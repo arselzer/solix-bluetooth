@@ -274,18 +274,14 @@ export class SolixConnection {
     // We accumulate all fragments, strip the sequence byte from each,
     // and decrypt when the small fragment arrives.
     if (cmdByte === 0xc4 || cmdByte === 0xc8) {
-      const seqByte = packet.payload[0];
-      const encData = packet.payload.slice(1);
+      this.log('rx', `Fragment cmd=${toHex(packet.command)} byte0=0x${packet.payload[0].toString(16)} payload=${packet.payload.length}B raw=${raw.length}B`);
 
-      this.log('rx', `Fragment cmd=${toHex(packet.command)} seq=0x${seqByte.toString(16)} data=${encData.length}B raw=${raw.length}B`);
-
+      // Store raw payload; we'll figure out seq byte stripping at assembly time
       if (raw.length < 50) {
-        // Small/final fragment — strip seq byte and trigger assembly
-        this.telemetryFragments.push(encData);
+        this.telemetryFragments.push(packet.payload);
         await this.assembleTelemetry();
       } else {
-        // Large fragment — accumulate
-        this.telemetryFragments.push(encData);
+        this.telemetryFragments.push(packet.payload);
       }
     } else if (cmdByte === 0x44 || cmdByte === 0x48) {
       // Single encrypted packet or response
@@ -311,26 +307,34 @@ export class SolixConnection {
   private async assembleTelemetry(): Promise<void> {
     if (!this.sessionKeys || this.telemetryFragments.length === 0) return;
 
-    // Concatenate all fragment data (sequence bytes already stripped)
-    const combined = concatBytes(...this.telemetryFragments);
-    const fragCount = this.telemetryFragments.length;
-
-    this.log('rx', `Assembling: ${fragCount} fragments = ${combined.length}B (mod16=${combined.length % 16})`);
-
-    // Reset
+    const fragments = this.telemetryFragments;
     this.telemetryFragments = [];
 
-    try {
-      const decrypted = await decryptAesCbc(combined, this.sessionKeys.aesKey, this.sessionKeys.iv);
-      this.log('rx', `Telemetry decrypted (${decrypted.length}B)`, toHex(decrypted).substring(0, 100));
+    const paramMap = getParamMap(this.device?.name ?? undefined);
 
-      const telemetry = parseTelemetry(decrypted, getParamMap(this.device?.name ?? undefined));
-      if (Object.keys(telemetry).length > 0) {
-        this.handlers.onTelemetry(telemetry);
+    // Try two strategies:
+    // 1. Raw concatenation (C1000 style — no sequence bytes)
+    // 2. Strip first byte from each fragment (Solarbank style — sequence bytes)
+    const rawCombined = concatBytes(...fragments);
+    const strippedCombined = concatBytes(...fragments.map(f => f.slice(1)));
+
+    for (const [label, data] of [['raw', rawCombined], ['stripped', strippedCombined]] as const) {
+      if (data.length % 16 !== 0) continue;
+      try {
+        const decrypted = await decryptAesCbc(data, this.sessionKeys.aesKey, this.sessionKeys.iv);
+        this.log('rx', `Telemetry decrypted (${label}, ${decrypted.length}B)`, toHex(decrypted).substring(0, 100));
+
+        const telemetry = parseTelemetry(decrypted, paramMap);
+        if (Object.keys(telemetry).length > 0) {
+          this.handlers.onTelemetry(telemetry);
+        }
+        return;
+      } catch {
+        // Try next strategy
       }
-    } catch (e) {
-      this.log('error', `Telemetry decrypt failed: ${e}`);
     }
+
+    this.log('error', `Telemetry decrypt failed: raw=${rawCombined.length}B(mod16=${rawCombined.length % 16}) stripped=${strippedCombined.length}B(mod16=${strippedCombined.length % 16})`);
   }
 
   async sendCommand(commandCode: Uint8Array, payload: Uint8Array): Promise<void> {
