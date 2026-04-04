@@ -11,15 +11,15 @@ const emit = defineEmits<{
 }>();
 
 const scanning = ref(false);
+const firstByte = ref('40');
 const scanFrom = ref('40');
 const scanTo = ref('60');
 const scanPayload = ref('a10121');
 const scanDelay = ref(500);
 const scanResults = ref<{ cmd: string; sent: boolean; responses: string[] }[]>([]);
 const currentCmd = ref('');
-
-const respondedResults = computed(() => scanResults.value.filter(r => r.responses.length > 0));
-const silentResults = computed(() => scanResults.value.filter(r => r.responses.length === 0));
+const scanProgress = ref(0);
+const scanTotal = ref(0);
 
 async function startScan() {
   const from = parseInt(scanFrom.value, 16);
@@ -28,21 +28,24 @@ async function startScan() {
 
   scanning.value = true;
   scanResults.value = [];
+  scanTotal.value = to - from + 1;
+  scanProgress.value = 0;
 
-  const payload = fromHex(scanPayload.value);
+  const payload = scanPayload.value ? fromHex(scanPayload.value) : new Uint8Array(0);
+  const fb = firstByte.value;
 
   for (let cmd2 = from; cmd2 <= to; cmd2++) {
     if (!scanning.value) break;
 
-    const cmdHex = '40' + cmd2.toString(16).padStart(2, '0');
+    const cmdHex = fb + cmd2.toString(16).padStart(2, '0');
     currentCmd.value = cmdHex;
+    scanProgress.value = cmd2 - from + 1;
 
     const result = { cmd: cmdHex, sent: true, responses: [] as string[] };
     scanResults.value.push(result);
 
     emit('command', fromHex(cmdHex), payload);
 
-    // Wait for potential response
     await new Promise(r => setTimeout(r, scanDelay.value));
   }
 
@@ -65,12 +68,16 @@ function stopScan() {
 
     <div class="config">
       <div class="field">
-        <label>Second byte from (hex)</label>
+        <label>First byte (hex)</label>
+        <input v-model="firstByte" placeholder="40" :disabled="scanning" />
+      </div>
+      <div class="field">
+        <label>Second byte from</label>
         <input v-model="scanFrom" placeholder="40" :disabled="scanning" />
       </div>
       <div class="field">
-        <label>Second byte to (hex)</label>
-        <input v-model="scanTo" placeholder="60" :disabled="scanning" />
+        <label>Second byte to</label>
+        <input v-model="scanTo" placeholder="ff" :disabled="scanning" />
       </div>
       <div class="field">
         <label>Payload (hex)</label>
@@ -89,10 +96,10 @@ function stopScan() {
         :disabled="!connected"
         @click="startScan"
       >
-        Start Scan (0x40{{ scanFrom }} - 0x40{{ scanTo }})
+        Scan 0x{{ firstByte }}{{ scanFrom }} → 0x{{ firstByte }}{{ scanTo }}
       </button>
       <button v-else class="btn stop" @click="stopScan">
-        Stop (scanning 0x{{ currentCmd }}...)
+        Stop ({{ scanProgress }}/{{ scanTotal }} — 0x{{ currentCmd }})
       </button>
     </div>
 
@@ -109,19 +116,64 @@ function stopScan() {
     </div>
 
     <div class="presets">
-      <h4>Known Command Ranges</h4>
+      <h4>Preset Ranges</h4>
       <div class="preset-grid">
         <button class="preset" @click="scanFrom = '40'; scanTo = '5f'" :disabled="scanning">
-          0x4040-0x405F (control)
+          0x40-0x5F (control)
         </button>
         <button class="preset" @click="scanFrom = '60'; scanTo = '7f'" :disabled="scanning">
-          0x4060-0x407F (extended)
+          0x60-0x7F
         </button>
         <button class="preset" @click="scanFrom = '80'; scanTo = '9f'" :disabled="scanning">
-          0x4080-0x409F (config?)
+          0x80-0x9F
         </button>
         <button class="preset" @click="scanFrom = 'a0'; scanTo = 'bf'" :disabled="scanning">
-          0x40A0-0x40BF (settings?)
+          0xA0-0xBF
+        </button>
+        <button class="preset" @click="scanFrom = 'c0'; scanTo = 'df'" :disabled="scanning">
+          0xC0-0xDF
+        </button>
+        <button class="preset" @click="scanFrom = 'e0'; scanTo = 'ff'" :disabled="scanning">
+          0xE0-0xFF
+        </button>
+        <button class="preset full" @click="scanFrom = '00'; scanTo = 'ff'" :disabled="scanning">
+          Full 0x00-0xFF (256 cmds)
+        </button>
+      </div>
+    </div>
+
+    <div class="presets">
+      <h4>Payload Presets</h4>
+      <div class="preset-grid">
+        <button class="preset" @click="scanPayload = 'a10121'" :disabled="scanning">
+          a10121 (status)
+        </button>
+        <button class="preset" @click="scanPayload = 'a10121a2020101'" :disabled="scanning">
+          ...a2020101 (ON)
+        </button>
+        <button class="preset" @click="scanPayload = 'a10121a2020100'" :disabled="scanning">
+          ...a2020100 (OFF)
+        </button>
+        <button class="preset" @click="scanPayload = ''" :disabled="scanning">
+          empty
+        </button>
+      </div>
+    </div>
+
+    <div class="presets">
+      <h4>First Byte Prefix</h4>
+      <div class="preset-grid">
+        <button class="preset" @click="firstByte = '40'" :disabled="scanning">
+          0x40 (default)
+        </button>
+        <button class="preset" @click="firstByte = 'c4'" :disabled="scanning">
+          0xC4 (telemetry)
+        </button>
+        <button class="preset" @click="firstByte = '44'" :disabled="scanning">
+          0x44 (single)
+        </button>
+        <button class="preset" @click="firstByte = '48'" :disabled="scanning">
+          0x48 (response)
         </button>
       </div>
     </div>
@@ -283,6 +335,11 @@ h4 {
 
 .preset:hover:not(:disabled) {
   background: #333;
+}
+
+.preset.full {
+  border-color: #f59e0b;
+  color: #f59e0b;
 }
 
 .preset:disabled {
