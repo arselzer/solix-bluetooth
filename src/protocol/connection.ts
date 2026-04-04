@@ -283,6 +283,11 @@ export class SolixConnection {
         this.log('info', `AES key: ${toHex(this.sessionKeys.aesKey)}`);
         this.log('info', `IV: ${toHex(this.sessionKeys.iv)}`);
         this.handlers.onStateChange('connected');
+
+        // Send initial status request — C1000 doesn't stream telemetry
+        // until asked, Solarbank streams automatically but the request
+        // doesn't hurt
+        setTimeout(() => this.requestStatus(), 500);
       } catch (e) {
         this.log('error', `Key derivation failed: ${e}`);
       }
@@ -380,6 +385,11 @@ export class SolixConnection {
     }
 
     this.log('error', `Telemetry decrypt failed: raw=${rawCombined.length}B(mod16=${rawCombined.length % 16}) stripped=${strippedCombined.length}B(mod16=${strippedCombined.length % 16})`);
+  }
+
+  async requestStatus(): Promise<void> {
+    this.log('tx', 'Sending status request');
+    await this.sendCommand(fromHex('4040'), fromHex('a10121'));
   }
 
   async sendCommand(commandCode: Uint8Array, payload: Uint8Array): Promise<void> {
