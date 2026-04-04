@@ -246,23 +246,30 @@ export class SolixConnection {
     if (!packet) return;
 
     const cmdByte = packet.command[0];
+    const cmdByte2 = packet.command[1];
 
-    // Telemetry arrives as fragmented c4xx packets:
-    // - Multiple large fragments (253B each) followed by one small fragment (<50B)
-    // - The small fragment triggers assembly and decryption
+    // Telemetry: SolixBLE stores only the LAST large packet (>230B raw) and
+    // one small packet (<50B raw), then concatenates large+small and decrypts.
+    // If two large packets arrive, the second replaces the first.
     if (cmdByte === 0xc4 || cmdByte === 0xc8) {
+      this.log('rx', `Fragment cmd=${toHex(packet.command)} payload=${packet.payload.length}B raw=${raw.length}B`);
+
       if (raw.length < 50) {
-        // Small fragment = final piece, triggers assembly
+        // Small fragment
         this.telemetryPayloadSmall = packet.payload;
-        this.log('rx', `Telemetry small (${raw.length}B), ${this.telemetryLargeFragments.length} large fragments queued`);
 
         if (this.telemetryLargeFragments.length > 0) {
           await this.assembleTelemetry();
         }
+      } else if (raw.length > 230) {
+        // Large fragment - REPLACE (not accumulate), matching SolixBLE behavior
+        // SolixBLE: "large invalidates previous small"
+        this.telemetryLargeFragments = [packet.payload];
+        this.telemetryPayloadSmall = null;
       } else {
-        // Large fragment - accumulate
-        this.telemetryLargeFragments.push(packet.payload);
-        this.log('rx', `Telemetry large #${this.telemetryLargeFragments.length} (${raw.length}B)`);
+        // Medium fragment - also treat as large replacement
+        this.telemetryLargeFragments = [packet.payload];
+        this.telemetryPayloadSmall = null;
       }
     } else if (cmdByte === 0x44 || cmdByte === 0x48) {
       // Single encrypted packet or response
@@ -294,7 +301,8 @@ export class SolixConnection {
       ? concatBytes(allLarge, this.telemetryPayloadSmall)
       : allLarge;
 
-    this.log('rx', `Assembling: ${this.telemetryLargeFragments.length} large + small = ${combined.length}B`);
+    const smallLen = this.telemetryPayloadSmall ? this.telemetryPayloadSmall.length : 0;
+    this.log('rx', `Assembling: large=${allLarge.length}B + small=${smallLen}B = ${combined.length}B (mod16=${combined.length % 16})`);
 
     // Reset
     this.telemetryLargeFragments = [];
