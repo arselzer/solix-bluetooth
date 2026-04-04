@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { TelemetryData } from '../protocol';
-import { PARAM_LABELS } from '../protocol';
+import { PARAM_LABELS, PARAM_GROUPS } from '../protocol';
 
 const props = defineProps<{
   data: TelemetryData;
@@ -11,20 +11,56 @@ interface DisplayItem {
   key: string;
   label: string;
   value: string | number;
-  isUnknown: boolean;
 }
 
-const items = computed<DisplayItem[]>(() => {
-  return Object.entries(props.data).map(([key, value]) => ({
-    key,
-    label: PARAM_LABELS[key] || key,
-    value,
-    isUnknown: key.startsWith('unknown_') || key.startsWith('raw_'),
-  }));
+interface DisplayGroup {
+  name: string;
+  items: DisplayItem[];
+}
+
+const groups = computed<DisplayGroup[]>(() => {
+  const result: DisplayGroup[] = [];
+  const usedKeys = new Set<string>();
+
+  for (const [groupName, keys] of Object.entries(PARAM_GROUPS)) {
+    const items: DisplayItem[] = [];
+    for (const key of keys) {
+      if (key in props.data) {
+        items.push({
+          key,
+          label: PARAM_LABELS[key] || key,
+          value: props.data[key],
+        });
+        usedKeys.add(key);
+      }
+    }
+    if (items.length > 0) {
+      result.push({ name: groupName, items });
+    }
+  }
+
+  // Ungrouped known params
+  const ungrouped: DisplayItem[] = [];
+  for (const [key, value] of Object.entries(props.data)) {
+    if (!usedKeys.has(key) && !key.startsWith('unknown_') && !key.startsWith('raw_')) {
+      ungrouped.push({ key, label: PARAM_LABELS[key] || key, value });
+      usedKeys.add(key);
+    }
+  }
+  if (ungrouped.length > 0) {
+    result.push({ name: 'Other', items: ungrouped });
+  }
+
+  return result;
 });
 
-const knownItems = computed(() => items.value.filter(i => !i.isUnknown));
-const unknownItems = computed(() => items.value.filter(i => i.isUnknown));
+const unknownItems = computed(() => {
+  return Object.entries(props.data)
+    .filter(([key]) => key.startsWith('unknown_') || key.startsWith('raw_'))
+    .map(([key, value]) => ({ key, value }));
+});
+
+const hasData = computed(() => Object.keys(props.data).length > 0);
 
 function formatValue(value: string | number): string {
   if (typeof value === 'number') {
@@ -36,20 +72,21 @@ function formatValue(value: string | number): string {
 
 <template>
   <div class="telemetry">
-    <h3>Telemetry Data</h3>
-
-    <div v-if="knownItems.length === 0 && unknownItems.length === 0" class="empty">
+    <div v-if="!hasData" class="empty">
       Waiting for data...
     </div>
 
-    <div v-if="knownItems.length > 0" class="grid">
-      <div v-for="item in knownItems" :key="item.key" class="item">
-        <div class="item-label">{{ item.label }}</div>
-        <div class="item-value">{{ formatValue(item.value) }}</div>
+    <div v-for="group in groups" :key="group.name" class="group">
+      <h4>{{ group.name }}</h4>
+      <div class="grid">
+        <div v-for="item in group.items" :key="item.key" class="item">
+          <div class="item-label">{{ item.label }}</div>
+          <div class="item-value">{{ formatValue(item.value) }}</div>
+        </div>
       </div>
     </div>
 
-    <div v-if="unknownItems.length > 0" class="unknown-section">
+    <div v-if="unknownItems.length > 0" class="group unknown-section">
       <h4>Unknown Parameters</h4>
       <div class="unknown-grid">
         <div v-for="item in unknownItems" :key="item.key" class="unknown-item">
@@ -69,16 +106,20 @@ function formatValue(value: string | number): string {
   border: 1px solid #333;
 }
 
-h3 {
-  margin: 0 0 12px 0;
-  color: #e0e0e0;
-  font-size: 1.1em;
+.group {
+  margin-bottom: 16px;
+}
+
+.group:last-child {
+  margin-bottom: 0;
 }
 
 h4 {
-  margin: 12px 0 8px 0;
+  margin: 0 0 8px 0;
   color: #888;
-  font-size: 0.9em;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .empty {
@@ -90,7 +131,7 @@ h4 {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 8px;
 }
 
@@ -101,7 +142,7 @@ h4 {
 }
 
 .item-label {
-  font-size: 0.8em;
+  font-size: 0.75em;
   color: #888;
   margin-bottom: 4px;
 }
@@ -115,8 +156,7 @@ h4 {
 
 .unknown-section {
   border-top: 1px solid #333;
-  margin-top: 12px;
-  padding-top: 8px;
+  padding-top: 12px;
 }
 
 .unknown-grid {

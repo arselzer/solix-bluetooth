@@ -87,26 +87,48 @@ function decodeParam(
 
 // Pretty label mapping for display
 export const PARAM_LABELS: Record<string, string> = {
+  // Common
+  device_type: 'Device Type',
   serial_number: 'Serial Number',
+  wifi_signal: 'WiFi Signal',
+  bt_signal: 'BT Signal',
+  firmware_version: 'Firmware',
+  temperature: 'Temperature (C)',
+
+  // Battery
   battery_percentage_aggregate: 'Battery %',
   battery_health: 'Battery Health %',
   battery_percentage: 'Battery Level',
+  battery_capacity: 'Battery Capacity',
+  battery_power: 'Battery Power (W)',
+  charged_energy: 'Charged (kWh)',
+  discharged_energy: 'Discharged (kWh)',
+  charge_power: 'Charge Power (W)',
+  discharge_power: 'Discharge Power (W)',
+
+  // Solar
   solar_power_in: 'Solar Input (W)',
-  pv_yield: 'PV Yield',
+  solar_pv1_power: 'PV1 (W)',
+  solar_pv2_power: 'PV2 (W)',
+  solar_pv3_power: 'PV3 (W)',
+  solar_pv4_power: 'PV4 (W)',
+  pv_yield: 'PV Yield (kWh)',
+
+  // Home / Output
   house_demand: 'House Demand (W)',
   house_consumption: 'Consumption (W)',
-  battery_power: 'Battery Power (W)',
-  charged_energy: 'Charged Energy',
-  discharged_energy: 'Discharged Energy',
+  power_out: 'Output (W)',
+  output_power: 'Output Power (W)',
+  output_limit: 'Output Limit (W)',
+  input_limit: 'Input Limit (W)',
+
+  // Grid
   grid_power: 'Grid Power (W)',
-  grid_import_energy: 'Grid Import',
-  grid_export_energy: 'Grid Export',
-  solar_pv1_power: 'PV1 Power (W)',
-  solar_pv2_power: 'PV2 Power (W)',
-  solar_pv3_power: 'PV3 Power (W)',
-  solar_pv4_power: 'PV4 Power (W)',
-  temperature: 'Temperature (C)',
-  power_out: 'Power Out (W)',
+  grid_import_energy: 'Grid Import (kWh)',
+  grid_export_energy: 'Grid Export (kWh)',
+  grid_to_home_power: 'Grid to Home (W)',
+  grid_status: 'Grid Status',
+
   // C1000 specific
   ac_power_in: 'AC Input (W)',
   ac_power_out: 'AC Output (W)',
@@ -116,5 +138,14 @@ export const PARAM_LABELS: Record<string, string> = {
   ac_switch: 'AC Switch',
   dc_switch: 'DC Switch',
   wifi_name: 'WiFi Name',
-  grid_to_home_power: 'Grid to Home (W)',
+};
+
+// Display grouping for organized layout
+export const PARAM_GROUPS: Record<string, string[]> = {
+  'Battery': ['battery_percentage', 'battery_percentage_aggregate', 'battery_health', 'battery_power', 'battery_capacity', 'charge_power', 'discharge_power', 'charged_energy', 'discharged_energy'],
+  'Solar': ['solar_power_in', 'solar_pv1_power', 'solar_pv2_power', 'solar_pv3_power', 'solar_pv4_power', 'pv_yield'],
+  'Home': ['house_demand', 'house_consumption', 'power_out', 'output_power', 'output_limit', 'input_limit'],
+  'Grid': ['grid_power', 'grid_to_home_power', 'grid_import_energy', 'grid_export_energy', 'grid_status'],
+  'Power Station': ['ac_power_in', 'ac_power_out', 'dc_power_out', 'type_c_power_out', 'usb_power_out', 'ac_switch', 'dc_switch'],
+  'Device': ['serial_number', 'device_type', 'firmware_version', 'temperature', 'wifi_signal', 'bt_signal', 'wifi_name'],
 };

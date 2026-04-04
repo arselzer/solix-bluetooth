@@ -6,13 +6,14 @@ import ConnectionPanel from './components/ConnectionPanel.vue';
 import TelemetryDisplay from './components/TelemetryDisplay.vue';
 import LogViewer from './components/LogViewer.vue';
 import RawPackets from './components/RawPackets.vue';
+import CommandPanel from './components/CommandPanel.vue';
 
 const connectionState = ref<ConnectionState>('disconnected');
 const deviceName = ref<string | null>(null);
 const telemetry = reactive<TelemetryData>({});
 const logEntries = ref<LogEntry[]>([]);
 const rawPackets = ref<{ timestamp: number; direction: 'tx' | 'rx'; data: Uint8Array }[]>([]);
-const activeTab = ref<'telemetry' | 'log' | 'raw'>('telemetry');
+const activeTab = ref<'telemetry' | 'commands' | 'log' | 'raw'>('telemetry');
 const bleSupported = ref(!!navigator.bluetooth);
 
 let connection: SolixConnection | null = null;
@@ -58,6 +59,12 @@ async function handleDisconnect() {
     connection = null;
   }
 }
+
+async function handleCommand(commandCode: Uint8Array, payload: Uint8Array) {
+  if (connection) {
+    await connection.sendCommand(commandCode, payload);
+  }
+}
 </script>
 
 <template>
@@ -87,6 +94,12 @@ async function handleDisconnect() {
           Telemetry
         </button>
         <button
+          :class="{ active: activeTab === 'commands' }"
+          @click="activeTab = 'commands'"
+        >
+          Commands
+        </button>
+        <button
           :class="{ active: activeTab === 'log' }"
           @click="activeTab = 'log'"
         >
@@ -103,6 +116,13 @@ async function handleDisconnect() {
       <TelemetryDisplay
         v-if="activeTab === 'telemetry'"
         :data="telemetry"
+      />
+
+      <CommandPanel
+        v-if="activeTab === 'commands'"
+        :device-name="deviceName"
+        :connected="connectionState === 'connected'"
+        @command="handleCommand"
       />
 
       <LogViewer
