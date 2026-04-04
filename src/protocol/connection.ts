@@ -205,12 +205,22 @@ export class SolixConnection {
 
     if (nextStage === 5 && packet.payload.length >= 64) {
       // Device sent its public key - derive shared secret
+      // The payload has prefix bytes before the raw 64-byte public key (x || y).
+      // With 67 bytes: 3 prefix + 64 key bytes. With 65 bytes: could be 0x04 + 64.
+      // Try to find the 64-byte key by looking for known prefix patterns.
+      this.log('info', `Key response full payload (${packet.payload.length}B): ${toHex(packet.payload)}`);
+
       let devicePublicKey: Uint8Array;
-      if (packet.payload[0] === 0x04 && packet.payload.length >= 65) {
+      const keyOffset = packet.payload.length - 64; // key is the last 64 bytes
+
+      if (packet.payload[0] === 0x04 && packet.payload.length === 65) {
+        // Standard uncompressed point format
         devicePublicKey = packet.payload.slice(0, 65);
       } else {
-        // Raw x,y coordinates (64 bytes), prepend 0x04
-        devicePublicKey = concatBytes(new Uint8Array([0x04]), packet.payload.slice(0, 64));
+        // Skip prefix bytes, take last 64 bytes as raw x,y, prepend 0x04
+        const rawKey = packet.payload.slice(keyOffset);
+        devicePublicKey = concatBytes(new Uint8Array([0x04]), rawKey);
+        this.log('info', `Skipped ${keyOffset} prefix bytes: ${toHex(packet.payload.slice(0, keyOffset))}`);
       }
 
       this.log('info', `Device public key: ${toHex(devicePublicKey).substring(0, 40)}...`);
