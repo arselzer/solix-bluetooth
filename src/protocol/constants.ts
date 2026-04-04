@@ -154,3 +154,69 @@ export function getParamMap(deviceName?: string): Record<number, ParamDef> {
 export const TELEMETRY_MARKER_BYTE_8 = 0x05;
 export const TELEMETRY_MARKER_BYTE_9 = 0x13;
 export const EXPECTED_TELEMETRY_LENGTH = 253;
+
+// ============================================================
+// Known BLE command codes (first byte is typically 0x40)
+// ============================================================
+// Confirmed via live device testing on C1000 (A1761)
+export const KNOWN_COMMANDS: Record<string, { name: string; description: string; payloads?: Record<string, string> }> = {
+  '4040': {
+    name: 'STATUS_REQUEST',
+    description: 'Full status + settings. Returns large telemetry via c840 fragments.',
+    payloads: { 'query': 'a10121' },
+  },
+  '4041': {
+    name: 'PARTIAL_STATUS',
+    description: 'Partial status. Returns a1, a2, a3 only (18B).',
+    payloads: { 'query': 'a10121' },
+  },
+  '404a': {
+    name: 'AC_TOGGLE',
+    description: 'Toggle AC output on/off.',
+    payloads: { 'on': 'a10121a2020101', 'off': 'a10121a2020100' },
+  },
+  '404b': {
+    name: 'DC_TOGGLE',
+    description: 'Toggle DC output on/off.',
+    payloads: { 'on': 'a10121a2020101', 'off': 'a10121a2020100' },
+  },
+  '404c': {
+    name: 'DISPLAY_MODE',
+    description: 'Set display mode.',
+    payloads: { 'set': 'a10121a20201XX' },
+  },
+  '404f': {
+    name: 'LIGHT_MODE',
+    description: 'Set LED light mode (0=off, 1=on, 2=auto).',
+    payloads: { 'set': 'a10121a20201XX' },
+  },
+  '4046': {
+    name: 'DISPLAY_TIMEOUT',
+    description: 'Set display auto-off timeout.',
+    payloads: { 'set': 'a10121a20302XXXX' },
+  },
+  '4052': {
+    name: 'DISPLAY_TOGGLE',
+    description: 'Toggle display on/off.',
+    payloads: { 'on': 'a10121a2020101', 'off': 'a10121a2020100' },
+  },
+};
+
+// TLV type byte meanings (first byte of each TLV param value)
+export const TLV_TYPE_BYTES: Record<number, string> = {
+  0x00: 'string (ASCII)',
+  0x01: 'uint8',
+  0x02: 'uint16 LE',
+  0x03: 'uint32 LE',
+  0x04: 'bytes/string',
+  0x05: 'float32 LE (IEEE 754)',
+};
+
+// Negotiation response fields (cmd 0x29)
+export const NEGOTIATION_INFO_FIELDS: Record<number, string> = {
+  0xa1: 'protocol_version',
+  0xa2: 'chip',           // e.g. "ESP32"
+  0xa3: 'firmware',       // e.g. "0.0.0.3"
+  0xa4: 'serial',         // device serial number
+  0xa5: 'feature_flags',
+};

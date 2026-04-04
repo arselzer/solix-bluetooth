@@ -28,20 +28,24 @@ function sendCustom() {
   }
 }
 
-// C1000 known commands
+// C1000 known commands (confirmed via live testing)
 const c1000Commands = [
+  { label: 'Status Request', cmd: '4040', payload: 'a10121' },
   { label: 'AC On', cmd: '404a', payload: 'a10121a2020101' },
   { label: 'AC Off', cmd: '404a', payload: 'a10121a2020100' },
   { label: 'DC On', cmd: '404b', payload: 'a10121a2020101' },
   { label: 'DC Off', cmd: '404b', payload: 'a10121a2020100' },
   { label: 'Display On', cmd: '4052', payload: 'a10121a2020101' },
   { label: 'Display Off', cmd: '4052', payload: 'a10121a2020100' },
-  { label: 'Status Request', cmd: '4040', payload: 'a10121' },
+  { label: 'Light Off', cmd: '404f', payload: 'a10121a2020100' },
+  { label: 'Light On', cmd: '404f', payload: 'a10121a2020101' },
+  { label: 'Light Auto', cmd: '404f', payload: 'a10121a2020102' },
 ];
 
-// General commands
+// General commands (work on all devices)
 const generalCommands = [
   { label: 'Status Request', cmd: '4040', payload: 'a10121' },
+  { label: 'Partial Status', cmd: '4041', payload: 'a10121' },
 ];
 </script>
 
