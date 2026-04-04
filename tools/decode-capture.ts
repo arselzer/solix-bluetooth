@@ -1,0 +1,325 @@
+#!/usr/bin/env npx tsx
+/**
+ * Decode an Anker Solix BLE capture from tshark output.
+ * Uses the hardcoded ECDH private key to derive the shared secret,
+ * then decrypts all post-negotiation packets and parses TLV data.
+ *
+ * Usage: npx tsx tools/decode-capture.ts < capture.tsv
+ *   or:  cat capture.tsv | npx tsx tools/decode-capture.ts
+ *
+ * Input format (tab-separated, from tshark):
+ *   frame_number  time_relative  opcode  handle  value_hex
+ *
+ * Or just pipe the "Write Commands Only" or "Notifications Only"
+ * sections from the decode-anker-ble.sh script.
+ */
+
+import { createECDH } from 'crypto';
+import { createDecipheriv } from 'crypto';
+
+const PRIVATE_KEY_HEX = '7dfbea61cd95cee49c458ad7419e817f1ade9a66136de3c7d5787af1458e39f4';
+
+function fromHex(hex: string): Buffer {
+  return Buffer.from(hex.replace(/[:\s]/g, ''), 'hex');
+}
+
+function toHex(buf: Buffer | Uint8Array): string {
+  return Buffer.from(buf).toString('hex');
+}
+
+function xorChecksum(data: Buffer): number {
+  let c = 0;
+  for (const b of data) c ^= b;
+  return c;
+}
+
+interface Packet {
+  frame: number;
+  time: number;
+  opcode: number; // 0x52 = write, 0x1b = notify
+  direction: 'TX' | 'RX';
+  raw: Buffer;
+  // Parsed
+  pattern: Buffer;
+  command: Buffer;
+  payload: Buffer;
+}
+
+function parsePacket(frame: number, time: number, opcode: number, valueHex: string): Packet | null {
+  const raw = fromHex(valueHex);
+  if (raw.length < 8 || raw[0] !== 0xff || raw[1] !== 0x09) return null;
+
+  const pattern = raw.subarray(4, 7);
+  const command = raw.subarray(7, 9);
+  const payload = raw.subarray(9, raw.length - 1);
+
+  return {
+    frame, time,
+    opcode,
+    direction: opcode === 0x52 ? 'TX' : 'RX',
+    raw, pattern, command, payload,
+  };
+}
+
+function isNegotiation(p: Packet): boolean {
+  return p.pattern[0] === 0x03 && p.pattern[1] === 0x00 && p.pattern[2] === 0x01;
+}
+
+function isEncrypted(p: Packet): boolean {
+  return p.pattern[0] === 0x03 && p.pattern[1] === 0x01;
+}
+
+function deriveSharedSecret(devicePublicKeyRaw: Buffer): { key: Buffer; iv: Buffer } {
+  const ecdh = createECDH('prime256v1');
+  ecdh.setPrivateKey(fromHex(PRIVATE_KEY_HEX));
+  const shared = ecdh.computeSecret(devicePublicKeyRaw);
+  return {
+    key: shared.subarray(0, 16),
+    iv: shared.subarray(16, 32),
+  };
+}
+
+function decryptAesCbc(data: Buffer, key: Buffer, iv: Buffer): Buffer | null {
+  try {
+    const decipher = createDecipheriv('aes-128-cbc', key, iv);
+    decipher.setAutoPadding(true);
+    const dec = Buffer.concat([decipher.update(data), decipher.final()]);
+    return dec;
+  } catch {
+    return null;
+  }
+}
+
+// TLV type byte meanings
+const TYPE_NAMES: Record<number, string> = {
+  0x00: 'str', 0x01: 'u8', 0x02: 'u16', 0x03: 'u32', 0x04: 'bytes', 0x05: 'f32',
+};
+
+function decodeTlvValue(data: Buffer): string {
+  if (data.length === 0) return '(empty)';
+  if (data.length === 1) return data[0].toString();
+
+  const typeByte = data[0];
+  const value = data.subarray(1);
+
+  switch (typeByte) {
+    case 0x00: return `"${value.toString('ascii')}"`;
+    case 0x01: return value.length >= 1 ? value[0].toString() : '0';
+    case 0x02: return value.length >= 2 ? value.readUInt16LE(0).toString() : '0';
+    case 0x03: return value.length >= 4 ? value.readUInt32LE(0).toString() : '0';
+    case 0x04: {
+      const ascii = value.toString('ascii');
+      if (/^[\x20-\x7e]+$/.test(ascii)) return `"${ascii}"`;
+      return toHex(value);
+    }
+    case 0x05: {
+      if (value.length >= 4) return value.readFloatLE(0).toFixed(2);
+      return '0';
+    }
+    default:
+      if (value.length === 1) return value[0].toString();
+      if (value.length === 2) return value.readUInt16LE(0).toString();
+      return toHex(data);
+  }
+}
+
+function parseTlv(data: Buffer): Array<{ id: number; len: number; raw: string; value: string }> {
+  const entries: Array<{ id: number; len: number; raw: string; value: string }> = [];
+  let offset = 0;
+  if (data.length > 0 && data[0] === 0x00) offset = 1;
+
+  while (offset < data.length) {
+    const id = data[offset++];
+    if (offset >= data.length) break;
+    const len = data[offset++];
+    if (len === 0) continue;
+    if (offset + len > data.length) break;
+    const paramData = data.subarray(offset, offset + len);
+    offset += len;
+    entries.push({
+      id,
+      len,
+      raw: toHex(paramData),
+      value: decodeTlvValue(paramData),
+    });
+  }
+  return entries;
+}
+
+// ====== MAIN ======
+
+async function main() {
+  const input = await new Promise<string>((resolve) => {
+    let data = '';
+    process.stdin.setEncoding('utf-8');
+    process.stdin.on('data', (chunk) => data += chunk);
+    process.stdin.on('end', () => resolve(data));
+  });
+
+  // Parse input lines - handle both tab-separated tshark output formats
+  const lines = input.trim().split('\n').filter(l => l.trim() && !l.startsWith('===') && !l.startsWith('Total') && !l.startsWith('To decrypt') && !l.startsWith('Filter') && !l.startsWith('These'));
+
+  const packets: Packet[] = [];
+  for (const line of lines) {
+    const parts = line.split('\t');
+    if (parts.length >= 3) {
+      // Format: frame time value  (from write/notify only sections)
+      // or:     frame time opcode handle value (from full section)
+      let frame: number, time: number, valueHex: string, opcode: number;
+
+      if (parts.length >= 5) {
+        // Full format: frame time opcode handle value
+        frame = parseInt(parts[0]);
+        time = parseFloat(parts[1]);
+        opcode = parseInt(parts[2], 16);
+        valueHex = parts[4];
+      } else if (parts.length >= 3) {
+        // Short format: frame time value
+        frame = parseInt(parts[0]);
+        time = parseFloat(parts[1]);
+        valueHex = parts[2];
+        // Guess opcode from context - we'll mark all as unknown
+        opcode = 0x52; // default to TX
+      } else {
+        continue;
+      }
+
+      if (!valueHex || !valueHex.startsWith('ff09')) continue;
+
+      const pkt = parsePacket(frame, time, opcode, valueHex);
+      if (pkt) packets.push(pkt);
+    }
+  }
+
+  console.log(`Parsed ${packets.length} packets\n`);
+
+  // Find device public key from negotiation
+  let devicePubKey: Buffer | null = null;
+  let appPubKey: Buffer | null = null;
+
+  for (const p of packets) {
+    if (!isNegotiation(p)) continue;
+
+    // cmd 0x21 response (RX) contains device public key
+    if (p.command[1] === 0x21 && p.direction === 'RX') {
+      // Last 64 bytes are the raw public key (x || y)
+      const keyOffset = p.payload.length - 64;
+      const rawKey = p.payload.subarray(keyOffset);
+      devicePubKey = Buffer.concat([Buffer.from([0x04]), rawKey]);
+      console.log(`Device public key (frame ${p.frame}): ${toHex(devicePubKey).substring(0, 40)}...`);
+    }
+
+    // cmd 0x21 TX contains app public key
+    if (p.command[1] === 0x21 && p.direction === 'TX') {
+      // Find the 64-byte key in the payload
+      if (p.payload.length >= 64) {
+        const keyOffset = p.payload.length - 64;
+        const rawKey = p.payload.subarray(keyOffset);
+        appPubKey = Buffer.concat([Buffer.from([0x04]), rawKey]);
+        console.log(`App public key (frame ${p.frame}): ${toHex(appPubKey).substring(0, 40)}...`);
+      }
+    }
+  }
+
+  if (!devicePubKey) {
+    console.error('Could not find device public key in negotiation!');
+    process.exit(1);
+  }
+
+  // Derive shared secret
+  const { key, iv } = deriveSharedSecret(devicePubKey);
+  console.log(`AES Key: ${toHex(key)}`);
+  console.log(`AES IV:  ${toHex(iv)}\n`);
+
+  // Decrypt all encrypted packets
+  console.log('='.repeat(120));
+  console.log('DECRYPTED PACKETS');
+  console.log('='.repeat(120));
+
+  // Track fragment assembly
+  let fragments: Buffer[] = [];
+  let lastFragTime = 0;
+
+  for (const p of packets) {
+    if (isNegotiation(p)) continue;
+    if (!isEncrypted(p)) continue;
+
+    const cmdByte = p.command[0];
+    const cmdHex = toHex(p.command);
+    const timeStr = p.time.toFixed(3).padStart(12);
+
+    // Fragmented telemetry
+    if (cmdByte === 0xc4 || cmdByte === 0xc8) {
+      fragments.push(p.payload);
+      lastFragTime = p.time;
+      continue;
+    }
+
+    // If we have pending fragments and this is NOT a fragment, assemble first
+    if (fragments.length > 0 && (cmdByte === 0x44 || cmdByte === 0x48)) {
+      // Try assembling fragments
+      tryAssembleAndDecrypt(fragments, key, iv, lastFragTime);
+      fragments = [];
+    }
+
+    // Single packet (0x40xx = request, 0x44xx/0x48xx = response)
+    const dec = decryptAesCbc(p.payload, key, iv);
+    if (dec) {
+      const dir = p.direction;
+      console.log(`\n[${timeStr}] ${dir} cmd=${cmdHex} frame=${p.frame} (${p.raw.length}B → ${dec.length}B decrypted)`);
+      console.log(`  hex: ${toHex(dec)}`);
+
+      const tlv = parseTlv(dec);
+      if (tlv.length > 0) {
+        for (const e of tlv) {
+          console.log(`  0x${e.id.toString(16).padStart(2, '0')} [${e.len}B] = ${e.value}  (${e.raw})`);
+        }
+      }
+    } else {
+      console.log(`\n[${timeStr}] ${p.direction} cmd=${cmdHex} frame=${p.frame} DECRYPT FAILED (${p.payload.length}B, mod16=${p.payload.length % 16})`);
+    }
+  }
+
+  // Flush remaining fragments
+  if (fragments.length > 0) {
+    tryAssembleAndDecrypt(fragments, key, iv, lastFragTime);
+  }
+}
+
+function tryAssembleAndDecrypt(fragments: Buffer[], key: Buffer, iv: Buffer, time: number) {
+  const timeStr = time.toFixed(3).padStart(12);
+
+  // Try raw concatenation first
+  const raw = Buffer.concat(fragments);
+  if (raw.length % 16 === 0) {
+    const dec = decryptAesCbc(raw, key, iv);
+    if (dec) {
+      console.log(`\n[${timeStr}] RX TELEMETRY (${fragments.length} frags, raw concat, ${raw.length}B → ${dec.length}B)`);
+      console.log(`  hex: ${toHex(dec)}`);
+      const tlv = parseTlv(dec);
+      for (const e of tlv) {
+        console.log(`  0x${e.id.toString(16).padStart(2, '0')} [${e.len}B] = ${e.value}  (${e.raw})`);
+      }
+      return;
+    }
+  }
+
+  // Try stripping first byte (sequence byte) from each fragment
+  const stripped = Buffer.concat(fragments.map(f => f.subarray(1)));
+  if (stripped.length % 16 === 0) {
+    const dec = decryptAesCbc(stripped, key, iv);
+    if (dec) {
+      console.log(`\n[${timeStr}] RX TELEMETRY (${fragments.length} frags, stripped, ${stripped.length}B → ${dec.length}B)`);
+      console.log(`  hex: ${toHex(dec)}`);
+      const tlv = parseTlv(dec);
+      for (const e of tlv) {
+        console.log(`  0x${e.id.toString(16).padStart(2, '0')} [${e.len}B] = ${e.value}  (${e.raw})`);
+      }
+      return;
+    }
+  }
+
+  console.log(`\n[${timeStr}] RX TELEMETRY DECRYPT FAILED (${fragments.length} frags, raw=${raw.length}B mod16=${raw.length%16}, stripped=${stripped.length}B mod16=${stripped.length%16})`);
+}
+
+main().catch(console.error);
