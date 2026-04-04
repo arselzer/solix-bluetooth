@@ -2,9 +2,20 @@ import { SB3_PARAMS, type ParamDef } from './constants';
 import { readUint16LE, readInt16LE, readUint32LE, readInt32LE, toHex } from './utils';
 import type { TelemetryData } from './types';
 
-export function parseTelemetry(decryptedPayload: Uint8Array, paramMap?: Record<number, ParamDef>): TelemetryData {
+export interface TlvEntry {
+  offset: number;
+  paramId: number;
+  paramIdHex: string;
+  length: number;
+  rawHex: string;
+  name: string | null;
+  decoded: string | number | null;
+}
+
+export function parseTelemetryDetailed(decryptedPayload: Uint8Array, paramMap?: Record<number, ParamDef>): { data: TelemetryData; tlvEntries: TlvEntry[] } {
   const params = paramMap ?? SB3_PARAMS;
   const result: TelemetryData = {};
+  const tlvEntries: TlvEntry[] = [];
   let offset = 0;
 
   // Strip leading 0x00 byte if present (as done in SolixBLE)
@@ -13,6 +24,7 @@ export function parseTelemetry(decryptedPayload: Uint8Array, paramMap?: Record<n
   }
 
   while (offset < decryptedPayload.length) {
+    const entryOffset = offset;
     const paramId = decryptedPayload[offset];
     offset++;
 
@@ -24,7 +36,7 @@ export function parseTelemetry(decryptedPayload: Uint8Array, paramMap?: Record<n
     if (paramLength === 0) continue;
 
     if (offset + paramLength > decryptedPayload.length) {
-      console.warn(`[Telemetry] Param 0x${paramId.toString(16)}: need ${paramLength} bytes but only ${decryptedPayload.length - offset} left`);
+      console.warn(`[TLV] 0x${paramId.toString(16)} @${entryOffset}: need ${paramLength}B but only ${decryptedPayload.length - offset} left`);
       break;
     }
 
@@ -32,23 +44,40 @@ export function parseTelemetry(decryptedPayload: Uint8Array, paramMap?: Record<n
     offset += paramLength;
 
     const paramDef = params[paramId];
+    const entry: TlvEntry = {
+      offset: entryOffset,
+      paramId,
+      paramIdHex: paramId.toString(16).padStart(2, '0'),
+      length: paramLength,
+      rawHex: toHex(paramData),
+      name: paramDef?.name ?? null,
+      decoded: null,
+    };
+
     if (paramDef) {
       try {
-        // SolixBLE skips the first byte of param data (type byte) for value parsing
         const valueData = paramDef.skipFirst && paramData.length > 1
           ? paramData.slice(1)
           : paramData;
-        result[paramDef.name] = decodeParam(paramDef, valueData);
+        const decoded = decodeParam(paramDef, valueData);
+        result[paramDef.name] = decoded;
+        entry.decoded = decoded;
       } catch (e) {
-        console.warn(`[Telemetry] Failed to decode param 0x${paramId.toString(16)} (${paramDef.name}):`, e);
-        result[`raw_${paramId.toString(16)}`] = toHex(paramData);
+        console.warn(`[TLV] 0x${entry.paramIdHex} (${paramDef.name}): decode failed`, e);
+        result[`raw_${entry.paramIdHex}`] = toHex(paramData);
       }
     } else {
-      result[`unknown_${paramId.toString(16)}`] = toHex(paramData);
+      result[`unknown_${entry.paramIdHex}`] = toHex(paramData);
     }
+
+    tlvEntries.push(entry);
   }
 
-  return result;
+  return { data: result, tlvEntries };
+}
+
+export function parseTelemetry(decryptedPayload: Uint8Array, paramMap?: Record<number, ParamDef>): TelemetryData {
+  return parseTelemetryDetailed(decryptedPayload, paramMap).data;
 }
 
 function decodeParam(

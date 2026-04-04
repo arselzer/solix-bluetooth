@@ -6,7 +6,7 @@ import {
 } from './constants';
 import { generateECDHKeyPair, deriveSharedSecret, decryptAesCbc, encryptAesCbc, type SessionKeys } from './crypto';
 import { buildPacket, parsePacket, isNegotiationPacket, isEncryptedPacket } from './packet';
-import { parseTelemetry } from './telemetry';
+import { parseTelemetryDetailed } from './telemetry';
 import { toHex, fromHex, concatBytes, xorChecksum } from './utils';
 import type { ConnectionState, TelemetryData, LogEntry } from './types';
 
@@ -288,8 +288,13 @@ export class SolixConnection {
       if (this.sessionKeys) {
         try {
           const decrypted = await decryptAesCbc(packet.payload, this.sessionKeys.aesKey, this.sessionKeys.iv);
-          this.log('rx', `Decrypted (${decrypted.length}B)`, toHex(decrypted).substring(0, 80));
-          const telemetry = parseTelemetry(decrypted, getParamMap(this.device?.name ?? undefined));
+          this.log('rx', `Decrypted single (${decrypted.length}B)`, toHex(decrypted));
+          const { data: telemetry, tlvEntries } = parseTelemetryDetailed(decrypted, getParamMap(this.device?.name ?? undefined));
+          for (const entry of tlvEntries) {
+            const nameStr = entry.name ? ` (${entry.name})` : ' [UNKNOWN]';
+            const valStr = entry.decoded !== null ? ` = ${entry.decoded}` : '';
+            this.log('info', `TLV @${entry.offset}: 0x${entry.paramIdHex} len=${entry.length}${nameStr}${valStr}`, entry.rawHex);
+          }
           if (Object.keys(telemetry).length > 0) {
             this.handlers.onTelemetry(telemetry);
           }
@@ -322,9 +327,17 @@ export class SolixConnection {
       if (data.length % 16 !== 0) continue;
       try {
         const decrypted = await decryptAesCbc(data, this.sessionKeys.aesKey, this.sessionKeys.iv);
-        this.log('rx', `Telemetry decrypted (${label}, ${decrypted.length}B)`, toHex(decrypted).substring(0, 100));
+        this.log('rx', `Telemetry decrypted (${label}, ${decrypted.length}B)`, toHex(decrypted));
 
-        const telemetry = parseTelemetry(decrypted, paramMap);
+        const { data: telemetry, tlvEntries } = parseTelemetryDetailed(decrypted, paramMap);
+
+        // Log each TLV entry for reverse engineering
+        for (const entry of tlvEntries) {
+          const nameStr = entry.name ? ` (${entry.name})` : ' [UNKNOWN]';
+          const valStr = entry.decoded !== null ? ` = ${entry.decoded}` : '';
+          this.log('info', `TLV @${entry.offset}: 0x${entry.paramIdHex} len=${entry.length}${nameStr}${valStr}`, entry.rawHex);
+        }
+
         if (Object.keys(telemetry).length > 0) {
           this.handlers.onTelemetry(telemetry);
         }

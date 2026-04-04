@@ -8,6 +8,7 @@ const props = defineProps<{
 
 const container = ref<HTMLElement | null>(null);
 const autoScroll = ref(true);
+const copyStatus = ref('');
 
 watch(() => props.entries.length, async () => {
   if (autoScroll.value) {
@@ -36,16 +37,47 @@ function formatTime(ts: number): string {
   const d = new Date(ts);
   return d.toLocaleTimeString([], { hour12: false }) + '.' + d.getMilliseconds().toString().padStart(3, '0');
 }
+
+function formatLogText(): string {
+  return props.entries.map(e => {
+    const time = formatTime(e.timestamp);
+    const dir = directionIcons[e.direction];
+    const data = e.data ? ' ' + e.data : '';
+    return `${time} ${dir} ${e.message}${data}`;
+  }).join('\n');
+}
+
+async function copyLog() {
+  try {
+    await navigator.clipboard.writeText(formatLogText());
+    copyStatus.value = 'Copied!';
+    setTimeout(() => copyStatus.value = '', 2000);
+  } catch {
+    // Fallback for non-HTTPS
+    const ta = document.createElement('textarea');
+    ta.value = formatLogText();
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    copyStatus.value = 'Copied!';
+    setTimeout(() => copyStatus.value = '', 2000);
+  }
+}
 </script>
 
 <template>
   <div class="log-viewer">
     <div class="log-header">
       <h3>Protocol Log</h3>
-      <label class="auto-scroll">
-        <input type="checkbox" v-model="autoScroll" />
-        Auto-scroll
-      </label>
+      <div class="controls">
+        <span v-if="copyStatus" class="copy-status">{{ copyStatus }}</span>
+        <button class="copy-btn" @click="copyLog">Copy All</button>
+        <label class="auto-scroll">
+          <input type="checkbox" v-model="autoScroll" />
+          Auto-scroll
+        </label>
+      </div>
     </div>
     <div class="log-container" ref="container">
       <div
@@ -85,6 +117,32 @@ function formatTime(ts: number): string {
   font-size: 1.1em;
 }
 
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.copy-btn {
+  padding: 4px 12px;
+  background: #2a2a3e;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #e0e0e0;
+  cursor: pointer;
+  font-size: 0.8em;
+}
+
+.copy-btn:hover {
+  background: #3b82f6;
+  border-color: #3b82f6;
+}
+
+.copy-status {
+  color: #5cb85c;
+  font-size: 0.8em;
+}
+
 .auto-scroll {
   color: #888;
   font-size: 0.85em;
@@ -96,7 +154,7 @@ function formatTime(ts: number): string {
 }
 
 .log-container {
-  height: 300px;
+  height: 400px;
   overflow-y: auto;
   padding: 8px;
   font-family: monospace;
