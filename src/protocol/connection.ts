@@ -78,21 +78,16 @@ export class SolixConnection {
       });
 
       // BLE connection often fails on first attempt — retry up to 3 times
-      // Race against a 5s timeout since the browser's default timeout is ~30s
+      // Use the browser's default timeout (more reliable than racing with our own)
       this.log('info', 'Connecting to GATT server...');
       for (let attempt = 1; attempt <= 3; attempt++) {
         try {
-          this.server = await Promise.race([
-            this.device.gatt!.connect(),
-            new Promise<never>((_, reject) =>
-              setTimeout(() => reject(new Error('Connection timeout')), 10000)
-            ),
-          ]);
+          this.server = await this.device.gatt!.connect();
           break;
         } catch (e) {
           if (attempt < 3) {
-            this.log('info', `Attempt ${attempt} failed (${e}), retrying...`);
-            await new Promise(r => setTimeout(r, 500));
+            this.log('info', `Attempt ${attempt} failed, retrying in 1s...`);
+            await new Promise(r => setTimeout(r, 1000));
           } else {
             throw e;
           }
@@ -145,6 +140,38 @@ export class SolixConnection {
 
     // Send negotiation stage 0
     await this.sendNegotiationStage(0);
+  }
+
+  private parseNegotiationInfo(payload: Uint8Array): void {
+    // The cmd 0x29 response contains device info as simple TLV:
+    // a1=version, a2=chip(ESP32), a3=firmware, a4=serial, a5=?
+    let offset = 0;
+    if (payload[0] === 0x00) offset = 1; // skip leading 0x00
+
+    while (offset < payload.length) {
+      const id = payload[offset++];
+      if (offset >= payload.length) break;
+      const len = payload[offset++];
+      if (offset + len > payload.length) break;
+      const data = payload.slice(offset, offset + len);
+      offset += len;
+
+      const hex = toHex(data);
+      const ascii = new TextDecoder().decode(data);
+      const isPrintable = /^[\x20-\x7e]+$/.test(ascii);
+
+      const labels: Record<number, string> = {
+        0xa1: 'protocol_version',
+        0xa2: 'chip',
+        0xa3: 'firmware',
+        0xa4: 'serial',
+        0xa5: 'feature_flags',
+      };
+
+      const label = labels[id] || `negotiation_0x${id.toString(16)}`;
+      const display = isPrintable ? ascii : hex;
+      this.log('info', `Device info: ${label} = ${display}`, hex);
+    }
   }
 
   private async sendNegotiationStage(stage: number): Promise<void> {
@@ -210,7 +237,12 @@ export class SolixConnection {
 
     const responseCmd = packet.command[1]; // e.g., 0x01, 0x03, 0x29, 0x05, 0x21
     this.log('rx', `Negotiation response cmd=0x${responseCmd.toString(16)} (${packet.payload.length}B)`,
-      toHex(packet.payload).substring(0, 80));
+      toHex(packet.payload));
+
+    // cmd 0x29 response contains device info as TLV
+    if (responseCmd === 0x29 && packet.payload.length > 10) {
+      this.parseNegotiationInfo(packet.payload);
+    }
 
     // Map response commands to next stage
     const stageMap: Record<number, number> = {

@@ -54,20 +54,24 @@ export function parseTelemetryDetailed(decryptedPayload: Uint8Array, paramMap?: 
       decoded: null,
     };
 
-    if (paramDef) {
-      try {
-        const valueData = paramDef.skipFirst && paramData.length > 1
-          ? paramData.slice(1)
-          : paramData;
-        const decoded = decodeParam(paramDef, valueData);
-        result[paramDef.name] = decoded;
-        entry.decoded = decoded;
-      } catch (e) {
-        console.warn(`[TLV] 0x${entry.paramIdHex} (${paramDef.name}): decode failed`, e);
-        result[`raw_${entry.paramIdHex}`] = toHex(paramData);
+    try {
+      // Use the type byte (first byte) to auto-decode the value
+      const decoded = decodeByTypeByte(paramData);
+      entry.decoded = decoded;
+
+      if (paramDef) {
+        let value = decoded;
+        if (paramDef.divisor && typeof value === 'number') {
+          value = value / paramDef.divisor;
+        }
+        result[paramDef.name] = value;
+      } else {
+        result[`unknown_${entry.paramIdHex}`] = decoded;
       }
-    } else {
-      result[`unknown_${entry.paramIdHex}`] = toHex(paramData);
+    } catch (e) {
+      console.warn(`[TLV] 0x${entry.paramIdHex}: decode failed`, e);
+      const key = paramDef ? `raw_${entry.paramIdHex}` : `unknown_${entry.paramIdHex}`;
+      result[key] = toHex(paramData);
     }
 
     tlvEntries.push(entry);
@@ -80,36 +84,58 @@ export function parseTelemetry(decryptedPayload: Uint8Array, paramMap?: Record<n
   return parseTelemetryDetailed(decryptedPayload, paramMap).data;
 }
 
-function decodeParam(
-  paramDef: { name: string; type: string; divisor?: number },
-  data: Uint8Array
-): string | number {
-  switch (paramDef.type) {
-    case 'string':
-      return new TextDecoder().decode(data);
+// The first byte of each TLV param data is a type indicator:
+// 0x00 = raw string/bytes (skip this byte, rest is ASCII)
+// 0x01 = uint8 (1 byte value follows)
+// 0x02 = uint16 LE (2 byte value follows)
+// 0x03 = uint32 LE (4 byte value follows)
+// 0x04 = bytes/string (variable length follows)
+// 0x05 = float32 LE (4 byte IEEE 754 follows)
+function decodeByTypeByte(data: Uint8Array): string | number {
+  if (data.length === 0) return 0;
+  if (data.length === 1) return data[0]; // No type byte, just a raw value
 
-    case 'int':
-      if (data.length === 1) return data[0];
-      if (data.length === 2) return readUint16LE(data, 0);
-      if (data.length === 4) return readUint32LE(data, 0);
-      return readUint16LE(data, 0);
+  const typeByte = data[0];
+  const valueData = data.slice(1);
 
-    case 'signed_int':
-      if (data.length === 1) return data[0] > 127 ? data[0] - 256 : data[0];
-      if (data.length === 2) return readInt16LE(data, 0);
-      if (data.length === 4) return readInt32LE(data, 0);
-      return readInt16LE(data, 0);
+  switch (typeByte) {
+    case 0x00: // ASCII string
+      return new TextDecoder().decode(valueData);
 
-    case 'float': {
-      let raw: number;
-      if (data.length === 1) raw = data[0];
-      else if (data.length === 2) raw = readUint16LE(data, 0);
-      else if (data.length === 4) raw = readUint32LE(data, 0);
-      else raw = readUint16LE(data, 0);
-      return paramDef.divisor ? raw / paramDef.divisor : raw;
+    case 0x01: // uint8
+      return valueData.length >= 1 ? valueData[0] : 0;
+
+    case 0x02: // uint16 LE
+      return valueData.length >= 2 ? readUint16LE(valueData, 0) : (valueData.length >= 1 ? valueData[0] : 0);
+
+    case 0x03: // uint32 LE
+      return valueData.length >= 4 ? readUint32LE(valueData, 0) : (valueData.length >= 2 ? readUint16LE(valueData, 0) : 0);
+
+    case 0x04: { // bytes/string
+      // Try ASCII if printable, otherwise hex
+      const ascii = new TextDecoder().decode(valueData);
+      if (/^[\x20-\x7e]*$/.test(ascii) && ascii.length > 0) return ascii;
+      return toHex(valueData);
+    }
+
+    case 0x05: { // float32 LE (IEEE 754)
+      if (valueData.length >= 4) {
+        const buf = new ArrayBuffer(4);
+        const view = new DataView(buf);
+        view.setUint8(0, valueData[0]);
+        view.setUint8(1, valueData[1]);
+        view.setUint8(2, valueData[2]);
+        view.setUint8(3, valueData[3]);
+        return Math.round(view.getFloat32(0, true) * 100) / 100;
+      }
+      return 0;
     }
 
     default:
+      // Unknown type byte — treat as raw int with skipFirst
+      if (valueData.length === 1) return valueData[0];
+      if (valueData.length === 2) return readUint16LE(valueData, 0);
+      if (valueData.length === 4) return readUint32LE(valueData, 0);
       return toHex(data);
   }
 }
