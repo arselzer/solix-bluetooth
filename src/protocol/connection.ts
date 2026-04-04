@@ -38,6 +38,7 @@ export class SolixConnection {
   private negotiationTimestamp = 0;
 
   private telemetryFragments: Uint8Array[] = [];
+  private assemblyTimer: ReturnType<typeof setTimeout> | null = null;
 
   private handlers: ConnectionEventHandler;
 
@@ -128,6 +129,10 @@ export class SolixConnection {
     this.sessionKeys = null;
     this.negotiationStage = -1;
     this.telemetryFragments = [];
+    if (this.assemblyTimer) {
+      clearTimeout(this.assemblyTimer);
+      this.assemblyTimer = null;
+    }
   }
 
   private async startNegotiation(): Promise<void> {
@@ -313,13 +318,16 @@ export class SolixConnection {
     if (cmdByte === 0xc4 || cmdByte === 0xc8) {
       this.log('rx', `Fragment cmd=${toHex(packet.command)} byte0=0x${packet.payload[0].toString(16)} payload=${packet.payload.length}B raw=${raw.length}B`);
 
-      // Store raw payload; we'll figure out seq byte stripping at assembly time
-      if (raw.length < 50) {
-        this.telemetryFragments.push(packet.payload);
-        await this.assembleTelemetry();
-      } else {
-        this.telemetryFragments.push(packet.payload);
-      }
+      this.telemetryFragments.push(packet.payload);
+
+      // Reset the assembly timer — assemble after 150ms of no new fragments
+      if (this.assemblyTimer) clearTimeout(this.assemblyTimer);
+      this.assemblyTimer = setTimeout(() => {
+        this.assemblyTimer = null;
+        if (this.telemetryFragments.length > 0) {
+          this.assembleTelemetry();
+        }
+      }, 150);
     } else if (cmdByte === 0x44 || cmdByte === 0x48) {
       // Single encrypted packet or response
       if (this.sessionKeys) {
@@ -351,6 +359,10 @@ export class SolixConnection {
 
     const fragments = this.telemetryFragments;
     this.telemetryFragments = [];
+    if (this.assemblyTimer) {
+      clearTimeout(this.assemblyTimer);
+      this.assemblyTimer = null;
+    }
 
     const paramMap = getParamMap(this.device?.name ?? undefined);
 
