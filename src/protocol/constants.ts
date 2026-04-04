@@ -64,6 +64,39 @@ export const SB3_PARAMS: Record<number, { name: string; type: 'string' | 'int' |
   0xd5: { name: 'grid_to_home_power', type: 'int', skipFirst: true },
 };
 
+// Solix C1000 (A17X0) telemetry parameter IDs
+// Based on SolixBLE devices/c1000.py
+export type ParamDef = { name: string; type: 'string' | 'int' | 'signed_int' | 'float'; divisor?: number; skipFirst?: boolean };
+export const C1000_PARAMS: Record<number, ParamDef> = {
+  0xa2: { name: 'serial_number', type: 'string', skipFirst: true },
+  0xa3: { name: 'wifi_name', type: 'string', skipFirst: true },
+  0xa5: { name: 'ac_power_in', type: 'int', skipFirst: true },
+  0xa6: { name: 'ac_power_out', type: 'int', skipFirst: true },
+  0xa7: { name: 'dc_power_out', type: 'int', skipFirst: true },
+  0xa8: { name: 'type_c_power_out', type: 'int', skipFirst: true },
+  0xa9: { name: 'usb_power_out', type: 'int', skipFirst: true },
+  0xab: { name: 'battery_percentage', type: 'int', skipFirst: true },
+  0xac: { name: 'battery_power', type: 'signed_int', skipFirst: true },
+  0xae: { name: 'solar_power_in', type: 'int', skipFirst: true },
+  0xaf: { name: 'ac_switch', type: 'int', skipFirst: true },
+  0xb0: { name: 'dc_switch', type: 'int', skipFirst: true },
+  0xb3: { name: 'temperature', type: 'signed_int', skipFirst: true },
+  0xb6: { name: 'battery_health', type: 'float', divisor: 10, skipFirst: true },
+  0xc7: { name: 'solar_pv1_power', type: 'int', skipFirst: true },
+  0xc8: { name: 'solar_pv2_power', type: 'int', skipFirst: true },
+};
+
+// Combined param map: try all known device params
+// Since param IDs can overlap between devices with different meanings,
+// we use the SB3 map as default and merge unique C1000 params
+export function getParamMap(deviceName?: string): Record<number, ParamDef> {
+  if (deviceName?.includes('C1000') || deviceName?.includes('A17X')) {
+    return C1000_PARAMS;
+  }
+  // Default to Solarbank 3 Pro
+  return SB3_PARAMS;
+}
+
 // Telemetry identification
 export const TELEMETRY_MARKER_BYTE_8 = 0x05;
 export const TELEMETRY_MARKER_BYTE_9 = 0x13;

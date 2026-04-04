@@ -1,8 +1,9 @@
-import { SB3_PARAMS } from './constants';
+import { SB3_PARAMS, type ParamDef } from './constants';
 import { readUint16LE, readInt16LE, readUint32LE, readInt32LE, toHex } from './utils';
 import type { TelemetryData } from './types';
 
-export function parseTelemetry(decryptedPayload: Uint8Array): TelemetryData {
+export function parseTelemetry(decryptedPayload: Uint8Array, paramMap?: Record<number, ParamDef>): TelemetryData {
+  const params = paramMap ?? SB3_PARAMS;
   const result: TelemetryData = {};
   let offset = 0;
 
@@ -30,7 +31,7 @@ export function parseTelemetry(decryptedPayload: Uint8Array): TelemetryData {
     const paramData = decryptedPayload.slice(offset, offset + paramLength);
     offset += paramLength;
 
-    const paramDef = SB3_PARAMS[paramId];
+    const paramDef = params[paramId];
     if (paramDef) {
       try {
         // SolixBLE skips the first byte of param data (type byte) for value parsing
@@ -106,5 +107,14 @@ export const PARAM_LABELS: Record<string, string> = {
   solar_pv4_power: 'PV4 Power (W)',
   temperature: 'Temperature (C)',
   power_out: 'Power Out (W)',
+  // C1000 specific
+  ac_power_in: 'AC Input (W)',
+  ac_power_out: 'AC Output (W)',
+  dc_power_out: 'DC Output (W)',
+  type_c_power_out: 'USB-C Output (W)',
+  usb_power_out: 'USB-A Output (W)',
+  ac_switch: 'AC Switch',
+  dc_switch: 'DC Switch',
+  wifi_name: 'WiFi Name',
   grid_to_home_power: 'Grid to Home (W)',
 };

@@ -2,7 +2,7 @@ import {
   SERVICE_UUID, UUID_COMMAND, UUID_TELEMETRY,
   NEGOTIATION_COMMAND_0, NEGOTIATION_COMMAND_1, NEGOTIATION_COMMAND_2,
   NEGOTIATION_COMMAND_3, NEGOTIATION_COMMAND_4_PREFIX,
-  PATTERN_ENCRYPTED,
+  PATTERN_ENCRYPTED, getParamMap,
 } from './constants';
 import { generateECDHKeyPair, deriveSharedSecret, decryptAesCbc, encryptAesCbc, type SessionKeys } from './crypto';
 import { buildPacket, parsePacket, isNegotiationPacket, isEncryptedPacket } from './packet';
@@ -37,7 +37,7 @@ export class SolixConnection {
   private negotiationStage = -1;
   private negotiationTimestamp = 0;
 
-  private telemetryPayloadLarge: Uint8Array | null = null;
+  private telemetryLargeFragments: Uint8Array[] = [];
   private telemetryPayloadSmall: Uint8Array | null = null;
 
   private handlers: ConnectionEventHandler;
@@ -63,6 +63,9 @@ export class SolixConnection {
         filters: [
           { namePrefix: 'Solarbank' },
           { namePrefix: 'A17C' },
+          { namePrefix: 'C1000' },
+          { namePrefix: 'A17X' },
+          { namePrefix: 'Anker' },
         ],
         optionalServices: [SERVICE_UUID],
       });
@@ -111,7 +114,7 @@ export class SolixConnection {
   private cleanup() {
     this.sessionKeys = null;
     this.negotiationStage = -1;
-    this.telemetryPayloadLarge = null;
+    this.telemetryLargeFragments = [];
     this.telemetryPayloadSmall = null;
   }
 
@@ -244,28 +247,22 @@ export class SolixConnection {
 
     const cmdByte = packet.command[0];
 
-    // Telemetry uses cmd c4xx (fragmented) or 44xx (single/final)
-    // Large packets > 230 bytes, small < 50 bytes
+    // Telemetry arrives as fragmented c4xx packets:
+    // - Multiple large fragments (253B each) followed by one small fragment (<50B)
+    // - The small fragment triggers assembly and decryption
     if (cmdByte === 0xc4 || cmdByte === 0xc8) {
-      if (raw.length > 230) {
-        // Large telemetry fragment - invalidates previous small
-        this.telemetryPayloadLarge = packet.payload;
-        this.telemetryPayloadSmall = null;
-        this.log('rx', `Telemetry large (${raw.length}B)`);
-      } else if (raw.length < 50) {
-        // Small telemetry fragment
+      if (raw.length < 50) {
+        // Small fragment = final piece, triggers assembly
         this.telemetryPayloadSmall = packet.payload;
-        this.log('rx', `Telemetry small (${raw.length}B)`);
+        this.log('rx', `Telemetry small (${raw.length}B), ${this.telemetryLargeFragments.length} large fragments queued`);
 
-        // Try assembly if we have both
-        if (this.telemetryPayloadLarge) {
+        if (this.telemetryLargeFragments.length > 0) {
           await this.assembleTelemetry();
         }
       } else {
-        // Medium-sized fragment - treat as large
-        this.telemetryPayloadLarge = packet.payload;
-        this.telemetryPayloadSmall = null;
-        this.log('rx', `Telemetry medium (${raw.length}B)`);
+        // Large fragment - accumulate
+        this.telemetryLargeFragments.push(packet.payload);
+        this.log('rx', `Telemetry large #${this.telemetryLargeFragments.length} (${raw.length}B)`);
       }
     } else if (cmdByte === 0x44 || cmdByte === 0x48) {
       // Single encrypted packet or response
@@ -273,7 +270,7 @@ export class SolixConnection {
         try {
           const decrypted = await decryptAesCbc(packet.payload, this.sessionKeys.aesKey, this.sessionKeys.iv);
           this.log('rx', `Decrypted (${decrypted.length}B)`, toHex(decrypted).substring(0, 80));
-          const telemetry = parseTelemetry(decrypted);
+          const telemetry = parseTelemetry(decrypted, getParamMap(this.device?.name ?? undefined));
           if (Object.keys(telemetry).length > 0) {
             this.handlers.onTelemetry(telemetry);
           }
@@ -289,22 +286,25 @@ export class SolixConnection {
   }
 
   private async assembleTelemetry(): Promise<void> {
-    if (!this.sessionKeys || !this.telemetryPayloadLarge) return;
+    if (!this.sessionKeys || this.telemetryLargeFragments.length === 0) return;
 
-    // Concatenate large + small as per SolixBLE
+    // Concatenate all large fragments + small fragment
+    const allLarge = concatBytes(...this.telemetryLargeFragments);
     const combined = this.telemetryPayloadSmall
-      ? concatBytes(this.telemetryPayloadLarge, this.telemetryPayloadSmall)
-      : this.telemetryPayloadLarge;
+      ? concatBytes(allLarge, this.telemetryPayloadSmall)
+      : allLarge;
+
+    this.log('rx', `Assembling: ${this.telemetryLargeFragments.length} large + small = ${combined.length}B`);
 
     // Reset
-    this.telemetryPayloadLarge = null;
+    this.telemetryLargeFragments = [];
     this.telemetryPayloadSmall = null;
 
     try {
       const decrypted = await decryptAesCbc(combined, this.sessionKeys.aesKey, this.sessionKeys.iv);
       this.log('rx', `Telemetry decrypted (${decrypted.length}B)`, toHex(decrypted).substring(0, 100));
 
-      const telemetry = parseTelemetry(decrypted);
+      const telemetry = parseTelemetry(decrypted, getParamMap(this.device?.name ?? undefined));
       if (Object.keys(telemetry).length > 0) {
         this.handlers.onTelemetry(telemetry);
       }

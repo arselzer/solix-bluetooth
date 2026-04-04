@@ -64,7 +64,7 @@ async function handleDisconnect() {
   <div class="app">
     <header>
       <h1>Anker Solix Bluetooth</h1>
-      <p class="subtitle">Local BLE control for Solarbank 3 E2700 Pro</p>
+      <p class="subtitle">Local BLE monitoring for Anker Solix devices</p>
     </header>
 
     <div v-if="!bleSupported" class="warning">
