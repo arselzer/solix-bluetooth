@@ -44,6 +44,12 @@ async function startScan() {
     const result = { cmd: cmdHex, sent: true, responses: [] as string[] };
     scanResults.value.push(result);
 
+    // Stop if disconnected
+    if (!props.connected) {
+      scanning.value = false;
+      break;
+    }
+
     emit('command', fromHex(cmdHex), payload);
 
     await new Promise(r => setTimeout(r, scanDelay.value));

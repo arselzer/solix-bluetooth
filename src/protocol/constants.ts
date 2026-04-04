@@ -200,6 +200,27 @@ export const KNOWN_COMMANDS: Record<string, { name: string; description: string;
     description: 'Toggle display on/off.',
     payloads: { 'on': 'a10121a2020101', 'off': 'a10121a2020100' },
   },
+  // Discovered via command scan 0x4000-0x403f on C1000
+  '4023': {
+    name: 'QUERY_23',
+    description: 'Returns single byte (01). Protocol info?',
+    payloads: { 'query': 'a10121' },
+  },
+  '4024': {
+    name: 'QUERY_PORT_COUNT',
+    description: 'Returns single byte (04). Possibly number of output ports.',
+    payloads: { 'query': 'a10121' },
+  },
+  '4029': {
+    name: 'QUERY_DEVICE_TYPE',
+    description: 'Returns TLV a1=5. Device type/category.',
+    payloads: { 'query': 'a10121' },
+  },
+  '4030': {
+    name: 'FIRMWARE_VERSIONS',
+    description: 'Returns firmware version strings: a1="v0.1.3.0" (main), a2="v1.5.1" (module).',
+    payloads: { 'query': 'a10121' },
+  },
 };
 
 // TLV type byte meanings (first byte of each TLV param value)
