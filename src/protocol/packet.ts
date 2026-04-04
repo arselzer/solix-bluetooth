@@ -40,7 +40,16 @@ export function parsePacket(data: Uint8Array): SolixPacket | null {
   const length = data[2] | (data[3] << 8);
   const pattern = data.slice(4, 7);
   const command = data.slice(7, 9);
-  const payload = data.slice(9, data.length - 1);
+  let payloadStart = 9;
+
+  // Special case from SolixBLE: if pattern is 03010f and cmd is c402,
+  // skip one extra byte before the payload
+  if (pattern[0] === 0x03 && pattern[1] === 0x01 && pattern[2] === 0x0f &&
+      command[0] === 0xc4 && command[1] === 0x02) {
+    payloadStart = 10;
+  }
+
+  const payload = data.slice(payloadStart, data.length - 1);
   const checksum = data[data.length - 1];
 
   // Verify checksum
