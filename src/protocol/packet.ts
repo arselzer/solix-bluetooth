@@ -4,12 +4,12 @@ import type { SolixPacket } from './types';
 
 export function buildPacket(pattern: Uint8Array, command: Uint8Array, payload: Uint8Array): Uint8Array {
   // Total length = 2(header) + 2(length) + 3(pattern) + 2(command) + payload.length + 1(checksum)
+  // Length = total packet size including header, length field, pattern, cmd, payload, checksum
   const totalLength = 2 + 2 + pattern.length + command.length + payload.length + 1;
+  // Length is little-endian
   const lengthBytes = new Uint8Array(2);
-  // Length field encodes the bytes after header (length itself + pattern + command + payload + checksum)
-  const innerLength = totalLength - 2; // everything after header
-  lengthBytes[0] = (innerLength >> 8) & 0xff;
-  lengthBytes[1] = innerLength & 0xff;
+  lengthBytes[0] = totalLength & 0xff;
+  lengthBytes[1] = (totalLength >> 8) & 0xff;
 
   const headerBytes = new Uint8Array([(HEADER >> 8) & 0xff, HEADER & 0xff]);
 
@@ -36,7 +36,8 @@ export function parsePacket(data: Uint8Array): SolixPacket | null {
     return null;
   }
 
-  const length = (data[2] << 8) | data[3];
+  // Length is little-endian
+  const length = data[2] | (data[3] << 8);
   const pattern = data.slice(4, 7);
   const command = data.slice(7, 9);
   const payload = data.slice(9, data.length - 1);

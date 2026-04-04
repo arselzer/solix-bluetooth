@@ -1,8 +1,13 @@
-import { SERVICE_UUID, UUID_COMMAND, UUID_TELEMETRY, NEGOTIATION_COMMANDS, PATTERN_NEGOTIATION, PATTERN_ENCRYPTED } from './constants';
+import {
+  SERVICE_UUID, UUID_COMMAND, UUID_TELEMETRY,
+  NEGOTIATION_COMMAND_0, NEGOTIATION_COMMAND_1, NEGOTIATION_COMMAND_2,
+  NEGOTIATION_COMMAND_3, NEGOTIATION_COMMAND_4_PREFIX,
+  PATTERN_ENCRYPTED,
+} from './constants';
 import { generateECDHKeyPair, deriveSharedSecret, decryptAesCbc, encryptAesCbc, type SessionKeys } from './crypto';
 import { buildPacket, parsePacket, isNegotiationPacket, isEncryptedPacket } from './packet';
 import { parseTelemetry } from './telemetry';
-import { toHex, concatBytes } from './utils';
+import { toHex, fromHex, concatBytes, xorChecksum } from './utils';
 import type { ConnectionState, TelemetryData, LogEntry } from './types';
 
 export type ConnectionEventHandler = {
@@ -10,6 +15,14 @@ export type ConnectionEventHandler = {
   onTelemetry: (data: TelemetryData) => void;
   onLog: (entry: LogEntry) => void;
   onRawPacket: (direction: 'tx' | 'rx', data: Uint8Array) => void;
+};
+
+// Pre-built negotiation commands (stages 0-3 are fixed, 4+ are dynamic)
+const FIXED_NEGOTIATION_PACKETS: Record<number, string> = {
+  0: NEGOTIATION_COMMAND_0,
+  1: NEGOTIATION_COMMAND_1,
+  2: NEGOTIATION_COMMAND_2,
+  3: NEGOTIATION_COMMAND_3,
 };
 
 export class SolixConnection {
@@ -21,11 +34,11 @@ export class SolixConnection {
   private privateKey: CryptoKey | null = null;
   private publicKeyRaw: Uint8Array | null = null;
   private sessionKeys: SessionKeys | null = null;
-  private negotiationStage = 0;
-  private negotiationStartTime = 0;
+  private negotiationStage = -1;
+  private negotiationTimestamp = 0;
 
-  private pendingLargePackets: Uint8Array[] = [];
-  private pendingSmallPackets: Uint8Array[] = [];
+  private telemetryPayloadLarge: Uint8Array | null = null;
+  private telemetryPayloadSmall: Uint8Array | null = null;
 
   private handlers: ConnectionEventHandler;
 
@@ -97,75 +110,44 @@ export class SolixConnection {
 
   private cleanup() {
     this.sessionKeys = null;
-    this.negotiationStage = 0;
-    this.pendingLargePackets = [];
-    this.pendingSmallPackets = [];
+    this.negotiationStage = -1;
+    this.telemetryPayloadLarge = null;
+    this.telemetryPayloadSmall = null;
   }
 
   private async startNegotiation(): Promise<void> {
-    // Generate ECDH key pair
     const keyPair = await generateECDHKeyPair();
     this.privateKey = keyPair.privateKey;
     this.publicKeyRaw = keyPair.publicKeyRaw;
-    this.negotiationStartTime = Date.now() / 1000;
 
     this.log('info', 'Generated ECDH key pair');
     this.log('info', `Public key: ${toHex(this.publicKeyRaw).substring(0, 40)}...`);
 
     // Send negotiation stage 0
-    await this.sendNegotiationCommand(0);
+    await this.sendNegotiationStage(0);
   }
 
-  private async sendNegotiationCommand(stage: number): Promise<void> {
-    if (!this.commandChar || !this.publicKeyRaw) return;
+  private async sendNegotiationStage(stage: number): Promise<void> {
+    if (!this.commandChar) return;
 
-    const cmdDef = NEGOTIATION_COMMANDS[stage];
-    if (!cmdDef) {
-      this.log('info', `Negotiation stage ${stage}: no more commands to send`);
+    let packet: Uint8Array;
+
+    if (stage <= 3) {
+      // Use exact pre-built packets from SolixBLE
+      packet = fromHex(FIXED_NEGOTIATION_PACKETS[stage]);
+    } else if (stage === 4 && this.publicKeyRaw) {
+      // Stage 4: send our ECDH public key (uncompressed, 65 bytes starting with 0x04)
+      // Build: prefix + public_key_bytes + checksum
+      const prefix = fromHex(NEGOTIATION_COMMAND_4_PREFIX);
+      const withoutChecksum = concatBytes(prefix, this.publicKeyRaw.slice(1)); // skip 0x04, send raw 64 bytes
+      const checksum = xorChecksum(withoutChecksum);
+      packet = concatBytes(withoutChecksum, new Uint8Array([checksum]));
+    } else {
+      this.log('info', `Negotiation stage ${stage}: nothing to send`);
       return;
     }
 
-    const command = new Uint8Array([0x40, cmdDef[0]]);
-
-    // Build payload with stage-specific data
-    let payload: Uint8Array;
-    switch (stage) {
-      case 0:
-      case 1:
-        // Send public key x-coordinate (bytes 1-33 of uncompressed public key)
-        payload = concatBytes(
-          new Uint8Array([cmdDef[1]]),
-          this.publicKeyRaw.slice(1, 33)
-        );
-        break;
-      case 2:
-        // Send public key y-coordinate (bytes 33-65)
-        payload = concatBytes(
-          new Uint8Array([cmdDef[1]]),
-          this.publicKeyRaw.slice(1, 33),  // x again for verification
-          this.publicKeyRaw.slice(33, 65)   // y coordinate
-        );
-        break;
-      case 3:
-        // Shorter payload for auth step
-        payload = concatBytes(
-          new Uint8Array([cmdDef[1]]),
-          this.publicKeyRaw.slice(1, 33)
-        );
-        break;
-      case 4:
-        // Final negotiation with full public key
-        payload = concatBytes(
-          new Uint8Array([cmdDef[1]]),
-          this.publicKeyRaw
-        );
-        break;
-      default:
-        payload = new Uint8Array([cmdDef[1]]);
-    }
-
-    const packet = buildPacket(PATTERN_NEGOTIATION, command, payload);
-    this.log('tx', `Negotiation stage ${stage}`, toHex(packet));
+    this.log('tx', `Negotiation stage ${stage} (${packet.length}B)`, toHex(packet).substring(0, 80));
     this.handlers.onRawPacket('tx', packet);
 
     try {
@@ -175,6 +157,11 @@ export class SolixConnection {
     }
 
     this.negotiationStage = stage;
+
+    // Capture timestamp at stage 2 (cmd 0x29) for anti-replay
+    if (stage === 2) {
+      this.negotiationTimestamp = Date.now() / 1000;
+    }
   }
 
   private async onNotification(event: Event): Promise<void> {
@@ -194,30 +181,39 @@ export class SolixConnection {
     } else if (isEncryptedPacket(packet)) {
       await this.handleEncryptedPacket(packet, data);
     } else {
-      this.log('rx', `Unknown packet pattern: ${toHex(packet.pattern)}`, toHex(data).substring(0, 80));
+      this.log('rx', `Unknown pattern: ${toHex(packet.pattern)}`, toHex(data).substring(0, 80));
     }
   }
 
   private async handleNegotiationResponse(packet: ReturnType<typeof parsePacket>): Promise<void> {
     if (!packet) return;
 
-    const responseCmd = packet.command[1];
-    this.log('rx', `Negotiation response cmd=0x${responseCmd.toString(16)}`, toHex(packet.payload).substring(0, 80));
+    const responseCmd = packet.command[1]; // e.g., 0x01, 0x03, 0x29, 0x05, 0x21
+    this.log('rx', `Negotiation response cmd=0x${responseCmd.toString(16)} (${packet.payload.length}B)`,
+      toHex(packet.payload).substring(0, 80));
 
-    // Check if this is the key exchange response (stage 5 = device sent public key in cmd 0x21)
-    if (responseCmd === 0x21 && packet.payload.length >= 64) {
-      // Extract device's public key from the payload
-      // The public key is typically in the payload as uncompressed point (65 bytes with 0x04 prefix)
-      // or just the raw 64 bytes (x || y)
+    // Map response commands to next stage
+    const stageMap: Record<number, number> = {
+      0x01: 1,  // response to stage 0 -> send stage 1
+      0x03: 2,  // response to stage 1 -> send stage 2
+      0x29: 3,  // response to stage 2 -> send stage 3
+      0x05: 4,  // response to stage 3 -> send stage 4 (our public key)
+      0x21: 5,  // response to stage 4 -> device's public key, derive shared secret
+    };
+
+    const nextStage = stageMap[responseCmd];
+
+    if (nextStage === 5 && packet.payload.length >= 64) {
+      // Device sent its public key - derive shared secret
       let devicePublicKey: Uint8Array;
-      if (packet.payload[0] === 0x04) {
+      if (packet.payload[0] === 0x04 && packet.payload.length >= 65) {
         devicePublicKey = packet.payload.slice(0, 65);
       } else {
-        // Assume raw x,y (64 bytes), prepend 0x04
+        // Raw x,y coordinates (64 bytes), prepend 0x04
         devicePublicKey = concatBytes(new Uint8Array([0x04]), packet.payload.slice(0, 64));
       }
 
-      this.log('info', `Received device public key: ${toHex(devicePublicKey).substring(0, 40)}...`);
+      this.log('info', `Device public key: ${toHex(devicePublicKey).substring(0, 40)}...`);
 
       try {
         this.sessionKeys = await deriveSharedSecret(this.privateKey!, devicePublicKey);
@@ -228,13 +224,8 @@ export class SolixConnection {
       } catch (e) {
         this.log('error', `Key derivation failed: ${e}`);
       }
-      return;
-    }
-
-    // Send next negotiation stage
-    const nextStage = this.negotiationStage + 1;
-    if (nextStage <= 4) {
-      await this.sendNegotiationCommand(nextStage);
+    } else if (nextStage !== undefined && nextStage <= 4) {
+      await this.sendNegotiationStage(nextStage);
     }
   }
 
@@ -242,85 +233,79 @@ export class SolixConnection {
     if (!packet) return;
 
     const cmdByte = packet.command[0];
-    const isLarge = raw.length > 100;
-    const isFragmented = cmdByte === 0xc4 || cmdByte === 0xc8;
 
-    if (isFragmented && isLarge) {
-      this.pendingLargePackets.push(packet.payload);
-      this.log('rx', `Large fragment (${raw.length}B, cmd=0x${cmdByte.toString(16)})`);
-    } else if (isFragmented && !isLarge) {
-      // Final fragment of a multi-part message
-      this.pendingSmallPackets.push(packet.payload);
-      this.log('rx', `Small fragment (${raw.length}B, cmd=0x${cmdByte.toString(16)})`);
+    // Telemetry uses cmd c4xx (fragmented) or 44xx (single/final)
+    // Large packets > 230 bytes, small < 50 bytes
+    if (cmdByte === 0xc4 || cmdByte === 0xc8) {
+      if (raw.length > 230) {
+        // Large telemetry fragment - invalidates previous small
+        this.telemetryPayloadLarge = packet.payload;
+        this.telemetryPayloadSmall = null;
+        this.log('rx', `Telemetry large (${raw.length}B)`);
+      } else if (raw.length < 50) {
+        // Small telemetry fragment
+        this.telemetryPayloadSmall = packet.payload;
+        this.log('rx', `Telemetry small (${raw.length}B)`);
 
-      // Try to assemble and decrypt
-      if (this.pendingLargePackets.length > 0) {
-        await this.assembleTelemetry();
+        // Try assembly if we have both
+        if (this.telemetryPayloadLarge) {
+          await this.assembleTelemetry();
+        }
+      } else {
+        // Medium-sized fragment - treat as large
+        this.telemetryPayloadLarge = packet.payload;
+        this.telemetryPayloadSmall = null;
+        this.log('rx', `Telemetry medium (${raw.length}B)`);
       }
     } else if (cmdByte === 0x44 || cmdByte === 0x48) {
-      // Single packet or response
+      // Single encrypted packet or response
       if (this.sessionKeys) {
         try {
           const decrypted = await decryptAesCbc(packet.payload, this.sessionKeys.aesKey, this.sessionKeys.iv);
+          this.log('rx', `Decrypted (${decrypted.length}B)`, toHex(decrypted).substring(0, 80));
           const telemetry = parseTelemetry(decrypted);
           if (Object.keys(telemetry).length > 0) {
             this.handlers.onTelemetry(telemetry);
           }
-          this.log('rx', `Decrypted single (${decrypted.length}B)`, toHex(decrypted).substring(0, 80));
         } catch (e) {
-          this.log('rx', `Decrypt failed (single): ${e}`, toHex(packet.payload).substring(0, 80));
+          this.log('rx', `Decrypt failed: ${e}`, toHex(packet.payload).substring(0, 60));
         }
       } else {
-        this.log('rx', `Encrypted packet (no keys yet)`, toHex(raw).substring(0, 80));
+        this.log('rx', `Encrypted (no keys)`, toHex(raw).substring(0, 60));
       }
     } else {
-      this.log('rx', `Encrypted cmd=0x${cmdByte.toString(16)} (${raw.length}B)`, toHex(raw).substring(0, 80));
+      this.log('rx', `Encrypted cmd=0x${cmdByte.toString(16)} (${raw.length}B)`, toHex(raw).substring(0, 60));
     }
   }
 
   private async assembleTelemetry(): Promise<void> {
-    if (!this.sessionKeys) return;
+    if (!this.sessionKeys || !this.telemetryPayloadLarge) return;
 
-    // Concatenate all fragments
-    const allLarge = concatBytes(...this.pendingLargePackets);
-    const allSmall = this.pendingSmallPackets.length > 0
-      ? concatBytes(...this.pendingSmallPackets)
-      : new Uint8Array(0);
+    // Concatenate large + small as per SolixBLE
+    const combined = this.telemetryPayloadSmall
+      ? concatBytes(this.telemetryPayloadLarge, this.telemetryPayloadSmall)
+      : this.telemetryPayloadLarge;
 
-    const combined = concatBytes(allLarge, allSmall);
-
-    this.pendingLargePackets = [];
-    this.pendingSmallPackets = [];
+    // Reset
+    this.telemetryPayloadLarge = null;
+    this.telemetryPayloadSmall = null;
 
     try {
       const decrypted = await decryptAesCbc(combined, this.sessionKeys.aesKey, this.sessionKeys.iv);
-      this.log('rx', `Decrypted telemetry (${decrypted.length}B)`, toHex(decrypted).substring(0, 120));
+      this.log('rx', `Telemetry decrypted (${decrypted.length}B)`, toHex(decrypted).substring(0, 100));
 
       const telemetry = parseTelemetry(decrypted);
       if (Object.keys(telemetry).length > 0) {
         this.handlers.onTelemetry(telemetry);
       }
     } catch (e) {
-      this.log('rx', `Telemetry decrypt failed: ${e}`);
-
-      // Try without combining
-      try {
-        const decrypted = await decryptAesCbc(allLarge, this.sessionKeys.aesKey, this.sessionKeys.iv);
-        this.log('rx', `Decrypted large only (${decrypted.length}B)`, toHex(decrypted).substring(0, 120));
-
-        const telemetry = parseTelemetry(decrypted);
-        if (Object.keys(telemetry).length > 0) {
-          this.handlers.onTelemetry(telemetry);
-        }
-      } catch (e2) {
-        this.log('error', `All decrypt attempts failed: ${e2}`);
-      }
+      this.log('error', `Telemetry decrypt failed: ${e}`);
     }
   }
 
   async sendCommand(commandCode: Uint8Array, payload: Uint8Array): Promise<void> {
     if (!this.commandChar || !this.sessionKeys) {
-      this.log('error', 'Cannot send command: not connected or no session keys');
+      this.log('error', 'Not connected or no session keys');
       return;
     }
 

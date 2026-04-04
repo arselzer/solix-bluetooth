@@ -6,21 +6,22 @@ export function parseTelemetry(decryptedPayload: Uint8Array): TelemetryData {
   const result: TelemetryData = {};
   let offset = 0;
 
-  while (offset < decryptedPayload.length) {
-    if (offset >= decryptedPayload.length) break;
+  // Strip leading 0x00 byte if present (as done in SolixBLE)
+  if (decryptedPayload.length > 0 && decryptedPayload[0] === 0x00) {
+    offset = 1;
+  }
 
+  while (offset < decryptedPayload.length) {
     const paramId = decryptedPayload[offset];
     offset++;
 
     if (offset >= decryptedPayload.length) break;
 
-    // Read length - can be 1 or 2 bytes depending on high bit
-    let paramLength = decryptedPayload[offset];
+    const paramLength = decryptedPayload[offset];
     offset++;
 
     if (paramLength === 0) continue;
 
-    // Check if we have enough data
     if (offset + paramLength > decryptedPayload.length) {
       console.warn(`[Telemetry] Param 0x${paramId.toString(16)}: need ${paramLength} bytes but only ${decryptedPayload.length - offset} left`);
       break;
@@ -32,13 +33,16 @@ export function parseTelemetry(decryptedPayload: Uint8Array): TelemetryData {
     const paramDef = SB3_PARAMS[paramId];
     if (paramDef) {
       try {
-        result[paramDef.name] = decodeParam(paramDef, paramData);
+        // SolixBLE skips the first byte of param data (type byte) for value parsing
+        const valueData = paramDef.skipFirst && paramData.length > 1
+          ? paramData.slice(1)
+          : paramData;
+        result[paramDef.name] = decodeParam(paramDef, valueData);
       } catch (e) {
         console.warn(`[Telemetry] Failed to decode param 0x${paramId.toString(16)} (${paramDef.name}):`, e);
         result[`raw_${paramId.toString(16)}`] = toHex(paramData);
       }
     } else {
-      // Unknown parameter - store raw hex
       result[`unknown_${paramId.toString(16)}`] = toHex(paramData);
     }
   }
