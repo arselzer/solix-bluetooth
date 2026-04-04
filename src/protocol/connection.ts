@@ -85,7 +85,7 @@ export class SolixConnection {
           this.server = await Promise.race([
             this.device.gatt!.connect(),
             new Promise<never>((_, reject) =>
-              setTimeout(() => reject(new Error('Connection timeout')), 5000)
+              setTimeout(() => reject(new Error('Connection timeout')), 10000)
             ),
           ]);
           break;
