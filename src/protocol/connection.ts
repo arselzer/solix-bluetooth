@@ -78,15 +78,21 @@ export class SolixConnection {
       });
 
       // BLE connection often fails on first attempt — retry up to 3 times
+      // Race against a 5s timeout since the browser's default timeout is ~30s
       this.log('info', 'Connecting to GATT server...');
       for (let attempt = 1; attempt <= 3; attempt++) {
         try {
-          this.server = await this.device.gatt!.connect();
+          this.server = await Promise.race([
+            this.device.gatt!.connect(),
+            new Promise<never>((_, reject) =>
+              setTimeout(() => reject(new Error('Connection timeout')), 5000)
+            ),
+          ]);
           break;
         } catch (e) {
           if (attempt < 3) {
-            this.log('info', `Connection attempt ${attempt} failed, retrying in 1s...`);
-            await new Promise(r => setTimeout(r, 1000));
+            this.log('info', `Attempt ${attempt} failed (${e}), retrying...`);
+            await new Promise(r => setTimeout(r, 500));
           } else {
             throw e;
           }
