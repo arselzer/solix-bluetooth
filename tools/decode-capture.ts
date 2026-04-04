@@ -146,6 +146,70 @@ function parseTlv(data: Buffer): Array<{ id: number; len: number; raw: string; v
   return entries;
 }
 
+// Extract a 64-byte public key from a negotiation payload
+// Try multiple strategies since the key location varies
+function extractPublicKey(payload: Buffer, label: string): Buffer | null {
+  const candidates: Buffer[] = [];
+
+  // Strategy 1: After "00 a1 40" prefix (3 bytes), take next 64
+  const prefixIdx = payload.indexOf(Buffer.from([0x00, 0xa1, 0x40]));
+  if (prefixIdx >= 0 && prefixIdx + 3 + 64 <= payload.length) {
+    candidates.push(payload.subarray(prefixIdx + 3, prefixIdx + 3 + 64));
+  }
+
+  // Strategy 2: After "a1 40" prefix (2 bytes)
+  const prefix2Idx = payload.indexOf(Buffer.from([0xa1, 0x40]));
+  if (prefix2Idx >= 0 && prefix2Idx + 2 + 64 <= payload.length) {
+    candidates.push(payload.subarray(prefix2Idx + 2, prefix2Idx + 2 + 64));
+  }
+
+  // Strategy 3: Last 64 bytes
+  if (payload.length >= 64) {
+    candidates.push(payload.subarray(payload.length - 64));
+  }
+
+  // Strategy 4: If payload starts with 0x04 (uncompressed point), take 65 bytes
+  if (payload[0] === 0x04 && payload.length >= 65) {
+    return payload.subarray(0, 65);
+  }
+
+  // Strategy 5: Look for any 0x04 byte followed by 64 bytes
+  for (let i = 0; i < payload.length - 64; i++) {
+    if (payload[i] === 0x04) {
+      candidates.push(payload.subarray(i, i + 65));
+    }
+  }
+
+  // Try each candidate
+  for (const candidate of candidates) {
+    const pubKey = candidate.length === 65 ? candidate : Buffer.concat([Buffer.from([0x04]), candidate]);
+    const result = tryDeriveSecret(pubKey);
+    if (result) {
+      console.log(`${label}: found valid key at offset, ${toHex(pubKey).substring(0, 40)}...`);
+      return pubKey;
+    }
+  }
+
+  // Fallback: return first 64-byte candidate with 0x04 prepended
+  if (candidates.length > 0) {
+    const c = candidates[0];
+    const pubKey = c.length === 65 ? c : Buffer.concat([Buffer.from([0x04]), c]);
+    console.log(`${label}: using best guess key ${toHex(pubKey).substring(0, 40)}... (may be invalid)`);
+    return pubKey;
+  }
+
+  console.log(`${label}: could not extract key from ${payload.length}B payload`);
+  return null;
+}
+
+function tryDeriveSecret(pubKey: Buffer): { key: Buffer; iv: Buffer } | null {
+  try {
+    return deriveSharedSecret(pubKey);
+  } catch {
+    return null;
+  }
+}
+
 // ====== MAIN ======
 
 async function main() {
@@ -200,24 +264,18 @@ async function main() {
   for (const p of packets) {
     if (!isNegotiation(p)) continue;
 
+    if (p.command[1] === 0x21) {
+      console.log(`Frame ${p.frame} ${p.direction} cmd=0x${toHex(p.command)} payload(${p.payload.length}B): ${toHex(p.payload)}`);
+    }
+
     // cmd 0x21 response (RX) contains device public key
     if (p.command[1] === 0x21 && p.direction === 'RX') {
-      // Last 64 bytes are the raw public key (x || y)
-      const keyOffset = p.payload.length - 64;
-      const rawKey = p.payload.subarray(keyOffset);
-      devicePubKey = Buffer.concat([Buffer.from([0x04]), rawKey]);
-      console.log(`Device public key (frame ${p.frame}): ${toHex(devicePubKey).substring(0, 40)}...`);
+      devicePubKey = extractPublicKey(p.payload, `device (frame ${p.frame})`);
     }
 
     // cmd 0x21 TX contains app public key
     if (p.command[1] === 0x21 && p.direction === 'TX') {
-      // Find the 64-byte key in the payload
-      if (p.payload.length >= 64) {
-        const keyOffset = p.payload.length - 64;
-        const rawKey = p.payload.subarray(keyOffset);
-        appPubKey = Buffer.concat([Buffer.from([0x04]), rawKey]);
-        console.log(`App public key (frame ${p.frame}): ${toHex(appPubKey).substring(0, 40)}...`);
-      }
+      appPubKey = extractPublicKey(p.payload, `app (frame ${p.frame})`);
     }
   }
 
@@ -226,8 +284,15 @@ async function main() {
     process.exit(1);
   }
 
-  // Derive shared secret
-  const { key, iv } = deriveSharedSecret(devicePubKey);
+  // Derive shared secret - try device key first, then all candidates
+  let key: Buffer, iv: Buffer;
+  const derived = tryDeriveSecret(devicePubKey);
+  if (derived) {
+    ({ key, iv } = derived);
+  } else {
+    console.error('Failed to derive shared secret with extracted key!');
+    process.exit(1);
+  }
   console.log(`AES Key: ${toHex(key)}`);
   console.log(`AES IV:  ${toHex(iv)}\n`);
 
