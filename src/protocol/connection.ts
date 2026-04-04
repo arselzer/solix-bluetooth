@@ -37,8 +37,7 @@ export class SolixConnection {
   private negotiationStage = -1;
   private negotiationTimestamp = 0;
 
-  private telemetryLargeFragments: Uint8Array[] = [];
-  private telemetryPayloadSmall: Uint8Array | null = null;
+  private telemetryFragments: Uint8Array[] = [];
 
   private handlers: ConnectionEventHandler;
 
@@ -127,8 +126,7 @@ export class SolixConnection {
   private cleanup() {
     this.sessionKeys = null;
     this.negotiationStage = -1;
-    this.telemetryLargeFragments = [];
-    this.telemetryPayloadSmall = null;
+    this.telemetryFragments = [];
   }
 
   private async startNegotiation(): Promise<void> {
@@ -259,30 +257,29 @@ export class SolixConnection {
     if (!packet) return;
 
     const cmdByte = packet.command[0];
-    const cmdByte2 = packet.command[1];
 
-    // Telemetry: SolixBLE stores only the LAST large packet (>230B raw) and
-    // one small packet (<50B raw), then concatenates large+small and decrypts.
-    // If two large packets arrive, the second replaces the first.
+    // Telemetry arrives as fragmented c4xx/c8xx packets.
+    // Each fragment's payload starts with a sequence byte (e.g., 0x13, 0x23, 0x33)
+    // that indicates fragment position. The encrypted data follows.
+    //
+    // C1000: 1 large + 1 small (sequence bytes: 0x13, 0x23 or similar)
+    // Solarbank 3: 2 large + 1 small (sequence bytes: 0x13, 0x23, 0x33)
+    //
+    // We accumulate all fragments, strip the sequence byte from each,
+    // and decrypt when the small fragment arrives.
     if (cmdByte === 0xc4 || cmdByte === 0xc8) {
-      this.log('rx', `Fragment cmd=${toHex(packet.command)} payload=${packet.payload.length}B raw=${raw.length}B`);
+      const seqByte = packet.payload[0];
+      const encData = packet.payload.slice(1);
+
+      this.log('rx', `Fragment cmd=${toHex(packet.command)} seq=0x${seqByte.toString(16)} data=${encData.length}B raw=${raw.length}B`);
 
       if (raw.length < 50) {
-        // Small fragment
-        this.telemetryPayloadSmall = packet.payload;
-
-        if (this.telemetryLargeFragments.length > 0) {
-          await this.assembleTelemetry();
-        }
-      } else if (raw.length > 230) {
-        // Large fragment - REPLACE (not accumulate), matching SolixBLE behavior
-        // SolixBLE: "large invalidates previous small"
-        this.telemetryLargeFragments = [packet.payload];
-        this.telemetryPayloadSmall = null;
+        // Small/final fragment — strip seq byte and trigger assembly
+        this.telemetryFragments.push(encData);
+        await this.assembleTelemetry();
       } else {
-        // Medium fragment - also treat as large replacement
-        this.telemetryLargeFragments = [packet.payload];
-        this.telemetryPayloadSmall = null;
+        // Large fragment — accumulate
+        this.telemetryFragments.push(encData);
       }
     } else if (cmdByte === 0x44 || cmdByte === 0x48) {
       // Single encrypted packet or response
@@ -306,20 +303,16 @@ export class SolixConnection {
   }
 
   private async assembleTelemetry(): Promise<void> {
-    if (!this.sessionKeys || this.telemetryLargeFragments.length === 0) return;
+    if (!this.sessionKeys || this.telemetryFragments.length === 0) return;
 
-    // Concatenate all large fragments + small fragment
-    const allLarge = concatBytes(...this.telemetryLargeFragments);
-    const combined = this.telemetryPayloadSmall
-      ? concatBytes(allLarge, this.telemetryPayloadSmall)
-      : allLarge;
+    // Concatenate all fragment data (sequence bytes already stripped)
+    const combined = concatBytes(...this.telemetryFragments);
+    const fragCount = this.telemetryFragments.length;
 
-    const smallLen = this.telemetryPayloadSmall ? this.telemetryPayloadSmall.length : 0;
-    this.log('rx', `Assembling: large=${allLarge.length}B + small=${smallLen}B = ${combined.length}B (mod16=${combined.length % 16})`);
+    this.log('rx', `Assembling: ${fragCount} fragments = ${combined.length}B (mod16=${combined.length % 16})`);
 
     // Reset
-    this.telemetryLargeFragments = [];
-    this.telemetryPayloadSmall = null;
+    this.telemetryFragments = [];
 
     try {
       const decrypted = await decryptAesCbc(combined, this.sessionKeys.aesKey, this.sessionKeys.iv);
