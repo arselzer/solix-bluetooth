@@ -12,12 +12,31 @@
  *
  * Or just pipe the "Write Commands Only" or "Notifications Only"
  * sections from the decode-anker-ble.sh script.
+ *
+ * IMPORTANT: This only works for captures from OUR web app or SolixBLE,
+ * which use the hardcoded ECDH private key. The official Anker app
+ * generates a fresh keypair each session, so its captures cannot be
+ * decrypted without intercepting the runtime private key (via Frida).
+ *
+ * To decrypt Anker app captures, use Frida to hook Cipher.doFinal()
+ * and capture the plaintext directly.
+ *
+ * For captures from our app, use:
+ *   PRIVATE_KEY=<hex> npx tsx tools/decode-capture.ts < capture.tsv
  */
 
 import { createECDH } from 'crypto';
 import { createDecipheriv } from 'crypto';
 
-const PRIVATE_KEY_HEX = '7dfbea61cd95cee49c458ad7419e817f1ade9a66136de3c7d5787af1458e39f4';
+// SolixBLE hardcoded private key - only works for SolixBLE/our web app captures
+const PRIVATE_KEY_HEX = process.env.PRIVATE_KEY || '7dfbea61cd95cee49c458ad7419e817f1ade9a66136de3c7d5787af1458e39f4';
+
+// Show what public key this private key generates
+const _ecdh = createECDH('prime256v1');
+_ecdh.setPrivateKey(fromHex(PRIVATE_KEY_HEX));
+const OUR_PUBLIC_KEY = _ecdh.getPublicKey();
+console.log(`Using private key: ${PRIVATE_KEY_HEX.substring(0, 16)}...`);
+console.log(`Corresponding public key: ${toHex(OUR_PUBLIC_KEY).substring(0, 40)}...\n`);
 
 function fromHex(hex: string): Buffer {
   return Buffer.from(hex.replace(/[:\s]/g, ''), 'hex');
@@ -279,12 +298,24 @@ async function main() {
     }
   }
 
+  // Check if the capture was made by the Anker app (different public key)
+  if (appPubKey && toHex(appPubKey) !== toHex(OUR_PUBLIC_KEY)) {
+    console.log('\n⚠️  WARNING: This capture was NOT made by SolixBLE or our web app.');
+    console.log('   The app used a different ECDH keypair (generated at runtime).');
+    console.log(`   App public key:  ${toHex(appPubKey).substring(0, 40)}...`);
+    console.log(`   Our public key:  ${toHex(OUR_PUBLIC_KEY).substring(0, 40)}...`);
+    console.log('   Cannot decrypt without the app\'s private key.');
+    console.log('   To capture decryptable traffic, use our web app or SolixBLE.');
+    console.log('   To intercept Anker app traffic, use Frida.\n');
+    process.exit(1);
+  }
+
   if (!devicePubKey) {
     console.error('Could not find device public key in negotiation!');
     process.exit(1);
   }
 
-  // Derive shared secret - try device key first, then all candidates
+  // Derive shared secret
   let key: Buffer, iv: Buffer;
   const derived = tryDeriveSecret(devicePubKey);
   if (derived) {
