@@ -78,8 +78,21 @@ export class SolixConnection {
         this.handlers.onStateChange('disconnected');
       });
 
+      // BLE connection often fails on first attempt — retry up to 3 times
       this.log('info', 'Connecting to GATT server...');
-      this.server = await this.device.gatt!.connect();
+      for (let attempt = 1; attempt <= 3; attempt++) {
+        try {
+          this.server = await this.device.gatt!.connect();
+          break;
+        } catch (e) {
+          if (attempt < 3) {
+            this.log('info', `Connection attempt ${attempt} failed, retrying in 1s...`);
+            await new Promise(r => setTimeout(r, 1000));
+          } else {
+            throw e;
+          }
+        }
+      }
 
       this.log('info', 'Getting primary service...');
       const service = await this.server.getPrimaryService(SERVICE_UUID);
