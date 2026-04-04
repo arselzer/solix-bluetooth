@@ -145,21 +145,31 @@ export const PARAM_LABELS: Record<string, string> = {
   // Common
   device_type: 'Device Type',
   serial_number: 'Serial Number',
+  model_name: 'Model',
   wifi_signal: 'WiFi Signal',
+  wifi_rssi: 'WiFi RSSI',
   bt_signal: 'BT Signal',
   firmware_version: 'Firmware',
+  hw_version: 'HW Version',
   temperature: 'Temperature (C)',
+  battery_temperature: 'Battery Temp (C)',
+  online_status: 'Online',
+  current_hour: 'Clock (hour)',
 
   // Battery
   battery_percentage_aggregate: 'Battery %',
-  battery_health: 'Battery Health %',
+  battery_health: 'Battery Health',
   battery_percentage: 'Battery Level',
   battery_capacity: 'Battery Capacity',
   battery_power: 'Battery Power (W)',
+  battery_cycles: 'Battery Cycles',
+  battery_resistance: 'Battery R (mOhm)',
+  battery_voltage: 'Battery Voltage',
   charged_energy: 'Charged (kWh)',
   discharged_energy: 'Discharged (kWh)',
   charge_power: 'Charge Power (W)',
   discharge_power: 'Discharge Power (W)',
+  charging_state: 'Charging State',
 
   // Solar
   solar_power_in: 'Solar Input (W)',
@@ -174,6 +184,7 @@ export const PARAM_LABELS: Record<string, string> = {
   house_consumption: 'Consumption (W)',
   power_out: 'Output (W)',
   output_power: 'Output Power (W)',
+  total_output_power: 'Total Output (W)',
   output_limit: 'Output Limit (W)',
   input_limit: 'Input Limit (W)',
 
@@ -184,23 +195,42 @@ export const PARAM_LABELS: Record<string, string> = {
   grid_to_home_power: 'Grid to Home (W)',
   grid_status: 'Grid Status',
 
-  // C1000 specific
+  // C1000 Power Station
   ac_power_in: 'AC Input (W)',
   ac_power_out: 'AC Output (W)',
   dc_power_out: 'DC Output (W)',
-  type_c_power_out: 'USB-C Output (W)',
-  usb_power_out: 'USB-A Output (W)',
+  type_c_power_out: 'USB-C Out (W)',
+  usb_power_out: 'USB-A Out (W)',
   ac_switch: 'AC Switch',
   dc_switch: 'DC Switch',
-  wifi_name: 'WiFi Name',
+  ac_output_active: 'AC Active',
+  dc_output_active: 'DC Active',
+  ac_enabled: 'AC Enabled',
+  dc_enabled: 'DC Enabled',
+  error_code: 'Error Code',
+
+  // C1000 Settings
+  capacity_wh: 'Capacity (Wh)',
+  max_ac_input_w: 'Max AC Input (W)',
+  display_timeout_s: 'Display Off (s)',
+  idle_timeout_min: 'Idle Off (min)',
+  ups_mode: 'UPS Mode',
+  ups_reserve_pct: 'UPS Reserve %',
+  min_soc_pct: 'Min SoC %',
+  max_charge_soc: 'Max Charge %',
+  max_discharge_soc: 'Max Discharge %',
+  charge_speed: 'Charge Speed',
+  light_mode: 'Light Mode',
+  led_mode: 'LED Mode',
 };
 
 // Display grouping for organized layout
 export const PARAM_GROUPS: Record<string, string[]> = {
-  'Battery': ['battery_percentage', 'battery_percentage_aggregate', 'battery_health', 'battery_power', 'battery_capacity', 'charge_power', 'discharge_power', 'charged_energy', 'discharged_energy'],
+  'Battery': ['battery_percentage', 'battery_percentage_aggregate', 'battery_health', 'battery_power', 'battery_capacity', 'battery_voltage', 'battery_cycles', 'battery_resistance', 'battery_temperature', 'charge_power', 'discharge_power', 'charging_state', 'charged_energy', 'discharged_energy'],
   'Solar': ['solar_power_in', 'solar_pv1_power', 'solar_pv2_power', 'solar_pv3_power', 'solar_pv4_power', 'pv_yield'],
-  'Home': ['house_demand', 'house_consumption', 'power_out', 'output_power', 'output_limit', 'input_limit'],
+  'Output': ['house_demand', 'house_consumption', 'power_out', 'output_power', 'total_output_power', 'output_limit', 'input_limit', 'ac_power_in', 'ac_power_out', 'dc_power_out', 'type_c_power_out', 'usb_power_out'],
   'Grid': ['grid_power', 'grid_to_home_power', 'grid_import_energy', 'grid_export_energy', 'grid_status'],
-  'Power Station': ['ac_power_in', 'ac_power_out', 'dc_power_out', 'type_c_power_out', 'usb_power_out', 'ac_switch', 'dc_switch'],
-  'Device': ['serial_number', 'device_type', 'firmware_version', 'temperature', 'wifi_signal', 'bt_signal', 'wifi_name'],
+  'Switches': ['ac_switch', 'dc_switch', 'ac_enabled', 'dc_enabled', 'ac_output_active', 'dc_output_active'],
+  'Settings': ['capacity_wh', 'max_ac_input_w', 'min_soc_pct', 'max_charge_soc', 'max_discharge_soc', 'charge_speed', 'display_timeout_s', 'idle_timeout_min', 'ups_mode', 'ups_reserve_pct', 'light_mode', 'led_mode'],
+  'Device': ['serial_number', 'model_name', 'device_type', 'firmware_version', 'hw_version', 'temperature', 'wifi_signal', 'wifi_rssi', 'bt_signal', 'online_status', 'current_hour', 'error_code'],
 };

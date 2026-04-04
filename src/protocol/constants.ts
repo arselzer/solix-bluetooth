@@ -75,26 +75,68 @@ export const SB3_PARAMS: Record<number, { name: string; type: 'string' | 'int' |
   0xd5: { name: 'grid_to_home_power', type: 'int', skipFirst: true },
 };
 
-// Solix C1000 (A17X0) telemetry parameter IDs
-// Based on SolixBLE devices/c1000.py
+// Solix C1000 (A1761) telemetry parameter IDs
+// Reverse-engineered from live device captures
 export type ParamDef = { name: string; type: 'string' | 'int' | 'signed_int' | 'float'; divisor?: number; skipFirst?: boolean };
 export const C1000_PARAMS: Record<number, ParamDef> = {
-  0xa2: { name: 'serial_number', type: 'string', skipFirst: true },
-  0xa3: { name: 'wifi_name', type: 'string', skipFirst: true },
+  // Power I/O
+  0xa4: { name: 'wifi_rssi', type: 'signed_int', skipFirst: true },         // 0xFFFF when not connected
   0xa5: { name: 'ac_power_in', type: 'int', skipFirst: true },
   0xa6: { name: 'ac_power_out', type: 'int', skipFirst: true },
   0xa7: { name: 'dc_power_out', type: 'int', skipFirst: true },
   0xa8: { name: 'type_c_power_out', type: 'int', skipFirst: true },
   0xa9: { name: 'usb_power_out', type: 'int', skipFirst: true },
+  0xaa: { name: 'total_output_power', type: 'int', skipFirst: true },
+  0xae: { name: 'solar_power_in', type: 'int', skipFirst: true },
+
+  // Battery
   0xab: { name: 'battery_percentage', type: 'int', skipFirst: true },
   0xac: { name: 'battery_power', type: 'signed_int', skipFirst: true },
-  0xae: { name: 'solar_power_in', type: 'int', skipFirst: true },
+  0xad: { name: 'battery_voltage', type: 'int', skipFirst: true },
+  0xb5: { name: 'battery_cycles', type: 'int', skipFirst: true },
+  0xb6: { name: 'battery_health', type: 'int', skipFirst: true },
+  0xb8: { name: 'battery_resistance', type: 'int', skipFirst: true },
+
+  // Switch states
   0xaf: { name: 'ac_switch', type: 'int', skipFirst: true },
   0xb0: { name: 'dc_switch', type: 'int', skipFirst: true },
-  0xb3: { name: 'temperature', type: 'signed_int', skipFirst: true },
-  0xb6: { name: 'battery_health', type: 'float', divisor: 10, skipFirst: true },
+  0xcc: { name: 'dc_output_active', type: 'int', skipFirst: true },         // changes when DC toggled
+
+  // Temperature
+  0xb3: { name: 'temperature', type: 'int', divisor: 10, skipFirst: true },  // /10 = Celsius
+  0xba: { name: 'battery_temperature', type: 'int', divisor: 10, skipFirst: true },
+
+  // Status
+  0xb1: { name: 'charging_state', type: 'int', skipFirst: true },
+  0xb2: { name: 'online_status', type: 'int', skipFirst: true },
+  0xb4: { name: 'error_code', type: 'int', skipFirst: true },
+  0xbb: { name: 'ac_output_active', type: 'int', skipFirst: true },
+
+  // Settings
+  0xbc: { name: 'led_mode', type: 'int', skipFirst: true },
+  0xbd: { name: 'current_hour', type: 'int', skipFirst: true },             // system clock hour
+  0xc0: { name: 'charge_speed', type: 'int', skipFirst: true },
+  0xc1: { name: 'max_charge_soc', type: 'int', skipFirst: true },           // 100 = charge to full
+  0xc3: { name: 'max_discharge_soc', type: 'int', skipFirst: true },        // 100 = use full capacity
+
+  // Solar
   0xc7: { name: 'solar_pv1_power', type: 'int', skipFirst: true },
   0xc8: { name: 'solar_pv2_power', type: 'int', skipFirst: true },
+
+  // Device info (from status request response)
+  0xd0: { name: 'serial_number', type: 'string', skipFirst: true },
+  0xd1: { name: 'capacity_wh', type: 'int', skipFirst: true },              // 1000 = 1000Wh
+  0xd2: { name: 'max_ac_input_w', type: 'int', skipFirst: true },           // 720W AC charging
+  0xd3: { name: 'display_timeout_s', type: 'int', skipFirst: true },        // 30 seconds
+  0xd4: { name: 'idle_timeout_min', type: 'int', skipFirst: true },         // 60 minutes
+  0xd5: { name: 'ups_mode', type: 'int', skipFirst: true },
+  0xd6: { name: 'ups_reserve_pct', type: 'int', skipFirst: true },
+  0xd7: { name: 'ac_enabled', type: 'int', skipFirst: true },               // 1 = AC output on
+  0xd8: { name: 'dc_enabled', type: 'int', skipFirst: true },               // 1 = DC output on
+  0xd9: { name: 'light_mode', type: 'int', skipFirst: true },               // 0=off 1=on 2=auto
+  0xda: { name: 'min_soc_pct', type: 'int', skipFirst: true },              // 50 = reserve 50%
+  0xfd: { name: 'model_name', type: 'string', skipFirst: true },            // "A1761_30Ah"
+  0xf8: { name: 'hw_version', type: 'int', skipFirst: true },
 };
 
 // Combined param map: try all known device params
