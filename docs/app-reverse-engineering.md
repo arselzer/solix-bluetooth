@@ -271,3 +271,127 @@ Based on asset/image names and methods:
 - Command assembly: `assemble_command_util.dart`
 - TLV parsing: `parseTlvData`, `parseCommonDataWithDataType`
 - Debug logging: `[decodeResponse] decryptedPayload ===`
+
+## Analytics Tracking Events (action_* and APP_*)
+
+These directly correspond to BLE commands/features:
+
+### Device Control Actions
+```
+action_set_ac_params                    — AC parameter settings
+action_set_dc_port_switch               — DC port on/off
+action_set_dc_port_countdown            — DC port countdown timer
+action_set_backup_mode                  — Backup power mode
+action_set_backup_strategy              — Backup strategy
+action_set_schedule                     — Schedule/timer
+action_set_screen_off_time              — Screen off timeout
+action_set_screen_saver_params          — Screen saver settings
+action_set_lcd_backlight_brightness     — LCD brightness
+action_set_sleep_mode                   — Sleep mode
+action_set_ambient_light_switch         — Ambient light
+action_set_temperature_type             — Temperature unit (C/F)
+action_set_language_type                — Device language
+action_set_system_params                — System parameters
+action_set_tou_system_params            — TOU system parameters
+action_set_electricity_price_and_unit   — Electricity price
+action_set_power_limit_country_code     — Power limit by country
+action_set_connection_sensitivity       — Grid connection sensitivity
+action_set_bms_params                   — BMS parameters
+action_set_system_self_check            — System self check
+action_set_distribution_box             — Distribution box config
+action_set_third_party_pv              — Third party PV config
+action_set_charging_schedule            — Charging schedule
+action_set_charging_protocol            — Charging protocol
+action_set_cycle_charging_power         — Cycle charging power
+action_set_car_charger_params           — Car charger parameters
+action_set_oil_machine_params           — Oil generator params
+action_set_standby_oil_machine_params   — Standby generator params
+action_set_gyroscope_switch             — Gyroscope switch
+action_set_screen_orientation           — Screen orientation
+action_set_laboratory_function_switch   — Lab function toggle
+action_set_offline_port_switch          — Offline port switch
+action_set_offline_port_switch_memory   — Offline port memory
+action_set_custom_branch                — Custom branch
+action_set_biggest_frequency            — Biggest frequency setting
+action_set_standby_rated_power          — Standby rated power
+action_set_protocol_switch              — Protocol switch
+action_set_tomato_time                  — Pomodoro timer
+action_control_charging                 — Charging control
+action_delete_task                      — Delete scheduled task
+action_device_reset                     — Factory reset
+action_disconnect_function              — Disconnect function
+action_restart_device                   — Restart device
+action_start_self_check                 — Start self check
+```
+
+### PPS (Portable Power Station) Specific
+```
+APP_PPS_ac_output_button_click          — AC output button
+APP_PPS_ac_output_switch_click          — AC output switch
+APP_PPS_dc_output_switch_click          — DC output switch
+APP_PPS_cart_port_button_click          — Car port button
+APP_PPS_set_ac_countdown                — AC countdown
+APP_PPS_set_dc_countdown                — DC countdown
+APP_PPS_super_charge_button_click       — Super charge
+APP_PPS_end_super_charge                — End super charge
+APP_PPS_charging_and_discharging_limit_enter — Charge/discharge limits
+APP_PPS_charging_discharging_limits_set — Set charge/discharge limits
+APP_PPS_output_memory_button_click      — Output memory
+APP_PPS_screen_language_set             — Screen language
+```
+
+### Generator Specific
+```
+APP_Gen_set_ac_output_mode              — AC output mode
+APP_Gen_set_dc_output_mode              — DC output mode
+APP_Gen_set_ac_countdown                — AC countdown
+APP_Gen_set_lpg_monitoring_mode         — LPG monitoring
+APP_Gen_start-stop_switch               — Start/stop switch
+APP_Gen_click_light_brightness          — Light brightness
+```
+
+### EMS/Energy Management
+```
+APP_ems_mode_set                        — EMS mode setting
+APP_FIRST_EMS_MODE                      — First EMS mode
+APP_DEVICE_EMS_BUTTON_POWER_SET_CLICK   — EMS power setting
+APP_DEVICE_EMS_MODEL_SETUP              — EMS model setup
+APP_DEVICE_EMS_SWITCH_MODE              — EMS switch mode
+APP_DEVICE_EMS_SWITCH_MODE_CHOOSE       — EMS mode choice
+APP_DEVICE_EMS_SINGLE_MODE              — Single EMS mode
+APP_DEVICE_EMS_OFFLINE_LEARNING         — Offline learning
+APP_DEVICE_EMS_LEARN_RESULT             — Learning result
+APP_DEVICE_EMS_RAPID_BATTERY_CHARG      — Rapid battery charge
+APP_DEVICE_EMS_PV_POWE                  — PV power setting
+APP_GRID_CHARGING_SETTING_PARAMETER     — Grid charging params
+```
+
+### Energy Deploy/Schedule
+```
+APP_ENERGY_DEPLOY_CLICK                 — Energy deploy
+APP_ENERGY_DEPLOY_ENTER_CLICK           — Enter energy deploy
+APP_ENERGY_DEPLOY_EDIT_POWER_CLICK      — Edit deploy power
+APP_ENERGY_DEPLOY_MODIFICATION_TIME_CLICK — Modify deploy time
+APP_ENERGY_DEPLOY_DELETE_CLICK          — Delete deploy
+APP_ENERGY_DEPLOY_TIME_CAR_CLICK        — Deploy time car
+APP_ENERGY_DEPLOY_NUMBER                — Deploy number
+```
+
+### Debug Log Strings
+```
+"Assembled protocol command data from tlv: "     — TLV command assembly debug
+"Sending command to set manual backup mode: "     — Backup mode debug
+"getDeviceCommandSuccess---conserve_percent> "    — Min SoC success
+"getDeviceCommandSuccess---diesel?.mode> "        — Diesel mode success
+```
+
+### Protocol Infrastructure
+```
+commonOpcodeMap          — Common opcode mapping
+chargingOpcodeMap        — Charging-specific opcode mapping
+OPCODE_KEY               — Opcode key constant
+FEATURE_OPCODE_KEY       — Feature opcode key
+ZXOpcodeType             — Opcode type enum
+BleCommandController     — BLE command controller
+BleWritePayloadHelper    — Payload construction helper
+```
