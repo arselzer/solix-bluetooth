@@ -395,3 +395,68 @@ ZXOpcodeType             — Opcode type enum
 BleCommandController     — BLE command controller
 BleWritePayloadHelper    — Payload construction helper
 ```
+
+## BLE Command Scan Results
+
+### Solarbank 3 E2700 Pro (A17C5) — Full Scan 0x4040-0x40FF
+
+| Command | Response | Likely Feature |
+|---------|----------|---------------|
+| `0x4040` | Full telemetry (495B via c840 3-fragment) | Status request |
+| `0x4041` | Full telemetry (494B via c405 3-fragment) | Status request (alt) |
+| `0x4045` | ACK `00a10131` | Unknown write cmd |
+| `0x4046` | ACK | Unknown write cmd |
+| `0x4047` | ACK | Unknown write cmd |
+| `0x4048` | ACK | Unknown write cmd |
+| `0x4049` | ACK | Unknown write cmd |
+| `0x4050` | `01a10131` or `00a10131` | Boolean toggle (feed-in?) |
+| `0x4051` | ACK | Unknown write cmd |
+| `0x4057` | `01a10131` | Boolean toggle (off-grid?) |
+| `0x405c` | ACK | Unknown write cmd |
+| `0x405e` | `01a10131` | Boolean toggle (self-consumption?) |
+| `0x405f` | ACK | Unknown write cmd |
+| `0x4061` | 12B: `00a10131a2020100a3020100` | Config query (a1,a2,a3) |
+| `0x4062` | Double ACK | Unknown |
+| `0x4072` | ACK | Unknown write cmd |
+| `0x4073` | ACK | Unknown write cmd |
+| `0x4080` | ACK | Unknown write cmd |
+| `0x4081` | `01a10131` | Boolean toggle |
+| `0x4082` | ACK | Unknown write cmd |
+| `0x409a` | `01a10131` | Boolean toggle |
+| `0x4074`-`0x40FF` | No response (except above) | Not implemented |
+
+**Total responding commands: ~20 out of 192 scanned**
+
+Commands returning `01a10131` (boolean true): 0x4050, 0x4057, 0x405e, 0x4081, 0x409a
+These likely correspond to: setFeedGridSwitch, setOffGridSwitch, setSelfConsumption, setGreenEnergyPriority, or similar boolean settings.
+
+### C1000 (A1761) — Partial Scan 0x4000-0x4039
+
+| Command | Response | Identified Feature |
+|---------|----------|-------------------|
+| `0x4000`-`0x4022` | No response | Not implemented |
+| `0x4023` | `01` (1B) | Protocol info query |
+| `0x4024` | `04` (1B) | Port count query |
+| `0x4025` | `04` (1B) | Port count query |
+| `0x4029` | `00a10105` TLV a1=5 | Device type query |
+| `0x402e` | `01` (1B) | Unknown query |
+| `0x402f` | `04` (1B) | Unknown query |
+| `0x4030` | 19B: firmware versions "v0.1.3.0", "v1.5.1" | Firmware version query |
+| `0x4031`-`0x4039` | No response (disconnected at 0x4039) | |
+| `0x4040` | Full telemetry (312B via c840 2-fragment) | Status request |
+| `0x4041` | Partial (18B: a1, a2, a3) | Partial status |
+| `0x4042`-`0x404c` | ACK only | Write commands (need payloads) |
+
+### Key Insight
+
+Both devices use `a10121` as a generic query/status payload. Write commands need
+proper TLV payloads with the target param ID and value. The `01a10131` responses
+on Solarbank indicate boolean features that are currently enabled — sending
+with a value payload (`a10121a2020100` for OFF, `a10121a2020101` for ON) might
+toggle these features.
+
+### Next Steps
+1. Try write payloads on the "boolean true" commands (0x4050, 0x4057, 0x405e)
+2. Try setting output_limit via 0x4050 with value payload
+3. Use Frida to intercept the app's actual command payloads
+4. Test during daytime with solar production for meaningful telemetry values
