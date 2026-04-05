@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
+import { ref, reactive, onMounted, onUnmounted, watch } from 'vue';
 import { SolixConnection } from './protocol';
 import type { ConnectionState, TelemetryData, LogEntry } from './protocol';
 import ConnectionPanel from './components/ConnectionPanel.vue';
@@ -16,6 +16,89 @@ const logEntries = ref<LogEntry[]>([]);
 const rawPackets = ref<{ timestamp: number; direction: 'tx' | 'rx'; data: Uint8Array }[]>([]);
 const activeTab = ref<'telemetry' | 'commands' | 'scanner' | 'log' | 'raw'>('telemetry');
 const bleSupported = ref(!!navigator.bluetooth);
+
+// Wake Lock to prevent browser from suspending when backgrounded
+let wakeLock: WakeLockSentinel | null = null;
+
+async function requestWakeLock() {
+  try {
+    if ('wakeLock' in navigator) {
+      wakeLock = await (navigator as any).wakeLock.request('screen');
+      wakeLock?.addEventListener('release', () => {
+        // Re-acquire on release (e.g., after screen off/on)
+        if (connectionState.value !== 'disconnected') {
+          requestWakeLock();
+        }
+      });
+    }
+  } catch { /* Wake Lock not supported or denied */ }
+}
+
+function releaseWakeLock() {
+  wakeLock?.release();
+  wakeLock = null;
+}
+
+// Re-acquire wake lock when page becomes visible again
+function handleVisibilityChange() {
+  if (document.visibilityState === 'visible' && connectionState.value !== 'disconnected') {
+    requestWakeLock();
+  }
+}
+
+// Persist logs to sessionStorage periodically
+function saveLogsToStorage() {
+  try {
+    const logsToSave = logEntries.value.slice(-200);
+    sessionStorage.setItem('solix_logs', JSON.stringify(logsToSave));
+    sessionStorage.setItem('solix_telemetry', JSON.stringify(telemetry));
+    sessionStorage.setItem('solix_tab', activeTab.value);
+    sessionStorage.setItem('solix_device', deviceName.value || '');
+  } catch { /* Storage full or unavailable */ }
+}
+
+function restoreLogsFromStorage() {
+  try {
+    const savedLogs = sessionStorage.getItem('solix_logs');
+    if (savedLogs) {
+      const parsed = JSON.parse(savedLogs) as LogEntry[];
+      if (parsed.length > 0) {
+        logEntries.value = [
+          { timestamp: Date.now(), direction: 'info', message: `--- Restored ${parsed.length} log entries from previous session ---` },
+          ...parsed,
+        ];
+      }
+    }
+    const savedTelemetry = sessionStorage.getItem('solix_telemetry');
+    if (savedTelemetry) {
+      Object.assign(telemetry, JSON.parse(savedTelemetry));
+    }
+    const savedTab = sessionStorage.getItem('solix_tab');
+    if (savedTab) {
+      activeTab.value = savedTab as any;
+    }
+    const savedDevice = sessionStorage.getItem('solix_device');
+    if (savedDevice) {
+      deviceName.value = savedDevice || null;
+    }
+  } catch { /* Parse error */ }
+}
+
+let saveInterval: ReturnType<typeof setInterval> | null = null;
+
+onMounted(() => {
+  restoreLogsFromStorage();
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+  // Save logs every 3 seconds
+  saveInterval = setInterval(saveLogsToStorage, 3000);
+});
+
+onUnmounted(() => {
+  releaseWakeLock();
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+  if (saveInterval) clearInterval(saveInterval);
+  saveLogsToStorage();
+});
 
 let connection: SolixConnection | null = null;
 
@@ -49,6 +132,7 @@ async function handleConnect() {
   connection = createConnection();
   try {
     await connection.connect();
+    await requestWakeLock();
   } catch (e) {
     console.error('Connection failed:', e);
   }
@@ -59,6 +143,7 @@ async function handleDisconnect() {
     await connection.disconnect();
     connection = null;
   }
+  releaseWakeLock();
 }
 
 async function handleCommand(commandCode: Uint8Array, payload: Uint8Array) {
