@@ -1,0 +1,17 @@
+{
+  "name": "Anker Solix Bluetooth",
+  "short_name": "Solix BLE",
+  "description": "Local BLE control for Anker Solix devices",
+  "start_url": "/solix-bluetooth/",
+  "scope": "/solix-bluetooth/",
+  "display": "standalone",
+  "background_color": "#121220",
+  "theme_color": "#1e1e2e",
+  "icons": [
+    {
+      "src": "/solix-bluetooth/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
