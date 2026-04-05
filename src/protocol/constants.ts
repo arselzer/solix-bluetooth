@@ -162,8 +162,14 @@ export function getParamMap(deviceName?: string): Record<number, ParamDef> {
   if (deviceName?.includes('C1000') || deviceName?.includes('A17X')) {
     return C1000_PARAMS;
   }
-  // Default to Solarbank 3 Pro
-  return SB3_PARAMS;
+  if (deviceName?.includes('C300') || deviceName?.includes('A1753') || deviceName?.includes('A1754') || deviceName?.includes('A1755')) {
+    return C1000_PARAMS; // C300X uses similar param layout to C1000
+  }
+  if (deviceName?.includes('Solarbank') || deviceName?.includes('A17C')) {
+    return SB3_PARAMS;
+  }
+  // Default: use C1000 params (most common for portable power stations)
+  return C1000_PARAMS;
 }
 
 // Telemetry identification

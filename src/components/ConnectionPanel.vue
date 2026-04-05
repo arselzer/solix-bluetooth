@@ -9,6 +9,7 @@ defineProps<{
 defineEmits<{
   connect: [];
   disconnect: [];
+  clear: [];
 }>();
 
 const stateLabels: Record<ConnectionState, string> = {
@@ -34,6 +35,13 @@ const stateColors: Record<ConnectionState, string> = {
       <span v-if="deviceName" class="device-name">{{ deviceName }}</span>
     </div>
     <div class="actions">
+      <button
+        v-if="state === 'disconnected'"
+        class="btn clear"
+        @click="$emit('clear')"
+      >
+        Clear
+      </button>
       <button
         v-if="state === 'disconnected'"
         class="btn connect"
@@ -94,6 +102,17 @@ const stateColors: Record<ConnectionState, string> = {
   font-weight: 600;
   cursor: pointer;
   font-size: 0.95em;
+}
+
+.clear {
+  background: transparent;
+  color: #888;
+  border: 1px solid #444;
+}
+
+.clear:hover {
+  background: #333;
+  color: #e0e0e0;
 }
 
 .connect {

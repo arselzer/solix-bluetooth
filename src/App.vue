@@ -151,6 +151,16 @@ async function handleCommand(commandCode: Uint8Array, payload: Uint8Array) {
     await connection.sendCommand(commandCode, payload);
   }
 }
+
+function clearState() {
+  logEntries.value = [];
+  rawPackets.value = [];
+  Object.keys(telemetry).forEach(k => delete telemetry[k]);
+  deviceName.value = null;
+  sessionStorage.removeItem('solix_logs');
+  sessionStorage.removeItem('solix_telemetry');
+  sessionStorage.removeItem('solix_device');
+}
 </script>
 
 <template>
@@ -170,6 +180,7 @@ async function handleCommand(commandCode: Uint8Array, payload: Uint8Array) {
         :device-name="deviceName"
         @connect="handleConnect"
         @disconnect="handleDisconnect"
+        @clear="clearState"
       />
 
       <div class="tabs">
