@@ -39,40 +39,56 @@ export const BASE_TIMESTAMP_HEX = '42ad8c69';
 export const BASE_TIMESTAMP = 0x698cad42; // little-endian interpretation
 
 // Solarbank 3 Pro (A17C5) telemetry parameter IDs
-// IMPORTANT: Integer values skip the first byte of param data (begin=1, it's a type byte)
+// Confirmed via daytime testing with solar production
 export const SB3_PARAMS: Record<number, { name: string; type: 'string' | 'int' | 'signed_int' | 'float'; divisor?: number; skipFirst?: boolean }> = {
   0xa1: { name: 'device_type', type: 'int', skipFirst: false },
   0xa2: { name: 'serial_number', type: 'string', skipFirst: true },
   0xa3: { name: 'wifi_signal', type: 'int', skipFirst: true },
   0xa4: { name: 'bt_signal', type: 'int', skipFirst: true },
-  0xa5: { name: 'battery_percentage_aggregate', type: 'float', divisor: 10, skipFirst: true },
-  0xa6: { name: 'battery_health', type: 'float', divisor: 10, skipFirst: true },
-  0xa7: { name: 'battery_percentage', type: 'int', skipFirst: true },
-  0xa8: { name: 'firmware_version', type: 'int', skipFirst: true },
+  0xa5: { name: 'battery_percentage', type: 'int', skipFirst: true },
+  0xa6: { name: 'temperature', type: 'int', skipFirst: true },           // Confirmed: matches 0xd4, changes with ambient temp
+  0xa7: { name: 'battery_info', type: 'int', skipFirst: true },          // 5-byte battery data
+  0xa8: { name: 'firmware_info', type: 'int', skipFirst: true },         // 5-byte firmware data
   0xa9: { name: 'battery_capacity', type: 'int', skipFirst: true },
-  0xab: { name: 'solar_power_in', type: 'int', skipFirst: true },
-  0xac: { name: 'pv_yield', type: 'int', skipFirst: true },
-  0xad: { name: 'output_power', type: 'int', skipFirst: true },
-  0xae: { name: 'charge_power', type: 'int', skipFirst: true },
-  0xb0: { name: 'discharge_power', type: 'int', skipFirst: true },
-  0xb1: { name: 'house_demand', type: 'int', skipFirst: true },
-  0xb2: { name: 'house_consumption', type: 'int', skipFirst: true },
-  0xb3: { name: 'grid_status', type: 'int', skipFirst: true },
-  0xb6: { name: 'battery_power', type: 'signed_int', skipFirst: true },
-  0xb7: { name: 'charged_energy', type: 'int', skipFirst: true },
-  0xb8: { name: 'discharged_energy', type: 'int', skipFirst: true },
-  0xbd: { name: 'grid_power', type: 'signed_int', skipFirst: true },
-  0xbe: { name: 'grid_import_energy', type: 'int', skipFirst: true },
-  0xbf: { name: 'grid_export_energy', type: 'int', skipFirst: true },
-  0xc0: { name: 'output_limit', type: 'int', skipFirst: true },
-  0xc1: { name: 'input_limit', type: 'int', skipFirst: true },
-  0xc7: { name: 'solar_pv1_power', type: 'int', skipFirst: true },
-  0xc8: { name: 'solar_pv2_power', type: 'int', skipFirst: true },
-  0xc9: { name: 'solar_pv3_power', type: 'int', skipFirst: true },
-  0xca: { name: 'solar_pv4_power', type: 'int', skipFirst: true },
-  0xcc: { name: 'temperature', type: 'signed_int', skipFirst: true },
-  0xd3: { name: 'power_out', type: 'int', skipFirst: true },
-  0xd5: { name: 'grid_to_home_power', type: 'int', skipFirst: true },
+  0xaa: { name: 'grid_connection', type: 'int', skipFirst: true },
+  0xab: { name: 'solar_power_total', type: 'int', skipFirst: true },     // Total solar input (W) - float32
+  0xac: { name: 'pv_yield_total', type: 'int', skipFirst: true },        // Total PV yield (W) - float32
+  0xad: { name: 'output_power', type: 'int', skipFirst: true },          // Output to home (W) - float32
+  0xae: { name: 'charge_power', type: 'int', skipFirst: true },          // Battery charge power (W) - float32
+  0xaf: { name: 'inverter_power', type: 'int', skipFirst: true },        // Inverter power - float32
+  0xb0: { name: 'cumulative_discharge_kwh', type: 'int', skipFirst: true }, // Cumulative kWh - float32
+  0xb1: { name: 'cumulative_demand_kwh', type: 'int', skipFirst: true },   // Cumulative kWh - float32
+  0xb2: { name: 'cumulative_consumption_kwh', type: 'int', skipFirst: true }, // Cumulative kWh - float32
+  0xb3: { name: 'cumulative_grid_kwh', type: 'int', skipFirst: true },     // Cumulative kWh - float32
+  0xb5: { name: 'battery_soc_raw', type: 'int', skipFirst: true },
+  0xb6: { name: 'battery_cycles', type: 'int', skipFirst: true },
+  0xb7: { name: 'charge_sessions', type: 'int', skipFirst: true },
+  0xb8: { name: 'discharge_sessions', type: 'int', skipFirst: true },
+  0xb9: { name: 'output_limit_setting', type: 'int', skipFirst: true },   // 200 = output limit in W?
+  0xba: { name: 'home_load_setting', type: 'int', skipFirst: true },      // Home load config - uint32
+  0xbd: { name: 'grid_power_limit', type: 'int', skipFirst: true },       // 800W grid power limit
+  0xbe: { name: 'grid_import_limit', type: 'int', skipFirst: true },      // 600W grid import limit
+  0xbf: { name: 'grid_export_power', type: 'int', skipFirst: true },
+  0xc0: { name: 'feed_in_limit', type: 'int', skipFirst: true },          // Feed-in grid limit (W)
+  0xc1: { name: 'daily_pv_counter', type: 'int', skipFirst: true },       // Changes constantly - counter not limit
+  0xc2: { name: 'total_pv_power', type: 'int', skipFirst: true },         // Mirrors solar_power_total - float32
+  0xc3: { name: 'grid_import_power', type: 'int', skipFirst: true },      // Grid import (W) - float32
+  0xc4: { name: 'grid_export_current', type: 'int', skipFirst: true },    // Grid export (W) - float32
+  0xc5: { name: 'battery_charge_current', type: 'int', skipFirst: true }, // Battery charge (W) = output_power - float32
+  0xc6: { name: 'solar_input_2', type: 'int', skipFirst: true },          // Second solar input (W) - float32 (172W with 2x400W panels)
+  0xc7: { name: 'solar_input_1', type: 'int', skipFirst: true },         // First solar input (W) - float32 (271W with 2x400W panels)
+  0xc8: { name: 'solar_pv3_power', type: 'int', skipFirst: true },       // PV3 (W) - float32
+  0xc9: { name: 'solar_pv3_power', type: 'int', skipFirst: true },       // PV3 (W) - float32
+  0xca: { name: 'solar_pv4_power', type: 'int', skipFirst: true },       // PV4 (W)
+  0xcb: { name: 'system_mode', type: 'int', skipFirst: true },
+  0xd3: { name: 'power_out_status', type: 'int', skipFirst: true },
+  0xd4: { name: 'temperature_2', type: 'int', skipFirst: true },          // Same as 0xa6 - confirms temperature
+  0xd5: { name: 'max_output_power', type: 'int', skipFirst: true },       // 3600W max output
+  0xd6: { name: 'max_charge_power', type: 'int', skipFirst: true },       // 1200W max charge
+  0xd7: { name: 'energy_today', type: 'int', skipFirst: true },           // Today's energy - float32
+  0xfb: { name: 'system_flags', type: 'int', skipFirst: true },
+  0xfc: { name: 'device_config', type: 'int', skipFirst: true },          // 22-byte config bitmap
+  0xfe: { name: 'anti_replay_timestamp', type: 'int', skipFirst: true },  // Increments each packet
 };
 
 // Solix C1000 (A1761) telemetry parameter IDs
