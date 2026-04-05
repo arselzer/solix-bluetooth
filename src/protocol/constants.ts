@@ -155,20 +155,66 @@ export const C1000_PARAMS: Record<number, ParamDef> = {
   0xf8: { name: 'hw_version', type: 'int', skipFirst: true },
 };
 
-// Combined param map: try all known device params
-// Since param IDs can overlap between devices with different meanings,
-// we use the SB3 map as default and merge unique C1000 params
+// Solix C300X (A1753/A1754/A1755) telemetry parameter IDs
+// Confirmed from live device capture (AZVSBK0F11400646)
+export const C300X_PARAMS: Record<number, ParamDef> = {
+  // Power I/O (all uint16, most are 0 when idle)
+  0xa4: { name: 'wifi_rssi', type: 'int', skipFirst: true },
+  0xa5: { name: 'ac_power_in', type: 'int', skipFirst: true },
+  0xa6: { name: 'ac_power_out', type: 'int', skipFirst: true },
+  0xa7: { name: 'dc_power_out', type: 'int', skipFirst: true },
+  0xa8: { name: 'type_c_power_out', type: 'int', skipFirst: true },
+  0xa9: { name: 'usb_power_out', type: 'int', skipFirst: true },
+  0xaa: { name: 'total_output_power', type: 'int', skipFirst: true },
+  0xab: { name: 'battery_percentage', type: 'int', skipFirst: true },
+  0xac: { name: 'battery_power', type: 'signed_int', skipFirst: true },
+  0xad: { name: 'battery_voltage', type: 'int', skipFirst: true },
+  0xae: { name: 'solar_power_in', type: 'int', skipFirst: true },
+  0xaf: { name: 'ac_switch', type: 'int', skipFirst: true },
+  0xb0: { name: 'dc_switch', type: 'int', skipFirst: true },
+
+  // Battery & Status
+  0xb1: { name: 'battery_capacity_wh', type: 'int', skipFirst: true },   // 1049 Wh
+  0xb2: { name: 'charging_state', type: 'int', skipFirst: true },
+  0xb3: { name: 'total_discharged_wh', type: 'int', skipFirst: true },   // 508 Wh lifetime
+  0xb4: { name: 'temperature', type: 'int', skipFirst: true },           // 27°C
+  0xb5: { name: 'battery_soc', type: 'int', skipFirst: true },           // 123 = SoC or health
+  0xb6: { name: 'battery_health_wh', type: 'int', skipFirst: true },     // 1049 = same as capacity
+
+  // Settings (uint8 via type 0x01)
+  0xb9: { name: 'screen_brightness', type: 'int', skipFirst: true },     // 19
+  0xbb: { name: 'ac_power_limit', type: 'int', skipFirst: true },        // 82W
+  0xbc: { name: 'dc_power_limit', type: 'int', skipFirst: true },        // 82W
+
+  // Device info & config
+  0xc5: { name: 'serial_number', type: 'string', skipFirst: true },      // "AZVSBK0F11400646"
+  0xc6: { name: 'max_ac_input_w', type: 'int', skipFirst: true },        // 330W
+  0xc7: { name: 'max_solar_input_w', type: 'int', skipFirst: true },     // 120W
+  0xc8: { name: 'display_timeout_s', type: 'int', skipFirst: true },     // 30s
+  0xc9: { name: 'idle_timeout_min', type: 'int', skipFirst: true },      // 60min
+  0xca: { name: 'ups_mode', type: 'int', skipFirst: true },
+  0xcc: { name: 'dc_output_active', type: 'int', skipFirst: true },
+  0xcd: { name: 'light_mode', type: 'int', skipFirst: true },            // 2 = auto
+  0xce: { name: 'min_soc_pct', type: 'int', skipFirst: true },           // 50%
+
+  // System
+  0xf7: { name: 'system_info', type: 'int', skipFirst: true },
+  0xf8: { name: 'device_config', type: 'int', skipFirst: true },         // 21-byte config
+  0xf9: { name: 'hw_version', type: 'int', skipFirst: true },            // 2
+};
+
+// Combined param map: select based on device name
 export function getParamMap(deviceName?: string): Record<number, ParamDef> {
-  if (deviceName?.includes('C1000') || deviceName?.includes('A17X')) {
-    return C1000_PARAMS;
-  }
   if (deviceName?.includes('C300') || deviceName?.includes('A1753') || deviceName?.includes('A1754') || deviceName?.includes('A1755')) {
-    return C1000_PARAMS; // C300X uses similar param layout to C1000
+    return C300X_PARAMS;
+  }
+  if (deviceName?.includes('C1000') || deviceName?.includes('A17X') || deviceName?.includes('A1761') || deviceName?.includes('A1762')) {
+    return C1000_PARAMS;
   }
   if (deviceName?.includes('Solarbank') || deviceName?.includes('A17C')) {
     return SB3_PARAMS;
   }
-  // Default: use C1000 params (most common for portable power stations)
+  // Default: use C1000 params
   return C1000_PARAMS;
 }
 

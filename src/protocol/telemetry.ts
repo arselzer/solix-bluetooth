@@ -235,7 +235,19 @@ export const PARAM_LABELS: Record<string, string> = {
   anti_replay_timestamp: 'Timestamp',
   temperature_2: 'Temperature 2 (C)',
 
-  // C1000 Power Station
+  // C300X specific
+  battery_capacity_wh: 'Battery Capacity (Wh)',
+  total_discharged_wh: 'Total Discharged (Wh)',
+  battery_soc: 'Battery SoC',
+  battery_health_wh: 'Battery Health (Wh)',
+  screen_brightness: 'Screen Brightness',
+  ac_power_limit: 'AC Power Limit (W)',
+  dc_power_limit: 'DC Power Limit (W)',
+  max_solar_input_w: 'Max Solar Input (W)',
+  system_info: 'System Info',
+  hw_version: 'HW Version',
+
+  // C1000/C300X Power Station
   ac_power_in: 'AC Input (W)',
   ac_power_out: 'AC Output (W)',
   dc_power_out: 'DC Output (W)',
