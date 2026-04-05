@@ -72,6 +72,11 @@ const stateColors: Record<ConnectionState, string> = {
   border: 1px solid #333;
 }
 
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
 .status {
   display: flex;
   align-items: center;
