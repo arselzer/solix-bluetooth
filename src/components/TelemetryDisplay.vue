@@ -1,11 +1,65 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import type { TelemetryData } from '../protocol';
 import { PARAM_LABELS, PARAM_GROUPS } from '../protocol';
 
 const props = defineProps<{
   data: TelemetryData;
 }>();
+
+const csvHistory = ref<{ timestamp: number; data: Record<string, string | number> }[]>([]);
+const recording = ref(false);
+let recordInterval: ReturnType<typeof setInterval> | null = null;
+
+function startRecording() {
+  recording.value = true;
+  csvHistory.value = [];
+  recordInterval = setInterval(() => {
+    if (Object.keys(props.data).length > 0) {
+      csvHistory.value.push({ timestamp: Date.now(), data: { ...props.data } });
+    }
+  }, 10000);
+}
+
+function stopRecording() {
+  recording.value = false;
+  if (recordInterval) {
+    clearInterval(recordInterval);
+    recordInterval = null;
+  }
+}
+
+function exportCsv() {
+  if (csvHistory.value.length === 0) {
+    // Export single snapshot
+    const keys = Object.keys(props.data);
+    const header = 'timestamp,' + keys.join(',');
+    const row = new Date().toISOString() + ',' + keys.map(k => props.data[k]).join(',');
+    downloadCsv(header + '\n' + row, 'solix-snapshot.csv');
+    return;
+  }
+
+  // Export recorded history
+  const allKeys = new Set<string>();
+  csvHistory.value.forEach(entry => Object.keys(entry.data).forEach(k => allKeys.add(k)));
+  const keys = Array.from(allKeys).sort();
+  const header = 'timestamp,' + keys.join(',');
+  const rows = csvHistory.value.map(entry => {
+    const ts = new Date(entry.timestamp).toISOString();
+    return ts + ',' + keys.map(k => entry.data[k] ?? '').join(',');
+  });
+  downloadCsv(header + '\n' + rows.join('\n'), 'solix-telemetry.csv');
+}
+
+function downloadCsv(content: string, filename: string) {
+  const blob = new Blob([content], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
 
 interface DisplayItem {
   key: string;
@@ -72,6 +126,18 @@ function formatValue(value: string | number): string {
 
 <template>
   <div class="telemetry">
+    <div v-if="hasData" class="export-bar">
+      <button class="export-btn" @click="exportCsv">
+        {{ csvHistory.length > 0 ? `Export CSV (${csvHistory.length} samples)` : 'Export Snapshot' }}
+      </button>
+      <button v-if="!recording" class="export-btn record" @click="startRecording">
+        Record (10s interval)
+      </button>
+      <button v-else class="export-btn stop" @click="stopRecording">
+        Stop Recording ({{ csvHistory.length }} samples)
+      </button>
+    </div>
+
     <div v-if="!hasData" class="empty">
       Waiting for data...
     </div>
@@ -105,6 +171,27 @@ function formatValue(value: string | number): string {
   border-radius: 8px;
   border: 1px solid #333;
 }
+
+.export-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.export-btn {
+  padding: 6px 14px;
+  background: #2a2a3e;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #e0e0e0;
+  cursor: pointer;
+  font-size: 0.8em;
+}
+
+.export-btn:hover { background: #3b82f6; border-color: #3b82f6; }
+.export-btn.record { border-color: #ef4444; color: #ef4444; }
+.export-btn.record:hover { background: #ef4444; color: white; }
+.export-btn.stop { background: #ef4444; color: white; border-color: #ef4444; }
 
 .group {
   margin-bottom: 16px;

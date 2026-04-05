@@ -39,6 +39,8 @@ export class SolixConnection {
 
   private telemetryFragments: Uint8Array[] = [];
   private assemblyTimer: ReturnType<typeof setTimeout> | null = null;
+  private statusPollTimer: ReturnType<typeof setInterval> | null = null;
+  private autoReconnect = true;
 
   private handlers: ConnectionEventHandler;
 
@@ -59,6 +61,7 @@ export class SolixConnection {
     this.log('info', 'Requesting Bluetooth device...');
 
     try {
+      this.autoReconnect = true;
       this.device = await navigator.bluetooth.requestDevice({
         filters: [
           { namePrefix: 'Solarbank' },
@@ -75,7 +78,11 @@ export class SolixConnection {
       this.device.addEventListener('gattserverdisconnected', () => {
         this.log('info', 'Device disconnected');
         this.cleanup();
-        this.handlers.onStateChange('disconnected');
+        if (this.autoReconnect) {
+          setTimeout(() => this.attemptReconnect(), 1000);
+        } else {
+          this.handlers.onStateChange('disconnected');
+        }
       });
 
       // BLE connection often fails on first attempt — retry up to 3 times
@@ -118,6 +125,8 @@ export class SolixConnection {
   }
 
   async disconnect(): Promise<void> {
+    this.autoReconnect = false;
+    this.stopStatusPolling();
     if (this.server?.connected) {
       this.server.disconnect();
     }
@@ -125,9 +134,58 @@ export class SolixConnection {
     this.handlers.onStateChange('disconnected');
   }
 
+  private startStatusPolling() {
+    this.stopStatusPolling();
+    this.statusPollTimer = setInterval(() => {
+      if (this.sessionKeys && this.commandChar) {
+        this.requestStatus();
+      }
+    }, 10000);
+  }
+
+  private stopStatusPolling() {
+    if (this.statusPollTimer) {
+      clearInterval(this.statusPollTimer);
+      this.statusPollTimer = null;
+    }
+  }
+
+  private async attemptReconnect(): Promise<void> {
+    if (!this.autoReconnect || !this.device) return;
+
+    this.log('info', 'Attempting auto-reconnect...');
+    this.handlers.onStateChange('connecting');
+
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        this.server = await this.device.gatt!.connect();
+        this.log('info', `Reconnected on attempt ${attempt}`);
+
+        const service = await this.server.getPrimaryService(SERVICE_UUID);
+        this.commandChar = await service.getCharacteristic(UUID_COMMAND);
+        this.telemetryChar = await service.getCharacteristic(UUID_TELEMETRY);
+        await this.telemetryChar.startNotifications();
+        this.telemetryChar.addEventListener('characteristicvaluechanged', this.onNotification.bind(this));
+
+        this.handlers.onStateChange('negotiating');
+        await this.startNegotiation();
+        return;
+      } catch (e) {
+        if (attempt < 3) {
+          this.log('info', `Reconnect attempt ${attempt} failed, retrying in 2s...`);
+          await new Promise(r => setTimeout(r, 2000));
+        }
+      }
+    }
+
+    this.log('error', 'Auto-reconnect failed after 3 attempts');
+    this.handlers.onStateChange('disconnected');
+  }
+
   private cleanup() {
     this.sessionKeys = null;
     this.negotiationStage = -1;
+    this.stopStatusPolling();
     this.telemetryFragments = [];
     if (this.assemblyTimer) {
       clearTimeout(this.assemblyTimer);
@@ -289,10 +347,9 @@ export class SolixConnection {
         this.log('info', `IV: ${toHex(this.sessionKeys.iv)}`);
         this.handlers.onStateChange('connected');
 
-        // Send initial status request — C1000 doesn't stream telemetry
-        // until asked, Solarbank streams automatically but the request
-        // doesn't hurt
+        // Send initial status request and start periodic polling
         setTimeout(() => this.requestStatus(), 500);
+        this.startStatusPolling();
       } catch (e) {
         this.log('error', `Key derivation failed: ${e}`);
       }

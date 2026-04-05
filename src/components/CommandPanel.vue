@@ -42,11 +42,26 @@ const c1000Commands = [
   { label: 'Light Auto', cmd: '404f', payload: 'a10121a2020102' },
 ];
 
+// Solarbank 3 commands (confirmed via scanning)
+const solarbankCommands = [
+  { label: 'Status Request', cmd: '4040', payload: 'a10121' },
+  { label: 'Firmware Info', cmd: '4030', payload: 'a10121' },
+  { label: 'Capabilities', cmd: '4020', payload: 'a10121' },
+  { label: 'Config Query', cmd: '4027', payload: 'a10121' },
+  { label: 'Query 0x4061', cmd: '4061', payload: 'a10121' },
+  { label: 'Toggle 0x4050', cmd: '4050', payload: 'a10121' },
+  { label: 'Toggle 0x4057', cmd: '4057', payload: 'a10121' },
+  { label: 'Toggle 0x405e', cmd: '405e', payload: 'a10121' },
+];
+
 // General commands (work on all devices)
 const generalCommands = [
   { label: 'Status Request', cmd: '4040', payload: 'a10121' },
   { label: 'Partial Status', cmd: '4041', payload: 'a10121' },
+  { label: 'Firmware Info', cmd: '4030', payload: 'a10121' },
 ];
+
+const isSolarbank = props.deviceName?.includes('Solarbank') || props.deviceName?.includes('A17C');
 </script>
 
 <template>
@@ -64,6 +79,16 @@ const generalCommands = [
           <template v-if="isC1000">
             <button
               v-for="cmd in c1000Commands"
+              :key="cmd.label"
+              class="cmd-btn"
+              @click="sendCommand(cmd.cmd, cmd.payload)"
+            >
+              {{ cmd.label }}
+            </button>
+          </template>
+          <template v-else-if="isSolarbank">
+            <button
+              v-for="cmd in solarbankCommands"
               :key="cmd.label"
               class="cmd-btn"
               @click="sendCommand(cmd.cmd, cmd.payload)"
