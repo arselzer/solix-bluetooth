@@ -460,3 +460,20 @@ toggle these features.
 2. Try setting output_limit via 0x4050 with value payload
 3. Use Frida to intercept the app's actual command payloads
 4. Test during daytime with solar production for meaningful telemetry values
+
+### Solarbank 3 — Low Range Scan 0x4000-0x403f (NEW)
+
+| Command | Response | Identified Feature |
+|---------|----------|-------------------|
+| `0x4000`-`0x401f` | No response | Not implemented |
+| `0x4020` | 31B: capabilities a1=3, a2=21, a3-a6=config blocks | **Device capabilities query** |
+| `0x4023` | `01` (1B) | Protocol version query |
+| `0x4024`/`0x4025` | `04` (1B) | Port count |
+| `0x4027` | 7B: `00a10100a20100` | Config query (a1=0, a2=0) |
+| `0x4028` | Two 4B responses: a1=0 then a1=12 | Double config query |
+| `0x402e` | `01` (1B) | Boolean query |
+| `0x402f` | `04` (1B) | Port count |
+| `0x4030` | **52B firmware versions** | **Firmware query**: "v0.3.0.1", "v1.0.4.5", "A17C5", "A17C5_mcu", "A17C5_esp32" |
+| `0x4035` | `00` (1B) | Boolean false |
+| `0x4036`/`0x4038` | `04` (1B) | Port count |
+| `0x4039`-`0x403f` | No response | Not implemented |
