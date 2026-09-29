@@ -154,7 +154,10 @@ the count. The incorrect `tou_schedule_parameter` field has been removed.
 Guarded C2000 `4090` writes verified reserve and usage-mode changes with AC
 output on. Earlier schedule tests stored malformed intervals because their
 encoder duplicated the count inside `A7`. They did not establish a valid
-all-day Peak plan. See the [encoding correction and next validation](../docs/c2000-tou-encoding-audit.md).
+all-day Peak plan. The later [corrected native Peak trial](../docs/c2000-corrected-peak-trial.md)
+verified that plan and battery discharge with mains present. AC output stayed
+enabled; restored Standard settings preceded the confirmed return to grid.
+See the [encoding correction](../docs/c2000-tou-encoding-audit.md).
 Anker's [C2000 app guide](https://lp.ankerjapan.com/hubfs/aoos/manual/A1783Guide.pdf)
 specifies Wi-Fi for Time-of-Use. A second guarded Peak test with the correct
 `Europe/Vienna` Bluetooth timezone still did not activate a tariff; it restored
@@ -170,12 +173,13 @@ earlier failures were followed by a successful trial: fixing ascending TLV
 order in `4025` allowed the C2000 to connect to the local TLS MQTT broker,
 reconnect using saved settings, and answer status/telemetry requests without
 Bluetooth. See [native MQTT findings](../docs/local-mqtt-investigation.md).
-Time-of-Use activation over isolated Wi-Fi remains unverified.
-The [firmware analysis](../docs/firmware-findings.md) now traces the C1000's
-binding and network-readiness requirements. Recovered C1000 schedule encoding
-matches the retained C2000 data, but corrected schedule control still requires
-live validation on each model. Native device MQTT remains experimental; the supported local
-MQTT bridge uses BLE to communicate with each station.
+The corrected local MQTT trial now verifies Time-of-Use activation on this
+C2000 firmware; the earlier failed trials used malformed schedules.
+The [firmware analysis](../docs/firmware-findings.md) traces the C1000's binding
+and network-readiness requirements. Recovered C1000 schedule encoding matches
+the retained C2000 data, but C1000 activation still requires its own live test.
+Native device MQTT remains experimental; the supported local MQTT bridge uses
+BLE to communicate with each station.
 C1000 Gen 2 firmware 1.1.4.3 uses legacy AES-CBC. After updating to 1.1.4.9,
 the same unit switched to Prime AES-GCM and required button pairing with a
 generated client ID. C2000 Gen 2 also uses Prime. Prime telemetry and the
@@ -307,8 +311,11 @@ setting that limit to 300 W still left the grid supplying the entire load
 and the full battery idle; the limit was restored to 1200 W. Neither setting
 redirected AC loads to the battery. The tested app required Wi-Fi to open
 Time-of-Use mode. Local Wi-Fi provisioning is now available experimentally as
-described below. The C2000 Time-of-Use mode selector is verified over BLE, but
-Peak scheduling and battery discharge with mains connected remain unverified.
+described below. The C2000 Time-of-Use mode selector is verified over BLE.
+Corrected native MQTT Peak scheduling has since produced battery discharge
+with mains connected on the C2000. Return to grid after restoring Standard was
+confirmed later, with an unmeasured delay. These tariff writes remain research
+probes; they are not exposed by the ordinary CLI or control socket.
 
 ### Local MQTT bridge
 
@@ -410,14 +417,16 @@ native charging-power changes 1800→1700→1800 W are also verified.
 The C2000 Gen 2 (main 2.1.6.4) connected directly to a local TLS MQTT listener
 on an isolated network, including a run requiring its client certificate.
 It reconnected with saved settings and answered `0100` status and `0057`
-telemetry-stream requests without Bluetooth. The local API bootstrap and
-broker probe are research tools; there is no packaged native provisioning
-service yet. C2000 native charging-power changes 1800→1700→1800 W were
+telemetry-stream requests without Bluetooth. The local API bootstrap and MQTT
+endpoint are available through the experimental
+[isolated lab workflow](../docs/isolated-ap-mqtt.md). C2000 native charging-power
+changes 1800→1700→1800 W were
 confirmed by acknowledgment and fresh status replies, with AC output on.
 The battery stayed idle at its cap; this verified the setpoint, not charging
-current. Native mode/reserve/schedule writes also succeeded, but an all-day
-Peak plan still did not activate a tariff or discharge. Those schedule controls
-remain private research probes. C1000 native MQTT remains unverified.
+current. Corrected native mode/reserve/schedule writes now activate Peak and
+battery discharge with mains connected. The [live trial](../docs/c2000-corrected-peak-trial.md)
+records the exact encoding and delayed grid-return observations. Those schedule
+controls remain private research probes. C1000 native MQTT remains unverified.
 
 Use the decoder with a broker client or Home Assistant coordinator:
 

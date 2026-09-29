@@ -5,7 +5,13 @@
 This investigation on 2026-09-29 used retained C2000 Gen 2 **2.1.6.4** captures,
 recovered C1000 Gen 2 main **1.1.4.9** and radio **0.3.3.0**, the retained Anker
 Android binary, and a local upstream source checkout. **No device, SSH, Bluetooth,
-MQTT or cloud request was made during this audit.** Raw artifacts remain private.
+MQTT or cloud request was made during this offline audit.** Raw artifacts remain private.
+
+**Subsequent live validation:** the [corrected C2000 Peak trial](c2000-corrected-peak-trial.md)
+confirmed one-slot storage in Standard, then active Peak and battery discharge
+with mains connected and AC output enabled. Settings and eventual grid power
+were independently verified after restoration. That later test is separate
+from the offline evidence below.
 
 The evidence substantially changes the interpretation of earlier failed Peak
 trials. **A6 is strongly supported as the schedule slot count; A7 contains
@@ -95,7 +101,8 @@ A7 value: 04 01 00 18
 Here the initial `04` is the binary type, followed directly by Peak, hour 0,
 hour 24. The actual C1000 handler, selector and D9 builder produced one valid
 slot, D9 length **29**, and active Peak for **all 24 simulated hours**.
-This has not yet established corrected C2000 schedule activation.
+That offline execution alone did not establish C2000 activation; the subsequent
+live trial now does, for this one-slot plan and firmware.
 
 Twelve additional controller cases confirmed A3/A4 do not alter C1000 schedule
 storage. Unused slot bytes persist when fewer bytes are copied, so count governs
@@ -151,14 +158,16 @@ phone sequence. Thus this audit cannot claim a byte-for-byte comparison with
 actual app output. Older app notes consisting of symbol lists should be read
 with the same limitation.
 
-## Next validation and reproducibility
+## Live validation and reproducibility
 
-The next bounded C2000 check should first store the corrected one-slot candidate
-**while retaining Standard mode**, then request fresh status. Expect D9 count 1
-at offset 6, `01 00 18` at offsets 7–9, and total value length 29. Preserve reserve,
-charge limits, charging power and outputs; restore the baseline count and mode.
-Only after that storage check should a separate guarded activation trial be
-considered. This audit performed neither step.
+The subsequent bounded C2000 check stored the corrected one-slot plan
+**while retaining Standard mode**: D9 count 1 at offset 6, `01 00 18` at offsets
+7–9, length 29, no active tariff and idle battery. It cleared the plan before
+a separate trial with 85% reserve, then confirmed Peak and discharge with
+mains present. Standard/count 0/reserve 10% were restored. Grid input did not
+resume immediately in the retained MQTT samples; a later independent BLE check
+confirmed idle and input equal to output. See the [live record](c2000-corrected-peak-trial.md)
+for exact observations, guards, restoration limits and private capture hashes.
 
 Public corrections belong in `python/solix_link/protocol.py`, its protocol and
 native-status fixtures, and historical protocol/MQTT/firmware reports. Existing

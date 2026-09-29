@@ -9,13 +9,17 @@ reconnected without Bluetooth and answered MQTT status/telemetry requests.
 Those initial tests preserved AC output and charging settings. A subsequent
 native MQTT trial verified radio connectivity queries and charging-power
 changes **1,800 → 1,700 → 1,800 W**, with AC output continuously reported on.
-Native Time-of-Use mode/reserve/schedule writes also worked, but an all-day
-Peak slot still did not activate a tariff or battery discharge. Original
-settings were restored and checked again over Bluetooth.
+Native Time-of-Use mode/reserve/schedule writes also worked. Those initial
+Peak requests used malformed slots; the later [corrected trial](c2000-corrected-peak-trial.md)
+verified active Peak and battery discharge with mains present. AC output stayed
+enabled. Standard/count 0/reserve 10% were restored, and a later independent
+BLE check confirmed grid power. Mode restoration alone did not immediately
+confirm grid return.
 
 The packaged Python [MQTT bridge](../python/README.md#local-mqtt-bridge) uses
-Bluetooth; native station MQTT currently requires the private lab API/broker
-setup. Public native telemetry decoding and request builders are available. Earlier failed trials
+Bluetooth; native station MQTT uses the experimental
+[packaged lab API/MQTT workflow](isolated-ap-mqtt.md). Public native telemetry
+decoding and request builders are available. Earlier failed trials
 below are retained as evidence; the [TLV-order correction](#provisioning-order-fix)
 supersedes the empty-service-ID investigation.
 

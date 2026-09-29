@@ -17,7 +17,9 @@ TLS MQTT listener on the isolated network, including client-certificate
 validation, saved-configuration reconnect, and status/telemetry requests.
 This is separate from the BLE bridge. See [native MQTT findings](local-mqtt-investigation.md).
 Native charging-power and mode/reserve/schedule writes are now verified too.
-Peak tariff activation still failed with MQTT connected; see the follow-up below.
+The [corrected Peak trial](c2000-corrected-peak-trial.md) now confirms active
+Peak and battery discharge with mains connected. AC output stayed enabled;
+restored Standard mode preceded the independently confirmed return to grid.
 
 ## Pairing and connection
 
@@ -40,7 +42,7 @@ The custom GATT service is `8c850001-0302-41c5-b46e-cf057c562025`; command write
 | `4103` | `a10121aa0201UU`, where `UU` is the upper charging percent | C2000 upper cap verified 90→85→90% and 90→95→90%; lower discharge limit stayed 1%, AC output stayed on |
 | `4103` | `a10121a40302SSSS` + `FD` millisecond timestamp, where `SSSS` is screen timeout in little-endian seconds | C1000 and C2000 both confirmed 30→60→30 seconds; C2000 AC output stayed on |
 | `4101` | `a10121a40302WWWWab03020000` + `FD` millisecond timestamp, where `WWWW` is AC charging-power limit in little-endian watts | C1000 and C2000 both confirmed setting and restore; C2000 tested 1800→1700→1800 W and 1800→300→1800 W |
-| `4090` | Historical `a10121a2020101a3020100a4020100a6020104a7050401010018` + `FD` | Accepted C2000 write, **malformed schedule**: A6 declares four slots and A7 duplicates a count. Corrected one-slot candidate uses `A6=0101`, `A7=04010018`; not yet validated live. A6=0 clears the effective count. See the [encoding audit](c2000-tou-encoding-audit.md). |
+| `4090` / native `0090` | Corrected typed fields `A2=0101`, `A3=0100`, `A4=0100`, `A6=0101`, `A7=04010018` + `FD`; native uses `A1=22` | C2000 native MQTT verified one-slot storage, active Peak and discharge with mains connected. Standard clear uses `A2=0100`, `A6=0100`, `A7=0400`, retaining A3/A4 zero. Corrected activation via BLE alone is untested. Old A6=4/A7=0401010018 encoding was malformed. See the [live trial](c2000-corrected-peak-trial.md). |
 | `4090` | `a10121a50201RR` + `FD` millisecond timestamp, where `RR` is backup reserve percent | C2000 reserve 10→85→10% verified in telemetry while AC output stayed on |
 | `4090` | `a10121a2020101a3020100a4020100a6020104a7050401010018` + `FD` millisecond timestamp | C2000 full-field Time-of-Use schedule write verified: one Peak slot, 00:00–24:00; `A7` contains binary type `04`, slot count `01`, tariff `01`, start `00`, end `18`. `D9` confirmed the slot. Peak did not become active in this trial. The analogous Off-Peak tariff is `03`; a zero-slot `A7=0400` cleared the plan. Meanings of `A3`, `A4`, and `A6` remain uncertain. |
 
@@ -239,7 +241,7 @@ After both corrected-response trials, the isolated AP and services were stopped,
 
 ### Main-controller firmware analysis
 
-Offline reconstruction also recovered the C1000 1.1.4.9 controller update package. The main controller passes its CRC-16/MODBUS check, the BMS passes CRC-16/XMODEM, and the display passes its byte-sum check after removing a repeating XOR mask. The controller contains explicit Time-of-Use readiness checks, a **different C1000 schedule layout**, additional display/alert settings, disaster-preparation and timer-plan handlers, and energy accounting. In the normal radio path, the controller's Wi-Fi-ready notification requires both AP and MQTT connectivity; this is a stronger explanation for the earlier inactive tariffs than association alone. The recovered code is C1000 firmware, so applying that explanation to C2000 remains an inference. Full versions, addresses, limitations, and next checks are in [Gen 2 firmware findings](firmware-findings.md). This analysis used retained local data and sent no station or cloud requests.
+Offline reconstruction also recovered the C1000 1.1.4.9 controller update package. The main controller passes its CRC-16/MODBUS check, the BMS passes CRC-16/XMODEM, and the display passes its byte-sum check after removing a repeating XOR mask. The controller contains explicit Time-of-Use readiness checks, a C1000 schedule layout subsequently reconciled with C2000 by the encoding audit, additional display/alert settings, disaster-preparation and timer-plan handlers, and energy accounting. In the normal radio path, the controller's Wi-Fi-ready notification requires both AP and MQTT connectivity; this is a stronger explanation for the earlier inactive tariffs than association alone. The recovered code is C1000 firmware, so applying that explanation to C2000 remains an inference. Full versions, addresses, limitations, and next checks are in [Gen 2 firmware findings](firmware-findings.md). This analysis used retained local data and sent no station or cloud requests.
 
 ### MQTT parser replay and HTTP framing comparison
 
@@ -332,11 +334,26 @@ On 2026-09-29, the same HA node ran a C2000-only bridge against another disposab
 
 We then verified the complete charging workflow through that loopback MQTT bridge. At 90% battery, idle, AC output on, and 90% upper cap, MQTT commands set charging power **1800→500 W** and upper cap **90→95%**; both returned successful telemetry confirmations. The station reported `charging`, with **872 W AC input** and **318 W AC output**, while AC output stayed on. MQTT restore commands set cap **95→90%** and power **500→1800 W**, again with successful confirmations. A separate direct BLE check found 90% battery, `idle`, mains present, AC output on, input/output both 355 W, and upper/lower limits 90%/1%. The private command/result log is `.solix-private/c2000-mqtt-charging-results-20260929.jsonl`. This establishes MQTT-to-BLE charging control through the bridge. Native C2000 MQTT monitoring was subsequently established as described above; those native trials did not send charging commands.
 
+### Corrected native Peak activation
+
+After the encoding audit, a bounded native MQTT trial on main **2.1.6.4** first
+stored the corrected slot in Standard (D9 length 29/count 1), cleared it, then
+raised reserve **10→85%** and selected Time-of-Use with Peak **00:00–24:00**.
+Peak became active; three discharge samples had **0 W AC input** and
+**851–897 W AC output**, with mains present and AC output enabled. SOC changed
+91→90%. Standard/count 0 were restored before reserve 10%. A separate MQTT
+connection confirmed settings but still reported discharge; a later independent
+BLE check confirmed idle and equal grid input/output. No extra recovery or
+AC-output write was sent. The [complete trial record](c2000-corrected-peak-trial.md)
+documents the observation gap and remaining automation questions.
+
 ## Local data and privacy
 
 The subsequent [native MQTT reconnect and tariff follow-up](c2000-mqtt-reconnect-and-tariff.md)
 verified controller `0089`, two AP reconnections, and longer unsuccessful Peak
-trials with reserve headroom. The [Python isolated AP/MQTT tool](isolated-ap-mqtt.md)
+trials with reserve headroom using the old malformed schedule encoding.
+The [corrected trial](c2000-corrected-peak-trial.md) subsequently verified active
+Peak and discharge with mains present. The [Python isolated AP/MQTT tool](isolated-ap-mqtt.md)
 now packages the local bootstrap, monitoring and charging-power workflow.
 Its live C2000 test confirmed native **1800→1700→1800 W** settings while AC
 output stayed on; an acknowledgement alone is not used as confirmation.
@@ -347,4 +364,4 @@ The [Python README](../python/README.md) documents installation, CLI pairing, HT
 
 ## Verification status
 
-The Python protocol tests passed; the public `SolixMonitor` setting methods changed and restored charge limits, AC charging power, display timeout, and fast charge on the live C1000. The CLI confirmed idempotent writes of the two new settings. C2000 upper-cap control was verified through the Python client, CLI, and local MQTT bridge; a 500 W charging-power setting and a temporary 95% cap caused the station to report charging while AC output remained on. The same charging/restore sequence was then verified end to end through MQTT. Guarded C2000 `4090` tests confirmed backup-reserve and usage-mode writes, plus accepted schedule bytes. The later audit found those schedule bytes malformed; corrected Peak storage and activation remain untested on hardware. The `wifi-setup` CLI independently connected the C1000 to the isolated AP using only its generated local BLE ID and received `4824=00`, `4825=26`; HTTP requests confirmed AP connectivity. The read-only HTTP server was exercised against the live C2000, returning JSON status, an event stream, and Prometheus metrics. The Vue/TypeScript browser app builds successfully with Prime pairing and C1000 setting controls, but its Web Bluetooth UI has not been exercised against a live station in a browser. The tested C1000 ended at upper/lower 100%/1%, AC charging power 1200 W, display timeout 30 seconds, fast charge off, AC output on, and DC output off; the user chose Device Timeout = Never. The C2000 ended idle in Standard mode with no active tariff, 10% reserve, zero schedule slots, upper/lower limits 90%/1%, AC charging power 1800 W, display timeout 30 seconds, and AC output on. The temporary AP is off, so its stored isolated SSID has no current route. No C2000 output-control write was sent.
+The Python protocol tests passed; the public `SolixMonitor` setting methods changed and restored charge limits, AC charging power, display timeout, and fast charge on the live C1000. The CLI confirmed idempotent writes of the two new settings. C2000 upper-cap control was verified through the Python client, CLI, and local MQTT bridge; a 500 W charging-power setting and a temporary 95% cap caused the station to report charging while AC output remained on. The same charging/restore sequence was then verified end to end through MQTT. Guarded C2000 `4090` tests confirmed backup-reserve and usage-mode writes, plus accepted schedule bytes. The later audit found those schedule bytes malformed. A subsequent corrected native MQTT trial verified Peak storage, activation and battery discharge with mains present; restoration and delayed grid-return observations are documented separately. The `wifi-setup` CLI independently connected the C1000 to the isolated AP using only its generated local BLE ID and received `4824=00`, `4825=26`; HTTP requests confirmed AP connectivity. The read-only HTTP server was exercised against the live C2000, returning JSON status, an event stream, and Prometheus metrics. The Vue/TypeScript browser app builds successfully with Prime pairing and C1000 setting controls, but its Web Bluetooth UI has not been exercised against a live station in a browser. The tested C1000 ended at upper/lower 100%/1%, AC charging power 1200 W, display timeout 30 seconds, fast charge off, AC output on, and DC output off; the user chose Device Timeout = Never. The C2000 ended idle in Standard mode with no active tariff, 10% reserve, zero schedule slots, upper/lower limits 90%/1%, AC charging power 1800 W, display timeout 30 seconds, and AC output on. The temporary AP is off, so its stored isolated SSID has no current route. No C2000 output-control write was sent.

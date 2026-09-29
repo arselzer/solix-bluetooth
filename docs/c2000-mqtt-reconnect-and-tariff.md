@@ -1,5 +1,11 @@
 # C2000 native MQTT reconnect and tariff follow-up
 
+**Later result:** the [corrected Peak trial](c2000-corrected-peak-trial.md)
+verified entirely local active Peak and battery discharge with mains present.
+AC output stayed enabled. Settings were restored immediately; grid power was
+confirmed later through independent BLE. Unresolved-discharge statements below
+describe the earlier malformed-schedule experiments, not the latest result.
+
 ## Scope
 
 Tests on 2026-09-29 used the C2000 Gen 2, main firmware **2.1.6.4**, on the

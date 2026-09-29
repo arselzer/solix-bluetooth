@@ -15,6 +15,10 @@ The [later encoding audit](c2000-tou-encoding-audit.md) shows those plans were
 malformed, correcting their earlier interpretation as valid all-day slots.
 The [DSP producer trace](inverter-dsp-investigation.md) subsequently identifies
 the C1000 gate input as qualified AC input; neither result proves C2000 discharge.
+The subsequent [live corrected Peak trial](c2000-corrected-peak-trial.md) does
+verify C2000 discharge with mains connected and AC output enabled. It also
+records the grid-return observation gap and twelve further C1000 cases for a
+possible internal-mode retention mechanism.
 
 ## Clock semantics are more specific than a timestamp acknowledgement
 

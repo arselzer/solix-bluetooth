@@ -150,13 +150,17 @@ An independent fresh BLE reading after AP shutdown confirmed the full baseline.
 Initial rejected double-slash API paths and incorrectly wrapped CA fields were
 captured, corrected and regression tested. The native HTTP adapter and guided
 mode have automated tests; their entire interactive flow has not been exercised
-on hardware. Scheduled battery discharge is still unresolved.
+on hardware. A subsequent [corrected Peak trial](c2000-corrected-peak-trial.md)
+verified local scheduled discharge with mains connected and AC output enabled.
+Return to grid was confirmed after restoring settings, with an unmeasured delay;
+the packaged control endpoint still omits tariff writes.
 
 The subsequent native cap test confirmed **90→95→90%** with a **300 W**
 charging limit, producing charging telemetry and roughly 315 W above the AC
 load. A 60-second trial using the old Peak encoding during charging reported
 no active tariff. The [subsequent audit](c2000-tou-encoding-audit.md) found that
-encoding malformed, so valid scheduled discharge remains untested. Original
+encoding malformed; corrected discharge was subsequently verified in the
+linked Peak trial. Original
 settings were restored; a separate read-only MQTT connection
 confirmed them and battery idle. See the [full trial record](c2000-mqtt-reconnect-and-tariff.md#native-upper-cap-and-charging-state-peak-trial),
 including failed BLE checks and the resulting service-shutdown fix.

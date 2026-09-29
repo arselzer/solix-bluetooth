@@ -11,6 +11,9 @@ The [later schedule audit](c2000-tou-encoding-audit.md) found that the Peak tria
 in this report used malformed slot encoding. Its inactive tariff cannot isolate
 binding, clock or power-gate behavior. Local API/MQTT transport observations are
 independent of that correction.
+The subsequent [corrected Peak trial](c2000-corrected-peak-trial.md) verified
+active Peak and discharge through entirely local native MQTT with AC output
+enabled. It documents restoration and the later independent grid-power check.
 
 Small API responses now use `Content-Length` and one complete JSON body. Only
 the large `get_mqtt_info` certificate response retains the previously verified

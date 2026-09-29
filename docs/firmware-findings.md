@@ -9,6 +9,10 @@ The [schedule encoding audit](c2000-tou-encoding-audit.md) corrects the earlier
 C2000 slot layout and invalidates claims that those trials installed valid
 all-day Peak plans. The [DSP investigation](inverter-dsp-investigation.md)
 verifies all 159 inverter image blocks and traces the AC-input readiness producer.
+The subsequent [corrected C2000 Peak trial](c2000-corrected-peak-trial.md)
+verifies local MQTT discharge with mains present. It also records a delay
+between restoring Standard and confirming grid input, with twelve additional
+C1000 firmware cases identifying a possible internal-mode retention mechanism.
 
 ## Scope and evidence
 
@@ -206,8 +210,9 @@ extra-parameter interpretation. All 244 audited native status records satisfy
 `length = 26 + 3 * D9[6]`, and 17 retained request/readback pairs reproduce the
 recovered C1000 schedule serialization. Earlier requests duplicated a count in
 `A7`, producing malformed slots. See the [complete audit](c2000-tou-encoding-audit.md).
-Corrected C2000 storage/activation and C1000 schedule writes still need hardware
-validation; no general schedule API is enabled.
+Corrected C2000 storage/activation is now verified in the
+[bounded native Peak trial](c2000-corrected-peak-trial.md). C1000 schedule writes
+still need hardware validation; no general schedule API is enabled.
 
 ## Additional control candidates
 
@@ -268,12 +273,12 @@ C2000 controller support is unknown.
   `A6/A7/A8` after an earlier `C3`. Correcting `4025` order made C2000 store the
   service ID and connect to local TLS MQTT. Saved credentials also survived AP
   restart; MQTT status and telemetry-stream requests worked with AC output on.
-  Native charging-power and mode/reserve/schedule writes now also work, but
-  Peak remains inactive despite radio server-ready status. The
+  Native charging-power and mode/reserve/schedule writes now also work. The
   [binding follow-up](c2000-binding-followup.md) tested complete small API
   replies and examined controller readiness; binding alone is now a weaker
-  explanation. Investigate the separate power gate, controller clock, and
-  C2000 schedule semantics. C1000 still needs a hardware comparison; do not
+  explanation. Correcting A6/A7 now activates Peak and discharge on C2000.
+  Investigate reliable return to grid, persistent scheduling and reserve floors.
+  C1000 still needs a hardware comparison; do not
   substitute the different `4038` layout.
 - When C1000 is reachable again, validate its own schedule layout and benign
   display/alert settings with baseline, telemetry, and restoration checks.
