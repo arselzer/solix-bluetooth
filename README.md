@@ -213,16 +213,30 @@ For remote access (e.g., from phone), tunnel with cloudflare:
 cloudflared tunnel --url http://localhost:5173
 ```
 
+### Development checks
+
+```bash
+npm run build
+node --import tsx --test tools/test-gen2-reconnect.ts
+PYTHONPATH=python python3 -m pytest python/tests -q
+```
+
+The browser build checks TypeScript. The offline GATT tests cover Prime and
+legacy reconnects, paired-ID reuse, cancellation, and the C2000 output-command
+guard. Install `./python[server,mqtt]` and `pytest` to include the HTTP tests.
+These checks do not contact a power station.
+
 ## Project Structure
 
 ```
 src/
   protocol/
-    constants.ts    — UUIDs, ECDH key, negotiation packets, 3 device param maps
+    constants.ts    — UUIDs, negotiation packets, legacy device param maps
     crypto.ts       — ECDH P-256 key exchange, AES-CBC/GCM encrypt/decrypt
     packet.ts       — FF09 packet framing, checksum, parsing
     telemetry.ts    — TLV decoder with auto type-byte detection
     connection.ts   — BLE connection, negotiation, fragment reassembly, auto-poll
+    prime.ts        — Gen 2 Prime negotiation and encrypted telemetry
     utils.ts        — Hex conversion, byte manipulation
     types.ts        — TypeScript interfaces
   components/
@@ -235,8 +249,14 @@ src/
   App.vue           — Main app with tabbed interface, wake lock, session persistence
 tools/
   decode-capture.ts — Offline capture decoder (Node.js)
+  test-gen2-reconnect.ts — Synthetic GATT regression tests
+python/
+  solix_gen2/       — Async BLE library, CLI, HTTP server, and MQTT bridge
+  tests/           — Synthetic protocol and service tests
 docs/
   app-reverse-engineering.md — Anker app decompilation findings
+  gen2-protocol.md  — Versioned live Gen 2 observations
+  firmware-findings.md — Offline C1000 firmware analysis and open questions
 ```
 
 ## Reverse Engineering
