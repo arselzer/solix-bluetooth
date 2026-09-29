@@ -1,21 +1,23 @@
 # Anker Solix Bluetooth
 
-A web app for local Bluetooth control and monitoring of Anker Solix devices, without requiring the Anker app or cloud account.
+A web app for local Bluetooth control and monitoring of Anker Solix devices. The C1000 Gen 2 and C2000 Gen 2 can be paired locally with a generated client ID and a short main power button press when using the Prime protocol.
 
 Tested with:
 - **Solarbank 3 E2700 Pro** (A17C5) — telemetry monitoring, daytime solar confirmed
 - **Anker SOLIX C1000** (A1761) — telemetry monitoring + control commands
 - **Anker SOLIX C300X** (A1753) — telemetry monitoring
+- **Anker SOLIX C1000 Gen 2** (A1763) — live BLE telemetry and AC/DC output controls on this laptop
+- **Anker SOLIX C2000 Gen 2** (A1783) — live BLE telemetry and verified charge-cap, charging-power, and screen-timeout controls from Python and MQTT, with AC output left on
 
 Built with Vue 3, TypeScript, and the Web Bluetooth API. Protocol based on reverse engineering from the [SolixBLE](https://github.com/flip-dots/SolixBLE) project with additional findings from live device testing and Anker app decompilation.
 
 ## Features
 
 - **Local BLE connection** — connects directly via Bluetooth, no cloud or account needed
-- **Encrypted communication** — full ECDH key exchange and AES-CBC encryption
+- **Encrypted communication** — ECDH with AES-CBC or AES-GCM, depending on model
 - **Live telemetry** — decodes real-time device data with auto type-byte detection:
   - Solar input power (per-panel, dual-input confirmed with 2x400W panels)
-  - Battery percentage, temperature, charge/discharge power
+  - Battery percentage, health, cycles, temperature, charge/discharge power
   - House demand, consumption, grid power
   - AC/DC output power, switch states
   - Device settings (charge limits, timeouts, UPS mode)
@@ -36,6 +38,24 @@ Built with Vue 3, TypeScript, and the Web Bluetooth API. Protocol based on rever
 | Solarbank 3 E2700 Pro | A17C5 | Yes | Scan only | float32 (495B) | Streams telemetry, dual solar inputs confirmed |
 | Anker SOLIX C1000 | A1761 | Yes | Yes | uint16 (312B) | AC/DC toggle, display, lights confirmed |
 | Anker SOLIX C300X | A1753 | Yes | Untested | uint16 (279B) | Serial at 0xc5, different param layout |
+| Anker SOLIX C1000 Gen 2 | A1763 | Yes | AC/DC On/Off; charge limits, AC charging power, display timeout, and fast charge switch | Packed TLV | Firmware 1.1.4.3: legacy CBC; 1.1.4.9: Prime GCM and button pairing. Controls verified after update; AC on/DC off restored |
+| Anker SOLIX C2000 Gen 2 | A1783 | Yes | Python/CLI/MQTT charge cap, charging power, and screen timeout; browser monitoring only | Packed TLV | Prime GCM; generated client ID paired by main button press |
+
+The [Python library, CLI, HTTP server, and local MQTT bridge](python/README.md) provide local monitoring for these Gen 2 models and can feed Home Assistant or other servers. The Python client, CLI, and MQTT bridge expose the C2000 upper charge cap, AC charging-power limit, and 30/60-second screen timeout, plus verified C1000 charge limits, AC charging power, display timeout, and fast charge settings. Raising the C2000 cap from 90% to 95% started charging at the configured 500 W limit while AC output stayed on. The browser exposes C1000 charge limits, AC charging power, and AC/DC switches. The CLI can join either Prime station to a WPA2 AP over Bluetooth; C1000 API setup is experimental, and direct device MQTT remains under investigation. C2000 output controls remain disabled. On both tested Prime stations, the browser generates a 40-character client ID, saves it locally for the selected Bluetooth device, and prompts for one short main power button press if registration returns `09`. Click **I pressed the main button** after pressing it. Later connections reuse the saved ID without another press. You can also enter an existing 40-character ID. The Python library exposes its generated ID for the caller to save in Home Assistant configuration. See the [versioned protocol notes](docs/gen2-protocol.md) for observed behavior and open questions.
+
+Prime registration is encrypted using a fresh ECDH session key. Local pairing on both tested stations required no Anker account ID: each first rejected our generated ID with `09`; after one short main power button press and a registration retry in the same BLE connection, each accepted the ID and streamed telemetry. They accepted the same ID again on reconnect. [Anker's C2000 guide](https://salesforce-knowledge-download.s3.us-west-2.amazonaws.com/000032532/en_US/000032532.pdf) documents this physical pairing confirmation. The phone's active Bluetooth connection prevented the laptop from seeing the C2000 advertisement during our test, so temporarily disconnect the phone if discovery fails. The C2000's AC output remained on throughout testing; do not press the separate AC output button.
+
+## Research status
+
+The [firmware findings](docs/firmware-findings.md) document the recovered C1000
+Gen 2 1.1.4.9 controller and radio code, integrity checks, command handlers, and
+remaining questions. Its Time-of-Use logic requires binding and network readiness;
+the radio normally reports readiness only after both Wi-Fi and MQTT connect.
+The C1000 schedule layout also differs from the observed C2000 layout. Native
+device MQTT and active local Time-of-Use control remain unverified. The working
+MQTT bridge communicates with the stations over BLE. Raw captures, firmware,
+credentials, and reproducible private analysis stay in the ignored
+`.solix-private/` directory.
 
 ## How It Works
 
@@ -51,11 +71,11 @@ Anker Solix devices use a custom BLE GATT service with encrypted binary communic
 
 ### Connection Flow
 
-1. **Device discovery** — filters by BLE name prefix ("Solarbank", "Anker", "C1000", etc.)
+1. **Device discovery** — filters by BLE service and name, including `SOLIX` Gen 2 advertisements
 2. **GATT connect** — auto-retry up to 3 times (first attempt often fails)
-3. **ECDH key exchange** — 5-stage negotiation using P-256 curve
-4. **AES-CBC encryption** — key = first 16 bytes of shared secret, IV = bytes 16-31
-5. **Telemetry** — Solarbank streams every ~3s; C1000/C300X respond to status requests
+3. **ECDH key exchange** — P-256 negotiation with fresh session keys
+4. **Encrypted session** — legacy AES-CBC on C1000 Gen 2 firmware 1.1.4.3; Prime AES-GCM on C1000 Gen 2 firmware 1.1.4.9 and the tested C2000 Gen 2
+5. **Telemetry** — Solarbank streams every ~3s; C1000/C300X respond to status requests. Gen 2 devices need a `4100` subscription; Prime stations may first need a short main power button pairing confirmation
 6. **Auto-polling** — full status requested every 10s for continuous updates
 
 ### Packet Format
