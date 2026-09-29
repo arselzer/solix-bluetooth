@@ -106,6 +106,15 @@ Applying the explanation to C2000 is an inference from the C1000 code, not
 verification of the C2000 implementation. Changing the controller's binding
 flags directly has not been tested and is not exposed as a control.
 
+A later C2000 native MQTT trial returned AP connected and server connected
+through `0027`/`0028`, then accepted a reserve change and all-day Peak schedule
+over `0090`. Twelve samples over 25.8 seconds still showed tariff `none` and
+idle battery; all settings were restored and confirmed over BLE. Thus a working
+MQTT connection alone is insufficient on the tested C2000. The radio query does
+not directly expose the controller's binding flag or cached network status.
+See the [native TOU trial](local-mqtt-investigation.md#time-of-use-with-mqtt-connected)
+and the bind-callback replay there before attributing this to any one gate.
+
 ### C1000 and C2000 schedule layouts differ
 
 The C1000 command table registers `0090` at `0x0800c7c4`. Its handler reads:
@@ -184,7 +193,9 @@ C2000 controller support is unknown.
   `A6/A7/A8` after an earlier `C3`. Correcting `4025` order made C2000 store the
   service ID and connect to local TLS MQTT. Saved credentials also survived AP
   restart; MQTT status and telemetry-stream requests worked with AC output on.
-  Check the controller's ready state and tariff activation next. C1000 still
+  Native charging-power and mode/reserve/schedule writes now also work, but
+  Peak remains inactive despite radio server-ready status. Investigate the
+  controller's binding notification and complete small API replies next. C1000 still
   needs a hardware comparison; do not substitute the different `4038` layout.
 - When C1000 is reachable again, validate its own schedule layout and benign
   display/alert settings with baseline, telemetry, and restoration checks.

@@ -6,12 +6,16 @@
 correcting provisioning TLV order produced TLS, MQTT subscription, and live
 power telemetry on the isolated HA-node network. The station subsequently
 reconnected without Bluetooth and answered MQTT status/telemetry requests.
-AC output and charging settings stayed unchanged. Native MQTT charging writes
-and Time-of-Use activation remain untested with this working connection.
+Those initial tests preserved AC output and charging settings. A subsequent
+native MQTT trial verified radio connectivity queries and charging-power
+changes **1,800 → 1,700 → 1,800 W**, with AC output continuously reported on.
+Native Time-of-Use mode/reserve/schedule writes also worked, but an all-day
+Peak slot still did not activate a tariff or battery discharge. Original
+settings were restored and checked again over Bluetooth.
 
 The packaged Python [MQTT bridge](../python/README.md#local-mqtt-bridge) uses
 Bluetooth; native station MQTT currently requires the private lab API/broker
-setup. A public native telemetry decoder is available. Earlier failed trials
+setup. Public native telemetry decoding and request builders are available. Earlier failed trials
 below are retained as evidence; the [TLV-order correction](#provisioning-order-fix)
 supersedes the empty-service-ID investigation.
 
@@ -386,6 +390,103 @@ All temporary AP/API/NTP/broker services were stopped afterward. Wi-Fi returned
 to the HA host's normal namespace, administratively down, and copied lab
 credentials were removed after the private archive hash matched locally.
 
+## Connectivity queries and native charging-power control
+
+A follow-up trial on the same C2000/main 2.1.6.4 queried the radio through its
+native MQTT command topic, using the ordinary `03000f` packet pattern:
+
+| Request → reply | Payload and result |
+| --- | --- |
+| `0027` → `0827` | Request `A1` is raw Unix seconds LE32; reply `00a10101a20100`: AP connected, Ethernet disconnected |
+| `0028` → `0828` | Same timestamp field; reply `00a10101`: server connected |
+| `0101` → `0901` | `A1=22`, `A4=02` + charging watts LE16, `FD=00` + ASCII Unix milliseconds; successful acknowledgment and telemetry confirmation |
+
+The native radio query IDs are the low 12 bits of the previously tested BLE
+`4027`/`4028` requests. Their `A1` timestamp differs from the application target
+marker used in power commands. The server-state query can start the firmware's
+status polling timer, as described above; it does not change power settings.
+
+The charging trial first resent the current 1,800 W value, changed to 1,700 W,
+waited five seconds, and restored 1,800 W. Each write received `0901` success
+and a fresh `0100`/`0900` readback with the requested limit. Its only setting
+field was `A4`: no AC output switch, timer, or mode field was sent. Battery
+remained at its 90% cap and idle, so this proves native **setpoint control**,
+not measurement of charging current at that setpoint. AC input/output remained
+enabled, mode Standard, tariff none, and caps 90%/1% throughout.
+
+`NativeMqttCommands` builds status, telemetry-stream, and charging-power
+requests for C2000. Publish them with `retain=False` and confirm changes from
+fresh telemetry; construction or MQTT delivery alone is not confirmation.
+The builders are separate from connection/provisioning and the existing BLE
+bridge. The public charging range matches the verified BLE range; native
+hardware changes tested here were 1,700 and 1,800 W.
+
+### Bluetooth coexistence and recovery
+
+An attempted BLE readiness query could not discover the C2000 while MQTT was
+connected, so the first guarded control attempt sent no charging write. After
+the AP stopped, a fresh BLE session succeeded and confirmed unchanged power
+settings. This is an observed availability change, not proof that the firmware
+always excludes concurrent BLE/Wi-Fi operation. Recovery scripts now stop the
+lab AP before attempting Bluetooth restoration if native MQTT fails.
+
+One earlier harness error also stopped before sending commands: a method named
+`request` collided with `socketserver.BaseRequestHandler.request`, the socket
+attribute. That method was renamed and synthetic outgoing frames checked before
+retrying. Both interrupted attempts and their captures were retained privately.
+
+## Time-of-Use with MQTT connected
+
+After the charging-power trial, a separate fixed sequence used native `0090`
+and confirmed `0890` acknowledgments plus fresh status replies:
+
+1. Verify AP/server status both `1`, Standard mode, tariff none, battery 90%
+   and idle, reserve 10%, empty schedule, caps 90%/1%, and charging limit 1,800 W.
+2. Set reserve **10 → 85%** (`A5=0155`).
+3. Set mode **Standard → Time-of-Use → Standard** (`A2=0101/0100`) with no slots.
+4. Install one Peak slot covering **00:00–24:00** in Time-of-Use mode.
+5. Restore Standard, clear the schedule, and restore reserve **85 → 10%**.
+
+All `0090` requests use `A1=22` and `FD=00` plus ASCII Unix milliseconds.
+The Peak fields were `A2=0101`, `A3=0100`, `A4=0100`, `A6=0104`,
+`A7=0401010018`; `D9[7:11]` confirmed count/slot `01010018`. The baseline
+schedule parameter was **0**, so the clear request restored `A6=0100` and
+`A7=0400`. An initial precheck expecting parameter 4 stopped without writing;
+the retry and both restoration paths were corrected to the actual baseline.
+
+**Result:** 12 Peak-period samples spanning 25.8 seconds still reported tariff
+`none`, battery `idle`, and mains present. AC output stayed enabled, supplying
+approximately 881–1,573 W during those samples. This establishes native
+schedule storage and restoration, **not working scheduled discharge**. The
+native radio reported a connected server before the writes, so missing MQTT
+alone no longer explains the inactive tariff on this C2000.
+
+Final native readback and a fresh BLE session after AP shutdown confirmed
+Standard, no tariff, reserve 10%, parameter 0, zero slots, caps 90%/1%, charging
+limit 1,800 W, and AC output on. The complete sequence, including the failed
+precheck, is retained privately. No AC output-control request was sent.
+
+### Remaining binding/HTTP question
+
+The C1000 bind-response callback at `0x4201c31c` parses each delivered body
+buffer directly; it does not have the MQTT-credential callback's accumulator.
+An offline five-case replay compared a whole fixed-length body, one whole HTTP
+chunk, one-byte chunks, a two-chunk split, and invalid JSON. The complete bodies
+reached the binding-success notification. Splitting a JSON object into two
+incomplete pieces did not. One-byte delivery is more subtle: the standalone
+digit `0` also reached a success notification, because the original common
+checker returns zero while writing a missing-code error through its separate
+output parameter. The callback tests the return value, then returns the error.
+
+This uses host cJSON/libc/OS substitutes and NUL-terminated callback buffers;
+it does not establish the actual C2000 binding state. In particular, it does
+**not** prove that one-byte chunks prevented binding. It does show why the
+large MQTT-response workaround must not be assumed suitable for every endpoint.
+A controlled whole-body comparison for the small binding/DST replies is a
+useful next experiment. Controller binding notification, clock propagation,
+the separate power-state gate, and C2000-specific schedule semantics remain
+unresolved; internal binding flags were not forced.
+
 ## Retained evidence and next checks
 
 Private artifacts remain ignored and must not be published:
@@ -419,10 +520,18 @@ Private artifacts remain ignored and must not be published:
   MQTT status/stream requests, raw envelopes, and unchanged-setting checks.
 - `.solix-private/isolated-ap/native-mtls-20260929/`: repeated passive trial
   with client-certificate verification, 15 decoded readings, and packet/API logs.
+- `.solix-private/isolated-ap/native-control-20260929/`: interrupted attempts,
+  BLE recovery readback, native connectivity replies, and confirmed charging
+  limit changes/restoration; packet captures and inputs accompany every attempt.
+- `.solix-private/isolated-ap/native-tou-20260929/`: guarded native schedule
+  trial, inactive-tariff observations, full restoration and final BLE readback.
+- `emulate_binding_chunks.py` / `binding-chunks-emulation-results.json`: five
+  bind-callback delivery cases, including the unexpected scalar-JSON behavior.
 
-Next, verify the controller's network-ready state with native MQTT connected,
-then investigate tariff activation with guarded baseline/restore checks and
-AC output continuously enabled. Package local credential/bootstrap handling
+Next, distinguish the radio's verified connected state from the controller's
+binding/readiness flags and test small API replies delivered as complete JSON.
+Continue tariff investigation with baseline/restore checks and AC output on.
+Package local credential/bootstrap handling
 and broker integration before presenting native MQTT as an installable service.
 Repeat on C1000 when reachable; its native connection remains unverified.
 Separate experiments can minimize HTTP framing and account-ID requirements.

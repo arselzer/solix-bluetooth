@@ -1,13 +1,16 @@
-"""Decode native station MQTT telemetry without Bluetooth or cloud access."""
+"""Native station MQTT request framing and telemetry decoding."""
 
 from __future__ import annotations
 
 import base64
 import binascii
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import json
+import re
+import secrets
+import time
 
-from .protocol import DATA_RESPONSE, Model, decode_telemetry, parse_packet
+from .protocol import DATA_REQUEST, DATA_RESPONSE, Model, build_packet, decode_telemetry, parse_packet, tlv
 
 
 @dataclass(frozen=True)
@@ -16,6 +19,82 @@ class MqttTelemetry:
 
     metrics: dict[str, int | str]
     raw_tlvs: dict[int, bytes]
+
+
+@dataclass(frozen=True)
+class NativeMqttRequest:
+    """A nonretained publish; topic and payload contain private identifiers."""
+
+    topic: str = field(repr=False)
+    payload: str = field(repr=False)
+    response_command: str
+
+
+@dataclass
+class NativeMqttCommands:
+    """Build C2000 native requests; callers own publishing and confirmation.
+
+    Requires a provisioned station and the configured account ID. These methods
+    do not contact Anker, connect to a broker, or determine whether a write took
+    effect. Publish with retain=False and confirm settings in fresh telemetry.
+    """
+
+    device_serial: str = field(repr=False)
+    account_id: str = field(repr=False)
+    model: Model = Model.C2000_GEN2
+    _session_id: str = field(default_factory=lambda: secrets.token_hex(8), init=False, repr=False)
+    _sequence: int = field(default=0, init=False, repr=False)
+
+    def __post_init__(self) -> None:
+        self.model = Model(self.model)
+        if self.model != Model.C2000_GEN2:
+            raise ValueError("Native MQTT commands are verified only on C2000 Gen 2")
+        if not isinstance(self.device_serial, str) or not re.fullmatch(r"[A-Za-z0-9_-]{1,64}", self.device_serial):
+            raise ValueError("Invalid native MQTT device serial")
+        if not isinstance(self.account_id, str) or not re.fullmatch(r"[0-9a-fA-F]{40}", self.account_id):
+            raise ValueError("Native MQTT account ID must be 40 hexadecimal characters")
+
+    def status(self) -> NativeMqttRequest:
+        """Request a single 0900 telemetry reply."""
+        return self._request("0100", b"", milliseconds=False)
+
+    def stream(self, seconds: int = 60) -> NativeMqttRequest:
+        """Request a bounded telemetry stream; renew explicitly if needed."""
+        if type(seconds) is not int or not 1 <= seconds <= 120:
+            raise ValueError("Stream duration must be an integer from 1 to 120 seconds")
+        fields = tlv(0xA2, b"\x01\x01") + tlv(0xA3, b"\x03" + seconds.to_bytes(4, "little"))
+        return self._request("0057", fields, milliseconds=False)
+
+    def ac_charging_power(self, watts: int) -> NativeMqttRequest:
+        """Set the charging-power limit; does not include an AC output switch."""
+        if type(watts) is not int or not 300 <= watts <= 1800 or watts % 100:
+            raise ValueError("Charging power must be 300–1800 W in 100 W steps")
+        fields = tlv(0xA4, b"\x02" + watts.to_bytes(2, "little"))
+        return self._request("0101", fields, milliseconds=True)
+
+    def _request(self, command: str, fields: bytes, *, milliseconds: bool) -> NativeMqttRequest:
+        now = time.time()
+        timestamp = (tlv(0xFD, b"\x00" + str(int(now * 1000)).encode("ascii"))
+                     if milliseconds else tlv(0xFE, b"\x03" + int(now).to_bytes(4, "little")))
+        frame = build_packet(DATA_REQUEST, bytes.fromhex(command), tlv(0xA1, b"\x22") + fields + timestamp)
+        self._sequence += 1
+        envelope = {
+            "head": {
+                "version": "1.0.0.1", "client_id": "solix-local-research",
+                "sess_id": self._session_id, "msg_seq": self._sequence,
+                "seed": 1, "timestamp": int(now), "cmd_status": 2, "cmd": 17,
+                "sign_code": 1, "device_pn": "A1783", "device_sn": self.device_serial,
+            },
+            "payload": json.dumps({
+                "device_sn": self.device_serial, "account_id": self.account_id,
+                "data": base64.b64encode(frame).decode("ascii"),
+            }, separators=(",", ":")),
+        }
+        return NativeMqttRequest(
+            topic=f"cmd/anker_power/A1783/{self.device_serial}/req",
+            payload=json.dumps(envelope, separators=(",", ":")),
+            response_command=f"{int(command, 16) | 0x0800:04x}",
+        )
 
 
 def decode_mqtt_telemetry(

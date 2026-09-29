@@ -3,8 +3,8 @@ import json
 
 import pytest
 
-from solix_gen2 import Model, decode_mqtt_telemetry
-from solix_gen2.protocol import DATA_RESPONSE, build_packet, tlv
+from solix_gen2 import Model, NativeMqttCommands, decode_mqtt_telemetry
+from solix_gen2.protocol import DATA_REQUEST, DATA_RESPONSE, build_packet, parse_packet, parse_tlvs, tlv
 
 
 def envelope(*, serial="SYNTHETIC", product="A1783", data=None, command="0421", status=0):
@@ -78,3 +78,71 @@ def test_reject_corrupt_packet_and_encrypted_payload():
     outer["payload"] = json.dumps(payload)
     with pytest.raises(ValueError, match="Encrypted"):
         decode_mqtt_telemetry(json.dumps(outer), model=Model.C2000_GEN2)
+
+
+def unpack_request(request):
+    outer = json.loads(request.payload)
+    inner = json.loads(outer["payload"])
+    return outer, inner, parse_packet(base64.b64decode(inner["data"], validate=True))
+
+
+def test_native_read_requests_and_private_representations(monkeypatch):
+    monkeypatch.setattr("solix_gen2.native_mqtt.time.time", lambda: 1800000000.125)
+    commands = NativeMqttCommands("A1783SYNTHETIC0001", "a" * 40)
+    status = commands.status()
+    outer, inner, packet = unpack_request(status)
+    assert status.topic == "cmd/anker_power/A1783/A1783SYNTHETIC0001/req"
+    assert status.response_command == "0900"
+    assert packet.pattern == DATA_REQUEST
+    assert packet.command.hex() == "0100"
+    assert packet.payload.hex() == "a10122fe050300d2496b"
+    assert inner["account_id"] == "a" * 40
+    assert outer["head"]["device_sn"] == inner["device_sn"] == commands.device_serial
+    assert outer["head"]["device_pn"] == "A1783"
+    assert outer["head"]["cmd"] == 17
+    assert outer["head"]["timestamp"] == 1800000000
+    stream = commands.stream(60)
+    second, _, packet = unpack_request(stream)
+    assert stream.response_command == "0857"
+    assert packet.command.hex() == "0057"
+    assert packet.payload.hex() == "a10122a2020101a305033c000000fe050300d2496b"
+    assert second["head"]["msg_seq"] == outer["head"]["msg_seq"] + 1
+    assert second["head"]["sess_id"] == outer["head"]["sess_id"]
+    for value in (commands, status, stream):
+        assert commands.device_serial not in repr(value)
+        assert commands.account_id not in repr(value)
+
+
+@pytest.mark.parametrize("watts", [300, 1700, 1800])
+def test_native_charging_request_has_only_charging_field(monkeypatch, watts):
+    monkeypatch.setattr("solix_gen2.native_mqtt.time.time", lambda: 1800000000.125)
+    request = NativeMqttCommands("SYNTHETIC", "a" * 40).ac_charging_power(watts)
+    _, _, packet = unpack_request(request)
+    fields = parse_tlvs(packet.payload)
+    assert packet.command.hex() == "0101"
+    assert request.response_command == "0901"
+    assert list(fields) == [0xA1, 0xA4, 0xFD]  # No AC output switch, timer, or mode fields.
+    assert fields[0xA4] == b"\x02" + watts.to_bytes(2, "little")
+    assert fields[0xFD] == b"\x001800000000125"
+
+
+@pytest.mark.parametrize("watts", [True, 0, 200, 350, 1900, 1800.0, "1800"])
+def test_reject_unsupported_native_charging_power(watts):
+    with pytest.raises(ValueError, match="Charging power"):
+        NativeMqttCommands("SYNTHETIC", "a" * 40).ac_charging_power(watts)
+
+
+@pytest.mark.parametrize("seconds", [True, 0, -1, 121, 1.5])
+def test_reject_unbounded_native_stream(seconds):
+    with pytest.raises(ValueError, match="Stream duration"):
+        NativeMqttCommands("SYNTHETIC", "a" * 40).stream(seconds)
+
+
+@pytest.mark.parametrize("serial,account", [("a/b", "a" * 40), ("#", "a" * 40),
+                                         ("", "a" * 40), (None, "a" * 40),
+                                         ("SYNTHETIC", "short"), ("SYNTHETIC", None)])
+def test_reject_invalid_native_request_identity(serial, account):
+    with pytest.raises(ValueError):
+        NativeMqttCommands(serial, account)
+    with pytest.raises(ValueError, match="only on C2000"):
+        NativeMqttCommands("SYNTHETIC", "a" * 40, model=Model.C1000_GEN2)

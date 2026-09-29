@@ -16,7 +16,8 @@ The official Anker app performed the C1000 firmware update from 1.1.4.3 to 1.1.4
 TLS MQTT listener on the isolated network, including client-certificate
 validation, saved-configuration reconnect, and status/telemetry requests.
 This is separate from the BLE bridge. See [native MQTT findings](local-mqtt-investigation.md).
-Native charging writes and tariff activation remain untested with this connection.
+Native charging-power and mode/reserve/schedule writes are now verified too.
+Peak tariff activation still failed with MQTT connected; see the follow-up below.
 
 ## Pairing and connection
 
@@ -299,6 +300,30 @@ no internet route; all captures remain private. The temporary services were
 stopped and HA credentials removed after verifying the archive hash.
 See [native MQTT findings](local-mqtt-investigation.md) for envelope fields,
 credential constraints, historical failures, and remaining work.
+
+### Native MQTT control follow-up
+
+On the same C2000/main 2.1.6.4, native radio queries `0027`/`0028` confirmed AP
+and server connectivity. Native `0101` with only the `A4` charging-power field
+changed **1800→1700→1800 W**, with successful `0901` acknowledgments and fresh
+`0900` telemetry after each step. The battery remained idle at its 90% cap;
+this verifies the setting, not charging current. The Python `NativeMqttCommands`
+helper now builds status, stream, and charging-power requests.
+
+A separate native `0090` trial verified reserve **10→85%**, mode
+**Standard→Time-of-Use→Standard**, and a single all-day Peak slot. Twelve
+samples spanning 25.8 seconds still showed no active tariff and idle battery,
+with mains present and AC output enabled. Native restore commands returned
+Standard, reserve 10%, zero slots, and the actual starting schedule parameter
+0; a fresh BLE session after AP shutdown confirmed these values, caps 90%/1%,
+and charging limit 1800 W. Bluetooth discovery had failed while MQTT was active
+in an earlier attempt, then succeeded after AP shutdown. No output switch was
+sent in any of these trials. Private captures include interrupted prechecks.
+
+Working radio connectivity alone therefore did not activate the C2000 tariff.
+Controller binding/readiness and complete small API responses remain leads;
+the [detailed findings](local-mqtt-investigation.md#time-of-use-with-mqtt-connected)
+record the guarded payloads, restoration, and an offline bind-callback replay.
 
 ### BLE-to-MQTT bridge
 

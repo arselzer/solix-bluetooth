@@ -332,16 +332,21 @@ input also includes the AC load supplied to the servers. The charge cap decides
 whether mains charging may resume at the current battery level; lowering it
 does not force the battery to supply AC loads. This is a local BLE-to-MQTT
 bridge. Native C2000 MQTT monitoring has since been demonstrated separately;
-native charging commands remain untested.
+native charging-power changes 1800→1700→1800 W are also verified.
 
-### Experimental native MQTT decoding
+### Experimental native MQTT requests and decoding
 
 The C2000 Gen 2 (main 2.1.6.4) connected directly to a local TLS MQTT listener
 on an isolated network, including a run requiring its client certificate.
 It reconnected with saved settings and answered `0100` status and `0057`
 telemetry-stream requests without Bluetooth. The local API bootstrap and
 broker probe are research tools; there is no packaged native provisioning
-service yet. C1000 native MQTT and native charging/TOU controls remain unverified.
+service yet. C2000 native charging-power changes 1800→1700→1800 W were
+confirmed by acknowledgment and fresh status replies, with AC output on.
+The battery stayed idle at its cap; this verified the setpoint, not charging
+current. Native mode/reserve/schedule writes also succeeded, but an all-day
+Peak plan still did not activate a tariff or discharge. Those schedule controls
+remain private research probes. C1000 native MQTT remains unverified.
 
 Use the decoder with a broker client or Home Assistant coordinator:
 
@@ -364,6 +369,32 @@ freshness and availability in your broker client; cached telemetry alone does
 not establish UPS availability. `raw_tlvs` may contain device identifiers and
 should remain private. The separate radio `state_info.battery` field is not
 the power-station charge percentage.
+
+Build requests for an already provisioned C2000 and publish through your broker
+client. Keep the configured account ID private; it is not a broker password.
+
+```python
+from solix_gen2 import NativeMqttCommands
+
+commands = NativeMqttCommands(configured_serial, configured_account_id)
+request = commands.status()             # One status reply (0900).
+mqtt_client.publish(request.topic, request.payload, qos=0, retain=False)
+
+request = commands.stream(seconds=60)   # Request regular telemetry (0421).
+mqtt_client.publish(request.topic, request.payload, qos=0, retain=False)
+# Explicit setting write, when wanted:
+# request = commands.ac_charging_power(1700)
+# mqtt_client.publish(request.topic, request.payload, qos=0, retain=False)
+```
+
+Each request exposes `response_command`, but the helper does not wait for
+acknowledgments or confirm settings. Subscribe before publishing, check fresh
+telemetry, and restore any temporary value. Charging requests contain only the
+charging-power field, with a validated 300–1800 W range in 100 W steps. Native
+hardware tests covered 1700 and 1800 W; the broader range follows the existing
+BLE controls. Streams accept 1–120 seconds and must be renewed by the caller.
+Request payloads and topics contain private identifiers; do not log them
+publicly. These helpers make no network calls and implement no output switch.
 
 ### Experimental Gen 2 Wi-Fi join and C1000 API setup
 

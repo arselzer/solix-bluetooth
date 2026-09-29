@@ -51,9 +51,13 @@ The [firmware findings](docs/firmware-findings.md) document the recovered C1000
 Gen 2 1.1.4.9 controller and radio code, integrity checks, command handlers, and
 remaining questions. Its Time-of-Use logic requires binding and network readiness;
 the radio normally reports readiness only after both Wi-Fi and MQTT connect.
-The C1000 schedule layout also differs from the observed C2000 layout. Native
-device MQTT and active local Time-of-Use control remain unverified. The working
-MQTT bridge communicates with the stations over BLE. Raw captures, firmware,
+The C1000 schedule layout also differs from the observed C2000 layout.
+[Native local MQTT](docs/local-mqtt-investigation.md) now works on C2000/main
+2.1.6.4 with TLS client certificates, saved-settings reconnect, live telemetry,
+and verified charging-power changes. Native mode/reserve/schedule writes work,
+but Peak still did not activate a tariff or discharge the battery. Python has
+native request/decoding helpers; native provisioning remains a lab workflow.
+The packaged MQTT bridge communicates with the stations over BLE. Raw captures, firmware,
 credentials, and reproducible private analysis stay in the ignored
 `.solix-private/` directory.
 
