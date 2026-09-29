@@ -1,18 +1,19 @@
-# solix-gen2-ble
+# solix-link
 
 Async Python monitoring over local Bluetooth, with a CLI, HTTP server, and
 MQTT bridge. It uses no cloud account.
 
 An experimental **isolated Wi-Fi/native MQTT endpoint** is also available for
 C2000 Gen 2: `lab-init`, `lab-run`, `lab-status`, `lab-readiness`,
-`lab-set-charge-power` and `lab-serve`. It packages the local API, NTP and mTLS
-interception workflow, without an internet route. Monitoring is the default;
+`lab-set-charge-power`, `lab-set-charge-cap` and `lab-serve`. It packages the
+local API, NTP and mTLS interception workflow, without an internet route.
+Monitoring is the default;
 native charging writes require `--allow-control` and fresh confirmation.
 See [setup, Python exports and limitations](../docs/isolated-ap-mqtt.md).
 
-Run `solix-gen2` without arguments in a terminal for interactive scanning,
+Run `solix-link` without arguments in a terminal for interactive scanning,
 station selection/pairing, BLE monitoring, MQTT setup and HTTP serving. For a
-custom config, use `solix-gen2 interactive --config /path/to/config.json`.
+custom config, use `solix-link interactive --config /path/to/config.json`.
 
 | Model profile | Monitoring | Controls |
 | --- | --- | --- |
@@ -21,8 +22,12 @@ custom config, use `solix-gen2 interactive --config /path/to/config.json`.
 | `c1000_gen2` — A1763 | Tested live | Verified charge limits, charging power, display timeout, fast charge |
 | `c2000_gen2` — A1783 | Tested live | Verified upper charge cap, charging power, screen timeout 30/60 s |
 
-C300 DC variants are not supported. Package/import/CLI names remain
-`solix-gen2-ble`, `solix_gen2`, and `solix-gen2` for compatibility.
+C300 DC variants are not supported. The distribution and CLI are `solix-link`;
+the Python import is `solix_link`. Existing `solix-gen2` commands and
+`solix_gen2` imports remain compatibility aliases to the same implementation.
+The config path `~/.config/solix-gen2/config.json`, MQTT topic prefix
+`solix_gen2` and Prometheus metric names remain stable, so existing deployments
+can upgrade without moving their saved pairing IDs or changing dashboards.
 
 Install from this repository (include `server` and/or `mqtt` for the network services):
 
@@ -36,7 +41,7 @@ print updates using its saved client ID:
 ```python
 import asyncio
 import os
-from solix_gen2 import SolixMonitor, discover
+from solix_link import SolixMonitor, discover
 
 async def main():
     devices = await discover()
@@ -68,14 +73,14 @@ These profiles automatically select legacy Bluetooth and do not need
 `owner_user_id` or `pair`. For example:
 
 ```bash
-solix-gen2 scan
-solix-gen2 add --name c300 --model c300 --address AA:BB:CC:DD:EE:03
-solix-gen2 monitor --name c300
-solix-gen2 set-display-timeout --name c300 --seconds 60
-solix-gen2 set-display-timeout --name c300 --seconds 30
-solix-gen2 set-ac-output --name c300 --enabled on
-solix-gen2 set-light --name c300 --mode low
-solix-gen2 set-charge-power --name c300 --watts 300
+solix-link scan
+solix-link add --name c300 --model c300 --address AA:BB:CC:DD:EE:03
+solix-link monitor --name c300
+solix-link set-display-timeout --name c300 --seconds 60
+solix-link set-display-timeout --name c300 --seconds 30
+solix-link set-ac-output --name c300 --enabled on
+solix-link set-light --name c300 --mode low
+solix-link set-charge-power --name c300 --watts 300
 ```
 
 Use `SolixMonitor(ble_device)` or, with an address,
@@ -112,7 +117,7 @@ For Wi-Fi/MQTT troubleshooting, query radio diagnostics on an existing Prime
 connection with `await monitor.network_diagnostics()`, or run:
 
 ```bash
-solix-gen2 network-diagnostics --name ups
+solix-link network-diagnostics --name ups
 ```
 
 The result contains `http_error_code`, `wifi_error_code`, `ble_disconnect_code`,
@@ -195,7 +200,7 @@ task, wait for `pairing_required`, press the main power button once, then call
 
 ```python
 import asyncio
-from solix_gen2 import SolixMonitor
+from solix_link import SolixMonitor
 
 monitor = SolixMonitor(c2000_device)  # Use protocol="legacy" for C1000 firmware 1.1.4.3.
 connect_task = asyncio.create_task(monitor.connect(timeout=120))
@@ -216,15 +221,15 @@ hold the button or press the separate AC output button.
 
 ## CLI and network server
 
-The package installs a `solix-gen2` command. Pair each Prime station once and
+The package installs a `solix-link` command. Pair each Prime station once and
 save both in a config file:
 
 ```bash
-solix-gen2 scan
-solix-gen2 pair --name c2000 --address AA:BB:CC:DD:EE:01 --timezone Europe/Vienna
-solix-gen2 pair --name c1000 --address AA:BB:CC:DD:EE:02 --model c1000_gen2
-solix-gen2 monitor
-solix-gen2 serve --host 0.0.0.0 --port 8765
+solix-link scan
+solix-link pair --name c2000 --address AA:BB:CC:DD:EE:01 --timezone Europe/Vienna
+solix-link pair --name c1000 --address AA:BB:CC:DD:EE:02 --model c1000_gen2
+solix-link monitor
+solix-link serve --host 0.0.0.0 --port 8765
 ```
 
 `pair` prompts for one short main button press if needed and writes the
@@ -232,7 +237,7 @@ generated ID to `~/.config/solix-gen2/config.json` with owner-only permissions.
 `--timezone` saves the station's IANA timezone for the Prime handshake; it is
 useful when the HA host runs in UTC but the station is elsewhere. The Python
 constructor accepts `timezone_name="Europe/Vienna"` for the same purpose. An
-existing device can be updated with `solix-gen2 add` and its saved client ID.
+existing device can be updated with `solix-link add` and its saved client ID.
 Use `--config /path/to/config.json` on `pair`, `add`, `monitor`, or `serve` to
 choose another path. This workspace already has a working, ignored config at
 `.solix-private/config.json`; copy it to the Home Assistant node with private
@@ -242,7 +247,7 @@ never send setting or AC/DC output commands.
 For a C1000 **Gen 2** still on firmware 1.1.4.3, use:
 
 ```bash
-solix-gen2 add --name c1000 --address AA:BB:CC:DD:EE:02 --model c1000_gen2 --protocol legacy
+solix-link add --name c1000 --address AA:BB:CC:DD:EE:02 --model c1000_gen2 --protocol legacy
 ```
 
 ### Verified Gen 2 settings
@@ -256,13 +261,13 @@ untouched. The C2000 also supports AC charging power at 300–1800 W in 100 W
 steps and screen timeout at 30 or 60 seconds. Its output controls remain blocked.
 
 ```bash
-solix-gen2 set-limits --name c1000 --upper 90 --lower 1
-solix-gen2 set-charge-power --name c1000 --watts 1000
-solix-gen2 set-display-timeout --name c1000 --seconds 60
-solix-gen2 set-fast-charge --name c1000 --enabled on
-solix-gen2 set-display-timeout --name c2000 --seconds 60
-solix-gen2 set-charge-power --name c2000 --watts 1700
-solix-gen2 set-charge-cap --name c2000 --upper 95
+solix-link set-limits --name c1000 --upper 90 --lower 1
+solix-link set-charge-power --name c1000 --watts 1000
+solix-link set-display-timeout --name c1000 --seconds 60
+solix-link set-fast-charge --name c1000 --enabled on
+solix-link set-display-timeout --name c2000 --seconds 60
+solix-link set-charge-power --name c2000 --watts 1700
+solix-link set-charge-cap --name c2000 --upper 95
 ```
 
 Use `--config /path/to/config.json` if the saved device uses a nondefault
@@ -316,7 +321,7 @@ settings through the packaged CLI; native MQTT currently requires the separate
 experimental lab setup described below.
 
 ```bash
-solix-gen2 mqtt-bridge --config /path/to/config.json \
+solix-link mqtt-bridge --config /path/to/config.json \
   --broker 127.0.0.1 --port 1883
 ```
 
@@ -419,7 +424,7 @@ remain private research probes. C1000 native MQTT remains unverified.
 Use the decoder with a broker client or Home Assistant coordinator:
 
 ```python
-from solix_gen2 import Model, decode_mqtt_telemetry
+from solix_link import Model, decode_mqtt_telemetry
 
 update = decode_mqtt_telemetry(
     message.payload,
@@ -442,7 +447,7 @@ Build requests for an already provisioned C2000 and publish through your broker
 client. Keep the configured account ID private; it is not a broker password.
 
 ```python
-from solix_gen2 import NativeMqttCommands
+from solix_link import NativeMqttCommands
 
 commands = NativeMqttCommands(configured_serial, configured_account_id)
 request = commands.status()             # One status reply (0900).
@@ -452,15 +457,19 @@ request = commands.stream(seconds=60)   # Request regular telemetry (0421).
 mqtt_client.publish(request.topic, request.payload, qos=0, retain=False)
 # Explicit setting write, when wanted:
 # request = commands.ac_charging_power(1700)
+# request = commands.charge_cap(95)  # Upper only; lower-limit field omitted.
 # mqtt_client.publish(request.topic, request.payload, qos=0, retain=False)
 ```
 
 Each request exposes `response_command`, but the helper does not wait for
 acknowledgments or confirm settings. Subscribe before publishing, check fresh
-telemetry, and restore any temporary value. Charging requests contain only the
+telemetry, and restore any temporary value. Power requests contain only the
 charging-power field, with a validated 300–1800 W range in 100 W steps. Native
-hardware tests covered 1700 and 1800 W; the broader range follows the existing
-BLE controls. Streams accept 1–120 seconds and must be renewed by the caller.
+hardware tests covered 300, 1700 and 1800 W. Upper-cap requests accept
+80–100% in 5% steps; 90→95→90% was verified through native MQTT. Use
+`LocalMqttServer.set_charge_cap()` or `lab-set-charge-cap` for fresh baseline,
+reserve-clamping protection and telemetry confirmation. The raw builder only
+validates the range. Streams accept 1–120 seconds and must be renewed by the caller.
 Request payloads and topics contain private identifiers; do not log them
 publicly. These helpers make no network calls and implement no output switch.
 
@@ -479,9 +488,9 @@ credentials; both tested models associated and obtained DHCP without an API URL:
 
 ```bash
 chmod 600 /path/to/wifi-password
-solix-gen2 wifi-join --name c1000 --ssid 'YourSSID' \
+solix-link wifi-join --name c1000 --ssid 'YourSSID' \
   --password-file /path/to/wifi-password
-solix-gen2 wifi-join --name c2000 --ssid 'YourSSID' \
+solix-link wifi-join --name c2000 --ssid 'YourSSID' \
   --password-file /path/to/wifi-password
 ```
 
@@ -489,7 +498,7 @@ solix-gen2 wifi-join --name c2000 --ssid 'YourSSID' \
 attempt its network binding calls:
 
 ```bash
-solix-gen2 wifi-setup --name c1000 --ssid 'YourSSID' \
+solix-link wifi-setup --name c1000 --ssid 'YourSSID' \
   --password-file /path/to/wifi-password \
   --api-url 'http://192.168.50.1/' --allow-http \
   --posix-timezone 'CET-1CEST,M3.5.0,M10.5.0/3' \
@@ -516,7 +525,7 @@ observed endpoint sequence is documented in the
 read-only. `serve` uses BLE and does not run an Anker API emulator; `lab-run`
 runs the separate local device API described in the isolated-AP guide.
 
-For offline protocol research, `solix_gen2.mqtt_credentials` provides
+For offline protocol research, `solix_link.mqtt_credentials` provides
 `encrypt_device_credential(device_serial, pem_bytes)` and
 `decrypt_device_credential(device_serial, base64_text)`. These implement the
 device endpoint's serial-derived AES-256-CBC envelope, verified against a
@@ -586,4 +595,4 @@ For a direct custom Home Assistant integration, use `SolixMonitor` callbacks
 or `MonitorService.subscribe()` and call `disconnect()` / `stop()` when the
 entry unloads. `available`, `last_seen`, and `error` in each status support HA
 entity availability. The HTTP service can run as a systemd service on a Linux
-HA node using the same `solix-gen2 serve --config ...` command.
+HA node using the same `solix-link serve --config ...` command.

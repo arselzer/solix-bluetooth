@@ -240,7 +240,8 @@ tools/
   decode-capture.ts — Offline capture decoder (Node.js)
   test-gen2-reconnect.ts — Synthetic GATT regression tests
 python/
-  solix_gen2/       — Async BLE library, CLI, HTTP server, and MQTT bridge
+  solix_link/       — Async BLE library, CLI, HTTP server, MQTT bridge and isolated AP
+  solix_gen2/       — Compatibility imports for existing clients
   tests/           — Synthetic protocol and service tests
 docs/
   app-reverse-engineering.md — Anker app decompilation findings

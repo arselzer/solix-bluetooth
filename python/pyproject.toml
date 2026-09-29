@@ -3,7 +3,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "solix-gen2-ble"
+name = "solix-link"
 version = "0.1.0"
 description = "Local Anker SOLIX monitoring and controls over Bluetooth and isolated native MQTT"
 readme = "README.md"
@@ -15,8 +15,9 @@ server = ["aiohttp>=3.9,<4"]
 mqtt = ["paho-mqtt>=2,<3"]
 
 [project.scripts]
-solix-gen2 = "solix_gen2.cli:main"
+solix-link = "solix_link.cli:main"
+solix-gen2 = "solix_link.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["solix_gen2*"]
+include = ["solix_link*", "solix_gen2*"]

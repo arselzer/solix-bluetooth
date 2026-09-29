@@ -60,8 +60,11 @@ Twelve additional offline executions of the original C1000 inverter-state
 getters confirmed that the active predicate requires status byte bit 0 set,
 the low 14 fault bits at offset `+2` clear, byte `+4` zero and inhibit bit 0 at
 `+8` clear. Firmware fault logging labels the middle fields "inv fault". A
-debounced poller updates the separate power-gate bit after ten consistent
-samples. Its physical meaning and C2000 equivalent remain unverified. Static
+debounced poller updates the separate power-gate bit using a stored threshold
+of ten. Subsequent real-code replay found an actual transition after 12 samples
+from zero, or 11 healthy samples after a failed sample; see the
+[inverter trace](inverter-state-investigation.md). Its physical meaning and
+C2000 equivalent remain unverified. Static
 reference searches did not identify a directly exposed standard telemetry field
 for this complete condition; AC-output telemetry alone cannot prove it.
 
@@ -132,3 +135,61 @@ client certificate/key fields are wrapped. Both were corrected and covered by
 tests. The final package suite has **157 passing Python tests**, including
 interactive navigation, MQTT/TLS exchange, stale data, control confirmation,
 timeout isolation, native HTTP authentication and AP preflight/cleanup behavior.
+
+## Native upper cap and charging-state Peak trial
+
+A further bounded trial on the same firmware used the packaged native request
+builder and endpoint. `0103` with typed `AA` changed only the upper cap:
+**90→95→90%**, acknowledged by `0903` and confirmed by fresh `0900` status.
+The lower-limit tag was omitted. Lower limit, reserve, mode, slot count, power
+limit and AC output were checked around each cap write. The endpoint refuses
+a cap below the current reserve before writing, since recovered C1000 firmware
+can clamp that reserve as a side effect; the C2000 equivalent is not proven.
+
+Charging power was reduced **1800→300 W** before raising the cap. Ten fresh
+observations over about 20 seconds showed the transition from idle to charging;
+stable AC-input minus AC-output readings were **313–334 W**. This verifies
+physical charging behavior beyond merely storing a power-limit setting.
+These are station-reported measurements, not an external energy-meter test.
+
+While charging at 90% SOC, the trial saved reserve **75%**, Time-of-Use mode,
+parameter **4**, and one Peak slot **00:00–24:00**. All 28 fresh observations
+over **60.24 seconds** reported `active_tariff=none` and `battery_status=charging`.
+SOC reaching 91% triggered the stop guard. No discharge was observed. Charging
+feedback therefore did not unlock the stored Peak plan in this configuration;
+it does not establish the value of the separate internal inverter gate.
+
+Standard mode, an empty plan, parameter 0, reserve 10%, cap 90%/1% and power
+1800 W were restored and freshly confirmed through native MQTT. AC output and
+mains presence remained on in every recorded observation. SOC ended at 91%:
+restoring settings does not reverse the small amount of charge added.
+
+The initial worker then exposed a shutdown-order bug: it awaited listener
+closure before closing accepted MQTT clients, hanging with an active station.
+The worker's bounded shutdown timed out; its parent removed the AP. Both final
+BLE attempts failed discovery, so they **did not independently verify status**.
+The endpoint and API service now close/cancel accepted clients before awaiting
+their listeners. Tests cover an active TLS station and an incomplete HTTP request.
+
+A separate read-only AP session with the fix reconnected using the saved local
+credentials, without BLE provisioning or any setting write. Fresh telemetry on
+that new MQTT connection independently confirmed every restored setting,
+AC output on, SOC 91% and battery idle. The updated worker stopped normally
+with that station connected. The AP namespace was removed. Its interface
+returned UP despite being lowered inside the namespace; cleanup now explicitly
+lowers and flushes it again after returning it to the host. The trial host was
+also explicitly left DOWN. The complete captures and both failed
+BLE attempts remain in
+`.solix-private/isolated-ap/native-cap-charging-20260929/`.
+
+The package is now **`solix-link`**, imported as **`solix_link`**. Its
+`lab-set-charge-cap` command and interactive native menu expose the verified
+cap path. Legacy CLI/import aliases, saved config paths, MQTT bridge topic
+prefixes and Prometheus metric names remain compatible. Tariff experiments
+remain private; scheduled discharge is still unresolved.
+
+The current verification suite has **175 passing Python tests**. A wheel built
+outside the workspace installed successfully and exercised both primary and
+compatibility CLI/import/module entry points. The offline inverter/log trace
+adds **39 synthetic firmware cases** with its substitution and hardware limits
+documented [separately](inverter-state-investigation.md).

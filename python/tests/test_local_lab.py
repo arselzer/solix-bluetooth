@@ -110,7 +110,7 @@ def test_native_response_filters_identity_and_malformed_envelopes(lab):
             native_response(message, config)
 
 
-async def fake_station(config, directory, port, *, retained_first=False):
+async def fake_station(config, directory, port, *, retained_first=False, reserve=10, cap_behavior="apply"):
     context = ssl.create_default_context(cafile=str(directory / "ca.pem"))
     context.load_cert_chain(directory / "client.pem", directory / "client-key.pem")
     reader, writer = await asyncio.open_connection("127.0.0.1", port, ssl=context, server_hostname=config.broker_host)
@@ -125,6 +125,8 @@ async def fake_station(config, directory, port, *, retained_first=False):
     captured = []
     async def respond():
         watts = 1800
+        upper = 100 if reserve > 90 else 90
+        reported_reserve = reserve
         first_status = True
         try:
             while True:
@@ -142,8 +144,18 @@ async def fake_station(config, directory, port, *, retained_first=False):
                     tags = parse_tlvs(frame.payload)
                     assert set(tags) == {0xA1, 0xA4, 0xFD}
                     watts = int.from_bytes(tags[0xA4][1:], "little")
+                elif command == "0103":
+                    tags = parse_tlvs(frame.payload)
+                    assert set(tags) == {0xA1, 0xAA, 0xFD}
+                    if cap_behavior != "ignored":
+                        upper = tags[0xAA][1]
+                    if cap_behavior == "reserve_changed":
+                        reported_reserve += 1
                 elif command == "0100":
-                    fields = tlv(0xA5, bytes([4, 25, 0, 90, 100])) + tlv(0xA7, bytes.fromhex("04015600015600")) + tlv(0xA4, bytes(5) + watts.to_bytes(2, "little"))
+                    fields = (tlv(0xA5, bytes([4, 25, 0, 90, 100]))
+                              + tlv(0xA7, bytes.fromhex("04015600015600"))
+                              + tlv(0xA4, bytes(5) + watts.to_bytes(2, "little"))
+                              + tlv(0xD9, bytes([4, 0, 0, reported_reserve, upper, 1, 0, 0])))
                 elif command == "0089":
                     fields = tlv(0xA1, b"\x34")
                 else:
@@ -181,6 +193,8 @@ def test_tls_mqtt_native_controls_freshness_and_cleanup(lab):
             assert config.device_serial not in json.dumps(server.snapshot())
             with pytest.raises(PermissionError):
                 await server.set_ac_charging_power(1700)
+            with pytest.raises(PermissionError):
+                await server.set_charge_cap(95)
             assert not any(frame.command.hex() == "0101" for frame in captured)
             server.allow_control = True
             result = await server.set_ac_charging_power(1700)
@@ -188,6 +202,12 @@ def test_tls_mqtt_native_controls_freshness_and_cleanup(lab):
             assert result["metrics"]["ac_output_enabled"] == 1
             result = await server.set_ac_charging_power(1800)
             assert result["metrics"]["ac_charging_power_limit_w"] == 1800
+            result = await server.set_charge_cap(95)
+            assert result["metrics"]["max_charge_percentage"] == 95
+            assert result["metrics"]["min_charge_percentage"] == 1
+            assert result["metrics"]["backup_reserve_percentage"] == 10
+            result = await server.set_charge_cap(90)
+            assert result["metrics"]["max_charge_percentage"] == 90
             await server.connection.request(server.commands.readiness())
             server.last_seen = time.time() - 31
             assert not server.snapshot()["available"]
@@ -200,8 +220,37 @@ def test_tls_mqtt_native_controls_freshness_and_cleanup(lab):
         finally:
             await asyncio.wait_for(server.stop(), 5)
             await asyncio.wait_for(task, 5)
-        assert set(frame.command.hex() for frame in captured) <= {"0100", "0101", "0089"}
+        assert set(frame.command.hex() for frame in captured) <= {"0100", "0101", "0103", "0089"}
         assert (directory / "mqtt-events.jsonl").stat().st_mode & 0o777 == 0o600
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("reserve,behavior,error,match", [
+    (95, "apply", ValueError, "backup reserve"),
+    (10, "ignored", RuntimeError, "not confirmed"),
+    (10, "reserve_changed", RuntimeError, "Another setting changed"),
+])
+def test_native_charge_cap_rejects_reserve_clamping_and_false_confirmation(lab, reserve, behavior, error, match):
+    async def run():
+        config, directory = lab
+        server = LocalMqttServer(config, directory, allow_control=True)
+        await server.start(host="127.0.0.1", port=0)
+        task, captured, writer = await fake_station(
+            config, directory, server._server.sockets[0].getsockname()[1], reserve=reserve, cap_behavior=behavior)
+        try:
+            async with asyncio.timeout(2):
+                while not server.snapshot()["available"]:
+                    await asyncio.sleep(0.01)
+            with pytest.raises(error, match=match):
+                await server.set_charge_cap(90 if reserve == 95 else 95)
+            writes = [frame for frame in captured if frame.command.hex() == "0103"]
+            assert len(writes) == (0 if reserve == 95 else 1)
+        finally:
+            writer.write(mqtt_packet(0xE0, b""))
+            await writer.drain()
+            await asyncio.wait_for(task, 5)
+            await writer.wait_closed()
+            await asyncio.wait_for(server.stop(), 5)
     asyncio.run(run())
 
 
@@ -211,6 +260,57 @@ def test_mqtt_oversize_length_rejected_before_reading_payload():
         reader.feed_data(b"\x30\x81\x80\x08")  # 131073 bytes.
         with pytest.raises(ValueError, match="too large"):
             await read_mqtt(reader)
+    asyncio.run(run())
+
+
+def test_shutdown_closes_an_active_tls_station_before_waiting_for_listener(lab):
+    async def run():
+        config, directory = lab
+        server = LocalMqttServer(config, directory)
+        await server.start(host="127.0.0.1", port=0)
+        task, _, writer = await fake_station(config, directory, server._server.sockets[0].getsockname()[1])
+        try:
+            async with asyncio.timeout(2):
+                while not server.snapshot()["available"]:
+                    await asyncio.sleep(0.01)
+            # The client remains connected; it has not sent DISCONNECT.
+            await asyncio.wait_for(server.stop(), 5)
+            assert not server.snapshot()["connected"]
+            await asyncio.wait_for(task, 5)
+            await writer.wait_closed()
+        finally:
+            writer.close()
+            await asyncio.wait_for(server.stop(), 5)
+    asyncio.run(run())
+
+
+def test_service_shutdown_cancels_an_incomplete_http_request(lab):
+    from solix_gen2.lab_service import InterceptService
+    async def run():
+        config, directory = lab
+        service = InterceptService(config, directory)
+        listener = await asyncio.start_server(service._api, "127.0.0.1", 0)
+        service._servers.append(listener)
+        reader, writer = await asyncio.open_connection("127.0.0.1", listener.sockets[0].getsockname()[1])
+        try:
+            writer.write(b"POST /equipment/devicemanage/get_mqtt_info HTTP/1.1\r\n")
+            await writer.drain()
+            async with asyncio.timeout(2):
+                while not service._clients:
+                    await asyncio.sleep(0.01)
+            await asyncio.wait_for(service.stop(), 5)
+            try:
+                assert await asyncio.wait_for(reader.read(), 2) == b""
+            except ConnectionResetError:
+                pass  # Closing with unread request bytes may reset the socket.
+            assert not service._clients and not service._servers
+        finally:
+            writer.close()
+            try:
+                await writer.wait_closed()
+            except ConnectionResetError:
+                pass
+            await service.stop()
     asyncio.run(run())
 
 
@@ -224,7 +324,9 @@ def test_namespace_cleanup_returns_adapter_before_deleting_namespace(lab, monkey
     assert any(args[-5:] == ("ip", "link", "set", config.interface, "down") for args in calls)
     move = next(i for i, args in enumerate(calls) if "phy" in args)
     delete = next(i for i, args in enumerate(calls) if args[:3] == ("ip", "netns", "del"))
-    assert move < delete
+    host_down = next(i for i, args in enumerate(calls) if args == ("ip", "link", "set", config.interface, "down"))
+    host_flush = next(i for i, args in enumerate(calls) if args == ("ip", "addr", "flush", "dev", config.interface))
+    assert move < host_down < host_flush < delete
     assert not ap.created and not ap.moved
 
 

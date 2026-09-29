@@ -132,6 +132,24 @@ def test_reject_unsupported_native_charging_power(watts):
         NativeMqttCommands("SYNTHETIC", "a" * 40).ac_charging_power(watts)
 
 
+@pytest.mark.parametrize("percentage", [80, 85, 90, 95, 100])
+def test_native_charge_cap_preserves_lower_limit(monkeypatch, percentage):
+    monkeypatch.setattr("solix_gen2.native_mqtt.time.time", lambda: 1800000000.125)
+    request = NativeMqttCommands("SYNTHETIC", "a" * 40).charge_cap(percentage)
+    _, _, packet = unpack_request(request)
+    fields = parse_tlvs(packet.payload)
+    assert packet.command.hex() == "0103" and request.response_command == "0903"
+    assert list(fields) == [0xA1, 0xAA, 0xFD]
+    assert fields[0xAA] == bytes((1, percentage))
+    assert fields[0xFD] == b"\x001800000000125"
+
+
+@pytest.mark.parametrize("percentage", [True, 0, 79, 91, 101, 90.0, "90"])
+def test_reject_unsupported_native_charge_cap(percentage):
+    with pytest.raises(ValueError, match="Charge cap"):
+        NativeMqttCommands("SYNTHETIC", "a" * 40).charge_cap(percentage)
+
+
 @pytest.mark.parametrize("seconds", [True, 0, -1, 121, 1.5])
 def test_reject_unbounded_native_stream(seconds):
     with pytest.raises(ValueError, match="Stream duration"):

@@ -146,6 +146,30 @@ while a tariff is selected. Report builder `0802db30` divides energy sums by
 360. Its external report route and full field schema remain unmapped; no new
 native energy-counter request is recommended yet.
 
+### Static report-route follow-up
+
+Further C1000 tracing found no direct call to `0802db30`, but a Thumb function
+pointer at `0802e1f0`. The periodic accumulator loads that builder and completion
+callback `08029330` at `0802e1d2`, then calls `08013d94`. That helper queues a
+descriptor through `08016a70` with command halfword **`0401`** and function
+**`0f`**. The builder formats a larger structured/JSON report containing the
+named tariff accumulators and durations. This establishes its internal queue
+route, not a safe incoming query or the radio's final MQTT representation.
+The descriptor layout, dispatch translation and completion semantics still
+need tracing. No corresponding report was requested live.
+
+The retained Anker Solix API reference at `c2f8769` separately maps C2000
+**`0503` on `state_info`** to six unknown unsigned energy values in `A2` at
+four-byte offsets 0–20, plus an `A3` timestamp. Its suggested scale is `0.001`
+and its publication interval is explicitly uncertain. Those unnamed fields
+must not be equated with the firmware's named tariff counters without evidence.
+The local endpoint retains these raw packets if received, but does not expose
+them as named energy sensors or issue an invented polling command.
+
+Private `energy-report-callers.json`, `energy-report-registration-disassembly.json`
+and `energy-report-callback-disassembly.json` retain the static inspection.
+No firmware execution or new hardware test was added for this route.
+
 ## Private reproducibility
 
 Scripts and JSON results are retained under ignored, owner-only

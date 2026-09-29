@@ -1,6 +1,10 @@
-"""Process entry point for device services inside the isolated namespace."""
+"""Compatibility alias for solix_link.lab_worker."""
 
-from .lab_service import main
+from importlib import import_module
+import sys
 
 if __name__ == "__main__":
+    from solix_link.lab_service import main
     main()
+else:
+    sys.modules[__name__] = import_module("solix_link.lab_worker")

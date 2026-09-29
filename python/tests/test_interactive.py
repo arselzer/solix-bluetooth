@@ -92,7 +92,7 @@ def test_interactive_native_session_stops_owned_child(monkeypatch, tmp_path):
             self.returncode = 0
     monkeypatch.setattr(interactive.os, "geteuid", lambda: 0)
     monkeypatch.setattr(interactive.subprocess, "Popen", Child)
-    inputs(monkeypatch, ["4"])
+    inputs(monkeypatch, ["5"])
     interactive.native_session(directory, tmp_path / "config.json", provision=False, allow_control=False)
     assert spawned[0].signals == [signal.SIGTERM]
     assert "--allow-control" not in spawned[0].command

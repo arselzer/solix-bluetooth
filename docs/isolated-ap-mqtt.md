@@ -23,7 +23,7 @@ they do not perform an Anker cloud-account binding.
 
 ## CLI setup
 
-Run `solix-gen2` without arguments for the terminal workflow. It scans nearby
+Run `solix-link` without arguments for the terminal workflow. It scans nearby
 stations, combines them with saved devices, and guides pairing, BLE monitoring,
 broker bridging and C2000 local-MQTT setup. Local setup can read the serial
 over BLE and lists Wi-Fi adapters that are DOWN. Monitoring is the first control
@@ -37,9 +37,9 @@ in an owner-only file; obtain it from retained local telemetry or the label.
 
 ```bash
 chmod 600 .solix-private/device-serial
-solix-gen2 lab-init --name ups --serial-file .solix-private/device-serial \
+solix-link lab-init --name ups --serial-file .solix-private/device-serial \
   --directory .solix-private/local-mqtt --interface wlan_lab --phy phy1 --country AT
-sudo /path/to/venv/bin/solix-gen2 lab-run \
+sudo /path/to/venv/bin/solix-link lab-run \
   --directory "$PWD/.solix-private/local-mqtt" --provision
 ```
 
@@ -62,8 +62,8 @@ is the connection check. Subsequent runs may omit `--provision`. Radio retries
 can be slow, so an unavailable snapshot during startup is expected.
 
 ```bash
-sudo /path/to/venv/bin/solix-gen2 lab-status --directory "$PWD/.solix-private/local-mqtt"
-sudo /path/to/venv/bin/solix-gen2 lab-readiness --directory "$PWD/.solix-private/local-mqtt"
+sudo /path/to/venv/bin/solix-link lab-status --directory "$PWD/.solix-private/local-mqtt"
+sudo /path/to/venv/bin/solix-link lab-readiness --directory "$PWD/.solix-private/local-mqtt"
 ```
 
 Monitoring polls `0100` every five seconds. Availability requires a connected
@@ -78,14 +78,25 @@ The endpoint starts read-only. Add `--allow-control` to `lab-run` to enable
 explicit commands through its owner-only Unix socket:
 
 ```bash
-sudo /path/to/venv/bin/solix-gen2 lab-set-charge-power \
+sudo /path/to/venv/bin/solix-link lab-set-charge-power \
   --directory "$PWD/.solix-private/local-mqtt" --watts 1700
 ```
 
-Only the C2000 charging-power limit is exposed: 300–1800 W in 100 W steps.
-Each write requires a fresh baseline, a successful `0901` reply and a new
-`0900` status with the requested limit and unchanged AC-output state. Commands
-are nonretained and serialized; a timeout closes that connection so a late
+The charging-power limit accepts 300–1800 W in 100 W steps. A write requires
+a fresh baseline, a successful `0901` reply and a new `0900` status with the
+requested limit and unchanged AC-output state. The upper charge cap is also
+available in 5% steps from 80% to 100%:
+
+```bash
+sudo /path/to/venv/bin/solix-link lab-set-charge-cap \
+  --directory "$PWD/.solix-private/local-mqtt" --upper 95
+```
+
+The cap request uses `0103`/`0903` and omits the lower-limit field. Fresh status
+must confirm the cap and preserve AC output, lower limit, reserve, charging
+power, usage mode and slot count. A cap below the backup reserve is refused
+before sending a write, because recovered firmware can clamp that reserve.
+Commands are nonretained and serialized; a timeout closes that connection so a late
 reply cannot confirm another write. A failed confirmation can still mean the
 setting changed: inspect the next fresh status before retrying. The limit is
 a charging setpoint; it has not demonstrated battery discharge with mains on.
@@ -96,7 +107,7 @@ AC switching and experimental tariff writes are not exposed by this endpoint.
 Run `lab-serve` in another process on the host, using the same private directory:
 
 ```bash
-sudo /path/to/venv/bin/solix-gen2 lab-serve \
+sudo /path/to/venv/bin/solix-link lab-serve \
   --directory "$PWD/.solix-private/local-mqtt" --host 127.0.0.1 --port 8765
 ```
 
@@ -140,3 +151,10 @@ Initial rejected double-slash API paths and incorrectly wrapped CA fields were
 captured, corrected and regression tested. The native HTTP adapter and guided
 mode have automated tests; their entire interactive flow has not been exercised
 on hardware. Scheduled battery discharge is still unresolved.
+
+The subsequent native cap test confirmed **90→95→90%** with a **300 W**
+charging limit, producing charging telemetry and roughly 315 W above the AC
+load. A 60-second all-day Peak test during charging still reported no active
+tariff. Original settings were restored; a separate read-only MQTT connection
+confirmed them and battery idle. See the [full trial record](c2000-mqtt-reconnect-and-tariff.md#native-upper-cap-and-charging-state-peak-trial),
+including failed BLE checks and the resulting service-shutdown fix.
