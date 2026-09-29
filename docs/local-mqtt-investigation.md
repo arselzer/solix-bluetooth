@@ -223,6 +223,70 @@ stopped, its namespace removed, and temporary HA-node credentials deleted after
 the private archive's SHA-256 matched locally. The station may retain the
 previously used offline lab SSID and local API endpoint.
 
+## Configuration and connectivity readback
+
+Additional radio queries were traced in the C1000 image and exercised on C2000
+on 2026-09-29. Requests used an `A1` timestamp; replies start with status `00`.
+These are research probes, not additional public Python methods yet.
+
+| Function / request → response | Reply TLVs | Evidence and caveats |
+| --- | --- | --- |
+| `10/403c` → `483c` | A1 SSID, A2 encrypted Wi-Fi password, A3 API base URL, A4 app/service ID | Handler `0x4203ed3c`; **contains private configuration** |
+| `0f/4027` → `4827` | A1 AP connected, A2 Ethernet connected, one byte each | Handler branch `0x42046554`; Ethernet is a constant zero in this C1000 image |
+| `0f/4028` → `4828` | A1 server connected, one byte | Getter `0x42043b84`; C1000 computes AP connected **and** MQTT connected |
+
+`4027` here is in function `0x0f`, distinct from owner registration in function
+`0x01`. The `4028` getter starts the existing server-status polling timer: it
+does not write network credentials or power settings, but is not side-effect
+free. A false server result cannot distinguish missing Wi-Fi from missing MQTT.
+
+The `10/403c` password has an additional firmware encryption envelope inside the
+ordinary encrypted BLE reply. Its research receiver handles function `0x10`
+and fragmented responses explicitly; the public session decoder currently
+handles normal app replies in function `0x0f`. Do not log decoded configuration
+to a public issue or expose this query in the read-only monitoring HTTP API.
+
+Nine offline query executions checked synthetic configuration and all four
+AP/MQTT state combinations. These execute the original handlers with host
+substitutes for configuration access, password transformation, TLV output, and
+timer creation; they do not validate physical flash contents or encryption.
+
+### C2000 app ID remains empty during activation
+
+A standalone read after the previous setup cleanup returned empty SSID,
+password, and app/service ID, with the local API URL still present. A second
+guarded trial then sampled before Wi-Fi join, after join, and approximately
+3, 15, and 50 seconds after `4025`:
+
+- SSID and encrypted password appeared after join; AP status became `1`.
+- The API URL remained correct, but app/service ID **remained empty** throughout.
+- Server status stayed `0`; HTTP, Wi-Fi, and MQTT error words stayed zero.
+- The local API received MQTT-info, bind, binding-check, and DST requests, then
+  unbind after BLE disconnect. There was no TCP/8883 traffic or listener event.
+
+This is evidence of an empty **readback field during setup**, not merely its
+cleanup afterward. It supports investigating missing initialization data, but
+does not prove that C2000 uses the same field for MQTT startup or explain why
+it is empty. Its firmware has not been recovered.
+
+The activation field mapping was checked independently in C1000 code. Three
+offline executions ran parser `0x420537d8`, adapter `0x42052e48`, and the start
+of activation at `0x42049092`, stopping at the configuration setter. `A6` reaches
+`device_app_id`; substituting `A5` or omitting the service field leaves it empty.
+This matches the earlier captured C1000 app request. It does **not** validate
+the C2000 parser. A different command, `0f/4038`, uses `A5` for the service ID;
+its layout must not be substituted into `4025`. No `4038` write was sent.
+
+The configuration readback is also distinct from `10/403b`, labeled
+`charge_set_upgrade_info` in the recovered image. That command has upgrade and
+Wi-Fi side effects and was not used as a generic configuration setter.
+
+Both live probes kept AC input/output enabled, Standard mode, no active tariff,
+zero slots, 90%/1% caps, and a 1,800 W charging limit. They sent no charging,
+output, scheduling, or firmware-update command. The AP was stopped, Wi-Fi
+returned administratively down, and temporary HA copies were deleted after
+archive hash verification. No request went to Anker's official API.
+
 ## Retained evidence and next checks
 
 Private artifacts remain ignored and must not be published:
@@ -241,9 +305,17 @@ Private artifacts remain ignored and must not be published:
   API/NTP logs, before/after telemetry, response validation, and result summary.
 - `.solix-private/isolated-ap/diagnostic-mqtt-20260929/`: passive and active
   comparison archives, sampled diagnostics, packet captures, and settings checks.
+- `emulate_network_readback.py` / `network-readback-emulation-results.json`:
+  nine configuration/connectivity query checks; `probe_network_readback.py` and
+  `network-readback-ha-results.tar.gz` retain the standalone C2000 readback.
+- `emulate_activation.py` / `activation-emulation-results.json`: three synthetic
+  C1000 activation-field checks, with OS, identity, and TLV-lookup substitutes.
+- `.solix-private/isolated-ap/config-readback-20260929/`: guarded active readbacks,
+  full notification capture, API/NTP logs, packet capture, and baseline checks.
 
-The next discriminating checks are the C1000 hardware comparison when reachable,
-the radio's persisted app/account/model fields, worker/task state, and actual
-credential storage. Recover C2000 firmware
-before assigning it the C1000 startup behavior. Preserve the response framing
-and credential checks when testing another hypothesis so results stay comparable.
+Next, investigate why the C2000 readback has no app/service ID despite the `A6`
+provisioning field, distinguishing model-specific parsing, storage, and readback
+semantics. A C1000 hardware comparison and C2000 firmware would help separate
+those possibilities. Worker/task state and actual credential storage remain
+unverified. Preserve the response framing and credential checks when testing
+another hypothesis so results stay comparable.

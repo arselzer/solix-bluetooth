@@ -6,7 +6,8 @@ These findings come from offline analysis of the owner's retained **C1000 Gen 2
 (A1763) update to 1.1.4.9**, captured on 2026-09-28 and analyzed on 2026-09-29.
 The radio application identifies itself as **v0.3.3.0**. We have not recovered
 the C2000 firmware, so identical behavior on that model remains unproven.
-No station command or firmware flash was performed during this analysis.
+Firmware analysis used retained local files; separate live network probes are
+documented below and in the linked investigation. No firmware was flashed.
 
 Raw images, phone captures, disassembly, and reproducible extraction scripts
 remain in the ignored, owner-only `.solix-private/firmware-analysis/` directory.
@@ -39,6 +40,47 @@ Version columns show manifest bytes, not necessarily app display formatting.
 The outer package checksum/trailer remains unverified. The separate radio
 image's embedded SHA-256 matches. MainMcu contains ARM Thumb code loaded at
 `0x08005000`; the radio contains RISC-V code.
+
+## Can the firmware be modified and installed?
+
+The recovered images can be analyzed and edited offline. Installing an edited
+image is a separate, unresolved problem. On the C1000 radio, there is concrete
+evidence of **cryptographic update verification**, beyond the transport checksum:
+
+- The retained 1,482,800-byte transfer contains an Espressif V2 signature block
+  at offset `0x169000`, followed by unused signature space and 48 transfer bytes.
+- Its block CRC-32 and SHA-256 of the preceding padded image both match.
+- Its **RSA-3072/PSS signature verifies**, with SHA-256, MGF1/SHA-256, and a
+  32-byte salt. Changing the digest or signature fails independent verification.
+- Radio update completion calls `esp_ota_end` at `0x420a2358`, which calls the
+  image verifier through `0x420048da`. That path reaches signature verification
+  at `0x42004782` and rejects failure. A startup-table entry also invokes the
+  running-image signature check at `0x420038f2`.
+
+The signature format matches [Espressif's documentation](https://docs.espressif.com/projects/esp-idf/en/stable/esp32c3/security/secure-boot-v2.html).
+The recovered verifier at `0x42003b8a` selects trusted key digests from the
+running image or eFuses according to a hardware register. **We have not read
+that register on the device.** The signed update does not establish whether
+hardware Secure Boot, flash encryption, UART download restrictions, or JTAG
+restrictions are enabled. A software verification bypass would not by itself
+establish that a modified image could boot.
+
+Consequently, ordinary OTA replacement is expected to reject a patched radio
+image. A possible future route would require investigating physical recovery
+access and the actual protection state on the noncritical C1000, or a verified
+update-path weakness. No such route is established, and no modified image has
+been sent to either station. The radio is the most relevant component for local
+network support; replacing it still requires preserving its controller protocol.
+
+The controller/BMS/display checksums above do **not** prove those components
+accept unsigned replacements: their bootloaders and complete update validation
+are not recovered. C2000 firmware remains unavailable. Do not infer C2000
+flashability from these C1000 findings.
+
+Private reproducibility: `verify_radio_signature.py` and
+`firmware-signature-results.json` in `.solix-private/firmware-analysis/` retain
+the local verification procedure and three results. Images and signature/key
+material remain private.
 
 ## Why storing a Time-of-Use plan is insufficient
 
@@ -137,9 +179,11 @@ C2000 controller support is unknown.
 - The [native local MQTT investigation](local-mqtt-investigation.md) now includes
   executable parser/startup replays, credential storage bounds, a reproduced
   plain-HTTP short-read failure, embedded TLS credential parser/getter checks,
-  and the read-only radio diagnostic query. C2000 still reports zero MQTT errors
-  without connecting. Inspect persisted configuration, actual credential storage,
-  and worker startup next, with a C1000 hardware comparison when reachable.
+  and radio diagnostic/configuration queries. C2000 reports an empty app/service
+  ID during setup despite an `A6` service field, and zero MQTT errors without
+  connecting. Trace its activation/storage path next, with a C1000 hardware
+  comparison when reachable. C1000 emulation confirms `A6` is correct for its
+  `4025` parser; do not substitute the different `4038` layout.
 - When C1000 is reachable again, validate its own schedule layout and benign
   display/alert settings with baseline, telemetry, and restoration checks.
 - Map the energy counters for read-only monitoring.
