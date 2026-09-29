@@ -12,7 +12,7 @@ export interface TelemetryData {
   [key: string]: string | number;
 }
 
-export type ConnectionState = 'disconnected' | 'connecting' | 'negotiating' | 'connected';
+export type ConnectionState = 'disconnected' | 'connecting' | 'negotiating' | 'pairing' | 'connected';
 
 export interface LogEntry {
   timestamp: number;

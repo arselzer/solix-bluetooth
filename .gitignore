@@ -11,6 +11,12 @@ node_modules
 dist
 dist-ssr
 *.local
+.solix-local-ids.json
+.solix-private/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
 
 # Editor directories and files
 .vscode/*

@@ -1,6 +1,92 @@
 import { SB3_PARAMS, type ParamDef } from './constants';
-import { readUint16LE, readInt16LE, readUint32LE, readInt32LE, toHex } from './utils';
+import { readUint16LE, readUint32LE, toHex } from './utils';
 import type { TelemetryData } from './types';
+
+// C1000 Gen 2 packs several readings into each TLV value. These offsets are
+// from SolixBLE's C1000G2 decoder; the first byte is a type marker.
+export function parseC1000Gen2Telemetry(payload: Uint8Array, model: 'c1000' | 'c2000' = 'c1000'): { data: TelemetryData; tlvEntries: TlvEntry[] } {
+  const data: TelemetryData = {};
+  const tlvEntries: TlvEntry[] = [];
+  const values = new Map<number, Uint8Array>();
+  let offset = payload[0] === 0 ? 1 : 0;
+  while (offset + 2 <= payload.length) {
+    const entryOffset = offset;
+    const id = payload[offset++];
+    const length = payload[offset++];
+    if (offset + length > payload.length) break;
+    const value = payload.slice(offset, offset + length);
+    offset += length;
+    values.set(id, value);
+    tlvEntries.push({
+      offset: entryOffset, paramId: id, paramIdHex: id.toString(16).padStart(2, '0'),
+      length, rawHex: toHex(value), name: null, decoded: null,
+    });
+  }
+
+  const number = (id: number, start: number, end: number, signed = false): number | undefined => {
+    const value = values.get(id);
+    if (!value || end > value.length || end <= start) return undefined;
+    const bytes = value.slice(start, end);
+    let result = 0;
+    for (let i = 0; i < bytes.length; i++) result += bytes[i] * 2 ** (8 * i);
+    if (signed && bytes[bytes.length - 1] & 0x80) result -= 2 ** (8 * bytes.length);
+    return result;
+  };
+  const put = (name: string, id: number, start: number, end: number, signed = false) => {
+    const value = number(id, start, end, signed);
+    if (value !== undefined) data[name] = value;
+  };
+  put('temperature', 0xa5, 1, 2, true);
+  put('battery_percentage', 0xa5, 3, 4);
+  put('battery_health', 0xa5, 4, 5);
+  put('total_output_power', 0xa6, 1, 3);
+  put('ac_power_in', 0xa6, 3, 5);
+  put('ac_charging_power_limit_w', 0xa4, 5, 7);
+  if (model === 'c2000') {
+    put('ac_input_frequency_hz', 0xa4, 7, 8);
+    const versions = values.get(0xf9);
+    if (versions) {
+      for (const [name, slot] of [
+        ['software_version', 0], ['software_version_controller', 1],
+        ['software_version_inverter', 3], ['software_version_bms', 4],
+        ['software_version_module', 6],
+      ] as const) {
+        const start = slot * 4;
+        if (versions.length >= start + 4) {
+          data[name] = Array.from(versions.slice(start, start + 4)).reverse().join('.');
+        }
+      }
+    }
+    const expansion = values.get(0xc0);
+    if (expansion && expansion.length > 1 + expansion[0]) {
+      const tail = expansion.slice(1 + expansion[0]);
+      if (tail.length >= 15) data.expansion_battery_count = tail[12] === 1 ? 1 : 0;
+    }
+  }
+  put('ac_switch', 0xa7, 1, 2);
+  put('ac_power_out', 0xa7, 2, 4);
+  put('ac_input_connected', 0xa7, 4, 5);
+  const workStatus = number(0xa3, 1, 2);
+  if (workStatus !== undefined) {
+    data.battery_status = ({ 0: 'idle', 1: 'discharging', 2: 'charging' } as Record<number, string>)[workStatus] ?? 'unknown';
+    data.battery_discharging = workStatus === 1 ? 1 : 0;
+    const remainingTenthsHours = number(0xa6, 7, 9);
+    if (remainingTenthsHours !== undefined) {
+      data.time_remaining_minutes = workStatus === 1 || workStatus === 2 ? remainingTenthsHours * 6 : 0;
+    }
+  }
+  put('dc_switch', 0xb2, 1, 2);
+  put('dc_power_out', 0xb2, 2, 4);
+  put('max_charge_soc', 0xd9, 4, 5);
+  put('min_soc_pct', 0xd9, 5, 6);
+
+  const identity = values.get(0xa2);
+  if (identity && identity.length >= 27) {
+    data.serial_number = new TextDecoder().decode(identity.slice(3, 20)).replace(/\0+$/, '');
+    data.model_name = new TextDecoder().decode(identity.slice(22, 27)).replace(/\0+$/, '');
+  }
+  return { data, tlvEntries };
+}
 
 export interface TlvEntry {
   offset: number;
@@ -176,6 +262,9 @@ export const PARAM_LABELS: Record<string, string> = {
   discharge_power: 'Discharge Power (W)',
   charging_state: 'Charging State',
   battery_charge_current: 'Battery Charge (W)',
+  battery_status: 'Battery State',
+  battery_discharging: 'Battery Discharging',
+  time_remaining_minutes: 'Time Remaining (min)',
 
   // Solar
   solar_power_total: 'Solar Total (W)',
@@ -245,10 +334,13 @@ export const PARAM_LABELS: Record<string, string> = {
   dc_power_limit: 'DC Power Limit (W)',
   max_solar_input_w: 'Max Solar Input (W)',
   system_info: 'System Info',
-  hw_version: 'HW Version',
 
   // C1000/C300X Power Station
   ac_power_in: 'AC Input (W)',
+  ac_input_connected: 'AC Input Connected',
+  ac_input_frequency_hz: 'AC Input Frequency (Hz)',
+  ac_charging_power_limit_w: 'AC Charging Limit (W)',
+  expansion_battery_count: 'Expansion Batteries',
   ac_power_out: 'AC Output (W)',
   dc_power_out: 'DC Output (W)',
   type_c_power_out: 'USB-C Out (W)',
@@ -260,6 +352,11 @@ export const PARAM_LABELS: Record<string, string> = {
   ac_enabled: 'AC Enabled',
   dc_enabled: 'DC Enabled',
   error_code: 'Error Code',
+  software_version: 'Main Software',
+  software_version_controller: 'Controller Software',
+  software_version_inverter: 'Inverter Software',
+  software_version_bms: 'Battery Software',
+  software_version_module: 'Wireless Software',
 
   // C1000 Settings
   capacity_wh: 'Capacity (Wh)',
@@ -279,11 +376,11 @@ export const PARAM_LABELS: Record<string, string> = {
 // Display grouping for organized layout
 export const PARAM_GROUPS: Record<string, string[]> = {
   'Solar': ['solar_power_total', 'solar_input_1', 'solar_input_2', 'solar_pv1_power', 'solar_pv2_power', 'solar_pv3_power', 'solar_pv4_power', 'total_pv_power', 'third_party_pv_power', 'pv_yield_total', 'pv_yield', 'inverter_power'],
-  'Battery': ['battery_percentage', 'battery_percentage_aggregate', 'battery_health', 'charge_power', 'battery_charge_current', 'battery_power', 'battery_capacity', 'battery_voltage', 'battery_cycles', 'battery_resistance', 'battery_temperature', 'charging_state', 'battery_soc_raw'],
+  'Battery': ['battery_percentage', 'battery_percentage_aggregate', 'battery_health', 'charge_power', 'battery_charge_current', 'battery_power', 'battery_capacity', 'battery_voltage', 'battery_cycles', 'battery_resistance', 'battery_temperature', 'charging_state', 'battery_soc_raw', 'battery_status', 'battery_discharging', 'time_remaining_minutes'],
   'Output': ['output_power', 'house_demand', 'house_consumption', 'power_out', 'power_out_status', 'total_output_power', 'ac_power_in', 'ac_power_out', 'dc_power_out', 'type_c_power_out', 'usb_power_out'],
-  'Grid': ['grid_power', 'grid_power_limit', 'grid_import_power', 'grid_import_limit', 'grid_export_current', 'grid_export_power', 'grid_to_home_power', 'grid_connection', 'grid_status', 'feed_in_limit'],
-  'Settings': ['output_limit_setting', 'home_load_setting', 'max_output_power', 'max_charge_power', 'capacity_wh', 'max_ac_input_w', 'min_soc_pct', 'max_charge_soc', 'max_discharge_soc', 'charge_speed', 'display_timeout_s', 'idle_timeout_min', 'ups_mode', 'ups_reserve_pct', 'light_mode', 'led_mode', 'system_mode'],
+  'Grid': ['grid_power', 'grid_power_limit', 'grid_import_power', 'grid_import_limit', 'grid_export_current', 'grid_export_power', 'grid_to_home_power', 'grid_connection', 'grid_status', 'feed_in_limit', 'ac_input_connected', 'ac_input_frequency_hz'],
+  'Settings': ['output_limit_setting', 'home_load_setting', 'max_output_power', 'max_charge_power', 'capacity_wh', 'max_ac_input_w', 'min_soc_pct', 'max_charge_soc', 'max_discharge_soc', 'charge_speed', 'display_timeout_s', 'idle_timeout_min', 'ups_mode', 'ups_reserve_pct', 'light_mode', 'led_mode', 'system_mode', 'ac_charging_power_limit_w'],
   'Counters': ['cumulative_discharge_kwh', 'cumulative_demand_kwh', 'cumulative_consumption_kwh', 'cumulative_grid_kwh', 'energy_today', 'daily_pv_counter', 'charged_energy', 'discharged_energy', 'charge_sessions', 'discharge_sessions'],
   'Switches': ['ac_switch', 'dc_switch', 'ac_enabled', 'dc_enabled', 'ac_output_active', 'dc_output_active'],
-  'Device': ['serial_number', 'model_name', 'device_type', 'firmware_version', 'firmware_info', 'hw_version', 'temperature', 'temperature_2', 'wifi_signal', 'wifi_rssi', 'bt_signal', 'online_status', 'current_hour', 'error_code', 'anti_replay_timestamp'],
+  'Device': ['serial_number', 'model_name', 'device_type', 'firmware_version', 'firmware_info', 'hw_version', 'temperature', 'temperature_2', 'wifi_signal', 'wifi_rssi', 'bt_signal', 'online_status', 'current_hour', 'error_code', 'anti_replay_timestamp', 'software_version', 'software_version_controller', 'software_version_inverter', 'software_version_bms', 'software_version_module', 'expansion_battery_count'],
 };

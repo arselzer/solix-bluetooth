@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { fromHex, toHex } from '../protocol';
+import { ref } from 'vue';
+import { fromHex } from '../protocol';
 
 const props = defineProps<{
   connected: boolean;

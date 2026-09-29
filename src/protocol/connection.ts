@@ -1,13 +1,14 @@
 import {
-  SERVICE_UUID, UUID_COMMAND, UUID_TELEMETRY,
+  SERVICE_UUID, UUID_COMMAND, UUID_TELEMETRY, UUID_IDENTIFIER,
   NEGOTIATION_COMMAND_0, NEGOTIATION_COMMAND_1, NEGOTIATION_COMMAND_2,
   NEGOTIATION_COMMAND_3, NEGOTIATION_COMMAND_4_PREFIX,
-  PATTERN_ENCRYPTED, getParamMap,
+  PATTERN_ENCRYPTED, PATTERN_NEGOTIATION, getParamMap,
 } from './constants';
 import { generateECDHKeyPair, deriveSharedSecret, decryptAesCbc, encryptAesCbc, type SessionKeys } from './crypto';
 import { buildPacket, parsePacket, isNegotiationPacket, isEncryptedPacket } from './packet';
-import { parseTelemetryDetailed } from './telemetry';
-import { toHex, fromHex, concatBytes, xorChecksum } from './utils';
+import { parseTelemetryDetailed, parseC1000Gen2Telemetry } from './telemetry';
+import { PrimeSession } from './prime';
+import { toHex, fromHex, concatBytes, xorChecksum, writeUint32LE } from './utils';
 import type { ConnectionState, TelemetryData, LogEntry } from './types';
 
 export type ConnectionEventHandler = {
@@ -25,22 +26,31 @@ const FIXED_NEGOTIATION_PACKETS: Record<number, string> = {
   3: NEGOTIATION_COMMAND_3,
 };
 
+const LEGACY_CLIENT_UUID = new TextEncoder().encode('b2dc0b17-b75d-4abf-ba6e-ec7c997c23e7');
+function tlv(id: number, value: Uint8Array): Uint8Array {
+  return concatBytes(new Uint8Array([id, value.length]), value);
+}
+
 export class SolixConnection {
   private device: BluetoothDevice | null = null;
   private server: BluetoothRemoteGATTServer | null = null;
   private commandChar: BluetoothRemoteGATTCharacteristic | null = null;
   private telemetryChar: BluetoothRemoteGATTCharacteristic | null = null;
+  private prime: PrimeSession | null = null;
 
   private privateKey: CryptoKey | null = null;
   private publicKeyRaw: Uint8Array | null = null;
   private sessionKeys: SessionKeys | null = null;
-  private negotiationStage = -1;
-  private negotiationTimestamp = 0;
 
   private telemetryFragments: Uint8Array[] = [];
   private assemblyTimer: ReturnType<typeof setTimeout> | null = null;
   private statusPollTimer: ReturnType<typeof setInterval> | null = null;
+  private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
   private autoReconnect = true;
+  private reconnecting = false;
+  private ownerUserId: string | null = null;
+  private c1000Protocol: 'prime' | 'legacy' = 'prime';
+  private notificationHandler = this.onNotification.bind(this);
 
   private handlers: ConnectionEventHandler;
 
@@ -52,21 +62,40 @@ export class SolixConnection {
     return this.device?.name ?? null;
   }
 
+  private get isC1000Gen2(): boolean {
+    return /C1000.*Gen 2|A1763/i.test(this.device?.name ?? '');
+  }
+
+  private get isC2000Gen2(): boolean {
+    return /C2000.*Gen 2|A1783/i.test(this.device?.name ?? '');
+  }
+
   private log(direction: LogEntry['direction'], message: string, data?: string) {
     this.handlers.onLog({ timestamp: Date.now(), direction, message, data });
   }
 
-  async connect(): Promise<void> {
+  async connect(showAllDevices = false, ownerUserId: string | null = null,
+    c1000Protocol: 'prime' | 'legacy' = 'prime'): Promise<void> {
     this.handlers.onStateChange('connecting');
     this.log('info', 'Requesting Bluetooth device...');
 
     try {
       this.autoReconnect = true;
-      this.device = await navigator.bluetooth.requestDevice({
+      this.ownerUserId = ownerUserId;
+      this.c1000Protocol = c1000Protocol;
+      this.device = await navigator.bluetooth.requestDevice(showAllDevices ? {
+        acceptAllDevices: true,
+        optionalServices: [SERVICE_UUID],
+      } : {
         filters: [
+          { services: [UUID_IDENTIFIER] },
           { namePrefix: 'Solarbank' },
+          { namePrefix: 'SOLIX' },
           { namePrefix: 'A17C' },
           { namePrefix: 'C1000' },
+          { namePrefix: 'C2000' },
+          { namePrefix: 'A1763' },
+          { namePrefix: 'A1783' },
           { namePrefix: 'A17X' },
           { namePrefix: 'Anker' },
         ],
@@ -78,8 +107,12 @@ export class SolixConnection {
       this.device.addEventListener('gattserverdisconnected', () => {
         this.log('info', 'Device disconnected');
         this.cleanup();
-        if (this.autoReconnect) {
-          setTimeout(() => this.attemptReconnect(), 1000);
+        if (this.autoReconnect && !this.reconnecting) {
+          this.handlers.onStateChange('connecting');
+          this.reconnectTimer = setTimeout(() => {
+            this.reconnectTimer = null;
+            void this.attemptReconnect();
+          }, 1000);
         } else {
           this.handlers.onStateChange('disconnected');
         }
@@ -103,7 +136,12 @@ export class SolixConnection {
       }
 
       this.log('info', 'Getting primary service...');
-      const service = await this.server.getPrimaryService(SERVICE_UUID);
+      let service: BluetoothRemoteGATTService;
+      try {
+        service = await this.server!.getPrimaryService(SERVICE_UUID);
+      } catch (error) {
+        throw new Error(`Device does not expose the expected Anker BLE service (${SERVICE_UUID}): ${error}`);
+      }
 
       this.log('info', 'Getting characteristics...');
       this.commandChar = await service.getCharacteristic(UUID_COMMAND);
@@ -111,14 +149,17 @@ export class SolixConnection {
 
       this.log('info', 'Subscribing to notifications...');
       await this.telemetryChar.startNotifications();
-      this.telemetryChar.addEventListener('characteristicvaluechanged', this.onNotification.bind(this));
+      this.telemetryChar.addEventListener('characteristicvaluechanged', this.notificationHandler);
 
       this.log('info', 'Starting encryption negotiation...');
       this.handlers.onStateChange('negotiating');
-      await this.startNegotiation();
+      await this.startSelectedNegotiation();
 
     } catch (error) {
       this.log('error', `Connection failed: ${error}`);
+      this.autoReconnect = false;
+      this.server?.disconnect();
+      this.cleanup();
       this.handlers.onStateChange('disconnected');
       throw error;
     }
@@ -137,8 +178,8 @@ export class SolixConnection {
   private startStatusPolling() {
     this.stopStatusPolling();
     this.statusPollTimer = setInterval(() => {
-      if (this.sessionKeys && this.commandChar) {
-        this.requestStatus();
+      if ((this.prime || this.sessionKeys) && this.commandChar && this.server?.connected) {
+        void this.requestStatus().catch(error => this.log('error', `Status request failed: ${error}`));
       }
     }, 10000);
   }
@@ -151,45 +192,110 @@ export class SolixConnection {
   }
 
   private async attemptReconnect(): Promise<void> {
-    if (!this.autoReconnect || !this.device) return;
+    if (!this.autoReconnect || !this.device || this.reconnecting) return;
+    this.reconnecting = true;
 
     this.log('info', 'Attempting auto-reconnect...');
     this.handlers.onStateChange('connecting');
 
-    for (let attempt = 1; attempt <= 3; attempt++) {
-      try {
-        this.server = await this.device.gatt!.connect();
-        this.log('info', `Reconnected on attempt ${attempt}`);
+    try {
+      for (let attempt = 1; attempt <= 3 && this.autoReconnect; attempt++) {
+        try {
+          this.server = await this.device.gatt!.connect();
+          if (!this.autoReconnect) {
+            this.server.disconnect();
+            return;
+          }
+          this.log('info', `Reconnected on attempt ${attempt}`);
 
-        const service = await this.server.getPrimaryService(SERVICE_UUID);
-        this.commandChar = await service.getCharacteristic(UUID_COMMAND);
-        this.telemetryChar = await service.getCharacteristic(UUID_TELEMETRY);
-        await this.telemetryChar.startNotifications();
-        this.telemetryChar.addEventListener('characteristicvaluechanged', this.onNotification.bind(this));
+          const service = await this.server.getPrimaryService(SERVICE_UUID);
+          this.commandChar = await service.getCharacteristic(UUID_COMMAND);
+          this.telemetryChar = await service.getCharacteristic(UUID_TELEMETRY);
+          await this.telemetryChar.startNotifications();
+          this.telemetryChar.addEventListener('characteristicvaluechanged', this.notificationHandler);
 
-        this.handlers.onStateChange('negotiating');
-        await this.startNegotiation();
-        return;
-      } catch (e) {
-        if (attempt < 3) {
-          this.log('info', `Reconnect attempt ${attempt} failed, retrying in 2s...`);
-          await new Promise(r => setTimeout(r, 2000));
+          this.handlers.onStateChange('negotiating');
+          await this.startSelectedNegotiation();
+          return;
+        } catch (e) {
+          this.server?.disconnect();
+          this.cleanup();
+          if (attempt < 3 && this.autoReconnect) {
+            this.log('info', `Reconnect attempt ${attempt} failed, retrying in 2s...`);
+            await new Promise(r => setTimeout(r, 2000));
+          }
         }
       }
-    }
 
-    this.log('error', 'Auto-reconnect failed after 3 attempts');
-    this.handlers.onStateChange('disconnected');
+      this.log('error', 'Auto-reconnect failed after 3 attempts');
+      this.handlers.onStateChange('disconnected');
+    } finally {
+      this.reconnecting = false;
+    }
+  }
+
+  async confirmPairing(): Promise<void> {
+    if (!this.prime || !this.server?.connected) {
+      throw new Error('Station is not connected for pairing');
+    }
+    this.handlers.onStateChange('negotiating');
+    await this.prime.confirmPairing();
   }
 
   private cleanup() {
+    this.prime?.reset();
+    this.prime = null;
     this.sessionKeys = null;
-    this.negotiationStage = -1;
     this.stopStatusPolling();
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = null;
+    }
+    this.telemetryChar?.removeEventListener('characteristicvaluechanged', this.notificationHandler);
+    this.telemetryChar = null;
+    this.commandChar = null;
     this.telemetryFragments = [];
     if (this.assemblyTimer) {
       clearTimeout(this.assemblyTimer);
       this.assemblyTimer = null;
+    }
+  }
+
+  private async startSelectedNegotiation(): Promise<void> {
+    if (this.isC2000Gen2 || (this.isC1000Gen2 && this.c1000Protocol === 'prime')) {
+      if (this.ownerUserId && !/^[0-9a-fA-F]{40}$/.test(this.ownerUserId)) {
+        throw new Error('Gen 2 client ID must be 40 hexadecimal characters');
+      }
+      const storageKey = `solix-prime-client:${this.device!.id}`;
+      let clientId = this.ownerUserId;
+      if (!clientId) {
+        try { clientId = localStorage.getItem(storageKey); }
+        catch { /* Storage may be disabled by the browser. */ }
+      }
+      if (!clientId || !/^[0-9a-fA-F]{40}$/.test(clientId)) {
+        clientId = Array.from(crypto.getRandomValues(new Uint8Array(20)),
+          byte => byte.toString(16).padStart(2, '0')).join('');
+        try { localStorage.setItem(storageKey, clientId); }
+        catch { this.log('info', `Browser storage unavailable; save this client ID: ${clientId}`); }
+        this.log('info', 'Generated a local Gen 2 client ID. Pair it with one short main power button press if prompted.');
+      }
+      this.ownerUserId = clientId;
+      this.prime = new PrimeSession({
+        send: async (packet) => {
+          this.handlers.onRawPacket('tx', packet);
+          await this.commandChar!.writeValueWithoutResponse(packet);
+        },
+        log: (message, data) => this.log('info', message, data),
+        ready: () => {
+          this.handlers.onStateChange('connected');
+          this.startStatusPolling();
+        },
+        pairingRequired: () => this.handlers.onStateChange('pairing'),
+        telemetry: (data) => this.handlers.onTelemetry(data),
+      }, clientId, this.isC2000Gen2);
+      await this.prime.start();
+    } else {
+      await this.startNegotiation();
     }
   }
 
@@ -242,9 +348,19 @@ export class SolixConnection {
 
     let packet: Uint8Array;
 
-    if (stage <= 3) {
+    if (this.isC1000Gen2 && stage <= 3) {
+      const timestamp = tlv(0xa1, writeUint32LE(Math.floor(Date.now() / 1000)));
+      const uuid = tlv(0xa2, LEGACY_CLIENT_UUID);
+      const extras = stage === 1 ? concatBytes(tlv(0xa3, fromHex('20')), tlv(0xa4, fromHex('00f0')))
+        : stage === 3 ? concatBytes(tlv(0xa3, fromHex('20')), tlv(0xa4, fromHex('00f0')), tlv(0xa5, fromHex('40')))
+          : new Uint8Array();
+      const command = ['0001', '0003', '0029', '0005'][stage];
+      packet = buildPacket(PATTERN_NEGOTIATION, fromHex(command), concatBytes(timestamp, uuid, extras));
+    } else if (stage <= 3) {
       // Use exact pre-built packets from SolixBLE
       packet = fromHex(FIXED_NEGOTIATION_PACKETS[stage]);
+    } else if (stage === 4 && this.publicKeyRaw && this.isC1000Gen2) {
+      packet = buildPacket(PATTERN_NEGOTIATION, fromHex('0021'), tlv(0xa1, this.publicKeyRaw.slice(1)));
     } else if (stage === 4 && this.publicKeyRaw) {
       // Stage 4: send our ECDH public key (uncompressed, 65 bytes starting with 0x04)
       // Build: prefix + public_key_bytes + checksum
@@ -266,23 +382,29 @@ export class SolixConnection {
       await this.commandChar.writeValue(packet);
     }
 
-    this.negotiationStage = stage;
-
-    // Capture timestamp at stage 2 (cmd 0x29) for anti-replay
-    if (stage === 2) {
-      this.negotiationTimestamp = Date.now() / 1000;
-    }
   }
 
   private async onNotification(event: Event): Promise<void> {
     const target = event.target as BluetoothRemoteGATTCharacteristic;
-    const data = new Uint8Array(target.value!.buffer);
+    const value = target.value!;
+    const data = new Uint8Array(value.buffer, value.byteOffset, value.byteLength);
 
     this.handlers.onRawPacket('rx', data);
 
     const packet = parsePacket(data);
     if (!packet) {
       this.log('rx', 'Unparseable packet', toHex(data));
+      return;
+    }
+
+    if (this.prime) {
+      try { await this.prime.handle(packet); }
+      catch (error) {
+        this.log('error', `Prime protocol error: ${error}`);
+        this.server?.disconnect();
+        this.cleanup();
+        this.handlers.onStateChange('disconnected');
+      }
       return;
     }
 
@@ -343,8 +465,18 @@ export class SolixConnection {
       try {
         this.sessionKeys = await deriveSharedSecret(this.privateKey!, devicePublicKey);
         this.log('info', 'Session keys derived successfully');
-        this.log('info', `AES key: ${toHex(this.sessionKeys.aesKey)}`);
-        this.log('info', `IV: ${toHex(this.sessionKeys.iv)}`);
+        if (this.isC1000Gen2) {
+          const tz = new TextEncoder().encode('UTC0');
+          const stage5 = concatBytes(
+            tlv(0xa1, writeUint32LE(Math.floor(Date.now() / 1000))),
+            tlv(0xa2, LEGACY_CLIENT_UUID), tlv(0xa3, fromHex('20')),
+            tlv(0xa4, fromHex('00000000')), tlv(0xa5, tz),
+          );
+          const encrypted = await encryptAesCbc(stage5, this.sessionKeys.aesKey, this.sessionKeys.iv);
+          const finalPacket = buildPacket(PATTERN_NEGOTIATION, fromHex('4022'), encrypted);
+          this.handlers.onRawPacket('tx', finalPacket);
+          await this.commandChar!.writeValueWithoutResponse(finalPacket);
+        }
         this.handlers.onStateChange('connected');
 
         // Send initial status request and start periodic polling
@@ -372,7 +504,7 @@ export class SolixConnection {
     //
     // We accumulate all fragments, strip the sequence byte from each,
     // and decrypt when the small fragment arrives.
-    if (cmdByte === 0xc4 || cmdByte === 0xc8) {
+    if (cmdByte === 0xc4 || cmdByte === 0xc8 || cmdByte === 0xc9) {
       this.log('rx', `Fragment cmd=${toHex(packet.command)} byte0=0x${packet.payload[0].toString(16)} payload=${packet.payload.length}B raw=${raw.length}B`);
 
       this.telemetryFragments.push(packet.payload);
@@ -385,13 +517,15 @@ export class SolixConnection {
           this.assembleTelemetry();
         }
       }, 150);
-    } else if (cmdByte === 0x44 || cmdByte === 0x48) {
+    } else if (cmdByte === 0x44 || cmdByte === 0x48 || cmdByte === 0x49) {
       // Single encrypted packet or response
       if (this.sessionKeys) {
         try {
           const decrypted = await decryptAesCbc(packet.payload, this.sessionKeys.aesKey, this.sessionKeys.iv);
           this.log('rx', `Decrypted single (${decrypted.length}B)`, toHex(decrypted));
-          const { data: telemetry, tlvEntries } = parseTelemetryDetailed(decrypted, getParamMap(this.device?.name ?? undefined));
+          const { data: telemetry, tlvEntries } = this.isC1000Gen2
+            ? parseC1000Gen2Telemetry(decrypted)
+            : parseTelemetryDetailed(decrypted, getParamMap(this.device?.name ?? undefined));
           for (const entry of tlvEntries) {
             const nameStr = entry.name ? ` (${entry.name})` : ' [UNKNOWN]';
             const valStr = entry.decoded !== null ? ` = ${entry.decoded}` : '';
@@ -435,7 +569,9 @@ export class SolixConnection {
         const decrypted = await decryptAesCbc(data, this.sessionKeys.aesKey, this.sessionKeys.iv);
         this.log('rx', `Telemetry decrypted (${label}, ${decrypted.length}B)`, toHex(decrypted));
 
-        const { data: telemetry, tlvEntries } = parseTelemetryDetailed(decrypted, paramMap);
+        const { data: telemetry, tlvEntries } = this.isC1000Gen2
+          ? parseC1000Gen2Telemetry(decrypted)
+          : parseTelemetryDetailed(decrypted, paramMap);
 
         // Log each TLV entry for reverse engineering
         for (const entry of tlvEntries) {
@@ -458,17 +594,67 @@ export class SolixConnection {
 
   async requestStatus(): Promise<void> {
     this.log('tx', 'Sending status request');
-    await this.sendCommand(fromHex('4040'), fromHex('a10121'));
+    if (this.prime) {
+      await this.prime.sendCommand(fromHex('4100'), fromHex('a10121'));
+      return;
+    }
+    await this.sendCommand(fromHex(this.isC1000Gen2 ? '4100' : '4040'), fromHex('a10121'));
+  }
+
+  async setChargeLimits(upper: number, lower: number): Promise<void> {
+    if (!this.isC1000Gen2 || !this.prime || !this.server?.connected) {
+      throw new Error('Charge limits require a connected C1000 Gen 2 Prime session');
+    }
+    if (!Number.isInteger(upper) || upper < 80 || upper > 100 || upper % 5 !== 0 ||
+        !Number.isInteger(lower) || ![1, 5, 10, 15, 20].includes(lower)) {
+      throw new Error('Choose an upper limit of 80–100% in 5% steps and a lower limit of 1, 5, 10, 15, or 20%');
+    }
+    const body = concatBytes(fromHex('a10121'), tlv(0xaa, new Uint8Array([1, upper])),
+      tlv(0xab, new Uint8Array([1, lower])));
+    await this.prime.sendCommand(fromHex('4103'), body, 'none');
+    this.log('tx', `Requested C1000 charge limits ${lower}–${upper}%`);
+  }
+
+  async setAcChargingPower(watts: number): Promise<void> {
+    if (!this.isC1000Gen2 || !this.prime || !this.server?.connected) {
+      throw new Error('AC charging power requires a connected C1000 Gen 2 Prime session');
+    }
+    if (!Number.isInteger(watts) || watts < 300 || watts > 1200 || watts % 100 !== 0) {
+      throw new Error('Choose AC charging power from 300 to 1200 W in 100 W steps');
+    }
+    const body = concatBytes(fromHex('a10121'), tlv(0xa4,
+      new Uint8Array([2, watts & 0xff, watts >> 8])), tlv(0xab, fromHex('020000')));
+    await this.prime.sendCommand(fromHex('4101'), body, 'fd');
+    this.log('tx', `Requested C1000 AC charging power ${watts} W`);
   }
 
   async sendCommand(commandCode: Uint8Array, payload: Uint8Array): Promise<void> {
+    const code = toHex(commandCode);
+    const body = toHex(payload);
+    if (this.isC2000Gen2 && (code !== '4100' || body !== 'a10121')) {
+      throw new Error('C2000 Gen 2 allows only the telemetry subscription');
+    }
+    if (this.isC1000Gen2 && !(
+      (code === '4100' && body === 'a10121') ||
+      (code === '4101' && (body === 'a10121a2020101' || body === 'a10121a2020100')) ||
+      (code === '4102' && (body === 'a10121a2020101' || body === 'a10121a2020100'))
+    )) {
+      throw new Error('This C1000 Gen 2 command has not been verified');
+    }
+    if (this.prime) {
+      await this.prime.sendCommand(commandCode, payload);
+      return;
+    }
     if (!this.commandChar || !this.sessionKeys) {
       this.log('error', 'Not connected or no session keys');
       return;
     }
 
-    const encrypted = await encryptAesCbc(payload, this.sessionKeys.aesKey, this.sessionKeys.iv);
-    const packet = buildPacket(PATTERN_ENCRYPTED, commandCode, encrypted);
+    const plaintext = this.isC1000Gen2
+      ? concatBytes(payload, tlv(0xfe, concatBytes(fromHex('03'), writeUint32LE(Math.floor(Date.now() / 1000)))))
+      : payload;
+    const encrypted = await encryptAesCbc(plaintext, this.sessionKeys.aesKey, this.sessionKeys.iv);
+    const packet = buildPacket(this.isC1000Gen2 ? fromHex('03000f') : PATTERN_ENCRYPTED, commandCode, encrypted);
 
     this.log('tx', `Command 0x${toHex(commandCode)}`, toHex(packet).substring(0, 80));
     this.handlers.onRawPacket('tx', packet);

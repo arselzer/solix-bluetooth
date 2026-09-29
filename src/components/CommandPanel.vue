@@ -1,20 +1,51 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { fromHex } from '../protocol';
+import type { TelemetryData } from '../protocol/types';
 
 const props = defineProps<{
   deviceName: string | null;
   connected: boolean;
+  c1000Protocol: 'prime' | 'legacy';
+  telemetry: TelemetryData;
 }>();
 
 const emit = defineEmits<{
   command: [commandCode: Uint8Array, payload: Uint8Array];
+  limits: [upper: number, lower: number];
+  chargePower: [watts: number];
 }>();
 
 const customCmd = ref('4040');
 const customPayload = ref('a10121');
+const upperLimit = ref<number | null>(null);
+const lowerLimit = ref<number | null>(null);
+const chargingPower = ref<number | null>(null);
 
-const isC1000 = props.deviceName?.includes('C1000') || props.deviceName?.includes('A17X');
+watch(() => props.telemetry.max_charge_soc, value => {
+  if (upperLimit.value === null && typeof value === 'number') upperLimit.value = value;
+}, { immediate: true });
+watch(() => props.telemetry.min_soc_pct, value => {
+  if (lowerLimit.value === null && typeof value === 'number') lowerLimit.value = value;
+}, { immediate: true });
+watch(() => props.telemetry.ac_charging_power_limit_w, value => {
+  if (chargingPower.value === null && typeof value === 'number') chargingPower.value = value;
+}, { immediate: true });
+
+function submitLimits() {
+  if (upperLimit.value !== null && lowerLimit.value !== null) {
+    emit('limits', upperLimit.value, lowerLimit.value);
+  }
+}
+
+function submitChargingPower() {
+  if (chargingPower.value !== null) emit('chargePower', chargingPower.value);
+}
+
+const isC1000Gen2 = computed(() => /C1000.*Gen 2|A1763/i.test(props.deviceName ?? ''));
+const isC2000Gen2 = computed(() => /C2000.*Gen 2|A1783/i.test(props.deviceName ?? ''));
+const isC1000 = computed(() => !isC1000Gen2.value &&
+  (props.deviceName?.includes('C1000') || props.deviceName?.includes('A17X')));
 
 function sendCommand(cmdHex: string, payloadHex: string) {
   emit('command', fromHex(cmdHex), fromHex(payloadHex));
@@ -54,6 +85,18 @@ const solarbankCommands = [
   { label: 'Toggle 0x405e', cmd: '405e', payload: 'a10121' },
 ];
 
+const c1000Gen2Commands = [
+  { label: 'Subscribe to telemetry', cmd: '4100', payload: 'a10121' },
+  { label: 'AC On', cmd: '4101', payload: 'a10121a2020101' },
+  { label: 'AC Off', cmd: '4101', payload: 'a10121a2020100' },
+  { label: 'DC On', cmd: '4102', payload: 'a10121a2020101' },
+  { label: 'DC Off', cmd: '4102', payload: 'a10121a2020100' },
+];
+
+const c2000Gen2Commands = [
+  { label: 'Subscribe to telemetry', cmd: '4100', payload: 'a10121' },
+];
+
 // General commands (work on all devices)
 const generalCommands = [
   { label: 'Status Request', cmd: '4040', payload: 'a10121' },
@@ -61,7 +104,7 @@ const generalCommands = [
   { label: 'Firmware Info', cmd: '4030', payload: 'a10121' },
 ];
 
-const isSolarbank = props.deviceName?.includes('Solarbank') || props.deviceName?.includes('A17C');
+const isSolarbank = computed(() => props.deviceName?.includes('Solarbank') || props.deviceName?.includes('A17C'));
 </script>
 
 <template>
@@ -76,7 +119,27 @@ const isSolarbank = props.deviceName?.includes('Solarbank') || props.deviceName?
       <div class="command-group">
         <h4>Quick Commands</h4>
         <div class="button-grid">
-          <template v-if="isC1000">
+          <template v-if="isC2000Gen2">
+            <button
+              v-for="cmd in c2000Gen2Commands"
+              :key="cmd.label"
+              class="cmd-btn"
+              @click="sendCommand(cmd.cmd, cmd.payload)"
+            >
+              {{ cmd.label }}
+            </button>
+          </template>
+          <template v-else-if="isC1000Gen2">
+            <button
+              v-for="cmd in c1000Gen2Commands"
+              :key="cmd.label"
+              class="cmd-btn"
+              @click="sendCommand(cmd.cmd, cmd.payload)"
+            >
+              {{ cmd.label }}
+            </button>
+          </template>
+          <template v-else-if="isC1000">
             <button
               v-for="cmd in c1000Commands"
               :key="cmd.label"
@@ -109,7 +172,41 @@ const isSolarbank = props.deviceName?.includes('Solarbank') || props.deviceName?
         </div>
       </div>
 
-      <div class="command-group">
+      <div v-if="isC1000Gen2 && c1000Protocol === 'prime'" class="command-group">
+        <h4>Charging settings</h4>
+        <div class="custom-form">
+          <div class="field">
+            <label>Charge up to</label>
+            <select v-model.number="upperLimit" :disabled="typeof telemetry.max_charge_soc !== 'number'">
+              <option v-for="value in [80, 85, 90, 95, 100]" :key="value" :value="value">{{ value }}%</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Discharge down to</label>
+            <select v-model.number="lowerLimit" :disabled="typeof telemetry.min_soc_pct !== 'number'">
+              <option v-for="value in [1, 5, 10, 15, 20]" :key="value" :value="value">{{ value }}%</option>
+            </select>
+          </div>
+          <button class="cmd-btn send-btn" :disabled="upperLimit === null || lowerLimit === null"
+            @click="submitLimits">Set limits</button>
+        </div>
+        <div class="custom-form setting-row">
+          <div class="field">
+            <label>AC charging power</label>
+            <select v-model.number="chargingPower" :disabled="typeof telemetry.ac_charging_power_limit_w !== 'number'">
+              <option v-for="value in [300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200]"
+                :key="value" :value="value">{{ value }} W</option>
+            </select>
+          </div>
+          <button class="cmd-btn send-btn" :disabled="chargingPower === null"
+            @click="submitChargingPower">Set power</button>
+        </div>
+        <p class="setting-note">Reported now: {{ telemetry.max_charge_soc ?? '—' }}% upper,
+          {{ telemetry.min_soc_pct ?? '—' }}% lower,
+          {{ telemetry.ac_charging_power_limit_w ?? '—' }} W AC charging.</p>
+      </div>
+
+      <div v-if="!isC1000Gen2 && !isC2000Gen2" class="command-group">
         <h4>Custom Command</h4>
         <div class="custom-form">
           <div class="field">
@@ -124,9 +221,8 @@ const isSolarbank = props.deviceName?.includes('Solarbank') || props.deviceName?
         </div>
       </div>
 
-      <div class="warning">
-        Commands are experimental. AC/DC toggles are only tested on C1000.
-        Solarbank control commands have not been reverse-engineered.
+      <div v-if="isC1000Gen2 || isC2000Gen2" class="warning">
+        C1000 Gen 2 AC and DC On/Off were verified on hardware. This browser keeps C2000 Gen 2 monitoring only; the Python library offers its verified charge-cap, charging-power, and screen-timeout settings.
       </div>
     </template>
   </div>
@@ -217,6 +313,18 @@ h4 {
   font-size: 0.9em;
   width: 140px;
 }
+
+.field select {
+  padding: 6px 10px;
+  background: #2a2a3e;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #e0e0e0;
+  min-width: 140px;
+}
+
+.setting-row { margin-top: 10px; }
+.setting-note { color: #aaa; font-size: 0.8em; margin: 8px 0 0; }
 
 .field input:focus {
   outline: none;

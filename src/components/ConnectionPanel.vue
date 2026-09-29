@@ -4,18 +4,25 @@ import type { ConnectionState } from '../protocol';
 defineProps<{
   state: ConnectionState;
   deviceName: string | null;
+  ownerUserId: string;
+  c1000Protocol: 'prime' | 'legacy';
 }>();
 
 defineEmits<{
   connect: [];
+  connectAny: [];
+  confirmPairing: [];
   disconnect: [];
   clear: [];
+  'update:ownerUserId': [value: string];
+  'update:c1000Protocol': [value: 'prime' | 'legacy'];
 }>();
 
 const stateLabels: Record<ConnectionState, string> = {
   disconnected: 'Disconnected',
   connecting: 'Connecting...',
   negotiating: 'Negotiating encryption...',
+  pairing: 'Waiting for main button press',
   connected: 'Connected',
 };
 
@@ -23,6 +30,7 @@ const stateColors: Record<ConnectionState, string> = {
   disconnected: '#888',
   connecting: '#f0ad4e',
   negotiating: '#f0ad4e',
+  pairing: '#f0ad4e',
   connected: '#5cb85c',
 };
 </script>
@@ -34,7 +42,27 @@ const stateColors: Record<ConnectionState, string> = {
       <span class="label">{{ stateLabels[state] }}</span>
       <span v-if="deviceName" class="device-name">{{ deviceName }}</span>
     </div>
+    <div v-if="state === 'disconnected'" class="owner-field">
+      <label for="owner-id">Gen 2 client ID (optional)</label>
+      <input id="owner-id" :value="ownerUserId" maxlength="40" autocomplete="off"
+        placeholder="40 hex characters"
+        @input="$emit('update:ownerUserId', ($event.target as HTMLInputElement).value)" />
+    </div>
+    <div v-if="state === 'disconnected'" class="owner-field">
+      <label for="c1000-protocol">C1000 Gen 2 firmware</label>
+      <select id="c1000-protocol" :value="c1000Protocol"
+        @change="$emit('update:c1000Protocol', ($event.target as HTMLSelectElement).value as 'prime' | 'legacy')">
+        <option value="prime">1.1.4.9 or newer (Prime)</option>
+        <option value="legacy">1.1.4.3 (Legacy)</option>
+      </select>
+    </div>
+    <div v-if="state === 'pairing'" class="pairing-tip">
+      Press the station's main power button once, then click below. Do not hold it or press AC output.
+    </div>
     <div class="actions">
+      <button v-if="state === 'pairing'" class="btn connect" @click="$emit('confirmPairing')">
+        I pressed the main button
+      </button>
       <button
         v-if="state === 'disconnected'"
         class="btn clear"
@@ -48,6 +76,14 @@ const stateColors: Record<ConnectionState, string> = {
         @click="$emit('connect')"
       >
         Connect
+      </button>
+      <button
+        v-if="state === 'disconnected'"
+        class="btn"
+        title="Choose from all nearby Bluetooth devices if your Anker device is missing"
+        @click="$emit('connectAny')"
+      >
+        Show all devices
       </button>
       <button
         v-else
@@ -66,15 +102,18 @@ const stateColors: Record<ConnectionState, string> = {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
   padding: 16px;
   background: #1e1e2e;
   border-radius: 8px;
   border: 1px solid #333;
 }
 
-.actions {
-  display: flex;
-  gap: 12px;
+.pairing-tip {
+  max-width: 370px;
+  color: #f0c674;
+  font-size: 0.9em;
 }
 
 .status {
@@ -127,6 +166,28 @@ const stateColors: Record<ConnectionState, string> = {
 
 .connect:hover {
   background: #2563eb;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+.owner-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: #999;
+  font-size: 0.75em;
+}
+
+.owner-field input, .owner-field select {
+  width: 190px;
+  padding: 7px;
+  color: #eee;
+  background: #2a2a3e;
+  border: 1px solid #444;
+  border-radius: 5px;
 }
 
 .disconnect {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, onUnmounted, watch } from 'vue';
+import { computed, ref, reactive, onMounted, onUnmounted } from 'vue';
 import { SolixConnection } from './protocol';
 import type { ConnectionState, TelemetryData, LogEntry } from './protocol';
 import ConnectionPanel from './components/ConnectionPanel.vue';
@@ -13,9 +13,13 @@ const connectionState = ref<ConnectionState>('disconnected');
 const deviceName = ref<string | null>(null);
 const telemetry = reactive<TelemetryData>({});
 const logEntries = ref<LogEntry[]>([]);
+const connectionError = ref<string | null>(null);
 const rawPackets = ref<{ timestamp: number; direction: 'tx' | 'rx'; data: Uint8Array }[]>([]);
 const activeTab = ref<'telemetry' | 'commands' | 'scanner' | 'log' | 'raw'>('telemetry');
 const bleSupported = ref(!!navigator.bluetooth);
+const ownerUserId = ref('');
+const c1000Protocol = ref<'prime' | 'legacy'>('prime');
+const isGen2 = computed(() => /C1000.*Gen 2|C2000.*Gen 2|A1763|A1783/i.test(deviceName.value ?? ''));
 
 // Wake Lock to prevent browser from suspending when backgrounded
 let wakeLock: WakeLockSentinel | null = null;
@@ -95,7 +99,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   releaseWakeLock();
-  document.addEventListener('visibilitychange', handleVisibilityChange);
+  document.removeEventListener('visibilitychange', handleVisibilityChange);
   if (saveInterval) clearInterval(saveInterval);
   saveLogsToStorage();
 });
@@ -109,12 +113,14 @@ function createConnection(): SolixConnection {
       if (connection) {
         deviceName.value = connection.deviceName;
       }
+      if (isGen2.value && activeTab.value === 'scanner') activeTab.value = 'telemetry';
     },
     onTelemetry(data) {
       Object.assign(telemetry, data);
     },
     onLog(entry) {
       logEntries.value.push(entry);
+      if (entry.direction === 'error') connectionError.value = entry.message;
       if (logEntries.value.length > 500) {
         logEntries.value = logEntries.value.slice(-400);
       }
@@ -128,10 +134,11 @@ function createConnection(): SolixConnection {
   });
 }
 
-async function handleConnect() {
+async function handleConnect(showAllDevices = false) {
+  connectionError.value = null;
   connection = createConnection();
   try {
-    await connection.connect();
+    await connection.connect(showAllDevices, ownerUserId.value.trim() || null, c1000Protocol.value);
     await requestWakeLock();
   } catch (e) {
     console.error('Connection failed:', e);
@@ -146,6 +153,14 @@ async function handleDisconnect() {
   releaseWakeLock();
 }
 
+async function handleConfirmPairing() {
+  try {
+    await connection?.confirmPairing();
+  } catch (error) {
+    connectionError.value = String(error);
+  }
+}
+
 async function handleCommand(commandCode: Uint8Array, payload: Uint8Array) {
   if (connection) {
     await connection.sendCommand(commandCode, payload);
@@ -155,11 +170,30 @@ async function handleCommand(commandCode: Uint8Array, payload: Uint8Array) {
 function clearState() {
   logEntries.value = [];
   rawPackets.value = [];
+  connectionError.value = null;
   Object.keys(telemetry).forEach(k => delete telemetry[k]);
   deviceName.value = null;
   sessionStorage.removeItem('solix_logs');
   sessionStorage.removeItem('solix_telemetry');
   sessionStorage.removeItem('solix_device');
+}
+
+async function handleChargeLimits(upper: number, lower: number) {
+  if (!connection) return;
+  try {
+    await connection.setChargeLimits(upper, lower);
+  } catch (error) {
+    connectionError.value = String(error);
+  }
+}
+
+async function handleChargePower(watts: number) {
+  if (!connection) return;
+  try {
+    await connection.setAcChargingPower(watts);
+  } catch (error) {
+    connectionError.value = String(error);
+  }
 }
 </script>
 
@@ -178,10 +212,15 @@ function clearState() {
       <ConnectionPanel
         :state="connectionState"
         :device-name="deviceName"
+        v-model:owner-user-id="ownerUserId"
+        v-model:c1000-protocol="c1000Protocol"
         @connect="handleConnect"
+        @connect-any="handleConnect(true)"
+        @confirm-pairing="handleConfirmPairing"
         @disconnect="handleDisconnect"
         @clear="clearState"
       />
+      <div v-if="connectionError" class="connection-error">{{ connectionError }}</div>
 
       <div class="tabs">
         <button
@@ -197,6 +236,7 @@ function clearState() {
           Commands
         </button>
         <button
+          v-if="!isGen2"
           :class="{ active: activeTab === 'scanner' }"
           @click="activeTab = 'scanner'"
         >
@@ -225,11 +265,15 @@ function clearState() {
         v-if="activeTab === 'commands'"
         :device-name="deviceName"
         :connected="connectionState === 'connected'"
+        :c1000-protocol="c1000Protocol"
+        :telemetry="telemetry"
         @command="handleCommand"
+        @limits="handleChargeLimits"
+        @charge-power="handleChargePower"
       />
 
       <CommandScanner
-        v-if="activeTab === 'scanner'"
+        v-if="activeTab === 'scanner' && !isGen2"
         :connected="connectionState === 'connected'"
         @command="handleCommand"
       />
@@ -284,6 +328,14 @@ main {
   background: #1e1e2e;
   border-radius: 8px;
   border: 1px solid #ef4444;
+}
+
+.connection-error {
+  padding: 10px 14px;
+  color: #ffb4b4;
+  background: #3a2028;
+  border: 1px solid #8c3947;
+  border-radius: 6px;
 }
 
 .tabs {

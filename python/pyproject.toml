@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "solix-gen2-ble"
+version = "0.1.0"
+description = "Local BLE monitoring for Anker SOLIX C1000 Gen 2 and C2000 Gen 2"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = ["bleak>=0.21", "cryptography>=41"]
+
+[project.optional-dependencies]
+server = ["aiohttp>=3.9,<4"]
+mqtt = ["paho-mqtt>=2,<3"]
+
+[project.scripts]
+solix-gen2 = "solix_gen2.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["solix_gen2*"]
