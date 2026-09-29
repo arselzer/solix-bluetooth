@@ -16,7 +16,8 @@ from typing import Callable
 
 from .lab_config import LabConfig, private_write
 from .native_mqtt import NativeMqttCommands, NativeMqttRequest, decode_mqtt_telemetry
-from .protocol import DATA_RESPONSE, parse_packet
+from .protocol import DATA_RESPONSE, decode_telemetry, parse_packet, parse_tlvs
+from .tou import PowerFlowTimeout, TouPeriod, periods_from_d9, power_flow, validate_periods
 
 
 def mqtt_packet(first: int, body: bytes) -> bytes:
@@ -110,7 +111,9 @@ class LocalMqttServer:
         return {"name": self.config.name, "model": self.config.model.value, "protocol": "native_mqtt",
                 "connected": connected,
                 "available": bool(connected and self.last_seen and time.time() - self.last_seen < 30),
-                "last_seen_timestamp": self.last_seen, "error": self.error, "metrics": self.metrics.copy()}
+                "last_seen_timestamp": self.last_seen, "error": self.error, "metrics": self.metrics.copy(),
+                "control_enabled": self.allow_control,
+                "power_flow": power_flow(self.metrics) if connected and self.last_seen and time.time() - self.last_seen < 30 else "unknown"}
 
     def record(self, event: str, **fields) -> None:
         # Full protocol evidence is deliberately kept only in this private file.
@@ -222,6 +225,179 @@ class LocalMqttServer:
             if self.metrics.get("max_charge_percentage") != percentage:
                 raise RuntimeError("Charge cap not confirmed by telemetry")
             return self.snapshot()
+
+    def _control_connection(self):
+        if not self.allow_control:
+            raise PermissionError("Native control is disabled")
+        if self.connection is None:
+            raise ConnectionError("Station is not connected")
+        return self.connection
+
+    async def _fresh_tou(self, connection, *, timeout: float = 12) -> tuple[bytes, dict]:
+        reply = await connection.request(self.commands.status(), timeout=timeout)
+        if not reply or reply[0] != 0:
+            raise RuntimeError("Status request failed")
+        fields = parse_tlvs(reply[1:])
+        d9 = fields.get(0xD9, b"")
+        periods_from_d9(d9)  # Never treat a truncated/malformed plan as a baseline.
+        metrics, _ = decode_telemetry(reply[1:], self.config.model)
+        metrics.pop("serial_number", None)
+        return d9, metrics
+
+    @staticmethod
+    def _tou_protected(before: dict, after: dict | None = None) -> None:
+        required = ("ac_output_enabled", "ac_input_connected", "max_charge_percentage",
+                    "min_charge_percentage", "ac_charging_power_limit_w", "ac_fast_charge_enabled",
+                    "ac_output_timer_remaining_seconds")
+        optional = ("dc_output_enabled", "dc_output_timer_remaining_seconds", "ac_power_saving_mode_enabled",
+                    "dc_power_saving_mode_enabled", "device_timeout_minutes", "port_memory_enabled",
+                    "display_timeout_seconds")
+        if any(k not in before for k in required):
+            raise RuntimeError("Missing fresh Time-of-Use baseline")
+        if after is not None and any(after.get(k) != before[k] for k in (*required, *optional) if k in before):
+            raise RuntimeError("Protected setting changed during Time-of-Use control")
+
+    async def _tou_ready(self, connection, metrics: dict) -> None:
+        self._tou_protected(metrics)
+        if metrics["ac_output_enabled"] != 1 or metrics["ac_input_connected"] != 1:
+            raise RuntimeError("Time-of-Use activation requires enabled AC output and connected mains")
+        if metrics["ac_fast_charge_enabled"] != 0:
+            raise ValueError("Disable fast charge first; active tariffs can clear that setting")
+        if metrics["ac_output_timer_remaining_seconds"] != 0:
+            raise ValueError("Active AC-output timer prevents Time-of-Use activation")
+        if not metrics["min_charge_percentage"] + 5 <= metrics["backup_reserve_percentage"] <= metrics["max_charge_percentage"]:
+            raise ValueError("Current reserve is outside the upper/lower charge bounds")
+        reply = await connection.request(self.commands.readiness())
+        if not reply or reply[0] != 0 or parse_tlvs(reply[1:]).get(0xA1) != b"\x34":
+            raise RuntimeError("Controller network readiness is not confirmed")
+
+    def _tou_result(self, d9: bytes, metrics: dict) -> dict:
+        result = self.snapshot()
+        result.update(metrics=metrics, power_flow=power_flow(metrics),
+                      tou_plan=[p.to_dict() for p in periods_from_d9(d9)], settings_confirmed=True)
+        return result
+
+    async def _write_tou(self, connection, periods, enabled, before) -> tuple[bytes, dict]:
+        await connection.request(self.commands.tou_plan(periods, enabled=enabled))
+        d9, metrics = await self._fresh_tou(connection)
+        self._tou_protected(before, metrics)
+        if (d9[2] != int(enabled) or periods_from_d9(d9) != tuple(periods)
+                or d9[3] != before["backup_reserve_percentage"]):
+            raise RuntimeError("Time-of-Use plan not confirmed by telemetry")
+        if not enabled and d9[1] != 0:
+            raise RuntimeError("Standard mode still reports an active tariff")
+        return d9, metrics
+
+    async def set_backup_reserve(self, percentage: int) -> dict:
+        """Change reserve only, preserving outputs, limits, mode and schedule."""
+        request = self.commands.backup_reserve(percentage)
+        async with self._control_lock:
+            connection = self._control_connection()
+            before_d9, before = await self._fresh_tou(connection)
+            self._tou_protected(before)
+            if not before["min_charge_percentage"] + 5 <= percentage <= before["max_charge_percentage"]:
+                raise ValueError("Reserve must be between the lower limit plus 5 and the upper charge limit")
+            await connection.request(request)
+            d9, metrics = await self._fresh_tou(connection)
+            self._tou_protected(before, metrics)
+            if (d9[3] != percentage or d9[2] != before_d9[2]
+                    or periods_from_d9(d9) != periods_from_d9(before_d9)):
+                raise RuntimeError("Reserve or preserved schedule not confirmed by telemetry")
+            return self._tou_result(d9, metrics)
+
+    async def set_tou_plan(self, periods=(), *, enabled: bool = False) -> dict:
+        """Store in Standard first; explicit activation may persist until cleared.
+
+        This replaces the old plan. A settings confirmation is not a power-flow
+        confirmation. Use return_to_grid() to clear a plan and verify grid input.
+        """
+        periods = validate_periods(periods)
+        self.commands.tou_plan(periods, enabled=enabled)  # Validate before I/O.
+        async with self._control_lock:
+            connection = self._control_connection()
+            before_d9, before = await self._fresh_tou(connection)
+            self._tou_protected(before)
+            if before_d9[2] not in (0, 1):
+                raise ValueError("Only Standard and Time-of-Use baselines are supported")
+            if enabled:
+                await self._tou_ready(connection, before)
+            attempted = False
+            try:
+                attempted = True
+                d9, metrics = await self._write_tou(connection, periods, False, before)
+                if enabled:
+                    d9, metrics = await self._write_tou(connection, periods, True, before)
+                return self._tou_result(d9, metrics)
+            except BaseException:
+                if attempted:
+                    try:
+                        await connection.request(self.commands.tou_plan(periods_from_d9(before_d9), enabled=bool(before_d9[2])))
+                        await self._fresh_tou(connection)
+                    except (OSError, RuntimeError, ValueError, TimeoutError):
+                        self.record("tou_restore_unconfirmed")
+                raise
+
+    async def _wait_grid(self, connection, before: dict, timeout: int) -> tuple[bytes, dict]:
+        deadline = asyncio.get_running_loop().time() + timeout
+        consecutive = 0
+        while asyncio.get_running_loop().time() < deadline:
+            remaining = deadline - asyncio.get_running_loop().time()
+            try:
+                d9, metrics = await self._fresh_tou(connection, timeout=min(12, max(0.01, remaining)))
+            except TimeoutError:
+                break
+            self._tou_protected(before, metrics)
+            if d9[3] != before["backup_reserve_percentage"]:
+                raise RuntimeError("Reserve changed during grid-return confirmation")
+            consecutive = consecutive + 1 if power_flow(metrics) == "grid" else 0
+            self.record("grid_return_sample", power_flow=power_flow(metrics),
+                        metrics={k: metrics.get(k) for k in ("battery_percentage", "battery_status",
+                                 "ac_input_power_w", "ac_output_power_w", "ac_output_enabled",
+                                 "usage_mode", "active_tariff", "backup_reserve_percentage")})
+            if consecutive >= 3:
+                return d9, metrics
+            await asyncio.sleep(min(2, max(0, deadline - asyncio.get_running_loop().time())))
+        raise PowerFlowTimeout(self.snapshot())
+
+    async def return_to_grid(self, *, timeout: int = 30) -> dict:
+        """Replace a plan with Standard; confirm power flow, preserving reserve.
+
+        If grid is not supplying the load, select the all-day tariff3 path first.
+        No output-switch or charge-limit command is included. Timeout describes
+        each confirmation phase, not the total transport time. Failure can leave
+        changed settings; inspect fresh status. Zero load cannot confirm flow.
+        """
+        if type(timeout) is not int or not 5 <= timeout <= 120:
+            raise ValueError("Grid confirmation timeout must be 5–120 seconds")
+        async with self._control_lock:
+            connection = self._control_connection()
+            _, before = await self._fresh_tou(connection)
+            self._tou_protected(before)
+            failure = None
+            try:
+                if power_flow(before) != "grid":
+                    await self._tou_ready(connection, before)
+                    await self._write_tou(connection, (TouPeriod("off_peak", 0, 24),), True, before)
+                    await self._wait_grid(connection, before, timeout)
+            except BaseException as error:
+                failure = error
+            finally:
+                # Clear even when the first confirmation fails. Do not lower
+                # reserve or report success solely from an ACK/Standard setting.
+                try:
+                    await self._write_tou(connection, (), False, before)
+                except (OSError, RuntimeError, ValueError, TimeoutError):
+                    self.record("grid_return_clear_unconfirmed")
+                    if failure is None:
+                        raise
+            if failure is not None:
+                if isinstance(failure, PowerFlowTimeout):
+                    raise PowerFlowTimeout(self.snapshot()) from None
+                raise failure
+            d9, metrics = await self._wait_grid(connection, before, timeout)
+            result = self._tou_result(d9, metrics)
+            result["grid_power_confirmed"] = True
+            return result
 
 
 class _Connection:

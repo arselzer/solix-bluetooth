@@ -90,9 +90,11 @@ shutdown and the BLE handshake were not isolated as possible influences.
 No extra charging, reserve or output command was sent to cause the return.
 
 Automation must confirm actual power flow after restoring mode. A successful
-acknowledgment or Standard setting alone is insufficient. Persistent operation,
-timed transitions, Off-Peak recovery and reserve-floor behavior remain untested.
-The ordinary CLI/control socket does not expose these research tariff writes.
+acknowledgment or Standard setting alone is insufficient. A [later packaged
+CLI trial](c2000-offpeak-grid-return.md) verified tariff-3 Off-Peak recovery,
+then cleared Standard and confirmed fresh grid samples. The CLI/control socket
+now exposes guarded plan/reserve/grid operations. Persistent operation, timed
+transitions and reserve-floor behavior remain untested.
 
 ## Relevant firmware lead
 

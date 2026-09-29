@@ -13,6 +13,8 @@ import time
 from .lab_config import LabConfig, load_lab, private_write
 from .mqtt_intercept import LocalMqttServer
 from .protocol import parse_tlvs, timezone_confer
+from .tou import PowerFlowTimeout, TouPeriod
+from .energy_report import decode_energy_events
 
 
 def api_response(path: str, request: dict, config: LabConfig, credentials: bytes) -> tuple[bytes, bool]:
@@ -30,6 +32,10 @@ def api_response(path: str, request: dict, config: LabConfig, credentials: bytes
                 "bind_state": 1, "relate_state": 1}
     elif path == "/equipment/help/dst":
         data = {"timezone": timezone_confer(config.timezone_name)[1].decode()}
+    elif path == "/equipment/logging/upload_pb_events":
+        # Local acknowledgement only; the cloud's response schema is unverified.
+        decode_energy_events(request)
+        data = {}
     elif path in ("/equipment/devicemanage/update_info", "/equipment/agreement/get_device_point_switch"):
         data = {}
     else:
@@ -146,7 +152,10 @@ class InterceptService:
                     raise ValueError("Request too large")
                 body = await reader.readexactly(length)
                 self.mqtt.record("api_request", headers_hex=headers.hex(), body_hex=body.hex())
-                response, chunked = api_response(path, json.loads(body or b"{}"), self.config, self.credentials)
+                request = json.loads(body or b"{}")
+                response, chunked = api_response(path, request, self.config, self.credentials)
+                if "/" + path.lstrip("/") == "/equipment/logging/upload_pb_events":
+                    self.mqtt.record("energy_report", reports=decode_energy_events(request))
                 writer.write(http_reply(response, credentials=chunked))
                 await writer.drain()
                 self.mqtt.record("api_response", path=path, size=len(response),
@@ -169,17 +178,32 @@ class InterceptService:
         try:
             if len(self._clients) > 8:
                 return
-            async with asyncio.timeout(45):
+            async with asyncio.timeout(10):
                 request = json.loads(await reader.readline())
                 if not isinstance(request, dict):
                     raise ValueError("Invalid request")
-                action = request.get("command")
+            action = request.get("command")
+            async with asyncio.timeout(control_timeout(action, request)):
                 if action == "status":
                     result = self.mqtt.snapshot()
                 elif action == "set-charge-power":
                     result = await self.mqtt.set_ac_charging_power(request.get("watts"))
                 elif action == "set-charge-cap":
                     result = await self.mqtt.set_charge_cap(request.get("upper"))
+                elif action == "set-backup-reserve":
+                    result = await self.mqtt.set_backup_reserve(request.get("reserve"))
+                elif action == "set-tou-plan":
+                    periods = request.get("periods", [])
+                    if not isinstance(periods, list) or len(periods) > 6:
+                        raise ValueError("Invalid schedule")
+                    parsed = []
+                    for period in periods:
+                        if not isinstance(period, dict) or set(period) != {"tariff", "start_hour", "end_hour"}:
+                            raise ValueError("Invalid schedule period")
+                        parsed.append(TouPeriod(**period))
+                    result = await self.mqtt.set_tou_plan(parsed, enabled=request.get("enabled", False))
+                elif action == "return-grid":
+                    result = await self.mqtt.return_to_grid(timeout=request.get("timeout", 30))
                 elif action == "readiness":
                     connection = self.mqtt.connection
                     if connection is None:
@@ -192,6 +216,8 @@ class InterceptService:
                 else:
                     raise ValueError("Unsupported command")
                 response = {"ok": True, "result": result}
+        except PowerFlowTimeout as error:
+            response = {"ok": False, "error": "PowerFlowTimeout", "result": error.snapshot}
         except (ValueError, OSError, TimeoutError, RuntimeError, asyncio.LimitOverrunError) as error:
             # Exception text is controlled by this package; avoid reflecting request data.
             response = {"ok": False, "error": type(error).__name__}
@@ -228,15 +254,32 @@ class InterceptService:
             self._socket_owned = False
 
 
+def control_timeout(command: str, fields: dict) -> int:
+    """Bound command transport separately from each power-flow confirmation."""
+    if command == "return-grid":
+        duration = fields.get("timeout", 30)
+        if type(duration) is int and 5 <= duration <= 120:
+            return 2 * duration + 100
+    if command == "set-tou-plan":
+        return 120
+    return 45
+
+
 async def lab_request(directory: Path, command: str, **fields) -> dict:
     """Use the private Unix socket from the host namespace or another local process."""
     reader, writer = await asyncio.open_unix_connection(directory / "control.sock", limit=131072)
     try:
         writer.write(json.dumps({"command": command, **fields}).encode() + b"\n")
         await writer.drain()
-        async with asyncio.timeout(45):
+        async with asyncio.timeout(control_timeout(command, fields) + 5):
             response = json.loads(await reader.readline())
         if not response.get("ok"):
+            if response.get("error") == "PowerFlowTimeout":
+                raise PowerFlowTimeout(response.get("result", {}))
+            errors = {"ValueError": ValueError, "PermissionError": PermissionError,
+                      "ConnectionError": ConnectionError, "TimeoutError": TimeoutError}
+            if response.get("error") in errors:
+                raise errors[response["error"]]("Native lab command failed; inspect fresh status")
             raise RuntimeError(f"Lab request failed: {response.get('error', 'unknown')}")
         return response["result"]
     finally:

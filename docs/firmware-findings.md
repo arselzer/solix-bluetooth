@@ -237,9 +237,12 @@ fast-charge fields also have matching handlers. `0103` is at `0x0800c530`,
 `0x0800c314`. These are internal opcode numbers; ordinary encrypted app packets
 use the previously documented `41xx`/`40xx` form and app command namespace.
 
-Additional code tracks solar-to-battery, grid-to-battery, and battery-to-load
-energy, plus time spent in tariff periods. These are promising monitoring
-fields; their units, reset rules, and transport mapping remain unresolved.
+Additional code tracks tariff-only solar-to-battery, grid-to-battery and
+battery-to-load sums, separately from a general AC/DC report. The [101-case
+follow-up](tariff-energy-followup.md) recovered a binary protobuf report and
+its local logging-API route. It corrects earlier descriptions that attributed
+the named tariff-only counters directly to that report. Runtime units, reset
+rules and C2000 equivalence remain unverified; passive decoding is available.
 
 ## Modbus: radio bridge found, controller support missing from dispatch table
 
@@ -277,7 +280,9 @@ C2000 controller support is unknown.
   [binding follow-up](c2000-binding-followup.md) tested complete small API
   replies and examined controller readiness; binding alone is now a weaker
   explanation. Correcting A6/A7 now activates Peak and discharge on C2000.
-  Investigate reliable return to grid, persistent scheduling and reserve floors.
+  A [packaged CLI follow-up](c2000-offpeak-grid-return.md) confirmed tariff-3
+  return to grid before clearing Standard. Investigate persistent scheduling
+  and reserve floors.
   C1000 still needs a hardware comparison; do not
   substitute the different `4038` layout.
 - When C1000 is reachable again, validate its own schedule layout and benign

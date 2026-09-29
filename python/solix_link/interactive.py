@@ -149,7 +149,9 @@ def setup_lab(device: DeviceConfig, directory: Path) -> None:
 def _show_status(status: dict) -> None:
     metrics = status.get("metrics", {})
     print(f"Connected: {status.get('connected', False)}; fresh data: {status.get('available', False)}")
-    for key in ("battery_percentage", "battery_status", "ac_output_enabled", "ac_input_power_w", "ac_output_power_w", "ac_charging_power_limit_w"):
+    print(f"Power flow: {status.get('power_flow', 'unknown')}")
+    for key in ("battery_percentage", "battery_status", "ac_output_enabled", "ac_input_power_w", "ac_output_power_w", "ac_charging_power_limit_w",
+                "usage_mode", "active_tariff", "backup_reserve_percentage", "tou_schedule_slot_count"):
         if key in metrics:
             print(f"  {key}: {metrics[key]}")
 
@@ -176,8 +178,11 @@ def native_session(directory: Path, config_path: Path, *, provision: bool, allow
             selected = choose("Local MQTT session", ["Show live status", "Read controller readiness",
                                                      "Set charging-power limit" if allow_control else "Charging controls disabled",
                                                      "Set upper charge limit" if allow_control else "Charge-cap controls disabled",
+                                                     "Set backup reserve" if allow_control else "Reserve controls disabled",
+                                                     "Store or activate hourly tariff plan" if allow_control else "Tariff controls disabled",
+                                                     "Clear plan and confirm grid power" if allow_control else "Grid-return control disabled",
                                                      "Stop this AP session"])
-            if selected is None or selected == 4:
+            if selected is None or selected == 7:
                 break
             try:
                 if selected == 0:
@@ -190,8 +195,26 @@ def native_session(directory: Path, config_path: Path, *, provision: bool, allow
                 elif selected == 3 and allow_control:
                     upper = int(prompt("Upper charge limit (80–100% in 5% steps)"))
                     _show_status(asyncio.run(lab_request(directory, "set-charge-cap", upper=upper)))
+                elif selected == 4 and allow_control:
+                    reserve = int(prompt("Backup reserve (5–100% in 5% steps, within charge limits)"))
+                    _show_status(asyncio.run(lab_request(directory, "set-backup-reserve", reserve=reserve)))
+                elif selected == 5 and allow_control:
+                    from .tou import TouPeriod
+                    mode = choose("Plan mode", ["Store in Standard", "Activate Time-of-Use (persists until changed)"])
+                    if mode is None:
+                        continue
+                    text = prompt("Periods separated by commas, e.g. peak:0:24; empty clears the plan")
+                    periods = []
+                    for value in text.split(",") if text else []:
+                        parts = value.strip().split(":")
+                        if len(parts) != 3:
+                            raise ValueError("Period format must be TARIFF:START:END")
+                        periods.append(TouPeriod(parts[0], int(parts[1]), int(parts[2])).to_dict())
+                    _show_status(asyncio.run(lab_request(directory, "set-tou-plan", periods=periods, enabled=mode == 1)))
+                elif selected == 6 and allow_control:
+                    _show_status(asyncio.run(lab_request(directory, "return-grid")))
             except (ValueError, OSError, RuntimeError, TimeoutError) as error:
-                print(f"{type(error).__name__}: {error}. Check fresh status before retrying a charging write.")
+                print(f"{type(error).__name__}: {error}. Check fresh status before retrying a control write.")
         if process.poll() is not None and process.returncode:
             print(f"AP session exited; inspect {log_path}.")
     finally:
@@ -232,7 +255,7 @@ def mqtt_menu(device: DeviceConfig, config_path: Path, directory: Path) -> None:
                 config = load_lab(directory / "lab.json")
                 if config.name != device.name:
                     raise ValueError("Lab belongs to a different selected station")
-                controls = choose("Native charging control", ["Monitoring only", "Enable explicit charging-power commands"])
+                controls = choose("Native control", ["Monitoring only", "Enable explicit charging and tariff commands"])
                 if controls is not None:
                     native_session(directory, config_path, provision=action == 3, allow_control=controls == 1)
             elif action == 4:

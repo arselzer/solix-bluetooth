@@ -8,6 +8,8 @@ from pathlib import Path
 import time
 
 from .lab_config import LabConfig
+from .commands import NATIVE_COMMANDS, validate_command
+from .lab_service import lab_request
 
 
 class LabMonitorService:
@@ -29,11 +31,24 @@ class LabMonitorService:
             latest = status.get("last_seen_timestamp")
             status["connected"] = bool(fresh and status.get("connected"))
             status["available"] = bool(status["connected"] and latest and time.time() - latest < 30)
+            if not status["available"]:
+                status["power_flow"] = "unknown"
             return status
         except (OSError, ValueError):
             return {"name": name, "model": self.config.model.value, "protocol": "native_mqtt",
                     "connected": False, "available": False, "last_seen_timestamp": None,
                     "error": "Lab status unavailable", "metrics": {}}
+
+    def supported_commands(self, name: str) -> list[str]:
+        return list(NATIVE_COMMANDS) if self.snapshot(name).get("control_enabled") else []
+
+    async def command(self, name: str, command: str, **values) -> dict:
+        validate_command(command, values)
+        if command not in self.supported_commands(name):
+            raise PermissionError("Native worker controls are disabled")
+        if not self.snapshot(name)["available"]:
+            raise ConnectionError("Fresh native telemetry is unavailable")
+        return await lab_request(self.directory, command, **values)
 
     def snapshots(self) -> list[dict]:
         return [self.snapshot(self.config.name)]

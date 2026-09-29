@@ -12,12 +12,23 @@ def inputs(monkeypatch, values):
 
 def test_no_arguments_launch_guided_mode_only_in_a_terminal(monkeypatch, tmp_path):
     called = []
+    monkeypatch.setattr(cli, "tui_available", lambda: False)
     monkeypatch.setattr(cli.sys.stdin, "isatty", lambda: True)
     monkeypatch.setattr(interactive, "run_interactive", lambda config, directory: called.append((config, directory)))
     assert cli.main([]) == 0
     assert called == [(cli.DEFAULT_CONFIG, None)]
     monkeypatch.setattr(cli.sys.stdin, "isatty", lambda: False)
     assert cli.main([]) == 2
+
+
+def test_no_arguments_use_terminal_dashboard_when_installed(monkeypatch):
+    from solix_link import tui
+    called = []
+    monkeypatch.setattr(cli.sys.stdin, "isatty", lambda: True)
+    monkeypatch.setattr(cli, "tui_available", lambda: True)
+    monkeypatch.setattr(tui, "run_tui", lambda config, directory: called.append((config, directory)))
+    assert cli.main([]) == 0
+    assert called == [(cli.DEFAULT_CONFIG, None)]
 
 
 def test_explicit_interactive_config_and_private_directory(monkeypatch, tmp_path):
@@ -92,7 +103,7 @@ def test_interactive_native_session_stops_owned_child(monkeypatch, tmp_path):
             self.returncode = 0
     monkeypatch.setattr(interactive.os, "geteuid", lambda: 0)
     monkeypatch.setattr(interactive.subprocess, "Popen", Child)
-    inputs(monkeypatch, ["5"])
+    inputs(monkeypatch, ["8"])
     interactive.native_session(directory, tmp_path / "config.json", provision=False, allow_control=False)
     assert spawned[0].signals == [signal.SIGTERM]
     assert "--allow-control" not in spawned[0].command

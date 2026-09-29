@@ -8,6 +8,7 @@ import getpass
 import json
 from pathlib import Path
 import sys
+from importlib.util import find_spec
 
 from .client import SolixMonitor, discover
 from .config import DEFAULT_CONFIG, DeviceConfig, load_config, save_config
@@ -21,6 +22,9 @@ def parser() -> argparse.ArgumentParser:
     guided = subcommands.add_parser("interactive", help="Scan, select and monitor stations with guided BLE/MQTT setup")
     guided.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     guided.add_argument("--lab-directory", type=Path, help="Existing or new private native MQTT lab directory")
+    tui = subcommands.add_parser("tui", help="Open the terminal dashboard (requires the tui extra)")
+    tui.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
+    tui.add_argument("--lab-directory", type=Path, help="Inspect/control an already running native MQTT lab")
 
     scan = subcommands.add_parser("scan", help="Find C300 AC, C1000, and C1000/C2000 Gen 2 devices")
     scan.add_argument("--timeout", type=float, default=8)
@@ -50,10 +54,11 @@ def parser() -> argparse.ArgumentParser:
     diagnostics.add_argument("--name", required=True)
     diagnostics.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
 
-    serve = subcommands.add_parser("serve", help="Run the read-only HTTP monitoring server")
+    serve = subcommands.add_parser("serve", help="Run HTTP monitoring with optional authenticated setting controls")
     serve.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     serve.add_argument("--host", default="127.0.0.1")
     serve.add_argument("--port", type=int, default=8765)
+    serve.add_argument("--allow-control", action="store_true", help="Enable allowlisted HTTP commands; requires SOLIX_HTTP_TOKEN")
 
     mqtt = subcommands.add_parser("mqtt-bridge", help="Publish BLE status and supported settings through a local MQTT broker")
     mqtt.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
@@ -306,18 +311,25 @@ async def _wifi_setup(args: argparse.Namespace) -> None:
         await monitor.disconnect()
 
 
+def tui_available() -> bool:
+    return find_spec("textual") is not None
+
+
 def main(argv: list[str] | None = None) -> int:
     argv = sys.argv[1:] if argv is None else argv
     if not argv:
         if not sys.stdin.isatty():
             print("Interactive mode needs a terminal; use --help for scripted commands.", file=sys.stderr)
             return 2
-        argv = ["interactive"]
+        argv = ["tui" if tui_available() else "interactive"]
     args = parser().parse_args(argv)
     try:
         if args.command == "interactive":
             from .interactive import run_interactive
             run_interactive(args.config, args.lab_directory)
+        elif args.command == "tui":
+            from .tui import run_tui
+            run_tui(args.config, args.lab_directory)
         elif args.command == "scan":
             asyncio.run(_scan(args.timeout))
         elif args.command == "add":
@@ -333,7 +345,8 @@ def main(argv: list[str] | None = None) -> int:
             asyncio.run(_network_diagnostics(args))
         elif args.command == "serve":
             from .server import run_server
-            run_server(MonitorService(load_config(args.config)), host=args.host, port=args.port)
+            run_server(MonitorService(load_config(args.config)), host=args.host, port=args.port,
+                       allow_control=args.allow_control)
         elif args.command == "mqtt-bridge":
             from .mqtt_bridge import MqttBridge
             asyncio.run(MqttBridge(

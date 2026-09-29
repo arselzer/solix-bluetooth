@@ -1,0 +1,67 @@
+{
+  "title": "SOLIX Link",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to your SOLIX Link gateway",
+        "description": "Enter the local HTTP or HTTPS URL. A gateway bearer token is required for controls and for authenticated gateways.",
+        "data": {"url": "Gateway URL", "token": "Bearer token"}
+      },
+      "reauth_confirm": {
+        "title": "Update gateway authentication",
+        "description": "Enter the gateway bearer token.",
+        "data": {"token": "Bearer token"}
+      },
+      "reconfigure": {
+        "title": "Reconfigure gateway",
+        "description": "Update this gateway's address. Leave the token field untouched to keep the current token; an explicitly empty token removes it.",
+        "data": {"url": "Gateway URL", "token": "Bearer token"}
+      }
+    },
+    "error": {
+      "invalid_url": "Enter a valid HTTP or HTTPS URL without embedded credentials or URL parameters.",
+      "invalid_auth": "The gateway rejected the token.",
+      "cannot_connect": "Could not read a valid SOLIX Link device list from the gateway."
+    },
+    "abort": {
+      "already_configured": "This gateway is already configured.",
+      "reauth_successful": "Gateway authentication updated.",
+      "reconfigure_successful": "Gateway configuration updated."
+    }
+  },
+  "services": {
+    "set_tou_plan": {
+      "name": "Set Time-of-Use plan",
+      "description": "Store or activate a schedule on a gateway-enabled C2000 Gen 2. Peak can discharge the battery with mains connected. Use Return to grid to confirm grid supply.",
+      "fields": {
+        "device_id": {"name": "Device", "description": "Select the SOLIX Link station."},
+        "enabled": {"name": "Enable Time-of-Use", "description": "Activate the plan, or store it while in Standard mode."},
+        "periods": {"name": "Periods", "description": "Up to six non-overlapping periods with tariff (peak, mid_peak, off_peak), start_hour and end_hour. Use whole hours 0–24; split overnight periods."}
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "mains_present": {"name": "Mains present"},
+      "ac_output_enabled": {"name": "AC output enabled"}
+    },
+    "sensor": {
+      "battery": {"name": "Battery"},
+      "temperature": {"name": "Temperature"},
+      "ac_input_power_w": {"name": "AC input power"},
+      "ac_output_power_w": {"name": "AC output power"},
+      "dc_output_power_w": {"name": "DC output power"},
+      "output_power_w": {"name": "Total output power"},
+      "battery_status": {"name": "Battery status", "state": {"idle": "Idle", "charging": "Charging", "discharging": "Discharging", "unknown": "Unknown"}},
+      "active_tariff": {"name": "Active tariff", "state": {"none": "None", "peak": "Peak", "mid_peak": "Mid-Peak", "off_peak": "Off-Peak", "unknown": "Unknown"}},
+      "usage_mode": {"name": "Usage mode", "state": {"standard": "Standard", "time_of_use": "Time-of-Use", "self_consumption": "Self consumption", "custom": "Custom", "unknown": "Unknown"}},
+      "power_flow": {"name": "AC power source", "state": {"grid": "Grid", "battery": "Battery", "transitioning": "Transitioning", "unknown": "Unknown"}}
+    },
+    "number": {
+      "charging_power": {"name": "AC charging power limit"},
+      "charge_cap": {"name": "Charge cap"},
+      "backup_reserve": {"name": "Backup reserve"}
+    },
+    "button": {"return_grid": {"name": "Return to grid"}}
+  }
+}

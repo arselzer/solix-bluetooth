@@ -65,10 +65,14 @@ count/triplets with retained C2000 data.
 2.1.6.4 with TLS client certificates, saved-settings reconnect, live telemetry,
 and verified charging-power changes. The [corrected Peak trial](docs/c2000-corrected-peak-trial.md)
 now verifies battery discharge with mains connected and AC output enabled,
-using entirely local MQTT. Restoring Standard did not immediately restore grid
-input; a later independent BLE check confirmed it. Python has native
-request/decoding helpers and a packaged isolated AP/MQTT lab workflow;
-tariff controls remain research probes.
+using entirely local MQTT. The [packaged CLI follow-up](docs/c2000-offpeak-grid-return.md)
+also verified Off-Peak grid return before clearing Standard. Python now exposes
+guarded reserve, hourly plans and flow-confirmed recovery, a [terminal dashboard](python/README.md#terminal-dashboard-and-ha-gateway),
+and an [authenticated HTTP/HA gateway](docs/gateway-home-assistant.md).
+The HA component is prepared and contract-tested; its runtime integration
+remains unverified. Timed schedules/reserve-floor behavior need live validation.
+The [offline tariff/energy follow-up](docs/tariff-energy-followup.md) adds
+101 replay cases and a passive binary energy-report decoder with unverified units.
 The packaged MQTT bridge communicates with the stations over BLE. Raw captures, firmware,
 credentials, and reproducible private analysis stay in the ignored
 `.solix-private/` directory.
@@ -247,6 +251,8 @@ python/
   solix_link/       — Async BLE library, CLI, HTTP server, MQTT bridge and isolated AP
   solix_gen2/       — Compatibility imports for existing clients
   tests/           — Synthetic protocol and service tests
+custom_components/solix_link/ — Prepared local-gateway Home Assistant integration
+home_assistant_tests/ — Standalone HTTP contract tests (HA runtime not required)
 docs/
   app-reverse-engineering.md — Anker app decompilation findings
   gen2-protocol.md  — Versioned live Gen 2 observations

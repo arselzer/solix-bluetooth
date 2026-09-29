@@ -1,4 +1,4 @@
-"""Read-only HTTP, SSE, and Prometheus endpoints for SOLIX telemetry."""
+"""HTTP/SSE telemetry with optional authenticated, allowlisted controls."""
 
 from __future__ import annotations
 
@@ -6,22 +6,35 @@ import asyncio
 import json
 import os
 import re
+import hmac
 
 from aiohttp import web
 
 from .manager import MonitorService
+from .commands import validate_command
+from .tou import PowerFlowTimeout
 
 
-def create_app(service: MonitorService, token: str | None = None) -> web.Application:
+def create_app(service: MonitorService, token: str | None = None, *, allow_control: bool = False) -> web.Application:
     """Create an aiohttp application without starting the BLE monitors."""
+
+    if allow_control and not token:
+        raise ValueError("HTTP controls require SOLIX_HTTP_TOKEN or an explicit Bearer token")
 
     @web.middleware
     async def authorize(request: web.Request, handler):
-        if token and request.headers.get("Authorization") != f"Bearer {token}":
+        if token and not hmac.compare_digest(request.headers.get("Authorization", "").encode(), f"Bearer {token}".encode()):
             raise web.HTTPUnauthorized(headers={"WWW-Authenticate": "Bearer"})
         return await handler(request)
 
-    app = web.Application(middlewares=[authorize])
+    app = web.Application(middlewares=[authorize], client_max_size=16384)
+
+    def status_with_controls(status: dict) -> dict:
+        commands = getattr(service, "supported_commands", None)
+        return {**status, "controls": commands(status["name"]) if allow_control and commands else []}
+
+    def snapshots() -> list[dict]:
+        return [status_with_controls(status) for status in service.snapshots()]
 
     async def health(_request: web.Request) -> web.Response:
         devices = service.snapshots()
@@ -29,13 +42,41 @@ def create_app(service: MonitorService, token: str | None = None) -> web.Applica
         return web.json_response({"ok": ok, "devices": len(devices), "available": sum(d["available"] for d in devices)}, status=200 if ok else 503)
 
     async def all_devices(_request: web.Request) -> web.Response:
-        return web.json_response({"devices": service.snapshots()})
+        return web.json_response({"devices": snapshots()})
 
     async def one_device(request: web.Request) -> web.Response:
         name = request.match_info["name"]
         if name not in service.devices:
             raise web.HTTPNotFound(text="Unknown device")
-        return web.json_response(service.snapshot(name))
+        return web.json_response(status_with_controls(service.snapshot(name)))
+
+    async def command(request: web.Request) -> web.Response:
+        if not allow_control:
+            return web.json_response({"error": "ControlsDisabled"}, status=403)
+        name = request.match_info["name"]
+        if name not in service.devices:
+            raise web.HTTPNotFound(text="Unknown device")
+        try:
+            body = await request.json()
+            if not isinstance(body, dict) or "command" not in body:
+                raise ValueError("Invalid command body")
+            action = body.pop("command")
+            validate_command(action, body)
+        except (ValueError, UnicodeError):
+            return web.json_response({"error": "InvalidCommand", "settings_may_have_changed": False}, status=400)
+        if action not in service.supported_commands(name):
+            return web.json_response({"error": "UnsupportedCommand", "settings_may_have_changed": False}, status=403)
+        try:
+            result = await service.command(name, action, **body)
+            return web.json_response(status_with_controls(result))
+        except PowerFlowTimeout as error:
+            failed_status = error.snapshot if error.snapshot.get("name") == name else service.snapshot(name)
+            return web.json_response({"error": "PowerFlowTimeout", "settings_may_have_changed": True,
+                                      "device": status_with_controls(failed_status)}, status=504)
+        except (ValueError, PermissionError, ConnectionError, TimeoutError, RuntimeError) as error:
+            code = 400 if isinstance(error, ValueError) else 403 if isinstance(error, PermissionError) else 504 if isinstance(error, TimeoutError) else 409
+            return web.json_response({"error": type(error).__name__, "settings_may_have_changed": not isinstance(error, PermissionError),
+                                      "device": status_with_controls(service.snapshot(name))}, status=code)
 
     async def events(request: web.Request) -> web.StreamResponse:
         response = web.StreamResponse(headers={
@@ -46,7 +87,7 @@ def create_app(service: MonitorService, token: str | None = None) -> web.Applica
         await response.prepare(request)
         queue = service.subscribe()
         try:
-            initial = json.dumps({"devices": service.snapshots()}, separators=(",", ":"))
+            initial = json.dumps({"devices": snapshots()}, separators=(",", ":"))
             await response.write(f"event: snapshot\ndata: {initial}\n\n".encode())
             while True:
                 try:
@@ -54,7 +95,7 @@ def create_app(service: MonitorService, token: str | None = None) -> web.Applica
                 except TimeoutError:
                     await response.write(b": keepalive\n\n")
                     continue
-                payload = json.dumps(event, separators=(",", ":"))
+                payload = json.dumps(status_with_controls(event), separators=(",", ":"))
                 await response.write(f"event: update\ndata: {payload}\n\n".encode())
         except (ConnectionResetError, asyncio.CancelledError):
             pass
@@ -85,6 +126,7 @@ def create_app(service: MonitorService, token: str | None = None) -> web.Applica
     app.router.add_get("/health", health)
     app.router.add_get("/devices", all_devices)
     app.router.add_get("/devices/{name}", one_device)
+    app.router.add_post("/devices/{name}/commands", command)
     app.router.add_get("/events", events)
     app.router.add_get("/metrics", metrics)
     app.on_startup.append(startup)
@@ -92,5 +134,5 @@ def create_app(service: MonitorService, token: str | None = None) -> web.Applica
     return app
 
 
-def run_server(service: MonitorService, host: str = "127.0.0.1", port: int = 8765) -> None:
-    web.run_app(create_app(service, os.environ.get("SOLIX_HTTP_TOKEN")), host=host, port=port)
+def run_server(service: MonitorService, host: str = "127.0.0.1", port: int = 8765, *, allow_control: bool = False) -> None:
+    web.run_app(create_app(service, os.environ.get("SOLIX_HTTP_TOKEN"), allow_control=allow_control), host=host, port=port)

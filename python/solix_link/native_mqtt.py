@@ -11,6 +11,7 @@ import secrets
 import time
 
 from .protocol import DATA_REQUEST, DATA_RESPONSE, Model, build_packet, decode_telemetry, parse_packet, tlv
+from .tou import TouPeriod, validate_periods
 
 
 @dataclass(frozen=True)
@@ -81,6 +82,26 @@ class NativeMqttCommands:
         if type(percentage) is not int or percentage not in (80, 85, 90, 95, 100):
             raise ValueError("Charge cap must be 80–100 percent in 5 percent steps")
         return self._request("0103", tlv(0xAA, bytes((1, percentage))), milliseconds=True)
+
+    def backup_reserve(self, percentage: int) -> NativeMqttRequest:
+        """Set only backup reserve; callers must check upper/lower limits first."""
+        if type(percentage) is not int or not 5 <= percentage <= 100 or percentage % 5:
+            raise ValueError("Backup reserve must be 5–100 percent in 5 percent steps")
+        return self._request("0090", tlv(0xA5, bytes((1, percentage))), milliseconds=True)
+
+    def tou_plan(self, periods: tuple[TouPeriod, ...], *, enabled: bool = False) -> NativeMqttRequest:
+        """Store a plan in Standard by default, or explicitly activate Time-of-Use.
+
+        A6 carries the count. A7 has type04 plus triplets, with no second count.
+        This changes mode/schedule only; it never includes an output switch.
+        """
+        periods = validate_periods(periods)
+        if type(enabled) is not bool or (enabled and not periods):
+            raise ValueError("Enabled Time-of-Use requires a nonempty schedule")
+        fields = (tlv(0xA2, bytes((1, int(enabled)))) + tlv(0xA3, b"\x01\x00")
+                  + tlv(0xA4, b"\x01\x00") + tlv(0xA6, bytes((1, len(periods))))
+                  + tlv(0xA7, b"\x04" + (b"".join(p.to_bytes() for p in periods) or b"\x00")))
+        return self._request("0090", fields, milliseconds=True)
 
     def _request(self, command: str, fields: bytes, *, milliseconds: bool) -> NativeMqttRequest:
         now = time.time()

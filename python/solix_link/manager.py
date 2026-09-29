@@ -10,6 +10,8 @@ from typing import Any
 from .client import SolixMonitor
 from .config import DeviceConfig
 from .protocol import Model
+from .commands import validate_command
+from .tou import power_flow
 
 
 class MonitorService:
@@ -48,6 +50,7 @@ class MonitorService:
             **status,
             "metrics": status["metrics"].copy(),
             "available": bool(status["connected"] and latest is not None and time.time() - latest < 90),
+            "power_flow": power_flow(status["metrics"]) if status["connected"] and latest and time.time() - latest < 90 else "unknown",
         }
 
     def snapshots(self) -> list[dict[str, Any]]:
@@ -135,6 +138,28 @@ class MonitorService:
             if setting == "light_mode":
                 return await monitor.set_light_mode(values["mode"])
             return await monitor.set_fast_charge_enabled(values["enabled"])
+
+    def supported_commands(self, name: str) -> list[str]:
+        device = self.devices[name]
+        if device.model in (Model.C300, Model.C1000):
+            return ["set-charge-power", "set-display-timeout", "set-light"]
+        if device.protocol != "prime":
+            return []
+        if device.model == Model.C2000_GEN2:
+            return ["set-charge-power", "set-charge-cap", "set-display-timeout"]
+        return ["set-charge-power", "set-display-timeout", "set-fast-charge"]
+
+    async def command(self, name: str, command: str, **values) -> dict:
+        validate_command(command, values)
+        if command not in self.supported_commands(name):
+            raise ValueError("Command is unsupported by this Bluetooth profile")
+        if not self.snapshot(name)["available"]:
+            raise ConnectionError("Fresh Bluetooth telemetry is unavailable")
+        setting = {"set-charge-power": "ac_charging_power", "set-charge-cap": "charge_cap",
+                   "set-display-timeout": "display_timeout", "set-fast-charge": "fast_charge",
+                   "set-light": "light_mode"}[command]
+        await self.apply_setting(name, setting, **values)
+        return self.snapshot(name)
 
     async def _run_device(self, device: DeviceConfig) -> None:
         status = self._status[device.name]

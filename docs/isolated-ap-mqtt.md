@@ -23,7 +23,14 @@ they do not perform an Anker cloud-account binding.
 
 ## CLI setup
 
-Run `solix-link` without arguments for the terminal workflow. It scans nearby
+Install `[tui]` and run `solix-link` without arguments for the full-screen
+terminal dashboard. It scans and merges nearby/saved stations, lets you save
+new devices, and explicitly connect for BLE monitoring. Prime stations needing
+pairing receive instructions to use `pair` or `interactive` first. Add
+`--lab-directory` to `solix-link tui` to select an already-running native lab.
+The dashboard does not start/stop an AP or change settings on exit.
+
+`solix-link interactive` retains the guided setup workflow. It scans nearby
 stations, combines them with saved devices, and guides pairing, BLE monitoring,
 broker bridging and C2000 local-MQTT setup. Local setup can read the serial
 over BLE and lists Wi-Fi adapters that are DOWN. Monitoring is the first control
@@ -99,8 +106,45 @@ before sending a write, because recovered firmware can clamp that reserve.
 Commands are nonretained and serialized; a timeout closes that connection so a late
 reply cannot confirm another write. A failed confirmation can still mean the
 setting changed: inspect the next fresh status before retrying. The limit is
-a charging setpoint; it has not demonstrated battery discharge with mains on.
-AC switching and experimental tariff writes are not exposed by this endpoint.
+a charging setpoint; it does not redirect AC loads to the battery.
+AC switching is not exposed by this endpoint.
+
+## Reserve, hourly plans and grid return
+
+Explicit native tariff controls require the same `--allow-control` worker:
+
+```sh
+sudo /path/to/venv/bin/solix-link lab-set-reserve \
+  --directory "$PWD/.solix-private/local-mqtt" --reserve 85
+sudo /path/to/venv/bin/solix-link lab-set-tou \
+  --directory "$PWD/.solix-private/local-mqtt" \
+  --mode standard --period peak:0:24
+```
+
+The second command stores an inactive plan. Replace `standard` with
+`time_of_use` to activate it explicitly; **Peak can discharge the battery while
+mains and AC output stay on**. The plan replaces all prior slots and persists
+until changed. Up to six non-overlapping whole-hour slots use `peak`, `mid_peak`
+or `off_peak`; hours are 0–24, end exclusive. Split overnight intervals at
+midnight. Only single all-day slots have been verified live.
+
+Reserve is an integer 5–100% in 5% steps and must fall between the current
+lower limit plus 5 and the upper cap. Plan activation requires fresh complete
+status, readiness, mains/output on, fast charge off and no active AC timer.
+Writes require fresh plan/reserve and unchanged protected settings, not just ACK.
+
+```sh
+sudo /path/to/venv/bin/solix-link lab-grid \
+  --directory "$PWD/.solix-private/local-mqtt" --timeout 30
+```
+
+Grid return selects native tariff 3 when needed, confirms three fresh grid
+samples, clears to Standard/count 0, then confirms three more. It preserves
+reserve, caps, charging power and outputs. At zero AC load, flow cannot be
+confirmed. `--timeout` is 5–120 seconds per confirmation phase, excluding
+transport overhead. A failed command can leave changed settings: inspect fresh
+status. `lab-set-tou --mode standard` clears the plan but alone does **not**
+confirm grid supply. Stopping the AP/tool does not reset a persistent plan.
 
 ## HTTP and Python integration
 
@@ -113,14 +157,19 @@ sudo /path/to/venv/bin/solix-link lab-serve \
 
 It reuses `/devices`, `/devices/{name}`, `/health`, `/events` and `/metrics` for
 Home Assistant or other monitoring clients. Bind a chosen LAN address when
-needed; `SOLIX_HTTP_TOKEN` enables the existing Bearer authentication. This
-server is read-only. It marks stale worker files unavailable and needs no BLE
-connection. This is a library/API building block, not an HA add-on installer.
+needed; `SOLIX_HTTP_TOKEN` enables Bearer authentication. Monitoring is the
+default. Add `--allow-control` to this command and the worker to enable strict
+POST `/devices/{name}/commands`; a nonempty token is mandatory. It marks stale
+worker files unavailable and needs no BLE connection. See the [gateway/HA
+guide](gateway-home-assistant.md) and [prepared custom integration](../custom_components/solix_link/README.md).
 
 Python exports `LabConfig`, `initialize_lab`, `load_lab`, `IsolatedAP`,
 `InterceptService`, `LocalMqttServer` and `lab_request`. `InterceptService`
 runs inside the isolated namespace; `lab_request` uses its filesystem Unix
-socket from a host process. For an HA coordinator, pass a callback to
+socket from a host process. `LocalMqttServer` also offers `set_backup_reserve`,
+`set_tou_plan` and `return_to_grid`, using exported `TouPeriod` values. Raw
+`NativeMqttCommands` builders only encode packets; they do not confirm writes.
+For an HA coordinator, pass a callback to
 `LocalMqttServer`/`InterceptService`, or consume the host HTTP event stream.
 
 ## Captures, shutdown and recovery
@@ -128,7 +177,10 @@ socket from a host process. For an HA coordinator, pass a callback to
 Directories use mode `0700`; config, keys, status, API/MQTT captures and logs
 use `0600`. Captures include private identifiers and must stay outside Git.
 Full API headers/bodies and MQTT frames are retained locally for later analysis;
-public status excludes the serial and raw fields. Archive these files before
+public status excludes the serial and raw fields. A passive handler for
+`/equipment/logging/upload_pb_events` retains/decodes recovered energy groups
+privately; units and C2000 behavior remain unverified. See [firmware follow-up](tariff-energy-followup.md).
+Archive these files before
 sharing a sanitized summary or removing a lab deployment.
 
 Ctrl-C, SIGTERM and `--duration SECONDS` stop owned services, flush the AP
@@ -152,8 +204,11 @@ captured, corrected and regression tested. The native HTTP adapter and guided
 mode have automated tests; their entire interactive flow has not been exercised
 on hardware. A subsequent [corrected Peak trial](c2000-corrected-peak-trial.md)
 verified local scheduled discharge with mains connected and AC output enabled.
-Return to grid was confirmed after restoring settings, with an unmeasured delay;
-the packaged control endpoint still omits tariff writes.
+A [later public CLI trial](c2000-offpeak-grid-return.md) exercised packaged
+reserve/plan commands and `lab-grid`: tariff 3 restored grid power before the
+plan was cleared. Independent MQTT and BLE checks confirmed the baseline.
+The new terminal dashboard and HA component have synthetic/contract tests;
+their full UI/HA runtime flow has not been exercised on hardware.
 
 The subsequent native cap test confirmed **90→95→90%** with a **300 W**
 charging limit, producing charging telemetry and roughly 315 W above the AC

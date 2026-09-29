@@ -150,9 +150,10 @@ nor a zero-watt charging-disable command. Keep existing model-specific limits.
 
 Tariff energy accumulation is another offline lead: `0802d880` updates
 SolarToBatt/GridToBatt/BattToLoad accumulators and tariff duration counters only
-while a tariff is selected. Report builder `0802db30` divides energy sums by
-360. Its external report route and full field schema remain unmapped; no new
-native energy-counter request is recommended yet.
+while a tariff is selected. The [subsequent 101-case follow-up](tariff-energy-followup.md)
+establishes that report builder `0802db30` instead uses a separate general
+AC/DC accumulator, divides its energy sums by 360 and emits binary protobuf.
+The report route is now partially mapped; no incoming energy query is established.
 
 ### Static report-route follow-up
 
@@ -160,11 +161,13 @@ Further C1000 tracing found no direct call to `0802db30`, but a Thumb function
 pointer at `0802e1f0`. The periodic accumulator loads that builder and completion
 callback `08029330` at `0802e1d2`, then calls `08013d94`. That helper queues a
 descriptor through `08016a70` with command halfword **`0401`** and function
-**`0f`**. The builder formats a larger structured/JSON report containing the
-named tariff accumulators and durations. This establishes its internal queue
-route, not a safe incoming query or the radio's final MQTT representation.
-The descriptor layout, dispatch translation and completion semantics still
-need tracing. No corresponding report was requested live.
+**`0f`**. Later actual-encoder replays correct the earlier structured/JSON
+interpretation: it emits binary general AC/DC groups. The radio wraps these
+as base64 in JSON and sends `/equipment/logging/upload_pb_events`, rather than
+an established MQTT query response. The [follow-up](tariff-energy-followup.md)
+documents the 16-bit A2 wrapper length, partial schema and passive decoder.
+Completion/reset behavior and physical units still need live validation.
+No corresponding report was requested live.
 
 The retained Anker Solix API reference at `c2f8769` separately maps C2000
 **`0503` on `state_info`** to six unknown unsigned energy values in `A2` at
@@ -176,7 +179,9 @@ them as named energy sensors or issue an invented polling command.
 
 Private `energy-report-callers.json`, `energy-report-registration-disassembly.json`
 and `energy-report-callback-disassembly.json` retain the static inspection.
-No firmware execution or new hardware test was added for this route.
+This initial route inspection did not execute firmware. The linked subsequent
+follow-up executed the actual builder/encoder/wrapper and selected radio paths
+with synthetic data, without a hardware test.
 
 ## Private reproducibility
 

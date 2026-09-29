@@ -13,6 +13,7 @@ dependencies = ["bleak>=0.21", "cryptography>=41"]
 [project.optional-dependencies]
 server = ["aiohttp>=3.9,<4"]
 mqtt = ["paho-mqtt>=2,<3"]
+tui = ["textual>=8.2,<9"]
 
 [project.scripts]
 solix-link = "solix_link.cli:main"

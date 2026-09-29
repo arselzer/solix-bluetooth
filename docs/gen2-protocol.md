@@ -347,6 +347,25 @@ BLE check confirmed idle and equal grid input/output. No extra recovery or
 AC-output write was sent. The [complete trial record](c2000-corrected-peak-trial.md)
 documents the observation gap and remaining automation questions.
 
+## Packaged tariff control and grid return
+
+The [subsequent public CLI trial](c2000-offpeak-grid-return.md) on the same
+C2000 main **2.1.6.4** verified `lab-set-reserve`, corrected `lab-set-tou`,
+and `lab-grid`. Peak supplied **900–982 W** from the battery with zero AC input.
+Native tariff **3** (`off_peak`, A7=`04 03 00 18`) restored grid input after
+approximately **4.84 seconds** and idle after **6.89 seconds** in this trial.
+The command confirmed three fresh grid samples, cleared Standard/count 0,
+then confirmed three more. Original reserve 10%, caps 90/1%, power 1800 W,
+fast charge off and AC output on were checked through independent MQTT/BLE.
+These are observed timings, not transfer guarantees; no waveform was measured.
+
+The guarded control socket, optional authenticated HTTP gateway and terminal
+dashboard expose reserve/plan/grid operations. Activated plans persist until
+changed. Multi-slot/timed operation and reserve-floor behavior remain untested.
+The [101-case firmware follow-up](tariff-energy-followup.md) also recovered
+partial binary energy reports through a logging API; passive decoding is
+available, but units/reset behavior and C2000 equivalence remain unverified.
+
 ## Local data and privacy
 
 The subsequent [native MQTT reconnect and tariff follow-up](c2000-mqtt-reconnect-and-tariff.md)

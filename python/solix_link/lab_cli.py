@@ -14,6 +14,7 @@ from .isolated_ap import IsolatedAP
 from .lab_config import LabConfig, initialize_lab, load_lab, private_write
 from .lab_service import lab_request
 from .protocol import Model, timezone_confer
+from .tou import TouPeriod
 
 
 def add_commands(subcommands) -> None:
@@ -30,7 +31,7 @@ def add_commands(subcommands) -> None:
     run = subcommands.add_parser("lab-run", help="Run an isolated WPA2 AP and local API/NTP/native MQTT endpoint (root required)")
     run.add_argument("--directory", type=Path, required=True)
     run.add_argument("--provision", action="store_true", help="Send local Wi-Fi/API settings through the saved BLE pairing")
-    run.add_argument("--allow-control", action="store_true", help="Enable explicit native charging commands via the private Unix socket")
+    run.add_argument("--allow-control", action="store_true", help="Enable explicit native charging, reserve and tariff commands via the private Unix socket")
     run.add_argument("--duration", type=int, help="Stop after this many seconds; default: run until Ctrl-C")
     run.add_argument("--hostapd", default="hostapd", help="Executable name or absolute path")
     run.add_argument("--dnsmasq", default="dnsmasq", help="Executable name or absolute path")
@@ -39,17 +40,29 @@ def add_commands(subcommands) -> None:
     for command, help_text in (("lab-status", "Query live native MQTT status"),
                                ("lab-readiness", "Read native controller readiness without writing settings"),
                                ("lab-set-charge-power", "Set and confirm C2000 native MQTT charging power"),
-                               ("lab-set-charge-cap", "Set and confirm the C2000 native MQTT upper charge limit")):
+                               ("lab-set-charge-cap", "Set and confirm the C2000 native MQTT upper charge limit"),
+                               ("lab-set-reserve", "Set and confirm backup reserve without changing outputs"),
+                               ("lab-set-tou", "Replace the native hourly schedule; explicit activation persists until changed"),
+                               ("lab-grid", "Clear the plan and confirm return to grid power without toggling AC output")):
         parser = subcommands.add_parser(command, help=help_text)
         parser.add_argument("--directory", type=Path, required=True)
         if command == "lab-set-charge-power":
             parser.add_argument("--watts", type=int, required=True)
         elif command == "lab-set-charge-cap":
             parser.add_argument("--upper", type=int, required=True)
-    serve = subcommands.add_parser("lab-serve", help="Expose native lab monitoring through the existing read-only HTTP/SSE/metrics API")
+        elif command == "lab-set-reserve":
+            parser.add_argument("--reserve", type=int, required=True)
+        elif command == "lab-set-tou":
+            parser.add_argument("--mode", choices=["standard", "time_of_use"], required=True)
+            parser.add_argument("--period", action="append", default=[], metavar="TARIFF:START:END",
+                                help="Repeat up to six times; peak, mid_peak or off_peak with whole local hours, e.g. peak:0:24")
+        elif command == "lab-grid":
+            parser.add_argument("--timeout", type=int, default=30, help="5–120 seconds per power-flow confirmation phase")
+    serve = subcommands.add_parser("lab-serve", help="Expose native lab HTTP/SSE/metrics with optional authenticated commands")
     serve.add_argument("--directory", type=Path, required=True)
     serve.add_argument("--host", default="127.0.0.1")
     serve.add_argument("--port", type=int, default=8765)
+    serve.add_argument("--allow-control", action="store_true", help="Enable HTTP commands; requires SOLIX_HTTP_TOKEN and a control-enabled worker")
 
 
 def _device(args, name: str):
@@ -142,10 +155,24 @@ def dispatch(args) -> None:
     elif args.command == "lab-serve":
         from .lab_monitor import LabMonitorService
         from .server import run_server
-        run_server(LabMonitorService(load_lab(args.directory / "lab.json"), args.directory), args.host, args.port)
+        run_server(LabMonitorService(load_lab(args.directory / "lab.json"), args.directory), args.host, args.port,
+                   allow_control=args.allow_control)
     else:
         command = {"lab-status": "status", "lab-readiness": "readiness", "lab-set-charge-power": "set-charge-power",
-                   "lab-set-charge-cap": "set-charge-cap"}[args.command]
+                   "lab-set-charge-cap": "set-charge-cap", "lab-set-reserve": "set-backup-reserve",
+                   "lab-set-tou": "set-tou-plan", "lab-grid": "return-grid"}[args.command]
         fields = ({"watts": args.watts} if args.command == "lab-set-charge-power" else
                   {"upper": args.upper} if args.command == "lab-set-charge-cap" else {})
+        if args.command == "lab-set-reserve":
+            fields = {"reserve": args.reserve}
+        elif args.command == "lab-grid":
+            fields = {"timeout": args.timeout}
+        elif args.command == "lab-set-tou":
+            periods = []
+            for text in args.period:
+                parts = text.split(":")
+                if len(parts) != 3:
+                    raise ValueError("Period format must be TARIFF:START:END")
+                periods.append(TouPeriod(parts[0], int(parts[1]), int(parts[2])).to_dict())
+            fields = {"periods": periods, "enabled": args.mode == "time_of_use"}
         print(json.dumps(asyncio.run(lab_request(args.directory, command, **fields))))

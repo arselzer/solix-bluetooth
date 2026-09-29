@@ -1,0 +1,19 @@
+set_tou_plan:
+  fields:
+    device_id:
+      required: true
+      selector:
+        device:
+          integration: solix_link
+    enabled:
+      required: true
+      selector:
+        boolean:
+    periods:
+      required: true
+      example:
+        - tariff: off_peak
+          start_hour: 0
+          end_hour: 24
+      selector:
+        object:
