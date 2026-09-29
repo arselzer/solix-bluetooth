@@ -207,12 +207,13 @@ def decode_telemetry(payload: bytes, model: Model | None = None) -> tuple[dict[s
                 0: "standard", 1: "time_of_use", 2: "self_consumption", 3: "custom",
             }.get(mode[2], "unknown")
             metrics["backup_reserve_percentage"] = mode[3]
-        if len(mode) >= 8:
-            # Live 4090 full-field writes showed A6 mirrored at D9[6] and
-            # the schedule slot count at D9[7]. A count of zero disables the
-            # plan even if bytes from a previous slot remain after it.
-            metrics["tou_schedule_parameter"] = mode[6]
-            metrics["tou_schedule_slot_count"] = mode[7]
+        if len(mode) >= 7 and mode[0] == 4:
+            # Retained C2000 records and the recovered C1000 serializer agree:
+            # count at 6, triplets at 7, then a separate 19-byte backup tail.
+            # Require the complete block before exposing a control baseline.
+            count = mode[6]
+            if count <= 6 and len(mode) >= 26 + 3 * count:
+                metrics["tou_schedule_slot_count"] = count
         # C2000 A4 settings layout follows the public Gen 2 field map. These
         # values were also checked against a live read-only 34-byte A4 block.
         number("ac_output_timer_remaining_seconds", 0xA4, 1, 5)

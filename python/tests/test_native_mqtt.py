@@ -11,7 +11,7 @@ def envelope(*, serial="SYNTHETIC", product="A1783", data=None, command="0421", 
     # Synthetic battery, mains/output, and C2000 Standard-mode blocks.
     body = (tlv(0xa5, bytes([4, 25, 0, 90, 100]))
             + tlv(0xa7, bytes.fromhex("04015600015600"))
-            + tlv(0xd9, bytes([4, 0, 0, 10, 90, 1, 4, 0])))
+            + tlv(0xd9, bytes([4, 0, 0, 10, 90, 1, 0]) + bytes(19)))
     if command == "0900":
         body = bytes([status]) + body
     encoded = base64.b64encode(build_packet(DATA_RESPONSE, bytes.fromhex(command), body)).decode()
@@ -28,6 +28,7 @@ def test_decode_native_telemetry_and_filter_device():
     assert result.metrics["ac_input_connected"] == 1
     assert result.metrics["usage_mode"] == "standard"
     assert result.metrics["active_tariff"] == "none"
+    assert result.metrics["tou_schedule_slot_count"] == 0
     assert result.raw_tlvs[0xa5] == bytes([4, 25, 0, 90, 100])
     assert decode_mqtt_telemetry(message, model=Model.C2000_GEN2, expected_serial="DIFFERENT") is None
     assert decode_mqtt_telemetry(message, model=Model.C1000_GEN2) is None

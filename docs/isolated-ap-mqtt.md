@@ -154,7 +154,9 @@ on hardware. Scheduled battery discharge is still unresolved.
 
 The subsequent native cap test confirmed **90→95→90%** with a **300 W**
 charging limit, producing charging telemetry and roughly 315 W above the AC
-load. A 60-second all-day Peak test during charging still reported no active
-tariff. Original settings were restored; a separate read-only MQTT connection
+load. A 60-second trial using the old Peak encoding during charging reported
+no active tariff. The [subsequent audit](c2000-tou-encoding-audit.md) found that
+encoding malformed, so valid scheduled discharge remains untested. Original
+settings were restored; a separate read-only MQTT connection
 confirmed them and battery idle. See the [full trial record](c2000-mqtt-reconnect-and-tariff.md#native-upper-cap-and-charging-state-peak-trial),
 including failed BLE checks and the resulting service-shutdown fix.

@@ -7,6 +7,13 @@ isolated HA-node AP. AC input and output stayed on. Raw captures, configuration,
 credentials and reproducible runners remain in ignored owner-only directories.
 No external Anker API request or firmware write was performed.
 
+**Later correction:** the [schedule audit](c2000-tou-encoding-audit.md) establishes
+that the Peak requests in this report used malformed intervals: `A6` is the
+count and `A7` has no embedded count. Earlier references to a confirmed all-day
+Peak slot must not be treated as validated encoding. Transport, charging and
+clock observations remain useful; failed tariff activation does not establish
+an additional cloud or power-gate requirement.
+
 ## Reconnect and controller readiness
 
 After a fresh BLE baseline, the known local network configuration was reapplied

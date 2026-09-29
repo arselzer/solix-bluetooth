@@ -148,15 +148,13 @@ their transitions have not been independently tested on this station. A timer
 countdown of zero means no active timer in the observed baseline. The C2000
 display timeout was independently changed 30→60→30 seconds with AC output on.
 Its `D9` block also reports `usage_mode`, `active_tariff`,
-`backup_reserve_percentage`, `tou_schedule_parameter`, and
-`tou_schedule_slot_count`. The saved live baseline decodes to `standard`,
-`none`, 10%, and zero slots. These read-only fields help distinguish grid
-bypass from a Time-of-Use Peak period. Guarded C2000 `4090` writes changed and
-restored the reserve, usage mode, and one-slot Peak and Off-Peak schedules,
-each confirmed in telemetry with AC output on. A confirmed all-day Peak slot
-still left the active tariff at `none` and the battery idle for 78 seconds, so
-schedule storage is not yet a verified charging/discharging control. See the
-[discharge-mode field notes](../docs/gen2-protocol.md#battery-discharge-while-ac-output-stays-enabled).
+`backup_reserve_percentage` and `tou_schedule_slot_count`. Count is at `D9[6]`,
+followed by triplets at `D9[7]`; a complete block is required before exposing
+the count. The incorrect `tou_schedule_parameter` field has been removed.
+Guarded C2000 `4090` writes verified reserve and usage-mode changes with AC
+output on. Earlier schedule tests stored malformed intervals because their
+encoder duplicated the count inside `A7`. They did not establish a valid
+all-day Peak plan. See the [encoding correction and next validation](../docs/c2000-tou-encoding-audit.md).
 Anker's [C2000 app guide](https://lp.ankerjapan.com/hubfs/aoos/manual/A1783Guide.pdf)
 specifies Wi-Fi for Time-of-Use. A second guarded Peak test with the correct
 `Europe/Vienna` Bluetooth timezone still did not activate a tariff; it restored
@@ -174,9 +172,9 @@ reconnect using saved settings, and answer status/telemetry requests without
 Bluetooth. See [native MQTT findings](../docs/local-mqtt-investigation.md).
 Time-of-Use activation over isolated Wi-Fi remains unverified.
 The [firmware analysis](../docs/firmware-findings.md) now traces the C1000's
-binding and network-readiness requirements and its different schedule layout.
-Those findings are not yet verified controls; do not reuse a C2000 schedule
-payload on C1000. Native device MQTT remains experimental; the supported local
+binding and network-readiness requirements. Recovered C1000 schedule encoding
+matches the retained C2000 data, but corrected schedule control still requires
+live validation on each model. Native device MQTT remains experimental; the supported local
 MQTT bridge uses BLE to communicate with each station.
 C1000 Gen 2 firmware 1.1.4.3 uses legacy AES-CBC. After updating to 1.1.4.9,
 the same unit switched to Prime AES-GCM and required button pairing with a

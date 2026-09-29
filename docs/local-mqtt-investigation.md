@@ -437,6 +437,11 @@ retrying. Both interrupted attempts and their captures were retained privately.
 
 ## Time-of-Use with MQTT connected
 
+**Encoding correction:** the [later raw-data audit](c2000-tou-encoding-audit.md)
+shows that the trial below sent a malformed schedule. `A6` is the count;
+`A7` contains triplets, without another count. This historical trial confirms
+accepted writes and inactive tariff, not a valid all-day Peak experiment.
+
 After the charging-power trial, a separate fixed sequence used native `0090`
 and confirmed `0890` acknowledgments plus fresh status replies:
 
@@ -444,25 +449,26 @@ and confirmed `0890` acknowledgments plus fresh status replies:
    and idle, reserve 10%, empty schedule, caps 90%/1%, and charging limit 1,800 W.
 2. Set reserve **10 → 85%** (`A5=0155`).
 3. Set mode **Standard → Time-of-Use → Standard** (`A2=0101/0100`) with no slots.
-4. Install one Peak slot covering **00:00–24:00** in Time-of-Use mode.
+4. Send the then-presumed one-slot all-day Peak encoding in Time-of-Use mode.
 5. Restore Standard, clear the schedule, and restore reserve **85 → 10%**.
 
 All `0090` requests use `A1=22` and `FD=00` plus ASCII Unix milliseconds.
 The Peak fields were `A2=0101`, `A3=0100`, `A4=0100`, `A6=0104`,
-`A7=0401010018`; `D9[7:11]` confirmed count/slot `01010018`. The baseline
-schedule parameter was **0**, so the clear request restored `A6=0100` and
+`A7=0401010018`; `D9[6]` actually reported **four slots**, with first triplet
+`010100` (Peak, start hour 1, end hour 0). The baseline count was **0**,
+so the clear request restored `A6=0100` and
 `A7=0400`. An initial precheck expecting parameter 4 stopped without writing;
 the retry and both restoration paths were corrected to the actual baseline.
 
 **Result:** 12 Peak-period samples spanning 25.8 seconds still reported tariff
 `none`, battery `idle`, and mains present. AC output stayed enabled, supplying
-approximately 881–1,573 W during those samples. This establishes native
-schedule storage and restoration, **not working scheduled discharge**. The
-native radio reported a connected server before the writes, so missing MQTT
-alone no longer explains the inactive tariff on this C2000.
+approximately 881–1,573 W during those samples. This establishes accepted
+native writes and baseline restoration, **not working scheduled discharge**.
+The native radio reported a connected server, but malformed intervals prevent
+conclusions about additional activation requirements.
 
 Final native readback and a fresh BLE session after AP shutdown confirmed
-Standard, no tariff, reserve 10%, parameter 0, zero slots, caps 90%/1%, charging
+Standard, no tariff, reserve 10%, zero slots, caps 90%/1%, charging
 limit 1,800 W, and AC output on. The complete sequence, including the failed
 precheck, is retained privately. No AC output-control request was sent.
 

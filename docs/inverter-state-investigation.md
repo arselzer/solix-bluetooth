@@ -9,6 +9,8 @@ implementation. Its AC output supplies servers and must remain enabled.
 
 This continues [the native power investigation](mqtt-power-offline-followup.md)
 and explains the separate power gate used by the recovered tariff selector.
+The subsequent [DSP producer trace](inverter-dsp-investigation.md) identifies
+register `0100.bit0` as qualified AC input in the recovered C1000 ACDC image.
 
 ## The missing inverter-state writer is an internal receive parser
 
@@ -51,7 +53,7 @@ synthetic; actual UART timing, queued callbacks and hardware are not tested.
 
 | Register | C1000 firmware evidence |
 | --- | --- |
-| `0100`, bit 0 | Required by the activation predicate; physical meaning remains unresolved. |
+| `0100`, bit 0 | Required by the activation predicate; the later DSP trace identifies qualified AC input on C1000. |
 | `0100`, bit 2 | Charger feedback: compared with the main controller's charging command in `080164b8`; recovery code names a mismatch “AC charging off from dsp”. |
 | `0101`, bits 0–13 | Must be clear for activation. Bits 14–15 are ignored by this predicate. |
 | `0101`, bit 6 | Fault handler `08005c20` identifies AC discharge overload. |
@@ -76,8 +78,9 @@ so a subsequent healthy sequence takes 11 samples. Do not describe this as
 exactly ten samples or infer its duration without the sampling cadence.
 
 The callback updates tariff gate `200004be.bit0` and queues an event. These
-results still do not identify `0100.bit0` with wall power, output enable,
-bypass or charging. Previously decoded mains/output fields are independent.
+results alone do not identify the bit's physical meaning. The later DSP trace
+establishes input voltage/frequency/protection qualification; it remains
+independent of output enable, bypass selection and charger feedback.
 
 ## Saved fault logs can contain the missing words
 
@@ -160,8 +163,8 @@ expired sessions. No such live experiment was performed in this follow-up.
 
 The established native status/readiness/connectivity queries remain the
 current monitoring route. Inverter-controller reception is now mapped, but
-fresh remote exposure of the full gate and the physical meaning of its bit 0
-remain open questions.
+fresh remote exposure of the full gate remains unresolved. Bit 0's producer is
+now mapped in the C1000 DSP; C2000 equivalence remains an open question.
 
 ## Private reproducibility
 

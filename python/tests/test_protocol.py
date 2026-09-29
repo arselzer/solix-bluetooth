@@ -187,7 +187,7 @@ def test_c2000_readonly_version_and_expansion_fields():
     settings[16:18] = (30).to_bytes(2, 'little')
     # C0 has a variable serial prefix; only its connection flag is exposed.
     no_pack = bytes((17,)) + b"X" * 17 + bytes(12) + b"\x00" + bytes(4)
-    tou = bytes.fromhex('040001555a010401010018')
+    tou = bytes.fromhex('040001555a0101010018') + bytes(19)
     reading = (tlv(0xA4, bytes(settings)) + tlv(0xF9, versions)
                + tlv(0xC0, no_pack) + tlv(0xD9, tou))
     metrics, _ = decode_telemetry(reading, Model.C2000_GEN2)
@@ -201,9 +201,27 @@ def test_c2000_readonly_version_and_expansion_fields():
     assert metrics["expansion_battery_count"] == 0
     assert metrics["usage_mode"] == "time_of_use"
     assert metrics["backup_reserve_percentage"] == 85
-    assert metrics["tou_schedule_parameter"] == 4
+    assert "tou_schedule_parameter" not in metrics
     assert metrics["tou_schedule_slot_count"] == 1
     assert "software_version" not in decode_telemetry(tlv(0xF9, b"\x01\x02"), Model.C2000_GEN2)[0]
+
+
+@pytest.mark.parametrize("count", [0, 1, 4, 6])
+def test_c2000_tou_count_precedes_triplets_and_backup_tail(count):
+    # The first tariff byte is deliberately different from the slot count.
+    block = bytes([4, 0, 0, 10, 90, 1, count]) + bytes([3, 0, 24]) * count + bytes(19)
+    metrics, _ = decode_telemetry(tlv(0xD9, block), Model.C2000_GEN2)
+    assert metrics["tou_schedule_slot_count"] == count
+    assert "tou_schedule_parameter" not in metrics
+    truncated, _ = decode_telemetry(tlv(0xD9, block[:-1]), Model.C2000_GEN2)
+    assert "tou_schedule_slot_count" not in truncated
+
+
+@pytest.mark.parametrize("block", [bytes([4, 0, 0, 10, 90, 1, 7]) + bytes(40),
+                                    bytes([1, 0, 0, 10, 90, 1, 0]) + bytes(19)])
+def test_c2000_tou_invalid_count_or_type_is_not_a_control_baseline(block):
+    metrics, _ = decode_telemetry(tlv(0xD9, block), Model.C2000_GEN2)
+    assert "tou_schedule_slot_count" not in metrics
 
 
 def test_wifi_provisioning_packets_use_ascending_tags():

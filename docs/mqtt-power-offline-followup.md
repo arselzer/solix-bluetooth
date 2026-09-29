@@ -11,6 +11,10 @@ not establish that every C1000 implementation detail applies to it.
 See [the live reconnect and tariff experiments](c2000-mqtt-reconnect-and-tariff.md)
 for C2000 results. Native status, readiness and charging-power control work;
 the tested Peak plans still did not activate a tariff or discharge the battery.
+The [later encoding audit](c2000-tou-encoding-audit.md) shows those plans were
+malformed, correcting their earlier interpretation as valid all-day slots.
+The [DSP producer trace](inverter-dsp-investigation.md) subsequently identifies
+the C1000 gate input as qualified AC input; neither result proves C2000 discharge.
 
 ## Clock semantics are more specific than a timestamp acknowledgement
 

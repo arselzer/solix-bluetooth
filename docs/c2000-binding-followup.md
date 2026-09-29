@@ -7,6 +7,11 @@ joined the existing isolated access point and used the local API and MQTT
 broker. The network namespace had no default route. No official Anker API
 request was made.
 
+The [later schedule audit](c2000-tou-encoding-audit.md) found that the Peak trial
+in this report used malformed slot encoding. Its inactive tariff cannot isolate
+binding, clock or power-gate behavior. Local API/MQTT transport observations are
+independent of that correction.
+
 Small API responses now use `Content-Length` and one complete JSON body. Only
 the large `get_mqtt_info` certificate response retains the previously verified
 one-byte HTTP chunk workaround. This change addresses the recovered C1000
@@ -37,7 +42,7 @@ or output setting was written during this follow-up.
 1. Establish a Bluetooth session from the HA node while the isolated access
    point is absent. Record telemetry and saved network configuration.
 2. Require the baseline: mains present, AC output enabled, Standard mode, no active
-   tariff, zero schedule slots, schedule parameter 0, reserve 10%, charging
+   tariff, zero schedule slots (`D9[6]=0`), reserve 10%, charging
    limits 90% / 1%, and AC charging power 1,800 W.
 3. Keep that session open while starting the isolated access point, API, and
    existing NTP service. Resend the existing `4024` network credentials and

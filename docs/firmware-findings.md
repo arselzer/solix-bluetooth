@@ -5,6 +5,10 @@ includes additional offline executions and guarded C2000 hardware observations.
 The [parallel power-control analysis](mqtt-power-offline-followup.md) adds
 73 actual-code cases for clock synchronization, complete tariff selection and
 native charge-limit handlers, including reserve side effects and diagnostic limits.
+The [schedule encoding audit](c2000-tou-encoding-audit.md) corrects the earlier
+C2000 slot layout and invalidates claims that those trials installed valid
+all-day Peak plans. The [DSP investigation](inverter-dsp-investigation.md)
+verifies all 159 inverter image blocks and traces the AC-input readiness producer.
 
 ## Scope and evidence
 
@@ -37,8 +41,8 @@ BLE session encryption removed when reconstructing the transfer.
 | --- | --- | ---: | --- |
 | MainMcu | `1.1.4.9` | 198,656 | CRC-16/MODBUS matches `9e8d` |
 | MainBMS | `1.0.4.2` | 104,448 | CRC-16/XMODEM matches `b5cb` |
-| dspACDC | `5.0.6.0` | 80,896 | Decoded header; checksum method unresolved |
-| dspDCDC | `5.0.6.0` | 87,040 | Decoded header; checksum method unresolved |
+| dspACDC | `5.0.6.0` | 80,896 | All 76 nested record CRC-16/MODBUS checks match; whole-component check unresolved |
+| dspDCDC | `5.0.6.0` | 87,040 | All 83 nested record CRC-16/MODBUS checks match; whole-component check unresolved |
 | lcd | `0.1.9.6` | 925,696 | Sum of decoded bytes matches `034edbc6` |
 | SW2505PD | `3.1.0.255` | 91,685 | Decoded vector table; checksum method unresolved |
 
@@ -114,10 +118,11 @@ from the C1000 code. Changing the controller's binding flags directly has not
 been tested and is not exposed as a control.
 
 A later C2000 native MQTT trial returned AP connected and server connected
-through `0027`/`0028`, then accepted a reserve change and all-day Peak schedule
+through `0027`/`0028`, then accepted a reserve change and the then-presumed all-day Peak schedule
 over `0090`. Twelve samples over 25.8 seconds still showed tariff `none` and
 idle battery; all settings were restored and confirmed over BLE. Thus a working
-MQTT connection alone is insufficient on the tested C2000. The radio query does
+MQTT connection did not activate the malformed schedule. The later encoding
+audit prevents conclusions about activation of a valid plan. The radio query does
 not directly expose the controller's binding flag or cached network status.
 See the [native TOU trial](local-mqtt-investigation.md#time-of-use-with-mqtt-connected)
 and the bind-callback replay there before attributing this to any one gate.
@@ -182,7 +187,7 @@ emulated. Thus **mains present and output enabled do not by themselves confirm
 the tariff power gate**, even in the recovered C1000 implementation. C2000
 implementation equivalence remains unverified.
 
-### C1000 and C2000 schedule layouts differ
+### Schedule layout: corrected interpretation
 
 The C1000 command table registers `0090` at `0x0800c7c4`. Its handler reads:
 
@@ -190,16 +195,19 @@ The C1000 command table registers `0090` at `0x0800c7c4`. Its handler reads:
 | --- | --- |
 | `A2` | Usage mode from the byte after the value's type marker |
 | `A5` | Backup reserve percentage |
-| `A6` | **Slot count**, not the C2000's separate schedule parameter |
+| `A6` | **Slot count** |
 | `A7` | Binary slot triplets: tariff, start hour, end hour; no embedded count |
 
 Its stored structure has room for six triplets. The `D9` telemetry builder at
 `0x080190d4` writes active tariff at byte 1, mode at 2, reserve at 3, upper/lower
 charge caps at 4/5, **slot count at 6**, and triplets beginning at 7.
-The tested C2000 instead reports a parameter at byte 6, count at 7, and
-triplets from 8. Do not reuse its schedule encoder or those offsets for C1000.
-C1000 schedule writes and tariff-label meanings beyond the observed code still
-need hardware validation; no general schedule API is enabled.
+The retained C2000 data supports the **same layout**, correcting our earlier
+extra-parameter interpretation. All 244 audited native status records satisfy
+`length = 26 + 3 * D9[6]`, and 17 retained request/readback pairs reproduce the
+recovered C1000 schedule serialization. Earlier requests duplicated a count in
+`A7`, producing malformed slots. See the [complete audit](c2000-tou-encoding-audit.md).
+Corrected C2000 storage/activation and C1000 schedule writes still need hardware
+validation; no general schedule API is enabled.
 
 ## Additional control candidates
 

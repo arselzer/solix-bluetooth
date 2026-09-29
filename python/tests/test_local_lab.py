@@ -152,10 +152,11 @@ async def fake_station(config, directory, port, *, retained_first=False, reserve
                     if cap_behavior == "reserve_changed":
                         reported_reserve += 1
                 elif command == "0100":
+                    schedule_tail = bytes(18 if cap_behavior == "truncated_schedule" else 19)
                     fields = (tlv(0xA5, bytes([4, 25, 0, 90, 100]))
                               + tlv(0xA7, bytes.fromhex("04015600015600"))
                               + tlv(0xA4, bytes(5) + watts.to_bytes(2, "little"))
-                              + tlv(0xD9, bytes([4, 0, 0, reported_reserve, upper, 1, 0, 0])))
+                              + tlv(0xD9, bytes([4, 0, 0, reported_reserve, upper, 1, 0]) + schedule_tail))
                 elif command == "0089":
                     fields = tlv(0xA1, b"\x34")
                 else:
@@ -229,6 +230,7 @@ def test_tls_mqtt_native_controls_freshness_and_cleanup(lab):
     (95, "apply", ValueError, "backup reserve"),
     (10, "ignored", RuntimeError, "not confirmed"),
     (10, "reserve_changed", RuntimeError, "Another setting changed"),
+    (10, "truncated_schedule", RuntimeError, "Missing fresh charge-limit baseline"),
 ])
 def test_native_charge_cap_rejects_reserve_clamping_and_false_confirmation(lab, reserve, behavior, error, match):
     async def run():
@@ -244,7 +246,7 @@ def test_native_charge_cap_rejects_reserve_clamping_and_false_confirmation(lab, 
             with pytest.raises(error, match=match):
                 await server.set_charge_cap(90 if reserve == 95 else 95)
             writes = [frame for frame in captured if frame.command.hex() == "0103"]
-            assert len(writes) == (0 if reserve == 95 else 1)
+            assert len(writes) == (0 if reserve == 95 or behavior == "truncated_schedule" else 1)
         finally:
             writer.write(mqtt_packet(0xE0, b""))
             await writer.drain()
