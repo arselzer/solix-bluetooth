@@ -179,11 +179,13 @@ C2000 controller support is unknown.
 - The [native local MQTT investigation](local-mqtt-investigation.md) now includes
   executable parser/startup replays, credential storage bounds, a reproduced
   plain-HTTP short-read failure, embedded TLS credential parser/getter checks,
-  and radio diagnostic/configuration queries. C2000 reports an empty app/service
-  ID during setup despite an `A6` service field, and zero MQTT errors without
-  connecting. Trace its activation/storage path next, with a C1000 hardware
-  comparison when reachable. C1000 emulation confirms `A6` is correct for its
-  `4025` parser; do not substitute the different `4038` layout.
+  and radio diagnostic/configuration queries. The actual TLV byte parser at
+  `0x4204f9a6` explains the empty service ID: it scans ascending tags and skips
+  `A6/A7/A8` after an earlier `C3`. Correcting `4025` order made C2000 store the
+  service ID and connect to local TLS MQTT. Saved credentials also survived AP
+  restart; MQTT status and telemetry-stream requests worked with AC output on.
+  Check the controller's ready state and tariff activation next. C1000 still
+  needs a hardware comparison; do not substitute the different `4038` layout.
 - When C1000 is reachable again, validate its own schedule layout and benign
   display/alert settings with baseline, telemetry, and restoration checks.
 - Map the energy counters for read-only monitoring.

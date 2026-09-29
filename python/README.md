@@ -101,7 +101,11 @@ the empty API responses did not start MQTT. The C2000's isolated SSID may remain
 saved while that AP is off. A later local API probe returned generated MQTT
 certificates and binding acknowledgements; the C2000 then requested an unbind
 and never looked up or connected to the local broker. Repeating setup with the
-real app account ID from private phone logs produced the same unbind.
+real app account ID from private phone logs produced the same unbind. These
+earlier failures were followed by a successful trial: fixing ascending TLV
+order in `4025` allowed the C2000 to connect to the local TLS MQTT broker,
+reconnect using saved settings, and answer status/telemetry requests without
+Bluetooth. See [native MQTT findings](../docs/local-mqtt-investigation.md).
 Time-of-Use activation over isolated Wi-Fi remains unverified.
 The [firmware analysis](../docs/firmware-findings.md) now traces the C1000's
 binding and network-readiness requirements and its different schedule layout.
@@ -247,7 +251,8 @@ Peak scheduling and battery discharge with mains connected remain unverified.
 `mqtt-bridge` connects to the stations over Bluetooth and publishes their
 telemetry to a broker on the same node or LAN. The stations themselves do not
 connect to this broker. This offers MQTT monitoring and the verified C1000
-settings while direct station-to-MQTT binding remains under investigation.
+settings through the packaged CLI; native MQTT currently requires the separate
+experimental lab setup described below.
 
 ```bash
 solix-gen2 mqtt-bridge --config /path/to/config.json \
@@ -326,7 +331,39 @@ and AC output still enabled. The 500 W setting limits charging, while total AC
 input also includes the AC load supplied to the servers. The charge cap decides
 whether mains charging may resume at the current battery level; lowering it
 does not force the battery to supply AC loads. This is a local BLE-to-MQTT
-bridge: direct MQTT from the station remains unverified.
+bridge. Native C2000 MQTT monitoring has since been demonstrated separately;
+native charging commands remain untested.
+
+### Experimental native MQTT decoding
+
+The C2000 Gen 2 (main 2.1.6.4) connected directly to a local TLS MQTT listener
+on an isolated network, including a run requiring its client certificate.
+It reconnected with saved settings and answered `0100` status and `0057`
+telemetry-stream requests without Bluetooth. The local API bootstrap and
+broker probe are research tools; there is no packaged native provisioning
+service yet. C1000 native MQTT and native charging/TOU controls remain unverified.
+
+Use the decoder with a broker client or Home Assistant coordinator:
+
+```python
+from solix_gen2 import Model, decode_mqtt_telemetry
+
+update = decode_mqtt_telemetry(
+    message.payload,
+    model=Model.C2000_GEN2,
+    expected_serial=configured_serial,
+)
+if update is not None:
+    coordinator.async_set_updated_data(update.metrics)
+```
+
+It accepts unencrypted native `0421` and successful `0900` envelopes, verifies
+the SOLIX checksum, and returns `None` for other devices/nontelemetry messages.
+Malformed or unsupported encrypted payloads raise `ValueError`. Monitor
+freshness and availability in your broker client; cached telemetry alone does
+not establish UPS availability. `raw_tlvs` may contain device identifiers and
+should remain private. The separate radio `state_info.battery` field is not
+the power-station charge percentage.
 
 ### Experimental Gen 2 Wi-Fi join and C1000 API setup
 
@@ -367,7 +404,11 @@ by the station. The test station rejected a self-signed certificate with TLS
 the passphrase. The configured client ID is used as the Wi-Fi binding account
 field unless `--account-id` is supplied. `wifi-setup` returns the BLE reply
 bytes, `4824=00` and `4825=26` on the tested C1000. Their complete meanings
-are not known; verify association and API traffic separately.
+are not known; verify association and API traffic separately. Those C1000
+results predate the `4025` ordering fix: the builder now emits ascending TLV
+tags so the firmware does not silently skip service/model/timezone fields.
+This corrected layout established native MQTT on C2000 using a private probe;
+the corrected C1000 CLI workflow still needs a hardware retest.
 
 Python callers can use `await monitor.join_wifi(...)` or
 `await monitor.send_wifi_provisioning(...)` with the same parameters. The
@@ -381,7 +422,8 @@ For offline protocol research, `solix_gen2.mqtt_credentials` provides
 device endpoint's serial-derived AES-256-CBC envelope, verified against a
 saved C1000 response and a synthetic OpenSSL vector. They perform no network
 requests and support the observed 17-character serial format. They do not
-complete station binding; native station-to-MQTT setup remains unverified.
+complete station binding; the successful C2000 lab setup also supplied a
+local API, DNS/NTP, and TLS MQTT broker.
 See the [credential and firmware findings](../docs/gen2-protocol.md#device-mqtt-credential-envelope).
 
 The read-only server provides:

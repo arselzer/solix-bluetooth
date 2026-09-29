@@ -412,9 +412,12 @@ class Session:
         self, account_id: str, api_url: str, posix_timezone: str,
         iana_timezone: str, *, c3_value: str = 'A2', allow_http: bool = False,
     ) -> bytes:
-        """Build the observed C1000 4025 cloud endpoint and timezone write.
+        """Build a C1000 4025 cloud endpoint and timezone write.
 
         The meaning of C3 and the 4825 response are not yet established.
+        Tags must be ascending: the radio parser silently skips a field that
+        follows a higher tag. The earlier reconstructed capture's C3 position
+        hid the service/model/timezone fields; keep this opaque field last.
         This method does not configure or emulate the remote API.
         """
         self._require_c1000_prime_control()
@@ -428,9 +431,9 @@ class Session:
         payload = (tlv(0xA1, self._timestamp()) + tlv(0xA2, account_id.encode('ascii'))
                    + tlv(0xA3, api_url.encode('ascii'))
                    + tlv(0xA4, posix_timezone.encode('ascii'))
-                   + tlv(0xC3, c3_value.encode('ascii'))
                    + tlv(0xA6, b'anker_power') + tlv(0xA7, b'A1763')
-                   + tlv(0xA8, iana_timezone.encode('ascii')))
+                   + tlv(0xA8, iana_timezone.encode('ascii'))
+                   + tlv(0xC3, c3_value.encode('ascii')))
         return self._send(DATA_REQUEST, '4025', payload)
 
     def feed(self, data: bytes) -> ProtocolUpdate:

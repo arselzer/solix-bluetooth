@@ -2,10 +2,18 @@
 
 ## Status and scope
 
-**Native station MQTT has not connected to the local broker.** The working
-Python [MQTT bridge](../python/README.md) uses Bluetooth to communicate with the
-station. The investigation here concerns the station's own Wi-Fi MQTT client,
-which may satisfy the network-readiness gate for Time-of-Use operation.
+**Native local MQTT works on the C2000 Gen 2 (main 2.1.6.4).** On 2026-09-29,
+correcting provisioning TLV order produced TLS, MQTT subscription, and live
+power telemetry on the isolated HA-node network. The station subsequently
+reconnected without Bluetooth and answered MQTT status/telemetry requests.
+AC output and charging settings stayed unchanged. Native MQTT charging writes
+and Time-of-Use activation remain untested with this working connection.
+
+The packaged Python [MQTT bridge](../python/README.md#local-mqtt-bridge) uses
+Bluetooth; native station MQTT currently requires the private lab API/broker
+setup. A public native telemetry decoder is available. Earlier failed trials
+below are retained as evidence; the [TLV-order correction](#provisioning-order-fix)
+supersedes the empty-service-ID investigation.
 
 On 2026-09-29 we replayed code from the retained **C1000 Gen 2 main update
 1.1.4.9, radio application v0.3.3.0**. We then tested an HTTP framing change on
@@ -251,7 +259,7 @@ AP/MQTT state combinations. These execute the original handlers with host
 substitutes for configuration access, password transformation, TLV output, and
 timer creation; they do not validate physical flash contents or encryption.
 
-### C2000 app ID remains empty during activation
+### Earlier trial: C2000 app ID remains empty during activation
 
 A standalone read after the previous setup cleanup returned empty SSID,
 password, and app/service ID, with the local API URL still present. A second
@@ -273,8 +281,9 @@ The activation field mapping was checked independently in C1000 code. Three
 offline executions ran parser `0x420537d8`, adapter `0x42052e48`, and the start
 of activation at `0x42049092`, stopping at the configuration setter. `A6` reaches
 `device_app_id`; substituting `A5` or omitting the service field leaves it empty.
-This matches the earlier captured C1000 app request. It does **not** validate
-the C2000 parser. A different command, `0f/4038`, uses `A5` for the service ID;
+This agrees with the reconstructed C1000 field mapping, but the host TLV-lookup
+substitute did not test actual wire order. It does **not** validate the C2000
+parser. A different command, `0f/4038`, uses `A5` for the service ID;
 its layout must not be substituted into `4025`. No `4038` write was sent.
 
 The configuration readback is also distinct from `10/403b`, labeled
@@ -286,6 +295,96 @@ zero slots, 90%/1% caps, and a 1,800 W charging limit. They sent no charging,
 output, scheduling, or firmware-update command. The AP was stopped, Wi-Fi
 returned administratively down, and temporary HA copies were deleted after
 archive hash verification. No request went to Anker's official API.
+
+## Provisioning order fix
+
+The recovered C1000 byte parser at `0x4204f9a6` scans candidate TLV tags in
+ascending order. After consuming a tag, it never returns to smaller tags.
+Our `4025` builder emitted `A1 A2 A3 A4 C3 A6 A7 A8`, so the parser skipped
+the service ID, model, and IANA timezone following `C3`. Correct order is:
+
+```text
+A1 A2 A3 A4 A6 A7 A8 C3
+```
+
+Three additional offline executions run the actual byte parser/getter and
+activation path, instead of substituting TLV lookup. The old order leaves the
+service ID empty; sorted fields reach the setter with `anker_power`; omitting
+the opaque `C3` field also succeeds. Its meaning remains unknown. The original
+phone plaintext was reconstructed from inferred keystream bytes, so neither
+`C3` nor its apparent placement is a verified requirement of the official app.
+The Python builder preserves that field at the end and tests ascending order.
+
+Changing only field order on C2000 made configuration readback report the
+11-byte service ID. About 30 seconds after `4025`, the station established
+TLS 1.2, sent MQTT CONNECT, subscribed, and published telemetry. The local API
+also saw `/equipment/agreement/get_device_point_switch` and
+`/equipment/devicemanage/update_info`. Early server-status reads at roughly
+3 and 15 seconds were still zero, before the successful MQTT connection.
+
+BLE disconnected before the final in-session check; its cause is unproven.
+A fresh BLE session subsequently confirmed saved configuration and unchanged
+AC input/output, Standard mode, no tariff, zero slots, 90%/1% caps, and 1,800 W
+charging limit. The API used the prior one-byte HTTP chunks and lab-generated
+credentials. This trial establishes the order fix without showing whether
+the HTTP workaround is still necessary on this C2000.
+
+## Native telemetry and read requests
+
+A second trial restarted the same isolated AP/API/broker **without Bluetooth
+or provisioning**. The station reconnected after about 80 seconds in this
+observation, using saved credentials, and did not repeat MQTT-info/bind calls.
+All decoded samples retained the baseline power settings. The AP namespace
+had no default route; no official API request was made.
+
+| MQTT topic | Observed purpose |
+| --- | --- |
+| `cmd/anker_power/A1783/{serial}/req` | Station command subscription |
+| `dt/anker_power/A1783/{serial}/param_info` | Power-station telemetry |
+| `dt/anker_power/A1783/{serial}/state_info` | Radio/network information |
+
+Messages have an outer JSON `head` and a **JSON string** in `payload`. Telemetry
+payloads contain `pn`, `sn`, and Base64 `data`. The decoded data is an ordinary
+SOLIX packet with pattern `03010f`, command `0421`, and the existing TLV/XOR
+framing. It is not encrypted with the BLE session key. MQTT transport is TLS.
+`state_info.battery` reported 100 while the station reported 90%: use the `A5`
+power telemetry field for UPS charge, not that radio field. Raw TLVs can
+contain serial numbers and must remain private.
+
+Two fixed read requests were sent only after confirming the safe baseline:
+
+| Request → response | Request TLVs | Result |
+| --- | --- | --- |
+| `0100` → `0900` | `A1=22`, `FE=03` + Unix seconds LE32 | Status `00` followed by full telemetry TLVs |
+| `0057` → `0857`, then `0421` | `A1=22`, `A2=0101`, `A3=03` + duration LE32, `FE` as above | Acknowledgment, then fresh telemetry roughly every three seconds; requested 60 seconds |
+
+The outgoing SOLIX pattern is `03000f`. The independently built JSON envelope
+uses head `cmd=17`, `cmd_status=2`, `sign_code=1`, version `1.0.0.1`, client/session
+IDs, sequence, seed, timestamp, `device_pn`, and `device_sn`; the inner JSON
+string carries `device_sn`, `account_id`, and Base64 `data`. The test used the
+privately retained account ID. Whether an arbitrary/local account ID works
+for native MQTT is **not established**. This is a verified envelope, not a
+claim that every field is required. No output, charge, or schedule write was sent.
+
+`solix_gen2.decode_mqtt_telemetry` decodes `0421` reports and successful `0900`
+status replies, checks framing/checksum, and optionally filters the serial.
+It does not connect, provision, or determine freshness. The lab listener is
+a minimal MQTT protocol probe, not a production broker or supported service.
+
+### Client certificate verification
+
+The first two trials did not request a client certificate (`CERT_NONE` on the
+server). A third restart loaded only the generated lab CA and required a
+client certificate (`CERT_REQUIRED`). TLS 1.2 succeeded with a peer certificate
+present, followed by MQTT subscription, status response, and the requested
+telemetry stream. Fifteen readings, including the status reply, decoded with
+unchanged baseline settings. This verifies a usable saved client certificate
+and key under the lab CA; negative tests for station-side hostname/CA checks
+were not performed. The broker used only lab-issued TLS credentials.
+
+All temporary AP/API/NTP/broker services were stopped afterward. Wi-Fi returned
+to the HA host's normal namespace, administratively down, and copied lab
+credentials were removed after the private archive hash matched locally.
 
 ## Retained evidence and next checks
 
@@ -312,10 +411,18 @@ Private artifacts remain ignored and must not be published:
   C1000 activation-field checks, with OS, identity, and TLV-lookup substitutes.
 - `.solix-private/isolated-ap/config-readback-20260929/`: guarded active readbacks,
   full notification capture, API/NTP logs, packet capture, and baseline checks.
+- `emulate_activation_wire.py` / `activation-wire-emulation-results.json`:
+  three actual byte-parser executions exposing the ordering error.
+- `.solix-private/isolated-ap/ordered-activation-20260929/`: corrected setup,
+  TLS/MQTT capture, and fresh BLE verification archives.
+- `.solix-private/isolated-ap/native-mqtt-20260929/`: passive reconnect,
+  MQTT status/stream requests, raw envelopes, and unchanged-setting checks.
+- `.solix-private/isolated-ap/native-mtls-20260929/`: repeated passive trial
+  with client-certificate verification, 15 decoded readings, and packet/API logs.
 
-Next, investigate why the C2000 readback has no app/service ID despite the `A6`
-provisioning field, distinguishing model-specific parsing, storage, and readback
-semantics. A C1000 hardware comparison and C2000 firmware would help separate
-those possibilities. Worker/task state and actual credential storage remain
-unverified. Preserve the response framing and credential checks when testing
-another hypothesis so results stay comparable.
+Next, verify the controller's network-ready state with native MQTT connected,
+then investigate tariff activation with guarded baseline/restore checks and
+AC output continuously enabled. Package local credential/bootstrap handling
+and broker integration before presenting native MQTT as an installable service.
+Repeat on C1000 when reachable; its native connection remains unverified.
+Separate experiments can minimize HTTP framing and account-ID requirements.

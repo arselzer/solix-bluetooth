@@ -206,7 +206,7 @@ def test_c2000_readonly_version_and_expansion_fields():
     assert "software_version" not in decode_telemetry(tlv(0xF9, b"\x01\x02"), Model.C2000_GEN2)[0]
 
 
-def test_c1000_wifi_provisioning_packets_match_captured_field_order():
+def test_wifi_provisioning_packets_use_ascending_tags():
     session = Session(Model.C1000_GEN2, owner_user_id='a' * 40)
     session._secret = bytes(range(32))
     session.ready = True
@@ -234,7 +234,7 @@ def test_c1000_wifi_provisioning_packets_match_captured_field_order():
     ))
     assert cloud.command.hex() == '4025'
     fields = parse_tlvs(session._crypt(cloud.payload, False))
-    assert list(fields) == [0xA1, 0xA2, 0xA3, 0xA4, 0xC3, 0xA6, 0xA7, 0xA8]
+    assert list(fields) == [0xA1, 0xA2, 0xA3, 0xA4, 0xA6, 0xA7, 0xA8, 0xC3]
     assert fields[0xA3] == b'https://example.invalid/'
     assert fields[0xC3] == b'A2'
     assert fields[0xA6] == b'anker_power'

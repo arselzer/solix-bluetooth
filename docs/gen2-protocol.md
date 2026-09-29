@@ -12,6 +12,12 @@ These notes record observations made on one C1000 Gen 2 (A1763) and one C2000 Ge
 
 The official Anker app performed the C1000 firmware update from 1.1.4.3 to 1.1.4.9. A user with 1.1.4.3 must select `legacy` in the browser or CLI config. The browser and Python package default to `prime` for current tested firmware. The C2000 main version was decoded directly from its live BLE `F9` block; it has not been cross-checked against the app's device information screen. Protocol selection for this C2000 is Prime only.
 
+**Native MQTT update:** C2000 main 2.1.6.4 now connects directly to a local
+TLS MQTT listener on the isolated network, including client-certificate
+validation, saved-configuration reconnect, and status/telemetry requests.
+This is separate from the BLE bridge. See [native MQTT findings](local-mqtt-investigation.md).
+Native charging writes and tariff activation remain untested with this connection.
+
 ## Pairing and connection
 
 Prime negotiation observed: `4001/4801`, `4003/4803`, `4029/4829`, `4005/4805`, `4021/4821` for P-256 key exchange, `4022/4822`, then `4027/4827` for registration. The registration payload contains a 40-character hexadecimal client ID. A newly generated ID produced response byte `09` on both stations. **One short press of the main power button**, followed by a `4027` retry on the same BLE connection, produced response byte `00`; telemetry then started after `4100`. Reuse of the ID worked on reconnect without another press. Do not hold the button: [Anker's C2000 guide](https://salesforce-knowledge-download.s3.us-west-2.amazonaws.com/000032532/en_US/000032532.pdf) distinguishes its short pairing press from a long power-off press.
@@ -149,7 +155,8 @@ Second, with a noncritical **771–772 W AC load** attached, the C1000 AC chargi
 
 On the C1000 only, the user entered an isolated 2.4 GHz AP's credentials in the Anker app twice. The AP was in a dedicated network namespace on the Home Assistant node, with only a Wi-Fi interface, loopback, and the AP subnet. It had no default route. The station associated, completed WPA2, obtained a DHCP lease, and asked DNS for `time.nist.gov` and `ankerpower-api-eu.anker.com`. With no DNS answer for either name, it made no HTTPS request and the app reported that it could not connect to the server. The C2000 was untouched. Full HCI, packet, DNS, and AP logs remain only in the ignored private directory.
 
-The app's C1000 Prime writes in this capture show two provisioning commands:
+The app's C1000 Prime writes contain two provisioning commands. The following
+table records the initial plaintext reconstruction, not a verified wire order:
 
 | Command | Plaintext TLVs | Observed response |
 | --- | --- | --- |
@@ -157,6 +164,12 @@ The app's C1000 Prime writes in this capture show two provisioning commands:
 | `4025` | `A1` timestamp, `A2` same account ID, `A3` HTTPS API base URL, `A4` POSIX timezone, `C3` two-byte value, `A6` service name, `A7` model code, `A8` IANA timezone | Immediate `4825` byte `26`; exact meaning unconfirmed |
 
 The app's `4025` API URL matched the hostname the station queried roughly one second after the `4825` reply. These fields were recovered from the local HCI trace by comparing encrypted traffic with known telemetry in the same Prime session. The account ID, SSID, passphrase, and complete decrypted requests remain private.
+
+**Correction:** the firmware byte parser requires ascending tags. Emit
+`A1 A2 A3 A4 A6 A7 A8 C3`; placing `C3` before `A6` silently loses the service,
+model, and IANA timezone. Correcting this in our packet established C2000 MQTT.
+The reconstructed opaque `C3` field and its placement are not confirmed official
+app requirements. Earlier failed probes below used the old order.
 
 The Python library then sent `4024` and `4025` directly from the laptop to the C1000. The station replied `00` and `26`, joined the same isolated AP, and obtained DHCP; AC output remained on. In the first direct test, sending `4024` alone was enough for association and DHCP. Repeating the full sequence with the **generated local BLE client ID** in `A2` also worked, so the original Anker account ID was unnecessary for local AP provisioning on this unit. The `solix-gen2 wifi-setup` CLI exercised that workflow with a password file; `wifi-join` exposes the independently observed `4024` only. This was tested with one WPA2 AP and firmware 1.1.4.9; other AP security types and firmware remain untested. The station's API binding remains incomplete.
 
@@ -261,13 +274,39 @@ Private captures were archived and the temporary AP stopped. See the
 [TLS and diagnostic findings](local-mqtt-investigation.md) for addresses,
 reply fields, timing, and remaining uncertainty.
 
+### Native MQTT established after provisioning correction
+
+The actual C1000 TLV parser `0x4204f9a6` explained the missing service ID:
+our reconstructed `C3` placement prevented parsing the lower-numbered fields
+after it. Three byte-parser replays reproduced this and verified ascending
+order. A guarded C2000 trial with only that ordering changed stored
+`anker_power`, completed TLS 1.2, subscribed to
+`cmd/anker_power/A1783/{serial}/req`, and published live station telemetry.
+Fresh BLE readback confirmed saved settings and unchanged power configuration.
+
+Two subsequent AP restarts required no Bluetooth or provisioning. The latter
+required a valid client certificate signed by the lab CA and succeeded.
+MQTT `0100` returned `0900` status plus full telemetry; `0057` requested a
+60-second stream, acknowledged with `0857`, followed by `0421` roughly every
+three seconds. These are ordinary SOLIX frames carried as Base64 in a JSON
+string inside the outer JSON `payload`, using TLS transport. The Python
+`decode_mqtt_telemetry` helper handles telemetry and successful status replies.
+
+The final trial decoded 15 readings, including its status reply, with mains
+present, AC output on, Standard mode, no tariff, zero slots, caps 90%/1%, and
+charging power 1800 W. It sent no charging/output/schedule write. The AP had
+no internet route; all captures remain private. The temporary services were
+stopped and HA credentials removed after verifying the archive hash.
+See [native MQTT findings](local-mqtt-investigation.md) for envelope fields,
+credential constraints, historical failures, and remaining work.
+
 ### BLE-to-MQTT bridge
 
 As a usable local MQTT path, the Python package now includes an optional **BLE-to-MQTT bridge**. It publishes sanitized C1000/C2000 telemetry and availability to a local broker. It subscribes to four verified C1000 setting topics, and only upper charge cap, charging power, and screen timeout for C2000. It has no AC/DC output command. On the HA node, a disposable loopback broker received live C1000 telemetry; a 100%/1% charge-limit write through MQTT was confirmed by the station, and the bridge last will marked it offline when stopped. This does not mean the power station itself connected to MQTT. See the [Python MQTT bridge instructions](../python/README.md#local-mqtt-bridge).
 
 On 2026-09-29, the same HA node ran a C2000-only bridge against another disposable MQTT listener bound to `127.0.0.1`. The listener received a live `solix_gen2/c2000/state` publish with availability true, 90% battery, mains present, AC output enabled, 343 W AC output, and the restored 30-second display timeout. The C2000 AC output remained on. The MQTT publication log is retained only in `.solix-private/c2000-mqtt-bridge-results-20260929.jsonl`. A follow-up loopback test subscribed only to the C2000 charging-power and display-timeout topics, sent an idempotent 1800 W charging-power command, and received a confirmed result. That result is retained in `.solix-private/c2000-mqtt-control-results-20260929.jsonl`. A subsequent loopback test sent an idempotent 90% upper-cap command and confirmed upper 90%, lower 1%, and AC output enabled; its log is `.solix-private/c2000-mqtt-cap-results-20260929.jsonl`.
 
-We then verified the complete charging workflow through that loopback MQTT bridge. At 90% battery, idle, AC output on, and 90% upper cap, MQTT commands set charging power **1800→500 W** and upper cap **90→95%**; both returned successful telemetry confirmations. The station reported `charging`, with **872 W AC input** and **318 W AC output**, while AC output stayed on. MQTT restore commands set cap **95→90%** and power **500→1800 W**, again with successful confirmations. A separate direct BLE check found 90% battery, `idle`, mains present, AC output on, input/output both 355 W, and upper/lower limits 90%/1%. The private command/result log is `.solix-private/c2000-mqtt-charging-results-20260929.jsonl`. This establishes MQTT-to-BLE charging control through the bridge. The isolated C1000 and C2000 provisioning trials described above have not established a direct station-to-broker MQTT connection.
+We then verified the complete charging workflow through that loopback MQTT bridge. At 90% battery, idle, AC output on, and 90% upper cap, MQTT commands set charging power **1800→500 W** and upper cap **90→95%**; both returned successful telemetry confirmations. The station reported `charging`, with **872 W AC input** and **318 W AC output**, while AC output stayed on. MQTT restore commands set cap **95→90%** and power **500→1800 W**, again with successful confirmations. A separate direct BLE check found 90% battery, `idle`, mains present, AC output on, input/output both 355 W, and upper/lower limits 90%/1%. The private command/result log is `.solix-private/c2000-mqtt-charging-results-20260929.jsonl`. This establishes MQTT-to-BLE charging control through the bridge. Native C2000 MQTT monitoring was subsequently established as described above; those native trials did not send charging commands.
 
 ## Local data and privacy
 
