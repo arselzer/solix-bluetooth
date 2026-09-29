@@ -482,10 +482,13 @@ This uses host cJSON/libc/OS substitutes and NUL-terminated callback buffers;
 it does not establish the actual C2000 binding state. In particular, it does
 **not** prove that one-byte chunks prevented binding. It does show why the
 large MQTT-response workaround must not be assumed suitable for every endpoint.
-A controlled whole-body comparison for the small binding/DST replies is a
-useful next experiment. Controller binding notification, clock propagation,
-the separate power-state gate, and C2000-specific schedule semantics remain
-unresolved; internal binding flags were not forced.
+The subsequent [whole-body binding follow-up](c2000-binding-followup.md)
+successfully used complete small binding/DST replies. It did not establish a
+new readiness transition: all 54 retained C2000 status records, including the
+earlier unsuccessful Peak trial, already contained A1=`34`, the ready value
+in the recovered C1000 status builder. Clock propagation, the separate
+power-state gate, and C2000-specific schedule semantics remain unresolved;
+internal binding flags were not forced.
 
 ## Retained evidence and next checks
 
@@ -527,10 +530,15 @@ Private artifacts remain ignored and must not be published:
   trial, inactive-tariff observations, full restoration and final BLE readback.
 - `emulate_binding_chunks.py` / `binding-chunks-emulation-results.json`: five
   bind-callback delivery cases, including the unexpected scalar-JSON behavior.
+- `.solix-private/isolated-ap/whole-small-replies-20260929/`: complete small
+  API replies, controller-readiness investigation, and recovery captures.
+- `emulate_telemetry_ready_prefix.py` and `emulate_mains_field.py`: twelve
+  status-prefix and 32 mains/output-field cases with the recovered C1000 code.
 
-Next, distinguish the radio's verified connected state from the controller's
-binding/readiness flags and test small API replies delivered as complete JSON.
-Continue tariff investigation with baseline/restore checks and AC output on.
+Continue tariff investigation through the separate power gate, controller
+clock, and C2000 schedule semantics, with baseline/restore checks and AC
+output on. The [binding follow-up](c2000-binding-followup.md) records the
+completed small-response trial and limits of readiness interpretation.
 Package local credential/bootstrap handling
 and broker integration before presenting native MQTT as an installable service.
 Repeat on C1000 when reachable; its native connection remains unverified.

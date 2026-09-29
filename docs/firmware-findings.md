@@ -100,11 +100,12 @@ On the radio, `wifi_connect_state_notify` at `0x420440f2` normally waits for
 **both MQTT connected and AP connected** before reporting Wi-Fi ready to the
 controller. A separate factory-mode branch exists; it has not been exercised.
 
-This supports a concrete explanation for the previous inactive-tariff trials:
 AP association and a stored plan do not establish this readiness state.
-Applying the explanation to C2000 is an inference from the C1000 code, not
-verification of the C2000 implementation. Changing the controller's binding
-flags directly has not been tested and is not exposed as a control.
+This initially made binding/network readiness a candidate explanation for
+inactive tariffs. The later status-prefix comparison below weakens that
+explanation for the C2000. Applying these gates to C2000 remains an inference
+from the C1000 code. Changing the controller's binding flags directly has not
+been tested and is not exposed as a control.
 
 A later C2000 native MQTT trial returned AP connected and server connected
 through `0027`/`0028`, then accepted a reserve change and all-day Peak schedule
@@ -114,6 +115,66 @@ MQTT connection alone is insufficient on the tested C2000. The radio query does
 not directly expose the controller's binding flag or cached network status.
 See the [native TOU trial](local-mqtt-investigation.md#time-of-use-with-mqtt-connected)
 and the bind-callback replay there before attributing this to any one gate.
+
+### Readiness is also encoded in the C1000 status prefix
+
+The C1000 `0100` handler at `0x0800b57c` calls the telemetry serializer
+`0x080224a0` at `0x0800b5f4`. Before serializing other fields, that function
+calls the same readiness gate at `0x080224cc` and writes **A1=`34` when
+ready, otherwise `31`**. Twelve offline prefix replays confirmed this for
+binding values 0/1/2 and cached network flags 0–3. Execution stopped before
+the individual telemetry callbacks; this was not a full-frame emulation.
+
+A comparison of **54 retained C2000 `0900`/`0421` records** found A1=`34`
+throughout the earlier native charging-power trial, native TOU trial, and
+later whole-body binding-reply trial. If the C2000 uses the same prefix
+meaning, its binding/network gate was already satisfied during the failed
+Peak test. This weakens the hypothesis that binding alone prevented TOU;
+it does not establish identical C2000 internals or resolve the power/clock/
+schedule conditions. Do not generalize the meaning of A1 to every command:
+other C1000 report builders use different ready values.
+
+### The separate power gate is debounced
+
+Further static tracing links the C1000 power-state bit to a normal status
+debouncer, rather than a remotely supplied schedule field:
+
+- Initialization at `0x0800ecf8` registers the input getters `0x08025e50`
+  and `0x08025edc`, and callback `0x08025e80`, in the first record at
+  `0x200041a4`.
+- The poller at `0x080254e4` counts consecutive getter results and emits
+  event mask `2` for the active transition and `1` for the inactive
+  transition. The callback respectively sets and clears bit 0 at
+  `0x200004be`, which the tariff selector reads.
+- The active getter requires bit 0 of the AC-module record at `0x20003f00`,
+  the low 14 bits of its halfword at offset `2` to be zero, byte `4` to be
+  zero, and bit 0 of byte `8` to be clear. The inactive getter checks only
+  whether the first status bit is clear.
+
+This identifies the software path and extra conditions. The physical meaning
+of every AC-module bit, its relation to the published mains-presence field,
+and the corresponding C2000 implementation are still unverified. No internal
+flag or AC-module state was written during this analysis.
+
+### Mains presence does not expose that power gate
+
+The C1000 `A7` telemetry builder at `0x08017ee0` obtains byte 4 from a
+different source: the inverse of bit 2 in peripheral register `0x40011808`,
+read through `0x0801b164`. It does not read the debounced tariff power flag.
+This is the field independently identified as mains presence by the earlier
+C1000 unplug/replug capture.
+
+The same builder's output-enabled byte (`A7[1]`) comes from stored flags:
+`0x0801a518(0)` dispatches to `0x08019b00`, which tests mask `0x30` in
+`0x20000164`. It also does not read the tariff power flag.
+
+Thirty-two offline replays executed the real builder's update path, output
+getter, and peripheral bit reader. Independently varying the synthetic
+register, tariff flag, AC-module bit, and output-setting flags confirmed these
+separate sources. Only memory copy was substituted; no real peripheral was
+emulated. Thus **mains present and output enabled do not by themselves confirm
+the tariff power gate**, even in the recovered C1000 implementation. C2000
+implementation equivalence remains unverified.
 
 ### C1000 and C2000 schedule layouts differ
 
@@ -194,9 +255,12 @@ C2000 controller support is unknown.
   service ID and connect to local TLS MQTT. Saved credentials also survived AP
   restart; MQTT status and telemetry-stream requests worked with AC output on.
   Native charging-power and mode/reserve/schedule writes now also work, but
-  Peak remains inactive despite radio server-ready status. Investigate the
-  controller's binding notification and complete small API replies next. C1000 still
-  needs a hardware comparison; do not substitute the different `4038` layout.
+  Peak remains inactive despite radio server-ready status. The
+  [binding follow-up](c2000-binding-followup.md) tested complete small API
+  replies and examined controller readiness; binding alone is now a weaker
+  explanation. Investigate the separate power gate, controller clock, and
+  C2000 schedule semantics. C1000 still needs a hardware comparison; do not
+  substitute the different `4038` layout.
 - When C1000 is reachable again, validate its own schedule layout and benign
   display/alert settings with baseline, telemetry, and restoration checks.
 - Map the energy counters for read-only monitoring.
