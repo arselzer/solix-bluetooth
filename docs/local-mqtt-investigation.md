@@ -42,6 +42,37 @@ certificate/private-key pairs were also parsed with `cryptography` and matched.
 The lab response was successfully decrypted using the serial in the C2000's
 actual request. That rules out a mismatched fixture serial in this trial.
 
+### Embedded TLS parser replay
+
+A second offline harness executes the radio's actual mbedTLS certificate
+parser (`0x420da982`) and private-key parser (`0x420cef3c`). Both retained
+fixtures pass all three parsers: root CA, client certificate, and private key.
+The credential getters (`0x4202536a`, `0x420255ec`, `0x4202586e`) also return
+the expected PEM bytes and **include the terminating NUL in their lengths**.
+
+There are 24 asserted cases: two fixtures × three fields × direct parsing,
+getter readback, missing NUL, and malformed DER inside valid PEM markers.
+The 12 valid cases succeed; all 12 malformed cases fail. Heap allocation,
+ROM libc/arithmetic, and flash reads are host substitutes. Flash transforms
+are omitted symmetrically. The ROM arithmetic addresses were checked against
+[Espressif's ESP32-C3 symbol map](https://github.com/espressif/esp-idf/blob/master/components/esp_rom/esp32c3/ld/esp32c3.rom.libgcc.ld).
+This checks parsing, not TLS certificate-chain verification or a handshake,
+and does not execute C2000 firmware or prove its physical flash contents.
+
+The TLS connector loads and parses credentials **before** calling
+`mbedtls_net_connect` (`0x420c2d4c`). In the recovered C1000 implementation:
+
+| Failure before DNS/TCP | Connector return code |
+| --- | ---: |
+| Random-generator seeding | -16 |
+| Missing/unparseable root CA | -19 |
+| Missing/unparseable client certificate | -20 |
+| Missing/unparseable private key | -21 |
+
+Consequently, absence of broker traffic alone cannot distinguish a startup
+gate from a credential-loading failure. The replay eliminates rejection of
+these PEM fixtures by the recovered parser, under the stated assumptions.
+
 ## HTTP receive behavior
 
 The header parser at `0x42039bdc` looks for `HTTP/`, then parses the numeric
@@ -111,8 +142,60 @@ With an empty app ID, model, or account ID and no saved configuration to recover
 offline initialization returns `0x90004` and never reaches worker startup, while
 the response callback still reports status zero. These are reproduced failure
 conditions, **not evidence that the live C2000 is missing those values**. Startup
-also depends on existing task state; flash recovery, task execution, certificate
-parsing for TLS, and the actual connection remain outside the replay's proof.
+also depends on existing task state; physical flash recovery, task execution,
+and the actual connection remain outside the replay's proof. TLS parsing is
+covered separately above.
+
+## Bluetooth network diagnostics
+
+Function ID **`0x0f`**, request **`4020`**, response **`4820`** exposes radio
+error state. This is separate from the negotiation function ID `0x01` and
+from battery/inverter fault reporting. The tested request contains an `A1`
+timestamp TLV. A successful reply starts with `00`, followed by:
+
+| TLV | Meaning | Encoding |
+| --- | --- | --- |
+| A1 | System reboot code | One byte |
+| A2 | SDK reset code | One byte |
+| A3 | HTTP error code | Signed 32-bit little-endian |
+| A4 | Wi-Fi error code | Signed 32-bit little-endian |
+| A5 | BLE disconnect code | Signed 32-bit little-endian |
+| A6 | MQTT error code | Signed 32-bit little-endian |
+
+The C1000 handler is selected at `0x42046548` and assembles its reply at
+`0x420472be`. Four offline executions checked zero and negative MQTT codes.
+The handler clears its reporting copies after replying. Reboot/reset codes
+became `255` on repeated C2000 reads; preserve the first sample. It reloads
+the four error words from their sources on the next request. The MQTT source
+at `0x3fc90358` is not cleared by this handler. Other reset-code meanings and
+model differences remain unverified.
+
+The Python API provides `await monitor.network_diagnostics()`; the CLI provides
+`solix-gen2 network-diagnostics --name ups`. These query radio diagnostics
+without changing power/network settings. Do not infer connectivity from zero
+codes or use these values as UPS battery faults.
+
+### C2000 comparison with diagnostic sampling
+
+Nine reads on 2026-09-29 succeeded: one baseline, four while the isolated AP
+was available without provisioning, and four during a fresh guarded Wi-Fi
+setup. The passive trial produced no station traffic. The active trial joined
+successfully, requested MQTT information, then binding/check/DST data, and
+used local NTP. No MQTT listener event or TCP/8883 packet appeared. The only
+captured DNS question was unrelated to the broker.
+
+At approximately 0, 10, 40 and 90 seconds after `4025`, HTTP, Wi-Fi, and MQTT
+error codes were all zero; BLE disconnect code was `531`, left uninterpreted.
+This is **not evidence of MQTT success**. It is consistent with a failure
+before a recorded connection error, but cannot identify the failing stage.
+The local API logged `unbind_device` about 2.1 seconds after BLE disconnect,
+matching the earlier provisioning-cleanup behavior; this was not a cloud call.
+
+Before/after checks preserved AC input/output on, Standard mode, no tariff,
+zero schedule slots, 90%/1% caps, and 1,800 W charging limit. Both trials ended
+with AP services stopped and temporary HA credentials removed after archive
+hash verification. Only the active trial resent Wi-Fi provisioning; neither
+sent output, charging, or schedule controls.
 
 ## C2000 hardware comparison
 
@@ -149,11 +232,18 @@ Private artifacts remain ignored and must not be published:
   `cryptography` available, plus the retained radio image and response fixtures.
 - `.solix-private/firmware-analysis/mqtt-http-packet-metadata.json`: earlier
   response segmentation metadata, without payloads.
+- `emulate_tls.py` / `tls-emulation-results.json` in the same directory:
+  24 embedded-parser/getter checks, including negative controls.
+- `emulate_diagnostics.py` / `diagnostics-emulation-results.json`: four
+  diagnostic-handler executions; `diagnostic-live-c2000-20260929.json` retains
+  the first hardware reading and its power-state baseline.
 - `.solix-private/isolated-ap/http-chunk-20260929/`: probe sources, packet capture,
   API/NTP logs, before/after telemetry, response validation, and result summary.
+- `.solix-private/isolated-ap/diagnostic-mqtt-20260929/`: passive and active
+  comparison archives, sampled diagnostics, packet captures, and settings checks.
 
 The next discriminating checks are the C1000 hardware comparison when reachable,
-the radio's persisted app/account/model fields and initialization errors, and
-the TLS credential-loading path before socket creation. Recover C2000 firmware
+the radio's persisted app/account/model fields, worker/task state, and actual
+credential storage. Recover C2000 firmware
 before assigning it the C1000 startup behavior. Preserve the response framing
 and credential checks when testing another hypothesis so results stay comparable.

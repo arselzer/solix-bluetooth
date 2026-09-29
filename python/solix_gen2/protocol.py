@@ -325,6 +325,12 @@ class Session:
         if self.model != Model.C1000_GEN2 or self.protocol != "prime" or not self.ready:
             raise RuntimeError("Setting controls require a connected C1000 Gen 2 Prime session")
 
+    def network_diagnostics_packet(self) -> bytes:
+        """Query radio errors; verified on C2000 and in C1000 radio firmware."""
+        if self.protocol != "prime" or not self.ready:
+            raise RuntimeError("Network diagnostics require a connected Prime session")
+        return self._send(DATA_REQUEST, "4020", tlv(0xA1, self._timestamp()))
+
     def charge_limits_packet(self, upper: int, lower: int) -> bytes:
         """Build the C1000 4103 charge/discharge limit write verified on 1.1.4.9."""
         self._require_c1000_prime_control()

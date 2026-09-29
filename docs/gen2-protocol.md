@@ -242,6 +242,25 @@ removed after archiving. Detailed parser addresses, identity requirements,
 29 replay cases, and limitations are in the
 [native local MQTT investigation](local-mqtt-investigation.md).
 
+### TLS credential replay and radio diagnostics
+
+The recovered C1000 radio's actual mbedTLS parsers accepted both retained
+credential fixtures. A separate 24-case replay covers direct parsing, flash
+getter readback with NUL-inclusive lengths, and malformed-input controls.
+The connector parses credentials before DNS/TCP, so missing broker traffic
+alone cannot locate the failure.
+
+The read-only radio query `0f/4020` → `4820` exposes HTTP, Wi-Fi, BLE disconnect,
+MQTT, and reset codes. Its handler passed four offline checks; nine C2000 reads
+succeeded, including four during another guarded isolated Wi-Fi setup. HTTP,
+Wi-Fi, and MQTT errors remained zero despite no MQTT connection. Reset codes
+became `255` after the first query. The Python library and CLI now expose this
+query; zero codes do not prove connectivity or report battery/inverter health.
+AC output, charge limits/power, and scheduling settings stayed unchanged.
+Private captures were archived and the temporary AP stopped. See the
+[TLS and diagnostic findings](local-mqtt-investigation.md) for addresses,
+reply fields, timing, and remaining uncertainty.
+
 ### BLE-to-MQTT bridge
 
 As a usable local MQTT path, the Python package now includes an optional **BLE-to-MQTT bridge**. It publishes sanitized C1000/C2000 telemetry and availability to a local broker. It subscribes to four verified C1000 setting topics, and only upper charge cap, charging power, and screen timeout for C2000. It has no AC/DC output command. On the HA node, a disposable loopback broker received live C1000 telemetry; a 100%/1% charge-limit write through MQTT was confirmed by the station, and the bridge last will marked it offline when stopped. This does not mean the power station itself connected to MQTT. See the [Python MQTT bridge instructions](../python/README.md#local-mqtt-bridge).

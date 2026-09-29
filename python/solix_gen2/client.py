@@ -8,6 +8,7 @@ import inspect
 from typing import Any
 
 from .protocol import COMMAND_UUID, TELEMETRY_UUID, Model, Session
+from .diagnostics import decode_network_diagnostics
 
 UpdateCallback = Callable[[dict[str, int | str]], Any]
 
@@ -60,6 +61,7 @@ class SolixMonitor:
         self._negotiation_done = asyncio.Event()
         self._connect_error: Exception | None = None
         self._lock = asyncio.Lock()
+        self._diagnostic_lock = asyncio.Lock()
         self._callbacks: list[UpdateCallback] = [on_update] if on_update else []
         self._updates: asyncio.Queue[dict[str, int | str]] = asyncio.Queue(maxsize=10)
         self._responses: asyncio.Queue[tuple[str, bytes]] = asyncio.Queue(maxsize=20)
@@ -136,6 +138,23 @@ class SolixMonitor:
                 received, payload = await self._responses.get()
                 if received == command:
                     return payload
+
+    async def network_diagnostics(self, timeout: float = 20) -> dict[str, int]:
+        """Read radio error codes without changing power or network settings.
+
+        Do not call during Wi-Fi provisioning, which shares the reply queue.
+        Reset codes can become 255 after a read; zero errors do not prove a
+        successful MQTT connection. These are not battery/inverter fault codes.
+        """
+        async with self._diagnostic_lock:
+            if not self.connected:
+                raise RuntimeError("Monitor is not connected")
+            packet = self._session.network_diagnostics_packet()
+            while not self._responses.empty():
+                self._responses.get_nowait()
+            await self._client.write_gatt_char(COMMAND_UUID, packet, response=False)
+            payload = await self._wait_for_response("4820", timeout=timeout)
+            return decode_network_diagnostics(payload)
 
     async def join_wifi(self, *, ssid: str, passphrase: str, account_id: str) -> str:
         """Send the observed C1000/C2000 Wi-Fi credentials write and return its BLE reply.

@@ -136,9 +136,10 @@ C2000 controller support is unknown.
 
 - The [native local MQTT investigation](local-mqtt-investigation.md) now includes
   executable parser/startup replays, credential storage bounds, a reproduced
-  plain-HTTP short-read failure, and a C2000 framing comparison. The workaround
-  did not establish MQTT; inspect persisted configuration and worker/TLS startup
-  next, with a C1000 hardware comparison when reachable.
+  plain-HTTP short-read failure, embedded TLS credential parser/getter checks,
+  and the read-only radio diagnostic query. C2000 still reports zero MQTT errors
+  without connecting. Inspect persisted configuration, actual credential storage,
+  and worker startup next, with a C1000 hardware comparison when reachable.
 - When C1000 is reachable again, validate its own schedule layout and benign
   display/alert settings with baseline, telemetry, and restoration checks.
 - Map the energy counters for read-only monitoring.

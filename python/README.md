@@ -46,6 +46,23 @@ await monitor.connect()
 `monitor.metrics` contains the latest decoded values. `monitor.raw_tlvs` keeps
 the original parameter bytes for further model decoding. C1000 Gen 2 metric
 offsets follow the [SolixBLE C1000G2 implementation](https://github.com/flip-dots/SolixBLE/blob/main/SolixBLE/devices/c1000g2.py).
+
+For Wi-Fi/MQTT troubleshooting, query radio diagnostics on an existing Prime
+connection with `await monitor.network_diagnostics()`, or run:
+
+```bash
+solix-gen2 network-diagnostics --name ups
+```
+
+The result contains `http_error_code`, `wifi_error_code`, `ble_disconnect_code`,
+`mqtt_error_code`, `system_reboot_code`, and `sdk_reset_code`. This query was
+tested on C2000 main firmware 2.1.6.4 and replayed against C1000 radio v0.3.3.0;
+the C1000 hardware query remains untested. It changes no power/network settings.
+Preserve the first result: reset codes may become 255 on later reads. Zero
+errors do **not** prove a connection, and these are not battery/inverter faults.
+Run it separately from Wi-Fi provisioning, which shares the response queue.
+See [native MQTT findings](../docs/local-mqtt-investigation.md).
+
 For UPS monitoring, `ac_input_connected` is 1 while the mains lead is present
 and 0 when it is absent, even if AC output remains on. `battery_status` is
 `idle`, `charging`, `discharging`, or `unknown`; `battery_discharging` is a

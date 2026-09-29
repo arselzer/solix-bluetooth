@@ -43,6 +43,10 @@ def parser() -> argparse.ArgumentParser:
     monitor.add_argument("--name", help="Monitor only this configured device")
     monitor.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
 
+    diagnostics = subcommands.add_parser("network-diagnostics", help="Read radio HTTP, MQTT, Wi-Fi and reset codes")
+    diagnostics.add_argument("--name", required=True)
+    diagnostics.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
+
     serve = subcommands.add_parser("serve", help="Run the read-only HTTP monitoring server")
     serve.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     serve.add_argument("--host", default="127.0.0.1")
@@ -164,6 +168,19 @@ async def _monitor(args: argparse.Namespace) -> None:
         await service.stop()
 
 
+async def _network_diagnostics(args: argparse.Namespace) -> None:
+    device = next((saved for saved in load_config(args.config) if saved.name == args.name), None)
+    if device is None:
+        raise ValueError(f"Unknown configured device: {args.name}")
+    if device.protocol != "prime":
+        raise ValueError("Network diagnostics require a Prime station")
+    async with SolixMonitor(
+        device.address, model=device.model, owner_user_id=device.client_id,
+        protocol=device.protocol, timezone_name=device.timezone_name,
+    ) as monitor:
+        print(json.dumps(await monitor.network_diagnostics()))
+
+
 async def _set(args: argparse.Namespace) -> None:
     device = next((saved for saved in load_config(args.config) if saved.name == args.name), None)
     if device is None:
@@ -249,6 +266,8 @@ def main(argv: list[str] | None = None) -> int:
             asyncio.run(_pair(args))
         elif args.command == "monitor":
             asyncio.run(_monitor(args))
+        elif args.command == "network-diagnostics":
+            asyncio.run(_network_diagnostics(args))
         elif args.command == "serve":
             from .server import run_server
             run_server(MonitorService(load_config(args.config)), host=args.host, port=args.port)
