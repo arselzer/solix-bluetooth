@@ -3,6 +3,17 @@
 Async Python monitoring over local Bluetooth, with a CLI, HTTP server, and
 MQTT bridge. It uses no cloud account.
 
+An experimental **isolated Wi-Fi/native MQTT endpoint** is also available for
+C2000 Gen 2: `lab-init`, `lab-run`, `lab-status`, `lab-readiness`,
+`lab-set-charge-power` and `lab-serve`. It packages the local API, NTP and mTLS
+interception workflow, without an internet route. Monitoring is the default;
+native charging writes require `--allow-control` and fresh confirmation.
+See [setup, Python exports and limitations](../docs/isolated-ap-mqtt.md).
+
+Run `solix-gen2` without arguments in a terminal for interactive scanning,
+station selection/pairing, BLE monitoring, MQTT setup and HTTP serving. For a
+custom config, use `solix-gen2 interactive --config /path/to/config.json`.
+
 | Model profile | Monitoring | Controls |
 | --- | --- | --- |
 | `c300` — C300/C300X AC | C300X tested live; C300 sibling uses the reference map | AC output, light, charging-power limit, screen timeout verified |
@@ -502,7 +513,8 @@ Python callers can use `await monitor.join_wifi(...)` or
 `await monitor.send_wifi_provisioning(...)` with the same parameters. The
 observed endpoint sequence is documented in the
 [field notes](../docs/gen2-protocol.md). The HTTP monitoring server remains
-read-only and does not run an Anker API emulator.
+read-only. `serve` uses BLE and does not run an Anker API emulator; `lab-run`
+runs the separate local device API described in the isolated-AP guide.
 
 For offline protocol research, `solix_gen2.mqtt_credentials` provides
 `encrypt_device_credential(device_serial, pem_bytes)` and

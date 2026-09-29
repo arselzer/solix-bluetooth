@@ -335,6 +335,13 @@ We then verified the complete charging workflow through that loopback MQTT bridg
 
 ## Local data and privacy
 
+The subsequent [native MQTT reconnect and tariff follow-up](c2000-mqtt-reconnect-and-tariff.md)
+verified controller `0089`, two AP reconnections, and longer unsuccessful Peak
+trials with reserve headroom. The [Python isolated AP/MQTT tool](isolated-ap-mqtt.md)
+now packages the local bootstrap, monitoring and charging-power workflow.
+Its live C2000 test confirmed native **1800→1700→1800 W** settings while AC
+output stayed on; an acknowledgement alone is not used as confirmation.
+
 The workspace's `.solix-private/` directory contains local observations, C1000 post-update handshake/Prime/control records, retained phone bugreports and extracted HCI traces, a private copy of the installed app binary, the isolated AP's packet/DNS/HTTP logs and experiment scripts/results, and a working private CLI config with both paired IDs. `.solix-local-ids.json` also holds the original C2000 ID. Both paths are ignored by Git, and the private folder and files are owner-readable only. These captures, credentials, and IDs are for local research and deployment, not GitHub. The earlier phone bugreport files deleted before the request to retain logs cannot be recovered retroactively. After the offline Wi-Fi tests, the AP and its DNS, HTTP, TLS, and MQTT probes were stopped; its Wi-Fi adapter was returned to the Home Assistant node's normal namespace. The phone's Bluetooth was restored to its original on state.
 
 The [Python README](../python/README.md) documents installation, CLI pairing, HTTP endpoints, a Home Assistant REST example, and the private config file needed for a server on the HA node.

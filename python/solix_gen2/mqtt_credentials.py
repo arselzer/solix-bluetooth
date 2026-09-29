@@ -1,6 +1,7 @@
 """Credential envelope used by the device's get_mqtt_info endpoint.
 
-Verified against a saved C1000 Gen 2 response. This differs from the account
+Verified against a saved C1000 Gen 2 response for the client certificate/key;
+the device response's root CA field remains plain PEM. This differs from the account
 API, which returns PEM directly. These helpers perform no network requests.
 The serial-derived key does not provide secrecy from someone with the serial.
 """

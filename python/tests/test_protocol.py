@@ -244,11 +244,12 @@ def test_wifi_provisioning_packets_use_ascending_tags():
         session.wifi_credentials_packet('x' * 33, 'examplepass', 'b' * 40)
     with pytest.raises(ValueError, match='passphrase'):
         session.wifi_credentials_packet('Lab-AP', 'short', 'b' * 40)
-    with pytest.raises(RuntimeError, match='C1000'):
-        c2000.wifi_cloud_config_packet(
-            'b' * 40, 'https://example.invalid/', 'CET-1CEST,M3.5.0,M10.5.0/3',
-            'Europe/Vienna',
-        )
+    c2000_cloud = parse_packet(c2000.wifi_cloud_config_packet(
+        'b' * 40, 'http://192.168.77.1/', 'UTC0', 'Etc/UTC', allow_http=True,
+    ))
+    c2000_fields = parse_tlvs(c2000._crypt(c2000_cloud.payload, False))
+    assert list(c2000_fields) == [0xA1, 0xA2, 0xA3, 0xA4, 0xA6, 0xA7, 0xA8, 0xC3]
+    assert c2000_fields[0xA7] == b'A1783'
 
     ack = build_packet(DATA_REQUEST, bytes.fromhex('4824'), session._crypt(b'\x00', True))
     assert session.feed(ack).response == ('4824', b'\x00')

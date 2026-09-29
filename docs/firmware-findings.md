@@ -1,5 +1,11 @@
 # Gen 2 firmware findings
 
+The latest [reconnect, clock and power-gate follow-up](c2000-mqtt-reconnect-and-tariff.md)
+includes additional offline executions and guarded C2000 hardware observations.
+The [parallel power-control analysis](mqtt-power-offline-followup.md) adds
+73 actual-code cases for clock synchronization, complete tariff selection and
+native charge-limit handlers, including reserve side effects and diagnostic limits.
+
 ## Scope and evidence
 
 These findings come from offline analysis of the owner's retained **C1000 Gen 2

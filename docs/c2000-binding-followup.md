@@ -132,10 +132,21 @@ app protocol, is native pattern `03 00 0f`, command `0089`, `A1=22`, and
 `FE=03` plus Unix seconds in little endian. The expected response is `0889`.
 The corresponding encrypted BLE commands would be `4089` / `4889`.
 
-Neither form has been sent to the C2000 in this follow-up. Its firmware image
+Neither form was sent during this passive follow-up. Its firmware image
 has not been recovered, so handler compatibility and interpretation remain
 unverified there. This query could distinguish radio MQTT connectivity from
 the controller gate without writing internal flags or changing a power mode.
 
 See [local MQTT investigation](local-mqtt-investigation.md) for the preceding
 native charging-power and Time-of-Use experiments.
+
+### Subsequent successful native query
+
+The [reconnect and tariff follow-up](c2000-mqtt-reconnect-and-tariff.md) later
+recovered native MQTT twice after AP interruptions and successfully sent
+`0089` to the C2000. Its `0889` response contained success `00`, `A1=34`,
+typed `A2=01 01`, `A3=01 00` and the expected constant fields. The opaque `FD`
+identifier remains private. This verifies command compatibility and the
+observed ready prefix; it does not establish all field meanings. Longer Peak
+trials with more reserve headroom still left the tariff inactive. The verified
+local connection is now available through the [Python lab tool](isolated-ap-mqtt.md).

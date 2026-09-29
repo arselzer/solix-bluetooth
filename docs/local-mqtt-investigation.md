@@ -539,7 +539,10 @@ Continue tariff investigation through the separate power gate, controller
 clock, and C2000 schedule semantics, with baseline/restore checks and AC
 output on. The [binding follow-up](c2000-binding-followup.md) records the
 completed small-response trial and limits of readiness interpretation.
-Package local credential/bootstrap handling
-and broker integration before presenting native MQTT as an installable service.
+The Python tool now packages local credential/bootstrap handling, isolated AP
+management, NTP and a native MQTT TLS endpoint; see
+[isolated AP/MQTT setup](isolated-ap-mqtt.md). Subsequent successful reconnects,
+the live `0089` query and longer unsuccessful Peak trials are recorded in
+[reconnect and tariff findings](c2000-mqtt-reconnect-and-tariff.md).
 Repeat on C1000 when reachable; its native connection remains unverified.
 Separate experiments can minimize HTTP framing and account-ID requirements.

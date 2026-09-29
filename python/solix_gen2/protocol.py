@@ -494,7 +494,7 @@ class Session:
         self, account_id: str, api_url: str, posix_timezone: str,
         iana_timezone: str, *, c3_value: str = 'A2', allow_http: bool = False,
     ) -> bytes:
-        """Build a C1000 4025 cloud endpoint and timezone write.
+        """Build a Gen 2 4025 endpoint and timezone write.
 
         The meaning of C3 and the 4825 response are not yet established.
         Tags must be ascending: the radio parser silently skips a field that
@@ -502,7 +502,8 @@ class Session:
         hid the service/model/timezone fields; keep this opaque field last.
         This method does not configure or emulate the remote API.
         """
-        self._require_c1000_prime_control()
+        if self.protocol != 'prime' or self.model not in (Model.C1000_GEN2, Model.C2000_GEN2):
+            raise ValueError('Wi-Fi endpoint provisioning requires a Prime Gen 2 station')
         if len(account_id) != 40 or any(c not in '0123456789abcdefABCDEF' for c in account_id):
             raise ValueError('account_id must be 40 hexadecimal characters')
         if not (api_url.startswith('https://') or
@@ -513,7 +514,8 @@ class Session:
         payload = (tlv(0xA1, self._timestamp()) + tlv(0xA2, account_id.encode('ascii'))
                    + tlv(0xA3, api_url.encode('ascii'))
                    + tlv(0xA4, posix_timezone.encode('ascii'))
-                   + tlv(0xA6, b'anker_power') + tlv(0xA7, b'A1763')
+                   + tlv(0xA6, b'anker_power')
+                   + tlv(0xA7, b'A1783' if self.model == Model.C2000_GEN2 else b'A1763')
                    + tlv(0xA8, iana_timezone.encode('ascii'))
                    + tlv(0xC3, c3_value.encode('ascii')))
         return self._send(DATA_REQUEST, '4025', payload)

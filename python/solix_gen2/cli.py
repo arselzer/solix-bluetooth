@@ -18,6 +18,9 @@ from .protocol import Model
 def parser() -> argparse.ArgumentParser:
     command = argparse.ArgumentParser(prog="solix-gen2", description="Local SOLIX Bluetooth monitoring and controls")
     subcommands = command.add_subparsers(dest="command", required=True)
+    guided = subcommands.add_parser("interactive", help="Scan, select and monitor stations with guided BLE/MQTT setup")
+    guided.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
+    guided.add_argument("--lab-directory", type=Path, help="Existing or new private native MQTT lab directory")
 
     scan = subcommands.add_parser("scan", help="Find C300 AC, C1000, and C1000/C2000 Gen 2 devices")
     scan.add_argument("--timeout", type=float, default=8)
@@ -104,7 +107,7 @@ def parser() -> argparse.ArgumentParser:
     fast.add_argument("--enabled", choices=["on", "off"], required=True)
     fast.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
 
-    wifi = subcommands.add_parser("wifi-setup", help="Experimentally provision C1000 Wi-Fi over Bluetooth")
+    wifi = subcommands.add_parser("wifi-setup", help="Provision Gen 2 Wi-Fi/API settings over Bluetooth")
     wifi.add_argument("--name", required=True)
     wifi.add_argument("--ssid", required=True)
     wifi.add_argument("--password-file", type=Path, help="Read Wi-Fi passphrase from a local file; otherwise prompt")
@@ -121,6 +124,8 @@ def parser() -> argparse.ArgumentParser:
     join.add_argument("--password-file", type=Path, help="Read Wi-Fi passphrase from a local file; otherwise prompt")
     join.add_argument("--account-id", help="40-character account ID; defaults to the paired local client ID")
     join.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
+    from .lab_cli import add_commands
+    add_commands(subcommands)
     return command
 
 
@@ -273,8 +278,8 @@ async def _wifi_setup(args: argparse.Namespace) -> None:
     device = next((saved for saved in load_config(args.config) if saved.name == args.name), None)
     if device is None:
         raise ValueError(f"Unknown configured device: {args.name}")
-    if device.protocol != "prime" or (args.command == 'wifi-setup' and device.model != Model.C1000_GEN2):
-        raise ValueError("Wi-Fi join requires Gen 2 Prime; cloud setup is tested only on C1000 Gen 2")
+    if device.protocol != "prime" or device.model not in (Model.C1000_GEN2, Model.C2000_GEN2):
+        raise ValueError("Wi-Fi setup requires a Gen 2 Prime station")
     account_id = args.account_id or device.client_id
     if account_id is None:
         raise ValueError("A paired client ID or --account-id is required")
@@ -302,9 +307,18 @@ async def _wifi_setup(args: argparse.Namespace) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
+    argv = sys.argv[1:] if argv is None else argv
+    if not argv:
+        if not sys.stdin.isatty():
+            print("Interactive mode needs a terminal; use --help for scripted commands.", file=sys.stderr)
+            return 2
+        argv = ["interactive"]
     args = parser().parse_args(argv)
     try:
-        if args.command == "scan":
+        if args.command == "interactive":
+            from .interactive import run_interactive
+            run_interactive(args.config, args.lab_directory)
+        elif args.command == "scan":
             asyncio.run(_scan(args.timeout))
         elif args.command == "add":
             device = DeviceConfig(args.name, args.address, Model(args.model), args.client_id,
@@ -333,8 +347,11 @@ def main(argv: list[str] | None = None) -> int:
             asyncio.run(_c1000_setting(args))
         elif args.command in ("wifi-setup", "wifi-join"):
             asyncio.run(_wifi_setup(args))
+        elif args.command.startswith("lab-"):
+            from .lab_cli import dispatch
+            dispatch(args)
         return 0
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, asyncio.CancelledError):
         return 130
     except Exception as error:
         print(f"{type(error).__name__}: {error}", file=sys.stderr)

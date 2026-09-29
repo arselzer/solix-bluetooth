@@ -58,6 +58,10 @@ class NativeMqttCommands:
         """Request a single 0900 telemetry reply."""
         return self._request("0100", b"", milliseconds=False)
 
+    def readiness(self) -> NativeMqttRequest:
+        """Read controller readiness (0089/0889); opaque fields stay private."""
+        return self._request("0089", b"", milliseconds=False)
+
     def stream(self, seconds: int = 60) -> NativeMqttRequest:
         """Request a bounded telemetry stream; renew explicitly if needed."""
         if type(seconds) is not int or not 1 <= seconds <= 120:

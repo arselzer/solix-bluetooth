@@ -183,7 +183,7 @@ class SolixMonitor:
         api_url: str, posix_timezone: str, iana_timezone: str,
         c3_value: str = 'A2', allow_http: bool = False,
     ) -> dict[str, str]:
-        """Send experimental C1000 Wi-Fi writes; return raw BLE acknowledgements.
+        """Send Gen 2 Wi-Fi writes; return raw BLE acknowledgements.
 
         Acknowledgements do not establish cloud registration or control.
         Credentials are never included in the returned value.
