@@ -22,7 +22,7 @@ class DeviceConfig:
     address: str
     model: Model
     client_id: str | None = None
-    protocol: str = "prime"
+    protocol: str | None = None
     timezone_name: str | None = None
 
     def __post_init__(self) -> None:
@@ -34,10 +34,7 @@ class DeviceConfig:
             len(self.client_id) != 40 or any(char not in "0123456789abcdefABCDEF" for char in self.client_id)
         ):
             raise ValueError("client_id must be 40 hexadecimal characters")
-        if self.protocol not in ("prime", "legacy"):
-            raise ValueError("protocol must be prime or legacy")
-        if self.model == Model.C2000_GEN2 and self.protocol != "prime":
-            raise ValueError("C2000 Gen 2 requires Prime protocol")
+        object.__setattr__(self, "protocol", self.model.resolve_protocol(self.protocol))
         timezone_confer(self.timezone_name)
 
     def as_dict(self) -> dict[str, str]:
@@ -62,7 +59,7 @@ def load_config(path: Path = DEFAULT_CONFIG) -> list[DeviceConfig]:
             address=entry["address"],
             model=Model(entry["model"]),
             client_id=entry.get("client_id", entry.get("owner_user_id")),
-            protocol=entry.get("protocol", "prime"),
+            protocol=entry.get("protocol"),
             timezone_name=entry.get("timezone_name"),
         ))
     if len({device.name for device in devices}) != len(devices):

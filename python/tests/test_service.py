@@ -21,13 +21,15 @@ def test_config_preserves_pairing_id_privately(tmp_path):
     assert json.loads(path.read_text())["devices"][0]["timezone_name"] == "Europe/Vienna"
 
 
-def test_http_auth_and_status(tmp_path):
+@pytest.mark.parametrize("model", [Model.C1000_GEN2, Model.C300, Model.C1000])
+def test_http_auth_and_status(tmp_path, model):
     pytest.importorskip("aiohttp")
     from aiohttp.test_utils import TestClient, TestServer
     from solix_gen2.server import create_app
 
     async def scenario():
-        service = MonitorService([DeviceConfig("ups", "AA:BB:CC:DD:EE:02", Model.C1000_GEN2, "b" * 40)])
+        service = MonitorService([DeviceConfig("ups", "AA:BB:CC:DD:EE:02", model,
+                                              "b" * 40 if model == Model.C1000_GEN2 else None)])
 
         async def no_ble():
             pass

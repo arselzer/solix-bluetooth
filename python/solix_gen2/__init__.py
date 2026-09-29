@@ -1,4 +1,4 @@
-"""Local Bluetooth monitoring and native MQTT framing for SOLIX Gen 2 stations."""
+"""Local SOLIX Bluetooth monitoring and experimental native Gen 2 MQTT framing."""
 
 from .client import SolixMonitor, discover
 from .protocol import Model

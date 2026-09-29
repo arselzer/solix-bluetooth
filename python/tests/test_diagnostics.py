@@ -33,7 +33,7 @@ def test_invalid_diagnostics_do_not_look_like_success(payload):
         decode_network_diagnostics(payload)
 
 
-@pytest.mark.parametrize("model", list(Model))
+@pytest.mark.parametrize("model", [Model.C1000_GEN2, Model.C2000_GEN2])
 def test_diagnostic_query_uses_radio_namespace_and_requires_prime_session(model):
     session = Session(model, "a" * 40)
     with pytest.raises(RuntimeError):

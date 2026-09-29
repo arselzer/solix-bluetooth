@@ -1,4 +1,4 @@
-"""Publish local BLE telemetry and verified Gen 2 settings through MQTT.
+"""Publish local BLE telemetry and model-supported settings through MQTT.
 
 The power stations do not connect to this broker. This process is the only
 MQTT client and keeps the BLE connection on the machine running the bridge.
@@ -23,6 +23,8 @@ _FIELDS = {
     "ac_charging_power": ("watts",),
     "display_timeout": ("seconds",),
     "fast_charge": ("enabled",),
+    "ac_output": ("enabled",),
+    "light_mode": ("mode",),
 }
 _CONFIRMED = {
     "charge_limits": ("max_charge_percentage", "min_charge_percentage"),
@@ -30,14 +32,18 @@ _CONFIRMED = {
     "ac_charging_power": ("ac_charging_power_limit_w",),
     "display_timeout": ("display_timeout_seconds",),
     "fast_charge": ("ac_fast_charge_enabled",),
+    "ac_output": ("ac_output_enabled",),
+    "light_mode": ("light_mode",),
 }
 
 
 def _supports_operation(device: Any, operation: str) -> bool:
+    if device.model in (Model.C300, Model.C1000) and device.protocol == "legacy":
+        return operation in ("display_timeout", "ac_charging_power", "ac_output", "light_mode")
     if device.protocol != 'prime':
         return False
     if device.model == Model.C1000_GEN2:
-        return operation in _FIELDS and operation != 'charge_cap'
+        return operation in ('charge_limits', 'ac_charging_power', 'display_timeout', 'fast_charge')
     return device.model == Model.C2000_GEN2 and operation in ('charge_cap', 'ac_charging_power', 'display_timeout')
 
 
@@ -166,12 +172,9 @@ class MqttBridge:
         def on_connect(_client, _userdata, _flags, reason_code, _properties):
             if reason_code == 0:
                 for device in self.service.devices.values():
-                    if device.model == Model.C1000_GEN2 and device.protocol == "prime":
-                        client.subscribe(self._topic(device.name, "set/+"), qos=1)
-                    elif device.model == Model.C2000_GEN2 and device.protocol == "prime":
-                        client.subscribe(self._topic(device.name, "set/charge_cap"), qos=1)
-                        client.subscribe(self._topic(device.name, "set/ac_charging_power"), qos=1)
-                        client.subscribe(self._topic(device.name, "set/display_timeout"), qos=1)
+                    for operation in _FIELDS:
+                        if _supports_operation(device, operation):
+                            client.subscribe(self._topic(device.name, f"set/{operation}"), qos=1)
                 if self._loop and not self._loop.is_closed():
                     self._loop.call_soon_threadsafe(self._broker_connected)
 

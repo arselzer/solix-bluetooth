@@ -13,7 +13,7 @@ def test_mqtt_setting_payloads_are_strict():
     assert decode_setting("charge_limits", b'{"upper":95,"lower":1}') == {"upper": 95, "lower": 1}
     assert decode_setting("fast_charge", b'{"enabled":false}') == {"enabled": False}
     for operation, payload in (
-        ("ac_output", b'{"enabled":false}'),
+        ("dc_output", b'{"enabled":false}'),
         ("charge_limits", b'{"upper":true,"lower":1}'),
         ("ac_charging_power", b'{"watts":"300"}'),
         ("fast_charge", b'{"enabled":1}'),
@@ -53,14 +53,26 @@ def test_bridge_uses_only_existing_c1000_link_and_ignores_retained_commands():
             self.calls.append(("cap", upper))
             return {"max_charge_percentage": upper, "min_charge_percentage": 1}
 
+        async def set_ac_output_enabled(self, enabled):
+            self.calls.append(("ac", enabled))
+            return {"ac_output_enabled": int(enabled)}
+
+        async def set_light_mode(self, mode):
+            self.calls.append(("light", mode))
+            return {"light_mode": mode}
+
     async def scenario():
         service = MonitorService([
             DeviceConfig("c1000", "AA:BB:CC:DD:EE:01", Model.C1000_GEN2, "a" * 40),
             DeviceConfig("c2000", "AA:BB:CC:DD:EE:02", Model.C2000_GEN2, "b" * 40),
+            DeviceConfig("c300", "AA:BB:CC:DD:EE:03", Model.C300),
+            DeviceConfig("original", "AA:BB:CC:DD:EE:04", Model.C1000),
         ])
         monitor = FakeMonitor()
         service._monitors["c1000"] = monitor
         service._monitors["c2000"] = monitor
+        service._monitors["c300"] = monitor
+        service._monitors["original"] = monitor
         bridge = MqttBridge(service)
         bridge._client = FakeClient()
 
@@ -77,6 +89,21 @@ def test_bridge_uses_only_existing_c1000_link_and_ignores_retained_commands():
         count = len(bridge._client.messages)
         await bridge._handle_command("solix_gen2/c2000/set/charge_limits", b'{"upper":80,"lower":1}', False)
         assert len(bridge._client.messages) == count
+
+        for name in ("c300", "original"):
+            await bridge._handle_command(f"solix_gen2/{name}/set/ac_output", b'{"enabled":true}', False)
+            assert monitor.calls[-1] == ("ac", True)
+            assert bridge._client.messages[-1][1]["confirmed"] == {"ac_output_enabled": 1}
+            await bridge._handle_command(f"solix_gen2/{name}/set/light_mode", b'{"mode":1}', False)
+            assert monitor.calls[-1] == ("light", 1)
+            await bridge._handle_command(f"solix_gen2/{name}/set/ac_charging_power", b'{"watts":300}', False)
+            assert monitor.calls[-1] == ("power", 300)
+        for name in ("c1000", "c2000"):
+            before = len(monitor.calls)
+            await bridge._handle_command(f"solix_gen2/{name}/set/ac_output", b'{"enabled":false}', False)
+            assert len(monitor.calls) == before
+            with pytest.raises(ValueError, match="not verified"):
+                await service.apply_setting(name, "ac_output", enabled=False)
         with pytest.raises(ValueError, match="not verified"):
             await service.apply_setting("c2000", "charge_limits", upper=80, lower=1)
 

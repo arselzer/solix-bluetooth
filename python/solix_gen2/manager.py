@@ -90,23 +90,29 @@ class MonitorService:
             await asyncio.gather(*tasks, return_exceptions=True)
 
     async def apply_setting(self, name: str, setting: str, **values: int | bool) -> dict[str, int | str]:
-        """Apply a verified Gen 2 setting through the service's existing BLE link."""
+        """Apply a model-supported setting through the service's existing BLE link."""
         device = self.devices.get(name)
         if device is None:
             raise ValueError("Unknown device")
-        if device.protocol != "prime" or (
-            device.model != Model.C1000_GEN2
-            and not (device.model == Model.C2000_GEN2 and setting in ("charge_cap", "ac_charging_power", "display_timeout"))
-        ):
-            raise ValueError("This setting is not verified for the selected Gen 2 Prime model")
+        legacy_setting = (device.model in (Model.C300, Model.C1000) and setting in (
+            "display_timeout", "ac_charging_power", "ac_output", "light_mode",
+        ))
         if setting == "charge_cap" and device.model != Model.C2000_GEN2:
             raise ValueError("Charge-cap setting is verified only on C2000 Gen 2 Prime")
+        prime_setting = device.protocol == "prime" and (
+            (device.model == Model.C1000_GEN2 and setting in ("charge_limits", "ac_charging_power", "display_timeout", "fast_charge"))
+            or (device.model == Model.C2000_GEN2 and setting in ("charge_cap", "ac_charging_power", "display_timeout"))
+        )
+        if not legacy_setting and not prime_setting:
+            raise ValueError("This setting is not verified for the selected model")
         expected = {
             "charge_limits": {"upper": int, "lower": int},
             "charge_cap": {"upper": int},
             "ac_charging_power": {"watts": int},
             "display_timeout": {"seconds": int},
             "fast_charge": {"enabled": bool},
+            "ac_output": {"enabled": bool},
+            "light_mode": {"mode": int},
         }.get(setting)
         if expected is None:
             raise ValueError("Unsupported setting")
@@ -124,6 +130,10 @@ class MonitorService:
                 return await monitor.set_ac_charging_power(values["watts"])
             if setting == "display_timeout":
                 return await monitor.set_display_timeout(values["seconds"])
+            if setting == "ac_output":
+                return await monitor.set_ac_output_enabled(values["enabled"])
+            if setting == "light_mode":
+                return await monitor.set_light_mode(values["mode"])
             return await monitor.set_fast_charge_enabled(values["enabled"])
 
     async def _run_device(self, device: DeviceConfig) -> None:

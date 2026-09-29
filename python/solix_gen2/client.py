@@ -1,4 +1,4 @@
-"""Async Bleak client for local SOLIX Gen 2 telemetry."""
+"""Async Bleak client for local SOLIX telemetry."""
 
 from __future__ import annotations
 
@@ -7,14 +7,14 @@ from collections.abc import Callable
 import inspect
 from typing import Any
 
-from .protocol import COMMAND_UUID, TELEMETRY_UUID, Model, Session
+from .protocol import COMMAND_UUID, TELEMETRY_UUID, Model, Session, parse_packet
 from .diagnostics import decode_network_diagnostics
 
 UpdateCallback = Callable[[dict[str, int | str]], Any]
 
 
 async def discover(timeout: float = 5.0) -> list[Any]:
-    """Return nearby C1000 Gen 2 and C2000 Gen 2 BLE devices."""
+    """Return supported stations, including experimental original C1000."""
     from bleak import BleakScanner
 
     found = await BleakScanner.discover(timeout=timeout)
@@ -32,7 +32,8 @@ class SolixMonitor:
     """Keep a BLE connection and publish telemetry updates.
 
     Pass a Bleak ``BLEDevice`` from :func:`discover`, or pass its address and
-    specify ``model=Model.C1000_GEN2`` or ``Model.C2000_GEN2``. The callback
+    specify a supported ``Model``. C300/C300X AC and original C1000 default
+    to legacy without an owner ID; Gen 2 defaults to Prime. The callback
     receives a fresh copy of the latest decoded metrics on each update.
     """
 
@@ -42,15 +43,17 @@ class SolixMonitor:
         *,
         model: Model | None = None,
         owner_user_id: str | None = None,
-        protocol: str = "prime",
+        protocol: str | None = None,
         timezone_name: str | None = None,
         on_update: UpdateCallback | None = None,
     ) -> None:
         self.device = device
         self.model = model or Model.from_name(getattr(device, "name", None))
-        self.protocol = protocol
+        self.protocol = self.model.resolve_protocol(protocol)
         self.timezone_name = timezone_name
         self.metrics: dict[str, int | str] = {}
+        self._telemetry_revision = 0
+        self._field_revision: dict[str, int] = {}
         self.raw_tlvs: dict[int, bytes] = {}
         self._session = Session(self.model, owner_user_id, protocol=self.protocol,
                                 timezone_name=self.timezone_name)
@@ -125,11 +128,11 @@ class SolixMonitor:
         return await asyncio.wait_for(self._updates.get(), timeout)
 
     async def request_status(self) -> None:
-        """Refresh the Gen 2 telemetry subscription."""
+        """Request fresh telemetry using the model's status command."""
         if not self.connected:
             raise RuntimeError("Monitor is not connected")
         await self._client.write_gatt_char(
-            COMMAND_UUID, self._session.send_command("4100", b"\xa1\x01\x21"), response=False
+            COMMAND_UUID, self._session.status_packet(), response=False
         )
 
     async def _wait_for_response(self, command: str, timeout: float = 20) -> bytes:
@@ -207,15 +210,32 @@ class SolixMonitor:
             raise RuntimeError("Monitor is not connected")
         while not self._updates.empty():
             self._updates.get_nowait()
+        while not self._responses.empty():
+            self._responses.get_nowait()
+        command = parse_packet(packet).command
+        reply_command = bytes((command[0] | 0x08, command[1])).hex()
+        baseline_revision = self._telemetry_revision
+
+        def check_reply() -> None:
+            while not self._responses.empty():
+                received, payload = self._responses.get_nowait()
+                if received == reply_command and (not payload or payload[0] != 0):
+                    code = payload[:1].hex() if payload else "empty"
+                    raise RuntimeError(f"Station rejected setting ({received}, status {code})")
+
         await self._client.write_gatt_char(COMMAND_UUID, packet, response=False)
         for _ in range(4):
             await asyncio.sleep(0.5)
+            check_reply()
             await self.request_status()
             try:
                 await self.wait_for_update(timeout=5)
             except TimeoutError:
+                check_reply()
                 continue
-            if all(self.metrics.get(name) == value for name, value in expected.items()):
+            check_reply()
+            if all(self._field_revision.get(name, 0) > baseline_revision
+                   and self.metrics.get(name) == value for name, value in expected.items()):
                 return self.metrics.copy()
         raise TimeoutError(f"Station did not report the requested setting: {expected}")
 
@@ -246,14 +266,35 @@ class SolixMonitor:
         })
 
     async def set_ac_charging_power(self, watts: int) -> dict[str, int | str]:
-        """Set Gen 2 Prime AC charging power, then confirm telemetry."""
+        """Set the AC charging-power limit, then confirm fresh telemetry."""
         packet = self._session.ac_charging_power_packet(watts)
         return await self._write_setting(packet, {"ac_charging_power_limit_w": watts})
 
+    async def set_ac_output_enabled(self, enabled: bool) -> dict[str, int | str]:
+        """Set C300/original C1000 AC output and confirm; unavailable on C2000."""
+        packet = self._session.ac_output_packet(enabled)
+        return await self._write_setting(packet, {"ac_output_enabled": int(enabled)})
+
+    async def set_light_mode(self, mode: int) -> dict[str, int | str]:
+        """Set C300/original C1000 light mode (0..4), then confirm telemetry."""
+        packet = self._session.light_mode_packet(mode)
+        return await self._write_setting(packet, {"light_mode": mode})
+
     async def set_display_timeout(self, seconds: int) -> dict[str, int | str]:
-        """Set Gen 2 display timeout and confirm telemetry (C2000: 30/60 s only)."""
+        """Set display timeout and confirm telemetry (C300/C2000: 30/60 s only)."""
         packet = self._session.display_timeout_packet(seconds)
         return await self._write_setting(packet, {"display_timeout_seconds": seconds})
+
+    async def set_c1000_setting(self, setting: str, value: int | bool) -> dict[str, int | str]:
+        """Apply a reference-derived original C1000 control and require fresh readback.
+
+        This path is not hardware verified. Record the baseline before testing
+        and restore it afterward. A timeout does not mean the write was ignored.
+        """
+        from .c1000 import c1000_setting
+        packet = self._session.c1000_control_packet(setting, value)
+        _command, _payload, expected = c1000_setting(setting, value)
+        return await self._write_setting(packet, expected)
 
     async def set_fast_charge_enabled(self, enabled: bool) -> dict[str, int | str]:
         """Set C1000 fast charge switch and confirm the reported value."""
@@ -289,6 +330,8 @@ class SolixMonitor:
             if update.pairing_required:
                 self.pairing_required.set()
             if update.telemetry is not None:
+                self._telemetry_revision += 1
+                self._field_revision.update({name: self._telemetry_revision for name in update.telemetry})
                 self.metrics.update(update.telemetry)
                 self.raw_tlvs = update.raw_tlvs or {}
                 snapshot = self.metrics.copy()

@@ -1,9 +1,17 @@
 # solix-gen2-ble
 
-Async Python monitoring for Anker SOLIX C1000 Gen 2 (A1763) and C2000 Gen 2
-(A1783) over local Bluetooth, plus verified C1000 charge-limit, AC charging
-power, display timeout, and fast charge switch controls. C2000 upper charge cap,
-charging power, and 30/60-second screen timeout are also verified. It uses no cloud account.
+Async Python monitoring over local Bluetooth, with a CLI, HTTP server, and
+MQTT bridge. It uses no cloud account.
+
+| Model profile | Monitoring | Controls |
+| --- | --- | --- |
+| `c300` — C300/C300X AC | C300X tested live; C300 sibling uses the reference map | AC output, light, charging-power limit, screen timeout verified |
+| `c1000` — original A1761 | Implemented, **not hardware tested** | Available normally with validation and telemetry confirmation |
+| `c1000_gen2` — A1763 | Tested live | Verified charge limits, charging power, display timeout, fast charge |
+| `c2000_gen2` — A1783 | Tested live | Verified upper charge cap, charging power, screen timeout 30/60 s |
+
+C300 DC variants are not supported. Package/import/CLI names remain
+`solix-gen2-ble`, `solix_gen2`, and `solix-gen2` for compatibility.
 
 Install from this repository (include `server` and/or `mqtt` for the network services):
 
@@ -22,7 +30,7 @@ from solix_gen2 import SolixMonitor, discover
 async def main():
     devices = await discover()
     if not devices:
-        raise RuntimeError("No SOLIX Gen 2 device is advertising")
+        raise RuntimeError("No supported SOLIX device is advertising")
     async with SolixMonitor(devices[0], owner_user_id=os.environ["SOLIX_CLIENT_ID"]) as monitor:
         while True:
             print(await monitor.wait_for_update(timeout=30))
@@ -42,6 +50,48 @@ monitor = SolixMonitor(
 await monitor.connect()
 # On unload: await monitor.disconnect()
 ```
+
+### C300/C300X AC and original C1000
+
+These profiles automatically select legacy Bluetooth and do not need
+`owner_user_id` or `pair`. For example:
+
+```bash
+solix-gen2 scan
+solix-gen2 add --name c300 --model c300 --address AA:BB:CC:DD:EE:03
+solix-gen2 monitor --name c300
+solix-gen2 set-display-timeout --name c300 --seconds 60
+solix-gen2 set-display-timeout --name c300 --seconds 30
+solix-gen2 set-ac-output --name c300 --enabled on
+solix-gen2 set-light --name c300 --mode low
+solix-gen2 set-charge-power --name c300 --watts 300
+```
+
+Use `SolixMonitor(ble_device)` or, with an address,
+`SolixMonitor(address, model=Model.C300)` in Python. The same saved config works
+with `serve` and `mqtt-bridge`; the bridge accepts C300 `display_timeout`,
+`ac_charging_power`, `ac_output`, and `light_mode` commands and publishes
+telemetry. C300 AC off/on, light off/low, 330/300 W limit, and 30/60 s display
+timeout were tested with each baseline restored. Charging-power choices are
+100/200/300/330 W; light modes are off/low/medium/high (0–3). The other values
+follow the reference map. The power test confirmed the stored AC limit while
+USB-C supplied charging; it did not measure AC charging-rate enforcement.
+No battery-percentage cap or reliable mains-presence field is identified.
+See [C300 findings](../docs/c300-protocol.md).
+
+Original C1000 uses `--model c1000` / `Model.C1000`. Its decoder and controls
+are prepared from protocol references, with synthetic tests only. Controls
+are available without an opt-in flag: use the standard power/display/AC/light
+methods and CLI commands, or `monitor.set_c1000_setting("display_brightness", 2)`
+and `c1000-setting` for additional settings. The bridge accepts the same four
+operations as C300. Device rejection replies raise errors; success requires
+the requested fields to appear in fresh telemetry after the write. Cached
+readings or an acknowledgement alone cannot confirm a setting. A timeout
+can still mean the setting changed; inspect before retrying.
+See the [original C1000 test workflow](../docs/c1000-original-protocol.md)
+for available settings, baseline capture, restoration, and uncertain fields.
+
+### Gen 2 telemetry and diagnostics
 
 `monitor.metrics` contains the latest decoded values. `monitor.raw_tlvs` keeps
 the original parameter bytes for further model decoding. C1000 Gen 2 metric
@@ -178,7 +228,7 @@ choose another path. This workspace already has a working, ignored config at
 file permissions to avoid pairing again. The monitor service and HTTP server
 never send setting or AC/DC output commands.
 
-For a C1000 still on firmware 1.1.4.3, use:
+For a C1000 **Gen 2** still on firmware 1.1.4.3, use:
 
 ```bash
 solix-gen2 add --name c1000 --address AA:BB:CC:DD:EE:02 --model c1000_gen2 --protocol legacy
@@ -250,7 +300,7 @@ Peak scheduling and battery discharge with mains connected remain unverified.
 
 `mqtt-bridge` connects to the stations over Bluetooth and publishes their
 telemetry to a broker on the same node or LAN. The stations themselves do not
-connect to this broker. This offers MQTT monitoring and the verified C1000
+connect to this broker. This offers MQTT monitoring and model-supported
 settings through the packaged CLI; native MQTT currently requires the separate
 experimental lab setup described below.
 
@@ -273,7 +323,7 @@ connection, and these stations may reject a second client.
 | `solix_gen2/c1000/result` | Nonretained JSON confirmation or error for the last setting command |
 
 Publish JSON to the following **nonretained** command topics, using your
-configured C1000 name in place of `c1000`:
+configured names in place of these examples (`c1000` below is **Gen 2**):
 
 ```text
 solix_gen2/c1000/set/charge_limits      {"upper":95,"lower":1}
@@ -283,15 +333,22 @@ solix_gen2/c1000/set/fast_charge       {"enabled":false}
 solix_gen2/c2000/set/ac_charging_power  {"watts":1700}
 solix_gen2/c2000/set/charge_cap         {"upper":95}
 solix_gen2/c2000/set/display_timeout   {"seconds":60}
+solix_gen2/c300/set/ac_output          {"enabled":true}
+solix_gen2/c300/set/light_mode         {"mode":1}
+solix_gen2/c300/set/ac_charging_power  {"watts":300}
+solix_gen2/c300/set/display_timeout    {"seconds":60}
 ```
 
-The bridge checks types and the library's verified value ranges, uses its
+Original C1000 has the same four operations as C300, using its own ranges;
+these original C1000 paths are hardware untested. No opt-in flag is required.
+The bridge checks types and the library's model-specific value ranges, uses its
 existing BLE connection, and waits for telemetry confirmation before
 publishing `result`. It ignores retained commands replayed at subscription,
 reports a full command queue instead of silently dropping a write, and clears
 queued commands if the broker connection drops.
 The C2000 subscribes only to its verified charge-cap, charging-power, and screen-timeout
-topics; there are no AC/DC output commands. A live
+topics; it has no AC/DC output commands. AC output commands are restricted
+to C300 AC and original C1000 profiles. A live
 C2000-only test on the HA node published its status to a disposable loopback
 MQTT listener, with AC output on. An idempotent 1800 W C2000 charging-power
 command sent through the loopback broker returned a confirmed result. This

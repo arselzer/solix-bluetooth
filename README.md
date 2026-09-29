@@ -5,7 +5,7 @@ A web app for local Bluetooth control and monitoring of Anker Solix devices. The
 Tested with:
 - **Solarbank 3 E2700 Pro** (A17C5) — telemetry monitoring, daytime solar confirmed
 - **Anker SOLIX C1000** (A1761) — telemetry monitoring + control commands
-- **Anker SOLIX C300X** (A1753) — telemetry monitoring
+- **Anker SOLIX C300X AC** (reference model A1723) — Python telemetry, reconnects, AC output, light, charging-power limit, and display timeout verified
 - **Anker SOLIX C1000 Gen 2** (A1763) — live BLE telemetry and AC/DC output controls on this laptop
 - **Anker SOLIX C2000 Gen 2** (A1783) — live BLE telemetry and verified charge-cap, charging-power, and screen-timeout controls from Python and MQTT, with AC output left on
 
@@ -37,11 +37,19 @@ Built with Vue 3, TypeScript, and the Web Bluetooth API. Protocol based on rever
 |--------|-------|-----------|---------|-------------|-------|
 | Solarbank 3 E2700 Pro | A17C5 | Yes | Scan only | float32 (495B) | Streams telemetry, dual solar inputs confirmed |
 | Anker SOLIX C1000 | A1761 | Yes | Yes | uint16 (312B) | AC/DC toggle, display, lights confirmed |
-| Anker SOLIX C300X | A1753 | Yes | Untested | uint16 (279B) | Serial at 0xc5, different param layout |
+| Anker SOLIX C300/C300X AC | A1722/A1723 | Python: C300X tested | Python: AC output, light, charging power, display timeout | Typed TLV | Legacy CBC, no account ID; C300 sibling untested; historical browser map needs correction |
 | Anker SOLIX C1000 Gen 2 | A1763 | Yes | AC/DC On/Off; charge limits, AC charging power, display timeout, and fast charge switch | Packed TLV | Firmware 1.1.4.3: legacy CBC; 1.1.4.9: Prime GCM and button pairing. Controls verified after update; AC on/DC off restored |
 | Anker SOLIX C2000 Gen 2 | A1783 | Yes | Python/CLI/MQTT charge cap, charging power, and screen timeout; browser monitoring only | Packed TLV | Prime GCM; generated client ID paired by main button press |
 
-The [Python library, CLI, HTTP server, and local MQTT bridge](python/README.md) provide local monitoring for these Gen 2 models and can feed Home Assistant or other servers. The Python client, CLI, and MQTT bridge expose the C2000 upper charge cap, AC charging-power limit, and 30/60-second screen timeout, plus verified C1000 charge limits, AC charging power, display timeout, and fast charge settings. Raising the C2000 cap from 90% to 95% started charging at the configured 500 W limit while AC output stayed on. The browser exposes C1000 charge limits, AC charging power, and AC/DC switches. The CLI can join either Prime station to a WPA2 AP over Bluetooth; C1000 API setup is experimental, and direct device MQTT remains under investigation. C2000 output controls remain disabled. On both tested Prime stations, the browser generates a 40-character client ID, saves it locally for the selected Bluetooth device, and prompts for one short main power button press if registration returns `09`. Click **I pressed the main button** after pressing it. Later connections reuse the saved ID without another press. You can also enter an existing 40-character ID. The Python library exposes its generated ID for the caller to save in Home Assistant configuration. See the [versioned protocol notes](docs/gen2-protocol.md) for observed behavior and open questions.
+The [Python library, CLI, HTTP server, and local MQTT bridge](python/README.md) provide local monitoring for C300 AC and these Gen 2 models and can feed Home Assistant or other servers. The Python client, CLI, and MQTT bridge expose C300 screen timeout, the C2000 upper charge cap, AC charging-power limit, and 30/60-second screen timeout, plus verified C1000 Gen 2 charge limits, AC charging power, display timeout, and fast charge settings. Raising the C2000 cap from 90% to 95% started charging at the configured 500 W limit while AC output stayed on. The browser exposes C1000 Gen 2 charge limits, AC charging power, and AC/DC switches. The CLI can join either Prime station to a WPA2 AP over Bluetooth; C1000 Gen 2 API setup is experimental, and direct device MQTT remains under investigation. C2000 output controls remain disabled. On both tested Prime stations, the browser generates a 40-character client ID, saves it locally for the selected Bluetooth device, and prompts for one short main power button press if registration returns `09`. Click **I pressed the main button** after pressing it. Later connections reuse the saved ID without another press. You can also enter an existing 40-character ID. The Python library exposes its generated ID for the caller to save in Home Assistant configuration. See the [versioned protocol notes](docs/gen2-protocol.md) for observed behavior and open questions.
+
+[C300/C300X AC findings](docs/c300-protocol.md) include live USB-C charging,
+firmware identifiers, and restored control tests. The Python package
+also includes [original C1000/A1761 support ready for testing](docs/c1000-original-protocol.md):
+its new decoder and controls have synthetic tests, **no hardware
+verification**. Controls use normal APIs with validation and fresh telemetry
+confirmation, without an opt-in flag. These legacy profiles need no Prime pairing ID. C300 DC is
+not supported by these profiles.
 
 Prime registration is encrypted using a fresh ECDH session key. Local pairing on both tested stations required no Anker account ID: each first rejected our generated ID with `09`; after one short main power button press and a registration retry in the same BLE connection, each accepted the ID and streamed telemetry. They accepted the same ID again on reconnect. [Anker's C2000 guide](https://salesforce-knowledge-download.s3.us-west-2.amazonaws.com/000032532/en_US/000032532.pdf) documents this physical pairing confirmation. The phone's active Bluetooth connection prevented the laptop from seeing the C2000 advertisement during our test, so temporarily disconnect the phone if discovery fails. The C2000's AC output remained on throughout testing; do not press the separate AC output button.
 
@@ -164,38 +172,15 @@ The **type byte** (first byte of each value) indicates the encoding:
 | `0xd5`/`0xd6` | Max output/charge power | 3600W / 1200W |
 | `0xfe` | Anti-replay timestamp | Increments each packet |
 
-#### C1000 (A1761) — 312 bytes, uint16 values
+#### Original C1000 and C300/C300X AC
 
-| ID | Name | Notes |
-|----|------|-------|
-| `0xa5`-`0xa9` | AC in/out, DC out, USB-C, USB-A | Power (W) |
-| `0xab` | Battery percentage | % |
-| `0xac` | Battery power | Signed (W) |
-| `0xae` | Solar input | W |
-| `0xaf`/`0xb0` | AC/DC switch state | 0=off, 1=on |
-| `0xb3`/`0xba` | Temperature / Battery temp | /10 = Celsius |
-| `0xb5`/`0xb6` | Battery cycles / health | |
-| `0xd0` | Serial number | ASCII string |
-| `0xd1` | Capacity | 1000 = 1000Wh |
-| `0xd7`/`0xd8` | AC/DC enabled | Config flags |
-| `0xda` | Min SoC reserve | 50% |
-| `0xfd` | Model name | "A1761_30Ah" |
-
-#### C300X (A1753) — 279 bytes, uint16 values
-
-| ID | Name | Notes |
-|----|------|-------|
-| `0xb1` | Battery capacity | 1049 Wh |
-| `0xb3` | Total discharged | 508 Wh lifetime |
-| `0xb4` | Temperature | 27°C |
-| `0xb5` | Battery SoC | 123 |
-| `0xbb`/`0xbc` | AC/DC power limits | 82W |
-| `0xc5` | Serial number | "AZVSBK0F11400646" |
-| `0xc6` | Max AC input | 330W |
-| `0xc7` | Max solar input | 120W |
-| `0xc8`/`0xc9` | Display/idle timeout | 30s / 60min |
-| `0xcd` | Light mode | 2 = auto |
-| `0xce` | Min SoC | 50% |
+The historical browser field tables conflict with current reference maps
+and the new C300 capture. Use the separate [original C1000 reference map](docs/c1000-original-protocol.md)
+and [live C300 findings](docs/c300-protocol.md) for Python work. In particular,
+C300 `B1=1049` is a firmware version code, not battery capacity; `BB` is
+battery percentage, `C8` is the verified display timeout, and `CF` is light
+mode. C300 `BC` and `CD` remain ambiguous. The browser decoder has not yet been
+updated to these corrected Python mappings.
 
 ## Requirements
 
@@ -287,7 +272,7 @@ Note: Only works for captures from our app (known ECDH key). The official Anker 
 - TLV type byte `0x05` = IEEE 754 float32 (Solarbank uses floats, C1000/C300X use uint16)
 - The Solarbank 3 sends 3 fragments (2x253B + 1 small) with sequence bytes that must be stripped
 - C1000 sends 2 fragments without sequence bytes
-- C300X sends 2 fragments (253B + 57B) without sequence bytes
+- The tested C300X AC sends two fragments with `12`/`22` counters; strip them before CBC decryption (see the C300 notes)
 - Device public key is after 3 prefix bytes (`00 a1 40`) in the cmd `0x21` response
 - `0x4030` returns firmware versions including model code ("A17C5", "A17C5_mcu", "A17C5_esp32")
 - `0x4020` returns device capabilities (31B on Solarbank)
@@ -296,7 +281,9 @@ Note: Only works for captures from our app (known ECDH key). The official Anker 
 
 ## Status
 
-This is an active reverse engineering project. Three devices connect, decrypt, and display telemetry successfully. C1000 control commands are confirmed working.
+This is an active reverse engineering project. Device and firmware verification
+is tracked separately in the Python and protocol documentation; historical
+browser observations do not verify new Python implementations.
 
 **Working:**
 - BLE connection with auto-retry and auto-reconnect
@@ -304,7 +291,7 @@ This is an active reverse engineering project. Three devices connect, decrypt, a
 - TLV telemetry parsing with type-byte auto-detection
 - C1000 control commands (AC, DC, display, lights)
 - Solarbank 3 real-time telemetry monitoring (daytime solar confirmed)
-- C300X telemetry monitoring
+- C300X AC Python telemetry, reconnects, AC output, light, charging-power limit, and screen timeout
 - Periodic status polling (10s interval)
 - Command scanner for discovering new commands
 - CSV export (snapshot or continuous recording)
@@ -314,7 +301,8 @@ This is an active reverse engineering project. Three devices connect, decrypt, a
 
 **Not yet implemented:**
 - Solarbank control commands (command scan done, write payloads need Frida)
-- C300X control commands (untested)
+- C300X AC battery-percentage cap, display brightness, and corrected browser decoding
+- Original C1000 Python hardware validation (experimental support is ready)
 - Setting write commands (min SoC, charge limits, timeouts)
 - Multi-device simultaneous connection
 

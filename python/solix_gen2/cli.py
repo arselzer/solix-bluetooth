@@ -16,10 +16,10 @@ from .protocol import Model
 
 
 def parser() -> argparse.ArgumentParser:
-    command = argparse.ArgumentParser(prog="solix-gen2", description="Local SOLIX Gen 2 BLE monitoring")
+    command = argparse.ArgumentParser(prog="solix-gen2", description="Local SOLIX Bluetooth monitoring and controls")
     subcommands = command.add_subparsers(dest="command", required=True)
 
-    scan = subcommands.add_parser("scan", help="Find nearby C1000/C2000 Gen 2 devices")
+    scan = subcommands.add_parser("scan", help="Find C300 AC, C1000, and C1000/C2000 Gen 2 devices")
     scan.add_argument("--timeout", type=float, default=8)
 
     add = subcommands.add_parser("add", help="Save a known device in the local config")
@@ -27,14 +27,14 @@ def parser() -> argparse.ArgumentParser:
     add.add_argument("--address", required=True)
     add.add_argument("--model", choices=[model.value for model in Model], required=True)
     add.add_argument("--client-id", help="Previously paired 40-character Prime client ID")
-    add.add_argument("--protocol", choices=["prime", "legacy"], default="prime")
+    add.add_argument("--protocol", choices=["prime", "legacy"], help="Default: legacy for C300/original C1000, Prime for Gen 2")
     add.add_argument("--timezone", help="Station timezone, for example Europe/Vienna")
     add.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
 
     pair = subcommands.add_parser("pair", help="Pair a Prime Gen 2 station with one main button press")
     pair.add_argument("--name", required=True)
     pair.add_argument("--address", required=True)
-    pair.add_argument("--model", choices=[model.value for model in Model], default=Model.C2000_GEN2.value)
+    pair.add_argument("--model", choices=[Model.C1000_GEN2.value, Model.C2000_GEN2.value], default=Model.C2000_GEN2.value)
     pair.add_argument("--client-id", help="Use an existing 40-character ID")
     pair.add_argument("--timezone", help="Station timezone, for example Europe/Vienna")
     pair.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
@@ -52,7 +52,7 @@ def parser() -> argparse.ArgumentParser:
     serve.add_argument("--host", default="127.0.0.1")
     serve.add_argument("--port", type=int, default=8765)
 
-    mqtt = subcommands.add_parser("mqtt-bridge", help="Publish BLE status and verified Gen 2 settings through a local MQTT broker")
+    mqtt = subcommands.add_parser("mqtt-bridge", help="Publish BLE status and supported settings through a local MQTT broker")
     mqtt.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     mqtt.add_argument("--broker", default="127.0.0.1")
     mqtt.add_argument("--port", type=int, default=1883)
@@ -72,15 +72,32 @@ def parser() -> argparse.ArgumentParser:
     cap.add_argument("--upper", type=int, required=True, help="80–100 percent in 5 percent steps")
     cap.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
 
-    power = subcommands.add_parser("set-charge-power", help="Set C1000/C2000 Gen 2 Prime AC charging power")
+    power = subcommands.add_parser("set-charge-power", help="Set a supported station's AC charging-power limit")
     power.add_argument("--name", required=True)
-    power.add_argument("--watts", type=int, required=True, help="300–1200 W (C1000) or 300–1800 W (C2000), in 100 W steps")
+    power.add_argument("--watts", type=int, required=True, help="C300:100/200/300/330; C1000:100–1000; Gen 2:300–1200; C2000:300–1800 W (100 W steps)")
     power.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
 
-    display = subcommands.add_parser("set-display-timeout", help="Set C1000/C2000 Gen 2 display timeout")
+    display = subcommands.add_parser("set-display-timeout", help="Set C300 AC, original C1000, or Gen 2 display timeout")
     display.add_argument("--name", required=True)
     display.add_argument("--seconds", type=int, required=True)
     display.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
+
+    ac = subcommands.add_parser("set-ac-output", help="Set C300 AC or original C1000 AC output")
+    ac.add_argument("--name", required=True)
+    ac.add_argument("--enabled", choices=["on", "off"], required=True)
+    ac.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
+
+    light = subcommands.add_parser("set-light", help="Set C300 AC or original C1000 light mode")
+    light.add_argument("--name", required=True)
+    light.add_argument("--mode", choices=["off", "low", "medium", "high", "sos"], required=True)
+    light.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
+
+    from .c1000 import C1000_SETTINGS
+    original = subcommands.add_parser("c1000-setting", help="Set an original C1000/A1761 control (hardware untested)")
+    original.add_argument("--name", required=True)
+    original.add_argument("--setting", choices=C1000_SETTINGS, required=True)
+    original.add_argument("--value", type=int, required=True, help="Integer value; enabled switches use 0 or 1")
+    original.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
 
     fast = subcommands.add_parser("set-fast-charge", help="Set C1000 fast charge switch")
     fast.add_argument("--name", required=True)
@@ -185,10 +202,14 @@ async def _set(args: argparse.Namespace) -> None:
     device = next((saved for saved in load_config(args.config) if saved.name == args.name), None)
     if device is None:
         raise ValueError(f"Unknown configured device: {args.name}")
-    if device.protocol != "prime" or (
-        device.model != Model.C1000_GEN2
-        and not (device.model == Model.C2000_GEN2 and args.command in ("set-display-timeout", "set-charge-power", "set-charge-cap"))
-    ):
+    legacy_setting = (device.model in (Model.C300, Model.C1000) and args.command in (
+        "set-display-timeout", "set-charge-power", "set-ac-output", "set-light",
+    ))
+    prime_setting = device.protocol == "prime" and (
+        (device.model == Model.C1000_GEN2 and args.command in ("set-limits", "set-display-timeout", "set-charge-power", "set-fast-charge", "set-charge-cap"))
+        or (device.model == Model.C2000_GEN2 and args.command in ("set-display-timeout", "set-charge-power", "set-charge-cap"))
+    )
+    if not legacy_setting and not prime_setting:
         raise ValueError("This setting is not verified for the selected device")
     if args.command == "set-charge-cap" and device.model != Model.C2000_GEN2:
         raise ValueError("set-charge-cap is verified only on C2000 Gen 2 Prime")
@@ -212,12 +233,40 @@ async def _set(args: argparse.Namespace) -> None:
         elif args.command == "set-display-timeout":
             metrics = await monitor.set_display_timeout(args.seconds)
             result = {"display_timeout_seconds": metrics["display_timeout_seconds"]}
+        elif args.command == "set-ac-output":
+            metrics = await monitor.set_ac_output_enabled(args.enabled == "on")
+            result = {"ac_output_enabled": metrics["ac_output_enabled"]}
+        elif args.command == "set-light":
+            mode = ("off", "low", "medium", "high", "sos").index(args.mode)
+            metrics = await monitor.set_light_mode(mode)
+            result = {"light_mode": metrics["light_mode"]}
         else:
             metrics = await monitor.set_fast_charge_enabled(args.enabled == 'on')
             result = {"ac_fast_charge_enabled": metrics["ac_fast_charge_enabled"]}
         print(json.dumps({"name": device.name, "confirmed": result}))
     finally:
         await monitor.disconnect()
+
+
+async def _c1000_setting(args: argparse.Namespace) -> None:
+    device = next((saved for saved in load_config(args.config) if saved.name == args.name), None)
+    if device is None or device.model != Model.C1000 or device.protocol != "legacy":
+        raise ValueError("This test command requires an original C1000/A1761 legacy config")
+    value = args.value
+    if args.setting.endswith("_enabled"):
+        if value not in (0, 1):
+            raise ValueError("Enabled switches accept only 0 or 1")
+        value = bool(value)
+    from .c1000 import c1000_setting
+    _command, _payload, expected = c1000_setting(args.setting, value)
+    async with SolixMonitor(device.address, model=device.model, protocol=device.protocol) as monitor:
+        await monitor.wait_for_update(timeout=15)
+        baseline = {field: monitor.metrics.get(field) for field in expected}
+        if any(item is None for item in baseline.values()):
+            raise RuntimeError("Baseline telemetry is missing the setting; no write sent")
+        print(json.dumps({"baseline": baseline}), flush=True)
+        metrics = await monitor.set_c1000_setting(args.setting, value)
+        print(json.dumps({"confirmed": {field: metrics[field] for field in expected}}))
 
 
 async def _wifi_setup(args: argparse.Namespace) -> None:
@@ -278,8 +327,10 @@ def main(argv: list[str] | None = None) -> int:
                 topic_prefix=args.topic_prefix, username=args.username,
                 password_file=args.password_file, ca_file=args.ca_file,
             ).run())
-        elif args.command in ("set-limits", "set-charge-cap", "set-charge-power", "set-display-timeout", "set-fast-charge"):
+        elif args.command in ("set-limits", "set-charge-cap", "set-charge-power", "set-display-timeout", "set-fast-charge", "set-ac-output", "set-light"):
             asyncio.run(_set(args))
+        elif args.command == "c1000-setting":
+            asyncio.run(_c1000_setting(args))
         elif args.command in ("wifi-setup", "wifi-join"):
             asyncio.run(_wifi_setup(args))
         return 0

@@ -1,4 +1,4 @@
-"""BLE packet framing, negotiation and telemetry decoding for SOLIX Gen 2."""
+"""BLE framing, negotiation and telemetry for supported SOLIX stations."""
 
 from __future__ import annotations
 
@@ -7,6 +7,7 @@ from datetime import datetime
 from enum import Enum
 from importlib import resources
 from pathlib import Path
+import re
 import secrets
 import time
 from zoneinfo import TZPATH, ZoneInfo
@@ -59,6 +60,8 @@ def timezone_confer(timezone_name: str | None) -> tuple[bytes, bytes]:
 
 
 class Model(str, Enum):
+    C300 = "c300"
+    C1000 = "c1000"
     C1000_GEN2 = "c1000_gen2"
     C2000_GEN2 = "c2000_gen2"
 
@@ -69,7 +72,28 @@ class Model(str, Enum):
             return cls.C1000_GEN2
         if ("c2000" in text and "gen 2" in text) or "a1783" in text:
             return cls.C2000_GEN2
+        # C300/C300X AC share typed telemetry. DC variants have another map.
+        words = text.replace("_", " ").replace("-", " ")
+        if not re.search(r"\bdc\b", words) and not any(code in text for code in ("a1726", "a1728")):
+            if re.search(r"\bc300x?\b", words) or "a1722" in text or "a1723" in text:
+                return cls.C300
+        if "a1761" in text or (re.search(r"\bc1000x?\b", words) and "gen" not in words):
+            return cls.C1000
         raise ValueError(f"Unsupported SOLIX model: {name!r}")
+
+    def resolve_protocol(self, protocol: str | None = None) -> str:
+        """Choose the model default while preserving explicit C1000 legacy use."""
+        if protocol is None:
+            protocol = "legacy" if self in (Model.C300, Model.C1000) else "prime"
+        if protocol not in ("prime", "legacy"):
+            raise ValueError("protocol must be prime or legacy")
+        if self == Model.C2000_GEN2 and protocol != "prime":
+            raise ValueError("C2000 Gen 2 requires Prime protocol")
+        if self == Model.C300 and protocol != "legacy":
+            raise ValueError("C300/C300X AC support requires legacy protocol")
+        if self == Model.C1000 and protocol != "legacy":
+            raise ValueError("Original C1000 support requires legacy protocol")
+        return protocol
 
 
 @dataclass(frozen=True)
@@ -125,6 +149,12 @@ def decode_telemetry(payload: bytes, model: Model | None = None) -> tuple[dict[s
     C1000 Gen 2 offsets are documented by SolixBLE. C2000 Gen 2 appears to
     use the same telemetry command family; verify its offsets on hardware.
     """
+    if model == Model.C300:
+        from .c300 import decode_c300_telemetry
+        return decode_c300_telemetry(payload)
+    if model == Model.C1000:
+        from .c1000 import decode_c1000_telemetry
+        return decode_c1000_telemetry(payload)
     values = parse_tlvs(payload)
     metrics: dict[str, int | str] = {}
 
@@ -241,13 +271,10 @@ class ProtocolUpdate:
 class Session:
     """Pure protocol state machine; feed notifications and send its output."""
 
-    def __init__(self, model: Model, owner_user_id: str | None = None, protocol: str = "prime",
+    def __init__(self, model: Model, owner_user_id: str | None = None, protocol: str | None = None,
                  timezone_name: str | None = None):
         self.model = model
-        if protocol not in ("prime", "legacy"):
-            raise ValueError("protocol must be prime or legacy")
-        if model == Model.C2000_GEN2 and protocol != "prime":
-            raise ValueError("C2000 Gen 2 requires Prime protocol")
+        protocol = model.resolve_protocol(protocol)
         self.protocol = protocol
         if protocol == "prime" and owner_user_id is None:
             owner_user_id = secrets.token_hex(20)
@@ -316,10 +343,28 @@ class Session:
             raise RuntimeError("BLE session has not been negotiated")
         if self.model == Model.C2000_GEN2 and (command != "4100" or payload != b"\xa1\x01\x21"):
             raise ValueError("C2000 Gen 2 supports telemetry subscription only")
+        if self.model == Model.C300 and (command != "4040" or payload != b"\xa1\x01\x21"):
+            raise ValueError("C300/C300X AC supports status requests only")
+        if self.model == Model.C1000 and (command != "4040" or payload != b"\xa1\x01\x21"):
+            raise ValueError("Use the dedicated original C1000 control methods")
         if self.protocol == "prime" and command == "4100" and payload == b"\xa1\x01\x21":
             payload += C2000_SUBSCRIBE_EXTRA
         extra = tlv(0xFE, self._timestamp() if self.protocol == "prime" else b"\x03" + self._timestamp())
         return self._send(DATA_REQUEST, command, payload + extra)
+
+    def status_packet(self) -> bytes:
+        """Build the model's read-only status request or subscription."""
+        command = "4040" if self.model in (Model.C300, Model.C1000) else "4100"
+        return self.send_command(command, b"\xa1\x01\x21")
+
+    def c1000_control_packet(self, setting: str, value: int | bool) -> bytes:
+        """Build a validated, reference-derived A1761 control (hardware untested)."""
+        if self.model != Model.C1000 or self.protocol != "legacy" or not self.ready:
+            raise RuntimeError("Controls require a connected original C1000 legacy session")
+        from .c1000 import c1000_setting
+        command, payload, _expected = c1000_setting(setting, value)
+        timestamp = tlv(0xFE, b"\x03" + self._timestamp())
+        return self._send(DATA_REQUEST, command, payload + timestamp)
 
     def _require_c1000_prime_control(self) -> None:
         if self.model != Model.C1000_GEN2 or self.protocol != "prime" or not self.ready:
@@ -350,7 +395,13 @@ class Session:
         return self._send(DATA_REQUEST, '4103', payload)
 
     def ac_charging_power_packet(self, watts: int) -> bytes:
-        """Build the 4101 AC charging-power write verified on both Gen 2 units."""
+        """Build the model-specific AC charging-power limit write."""
+        if self.model == Model.C1000:
+            return self.c1000_control_packet("ac_charging_power", watts)
+        if self.model == Model.C300:
+            if type(watts) is not int or watts not in (100, 200, 300, 330):
+                raise ValueError("C300 charging power must be 100, 200, 300, or 330 W")
+            return self._c300_setting("4044", b"\x02" + watts.to_bytes(2, "little"))
         if self.model not in (Model.C1000_GEN2, Model.C2000_GEN2) or self.protocol != 'prime' or not self.ready:
             raise RuntimeError('Charging-power control requires a connected Gen 2 Prime session')
         maximum = 1800 if self.model == Model.C2000_GEN2 else 1200
@@ -361,8 +412,39 @@ class Session:
                    + tlv(0xAB, b"\x02\x00\x00") + tlv(0xFD, b"\x00" + milliseconds))
         return self._send(DATA_REQUEST, "4101", payload)
 
+    def _c300_setting(self, command: str, value: bytes) -> bytes:
+        if self.model != Model.C300 or self.protocol != "legacy" or not self.ready:
+            raise RuntimeError("C300 control requires a connected legacy session")
+        payload = (b"\xa1\x01\x21" + tlv(0xA2, value)
+                   + tlv(0xFE, b"\x03" + self._timestamp()))
+        return self._send(DATA_REQUEST, command, payload)
+
+    def ac_output_packet(self, enabled: bool) -> bytes:
+        """Set C300 or original C1000 AC output; other models are excluded."""
+        if type(enabled) is not bool:
+            raise ValueError("enabled must be a boolean")
+        if self.model == Model.C1000:
+            return self.c1000_control_packet("ac_output_enabled", enabled)
+        return self._c300_setting("404a", bytes((1, int(enabled))))
+
+    def light_mode_packet(self, mode: int) -> bytes:
+        """Set off/low/medium/high light; original C1000 also supports SOS."""
+        if type(mode) is not int or mode not in (0, 1, 2, 3, 4):
+            raise ValueError("light mode must be 0, 1, 2, 3, or 4")
+        if self.model == Model.C1000:
+            return self.c1000_control_packet("light_mode", mode)
+        if self.model == Model.C300 and mode == 4:
+            raise ValueError("C300 light mode must be 0, 1, 2, or 3")
+        return self._c300_setting("404f", bytes((1, mode)))
+
     def display_timeout_packet(self, seconds: int) -> bytes:
-        """Build the 4103 display timeout write verified on both Gen 2 units."""
+        """Build a verified display timeout write for the selected model."""
+        if self.model == Model.C1000:
+            return self.c1000_control_packet("display_timeout", seconds)
+        if self.model == Model.C300:
+            if type(seconds) is not int or seconds not in (30, 60):
+                raise ValueError("C300 display timeout is verified only at 30 or 60 seconds")
+            return self._c300_setting("4046", b"\x02" + seconds.to_bytes(2, "little"))
         if self.model not in (Model.C1000_GEN2, Model.C2000_GEN2) or self.protocol != 'prime' or not self.ready:
             raise RuntimeError('Display timeout control requires a connected Gen 2 Prime session')
         if self.model == Model.C2000_GEN2 and seconds not in (30, 60):
@@ -442,7 +524,7 @@ class Session:
             return self._negotiate(packet)
         # The C1000 app's 4824/4825 Wi-Fi acknowledgements use the request
         # pattern even though they arrive as GATT notifications.
-        if packet.pattern == DATA_REQUEST and packet.command[0] == 0x48:
+        if packet.pattern == DATA_REQUEST and (packet.command[0] == 0x48 or packet.command.hex() in ("4901", "4903")):
             return self._receive_data(packet)
         if packet.pattern == DATA_RESPONSE:
             return self._receive_data(packet)
@@ -482,7 +564,7 @@ class Session:
                     raise RuntimeError(f'Prime registration failed: {plain[:1].hex()}')
                 self.pairing_required = False
                 self.ready = True
-                outgoing.append(self.send_command("4100", b"\xa1\x01\x21"))
+                outgoing.append(self.status_packet())
         else:
             prefix = lambda: self._legacy_prefix()
             if command == "0801":
@@ -498,14 +580,17 @@ class Session:
                 stage5 = prefix() + tlv(0xA3, b"\x20") + tlv(0xA4, bytes(4)) + tlv(0xA5, b"UTC0")
                 outgoing.append(self._send(NEGOTIATION, "4022", stage5))
                 self.ready = True
-                outgoing.append(self.send_command("4100", b"\xa1\x01\x21"))
+                outgoing.append(self.status_packet())
         return ProtocolUpdate(outgoing=outgoing, ready=self.ready)
 
     def _receive_data(self, packet: Packet) -> ProtocolUpdate:
         if not self._secret:
             return ProtocolUpdate()
-        if packet.command[0] == 0x48:
+        legacy_station = self.model in (Model.C300, Model.C1000)
+        if (packet.command[0] == 0x48 or packet.command.hex() in ("4901", "4903")) and not (legacy_station and packet.command.hex() == "4840"):
             return ProtocolUpdate(response=(packet.command.hex(), self._crypt(packet.payload, False)))
+        if legacy_station and packet.command.hex() not in ("c402", "c405", "c840", "0402", "0405", "4840"):
+            return ProtocolUpdate()
         payload = packet.payload
         if packet.command[0] in (0xC4, 0xC8, 0xC9):
             if not payload:
