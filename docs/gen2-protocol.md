@@ -227,6 +227,21 @@ After both corrected-response trials, the isolated AP and services were stopped,
 
 Offline reconstruction also recovered the C1000 1.1.4.9 controller update package. The main controller passes its CRC-16/MODBUS check, the BMS passes CRC-16/XMODEM, and the display passes its byte-sum check after removing a repeating XOR mask. The controller contains explicit Time-of-Use readiness checks, a **different C1000 schedule layout**, additional display/alert settings, disaster-preparation and timer-plan handlers, and energy accounting. In the normal radio path, the controller's Wi-Fi-ready notification requires both AP and MQTT connectivity; this is a stronger explanation for the earlier inactive tariffs than association alone. The recovered code is C1000 firmware, so applying that explanation to C2000 remains an inference. Full versions, addresses, limitations, and next checks are in [Gen 2 firmware findings](firmware-findings.md). This analysis used retained local data and sent no station or cloud requests.
 
+### MQTT parser replay and HTTP framing comparison
+
+Further offline execution of the recovered C1000 radio code accepted both the
+retained official response and the generated lab response, including credential
+storage validation and MQTT startup checks with synthetic identities. HTTP/1.0
+was accepted. The plain HTTP receive loop does have a reproduced short-read
+failure when `EAGAIN` follows a partial block; one-byte HTTP chunks avoid it in
+the replay. A guarded C2000 hardware comparison served that framing and captured
+the complete response, but still produced no broker DNS query or TCP connection.
+Charge caps 90%/1%, charging power 1800 W, Standard mode, zero schedule slots, and
+AC output on were unchanged. The AP was stopped and temporary HA credentials
+removed after archiving. Detailed parser addresses, identity requirements,
+29 replay cases, and limitations are in the
+[native local MQTT investigation](local-mqtt-investigation.md).
+
 ### BLE-to-MQTT bridge
 
 As a usable local MQTT path, the Python package now includes an optional **BLE-to-MQTT bridge**. It publishes sanitized C1000/C2000 telemetry and availability to a local broker. It subscribes to four verified C1000 setting topics, and only upper charge cap, charging power, and screen timeout for C2000. It has no AC/DC output command. On the HA node, a disposable loopback broker received live C1000 telemetry; a 100%/1% charge-limit write through MQTT was confirmed by the station, and the bridge last will marked it offline when stopped. This does not mean the power station itself connected to MQTT. See the [Python MQTT bridge instructions](../python/README.md#local-mqtt-bridge).

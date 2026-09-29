@@ -257,6 +257,7 @@ docs/
   app-reverse-engineering.md — Anker app decompilation findings
   gen2-protocol.md  — Versioned live Gen 2 observations
   firmware-findings.md — Offline C1000 firmware analysis and open questions
+  local-mqtt-investigation.md — Native MQTT parser replays and isolated AP trials
 ```
 
 ## Reverse Engineering
