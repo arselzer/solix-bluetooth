@@ -1,5 +1,11 @@
 # Gen 2 firmware findings
 
+The [2026-09-30 C1000 hardware follow-up](c1000-local-mqtt.md) validates
+corrected BLE schedule storage and native MQTT charging/reserve/tariff controls
+on main 1.1.4.9/radio 0.3.3.0, including generated local-ID authentication.
+The [energy lifecycle follow-up](energy-report-lifecycle.md) adds reporting
+switch, retry and persistence replays plus actual C2000 report reception.
+
 The latest [reconnect, clock and power-gate follow-up](c2000-mqtt-reconnect-and-tariff.md)
 includes additional offline executions and guarded C2000 hardware observations.
 The [parallel power-control analysis](mqtt-power-offline-followup.md) adds
@@ -211,8 +217,9 @@ extra-parameter interpretation. All 244 audited native status records satisfy
 recovered C1000 schedule serialization. Earlier requests duplicated a count in
 `A7`, producing malformed slots. See the [complete audit](c2000-tou-encoding-audit.md).
 Corrected C2000 storage/activation is now verified in the
-[bounded native Peak trial](c2000-corrected-peak-trial.md). C1000 schedule writes
-still need hardware validation; no general schedule API is enabled.
+[bounded native Peak trial](c2000-corrected-peak-trial.md). C1000 corrected schedule storage and native activation are now
+[hardware validated](c1000-local-mqtt.md). C2000 has a guarded native schedule API, tested
+separately; see [grid-return validation](c2000-offpeak-grid-return.md).
 
 ## Additional control candidates
 
@@ -290,3 +297,7 @@ C2000 controller support is unknown.
 - Map the energy counters for read-only monitoring.
 - Obtain C2000 firmware evidence before assuming its controller can service
   the Modbus bridge. Keep its AC output enabled throughout any live work.
+
+The later [report lifecycle investigation](energy-report-lifecycle.md) traces
+analytics point 20001, report retry/completion and accounting persistence.
+Local C2000 report capture now confirms the known protobuf transport.

@@ -10,21 +10,26 @@ import signal
 import struct
 import time
 
-from .lab_config import LabConfig, load_lab, private_write
+from .ap_service_config import APServiceConfig, load_ap_service, private_write
 from .mqtt_intercept import LocalMqttServer
-from .protocol import parse_tlvs, timezone_confer
+from .protocol import Model, parse_tlvs, timezone_confer
 from .tou import PowerFlowTimeout, TouPeriod
 from .energy_report import decode_energy_events
 
 
-def api_response(path: str, request: dict, config: LabConfig, credentials: bytes) -> tuple[bytes, bool]:
+def api_response(path: str, request: dict, config: APServiceConfig, credentials: bytes,
+                 *, energy_reports: bool = False) -> tuple[bytes, bool]:
     """Return the minimal observed device API schema, never forwarding requests."""
+    if type(energy_reports) is not bool:
+        raise ValueError("Energy reporting must be a boolean")
     # The radio concatenates a trailing-slash base URL with a leading-slash path.
     path = "/" + path.lstrip("/")
     if not isinstance(request, dict) or request.get("device_sn", config.device_serial) != config.device_serial:
         raise ValueError("Unexpected device identity")
     if path == "/equipment/devicemanage/get_mqtt_info":
-        return credentials, True
+        # C1000 0.3.3.0 joined MQTT with Content-Length; one-byte chunks stalled
+        # its live bootstrap. Retain the verified C2000 short-read workaround.
+        return credentials, config.model == Model.C2000_GEN2
     if path in ("/equipment/devicerelation/bind_device", "/equipment/devicerelation/check_relate_bind_device"):
         data = {"device_sn": config.device_serial, "account": request.get("account", ""),
                 "is_bind": True, "is_relate": True, "bind": True, "relate": True,
@@ -36,7 +41,11 @@ def api_response(path: str, request: dict, config: LabConfig, credentials: bytes
         # Local acknowledgement only; the cloud's response schema is unverified.
         decode_energy_events(request)
         data = {}
-    elif path in ("/equipment/devicemanage/update_info", "/equipment/agreement/get_device_point_switch"):
+    elif path == "/equipment/agreement/get_device_point_switch":
+        # Recovered C1000 radio 0.3.3.0 accepts the first param's exact name and
+        # string value. This analytics flag is independent of power controls.
+        data = {"param": [{"param_name": "20001", "param_value": "1" if energy_reports else "0"}]}
+    elif path == "/equipment/devicemanage/update_info":
         data = {}
     else:
         raise ValueError("Unsupported local API path")
@@ -82,15 +91,19 @@ class _Ntp(asyncio.DatagramProtocol):
             self.mqtt.record("ntp_served")
 
 
-class InterceptService:
+class APService:
     """Own device-facing services. Use only on the isolated AP interface.
 
     The Unix control socket is owner-only. Network-facing HTTP emulates the
     station bootstrap API; it does not expose charging controls to the station.
     """
 
-    def __init__(self, config: LabConfig, directory: Path, *, allow_control: bool = False, callback=None) -> None:
+    def __init__(self, config: APServiceConfig, directory: Path, *, allow_control: bool = False,
+                 energy_reports: bool = False, callback=None) -> None:
+        if type(energy_reports) is not bool:
+            raise ValueError("Energy reporting must be a boolean")
         self.config, self.directory = config, directory
+        self.energy_reports = energy_reports
         self.mqtt = LocalMqttServer(config, directory, allow_control=allow_control, callback=callback)
         self.credentials = (directory / "mqtt-response.json").read_bytes()
         self._servers: list[asyncio.Server] = []
@@ -104,7 +117,7 @@ class InterceptService:
     async def start(self, *, api_port: int = 80, mqtt_port: int = 8883, ntp_port: int = 123) -> None:
         # Never unlink a potentially active worker's socket.
         if self.socket_path.exists():
-            raise RuntimeError("Existing lab control socket; stop or recover the previous worker first")
+            raise RuntimeError("Existing AP service control socket; stop or recover the previous worker first")
         try:
             await self.mqtt.start(port=mqtt_port)
             self._servers.append(await asyncio.start_server(self._api, self.config.gateway, api_port, limit=16384))
@@ -153,7 +166,8 @@ class InterceptService:
                 body = await reader.readexactly(length)
                 self.mqtt.record("api_request", headers_hex=headers.hex(), body_hex=body.hex())
                 request = json.loads(body or b"{}")
-                response, chunked = api_response(path, request, self.config, self.credentials)
+                response, chunked = api_response(path, request, self.config, self.credentials,
+                                                 energy_reports=self.energy_reports)
                 if "/" + path.lstrip("/") == "/equipment/logging/upload_pb_events":
                     self.mqtt.record("energy_report", reports=decode_energy_events(request))
                 writer.write(http_reply(response, credentials=chunked))
@@ -265,7 +279,7 @@ def control_timeout(command: str, fields: dict) -> int:
     return 45
 
 
-async def lab_request(directory: Path, command: str, **fields) -> dict:
+async def ap_service_request(directory: Path, command: str, **fields) -> dict:
     """Use the private Unix socket from the host namespace or another local process."""
     reader, writer = await asyncio.open_unix_connection(directory / "control.sock", limit=131072)
     try:
@@ -279,16 +293,17 @@ async def lab_request(directory: Path, command: str, **fields) -> dict:
             errors = {"ValueError": ValueError, "PermissionError": PermissionError,
                       "ConnectionError": ConnectionError, "TimeoutError": TimeoutError}
             if response.get("error") in errors:
-                raise errors[response["error"]]("Native lab command failed; inspect fresh status")
-            raise RuntimeError(f"Lab request failed: {response.get('error', 'unknown')}")
+                raise errors[response["error"]]("Native AP service command failed; inspect fresh status")
+            raise RuntimeError(f"AP service request failed: {response.get('error', 'unknown')}")
         return response["result"]
     finally:
         writer.close()
         await writer.wait_closed()
 
 
-async def _worker(directory: Path, allow_control: bool) -> None:
-    service = InterceptService(load_lab(directory / "lab.json"), directory, allow_control=allow_control)
+async def _worker(directory: Path, allow_control: bool, energy_reports: bool = False) -> None:
+    service = APService(load_ap_service(directory / "ap_service.json"), directory, allow_control=allow_control,
+                               energy_reports=energy_reports)
     stop = asyncio.Event()
     loop = asyncio.get_running_loop()
     for sig in (signal.SIGTERM, signal.SIGINT):
@@ -305,8 +320,9 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Device-facing services; run inside the isolated AP namespace")
     parser.add_argument("--directory", type=Path, required=True)
     parser.add_argument("--allow-control", action="store_true")
+    parser.add_argument("--energy-reports", action="store_true")
     args = parser.parse_args()
-    asyncio.run(_worker(args.directory, args.allow_control))
+    asyncio.run(_worker(args.directory, args.allow_control, args.energy_reports))
 
 
 if __name__ == "__main__":

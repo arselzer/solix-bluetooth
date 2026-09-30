@@ -6,13 +6,13 @@ Run one station connection owner and let other machines use its HTTP API:
 
 ```mermaid
 flowchart LR
-    Station[C2000] -->|isolated Wi-Fi / TLS MQTT| Lab[Privileged local lab service]
-    Lab -->|private Unix socket / status file| Gateway[Authenticated HTTP gateway]
+    Station[C1000/C2000 Gen 2] -->|isolated Wi-Fi / TLS MQTT| APService[Privileged local AP service]
+    APService -->|private Unix socket / status file| Gateway[Authenticated HTTP gateway]
     Gateway --> HA[Home Assistant coordinator]
     Gateway --> Clients[Other LAN monitoring clients]
 ```
 
-For BLE models, `serve` owns Bluetooth instead of `lab-run`/`lab-serve`. Do not
+For BLE models, `serve` owns Bluetooth instead of `ap-service-run`/`ap-service-serve`. Do not
 start both BLE owners for the same station. The separate gateway keeps AP
 privileges and reconnection out of HA; HA uses one shared HTTP client/coordinator
 as described in its [official fetching guidance](https://developers.home-assistant.io/docs/integration_fetching_data/).
@@ -24,7 +24,7 @@ Use absolute private directory paths and a dedicated unused AP adapter.
 
 ```sh
 python3 -m pip install -e './python[server,mqtt,tui]'
-sudo /path/to/venv/bin/solix-link lab-run \
+sudo /path/to/venv/bin/solix-link ap-service-run \
   --directory /path/to/.solix-private/local-mqtt --allow-control
 ```
 
@@ -32,7 +32,7 @@ In another shell, load a generated token from an owner-only file:
 
 ```sh
 export SOLIX_HTTP_TOKEN="$(cat /path/to/private/http-token)"
-sudo --preserve-env=SOLIX_HTTP_TOKEN /path/to/venv/bin/solix-link lab-serve \
+sudo --preserve-env=SOLIX_HTTP_TOKEN /path/to/venv/bin/solix-link ap-service-serve \
   --directory /path/to/.solix-private/local-mqtt \
   --host YOUR_LAN_ADDRESS --port 8765 --allow-control
 ```
@@ -81,7 +81,7 @@ to clients independently of HA.
 
 An activated plan remains on the station until changed. Closing the TUI,
 stopping the AP, ending a process or canceling an HTTP request does not reset
-the station. Use `lab-grid` or HA's Return-to-grid button and check its confirmed
+the station. Use `ap-service-grid` or HA's Return-to-grid button and check its confirmed
 flow before stopping a discharge plan. Grid confirmation needs a measurable
 positive AC load; zero-load readings are insufficient.
 

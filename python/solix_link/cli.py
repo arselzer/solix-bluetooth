@@ -21,10 +21,10 @@ def parser() -> argparse.ArgumentParser:
     subcommands = command.add_subparsers(dest="command", required=True)
     guided = subcommands.add_parser("interactive", help="Scan, select and monitor stations with guided BLE/MQTT setup")
     guided.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
-    guided.add_argument("--lab-directory", type=Path, help="Existing or new private native MQTT lab directory")
+    guided.add_argument("--ap-service-directory", type=Path, help="Existing or new private AP-service directory")
     tui = subcommands.add_parser("tui", help="Open the terminal dashboard (requires the tui extra)")
     tui.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
-    tui.add_argument("--lab-directory", type=Path, help="Inspect/control an already running native MQTT lab")
+    tui.add_argument("--ap-service-directory", type=Path, help="Inspect/control an already running AP service")
 
     scan = subcommands.add_parser("scan", help="Find C300 AC, C1000, and C1000/C2000 Gen 2 devices")
     scan.add_argument("--timeout", type=float, default=8)
@@ -117,7 +117,7 @@ def parser() -> argparse.ArgumentParser:
     wifi.add_argument("--ssid", required=True)
     wifi.add_argument("--password-file", type=Path, help="Read Wi-Fi passphrase from a local file; otherwise prompt")
     wifi.add_argument("--api-url", required=True, help="API base URL supplied to the station")
-    wifi.add_argument("--allow-http", action="store_true", help="Allow a local HTTP API URL for isolated lab use")
+    wifi.add_argument("--allow-http", action="store_true", help="Allow a local HTTP API URL for isolated AP-service use")
     wifi.add_argument("--account-id", help="40-character account ID; defaults to the paired local client ID")
     wifi.add_argument("--posix-timezone", default="UTC0")
     wifi.add_argument("--iana-timezone", default="Etc/UTC")
@@ -129,7 +129,7 @@ def parser() -> argparse.ArgumentParser:
     join.add_argument("--password-file", type=Path, help="Read Wi-Fi passphrase from a local file; otherwise prompt")
     join.add_argument("--account-id", help="40-character account ID; defaults to the paired local client ID")
     join.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
-    from .lab_cli import add_commands
+    from .ap_service_cli import add_commands
     add_commands(subcommands)
     return command
 
@@ -321,15 +321,20 @@ def main(argv: list[str] | None = None) -> int:
         if not sys.stdin.isatty():
             print("Interactive mode needs a terminal; use --help for scripted commands.", file=sys.stderr)
             return 2
-        argv = ["tui" if tui_available() else "interactive"]
+        if tui_available():
+            argv = ["tui"]
+        else:
+            print("Using the line menu. For the full-screen dashboard, install the tui extra: "
+                  "python -m pip install 'solix-link[tui]'", file=sys.stderr)
+            argv = ["interactive"]
     args = parser().parse_args(argv)
     try:
         if args.command == "interactive":
             from .interactive import run_interactive
-            run_interactive(args.config, args.lab_directory)
+            run_interactive(args.config, args.ap_service_directory)
         elif args.command == "tui":
             from .tui import run_tui
-            run_tui(args.config, args.lab_directory)
+            run_tui(args.config, args.ap_service_directory)
         elif args.command == "scan":
             asyncio.run(_scan(args.timeout))
         elif args.command == "add":
@@ -360,8 +365,8 @@ def main(argv: list[str] | None = None) -> int:
             asyncio.run(_c1000_setting(args))
         elif args.command in ("wifi-setup", "wifi-join"):
             asyncio.run(_wifi_setup(args))
-        elif args.command.startswith("lab-"):
-            from .lab_cli import dispatch
+        elif args.command.startswith("ap-service-"):
+            from .ap_service_cli import dispatch
             dispatch(args)
         return 0
     except (KeyboardInterrupt, asyncio.CancelledError):

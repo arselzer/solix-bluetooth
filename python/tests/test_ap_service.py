@@ -9,28 +9,28 @@ import time
 from cryptography import x509
 import pytest
 
-from solix_gen2 import LabConfig, LocalMqttServer, initialize_lab, load_lab
+from solix_gen2 import APServiceConfig, LocalMqttServer, initialize_ap_service, load_ap_service
 from solix_gen2.isolated_ap import IsolatedAP
-from solix_gen2.lab_config import private_write
-from solix_gen2.lab_monitor import LabMonitorService
-from solix_gen2.lab_service import api_response, http_reply, ntp_reply
+from solix_gen2.ap_service_config import private_write
+from solix_gen2.ap_service_monitor import APServiceMonitor
+from solix_gen2.ap_service import api_response, http_reply, ntp_reply
 from solix_gen2.mqtt_credentials import decrypt_device_credential
 from solix_gen2.mqtt_intercept import mqtt_packet, native_response, read_mqtt
 from solix_gen2.protocol import DATA_RESPONSE, build_packet, parse_packet, parse_tlvs, tlv
 
 
 @pytest.fixture
-def lab(tmp_path):
-    config = LabConfig("ups", "wlan_lab", "phy9", "AT", "A1783SYNTHETIC001", "a" * 40,
+def ap_service(tmp_path):
+    config = APServiceConfig("ups", "wlan_ap", "phy9", "AT", "A1783SYNTHETIC001", "a" * 40,
                        timezone_name="Europe/Vienna")
     directory = tmp_path / "private"
-    initialize_lab(directory, config)
+    initialize_ap_service(directory, config)
     return config, directory
 
 
-def test_private_bootstrap_certificates_and_no_overwrite(lab):
-    config, directory = lab
-    assert load_lab(directory / "lab.json") == config
+def test_private_bootstrap_certificates_and_no_overwrite(ap_service):
+    config, directory = ap_service
+    assert load_ap_service(directory / "ap_service.json") == config
     assert directory.stat().st_mode & 0o777 == 0o700
     assert all(path.stat().st_mode & 0o777 == 0o600 for path in directory.iterdir())
     response = json.loads((directory / "mqtt-response.json").read_text())["data"]
@@ -41,7 +41,7 @@ def test_private_bootstrap_certificates_and_no_overwrite(lab):
     assert config.account_id not in repr(config) and config.passphrase not in repr(config)
     before = (directory / "client-key.pem").read_bytes()
     with pytest.raises(FileExistsError):
-        initialize_lab(directory, config)
+        initialize_ap_service(directory, config)
     assert (directory / "client-key.pem").read_bytes() == before
 
 
@@ -49,17 +49,17 @@ def test_private_bootstrap_certificates_and_no_overwrite(lab):
                                      {"passphrase": "password\ncommand"}, {"gateway": "8.8.8.1"},
                                      {"gateway": "127.0.0.1"}, {"broker_host": "evil/host"},
                                      {"device_serial": "short"}, {"account_id": "bad"}])
-def test_reject_unsafe_lab_configuration(lab, changes):
+def test_reject_unsafe_ap_service_configuration(ap_service, changes):
     with pytest.raises(ValueError):
-        replace(lab[0], **changes)
+        replace(ap_service[0], **changes)
 
 
-def test_refuse_public_config_and_symlink(lab, tmp_path):
-    config, directory = lab
-    path = directory / "lab.json"
+def test_refuse_public_config_and_symlink(ap_service, tmp_path):
+    config, directory = ap_service
+    path = directory / "ap_service.json"
     path.chmod(0o644)
     with pytest.raises(ValueError, match="owner-only"):
-        load_lab(path)
+        load_ap_service(path)
     target = tmp_path / "target"
     target.write_text("unchanged")
     link = directory / "link"
@@ -69,8 +69,8 @@ def test_refuse_public_config_and_symlink(lab, tmp_path):
     assert target.read_text() == "unchanged"
 
 
-def test_api_framing_and_ntp_without_forwarding(lab):
-    config, _ = lab
+def test_api_framing_and_ntp_without_forwarding(ap_service):
+    config, _ = ap_service
     credentials = b'{"certificate_pem":"synthetic"}'
     body, chunked = api_response("/equipment/devicemanage/get_mqtt_info", {"device_sn": config.device_serial}, config, credentials)
     wire = http_reply(body, credentials=chunked)
@@ -95,14 +95,27 @@ def test_api_framing_and_ntp_without_forwarding(lab):
     assert ntp_reply(b"short", time.time()) is None
 
 
+@pytest.mark.parametrize("enabled", [False, True])
+def test_point_switch_schema_requires_explicit_energy_reporting(ap_service, enabled):
+    config, _ = ap_service
+    body, chunked = api_response("/equipment/agreement/get_device_point_switch", {}, config, b"",
+                                 energy_reports=enabled)
+    response = json.loads(body)
+    assert response["code"] == 0 and response["msg"] == "success"
+    assert response["data"] == {"param": [{"param_name": "20001", "param_value": str(int(enabled))}]}
+    assert not chunked
+    default, _ = api_response("/equipment/agreement/get_device_point_switch", {}, config, b"")
+    assert json.loads(default)["data"]["param"][0]["param_value"] == "0"
+
+
 def response(config, command, fields=b"", *, serial=None):
     frame = build_packet(DATA_RESPONSE, bytes.fromhex(command), b"\x00" + fields)
     return json.dumps({"payload": json.dumps({"sn": serial or config.device_serial, "pn": "A1783",
                                                "data": base64.b64encode(frame).decode()})}).encode()
 
 
-def test_native_response_filters_identity_and_malformed_envelopes(lab):
-    config, _ = lab
+def test_native_response_filters_identity_and_malformed_envelopes(ap_service):
+    config, _ = ap_service
     assert native_response(response(config, "0901"), config).command.hex() == "0901"
     assert native_response(response(config, "0901", serial="other"), config) is None
     for message in (b"[]", b'{"payload":"[]"}', b"bad json"):
@@ -178,9 +191,9 @@ async def fake_station(config, directory, port, *, retained_first=False, reserve
     return asyncio.create_task(respond()), captured, writer
 
 
-def test_tls_mqtt_native_controls_freshness_and_cleanup(lab):
+def test_tls_mqtt_native_controls_freshness_and_cleanup(ap_service):
     async def run():
-        config, directory = lab
+        config, directory = ap_service
         server = LocalMqttServer(config, directory)
         await server.start(host="127.0.0.1", port=0)
         port = server._server.sockets[0].getsockname()[1]
@@ -232,9 +245,9 @@ def test_tls_mqtt_native_controls_freshness_and_cleanup(lab):
     (10, "reserve_changed", RuntimeError, "Another setting changed"),
     (10, "truncated_schedule", RuntimeError, "Missing fresh charge-limit baseline"),
 ])
-def test_native_charge_cap_rejects_reserve_clamping_and_false_confirmation(lab, reserve, behavior, error, match):
+def test_native_charge_cap_rejects_reserve_clamping_and_false_confirmation(ap_service, reserve, behavior, error, match):
     async def run():
-        config, directory = lab
+        config, directory = ap_service
         server = LocalMqttServer(config, directory, allow_control=True)
         await server.start(host="127.0.0.1", port=0)
         task, captured, writer = await fake_station(
@@ -265,9 +278,9 @@ def test_mqtt_oversize_length_rejected_before_reading_payload():
     asyncio.run(run())
 
 
-def test_shutdown_closes_an_active_tls_station_before_waiting_for_listener(lab):
+def test_shutdown_closes_an_active_tls_station_before_waiting_for_listener(ap_service):
     async def run():
-        config, directory = lab
+        config, directory = ap_service
         server = LocalMqttServer(config, directory)
         await server.start(host="127.0.0.1", port=0)
         task, _, writer = await fake_station(config, directory, server._server.sockets[0].getsockname()[1])
@@ -286,11 +299,11 @@ def test_shutdown_closes_an_active_tls_station_before_waiting_for_listener(lab):
     asyncio.run(run())
 
 
-def test_service_shutdown_cancels_an_incomplete_http_request(lab):
-    from solix_gen2.lab_service import InterceptService
+def test_service_shutdown_cancels_an_incomplete_http_request(ap_service):
+    from solix_gen2.ap_service import APService
     async def run():
-        config, directory = lab
-        service = InterceptService(config, directory)
+        config, directory = ap_service
+        service = APService(config, directory)
         listener = await asyncio.start_server(service._api, "127.0.0.1", 0)
         service._servers.append(listener)
         reader, writer = await asyncio.open_connection("127.0.0.1", listener.sockets[0].getsockname()[1])
@@ -316,8 +329,8 @@ def test_service_shutdown_cancels_an_incomplete_http_request(lab):
     asyncio.run(run())
 
 
-def test_namespace_cleanup_returns_adapter_before_deleting_namespace(lab, monkeypatch):
-    config, directory = lab
+def test_namespace_cleanup_returns_adapter_before_deleting_namespace(ap_service, monkeypatch):
+    config, directory = ap_service
     ap = IsolatedAP(config, directory)
     ap.created = ap.moved = True
     calls = []
@@ -332,8 +345,8 @@ def test_namespace_cleanup_returns_adapter_before_deleting_namespace(lab, monkey
     assert not ap.created and not ap.moved
 
 
-def test_namespace_retained_if_adapter_cannot_return(lab, monkeypatch):
-    ap = IsolatedAP(*lab)
+def test_namespace_retained_if_adapter_cannot_return(ap_service, monkeypatch):
+    ap = IsolatedAP(*ap_service)
     ap.created = ap.moved = True
     calls = []
     def fail(*args):
@@ -348,8 +361,8 @@ def test_namespace_retained_if_adapter_cannot_return(lab, monkeypatch):
 
 
 @pytest.mark.parametrize("existing_namespace", [False, True])
-def test_ap_refuses_existing_namespace_or_active_adapter_before_mutation(lab, monkeypatch, existing_namespace):
-    ap = IsolatedAP(*lab)
+def test_ap_refuses_existing_namespace_or_active_adapter_before_mutation(ap_service, monkeypatch, existing_namespace):
+    ap = IsolatedAP(*ap_service)
     monkeypatch.setattr("solix_gen2.isolated_ap.os.geteuid", lambda: 0)
     monkeypatch.setattr("solix_gen2.isolated_ap.shutil.which", lambda value: value)
     calls = []
@@ -367,22 +380,22 @@ def test_ap_refuses_existing_namespace_or_active_adapter_before_mutation(lab, mo
     assert not any(args[:3] == ("ip", "netns", "add") for args in calls)
 
 
-def test_http_adapter_marks_stale_worker_and_readings_unavailable(lab, monkeypatch):
-    config, directory = lab
-    service = LabMonitorService(config, directory)
+def test_http_adapter_marks_stale_worker_and_readings_unavailable(ap_service, monkeypatch):
+    config, directory = ap_service
+    service = APServiceMonitor(config, directory)
     private_write(directory / "status.json", json.dumps({"name": config.name, "connected": True,
                   "last_seen_timestamp": time.time() - 40, "metrics": {}}))
     assert not service.snapshot(config.name)["available"]
     assert not service.snapshot(config.name)["metrics"]
 
 
-def test_native_http_auth_and_freshness(lab):
+def test_native_http_auth_and_freshness(ap_service):
     pytest.importorskip("aiohttp")
     from aiohttp.test_utils import TestClient, TestServer
     from solix_gen2.server import create_app
     async def run():
-        config, directory = lab
-        service = LabMonitorService(config, directory)
+        config, directory = ap_service
+        service = APServiceMonitor(config, directory)
         private_write(directory / "status.json", json.dumps({"name": config.name, "connected": True,
                       "last_seen_timestamp": time.time(), "metrics": {"battery_percentage": 90}}))
         async with TestServer(create_app(service, token="test-token")) as server:
@@ -398,7 +411,7 @@ def test_native_http_auth_and_freshness(lab):
     asyncio.run(run())
 
 
-def test_request_timeout_closes_connection_and_prevents_late_ack_reuse(lab):
+def test_request_timeout_closes_connection_and_prevents_late_ack_reuse(ap_service):
     from solix_gen2.mqtt_intercept import _Connection
     class Writer:
         closed = False
@@ -411,7 +424,7 @@ def test_request_timeout_closes_connection_and_prevents_late_ack_reuse(lab):
         def close(self):
             self.closed = True
     async def run():
-        config, directory = lab
+        config, directory = ap_service
         server = LocalMqttServer(config, directory)
         writer = Writer()
         connection = _Connection(server, asyncio.StreamReader(), writer)

@@ -4,8 +4,8 @@ import json
 import pytest
 
 from solix_link.energy_report import REPORT_NAME, decode_energy_events, decode_energy_report
-from solix_link.lab_config import LabConfig
-from solix_link.lab_service import api_response
+from solix_link.ap_service_config import APServiceConfig
+from solix_link.ap_service import api_response
 
 
 def varint(value):
@@ -56,7 +56,7 @@ def test_invalid_event_envelope_is_rejected(changes):
 
 
 def test_local_logging_ack_does_not_forward_and_rejects_wrong_device():
-    config = LabConfig("ups", "wlan_lab", "phy9", "AT", "A1783SYNTHETIC001", "a" * 40)
+    config = APServiceConfig("ups", "wlan_ap", "phy9", "AT", "A1783SYNTHETIC001", "a" * 40)
     event = request(field(19, field(3, 150)))
     body, chunked = api_response("//equipment/logging/upload_pb_events", event, config, b"unused")
     assert json.loads(body)["code"] == 0 and not chunked

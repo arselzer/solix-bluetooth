@@ -228,19 +228,19 @@ def test_wifi_provisioning_packets_use_ascending_tags():
     session = Session(Model.C1000_GEN2, owner_user_id='a' * 40)
     session._secret = bytes(range(32))
     session.ready = True
-    credentials = parse_packet(session.wifi_credentials_packet('Lab-AP', 'examplepass', 'b' * 40))
+    credentials = parse_packet(session.wifi_credentials_packet('Local-AP', 'examplepass', 'b' * 40))
     assert credentials.command.hex() == '4024'
     fields = parse_tlvs(session._crypt(credentials.payload, False))
     assert list(fields) == [0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6]
     assert fields[0xA2] == b'b' * 40
-    assert fields[0xA3] == b'Lab-AP'
+    assert fields[0xA3] == b'Local-AP'
     assert fields[0xA4] == fields[0xA5] == b'\x00'
     assert fields[0xA6] == b'examplepass'
 
     c2000 = Session(Model.C2000_GEN2, owner_user_id='a' * 40)
     c2000._secret = bytes(range(32))
     c2000.ready = True
-    c2000_join = parse_packet(c2000.wifi_credentials_packet('Lab-AP', 'examplepass', 'b' * 40))
+    c2000_join = parse_packet(c2000.wifi_credentials_packet('Local-AP', 'examplepass', 'b' * 40))
     assert c2000_join.command.hex() == '4024'
     c2000_fields = parse_tlvs(c2000._crypt(c2000_join.payload, False))
     assert [(tag, value) for tag, value in c2000_fields.items() if tag != 0xA1] == [
@@ -261,7 +261,7 @@ def test_wifi_provisioning_packets_use_ascending_tags():
     with pytest.raises(ValueError, match='SSID'):
         session.wifi_credentials_packet('x' * 33, 'examplepass', 'b' * 40)
     with pytest.raises(ValueError, match='passphrase'):
-        session.wifi_credentials_packet('Lab-AP', 'short', 'b' * 40)
+        session.wifi_credentials_packet('Local-AP', 'short', 'b' * 40)
     c2000_cloud = parse_packet(c2000.wifi_cloud_config_packet(
         'b' * 40, 'http://192.168.77.1/', 'UTC0', 'Etc/UTC', allow_http=True,
     ))
@@ -309,3 +309,19 @@ def test_c1000_setting_fields_decode_from_a4_status():
     assert metrics['ac_fast_charge_enabled'] == 0
     assert metrics['display_enabled'] == 0
     assert metrics['port_memory_enabled'] == 1
+
+
+def test_c1000_prime_tariff_baseline_and_prefixed_firmware_versions():
+    # Synthetic reproduction of the live 1.1.4.9/0.3.3.0 block: F9 has a
+    # type byte, while D9 has count at six and a separate backup tail.
+    d9 = bytes([4, 2, 1, 85, 100, 1, 1, 2, 0, 24]) + bytes(19)
+    versions = b"\x04" + bytes([9, 4, 1, 1]) + bytes(20) + bytes([0, 3, 3, 0])
+    metrics, _ = decode_telemetry(tlv(0xD9, d9) + tlv(0xF9, versions), Model.C1000_GEN2)
+    assert metrics["active_tariff"] == "mid_peak"
+    assert metrics["usage_mode"] == "time_of_use"
+    assert metrics["backup_reserve_percentage"] == 85
+    assert metrics["tou_schedule_slot_count"] == 1
+    assert metrics["software_version"] == "1.1.4.9"
+    assert metrics["software_version_module"] == "0.3.3.0"
+    truncated, _ = decode_telemetry(tlv(0xD9, d9[:-1]) + tlv(0xF9, versions[:-1]), Model.C1000_GEN2)
+    assert "tou_schedule_slot_count" not in truncated and "software_version" not in truncated

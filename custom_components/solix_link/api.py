@@ -200,7 +200,7 @@ def validate_command(snapshot: dict, payload: dict) -> None:
 def request_deadline(method: str, payload: dict | None = None) -> int:
     """Allow the worker budget, its five-second RPC margin, and HTTP overhead.
 
-    Match gateway lab_service.control_timeout without importing gateway/BLE
+    Match gateway ap_service.control_timeout without importing gateway/BLE
     dependencies into HA. This deadline bounds waiting, not device execution:
     connection failure or expiry cannot establish whether settings changed.
     """

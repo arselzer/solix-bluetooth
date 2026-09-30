@@ -2,15 +2,18 @@
 
 import asyncio
 import builtins
+from dataclasses import asdict
+import json
 import time
 from types import SimpleNamespace
 
 import pytest
 
 from solix_link.config import DeviceConfig, load_config, save_config
+from solix_link.ap_service_config import APServiceConfig, private_write
 from solix_link.protocol import Model
 from solix_link.tui import (
-    Target, TuiBackend, controls_for, create_app, parse_plan, public_snapshot, safe_error,
+    METRIC_LABELS, Target, TuiBackend, controls_for, create_app, parse_plan, public_snapshot, safe_error,
 )
 
 
@@ -80,6 +83,55 @@ def test_c2000_has_no_ac_control_in_ui_or_backend():
     asyncio.run(run())
 
 
+@pytest.mark.parametrize("model,maximum", [(Model.C1000_GEN2, 1200), (Model.C2000_GEN2, 1800)])
+def test_native_target_uses_initialized_profile_model_and_limits(tmp_path, model, maximum):
+    config = APServiceConfig("ups", "wlan_unused", "phy9", "AT", "A1763SYNTHETIC001", "a" * 40,
+                             model=model)
+    private_write(tmp_path / "ap_service.json", json.dumps(asdict(config)))
+    target = TuiBackend([], tmp_path).targets[0]
+    assert target.native and target.model == model
+    assert model.value in target.label
+    controls = controls_for(target)
+    assert next(control for control in controls if control.key == "charge-power").hint == f"300–{maximum} W, in 100 W steps"
+    assert {control.key for control in controls} == {"charge-power", "charge-cap", "reserve"}
+    assert config.account_id not in target.label and config.device_serial not in target.label
+
+
+def test_missing_mock_native_profile_retains_default_model(tmp_path):
+    assert TuiBackend([], tmp_path).targets[0].model == Model.C2000_GEN2
+
+
+@pytest.mark.parametrize("failure", ["malformed", "model", "permissions", "broken_symlink"])
+def test_existing_invalid_native_profile_fails_without_leaking_secrets(tmp_path, failure):
+    path = tmp_path / "ap_service.json"
+    config = APServiceConfig("ups", "wlan_unused", "phy9", "AT", "A1763SYNTHETIC001", "a" * 40)
+    fields = asdict(config)
+    fields["passphrase"] = "SYNTHETIC_PRIVATE_PASSWORD"
+    if failure == "broken_symlink":
+        path.symlink_to(tmp_path / "missing_private_profile")
+    else:
+        if failure == "model":
+            fields["model"] = "SYNTHETIC_PRIVATE_MODEL"
+        private_write(path, "SYNTHETIC_PRIVATE_PASSWORD{" if failure == "malformed" else json.dumps(fields))
+        if failure == "permissions":
+            path.chmod(0o644)
+    with pytest.raises(RuntimeError, match="profile is invalid or unreadable") as error:
+        TuiBackend([], tmp_path)
+    assert "SYNTHETIC_PRIVATE" not in str(error.value)
+    assert config.account_id not in str(error.value) and config.device_serial not in str(error.value)
+
+
+def test_unreadable_native_profile_does_not_choose_a_default_model(tmp_path, monkeypatch):
+    from solix_link import ap_service_config
+    private_write(tmp_path / "ap_service.json", "{}")
+    def unreadable(_path):
+        raise PermissionError("SYNTHETIC_PRIVATE_PASSWORD")
+    monkeypatch.setattr(ap_service_config, "load_ap_service", unreadable)
+    with pytest.raises(RuntimeError, match="profile is invalid or unreadable") as error:
+        TuiBackend([], tmp_path)
+    assert "SYNTHETIC_PRIVATE" not in str(error.value)
+
+
 def test_ble_control_and_disconnect_preserve_secrets():
     async def run():
         backend = TuiBackend([station()], monitor_factory=FakeMonitor)
@@ -130,7 +182,7 @@ def test_native_controls_use_only_local_socket_actions(tmp_path):
             await backend.control("plan", "peak:0:18,off_peak:6:24")
         assert len(calls) == 6
         await backend.disconnect()
-        assert len(calls) == 6  # Closing UI never changes a plan or stops the lab.
+        assert len(calls) == 6  # Closing UI never changes a plan or stops the ap_service.
     asyncio.run(run())
 
 
@@ -185,7 +237,8 @@ def test_headless_dashboard_connect_control_and_narrow_layout():
             await pilot.pause()
             assert app.has_class("narrow")
             assert app.query_one("#station").size.width <= 70
-            assert app.query_one("#battery").size.height >= 2  # Both text lines fit inside its border.
+            assert app.has_class("compact")
+            assert app.query_one("#compact-summary").size.height >= 1
             assert app.query_one("#connect").region.y == app.query_one("#disconnect").region.y
             app.query_one("#apply-setting").scroll_visible(animate=False)
             await pilot.pause()
@@ -361,4 +414,113 @@ def test_scanned_gen2_requires_existing_pairing_workflow(tmp_path):
         await backend.scan()
         with pytest.raises(ValueError, match="confirm its main button"):
             await backend.connect(backend.targets[0].key)
+    asyncio.run(run())
+
+
+def test_headless_keyboard_navigation_preserves_fixed_rows_and_explicit_writes():
+    pytest.importorskip("textual")
+    from textual.widgets import Input, Select, TabbedContent
+    async def run():
+        backend = TuiBackend([station()], monitor_factory=FakeMonitor)
+        app = create_app(backend=backend)
+        async with app.run_test(size=(100, 40)) as pilot:
+            connection_y = app.query_one("#connection").region.y
+            status_y = app.query_one("#connection-status").region.y
+            await pilot.press("ctrl+o")
+            await pilot.pause()
+            assert backend.monitor.connected and backend.monitor.calls == []
+            await pilot.press("f2")
+            await pilot.pause()
+            assert app.query_one("#tabs", TabbedContent).active == "controls"
+            assert app.focused == app.query_one("#setting", Select)
+            app.query_one("#setting", Select).value = "display-timeout"
+            await pilot.pause()
+            app.query_one("#setting-value", Input).focus()
+            await pilot.press("6", "0")
+            assert backend.monitor.calls == []  # Editing never sends commands.
+            await pilot.press("f3")
+            await pilot.pause()
+            app.query_one("#plan-scroll").scroll_end(animate=False)
+            await pilot.pause()
+            assert app.query_one("#connection").region.y == connection_y
+            assert app.query_one("#connection-status").region.y == status_y
+            await pilot.press("f4")
+            await pilot.pause()
+            assert app.query_one("#tabs", TabbedContent).active == "events"
+            await pilot.press("f10")
+            await pilot.pause()
+            assert app.screen.__class__.__name__ == "HelpScreen"
+            await pilot.press("escape")
+            await pilot.pause()
+            assert app.screen.__class__.__name__ != "HelpScreen"
+            await pilot.press("ctrl+d")
+            await pilot.pause()
+            assert backend.monitor is None
+            await app.action_quit()
+    asyncio.run(run())
+
+
+def test_live_refresh_keeps_table_selection_and_scroll_position():
+    pytest.importorskip("textual")
+    from textual.widgets import DataTable
+    async def run():
+        app = create_app(backend=TuiBackend([]))
+        async with app.run_test(size=(100, 34)) as pilot:
+            snapshot = {"available": True, "connected": True,
+                        "metrics": {key: 10 for key in METRIC_LABELS}}
+            app.render_snapshot(snapshot)
+            table = app.query_one("#readings", DataTable)
+            table.move_cursor(row=20, column=0)
+            await pilot.pause()
+            scroll = table.scroll_y
+            assert scroll > 0
+            snapshot["metrics"]["battery_percentage"] = 11
+            app.render_snapshot(snapshot)
+            await pilot.pause()
+            assert table.cursor_row == 20 and table.scroll_y == scroll
+            assert table.get_cell("battery_percentage", "value") == "11"
+            assert app.query_one("#body").scroll_y == 0
+            await app.action_quit()
+    asyncio.run(run())
+
+
+def test_rapid_panel_switch_does_not_restore_deferred_focus_to_old_panel():
+    pytest.importorskip("textual")
+    from textual.widgets import RichLog, TabbedContent, TabPane
+    async def run():
+        app = create_app(backend=TuiBackend([]))
+        async with app.run_test(size=(100, 40)) as pilot:
+            app.action_panel("controls")
+            app.action_panel("plan")
+            app.action_panel("events")
+            await pilot.pause()
+            tabs = app.query_one("#tabs", TabbedContent)
+            assert tabs.active == "events"
+            assert app.focused == app.query_one("#event-log", RichLog)
+            # A queued focus message can outlive the pane that generated it.
+            tabs.post_message(TabPane.Focused(app.query_one("#plan", TabPane)))
+            await pilot.pause()
+            assert tabs.active == "events"
+            await app.action_quit()
+    asyncio.run(run())
+
+
+def test_small_terminal_keeps_workspace_and_navigation_inside_screen():
+    pytest.importorskip("textual")
+    from textual.widgets import Footer, TabbedContent
+    async def run():
+        app = create_app(backend=TuiBackend([station()], monitor_factory=FakeMonitor))
+        async with app.run_test(size=(45, 24)) as pilot:
+            assert app.has_class("narrow") and app.has_class("compact")
+            tabs = app.query_one("#tabs", TabbedContent)
+            footer = app.query_one(Footer)
+            assert tabs.region.bottom <= footer.region.y
+            assert tabs.size.height >= 6
+            await pilot.press("f2")
+            await pilot.pause()
+            app.query_one("#controls-scroll").scroll_end(animate=False)
+            await pilot.pause()
+            assert app.query_one("#body").scroll_y == 0
+            assert app.query_one("#connection-status").region.bottom <= tabs.region.y
+            await app.action_quit()
     asyncio.run(run())

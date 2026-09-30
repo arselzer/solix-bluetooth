@@ -194,10 +194,8 @@ def decode_telemetry(payload: bytes, model: Model | None = None) -> tuple[dict[s
         number("ac_charging_power_limit_w", 0xA4, 5, 7)
         # Verified on both models by 30 -> 60 -> 30 second BLE writes.
         number("display_timeout_seconds", 0xA4, 16, 18)
-    if model == Model.C2000_GEN2:
-        number("ac_input_frequency_hz", 0xA4, 7, 8)
-        # A1783's D9 block reports the active tariff, usage mode, and backup
-        # reserve. The current unit reports 0/0/10 (none/Standard/10%).
+        # Gen 2 D9 reports tariff/mode/reserve. C1000 1.1.4.9 firmware and
+        # live baseline agree with the independently tested C2000 layout.
         mode = values.get(0xD9, b"")
         if len(mode) >= 4:
             metrics["active_tariff"] = {
@@ -214,6 +212,8 @@ def decode_telemetry(payload: bytes, model: Model | None = None) -> tuple[dict[s
             count = mode[6]
             if count <= 6 and len(mode) >= 26 + 3 * count:
                 metrics["tou_schedule_slot_count"] = count
+    if model == Model.C2000_GEN2:
+        number("ac_input_frequency_hz", 0xA4, 7, 8)
         # C2000 A4 settings layout follows the public Gen 2 field map. These
         # values were also checked against a live read-only 34-byte A4 block.
         number("ac_output_timer_remaining_seconds", 0xA4, 1, 5)
@@ -240,6 +240,12 @@ def decode_telemetry(payload: bytes, model: Model | None = None) -> tuple[dict[s
             if len(tail) >= 15:
                 metrics["expansion_battery_count"] = int(tail[12] == 1)
     if model == Model.C1000_GEN2:
+        # Unlike C2000's F9, the observed C1000 block includes a type04 byte.
+        versions = values.get(0xF9, b"")
+        if len(versions) >= 29 and versions[0] == 4:
+            for name, slot in (("software_version", 0), ("software_version_module", 6)):
+                start = 1 + slot * 4
+                metrics[name] = ".".join(str(byte) for byte in reversed(versions[start:start + 4]))
         number("ac_output_timeout_seconds", 0xA4, 1, 5)
         number("dc_output_timeout_seconds", 0xA4, 9, 13)
         number("device_timeout_minutes", 0xA4, 14, 16)

@@ -4,24 +4,28 @@ Async Python monitoring over local Bluetooth, with a CLI, HTTP server, and
 MQTT bridge. It uses no cloud account.
 
 An experimental **isolated Wi-Fi/native MQTT endpoint** is also available for
-C2000 Gen 2: `lab-init`, `lab-run`, `lab-status`, `lab-readiness`,
-`lab-set-charge-power`, `lab-set-charge-cap`, `lab-set-reserve`, `lab-set-tou`,
-`lab-grid` and `lab-serve`. It packages the
+C1000/C2000 Gen 2: `ap-service-init`, `ap-service-run`, `ap-service-status`, `ap-service-readiness`,
+`ap-service-set-charge-power`, `ap-service-set-charge-cap`, `ap-service-set-reserve`, `ap-service-set-tou`,
+`ap-service-grid` and `ap-service-serve`. It packages the
 local API, NTP and mTLS interception workflow, without an internet route.
+C1000 uses its generated BLE pairing ID for local MQTT; C2000 generated-ID
+MQTT remains unverified. See [C1000 findings](../docs/c1000-local-mqtt.md).
 Monitoring is the default;
 native charging writes require `--allow-control` and fresh confirmation.
 See [setup, Python exports and limitations](../docs/isolated-ap-mqtt.md).
 
 Run `solix-link` without arguments with the `tui` extra for a full-screen
-terminal dashboard: asynchronous scanning, saved/discovered station selection,
-live measurements and explicit controls. Without that extra it uses the line
-menu. `solix-link interactive` retains pairing, AP setup and service launching.
+terminal dashboard with fixed connection/status rows, selectable panels,
+asynchronous scanning, live measurements and explicit controls. Without that
+extra it uses the line menu and shows an installation hint. `solix-link
+interactive` retains guided pairing, AP setup and service launching. Commands
+such as `monitor`, `serve` and `ap-service-status` keep their scripted behavior.
 
 | Model profile | Monitoring | Controls |
 | --- | --- | --- |
 | `c300` — C300/C300X AC | C300X tested live; C300 sibling uses the reference map | AC output, light, charging-power limit, screen timeout verified |
 | `c1000` — original A1761 | Implemented, **not hardware tested** | Available normally with validation and telemetry confirmation |
-| `c1000_gen2` — A1763 | Tested live | Verified charge limits, charging power, display timeout, fast charge |
+| `c1000_gen2` — A1763 | BLE and native MQTT tested live | Charge limits/power, display timeout, fast charge; native reserve, Peak/Mid-Peak and grid return |
 | `c2000_gen2` — A1783 | Tested live | Upper charge cap, charging power, screen timeout; native reserve, all-day Peak and confirmed grid return |
 
 C300 DC variants are not supported. The distribution and CLI are `solix-link`;
@@ -37,20 +41,45 @@ Install from this repository (include `server` and/or `mqtt` for the network ser
 pip install './python[server,mqtt,tui]'
 ```
 
+AP-service Python APIs use `APServiceConfig`, `APService` and
+`ap_service_request`; configuration is `ap_service.json`. Add
+`ap-service-run --energy-reports` for optional local analytics capture. The
+counter units remain unverified; no HA energy statistics are derived from them.
+
 ## Terminal dashboard and HA gateway
 
 ```sh
 solix-link tui --config /path/to/config.json
-solix-link tui --lab-directory /path/to/.solix-private/local-mqtt
+solix-link tui --ap-service-directory /path/to/.solix-private/local-mqtt
 ```
 
 ![Terminal dashboard using synthetic telemetry](../docs/images/solix-link-tui.svg)
+
+Connection, status and summaries stay visible while the selected panel scrolls.
+Live updates preserve the readings table's selection and scroll position.
+Smaller terminals use a compact summary and scrollable forms. Use the mouse or
+keyboard:
+
+| Key | Action |
+| --- | --- |
+| Tab / Shift+Tab | Move between fields and buttons |
+| Up / Down, Enter | Choose a station, setting or option |
+| F1 / F2 / F3 / F4 | Overview / Controls / Hourly plan / Events |
+| Ctrl+O / Ctrl+D | Connect / disconnect monitoring |
+| Ctrl+S / Ctrl+R | Scan / request fresh readings |
+| ? / F10 | Keyboard and workflow guide; Esc closes it |
+| Ctrl+Q / Ctrl+C | Quit after the current operation finishes |
+
+The `tui` dependency is optional. For a pipx installation from this checkout,
+use `pipx install --force './python[server,mqtt,tui]'`; ordinary pip users can
+add it with `python -m pip install './python[tui]'`. `solix-link interactive`
+always opens the line-based guide, even when the dashboard is installed.
 
 Scan merges nearby stations without changing saved configuration; Save station
 appends a selected device. C300/original C1000 connect without an account ID.
 For unpaired Prime stations, follow `pair`/`interactive` main-button instructions
 first. The dashboard opens disconnected and connects only on request. Native
-MQTT selection uses an already-running lab worker; it does not create an AP.
+MQTT selection uses an already-running AP-service worker; it does not create an AP.
 Controls honor model/worker permissions, and C2000 has no AC-output switch.
 Closing the dashboard disconnects monitoring; it does not restore settings.
 
@@ -147,8 +176,8 @@ solix-link network-diagnostics --name ups
 
 The result contains `http_error_code`, `wifi_error_code`, `ble_disconnect_code`,
 `mqtt_error_code`, `system_reboot_code`, and `sdk_reset_code`. This query was
-tested on C2000 main firmware 2.1.6.4 and replayed against C1000 radio v0.3.3.0;
-the C1000 hardware query remains untested. It changes no power/network settings.
+tested on C2000 main 2.1.6.4 and C1000 main 1.1.4.9/radio 0.3.3.0.
+It changes no power/network settings.
 Preserve the first result: reset codes may become 255 on later reads. Zero
 errors do **not** prove a connection, and these are not battery/inverter faults.
 Run it separately from Wi-Fi provisioning, which shares the response queue.
@@ -339,9 +368,9 @@ redirected AC loads to the battery. The tested app required Wi-Fi to open
 Time-of-Use mode. Local Wi-Fi provisioning is now available experimentally as
 described below. The C2000 Time-of-Use mode selector is verified over BLE.
 Corrected native MQTT Peak scheduling has since produced battery discharge
-with mains connected on the C2000. The native `lab-set-reserve`, `lab-set-tou`
-and `lab-grid` commands now expose guarded operations with fresh confirmation.
-`lab-grid` checks actual grid supply before and after clearing the plan.
+with mains connected on the C2000. The native `ap-service-set-reserve`, `ap-service-set-tou`
+and `ap-service-grid` commands now expose guarded operations with fresh confirmation.
+`ap-service-grid` checks actual grid supply before and after clearing the plan.
 Activated plans persist until changed; tool shutdown does not reset them.
 Timed/multiple slots and reserve-floor behavior remain untested.
 
@@ -351,7 +380,7 @@ Timed/multiple slots and reserve-floor behavior remain untested.
 telemetry to a broker on the same node or LAN. The stations themselves do not
 connect to this broker. This offers MQTT monitoring and model-supported
 settings through the packaged CLI; native MQTT currently requires the separate
-experimental lab setup described below.
+experimental AP-service setup described below.
 
 ```bash
 solix-link mqtt-bridge --config /path/to/config.json \
@@ -447,7 +476,7 @@ on an isolated network, including a run requiring its client certificate.
 It reconnected with saved settings and answered `0100` status and `0057`
 telemetry-stream requests without Bluetooth. The local API bootstrap and MQTT
 endpoint are available through the experimental
-[isolated lab workflow](../docs/isolated-ap-mqtt.md). C2000 native charging-power
+[isolated AP-service workflow](../docs/isolated-ap-mqtt.md). C2000 native charging-power
 changes 1800→1700→1800 W were
 confirmed by acknowledgment and fresh status replies, with AC output on.
 The battery stayed idle at its cap; this verified the setpoint, not charging
@@ -502,7 +531,7 @@ telemetry, and restore any temporary value. Power requests contain only the
 charging-power field, with a validated 300–1800 W range in 100 W steps. Native
 hardware tests covered 300, 1700 and 1800 W. Upper-cap requests accept
 80–100% in 5% steps; 90→95→90% was verified through native MQTT. Use
-`LocalMqttServer.set_charge_cap()` or `lab-set-charge-cap` for fresh baseline,
+`LocalMqttServer.set_charge_cap()` or `ap-service-set-charge-cap` for fresh baseline,
 reserve-clamping protection and telemetry confirmation. The raw builder only
 validates the range. Streams accept 1–120 seconds and must be renewed by the caller.
 Request payloads and topics contain private identifiers; do not log them
@@ -558,7 +587,7 @@ Python callers can use `await monitor.join_wifi(...)` or
 observed endpoint sequence is documented in the
 [field notes](../docs/gen2-protocol.md). The HTTP server defaults to monitoring;
 `--allow-control` and a nonempty `SOLIX_HTTP_TOKEN` enable allowlisted commands.
-`serve` uses BLE and does not run an Anker API emulator; `lab-run`
+`serve` uses BLE and does not run an Anker API emulator; `ap-service-run`
 runs the separate local device API described in the isolated-AP guide.
 
 For offline protocol research, `solix_link.mqtt_credentials` provides
@@ -567,7 +596,7 @@ For offline protocol research, `solix_link.mqtt_credentials` provides
 device endpoint's serial-derived AES-256-CBC envelope, verified against a
 saved C1000 response and a synthetic OpenSSL vector. They perform no network
 requests and support the observed 17-character serial format. They do not
-complete station binding; the successful C2000 lab setup also supplied a
+complete station binding; the successful C2000 AP-service setup also supplied a
 local API, DNS/NTP, and TLS MQTT broker.
 See the [credential and firmware findings](../docs/gen2-protocol.md#device-mqtt-credential-envelope).
 
@@ -588,7 +617,7 @@ token on every endpoint; Home Assistant can send it in an `Authorization`
 header. The service reconnects BLE automatically and marks readings
 unavailable when the station stops reporting.
 
-Native charging commands additionally require a control-enabled lab worker.
+Native charging commands additionally require a control-enabled AP-service worker.
 All command fields/types are validated; no HTTP AC-output, timer, firmware or
 arbitrary opcode control is exposed. Timeouts can leave changed settings;
 inspect fresh status before retrying. See [deployment and command schemas](../docs/gateway-home-assistant.md).

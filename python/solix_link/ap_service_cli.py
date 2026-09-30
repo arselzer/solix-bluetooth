@@ -11,16 +11,16 @@ import sys
 from .client import SolixMonitor
 from .config import DEFAULT_CONFIG, load_config
 from .isolated_ap import IsolatedAP
-from .lab_config import LabConfig, initialize_lab, load_lab, private_write
-from .lab_service import lab_request
+from .ap_service_config import APServiceConfig, initialize_ap_service, load_ap_service, private_write
+from .ap_service import ap_service_request
 from .protocol import Model, timezone_confer
 from .tou import TouPeriod
 
 
 def add_commands(subcommands) -> None:
-    init = subcommands.add_parser("lab-init", help="Generate private isolated-AP configuration and local MQTT certificates (C2000 Gen 2)")
+    init = subcommands.add_parser("ap-service-init", help="Generate private isolated-AP configuration and local MQTT certificates (C1000/C2000 Gen 2)")
     init.add_argument("--directory", type=Path, required=True, help="New private directory; existing directories are refused")
-    init.add_argument("--name", required=True, help="Existing paired C2000 config name")
+    init.add_argument("--name", required=True, help="Existing paired C1000 Gen 2 or C2000 Gen 2 config name")
     init.add_argument("--serial-file", type=Path, required=True, help="Owner-only file with the 17-character device serial")
     init.add_argument("--account-id-file", type=Path, help="Otherwise use the paired BLE client ID")
     init.add_argument("--interface", required=True, help="Dedicated, unused Linux Wi-Fi interface")
@@ -28,37 +28,39 @@ def add_commands(subcommands) -> None:
     init.add_argument("--country", required=True, help="Wi-Fi regulatory country, for example AT")
     init.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
 
-    run = subcommands.add_parser("lab-run", help="Run an isolated WPA2 AP and local API/NTP/native MQTT endpoint (root required)")
+    run = subcommands.add_parser("ap-service-run", help="Run an isolated WPA2 AP and local API/NTP/native MQTT endpoint (root required)")
     run.add_argument("--directory", type=Path, required=True)
     run.add_argument("--provision", action="store_true", help="Send local Wi-Fi/API settings through the saved BLE pairing")
     run.add_argument("--allow-control", action="store_true", help="Enable explicit native charging, reserve and tariff commands via the private Unix socket")
+    run.add_argument("--energy-reports", action="store_true", help="Enable local energy reporting; counter units remain unverified")
     run.add_argument("--duration", type=int, help="Stop after this many seconds; default: run until Ctrl-C")
     run.add_argument("--hostapd", default="hostapd", help="Executable name or absolute path")
     run.add_argument("--dnsmasq", default="dnsmasq", help="Executable name or absolute path")
     run.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
 
-    for command, help_text in (("lab-status", "Query live native MQTT status"),
-                               ("lab-readiness", "Read native controller readiness without writing settings"),
-                               ("lab-set-charge-power", "Set and confirm C2000 native MQTT charging power"),
-                               ("lab-set-charge-cap", "Set and confirm the C2000 native MQTT upper charge limit"),
-                               ("lab-set-reserve", "Set and confirm backup reserve without changing outputs"),
-                               ("lab-set-tou", "Replace the native hourly schedule; explicit activation persists until changed"),
-                               ("lab-grid", "Clear the plan and confirm return to grid power without toggling AC output")):
+    for command, help_text in (("ap-service-status", "Query live native MQTT status"),
+                               ("ap-service-readiness", "Read native controller readiness without writing settings"),
+                               ("ap-service-set-charge-power", "Set and confirm Gen 2 native MQTT charging power"),
+                               ("ap-service-set-charge-cap", "Set and confirm the Gen 2 native MQTT upper charge limit"),
+                               ("ap-service-set-reserve", "Set and confirm backup reserve without changing outputs"),
+                               ("ap-service-set-tou", "Replace the native hourly schedule; explicit activation persists until changed"),
+                               ("ap-service-grid", "Clear the plan and confirm return to grid power without toggling AC output")):
         parser = subcommands.add_parser(command, help=help_text)
         parser.add_argument("--directory", type=Path, required=True)
-        if command == "lab-set-charge-power":
-            parser.add_argument("--watts", type=int, required=True)
-        elif command == "lab-set-charge-cap":
+        if command == "ap-service-set-charge-power":
+            parser.add_argument("--watts", type=int, required=True,
+                                help="100 W steps, from 300 W to 1200 W (C1000 Gen 2) or 1800 W (C2000 Gen 2)")
+        elif command == "ap-service-set-charge-cap":
             parser.add_argument("--upper", type=int, required=True)
-        elif command == "lab-set-reserve":
+        elif command == "ap-service-set-reserve":
             parser.add_argument("--reserve", type=int, required=True)
-        elif command == "lab-set-tou":
+        elif command == "ap-service-set-tou":
             parser.add_argument("--mode", choices=["standard", "time_of_use"], required=True)
             parser.add_argument("--period", action="append", default=[], metavar="TARIFF:START:END",
                                 help="Repeat up to six times; peak, mid_peak or off_peak with whole local hours, e.g. peak:0:24")
-        elif command == "lab-grid":
+        elif command == "ap-service-grid":
             parser.add_argument("--timeout", type=int, default=30, help="5–120 seconds per power-flow confirmation phase")
-    serve = subcommands.add_parser("lab-serve", help="Expose native lab HTTP/SSE/metrics with optional authenticated commands")
+    serve = subcommands.add_parser("ap-service-serve", help="Expose AP-service HTTP/SSE/metrics with optional authenticated commands")
     serve.add_argument("--directory", type=Path, required=True)
     serve.add_argument("--host", default="127.0.0.1")
     serve.add_argument("--port", type=int, default=8765)
@@ -67,8 +69,8 @@ def add_commands(subcommands) -> None:
 
 def _device(args, name: str):
     device = next((device for device in load_config(args.config) if device.name == name), None)
-    if device is None or device.model != Model.C2000_GEN2 or device.protocol != "prime" or not device.client_id:
-        raise ValueError("Configure and pair a C2000 Gen 2 before local MQTT setup")
+    if device is None or device.model not in (Model.C1000_GEN2, Model.C2000_GEN2) or device.protocol != "prime" or not device.client_id:
+        raise ValueError("Configure and pair a C1000 Gen 2 or C2000 Gen 2 before local MQTT setup")
     return device
 
 
@@ -78,11 +80,11 @@ def _secret(path: Path) -> str:
     return path.read_text().strip()
 
 
-async def run_lab(args) -> None:
+async def run_ap_service(args) -> None:
     if args.duration is not None and args.duration <= 0:
         raise ValueError("Duration must be positive")
     directory = args.directory.resolve()
-    config = load_lab(directory / "lab.json")
+    config = load_ap_service(directory / "ap_service.json")
     ap = IsolatedAP(config, directory, hostapd=args.hostapd, dnsmasq=args.dnsmasq)
     monitor = None
     loop = asyncio.get_running_loop()
@@ -91,6 +93,8 @@ async def run_lab(args) -> None:
     try:
         if args.provision:
             device = _device(args, config.name)
+            if device.model != config.model:
+                raise ValueError("Paired device model does not match AP-service configuration")
             monitor = SolixMonitor(device.address, model=device.model, owner_user_id=device.client_id,
                                    protocol=device.protocol, timezone_name=config.timezone_name)
             await monitor.connect(timeout=35)
@@ -98,13 +102,15 @@ async def run_lab(args) -> None:
             await monitor.request_status()
             baseline = await monitor.wait_for_update(timeout=15)
             if baseline.get("serial_number") != config.device_serial:
-                raise ValueError("Bluetooth device serial does not match lab configuration")
+                raise ValueError("Bluetooth device serial does not match AP-service configuration")
             private_write(directory / "provisioning-baseline.json", json.dumps(baseline))
         # Keep startup synchronous so cancellation cannot outlive cleanup in a thread.
         ap.start()
-        worker = [sys.executable, "-m", "solix_link.lab_worker", "--directory", str(directory)]
+        worker = [sys.executable, "-m", "solix_link.ap_service_worker", "--directory", str(directory)]
         if args.allow_control:
             worker.append("--allow-control")
+        if args.energy_reports:
+            worker.append("--energy-reports")
         (directory / "ready").unlink(missing_ok=True)
         ap.spawn(worker, "service.log")
         async with asyncio.timeout(15):
@@ -122,13 +128,13 @@ async def run_lab(args) -> None:
                 raise RuntimeError("Station rejected Wi-Fi credentials")
             await monitor.disconnect()
             monitor = None
-        print(json.dumps({"event": "lab_started", "name": config.name, "control_enabled": args.allow_control}), flush=True)
+        print(json.dumps({"event": "ap_service_started", "name": config.name, "control_enabled": args.allow_control}), flush=True)
         loop = asyncio.get_running_loop()
         end = loop.time() + args.duration if args.duration else None
         previous = None
         while end is None or loop.time() < end:
             ap.check()
-            status = await lab_request(directory, "status")
+            status = await ap_service_request(directory, "status")
             if status != previous:
                 print(json.dumps(status), flush=True)
                 previous = status
@@ -142,32 +148,32 @@ async def run_lab(args) -> None:
 
 
 def dispatch(args) -> None:
-    if args.command == "lab-init":
+    if args.command == "ap-service-init":
         device = _device(args, args.name)
-        config = LabConfig(name=device.name, interface=args.interface, phy=args.phy, country=args.country,
+        config = APServiceConfig(name=device.name, interface=args.interface, phy=args.phy, country=args.country,
                            device_serial=_secret(args.serial_file),
                            account_id=_secret(args.account_id_file) if args.account_id_file else device.client_id,
-                           timezone_name=device.timezone_name or "Etc/UTC")
-        initialize_lab(args.directory, config)
+                           timezone_name=device.timezone_name or "Etc/UTC", model=device.model)
+        initialize_ap_service(args.directory, config)
         print(f"Created private local AP and MQTT credentials in {args.directory}")
-    elif args.command == "lab-run":
-        asyncio.run(run_lab(args))
-    elif args.command == "lab-serve":
-        from .lab_monitor import LabMonitorService
+    elif args.command == "ap-service-run":
+        asyncio.run(run_ap_service(args))
+    elif args.command == "ap-service-serve":
+        from .ap_service_monitor import APServiceMonitor
         from .server import run_server
-        run_server(LabMonitorService(load_lab(args.directory / "lab.json"), args.directory), args.host, args.port,
+        run_server(APServiceMonitor(load_ap_service(args.directory / "ap_service.json"), args.directory), args.host, args.port,
                    allow_control=args.allow_control)
     else:
-        command = {"lab-status": "status", "lab-readiness": "readiness", "lab-set-charge-power": "set-charge-power",
-                   "lab-set-charge-cap": "set-charge-cap", "lab-set-reserve": "set-backup-reserve",
-                   "lab-set-tou": "set-tou-plan", "lab-grid": "return-grid"}[args.command]
-        fields = ({"watts": args.watts} if args.command == "lab-set-charge-power" else
-                  {"upper": args.upper} if args.command == "lab-set-charge-cap" else {})
-        if args.command == "lab-set-reserve":
+        command = {"ap-service-status": "status", "ap-service-readiness": "readiness", "ap-service-set-charge-power": "set-charge-power",
+                   "ap-service-set-charge-cap": "set-charge-cap", "ap-service-set-reserve": "set-backup-reserve",
+                   "ap-service-set-tou": "set-tou-plan", "ap-service-grid": "return-grid"}[args.command]
+        fields = ({"watts": args.watts} if args.command == "ap-service-set-charge-power" else
+                  {"upper": args.upper} if args.command == "ap-service-set-charge-cap" else {})
+        if args.command == "ap-service-set-reserve":
             fields = {"reserve": args.reserve}
-        elif args.command == "lab-grid":
+        elif args.command == "ap-service-grid":
             fields = {"timeout": args.timeout}
-        elif args.command == "lab-set-tou":
+        elif args.command == "ap-service-set-tou":
             periods = []
             for text in args.period:
                 parts = text.split(":")
@@ -175,4 +181,4 @@ def dispatch(args) -> None:
                     raise ValueError("Period format must be TARIFF:START:END")
                 periods.append(TouPeriod(parts[0], int(parts[1]), int(parts[2])).to_dict())
             fields = {"periods": periods, "enabled": args.mode == "time_of_use"}
-        print(json.dumps(asyncio.run(lab_request(args.directory, command, **fields))))
+        print(json.dumps(asyncio.run(ap_service_request(args.directory, command, **fields))))

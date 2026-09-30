@@ -64,8 +64,9 @@ class Control:
 def controls_for(target: Target) -> tuple[Control, ...]:
     """Expose model-supported operations; C2000 never gets an AC switch."""
     if target.native:
+        maximum = 1200 if target.model == Model.C1000_GEN2 else 1800
         return (
-            Control("charge-power", "AC charging power", "300–1800 W, in 100 W steps"),
+            Control("charge-power", "AC charging power", f"300–{maximum} W, in 100 W steps"),
             Control("charge-cap", "Upper charge limit", "80–100%, in 5% steps"),
             Control("reserve", "Backup reserve", "5–100%, in 5% steps; within current charge limits"),
         )
@@ -127,16 +128,17 @@ def public_snapshot(snapshot: dict) -> dict:
 class TuiBackend:
     """Serialize local monitoring and explicit control calls behind the UI."""
 
-    def __init__(self, devices: list[DeviceConfig], lab_directory: Path | None = None,
+    def __init__(self, devices: list[DeviceConfig], ap_service_directory: Path | None = None,
                  *, monitor_factory: Callable[..., Any] = SolixMonitor,
                  requester: Callable[..., Any] | None = None,
                  scanner: Callable[..., Any] | None = None,
                  config_path: Path | None = None) -> None:
         self.targets = [Target(f"ble:{d.name}", f"{d.name} · {d.model.value}", d.model, device=d)
                         for d in devices]
-        if lab_directory is not None:
-            self.targets.append(Target("native", "Native MQTT · running local lab", Model.C2000_GEN2, True))
-        self.directory = lab_directory
+        if ap_service_directory is not None:
+            model = self._native_model(ap_service_directory)
+            self.targets.append(Target("native", f"Native MQTT · {model.value} · AP service", model, True))
+        self.directory = ap_service_directory
         self.monitor_factory = monitor_factory
         self.requester = requester
         self.scanner = scanner
@@ -146,6 +148,24 @@ class TuiBackend:
         self.last_seen: float | None = None
         self.control_enabled = False
         self._lock = asyncio.Lock()
+
+    @staticmethod
+    def _native_model(directory: Path) -> Model:
+        """Read only the profile model; fail clearly without reflecting secrets."""
+        from .ap_service_config import load_ap_service
+        profile = directory / "ap_service.json"
+        message = "AP-service profile is invalid or unreadable; check ap_service.json and its owner-only permissions"
+        try:
+            profile.lstat()
+        except FileNotFoundError:
+            # Fake transports and uninitialized directories have no profile.
+            return Model.C2000_GEN2
+        except OSError:
+            raise RuntimeError(message) from None
+        try:
+            return load_ap_service(profile).model
+        except (OSError, ValueError, TypeError):
+            raise RuntimeError(message) from None
 
     @staticmethod
     def _name(model: Model, used: set[str]) -> str:
@@ -203,11 +223,11 @@ class TuiBackend:
 
     async def _native(self, command: str, **fields: Any) -> dict:
         if self.directory is None:
-            raise RuntimeError("No local lab directory was selected")
+            raise RuntimeError("No AP-service directory was selected")
         requester = self.requester
         if requester is None:
-            from .lab_service import lab_request
-            requester = lab_request
+            from .ap_service import ap_service_request
+            requester = ap_service_request
         return await requester(self.directory, command, **fields)
 
     async def _close(self) -> None:
@@ -227,7 +247,7 @@ class TuiBackend:
             await self._close()
             target = next((item for item in self.targets if item.key == key), None)
             if target is None:
-                raise ValueError("Choose a saved station or a running local lab")
+                raise ValueError("Choose a saved station or a running AP service")
             if target.native:
                 snapshot = await self._native("status")
                 self.target = target
@@ -286,7 +306,7 @@ class TuiBackend:
                 raise ValueError("This operation is unavailable for the selected station")
             if target.native:
                 if not self.control_enabled:
-                    raise RuntimeError("Native controls are disabled; start the lab with --allow-control")
+                    raise RuntimeError("Native controls are disabled; start the AP service with --allow-control")
                 if action == "plan":
                     response = await self._native("set-tou-plan", periods=parse_plan(value), enabled=enabled)
                 elif action == "return-grid":
@@ -319,43 +339,112 @@ class TuiBackend:
             return self._ble_snapshot()
 
 
-def create_app(config_path: Path = DEFAULT_CONFIG, lab_directory: Path | None = None,
+def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | None = None,
                *, backend: TuiBackend | None = None) -> Any:
     """Build the dashboard lazily, allowing CLI help without the TUI extra."""
     try:
         from textual import on
         from textual.app import App, ComposeResult
-        from textual.containers import Grid, Horizontal, VerticalScroll
+        from textual.binding import Binding
+        from textual.containers import Grid, Horizontal, Vertical, VerticalScroll
+        from textual.screen import ModalScreen
         from textual.widgets import Button, DataTable, Footer, Header, Input, Label, RichLog, Select, Static, TabbedContent, TabPane
     except ImportError:
         raise RuntimeError("Install the terminal UI with: pip install 'solix-link[tui]'") from None
 
-    backend = backend or TuiBackend(load_config(config_path), lab_directory, config_path=config_path)
+    backend = backend or TuiBackend(load_config(config_path), ap_service_directory, config_path=config_path)
+
+    class DashboardTabs(TabbedContent):
+        def _on_tab_pane_focused(self, event: Any) -> None:
+            # Textual queues these messages. An earlier pane's focus message
+            # must not reactivate it after focus has moved to another pane.
+            event.prevent_default()
+            focused = self.screen.focused
+            if focused is not None and event.tab_pane in focused.ancestors_with_self:
+                super()._on_tab_pane_focused(event)
+            else:
+                event.stop()
+
+    class HelpScreen(ModalScreen):
+        BINDINGS = [("escape", "dismiss", "Close"), ("question_mark", "dismiss", "Close")]
+        DEFAULT_CSS = """
+        HelpScreen { align: center middle; background: #0c1424 85%; }
+        #help-dialog { width: 66; max-width: 95%; height: auto; max-height: 90%;
+                       border: round #77dfc2; background: #13233a; padding: 1 2; }
+        #help-title { color: #77dfc2; text-style: bold; margin-bottom: 1; }
+        #help-close { margin-top: 1; width: 100%; }
+        """
+
+        def compose(self) -> ComposeResult:
+            with VerticalScroll(id="help-dialog"):
+                yield Static("Dashboard keyboard guide", id="help-title")
+                yield Static(
+                    "Tab / Shift+Tab   Move between fields and buttons\n"
+                    "↑ / ↓, Enter      Select a station, setting or option\n"
+                    "F1–F4             Overview, Controls, Hourly plan, Events\n"
+                    "Ctrl+O            Connect to the selected station\n"
+                    "Ctrl+S            Scan nearby Bluetooth stations\n"
+                    "Ctrl+R            Request fresh readings\n"
+                    "Ctrl+D            Disconnect monitoring\n"
+                    "Ctrl+Q / Ctrl+C   Quit after the current operation\n"
+                    "? / F10           Open this guide\n\n"
+                    "Connection, status and summaries stay in place. Scroll "
+                    "inside the selected panel for longer lists.\n\n"
+                    "Changing a value does nothing until Apply is selected. "
+                    "Closing the dashboard disconnects monitoring and keeps "
+                    "station settings. Pairing and AP setup remain available "
+                    "through solix-link interactive.", markup=False,
+                )
+                yield Button("Back to dashboard · Esc", id="help-close", variant="primary")
+
+        @on(Button.Pressed, "#help-close")
+        def close_help(self) -> None:
+            self.dismiss()
 
     class SolixApp(App):
         TITLE = "SOLIX Link"
         SUB_TITLE = "Local station console"
-        BINDINGS = [("s", "scan", "Scan"), ("r", "refresh", "Refresh"), ("d", "disconnect", "Disconnect"),
-                    ("q", "quit", "Quit"), ("ctrl+c", "quit", "Quit")]
+        BINDINGS = [
+            Binding("f1", "panel('overview')", "Overview", priority=True),
+            Binding("f2", "panel('controls')", "Controls", priority=True),
+            Binding("f3", "panel('plan')", "Plan", priority=True),
+            Binding("f4", "panel('events')", "Events", priority=True),
+            Binding("ctrl+o", "connect", "Connect", show=False, priority=True),
+            Binding("ctrl+s", "scan", "Scan", priority=True),
+            Binding("ctrl+r", "refresh", "Refresh", priority=True),
+            Binding("ctrl+d", "disconnect", "Disconnect", show=False, priority=True),
+            Binding("question_mark,f10", "help", "Help"),
+            Binding("ctrl+q,ctrl+c", "quit", "Quit", priority=True),
+            Binding("s", "scan", "Scan", show=False),
+            Binding("r", "refresh", "Refresh", show=False),
+            Binding("d", "disconnect", "Disconnect", show=False),
+            Binding("q", "quit", "Quit", show=False),
+        ]
         CSS = """
         Screen { background: #0c1424; color: #e2ebfa; }
         Header { background: #13233a; color: #77dfc2; }
         Footer { background: #13233a; }
-        #body { padding: 1 2; }
-        #connection { height: auto; margin-bottom: 1; }
+        #body { height: 1fr; padding: 0 2; overflow: hidden hidden; }
+        #connection { height: 3; }
         #station { width: 1fr; margin-right: 1; }
         #connection-buttons { width: 34; height: 3; }
         #connection Button { margin-right: 1; }
-        #discovery { height: auto; margin-bottom: 1; }
+        #discovery { height: auto; }
         #discovery Button { margin-right: 1; }
         #discovery-hint { height: auto; width: 1fr; color: #a8bdd4; padding-top: 1; }
-        #connection-status { height: 2; color: #a8bdd4; }
-        #cards { grid-size: 3; grid-gutter: 1; height: 5; margin-bottom: 1; }
-        .card { border: round #2c4866; background: #13233a; padding: 0 2; content-align: center middle; }
-        #tabs { height: auto; min-height: 18; }
-        TabPane { padding: 1; }
-        #readings { height: 16; }
-        #event-log { height: 16; border: round #2c4866; }
+        #connection-status { height: 1; color: #a8bdd4; }
+        #connection-status.live { color: #77dfc2; }
+        #connection-status.busy, #connection-status.error { color: #ffcc80; }
+        #keyboard-hint { height: 1; color: #8298b5; }
+        #cards { grid-size: 3; grid-gutter: 1; height: 4; }
+        .card { border: round #2c4866; background: #13233a; padding: 0 1; content-align: center middle; }
+        #compact-summary { display: none; height: auto; max-height: 2; color: #77dfc2; }
+        #tabs { height: 1fr; min-height: 6; }
+        #tabs ContentSwitcher { height: 1fr; }
+        TabPane { height: 1fr; padding: 0 1; }
+        #controls-scroll, #plan-scroll { height: 1fr; }
+        #readings { height: 1fr; }
+        #event-log { height: 1fr; border: round #2c4866; }
         .form-label { margin-top: 1; color: #77dfc2; }
         .hint { color: #a8bdd4; height: auto; margin: 1 0; }
         .form-row { height: auto; margin-bottom: 1; }
@@ -364,15 +453,19 @@ def create_app(config_path: Path = DEFAULT_CONFIG, lab_directory: Path | None = 
         #plan-text { width: 1fr; }
         #plan-mode { margin-bottom: 1; }
         #notice { color: #ffcc80; height: auto; margin-top: 1; }
-        .narrow #connection { layout: vertical; }
+        .narrow #body { padding: 0 1; }
+        .narrow #connection { layout: vertical; height: 6; }
         .narrow #station { width: 100%; }
         .narrow #connection-buttons { width: 100%; }
         .narrow #discovery { layout: vertical; }
         #discovery-buttons { width: 34; height: 3; }
         .narrow #discovery-hint { width: 100%; padding-top: 0; }
-        .narrow #cards { grid-size: 1; grid-rows: 4; height: 14; }
         .narrow .form-row { layout: vertical; }
         .narrow .form-row Input { width: 100%; }
+        .compact #cards, .compact #discovery-hint { display: none; }
+        .compact #compact-summary { display: block; }
+        .compact #connection-status { height: 2; }
+        Button:focus, Input:focus, Select:focus { border: tall #77dfc2; }
         """
 
         def __init__(self) -> None:
@@ -382,10 +475,11 @@ def create_app(config_path: Path = DEFAULT_CONFIG, lab_directory: Path | None = 
             self.busy = False
             self.refreshing = False
             self.snapshot: dict = {}
+            self.reading_keys: tuple[str, ...] = ()
 
         def compose(self) -> ComposeResult:
             yield Header(show_clock=True)
-            with VerticalScroll(id="body"):
+            with Vertical(id="body"):
                 with Horizontal(id="connection"):
                     yield Select([(t.label, t.key) for t in backend.targets],
                                  value=self.selected if self.selected else Select.NULL,
@@ -398,47 +492,65 @@ def create_app(config_path: Path = DEFAULT_CONFIG, lab_directory: Path | None = 
                         yield Button("Scan Bluetooth", id="scan")
                         yield Button("Save station", id="save-station", disabled=True)
                     yield Static("Scan nearby stations or choose a saved station.", id="discovery-hint", markup=False)
-                yield Static("Choose a station, then Connect.", id="connection-status", markup=False)
+                yield Static("Disconnected · Choose a station, then Connect.", id="connection-status", markup=False)
+                yield Static("Tab / Shift+Tab navigate · Enter select · F1–F4 panels · ? help", id="keyboard-hint", markup=False)
                 with Grid(id="cards"):
                     yield Static("BATTERY\n—", classes="card", id="battery", markup=False)
                     yield Static("POWER\n—", classes="card", id="power", markup=False)
                     yield Static("SUPPLY\nUnknown", classes="card", id="flow", markup=False)
-                with TabbedContent(id="tabs"):
+                yield Static("Battery — · Input — · Output — · Supply unknown", id="compact-summary", markup=False)
+                with DashboardTabs(id="tabs"):
                     with TabPane("Overview", id="overview"):
-                        yield DataTable(id="readings", zebra_stripes=True)
+                        yield DataTable(id="readings", zebra_stripes=True, cursor_type="row")
                     with TabPane("Controls", id="controls"):
-                        yield Label("Station setting", classes="form-label")
-                        yield Select([], prompt="Connect to choose a setting", id="setting", allow_blank=True)
-                        yield Static("Changes apply only when you select Apply.", id="control-hint", classes="hint", markup=False)
-                        with Horizontal(classes="form-row"):
-                            yield Input(placeholder="Value", id="setting-value")
-                            yield Button("Apply setting", id="apply-setting", variant="primary", disabled=True)
-                        yield Static("", id="notice", markup=False)
+                        with VerticalScroll(id="controls-scroll"):
+                            yield Label("Station setting", classes="form-label")
+                            yield Select([], prompt="Connect to choose a setting", id="setting", allow_blank=True)
+                            yield Static("Changes apply only when you select Apply.", id="control-hint", classes="hint", markup=False)
+                            with Horizontal(classes="form-row"):
+                                yield Input(placeholder="Value", id="setting-value")
+                                yield Button("Apply setting", id="apply-setting", variant="primary", disabled=True)
+                            yield Static("", id="notice", markup=False)
                     with TabPane("Hourly plan", id="plan"):
-                        yield Static("Native MQTT only · local station hours · up to six non-overlapping periods", classes="hint", markup=False)
-                        yield Label("Periods (empty clears the plan)", classes="form-label")
-                        yield Input(placeholder="off_peak:0:6,peak:6:24", id="plan-text")
-                        yield Static("Tariffs: peak, mid_peak, off_peak. Split overnight periods at midnight.\nActivating a plan persists until you change it or return to grid.", classes="hint", markup=False)
-                        yield Select([("Store in Standard mode", "store"), ("Activate Time-of-Use", "activate")],
-                                     value="store", allow_blank=False, id="plan-mode")
-                        with Horizontal(classes="form-row"):
-                            yield Button("Apply hourly plan", id="apply-plan", variant="primary", disabled=True)
-                            yield Button("Return to grid", id="return-grid", disabled=True)
-                        yield Static("Return to grid clears the plan and waits for observed grid supply. It keeps AC output enabled.", classes="hint", markup=False)
+                        with VerticalScroll(id="plan-scroll"):
+                            yield Static("Native MQTT only · local station hours · up to six non-overlapping periods", classes="hint", markup=False)
+                            yield Label("Periods (empty clears the plan)", classes="form-label")
+                            yield Input(placeholder="off_peak:0:6,peak:6:24", id="plan-text")
+                            yield Static("Tariffs: peak, mid_peak, off_peak. Split overnight periods at midnight.\nActivating a plan persists until you change it or return to grid.", classes="hint", markup=False)
+                            yield Select([("Store in Standard mode", "store"), ("Activate Time-of-Use", "activate")],
+                                         value="store", allow_blank=False, id="plan-mode")
+                            with Horizontal(classes="form-row"):
+                                yield Button("Apply hourly plan", id="apply-plan", variant="primary", disabled=True)
+                                yield Button("Return to grid", id="return-grid", disabled=True)
+                            yield Static("Return to grid clears the plan and waits for observed grid supply. It keeps AC output enabled.", classes="hint", markup=False)
                     with TabPane("Events", id="events"):
                         yield RichLog(id="event-log", markup=False, wrap=True, max_lines=200)
             yield Footer()
 
         def on_mount(self) -> None:
-            self.query_one("#readings", DataTable).add_columns("Measurement", "Value")
+            table = self.query_one("#readings", DataTable)
+            table.add_column("Measurement", key="measurement")
+            table.add_column("Value", key="value")
             self.configure_controls()
+            self.query_one("#station", Select).focus()
             self.set_interval(2, self.poll)
 
         def on_resize(self, event: Any) -> None:
             self.set_class(event.size.width < 82, "narrow")
+            self.set_class(event.size.height < 32 or event.size.width < 58, "compact")
+            self.query_one("#keyboard-hint", Static).update(
+                "Tab / Enter · F1–F4 panels · F10 help" if event.size.width < 82
+                else "Tab / Shift+Tab navigate · Enter select · F1–F4 panels · ? help"
+            )
 
         def event_log(self, message: str) -> None:
             self.query_one("#event-log", RichLog).write(f"{time.strftime('%H:%M:%S')}  {message}")
+
+        def status(self, message: str, kind: str = "idle") -> None:
+            widget = self.query_one("#connection-status", Static)
+            widget.update(message)
+            for state in ("live", "busy", "error"):
+                widget.set_class(state == kind, state)
 
         def current_target(self) -> Target | None:
             return next((t for t in backend.targets if t.key == self.selected), None)
@@ -451,7 +563,7 @@ def create_app(config_path: Path = DEFAULT_CONFIG, lab_directory: Path | None = 
             selector.value = options[0].key if options else Select.NULL
             note = "Original C1000 controls follow reference mappings; hardware verification is pending." if target and target.model == Model.C1000 else ""
             if target and target.native:
-                note = "Controls require the running lab to have been started with --allow-control."
+                note = "Controls require the running AP service to have been started with --allow-control."
             self.query_one("#notice", Static).update(note)
             guidance = "Scan nearby stations or choose a saved station."
             if target and not target.saved:
@@ -483,18 +595,31 @@ def create_app(config_path: Path = DEFAULT_CONFIG, lab_directory: Path | None = 
             latest = snapshot.get("last_seen_timestamp")
             age = f" · {max(0, int(time.time() - latest))}s since update" if isinstance(latest, (int, float)) else ""
             state = "Live" if fresh else "Waiting for fresh telemetry" if snapshot.get("connected") else "Disconnected"
-            self.query_one("#connection-status", Static).update(state + age)
+            permission = " · Read only" if backend.target and backend.target.native and not snapshot.get("control_enabled") else ""
+            self.status(state + age + permission, "live" if fresh else "idle")
             self.query_one("#battery", Static).update(f"BATTERY\n{metrics.get('battery_percentage', '—')}% · {metrics.get('battery_status', 'unknown')}")
             incoming = metrics.get("input_power_w", metrics.get("ac_input_power_w", "—"))
             outgoing = metrics.get("output_power_w", metrics.get("ac_output_power_w", "—"))
             self.query_one("#power", Static).update(f"POWER\n{incoming} W in  ·  {outgoing} W out")
             flow = str(snapshot.get("power_flow") or "unknown") if fresh else "unknown"
             self.query_one("#flow", Static).update(f"SUPPLY\n{flow.replace('_', ' ').title()}")
+            self.query_one("#compact-summary", Static).update(
+                f"Battery {metrics.get('battery_percentage', '—')}% · {incoming} W in · {outgoing} W out · {flow}"
+            )
             table = self.query_one("#readings", DataTable)
-            table.clear()
-            for key, label in METRIC_LABELS.items():
-                if key in metrics:
-                    table.add_row(label, str(metrics[key]))
+            keys = tuple(key for key in METRIC_LABELS if key in metrics)
+            if keys != self.reading_keys:
+                row, scroll = table.cursor_row, table.scroll_y
+                table.clear()
+                for key in keys:
+                    table.add_row(METRIC_LABELS[key], str(metrics[key]), key=key)
+                if keys:
+                    table.move_cursor(row=min(row, len(keys) - 1), column=0, scroll=False)
+                    table.scroll_to(y=scroll, animate=False)
+                self.reading_keys = keys
+            else:
+                for key in keys:
+                    table.update_cell(key, "value", str(metrics[key]), update_width=True)
             self.update_buttons()
 
         def launch(self, coroutine: Any, *, control: bool = False) -> None:
@@ -504,7 +629,7 @@ def create_app(config_path: Path = DEFAULT_CONFIG, lab_directory: Path | None = 
             self.busy = True
             self.update_buttons()
             if control:
-                self.query_one("#connection-status", Static).update("Applying setting — waiting for fresh telemetry…")
+                self.status("Applying setting — waiting for fresh telemetry…", "busy")
                 self.event_log("Applying the selected control…")
             async def operation() -> None:
                 try:
@@ -515,12 +640,12 @@ def create_app(config_path: Path = DEFAULT_CONFIG, lab_directory: Path | None = 
                         self.event_log("Setting confirmed by fresh station telemetry.")
                 except Exception as error:
                     self.event_log(safe_error(error))
-                    self.query_one("#connection-status", Static).update(safe_error(error))
                     if control:
                         self.event_log("A failed write may have taken effect. Check fresh status before retrying.")
                     snapshot = getattr(error, "snapshot", None)
                     if isinstance(snapshot, dict):
                         self.render_snapshot(public_snapshot(snapshot))
+                    self.status(safe_error(error), "error")
                 finally:
                     self.busy = False
                     self.update_buttons()
@@ -551,8 +676,7 @@ def create_app(config_path: Path = DEFAULT_CONFIG, lab_directory: Path | None = 
         def button_pressed(self, event: Any) -> None:
             action = event.button.id
             if action == "connect" and self.selected:
-                self.event_log("Connecting to the selected local station…")
-                self.launch(backend.connect(self.selected))
+                self.action_connect()
             elif action == "disconnect":
                 self.action_disconnect()
             elif action == "scan":
@@ -587,13 +711,30 @@ def create_app(config_path: Path = DEFAULT_CONFIG, lab_directory: Path | None = 
                 except Exception as error:
                     if not self.busy:
                         self.render_snapshot(public_snapshot({"metrics": {}}))
-                        self.query_one("#connection-status", Static).update(safe_error(error))
+                        self.status(safe_error(error), "error")
                 finally:
                     self.refreshing = False
             self.run_worker(refresh(), group="refresh", exit_on_error=False)
 
         def action_refresh(self) -> None:
             self.launch(backend.refresh(force=True))
+
+        def action_connect(self) -> None:
+            if self.busy or not self.selected:
+                return
+            self.status("Connecting to the selected local station…", "busy")
+            self.event_log("Connecting to the selected local station…")
+            self.launch(backend.connect(self.selected))
+
+        def action_panel(self, panel: str) -> None:
+            self.screen.set_focus(None)
+            self.query_one("#tabs", TabbedContent).active = panel
+            widget = {"overview": "readings", "controls": "setting", "plan": "plan-text", "events": "event-log"}[panel]
+            self.screen.set_focus(self.query_one(f"#{widget}"))
+
+        def action_help(self) -> None:
+            if not isinstance(self.screen, HelpScreen):
+                self.push_screen(HelpScreen())
 
         def refresh_targets(self) -> None:
             selector = self.query_one("#station", Select)
@@ -610,12 +751,12 @@ def create_app(config_path: Path = DEFAULT_CONFIG, lab_directory: Path | None = 
 
         def action_scan(self) -> None:
             async def scan() -> None:
-                self.query_one("#connection-status", Static).update("Scanning nearby Bluetooth stations…")
+                self.status("Scanning nearby Bluetooth stations…", "busy")
                 count = await backend.scan()
                 self.refresh_targets()
                 message = f"Scan complete: {count} new supported station(s)."
                 self.event_log(message)
-                self.query_one("#connection-status", Static).update(message)
+                self.status(message)
             self.launch(scan())
 
         def action_disconnect(self) -> None:
@@ -638,6 +779,6 @@ def create_app(config_path: Path = DEFAULT_CONFIG, lab_directory: Path | None = 
     return SolixApp()
 
 
-def run_tui(config_path: Path = DEFAULT_CONFIG, lab_directory: Path | None = None) -> None:
+def run_tui(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | None = None) -> None:
     """Open the optional dashboard without starting services or changing settings."""
-    create_app(config_path, lab_directory).run()
+    create_app(config_path, ap_service_directory).run()

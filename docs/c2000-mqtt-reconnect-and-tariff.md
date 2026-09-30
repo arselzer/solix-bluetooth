@@ -196,7 +196,7 @@ BLE attempts remain in
 `.solix-private/isolated-ap/native-cap-charging-20260929/`.
 
 The package is now **`solix-link`**, imported as **`solix_link`**. Its
-`lab-set-charge-cap` command and interactive native menu expose the verified
+`ap-service-set-charge-cap` command and interactive native menu expose the verified
 cap path. Legacy CLI/import aliases, saved config paths, MQTT bridge topic
 prefixes and Prometheus metric names remain compatible. Tariff experiments
 remain private; scheduled discharge is still unresolved.

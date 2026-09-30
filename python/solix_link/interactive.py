@@ -15,8 +15,8 @@ import time
 
 from .client import SolixMonitor, discover
 from .config import DeviceConfig, load_config, save_config
-from .lab_config import LabConfig, initialize_lab, load_lab, private_write
-from .lab_service import lab_request
+from .ap_service_config import APServiceConfig, initialize_ap_service, load_ap_service, private_write
+from .ap_service import ap_service_request
 from .protocol import Model
 
 
@@ -120,7 +120,9 @@ def wifi_adapters() -> list[tuple[str, str]]:
     return result
 
 
-def setup_lab(device: DeviceConfig, directory: Path) -> None:
+def setup_ap_service(device: DeviceConfig, directory: Path) -> None:
+    if device.model not in (Model.C1000_GEN2, Model.C2000_GEN2) or device.protocol != "prime" or not device.client_id:
+        raise ValueError("AP setup requires a paired C1000 Gen 2 or C2000 Gen 2")
     print("Local MQTT uses a dedicated Wi-Fi adapter, a private API and an AP without an internet route.")
     adapters = wifi_adapters()
     if adapters:
@@ -140,10 +142,10 @@ def setup_lab(device: DeviceConfig, directory: Path) -> None:
         serial = getpass.getpass("Device serial (17 characters, hidden): ").strip()
     import getpass
     account = getpass.getpass("App account ID, or Enter for saved BLE pairing ID (hidden): ").strip() or device.client_id
-    config = LabConfig(device.name, interface, phy, country, serial, account,
-                       timezone_name=device.timezone_name or "Etc/UTC")
-    initialize_lab(directory, config)
-    print(f"Saved local AP credentials and certificates in {directory}. Native setup is experimental on C2000 Gen 2.")
+    config = APServiceConfig(device.name, interface, phy, country, serial, account,
+                       timezone_name=device.timezone_name or "Etc/UTC", model=device.model)
+    initialize_ap_service(directory, config)
+    print(f"Saved local AP credentials and certificates in {directory}. Native setup is experimental ({device.model.value}).")
 
 
 def _show_status(status: dict) -> None:
@@ -157,7 +159,9 @@ def _show_status(status: dict) -> None:
 
 
 def native_session(directory: Path, config_path: Path, *, provision: bool, allow_control: bool) -> None:
-    command = [sys.executable, "-m", "solix_link", "lab-run", "--directory", str(directory.resolve()),
+    config = load_ap_service(directory / "ap_service.json")
+    maximum_power = 1200 if config.model == Model.C1000_GEN2 else 1800
+    command = [sys.executable, "-m", "solix_link", "ap-service-run", "--directory", str(directory.resolve()),
                "--config", str(config_path.resolve())]
     if provision:
         command.append("--provision")
@@ -166,16 +170,16 @@ def native_session(directory: Path, config_path: Path, *, provision: bool, allow
     if os.geteuid() != 0:
         print("Starting the isolated AP needs root to move the dedicated adapter into its namespace. Run:")
         print("sudo " + shlex.join(command))
-        print("Then reopen interactive mode to inspect this lab's status.")
+        print("Then reopen interactive mode to inspect the AP-service status.")
         return
     log_path = directory / f"interactive-{time.time_ns()}.log"
     private_write(log_path, b"")
     with log_path.open("ab") as log:
         process = subprocess.Popen(command, stdout=log, stderr=log, start_new_session=True)
     try:
-        print(f"Starting local MQTT; logs: {log_path}. Radio reconnection can take several minutes.")
+        print(f"Starting the AP service; logs: {log_path}. Radio reconnection can take several minutes.")
         while process.poll() is None:
-            selected = choose("Local MQTT session", ["Show live status", "Read controller readiness",
+            selected = choose("AP-service session", ["Show live status", "Read controller readiness",
                                                      "Set charging-power limit" if allow_control else "Charging controls disabled",
                                                      "Set upper charge limit" if allow_control else "Charge-cap controls disabled",
                                                      "Set backup reserve" if allow_control else "Reserve controls disabled",
@@ -186,18 +190,18 @@ def native_session(directory: Path, config_path: Path, *, provision: bool, allow
                 break
             try:
                 if selected == 0:
-                    _show_status(asyncio.run(lab_request(directory, "status")))
+                    _show_status(asyncio.run(ap_service_request(directory, "status")))
                 elif selected == 1:
-                    print(json.dumps(asyncio.run(lab_request(directory, "readiness"))))
+                    print(json.dumps(asyncio.run(ap_service_request(directory, "readiness"))))
                 elif selected == 2 and allow_control:
-                    watts = int(prompt("Charging-power limit (300–1800 W in 100 W steps)"))
-                    _show_status(asyncio.run(lab_request(directory, "set-charge-power", watts=watts)))
+                    watts = int(prompt(f"Charging-power limit (300–{maximum_power} W in 100 W steps)"))
+                    _show_status(asyncio.run(ap_service_request(directory, "set-charge-power", watts=watts)))
                 elif selected == 3 and allow_control:
                     upper = int(prompt("Upper charge limit (80–100% in 5% steps)"))
-                    _show_status(asyncio.run(lab_request(directory, "set-charge-cap", upper=upper)))
+                    _show_status(asyncio.run(ap_service_request(directory, "set-charge-cap", upper=upper)))
                 elif selected == 4 and allow_control:
                     reserve = int(prompt("Backup reserve (5–100% in 5% steps, within charge limits)"))
-                    _show_status(asyncio.run(lab_request(directory, "set-backup-reserve", reserve=reserve)))
+                    _show_status(asyncio.run(ap_service_request(directory, "set-backup-reserve", reserve=reserve)))
                 elif selected == 5 and allow_control:
                     from .tou import TouPeriod
                     mode = choose("Plan mode", ["Store in Standard", "Activate Time-of-Use (persists until changed)"])
@@ -210,9 +214,9 @@ def native_session(directory: Path, config_path: Path, *, provision: bool, allow
                         if len(parts) != 3:
                             raise ValueError("Period format must be TARIFF:START:END")
                         periods.append(TouPeriod(parts[0], int(parts[1]), int(parts[2])).to_dict())
-                    _show_status(asyncio.run(lab_request(directory, "set-tou-plan", periods=periods, enabled=mode == 1)))
+                    _show_status(asyncio.run(ap_service_request(directory, "set-tou-plan", periods=periods, enabled=mode == 1)))
                 elif selected == 6 and allow_control:
-                    _show_status(asyncio.run(lab_request(directory, "return-grid")))
+                    _show_status(asyncio.run(ap_service_request(directory, "return-grid")))
             except (ValueError, OSError, RuntimeError, TimeoutError) as error:
                 print(f"{type(error).__name__}: {error}. Check fresh status before retrying a control write.")
         if process.poll() is not None and process.returncode:
@@ -229,9 +233,9 @@ def native_session(directory: Path, config_path: Path, *, provision: bool, allow
 def mqtt_menu(device: DeviceConfig, config_path: Path, directory: Path) -> None:
     while True:
         choices = ["Publish BLE telemetry to my MQTT broker"]
-        if device.model == Model.C2000_GEN2:
-            choices += ["Create isolated AP/native MQTT configuration", "Start saved isolated AP",
-                        "Provision/reconnect to isolated AP", "Inspect running native MQTT status",
+        if device.model in (Model.C1000_GEN2, Model.C2000_GEN2):
+            choices += ["Create AP-service configuration", "Start saved AP service",
+                        "Provision/reconnect to AP service", "Inspect running AP-service status",
                         "Serve native status over HTTP"]
         action = choose("MQTT connection", choices)
         if action is None:
@@ -250,29 +254,29 @@ def mqtt_menu(device: DeviceConfig, config_path: Path, directory: Path) -> None:
                                        username=username or None, password_file=Path(password) if password else None,
                                        ca_file=Path(ca) if ca else None).run())
             elif action == 1:
-                setup_lab(device, directory)
+                setup_ap_service(device, directory)
             elif action in (2, 3):
-                config = load_lab(directory / "lab.json")
-                if config.name != device.name:
-                    raise ValueError("Lab belongs to a different selected station")
+                config = load_ap_service(directory / "ap_service.json")
+                if config.name != device.name or config.model != device.model:
+                    raise ValueError("AP service belongs to a different selected station")
                 controls = choose("Native control", ["Monitoring only", "Enable explicit charging and tariff commands"])
                 if controls is not None:
                     native_session(directory, config_path, provision=action == 3, allow_control=controls == 1)
             elif action == 4:
-                _show_status(asyncio.run(lab_request(directory, "status")))
+                _show_status(asyncio.run(ap_service_request(directory, "status")))
             elif action == 5:
-                from .lab_monitor import LabMonitorService
+                from .ap_service_monitor import APServiceMonitor
                 from .server import run_server
                 host = prompt("HTTP listen address", "127.0.0.1")
                 port = int(prompt("HTTP port", "8765"))
-                run_server(LabMonitorService(load_lab(directory / "lab.json"), directory), host, port)
+                run_server(APServiceMonitor(load_ap_service(directory / "ap_service.json"), directory), host, port)
         except KeyboardInterrupt:
             print("Stopped.")
         except Exception as error:
             print(f"{type(error).__name__}: {error}")
 
 
-def run_interactive(config_path: Path, lab_directory: Path | None = None) -> None:
+def run_interactive(config_path: Path, ap_service_directory: Path | None = None) -> None:
     print("SOLIX local monitoring — Ctrl-C stops an active monitor; 0 returns to the menu.")
     selected = select_device(config_path)
     while True:
@@ -295,7 +299,7 @@ def run_interactive(config_path: Path, lab_directory: Path | None = None) -> Non
                 print("Monitoring Bluetooth; Ctrl-C returns to the menu.")
                 asyncio.run(_monitor(argparse.Namespace(name=selected.name, config=config_path)))
             elif action == 2:
-                directory = lab_directory or config_path.parent / "labs" / selected.name
+                directory = ap_service_directory or config_path.parent / "ap-services" / selected.name
                 mqtt_menu(selected, config_path, directory)
             elif action == 3:
                 from .manager import MonitorService

@@ -35,8 +35,9 @@ acknowledgment supplies no range guarantee. The client therefore enforces
 
 Nominal timer periods suggest general 10-second energy samples and `sum / 360`
 report values in Wh, with durations in 10-minute units. **Actual scheduler
-timing, physical scaling/calibration, persistence/reset behavior and C2000
-equivalence remain unverified.** Do not publish these as lifetime HA energy
+timing, physical scaling/calibration, on-device persistence/reset behavior and
+C2000 equivalence remain unverified. The later [report lifecycle trace](energy-report-lifecycle.md)
+identifies completion, retry and persistence branches offline.** Do not publish these as lifetime HA energy
 statistics yet.
 
 ## Binary report and transport
@@ -69,7 +70,7 @@ then selects **`/equipment/logging/upload_pb_events`**, HTTP task `0x16`.
 
 The isolated API now retains this logging request locally, decodes known groups
 into private `energy_report` records and returns a minimal local acknowledgment.
-That acknowledgment is a lab implementation; Anker's response schema has not
+That acknowledgment is a local implementation; Anker's response schema has not
 been captured. No such request was observed in the short live C2000 trial.
 No incoming `0401` query is established, so the tool sends none.
 
@@ -88,7 +89,10 @@ data. It is deliberately absent from normal telemetry and HA energy entities.
 The packaged decoder matched all three retained actual-encoder replay cases
 (zero, distinct groups and large-u64 inputs); this validates the recovered
 counter schema, not its physical units.
-Next: retain spontaneous C2000 reports during a longer local session, compare
+An opt-in `ap-service-run --energy-reports` now returns the recovered analytics
+point-switch schema; power controls still require `--allow-control`. See the
+[report lifecycle findings](energy-report-lifecycle.md) for its firmware gates
+and live capture results. Next, compare
 counter deltas with measured power/time, and determine restart/reset behavior.
 The six native `0503/state_info` energy words remain separate unknowns.
 

@@ -1,4 +1,4 @@
-"""Private configuration and certificate bootstrap for the isolated MQTT lab."""
+"""Private configuration and certificate bootstrap for the isolated MQTT AP service."""
 
 from __future__ import annotations
 
@@ -23,8 +23,8 @@ from .protocol import Model, timezone_confer
 
 
 @dataclass(frozen=True)
-class LabConfig:
-    """One C2000 and a dedicated Linux Wi-Fi adapter; secrets never appear in repr."""
+class APServiceConfig:
+    """One Gen 2 station and a dedicated Wi-Fi adapter; secrets stay out of repr."""
 
     name: str
     interface: str
@@ -35,38 +35,39 @@ class LabConfig:
     ssid: str = field(default_factory=lambda: f"SOLIX-Local-{secrets.token_hex(3)}")
     passphrase: str = field(default_factory=lambda: secrets.token_urlsafe(24), repr=False)
     timezone_name: str = "Etc/UTC"
-    namespace: str = "solix_lab"
+    namespace: str = "solix_ap_service"
     gateway: str = "192.168.77.1"
     broker_host: str = "mqtt.solix.test"
+    model: Model = Model.C2000_GEN2
 
     def __post_init__(self) -> None:
+        model = Model(self.model)
+        if model not in (Model.C1000_GEN2, Model.C2000_GEN2):
+            raise ValueError("AP service supports C1000 Gen 2 and C2000 Gen 2 only")
+        object.__setattr__(self, "model", model)
         for value in (self.name, self.interface, self.phy, self.namespace):
             if not isinstance(value, str) or not re.fullmatch(r"[A-Za-z0-9_-]{1,32}", value):
-                raise ValueError("Lab names must contain only letters, digits, _ or -")
+                raise ValueError("AP service names must contain only letters, digits, _ or -")
         if not re.fullmatch(r"[A-Z]{2}", self.country):
             raise ValueError("Country must be a two-letter regulatory code")
         if not re.fullmatch(r"[A-Za-z0-9]{17}", self.device_serial):
-            raise ValueError("Lab requires the observed 17-character device serial")
+            raise ValueError("AP service requires the observed 17-character device serial")
         if not re.fullmatch(r"[0-9a-fA-F]{40}", self.account_id):
-            raise ValueError("Lab account ID must be 40 hexadecimal characters")
+            raise ValueError("AP service account ID must be 40 hexadecimal characters")
         if not self.ssid.isascii() or not 1 <= len(self.ssid) <= 32 or any(c in self.ssid for c in "\r\n\x00"):
             raise ValueError("SSID must be 1–32 single-line ASCII characters")
         if not self.passphrase.isascii() or not 8 <= len(self.passphrase) <= 63 or any(ord(c) < 32 or ord(c) > 126 for c in self.passphrase):
             raise ValueError("WPA2 passphrase must contain 8–63 printable ASCII characters")
         address = ipaddress.IPv4Address(self.gateway)
         if not address.is_private or address.is_loopback or address.is_link_local or int(address) & 255 != 1:
-            raise ValueError("Lab gateway must be a private IPv4 /24 address ending in .1")
+            raise ValueError("AP service gateway must be a private IPv4 /24 address ending in .1")
         if not re.fullmatch(r"(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,63}", self.broker_host):
             raise ValueError("Invalid local broker hostname")
         timezone_confer(self.timezone_name)
 
     @property
     def product(self) -> str:
-        return "A1783"
-
-    @property
-    def model(self) -> Model:
-        return Model.C2000_GEN2
+        return "A1763" if self.model == Model.C1000_GEN2 else "A1783"
 
     @property
     def api_url(self) -> str:
@@ -98,17 +99,17 @@ def private_write(path: Path, data: str | bytes) -> None:
         Path(temporary).unlink(missing_ok=True)
 
 
-def load_lab(path: Path) -> LabConfig:
+def load_ap_service(path: Path) -> APServiceConfig:
     mode = path.stat().st_mode
     if path.is_symlink() or not stat.S_ISREG(mode) or mode & 0o077:
-        raise ValueError("Lab configuration must be an owner-only regular file")
+        raise ValueError("AP service configuration must be an owner-only regular file")
     try:
-        return LabConfig(**json.loads(path.read_text()))
+        return APServiceConfig(**json.loads(path.read_text()))
     except (TypeError, KeyError, json.JSONDecodeError):
-        raise ValueError("Invalid lab configuration") from None
+        raise ValueError("Invalid AP service configuration") from None
 
 
-def initialize_lab(directory: Path, config: LabConfig) -> Path:
+def initialize_ap_service(directory: Path, config: APServiceConfig) -> Path:
     """Generate a local CA, server/client certificates and encrypted API fields.
 
     No Anker account request is made. Refuse an existing directory so keys and
@@ -117,7 +118,7 @@ def initialize_lab(directory: Path, config: LabConfig) -> Path:
     directory.mkdir(parents=True, mode=0o700, exist_ok=False)
     now = datetime.now(timezone.utc)
     ca_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
-    ca_name = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, "SOLIX local lab CA")])
+    ca_name = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, "SOLIX AP service CA")])
     ca = (x509.CertificateBuilder().subject_name(ca_name).issuer_name(ca_name)
           .public_key(ca_key.public_key()).serial_number(x509.random_serial_number())
           .not_valid_before(now - timedelta(days=1)).not_valid_after(now + timedelta(days=3650))
@@ -152,5 +153,5 @@ def initialize_lab(directory: Path, config: LabConfig) -> Path:
         "origin": "", "country_code": "",
     }}
     private_write(directory / "mqtt-response.json", json.dumps(response))
-    private_write(directory / "lab.json", json.dumps(asdict(config), indent=2) + "\n")
-    return directory / "lab.json"
+    private_write(directory / "ap_service.json", json.dumps(asdict(config), indent=2) + "\n")
+    return directory / "ap_service.json"

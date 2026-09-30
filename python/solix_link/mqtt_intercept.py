@@ -1,4 +1,4 @@
-"""Small, single-station MQTT 3.1.1 TLS endpoint for the isolated SOLIX lab.
+"""Small, single-station MQTT 3.1.1 TLS endpoint for the isolated SOLIX AP service.
 
 This is a device protocol endpoint, not a general MQTT broker. It never bridges
 traffic to Anker or another network and never sends an AC output command.
@@ -14,9 +14,9 @@ import ssl
 import time
 from typing import Callable
 
-from .lab_config import LabConfig, private_write
+from .ap_service_config import APServiceConfig, private_write
 from .native_mqtt import NativeMqttCommands, NativeMqttRequest, decode_mqtt_telemetry
-from .protocol import DATA_RESPONSE, decode_telemetry, parse_packet, parse_tlvs
+from .protocol import DATA_RESPONSE, Model, decode_telemetry, parse_packet, parse_tlvs
 from .tou import PowerFlowTimeout, TouPeriod, periods_from_d9, power_flow, validate_periods
 
 
@@ -61,7 +61,7 @@ def mqtt_string(body: bytes, position: int) -> tuple[str, int]:
     return value, end
 
 
-def native_response(message: bytes, config: LabConfig):
+def native_response(message: bytes, config: APServiceConfig):
     """Validate device identity before accepting any acknowledgement."""
     try:
         outer = json.loads(message)
@@ -89,13 +89,13 @@ class LocalMqttServer:
     and matched by opcode within the current connection rather than msg_seq.
     """
 
-    def __init__(self, config: LabConfig, directory: Path, *, allow_control: bool = False,
+    def __init__(self, config: APServiceConfig, directory: Path, *, allow_control: bool = False,
                  callback: Callable[[dict], None] | None = None) -> None:
         self.config = config
         self.directory = directory
         self.allow_control = allow_control
         self.callback = callback
-        self.commands = NativeMqttCommands(config.device_serial, config.account_id)
+        self.commands = NativeMqttCommands(config.device_serial, config.account_id, model=config.model)
         self.topic = self.commands.status().topic
         self.connection: _Connection | None = None
         self.metrics: dict = {}
@@ -247,9 +247,12 @@ class LocalMqttServer:
     @staticmethod
     def _tou_protected(before: dict, after: dict | None = None) -> None:
         required = ("ac_output_enabled", "ac_input_connected", "max_charge_percentage",
-                    "min_charge_percentage", "ac_charging_power_limit_w", "ac_fast_charge_enabled",
-                    "ac_output_timer_remaining_seconds")
-        optional = ("dc_output_enabled", "dc_output_timer_remaining_seconds", "ac_power_saving_mode_enabled",
+                    "min_charge_percentage", "ac_charging_power_limit_w", "ac_fast_charge_enabled")
+        # C1000's existing decoder names this countdown differently.
+        timer = ("ac_output_timer_remaining_seconds" if "ac_output_timer_remaining_seconds" in before
+                 else "ac_output_timeout_seconds")
+        required += (timer,)
+        optional = ("dc_output_enabled", "dc_output_timer_remaining_seconds", "dc_output_timeout_seconds", "ac_power_saving_mode_enabled",
                     "dc_power_saving_mode_enabled", "device_timeout_minutes", "port_memory_enabled",
                     "display_timeout_seconds")
         if any(k not in before for k in required):
@@ -263,7 +266,8 @@ class LocalMqttServer:
             raise RuntimeError("Time-of-Use activation requires enabled AC output and connected mains")
         if metrics["ac_fast_charge_enabled"] != 0:
             raise ValueError("Disable fast charge first; active tariffs can clear that setting")
-        if metrics["ac_output_timer_remaining_seconds"] != 0:
+        timer = metrics.get("ac_output_timer_remaining_seconds", metrics.get("ac_output_timeout_seconds"))
+        if timer != 0:
             raise ValueError("Active AC-output timer prevents Time-of-Use activation")
         if not metrics["min_charge_percentage"] + 5 <= metrics["backup_reserve_percentage"] <= metrics["max_charge_percentage"]:
             raise ValueError("Current reserve is outside the upper/lower charge bounds")
@@ -408,6 +412,7 @@ class _Connection:
         self.pending: tuple[str, asyncio.Future] | None = None
         self.lock = asyncio.Lock()
         self.poller: asyncio.Task | None = None
+        self._command_ready_at = 0.0
 
     async def send(self, first: int, body: bytes) -> None:
         self.writer.write(mqtt_packet(first, body))
@@ -429,6 +434,13 @@ class _Connection:
         async with self.lock:
             if self.writer.is_closing() or not self.subscribed:
                 raise ConnectionError("Station command subscription is unavailable")
+            # C1000 can publish before startup/provisioning has settled. An
+            # immediate status request was lost live; delayed requests worked.
+            delay = self._command_ready_at - asyncio.get_running_loop().time()
+            if delay > 0:
+                await asyncio.sleep(delay)
+                if self.writer.is_closing() or not self.subscribed:
+                    raise ConnectionError("Station disconnected during startup")
             future = asyncio.get_running_loop().create_future()
             self.pending = (request.response_command, future)
             topic = request.topic.encode()
@@ -502,6 +514,8 @@ class _Connection:
                     if old and old is not self:
                         await old.close()
                     self.subscribed = True
+                    self._command_ready_at = asyncio.get_running_loop().time() + (
+                        15 if self.server.config.model == Model.C1000_GEN2 else 0)
                     self.server.connection = self
                     self.server.last_seen = None
                     self.server.error = None

@@ -33,7 +33,7 @@ class NativeMqttRequest:
 
 @dataclass
 class NativeMqttCommands:
-    """Build C2000 native requests; callers own publishing and confirmation.
+    """Build Gen 2 native requests; callers own publishing and confirmation.
 
     Requires a provisioned station and the configured account ID. These methods
     do not contact Anker, connect to a broker, or determine whether a write took
@@ -48,8 +48,8 @@ class NativeMqttCommands:
 
     def __post_init__(self) -> None:
         self.model = Model(self.model)
-        if self.model != Model.C2000_GEN2:
-            raise ValueError("Native MQTT commands are verified only on C2000 Gen 2")
+        if self.model not in (Model.C1000_GEN2, Model.C2000_GEN2):
+            raise ValueError("Native MQTT commands support C1000 Gen 2 and C2000 Gen 2 only")
         if not isinstance(self.device_serial, str) or not re.fullmatch(r"[A-Za-z0-9_-]{1,64}", self.device_serial):
             raise ValueError("Invalid native MQTT device serial")
         if not isinstance(self.account_id, str) or not re.fullmatch(r"[0-9a-fA-F]{40}", self.account_id):
@@ -58,6 +58,10 @@ class NativeMqttCommands:
     def status(self) -> NativeMqttRequest:
         """Request a single 0900 telemetry reply."""
         return self._request("0100", b"", milliseconds=False)
+
+    @property
+    def product(self) -> str:
+        return "A1763" if self.model == Model.C1000_GEN2 else "A1783"
 
     def readiness(self) -> NativeMqttRequest:
         """Read controller readiness (0089/0889); opaque fields stay private."""
@@ -72,8 +76,9 @@ class NativeMqttCommands:
 
     def ac_charging_power(self, watts: int) -> NativeMqttRequest:
         """Set the charging-power limit; does not include an AC output switch."""
-        if type(watts) is not int or not 300 <= watts <= 1800 or watts % 100:
-            raise ValueError("Charging power must be 300–1800 W in 100 W steps")
+        maximum = 1200 if self.model == Model.C1000_GEN2 else 1800
+        if type(watts) is not int or not 300 <= watts <= maximum or watts % 100:
+            raise ValueError(f"Charging power must be 300–{maximum} W in 100 W steps")
         fields = tlv(0xA4, b"\x02" + watts.to_bytes(2, "little"))
         return self._request("0101", fields, milliseconds=True)
 
@@ -114,7 +119,7 @@ class NativeMqttCommands:
                 "version": "1.0.0.1", "client_id": "solix-local-research",
                 "sess_id": self._session_id, "msg_seq": self._sequence,
                 "seed": 1, "timestamp": int(now), "cmd_status": 2, "cmd": 17,
-                "sign_code": 1, "device_pn": "A1783", "device_sn": self.device_serial,
+                "sign_code": 1, "device_pn": self.product, "device_sn": self.device_serial,
             },
             "payload": json.dumps({
                 "device_sn": self.device_serial, "account_id": self.account_id,
@@ -122,7 +127,7 @@ class NativeMqttCommands:
             }, separators=(",", ":")),
         }
         return NativeMqttRequest(
-            topic=f"cmd/anker_power/A1783/{self.device_serial}/req",
+            topic=f"cmd/anker_power/{self.product}/{self.device_serial}/req",
             payload=json.dumps(envelope, separators=(",", ":")),
             response_command=f"{int(command, 16) | 0x0800:04x}",
         )

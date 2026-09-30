@@ -10,13 +10,14 @@ def inputs(monkeypatch, values):
     monkeypatch.setattr("builtins.input", lambda _prompt: next(values))
 
 
-def test_no_arguments_launch_guided_mode_only_in_a_terminal(monkeypatch, tmp_path):
+def test_no_arguments_launch_guided_mode_only_in_a_terminal(monkeypatch, tmp_path, capsys):
     called = []
     monkeypatch.setattr(cli, "tui_available", lambda: False)
     monkeypatch.setattr(cli.sys.stdin, "isatty", lambda: True)
     monkeypatch.setattr(interactive, "run_interactive", lambda config, directory: called.append((config, directory)))
     assert cli.main([]) == 0
     assert called == [(cli.DEFAULT_CONFIG, None)]
+    assert "Using the line menu" in capsys.readouterr().err
     monkeypatch.setattr(cli.sys.stdin, "isatty", lambda: False)
     assert cli.main([]) == 2
 
@@ -31,12 +32,13 @@ def test_no_arguments_use_terminal_dashboard_when_installed(monkeypatch):
     assert called == [(cli.DEFAULT_CONFIG, None)]
 
 
-def test_explicit_interactive_config_and_private_directory(monkeypatch, tmp_path):
+def test_explicit_interactive_config_and_private_directory(monkeypatch, tmp_path, capsys):
     called = []
     monkeypatch.setattr(interactive, "run_interactive", lambda config, directory: called.append((config, directory)))
     config, directory = tmp_path / "config.json", tmp_path / "private"
-    assert cli.main(["interactive", "--config", str(config), "--lab-directory", str(directory)]) == 0
+    assert cli.main(["interactive", "--config", str(config), "--ap-service-directory", str(directory)]) == 0
     assert called == [(config, directory)]
+    assert "tui extra" not in capsys.readouterr().err
 
 
 def test_menu_invalid_selection_and_back(monkeypatch):
@@ -75,20 +77,23 @@ def test_saved_selection_survives_missing_bluetooth(monkeypatch, tmp_path):
 
 
 def test_nonroot_native_setup_prints_explicit_command_without_spawning(monkeypatch, tmp_path, capsys):
+    monkeypatch.setattr(interactive, "load_ap_service", lambda _path: SimpleNamespace(model=Model.C2000_GEN2))
     monkeypatch.setattr(interactive.os, "geteuid", lambda: 1000)
     monkeypatch.setattr(interactive.subprocess, "Popen", lambda *_args, **_kwargs: (_ for _ in ()).throw(AssertionError("must not spawn")))
     interactive.native_session(tmp_path / "private directory", tmp_path / "config.json", provision=True, allow_control=False)
     output = capsys.readouterr().out
     assert "sudo " in output and "--provision" in output
+    assert "ap-service-run" in output
     assert "--allow-control" not in output
     assert "private directory'" in output  # The displayed path is shell-quoted.
 
 
 def test_interactive_native_session_stops_owned_child(monkeypatch, tmp_path):
     import signal
-    directory = tmp_path / "lab"
+    directory = tmp_path / "ap_service"
     directory.mkdir(mode=0o700)
     spawned = []
+    monkeypatch.setattr(interactive, "load_ap_service", lambda _path: SimpleNamespace(model=Model.C1000_GEN2))
     class Child:
         returncode = None
         def __init__(self, command, **kwargs):
@@ -106,6 +111,7 @@ def test_interactive_native_session_stops_owned_child(monkeypatch, tmp_path):
     inputs(monkeypatch, ["8"])
     interactive.native_session(directory, tmp_path / "config.json", provision=False, allow_control=False)
     assert spawned[0].signals == [signal.SIGTERM]
+    assert "ap-service-run" in spawned[0].command
     assert "--allow-control" not in spawned[0].command
     assert "--provision" not in spawned[0].command
     assert next(directory.glob("interactive-*.log")).stat().st_mode & 0o777 == 0o600

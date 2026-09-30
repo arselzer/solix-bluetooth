@@ -9,7 +9,7 @@ import shutil
 import signal
 import subprocess
 
-from .lab_config import LabConfig, private_write
+from .ap_service_config import APServiceConfig, private_write
 
 
 class IsolatedAP:
@@ -19,7 +19,7 @@ class IsolatedAP:
     and active adapters are refused; host routing/firewall rules are untouched.
     """
 
-    def __init__(self, config: LabConfig, directory: Path, *, hostapd: str = "hostapd", dnsmasq: str = "dnsmasq") -> None:
+    def __init__(self, config: APServiceConfig, directory: Path, *, hostapd: str = "hostapd", dnsmasq: str = "dnsmasq") -> None:
         self.config = config
         self.directory = directory.resolve()
         self.hostapd = hostapd
@@ -93,16 +93,16 @@ class IsolatedAP:
                         f"--address=/time.nist.gov/{config.gateway}", f"--address=/{config.broker_host}/{config.gateway}",
                         "--leasefile-ro", "--log-dhcp"], "dnsmasq.log")
             if self._run(*self.exec_args(self._ip, "route", "show", "default")).strip():
-                raise RuntimeError("Lab namespace unexpectedly has a default route")
+                raise RuntimeError("AP service namespace unexpectedly has a default route")
         except BaseException:
             self.stop()
             raise
 
     def check(self) -> None:
         if any(process.poll() is not None for process in self.processes):
-            raise RuntimeError("A lab service exited; inspect private logs")
+            raise RuntimeError("A AP service exited; inspect private logs")
         if self._run(*self.exec_args(self._ip, "route", "show", "default")).strip():
-            raise RuntimeError("Lab namespace acquired a default route")
+            raise RuntimeError("AP service namespace acquired a default route")
 
     def stop(self) -> None:
         failures = []
@@ -132,7 +132,7 @@ class IsolatedAP:
                 self._run(self._ip, "netns", "del", self.config.namespace)
                 self.created = False
             except Exception:
-                failures.append("Could not remove the lab namespace")
+                failures.append("Could not remove the AP service namespace")
         if failures:
             raise RuntimeError("; ".join(failures))
 

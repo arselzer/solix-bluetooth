@@ -1,6 +1,6 @@
 # SOLIX Gen 2 Bluetooth field notes
 
-These notes record observations made on one C1000 Gen 2 (A1763) and one C2000 Gen 2 (A1783) on 2026-09-28 and 2026-09-29. They are a compatibility record, not a claim that every regional model or firmware behaves identically. No account ID, Bluetooth address, serial number, or phone capture is included here.
+These notes record observations made on one C1000 Gen 2 (A1763) and one C2000 Gen 2 (A1783) on 2026-09-28 through 2026-09-30. They are a compatibility record, not a claim that every regional model or firmware behaves identically. No account ID, Bluetooth address, serial number, or phone capture is included here.
 
 ## Tested versions and outcome
 
@@ -20,6 +20,15 @@ Native charging-power and mode/reserve/schedule writes are now verified too.
 The [corrected Peak trial](c2000-corrected-peak-trial.md) now confirms active
 Peak and battery discharge with mains connected. AC output stayed enabled;
 restored Standard mode preceded the independently confirmed return to grid.
+
+**2026-09-30 C1000 update:** main 1.1.4.9/radio 0.3.3.0 now works with native
+MQTT using a generated local ID and certificates. Content-Length credential
+framing and a 15-second startup grace resolved the latest setup/request failures.
+Charging power, upper cap, reserve, active Peak battery supply, Mid-Peak grid
+supply and guarded grid return were confirmed. Original settings were restored
+over MQTT and independently checked over BLE. Earlier failed setup trials below
+remain historical evidence. See [C1000 local MQTT findings](c1000-local-mqtt.md)
+and [C2000 energy-report lifecycle](energy-report-lifecycle.md).
 
 ## Pairing and connection
 
@@ -350,8 +359,8 @@ documents the observation gap and remaining automation questions.
 ## Packaged tariff control and grid return
 
 The [subsequent public CLI trial](c2000-offpeak-grid-return.md) on the same
-C2000 main **2.1.6.4** verified `lab-set-reserve`, corrected `lab-set-tou`,
-and `lab-grid`. Peak supplied **900–982 W** from the battery with zero AC input.
+C2000 main **2.1.6.4** verified `ap-service-set-reserve`, corrected `ap-service-set-tou`,
+and `ap-service-grid`. Peak supplied **900–982 W** from the battery with zero AC input.
 Native tariff **3** (`off_peak`, A7=`04 03 00 18`) restored grid input after
 approximately **4.84 seconds** and idle after **6.89 seconds** in this trial.
 The command confirmed three fresh grid samples, cleared Standard/count 0,

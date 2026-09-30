@@ -7,15 +7,15 @@ import json
 from pathlib import Path
 import time
 
-from .lab_config import LabConfig
+from .ap_service_config import APServiceConfig
 from .commands import NATIVE_COMMANDS, validate_command
-from .lab_service import lab_request
+from .ap_service import ap_service_request
 
 
-class LabMonitorService:
+class APServiceMonitor:
     """Monitor-service interface backed by the private native MQTT status file."""
 
-    def __init__(self, config: LabConfig, directory: Path) -> None:
+    def __init__(self, config: APServiceConfig, directory: Path) -> None:
         self.config, self.directory = config, directory
         self.devices = {config.name: config}
         self._subscribers: set[asyncio.Queue] = set()
@@ -37,7 +37,7 @@ class LabMonitorService:
         except (OSError, ValueError):
             return {"name": name, "model": self.config.model.value, "protocol": "native_mqtt",
                     "connected": False, "available": False, "last_seen_timestamp": None,
-                    "error": "Lab status unavailable", "metrics": {}}
+                    "error": "AP service status unavailable", "metrics": {}}
 
     def supported_commands(self, name: str) -> list[str]:
         return list(NATIVE_COMMANDS) if self.snapshot(name).get("control_enabled") else []
@@ -48,7 +48,7 @@ class LabMonitorService:
             raise PermissionError("Native worker controls are disabled")
         if not self.snapshot(name)["available"]:
             raise ConnectionError("Fresh native telemetry is unavailable")
-        return await lab_request(self.directory, command, **values)
+        return await ap_service_request(self.directory, command, **values)
 
     def snapshots(self) -> list[dict]:
         return [self.snapshot(self.config.name)]

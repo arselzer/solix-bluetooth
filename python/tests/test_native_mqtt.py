@@ -163,5 +163,39 @@ def test_reject_unbounded_native_stream(seconds):
 def test_reject_invalid_native_request_identity(serial, account):
     with pytest.raises(ValueError):
         NativeMqttCommands(serial, account)
-    with pytest.raises(ValueError, match="only on C2000"):
-        NativeMqttCommands("SYNTHETIC", "a" * 40, model=Model.C1000_GEN2)
+
+
+@pytest.mark.parametrize("model", [Model.C1000, Model.C300])
+def test_reject_unsupported_native_request_model(model):
+    with pytest.raises(ValueError, match="Gen 2 only"):
+        NativeMqttCommands("SYNTHETIC", "a" * 40, model=model)
+
+
+@pytest.mark.parametrize("model,product,maximum", [
+    (Model.C1000_GEN2, "A1763", 1200),
+    (Model.C2000_GEN2, "A1783", 1800),
+])
+def test_native_model_profile_identity_and_charging_limit(model, product, maximum):
+    commands = NativeMqttCommands("SYNTHETIC", "a" * 40, model=model.value)
+    request = commands.ac_charging_power(maximum)
+    outer, inner, packet = unpack_request(request)
+    assert commands.model is model
+    assert commands.product == product
+    assert request.topic == f"cmd/anker_power/{product}/SYNTHETIC/req"
+    assert outer["head"]["device_pn"] == product
+    assert outer["head"]["device_sn"] == inner["device_sn"] == "SYNTHETIC"
+    assert list(parse_tlvs(packet.payload)) == [0xA1, 0xA4, 0xFD]
+    assert parse_tlvs(packet.payload)[0xA4] == b"\x02" + maximum.to_bytes(2, "little")
+    with pytest.raises(ValueError, match=f"300–{maximum}"):
+        commands.ac_charging_power(maximum + 100)
+
+
+def test_c1000_native_response_requires_matching_product_and_serial():
+    result = decode_mqtt_telemetry(envelope(product="A1763"), model=Model.C1000_GEN2,
+                                   expected_serial="SYNTHETIC")
+    assert result is not None
+    assert result.metrics["usage_mode"] == "standard"
+    assert result.metrics["backup_reserve_percentage"] == 10
+    assert decode_mqtt_telemetry(envelope(product="A1783"), model=Model.C1000_GEN2) is None
+    assert decode_mqtt_telemetry(envelope(product="A1763"), model=Model.C1000_GEN2,
+                                 expected_serial="DIFFERENT") is None

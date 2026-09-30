@@ -2,16 +2,17 @@
 
 The Python package can run the local AP, device API emulator, NTP server and
 native MQTT TLS endpoint previously used by the investigation scripts. This
-path is experimental and implemented for **C2000 Gen 2 / A1783**. C1000 Gen 2
-Wi-Fi joining is verified separately; its native MQTT bootstrap is not verified.
+path is experimental and tested for **C1000 Gen 2 / A1763 (1.1.4.9)** and
+**C2000 Gen 2 / A1783 (2.1.6.4)**. C1000 bootstrap, charging controls and tariffs
+work with a generated local identity; see [the live findings](c1000-local-mqtt.md).
 The existing `mqtt-bridge` command remains a BLE-to-broker bridge.
 
 ## Requirements and isolation
 
 Use a Linux host with `ip`, `iw`, `hostapd`, `dnsmasq`, and a dedicated Wi-Fi
 adapter supporting AP mode. The adapter must be administratively DOWN, have
-no addresses, and match the configured phy. An active adapter or existing lab
-namespace is refused. `lab-run` needs root to move the adapter into a network
+no addresses, and match the configured phy. An active adapter or existing AP-service
+namespace is refused. `ap-service-run` needs root to move the adapter into a network
 namespace and bind the device's HTTP, MQTT and NTP ports.
 
 The namespace contains only loopback and the AP interface. It has no default
@@ -27,35 +28,37 @@ Install `[tui]` and run `solix-link` without arguments for the full-screen
 terminal dashboard. It scans and merges nearby/saved stations, lets you save
 new devices, and explicitly connect for BLE monitoring. Prime stations needing
 pairing receive instructions to use `pair` or `interactive` first. Add
-`--lab-directory` to `solix-link tui` to select an already-running native lab.
+`--ap-service-directory` to `solix-link tui` to select an already-running AP service.
 The dashboard does not start/stop an AP or change settings on exit.
 
 `solix-link interactive` retains the guided setup workflow. It scans nearby
 stations, combines them with saved devices, and guides pairing, BLE monitoring,
-broker bridging and C2000 local-MQTT setup. Local setup can read the serial
+broker bridging and Gen 2 local-MQTT setup. Local setup can read the serial
 over BLE and lists Wi-Fi adapters that are DOWN. Monitoring is the first control
 choice. Starting an AP requires root; nonroot mode prints the exact command.
 An AP started by the interactive session runs in a child process and is stopped
 when that session ends. Scripted commands remain available below.
 
 Install the Python package; add `[server]` for HTTP monitoring. First pair the
-C2000 through the existing `pair` command and save its timezone. Put its serial
+Gen 2 station through the existing `pair` command and save its timezone. Put its serial
 in an owner-only file; obtain it from retained local telemetry or the label.
 
 ```bash
 chmod 600 .solix-private/device-serial
-solix-link lab-init --name ups --serial-file .solix-private/device-serial \
-  --directory .solix-private/local-mqtt --interface wlan_lab --phy phy1 --country AT
-sudo /path/to/venv/bin/solix-link lab-run \
+solix-link ap-service-init --name ups --serial-file .solix-private/device-serial \
+  --directory .solix-private/local-mqtt --interface wlan_ap --phy phy1 --country AT
+sudo /path/to/venv/bin/solix-link ap-service-run \
   --directory "$PWD/.solix-private/local-mqtt" --provision
 ```
 
-`lab-init` generates a random WPA2 SSID/passphrase, local CA, server/client
+`ap-service-init` generates a random WPA2 SSID/passphrase, local CA, server/client
 certificates and serial-wrapped MQTT credential response. It refuses to
 overwrite an existing directory. The account ID defaults to the saved BLE
 client ID; `--account-id-file` can supply an existing app account ID without
-putting it in shell history. Live bootstrap tests used the retained app ID;
-the minimum account-ID requirements still need a separate test.
+putting it in shell history. C1000 bootstrap and control were verified with
+the saved generated BLE ID; its old app ID was rejected after local provisioning.
+C2000 live MQTT tests used the retained app ID; a generated-ID trial on that
+model remains unverified. Neither model needs cloud API requests to run locally.
 
 The client certificate and private key fields use the observed serial-derived
 envelope; the root CA field is plain PEM. This wrapping is not secrecy from
@@ -69,33 +72,36 @@ is the connection check. Subsequent runs may omit `--provision`. Radio retries
 can be slow, so an unavailable snapshot during startup is expected.
 
 ```bash
-sudo /path/to/venv/bin/solix-link lab-status --directory "$PWD/.solix-private/local-mqtt"
-sudo /path/to/venv/bin/solix-link lab-readiness --directory "$PWD/.solix-private/local-mqtt"
+sudo /path/to/venv/bin/solix-link ap-service-status --directory "$PWD/.solix-private/local-mqtt"
+sudo /path/to/venv/bin/solix-link ap-service-readiness --directory "$PWD/.solix-private/local-mqtt"
 ```
 
 Monitoring polls `0100` every five seconds. Availability requires a connected
 station and telemetry younger than 30 seconds. A new connection invalidates
 the previous reading. Retained MQTT messages cannot establish freshness or
 acknowledge a request. Controller readiness exposes only interpreted prefix
-fields; the opaque identifier remains private.
+fields; the opaque identifier remains private. C1000 requests wait 15 seconds
+after subscription because immediate requests were lost during live startup.
+Its credential response uses Content-Length; C2000 retains one-byte chunks.
 
 ## Charging control
 
-The endpoint starts read-only. Add `--allow-control` to `lab-run` to enable
+The endpoint starts read-only. Add `--allow-control` to `ap-service-run` to enable
 explicit commands through its owner-only Unix socket:
 
 ```bash
-sudo /path/to/venv/bin/solix-link lab-set-charge-power \
-  --directory "$PWD/.solix-private/local-mqtt" --watts 1700
+sudo /path/to/venv/bin/solix-link ap-service-set-charge-power \
+  --directory "$PWD/.solix-private/local-mqtt" --watts 1000
 ```
 
-The charging-power limit accepts 300–1800 W in 100 W steps. A write requires
+The charging-power limit accepts 300–1200 W for C1000 or 300–1800 W for C2000,
+in 100 W steps. A write requires
 a fresh baseline, a successful `0901` reply and a new `0900` status with the
 requested limit and unchanged AC-output state. The upper charge cap is also
 available in 5% steps from 80% to 100%:
 
 ```bash
-sudo /path/to/venv/bin/solix-link lab-set-charge-cap \
+sudo /path/to/venv/bin/solix-link ap-service-set-charge-cap \
   --directory "$PWD/.solix-private/local-mqtt" --upper 95
 ```
 
@@ -114,9 +120,9 @@ AC switching is not exposed by this endpoint.
 Explicit native tariff controls require the same `--allow-control` worker:
 
 ```sh
-sudo /path/to/venv/bin/solix-link lab-set-reserve \
+sudo /path/to/venv/bin/solix-link ap-service-set-reserve \
   --directory "$PWD/.solix-private/local-mqtt" --reserve 85
-sudo /path/to/venv/bin/solix-link lab-set-tou \
+sudo /path/to/venv/bin/solix-link ap-service-set-tou \
   --directory "$PWD/.solix-private/local-mqtt" \
   --mode standard --period peak:0:24
 ```
@@ -126,7 +132,10 @@ The second command stores an inactive plan. Replace `standard` with
 mains and AC output stay on**. The plan replaces all prior slots and persists
 until changed. Up to six non-overlapping whole-hour slots use `peak`, `mid_peak`
 or `off_peak`; hours are 0–24, end exclusive. Split overnight intervals at
-midnight. Only single all-day slots have been verified live.
+midnight. Both models have live all-day Peak/grid-return validation. C1000
+Mid-Peak above reserve kept the load on grid without charging.
+C1000 also selected a two-slot plan and stayed on grid at a 100% reserve;
+timed boundary crossings and lower reserve transitions remain untested.
 
 Reserve is an integer 5–100% in 5% steps and must fall between the current
 lower limit plus 5 and the upper cap. Plan activation requires fresh complete
@@ -134,7 +143,7 @@ status, readiness, mains/output on, fast charge off and no active AC timer.
 Writes require fresh plan/reserve and unchanged protected settings, not just ACK.
 
 ```sh
-sudo /path/to/venv/bin/solix-link lab-grid \
+sudo /path/to/venv/bin/solix-link ap-service-grid \
   --directory "$PWD/.solix-private/local-mqtt" --timeout 30
 ```
 
@@ -143,15 +152,37 @@ samples, clears to Standard/count 0, then confirms three more. It preserves
 reserve, caps, charging power and outputs. At zero AC load, flow cannot be
 confirmed. `--timeout` is 5–120 seconds per confirmation phase, excluding
 transport overhead. A failed command can leave changed settings: inspect fresh
-status. `lab-set-tou --mode standard` clears the plan but alone does **not**
+status. `ap-service-set-tou --mode standard` clears the plan but alone does **not**
 confirm grid supply. Stopping the AP/tool does not reset a persistent plan.
+
+## Local energy-report capture
+
+Add `--energy-reports` to `ap-service-run` to answer the station's analytics
+point-switch request with `20001="1"`. Without the option, the reply explicitly
+selects `"0"`. This flag is separate from `--allow-control`: it enables local
+reporting without authorizing charging or output commands. The station receives
+it when it fetches the API endpoint; restarting the tool alone does not prove
+that the device has fetched a new value.
+
+Known protobuf groups are decoded into owner-only `energy_report` events in
+`mqtt-events.jsonl`. Raw requests remain private. Physical counter units,
+reset semantics and report timing remain under investigation; a C2000
+20-minute capture received two reports, with uncalibrated counters.
+These counters are not exposed as HA lifetime-energy entities. See
+[report lifecycle findings](energy-report-lifecycle.md).
+
+Python modules use `ap_service`, `ap_service_config` and `ap_service_monitor`;
+setup stores `ap_service.json`. The former `lab-*` commands/modules have been
+removed, with no aliases. For a retained investigation profile, rename its
+configuration file to `ap_service.json`; its certificate files and saved
+SSID/password can stay intact.
 
 ## HTTP and Python integration
 
-Run `lab-serve` in another process on the host, using the same private directory:
+Run `ap-service-serve` in another process on the host, using the same private directory:
 
 ```bash
-sudo /path/to/venv/bin/solix-link lab-serve \
+sudo /path/to/venv/bin/solix-link ap-service-serve \
   --directory "$PWD/.solix-private/local-mqtt" --host 127.0.0.1 --port 8765
 ```
 
@@ -163,14 +194,14 @@ POST `/devices/{name}/commands`; a nonempty token is mandatory. It marks stale
 worker files unavailable and needs no BLE connection. See the [gateway/HA
 guide](gateway-home-assistant.md) and [prepared custom integration](../custom_components/solix_link/README.md).
 
-Python exports `LabConfig`, `initialize_lab`, `load_lab`, `IsolatedAP`,
-`InterceptService`, `LocalMqttServer` and `lab_request`. `InterceptService`
-runs inside the isolated namespace; `lab_request` uses its filesystem Unix
+Python exports `APServiceConfig`, `initialize_ap_service`, `load_ap_service`, `IsolatedAP`,
+`APService`, `LocalMqttServer` and `ap_service_request`. `APService`
+runs inside the isolated namespace; `ap_service_request` uses its filesystem Unix
 socket from a host process. `LocalMqttServer` also offers `set_backup_reserve`,
 `set_tou_plan` and `return_to_grid`, using exported `TouPeriod` values. Raw
 `NativeMqttCommands` builders only encode packets; they do not confirm writes.
 For an HA coordinator, pass a callback to
-`LocalMqttServer`/`InterceptService`, or consume the host HTTP event stream.
+`LocalMqttServer`/`APService`, or consume the host HTTP event stream.
 
 ## Captures, shutdown and recovery
 
@@ -181,7 +212,7 @@ public status excludes the serial and raw fields. A passive handler for
 `/equipment/logging/upload_pb_events` retains/decodes recovered energy groups
 privately; units and C2000 behavior remain unverified. See [firmware follow-up](tariff-energy-followup.md).
 Archive these files before
-sharing a sanitized summary or removing a lab deployment.
+sharing a sanitized summary or removing an AP-service deployment.
 
 Ctrl-C, SIGTERM and `--duration SECONDS` stop owned services, flush the AP
 address, return the adapter to the original namespace and leave it DOWN. If
@@ -205,7 +236,7 @@ mode have automated tests; their entire interactive flow has not been exercised
 on hardware. A subsequent [corrected Peak trial](c2000-corrected-peak-trial.md)
 verified local scheduled discharge with mains connected and AC output enabled.
 A [later public CLI trial](c2000-offpeak-grid-return.md) exercised packaged
-reserve/plan commands and `lab-grid`: tariff 3 restored grid power before the
+reserve/plan commands and `ap-service-grid`: tariff 3 restored grid power before the
 plan was cleared. Independent MQTT and BLE checks confirmed the baseline.
 The new terminal dashboard and HA component have synthetic/contract tests;
 their full UI/HA runtime flow has not been exercised on hardware.

@@ -8,7 +8,7 @@ import time
 
 import pytest
 
-from solix_link import LabConfig, LocalMqttServer, NativeMqttCommands, PowerFlowTimeout, TouPeriod, power_flow
+from solix_link import APServiceConfig, LocalMqttServer, NativeMqttCommands, PowerFlowTimeout, TouPeriod, power_flow
 from solix_link.protocol import decode_telemetry, parse_packet, parse_tlvs, tlv
 from solix_link.tou import periods_from_d9, validate_periods
 
@@ -120,7 +120,7 @@ class Station:
 
 
 def server(tmp_path, *, allow_control=True):
-    config = LabConfig("ups", "wlan_lab", "phy9", "AT", "A1783SYNTHETIC001", "a" * 40)
+    config = APServiceConfig("ups", "wlan_ap", "phy9", "AT", "A1783SYNTHETIC001", "a" * 40)
     result = LocalMqttServer(config, tmp_path, allow_control=allow_control)
     station = Station(result)
     result.connection = station
@@ -198,38 +198,61 @@ def test_grid_timeout_clears_plan_without_claiming_recovery(tmp_path):
 
 
 @pytest.mark.parametrize("argv,command,expected", [
-    (["lab-set-reserve", "--reserve", "85"], "set-backup-reserve", {"reserve": 85}),
-    (["lab-set-tou", "--mode", "time_of_use", "--period", "peak:0:24"], "set-tou-plan",
+    (["ap-service-set-reserve", "--reserve", "85"], "set-backup-reserve", {"reserve": 85}),
+    (["ap-service-set-tou", "--mode", "time_of_use", "--period", "peak:0:24"], "set-tou-plan",
      {"periods": [{"tariff": "peak", "start_hour": 0, "end_hour": 24}], "enabled": True}),
-    (["lab-grid", "--timeout", "20"], "return-grid", {"timeout": 20}),
+    (["ap-service-grid", "--timeout", "20"], "return-grid", {"timeout": 20}),
 ])
 def test_cli_dispatch_uses_private_control_socket(tmp_path, monkeypatch, argv, command, expected):
-    from solix_link import cli, lab_cli
+    from solix_link import cli, ap_service_cli
     requests = []
     async def request(directory, action, **fields):
         requests.append((directory, action, fields))
         return {"metrics": {}}
-    monkeypatch.setattr(lab_cli, "lab_request", request)
+    monkeypatch.setattr(ap_service_cli, "ap_service_request", request)
     assert cli.main(argv + ["--directory", str(tmp_path)]) == 0
     assert requests == [(tmp_path, command, expected)]
 
 
 def test_socket_rejects_bad_schedule_before_io_and_confirms_reserve(tmp_path):
-    from solix_link.lab_service import InterceptService, lab_request
+    from solix_link.ap_service import APService, ap_service_request
     async def run():
         mqtt, station = server(tmp_path)
         (tmp_path / "mqtt-response.json").write_text("{}")
-        service = InterceptService(mqtt.config, tmp_path, allow_control=True)
+        service = APService(mqtt.config, tmp_path, allow_control=True)
         service.mqtt = mqtt
         listener = await asyncio.start_unix_server(service._control, path=service.socket_path)
         service._servers.append(listener)
         try:
             with pytest.raises(ValueError):
-                await lab_request(tmp_path, "set-tou-plan", periods=[{"tariff": "peak", "start_hour": True, "end_hour": 24}], enabled=True)
+                await ap_service_request(tmp_path, "set-tou-plan", periods=[{"tariff": "peak", "start_hour": True, "end_hour": 24}], enabled=True)
             assert not station.requests
-            result = await lab_request(tmp_path, "set-backup-reserve", reserve=85)
+            result = await ap_service_request(tmp_path, "set-backup-reserve", reserve=85)
             assert result["metrics"]["backup_reserve_percentage"] == 85
             assert mqtt.config.device_serial not in json.dumps(result)
         finally:
             await service.stop()
     asyncio.run(run())
+
+
+@pytest.mark.parametrize("timer_key", ["ac_output_timer_remaining_seconds", "ac_output_timeout_seconds"])
+def test_gen2_tou_guard_accepts_both_countdowns_and_rejects_active_timer(tmp_path, timer_key):
+    before = {"ac_output_enabled": 1, "ac_input_connected": 1, "max_charge_percentage": 100,
+              "min_charge_percentage": 1, "ac_charging_power_limit_w": 1200,
+              "ac_fast_charge_enabled": 0, "backup_reserve_percentage": 10, timer_key: 0}
+    config = APServiceConfig("ups", "wlan_ap", "phy9", "AT", "A1763SYNTHETIC001", "a" * 40,
+                             model="c1000_gen2")
+    server = LocalMqttServer(config, tmp_path)
+    server._tou_protected(before)
+    with pytest.raises(RuntimeError, match="Protected setting"):
+        server._tou_protected(before, {**before, timer_key: 1})
+    requests = []
+    async def ready(request):
+        requests.append(request)
+        return b"\x00" + tlv(0xA1, b"\x34")
+    connection = SimpleNamespace(request=ready)
+    asyncio.run(server._tou_ready(connection, before))
+    assert len(requests) == 1
+    with pytest.raises(ValueError, match="Active AC-output timer"):
+        asyncio.run(server._tou_ready(connection, {**before, timer_key: 1}))
+    assert len(requests) == 1  # Timer refusal precedes I/O.

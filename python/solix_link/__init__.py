@@ -3,13 +3,13 @@
 from .client import SolixMonitor, discover
 from .protocol import Model
 from .native_mqtt import MqttTelemetry, NativeMqttCommands, NativeMqttRequest, decode_mqtt_telemetry
-from .lab_config import LabConfig, initialize_lab, load_lab
+from .ap_service_config import APServiceConfig, initialize_ap_service, load_ap_service
 from .isolated_ap import IsolatedAP
 from .mqtt_intercept import LocalMqttServer
-from .lab_service import InterceptService, lab_request
+from .ap_service import APService, ap_service_request
 from .tou import PowerFlowTimeout, TouPeriod, power_flow
 
 __all__ = ["Model", "SolixMonitor", "discover", "MqttTelemetry", "NativeMqttCommands",
-           "NativeMqttRequest", "decode_mqtt_telemetry", "LabConfig", "initialize_lab",
-           "load_lab", "IsolatedAP", "LocalMqttServer", "InterceptService", "lab_request",
+           "NativeMqttRequest", "decode_mqtt_telemetry", "APServiceConfig", "initialize_ap_service",
+           "load_ap_service", "IsolatedAP", "LocalMqttServer", "APService", "ap_service_request",
            "TouPeriod", "PowerFlowTimeout", "power_flow"]

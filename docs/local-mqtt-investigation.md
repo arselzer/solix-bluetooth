@@ -18,7 +18,7 @@ confirm grid return.
 
 The packaged Python [MQTT bridge](../python/README.md#local-mqtt-bridge) uses
 Bluetooth; native station MQTT uses the experimental
-[packaged lab API/MQTT workflow](isolated-ap-mqtt.md). Public native telemetry
+[packaged AP-service API/MQTT workflow](isolated-ap-mqtt.md). Public native telemetry
 decoding and request builders are available. Earlier failed trials
 below are retained as evidence; the [TLV-order correction](#provisioning-order-fix)
 supersedes the empty-service-ID investigation.
@@ -29,6 +29,11 @@ the **C2000 Gen 2**, whose main firmware reports **2.1.6.4**. Its firmware has
 not been recovered; C1000 code behavior is not proof of C2000 compatibility.
 See [firmware findings](firmware-findings.md) for image integrity and scheduling
 gates, and [protocol observations](gen2-protocol.md) for earlier lab trials.
+
+The [2026-09-30 C1000 follow-up](c1000-local-mqtt.md) now confirms native
+MQTT on main 1.1.4.9/radio 0.3.3.0 with a generated local ID, model-specific
+HTTP framing and startup grace. Native charging controls, Peak/Mid-Peak and
+grid return are verified. Earlier failures below remain historical evidence.
 
 ## Credential acceptance and storage
 

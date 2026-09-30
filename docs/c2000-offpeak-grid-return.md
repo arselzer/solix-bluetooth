@@ -1,5 +1,8 @@
 # C2000 packaged tariff controls and grid return
 
+Command examples use current `ap-service-*` names; the recorded trial
+preceded the rename.
+
 ## Result and versions
 
 On **2026-09-29**, the public `solix-link` CLI on the isolated HA-node AP
@@ -19,13 +22,13 @@ Baseline: **90% SOC**, battery idle, mains connected, AC output enabled,
 **997/997 W** AC input/output, Standard/no tariff/count 0, reserve **10%**,
 upper/lower **90/1%**, charging limit **1800 W**, fast charge off, no AC timer.
 
-1. `lab-set-tou --mode standard --period peak:0:24` stored one slot without
+1. `ap-service-set-tou --mode standard --period peak:0:24` stored one slot without
    activating it. Fresh D9 length was 29, count 1, triplet `01 00 18`.
    Clear to Standard/count 0 was also confirmed.
-2. `lab-set-reserve --reserve 85` changed only reserve.
-3. `lab-set-tou --mode time_of_use --period peak:0:24` selected Peak. Three
+2. `ap-service-set-reserve --reserve 85` changed only reserve.
+3. `ap-service-set-tou --mode time_of_use --period peak:0:24` selected Peak. Three
    discharge samples reported **0 W input**, **900, 963, 982 W output**, SOC 90%.
-4. `lab-grid --timeout 20` selected wire tariff **3**, named `off_peak` in the
+4. `ap-service-grid --timeout 20` selected wire tariff **3**, named `off_peak` in the
    public API, using an all-day triplet `03 00 18`. Input/output first became
    **965/965 W** approximately **4.84 seconds** after that write; battery idle
    was first observed at **6.89 seconds**. It required three consecutive fresh
@@ -33,7 +36,7 @@ upper/lower **90/1%**, charging limit **1800 W**, fast charge off, no AC timer.
 5. The trial restored reserve 10% and verified every protected setting. No
    charging-power/cap change or charging fallback was needed.
 
-`lab-grid` completed roughly 16.5 seconds after the last Peak discharge sample.
+`ap-service-grid` completed roughly 16.5 seconds after the last Peak discharge sample.
 Its per-phase timeout excludes transport overhead; this is an observation from
 one trial, not a guaranteed recovery deadline.
 
