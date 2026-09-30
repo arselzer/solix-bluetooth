@@ -31,7 +31,7 @@ documented below and in the linked investigation. No firmware was flashed.
 
 With owner authorization, the recovered vendor application images and hashes
 are now public under [firmware/](../firmware/README.md). The
-[offline analysis tools](../tools/firmware_analysis/) reproduce 1,540 synthetic
+[offline analysis tools](../tools/firmware_analysis/) reproduce 1,842 synthetic
 instruction cases, radio signature verification and DSP record extraction.
 See [reproduction and substitutions](firmware-analysis-reproduction.md).
 Phone captures, session keys, account/device identifiers and raw device logs

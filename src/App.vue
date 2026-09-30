@@ -85,6 +85,7 @@ function restoreLogsFromStorage() {
     if (savedDevice) {
       deviceName.value = savedDevice || null;
     }
+    if (isGen2.value || 'battery_health_raw' in telemetry) delete telemetry.battery_health;
   } catch { /* Parse error */ }
 }
 
@@ -116,6 +117,7 @@ function createConnection(): SolixConnection {
       if (isGen2.value && activeTab.value === 'scanner') activeTab.value = 'telemetry';
     },
     onTelemetry(data) {
+      if ('battery_health_raw' in data) delete telemetry.battery_health;
       Object.assign(telemetry, data);
     },
     onLog(entry) {

@@ -65,6 +65,9 @@ All bodies also carry `A1=21` and `FE=03` + Unix seconds LE32. BLE command
 numbers and application identifier differ from their MQTT counterparts.
 Live-tested pairs were timeout 30/60 s, brightness 2/3, display off/on,
 light 0/1, charging power 1000/300 W, and both directions of AC/DC output.
+The later [MQTT bridge test](c1000-bridge-charging-and-bypass.md) also verified
+1000/100 W with outputs kept on. Charging power below the reported load did
+not establish forced battery operation while AC input remained supplied.
 Other table values remain reference-derived.
 The generic `send_command` path permits only status for this model; dedicated
 control methods validate types and ranges. There is no opt-in flag. Use the
@@ -105,6 +108,8 @@ The **BLE-to-MQTT bridge** supports charging power, display timeout, AC output
 and light. Here the station communicates over Bluetooth; the bridge connects
 to your broker. The HTTP gateway exposes charging power, display timeout and
 light, with no AC-output API command.
+The complete original-C1000 TCP MQTT/Paho/BLE write and restoration path is now
+verified; station Wi-Fi is unnecessary for the bridge.
 
 The upstream A1761 map includes cloud MQTT commands, so MQTT exists in the
 vendor protocol. That map does not establish local provisioning, endpoint
@@ -112,7 +117,12 @@ replacement or authentication for A1761. Our isolated AP/native MQTT workflow
 currently accepts Gen 2 profiles only. No direct original-C1000 local MQTT
 connection was tested, and Gen 2 setup packets must not be assumed compatible.
 
-Open work includes Wi-Fi/binding setup; temperature units, device timeout,
+Device Timeout is now exposed through the SDK, CLI, bridge and gateway/HA.
+The [timeout trial](device-timeout-behavior.md) confirmed legacy `4045/A2`
+and D2 readback for 720→0→720 minutes while keeping AC output on. Never
+disables the saved timeout; it cannot guarantee uninterrupted radio access.
+
+Open work includes Wi-Fi/binding setup; temperature units,
 fast charge and output timers; smart-output behavior; expansion-battery data;
 charge/discharge limits if supported; and reliable mains/battery-state mapping.
 The reference lists additional commands, but their BLE numbers and physical

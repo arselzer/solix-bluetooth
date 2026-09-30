@@ -38,10 +38,26 @@ export function parseC1000Gen2Telemetry(payload: Uint8Array, model: 'c1000' | 'c
   };
   put('temperature', 0xa5, 1, 2, true);
   put('battery_percentage', 0xa5, 3, 4);
-  put('battery_health', 0xa5, 4, 5);
+  // A1763/main 1.1.4.9 returns literal 100 here, not measured state of health.
+  put('battery_health_raw', 0xa5, 4, 5);
   put('total_output_power', 0xa6, 1, 3);
   put('ac_power_in', 0xa6, 3, 5);
   put('ac_charging_power_limit_w', 0xa4, 5, 7);
+  if (model === 'c1000') {
+    const pv = values.get(0xa8);
+    if (pv?.length === 4 && pv[0] === 4 && (pv[1] === 0 || pv[1] === 1)) {
+      data.dc_input_active = pv[1];
+    }
+    const power = values.get(0xa6);
+    if (power?.length === 10 && power[0] === 4) {
+      // A8 can retain old power during incremental updates; prefer full A6.
+      put('dc_input_power_raw', 0xa6, 5, 7);
+    }
+    const state = values.get(0xa3);
+    if (state?.length === 14 && state[0] === 4) {
+      data.controller_error_code = state[2];
+    }
+  }
   if (model === 'c2000') {
     put('ac_input_frequency_hz', 0xa4, 7, 8);
     const versions = values.get(0xf9);
@@ -246,6 +262,10 @@ export const PARAM_LABELS: Record<string, string> = {
   battery_percentage: 'Battery %',
   battery_percentage_aggregate: 'Battery % (agg)',
   battery_health: 'Battery Health',
+  battery_health_raw: 'Battery Compatibility Byte (raw)',
+  dc_input_active: 'DC/PV Input Active',
+  dc_input_power_raw: 'DC/PV Input Power (raw)',
+  controller_error_code: 'Controller Error Code (raw)',
   battery_capacity: 'Battery Capacity',
   battery_power: 'Battery Power (W)',
   battery_cycles: 'Battery Cycles',
@@ -375,6 +395,7 @@ export const PARAM_LABELS: Record<string, string> = {
 
 // Display grouping for organized layout
 export const PARAM_GROUPS: Record<string, string[]> = {
+  'Diagnostics': ['battery_health_raw', 'dc_input_active', 'dc_input_power_raw', 'controller_error_code'],
   'Solar': ['solar_power_total', 'solar_input_1', 'solar_input_2', 'solar_pv1_power', 'solar_pv2_power', 'solar_pv3_power', 'solar_pv4_power', 'total_pv_power', 'third_party_pv_power', 'pv_yield_total', 'pv_yield', 'inverter_power'],
   'Battery': ['battery_percentage', 'battery_percentage_aggregate', 'battery_health', 'charge_power', 'battery_charge_current', 'battery_power', 'battery_capacity', 'battery_voltage', 'battery_cycles', 'battery_resistance', 'battery_temperature', 'charging_state', 'battery_soc_raw', 'battery_status', 'battery_discharging', 'time_remaining_minutes'],
   'Output': ['output_power', 'house_demand', 'house_consumption', 'power_out', 'power_out_status', 'total_output_power', 'ac_power_in', 'ac_power_out', 'dc_power_out', 'type_c_power_out', 'usb_power_out'],

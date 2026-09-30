@@ -1,0 +1,23 @@
+{
+  "hardware_access": false,
+  "case_counts": {
+    "battery_temperature_and_fixed_health": 84,
+    "pv_input_and_power_mirror": 24,
+    "pv_incremental_update": 6,
+    "current_error_code": 33
+  },
+  "firmware": {
+    "filename": "MainMcu-decoded.bin",
+    "sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9"
+  },
+  "runtime": {
+    "python": "3.12.3",
+    "unicorn": "2.1.4"
+  },
+  "result_sha256": "bc4bcd16a78acc52fce058870bc99bb88c4fea868043c9461c364578d670ff47",
+  "source_sha256": {
+    "emulate_additional_features.py": "baaeb837278e225a117ebaf025e1e463eed10f24d51af8d7f2946783ef12615e",
+    "emulate_clock_semantics.py": "945b649c3b5cec00d816041e783641085ccfbdb5f80efc2ed2c4e15f3bae30f2",
+    "replay_io.py": "731d795a5ec37e2cf12b809b7122eaf7a29d84c21a2ecd43fafa3e2f8d962d30"
+  }
+}

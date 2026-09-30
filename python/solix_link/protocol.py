@@ -30,6 +30,12 @@ NEGOTIATION = bytes.fromhex("030001")
 DATA_REQUEST = bytes.fromhex("03000f")
 DATA_RESPONSE = bytes.fromhex("03010f")
 C2000_SUBSCRIBE_EXTRA = bytes.fromhex("a20a040100e3fbfcfe000000")
+DEVICE_TIMEOUT_MINUTES = (0, 30, 60, 120, 240, 360, 720, 1440)
+
+
+def validate_device_timeout(minutes: int) -> None:
+    if type(minutes) is not int or minutes not in DEVICE_TIMEOUT_MINUTES:
+        raise ValueError(f"Device timeout must be minutes in {DEVICE_TIMEOUT_MINUTES}; 0 means Never")
 
 
 def timezone_confer(timezone_name: str | None) -> tuple[bytes, bytes]:
@@ -165,7 +171,9 @@ def decode_telemetry(payload: bytes, model: Model | None = None) -> tuple[dict[s
 
     number("temperature_c", 0xA5, 1, 2, signed=True)
     number("battery_percentage", 0xA5, 3, 4)
-    number("battery_health", 0xA5, 4, 5)
+    # A1763 main 1.1.4.9 returns literal 100 here, not measured BMS health.
+    # Keep the byte available without assigning health semantics to either Gen 2.
+    number("battery_health_raw", 0xA5, 4, 5)
     number("output_power_w", 0xA6, 1, 3)
     number("ac_input_power_w", 0xA6, 3, 5)
     number("ac_output_enabled", 0xA7, 1, 2)
@@ -240,6 +248,18 @@ def decode_telemetry(payload: bytes, model: Model | None = None) -> tuple[dict[s
             if len(tail) >= 15:
                 metrics["expansion_battery_count"] = int(tail[12] == 1)
     if model == Model.C1000_GEN2:
+        # Exact type/lengths come from A1763 main 1.1.4.9 serializers.
+        # A8 incremental updates can retain an old power word, so use A6's
+        # power field. Its watt scale still needs a nonzero physical PV check.
+        pv = values.get(0xA8, b"")
+        if len(pv) == 4 and pv[0] == 4 and pv[1] in (0, 1):
+            metrics["dc_input_active"] = pv[1]
+        power = values.get(0xA6, b"")
+        if len(power) == 10 and power[0] == 4:
+            metrics["dc_input_power_raw"] = int.from_bytes(power[5:7], "little")
+        work = values.get(0xA3, b"")
+        if len(work) == 14 and work[0] == 4:
+            metrics["controller_error_code"] = work[2]
         # Unlike C2000's F9, the observed C1000 block includes a type04 byte.
         versions = values.get(0xF9, b"")
         if len(versions) >= 29 and versions[0] == 4:
@@ -447,6 +467,21 @@ class Session:
         if self.model == Model.C300 and mode == 4:
             raise ValueError("C300 light mode must be 0, 1, 2, or 3")
         return self._c300_setting("404f", bytes((1, mode)))
+
+    def device_timeout_packet(self, minutes: int) -> bytes:
+        """Set C1000 device timeout; zero disables this configured timeout.
+
+        Independent sleep behavior may still affect remote access. This packet
+        contains no output switch and does not cancel every pending sleep event.
+        """
+        validate_device_timeout(minutes)
+        if self.model == Model.C1000:
+            return self.c1000_control_packet("device_timeout", minutes)
+        self._require_c1000_prime_control()
+        milliseconds = str(int(time.time() * 1000)).encode("ascii")
+        payload = (b"\xa1\x01\x21" + tlv(0xA6, b"\x02" + minutes.to_bytes(2, "little"))
+                   + tlv(0xFD, b"\x00" + milliseconds))
+        return self._send(DATA_REQUEST, "4103", payload)
 
     def display_timeout_packet(self, seconds: int) -> bytes:
         """Build a verified display timeout write for the selected model."""

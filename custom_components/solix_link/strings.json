@@ -43,7 +43,8 @@
   "entity": {
     "binary_sensor": {
       "mains_present": {"name": "Mains present"},
-      "ac_output_enabled": {"name": "AC output enabled"}
+      "ac_output_enabled": {"name": "AC output enabled"},
+      "dc_input_active": {"name": "DC/PV input active"}
     },
     "sensor": {
       "battery": {"name": "Battery"},
@@ -55,7 +56,10 @@
       "battery_status": {"name": "Battery status", "state": {"idle": "Idle", "charging": "Charging", "discharging": "Discharging", "unknown": "Unknown"}},
       "active_tariff": {"name": "Active tariff", "state": {"none": "None", "peak": "Peak", "mid_peak": "Mid-Peak", "off_peak": "Off-Peak", "unknown": "Unknown"}},
       "usage_mode": {"name": "Usage mode", "state": {"standard": "Standard", "time_of_use": "Time-of-Use", "self_consumption": "Self consumption", "custom": "Custom", "unknown": "Unknown"}},
-      "power_flow": {"name": "AC power source", "state": {"grid": "Grid", "battery": "Battery", "transitioning": "Transitioning", "unknown": "Unknown"}}
+      "power_flow": {"name": "AC power source", "state": {"grid": "Grid", "battery": "Battery", "transitioning": "Transitioning", "unknown": "Unknown"}},
+      "dc_input_power_raw": {"name": "DC/PV input power (raw)"},
+      "controller_error_code": {"name": "Controller error code (raw)"},
+      "battery_health_raw": {"name": "Battery compatibility byte (raw)"}
     },
     "number": {
       "charging_power": {"name": "AC charging power limit"},
@@ -65,7 +69,8 @@
     "button": {"return_grid": {"name": "Return to grid"}},
     "select": {
       "temperature_unit": {"name": "Temperature display", "state": {"celsius": "Celsius", "fahrenheit": "Fahrenheit"}},
-      "discharge_floor": {"name": "Lower discharge limit"}
+      "discharge_floor": {"name": "Lower discharge limit"},
+      "device_timeout": {"name": "Device Timeout", "state": {"never": "Never", "30_minutes": "30 minutes", "1_hour": "1 hour", "2_hours": "2 hours", "4_hours": "4 hours", "6_hours": "6 hours", "12_hours": "12 hours", "24_hours": "24 hours"}}
     },
     "switch": {"off_grid_alert": {"name": "Off-grid alert"}}
   }

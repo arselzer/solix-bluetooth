@@ -108,7 +108,7 @@ def test_interactive_native_session_stops_owned_child(monkeypatch, tmp_path):
             self.returncode = 0
     monkeypatch.setattr(interactive.os, "geteuid", lambda: 0)
     monkeypatch.setattr(interactive.subprocess, "Popen", Child)
-    inputs(monkeypatch, ["8"])
+    inputs(monkeypatch, ["0"])
     interactive.native_session(directory, tmp_path / "config.json", provision=False, allow_control=False)
     assert spawned[0].signals == [signal.SIGTERM]
     assert "ap-service-run" in spawned[0].command

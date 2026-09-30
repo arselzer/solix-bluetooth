@@ -112,7 +112,7 @@ web-dashboard guide. Commit Vue sources and compiled Python assets together.
 - [Firmware findings](docs/firmware-findings.md): handlers, readiness, tariffs,
   checksums and update verification.
 - [Firmware inputs](firmware/README.md): recovered vendor images, hashes and provenance.
-- [Reproduce 1,540 offline cases](docs/firmware-analysis-reproduction.md):
+- [Reproduce 1,842 offline cases](docs/firmware-analysis-reproduction.md):
   original instruction execution with synthetic inputs and explicit substitutions.
 - [Charging follow-up](docs/c1000-charging-control-followup.md): reserve side
   effects, mirrored limits and why 0 W is unavailable as charge pause.

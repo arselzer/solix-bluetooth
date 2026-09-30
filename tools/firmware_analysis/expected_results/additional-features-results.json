@@ -1,0 +1,1792 @@
+{
+  "battery_temperature_and_fixed_health": [
+    {
+      "synthetic_bms_fill_byte": 0,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        0,
+        10,
+        20,
+        30
+      ],
+      "truncated_mean_c": 15,
+      "a5_temperature_c": 0,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 0,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        20,
+        30,
+        40,
+        50
+      ],
+      "truncated_mean_c": 35,
+      "a5_temperature_c": 50,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 0,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        25,
+        25,
+        25,
+        25
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 25,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 0,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        10,
+        20,
+        30,
+        40
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 10,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 0,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        11,
+        20,
+        30,
+        40
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 11,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 0,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        -20,
+        -10,
+        0,
+        10
+      ],
+      "truncated_mean_c": -5,
+      "a5_temperature_c": -20,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 0,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        26,
+        26,
+        26,
+        26
+      ],
+      "truncated_mean_c": 26,
+      "a5_temperature_c": 26,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 0,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        0,
+        10,
+        20,
+        30
+      ],
+      "truncated_mean_c": 15,
+      "a5_temperature_c": 0,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 0,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        20,
+        30,
+        40,
+        50
+      ],
+      "truncated_mean_c": 35,
+      "a5_temperature_c": 50,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 0,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        25,
+        25,
+        25,
+        25
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 25,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 0,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        10,
+        20,
+        30,
+        40
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 10,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 0,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        11,
+        20,
+        30,
+        40
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 11,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 0,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        -20,
+        -10,
+        0,
+        10
+      ],
+      "truncated_mean_c": -5,
+      "a5_temperature_c": -20,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 0,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        26,
+        26,
+        26,
+        26
+      ],
+      "truncated_mean_c": 26,
+      "a5_temperature_c": 26,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 0,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        0,
+        10,
+        20,
+        30
+      ],
+      "truncated_mean_c": 15,
+      "a5_temperature_c": 0,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 0,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        20,
+        30,
+        40,
+        50
+      ],
+      "truncated_mean_c": 35,
+      "a5_temperature_c": 50,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 0,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        25,
+        25,
+        25,
+        25
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 25,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 0,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        10,
+        20,
+        30,
+        40
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 10,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 0,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        11,
+        20,
+        30,
+        40
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 11,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 0,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        -20,
+        -10,
+        0,
+        10
+      ],
+      "truncated_mean_c": -5,
+      "a5_temperature_c": -20,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 0,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        26,
+        26,
+        26,
+        26
+      ],
+      "truncated_mean_c": 26,
+      "a5_temperature_c": 26,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 85,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        0,
+        10,
+        20,
+        30
+      ],
+      "truncated_mean_c": 15,
+      "a5_temperature_c": 0,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 85,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        20,
+        30,
+        40,
+        50
+      ],
+      "truncated_mean_c": 35,
+      "a5_temperature_c": 50,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 85,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        25,
+        25,
+        25,
+        25
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 25,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 85,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        10,
+        20,
+        30,
+        40
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 10,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 85,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        11,
+        20,
+        30,
+        40
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 11,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 85,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        -20,
+        -10,
+        0,
+        10
+      ],
+      "truncated_mean_c": -5,
+      "a5_temperature_c": -20,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 85,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        26,
+        26,
+        26,
+        26
+      ],
+      "truncated_mean_c": 26,
+      "a5_temperature_c": 26,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 85,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        0,
+        10,
+        20,
+        30
+      ],
+      "truncated_mean_c": 15,
+      "a5_temperature_c": 0,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 85,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        20,
+        30,
+        40,
+        50
+      ],
+      "truncated_mean_c": 35,
+      "a5_temperature_c": 50,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 85,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        25,
+        25,
+        25,
+        25
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 25,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 85,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        10,
+        20,
+        30,
+        40
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 10,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 85,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        11,
+        20,
+        30,
+        40
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 11,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 85,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        -20,
+        -10,
+        0,
+        10
+      ],
+      "truncated_mean_c": -5,
+      "a5_temperature_c": -20,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 85,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        26,
+        26,
+        26,
+        26
+      ],
+      "truncated_mean_c": 26,
+      "a5_temperature_c": 26,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 85,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        0,
+        10,
+        20,
+        30
+      ],
+      "truncated_mean_c": 15,
+      "a5_temperature_c": 0,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 85,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        20,
+        30,
+        40,
+        50
+      ],
+      "truncated_mean_c": 35,
+      "a5_temperature_c": 50,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 85,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        25,
+        25,
+        25,
+        25
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 25,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 85,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        10,
+        20,
+        30,
+        40
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 10,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 85,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        11,
+        20,
+        30,
+        40
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 11,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 85,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        -20,
+        -10,
+        0,
+        10
+      ],
+      "truncated_mean_c": -5,
+      "a5_temperature_c": -20,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 85,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        26,
+        26,
+        26,
+        26
+      ],
+      "truncated_mean_c": 26,
+      "a5_temperature_c": 26,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 170,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        0,
+        10,
+        20,
+        30
+      ],
+      "truncated_mean_c": 15,
+      "a5_temperature_c": 0,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 170,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        20,
+        30,
+        40,
+        50
+      ],
+      "truncated_mean_c": 35,
+      "a5_temperature_c": 50,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 170,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        25,
+        25,
+        25,
+        25
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 25,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 170,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        10,
+        20,
+        30,
+        40
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 10,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 170,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        11,
+        20,
+        30,
+        40
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 11,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 170,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        -20,
+        -10,
+        0,
+        10
+      ],
+      "truncated_mean_c": -5,
+      "a5_temperature_c": -20,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 170,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        26,
+        26,
+        26,
+        26
+      ],
+      "truncated_mean_c": 26,
+      "a5_temperature_c": 26,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 170,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        0,
+        10,
+        20,
+        30
+      ],
+      "truncated_mean_c": 15,
+      "a5_temperature_c": 0,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 170,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        20,
+        30,
+        40,
+        50
+      ],
+      "truncated_mean_c": 35,
+      "a5_temperature_c": 50,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 170,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        25,
+        25,
+        25,
+        25
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 25,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 170,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        10,
+        20,
+        30,
+        40
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 10,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 170,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        11,
+        20,
+        30,
+        40
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 11,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 170,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        -20,
+        -10,
+        0,
+        10
+      ],
+      "truncated_mean_c": -5,
+      "a5_temperature_c": -20,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 170,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        26,
+        26,
+        26,
+        26
+      ],
+      "truncated_mean_c": 26,
+      "a5_temperature_c": 26,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 170,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        0,
+        10,
+        20,
+        30
+      ],
+      "truncated_mean_c": 15,
+      "a5_temperature_c": 0,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 170,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        20,
+        30,
+        40,
+        50
+      ],
+      "truncated_mean_c": 35,
+      "a5_temperature_c": 50,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 170,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        25,
+        25,
+        25,
+        25
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 25,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 170,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        10,
+        20,
+        30,
+        40
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 10,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 170,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        11,
+        20,
+        30,
+        40
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 11,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 170,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        -20,
+        -10,
+        0,
+        10
+      ],
+      "truncated_mean_c": -5,
+      "a5_temperature_c": -20,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 170,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        26,
+        26,
+        26,
+        26
+      ],
+      "truncated_mean_c": 26,
+      "a5_temperature_c": 26,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 255,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        0,
+        10,
+        20,
+        30
+      ],
+      "truncated_mean_c": 15,
+      "a5_temperature_c": 0,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 255,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        20,
+        30,
+        40,
+        50
+      ],
+      "truncated_mean_c": 35,
+      "a5_temperature_c": 50,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 255,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        25,
+        25,
+        25,
+        25
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 25,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 255,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        10,
+        20,
+        30,
+        40
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 10,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 255,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        11,
+        20,
+        30,
+        40
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 11,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 255,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        -20,
+        -10,
+        0,
+        10
+      ],
+      "truncated_mean_c": -5,
+      "a5_temperature_c": -20,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 255,
+      "soc": 0,
+      "sensor_temperatures_c": [
+        26,
+        26,
+        26,
+        26
+      ],
+      "truncated_mean_c": 26,
+      "a5_temperature_c": 26,
+      "a5_soc": 0,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 255,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        0,
+        10,
+        20,
+        30
+      ],
+      "truncated_mean_c": 15,
+      "a5_temperature_c": 0,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 255,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        20,
+        30,
+        40,
+        50
+      ],
+      "truncated_mean_c": 35,
+      "a5_temperature_c": 50,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 255,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        25,
+        25,
+        25,
+        25
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 25,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 255,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        10,
+        20,
+        30,
+        40
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 10,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 255,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        11,
+        20,
+        30,
+        40
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 11,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 255,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        -20,
+        -10,
+        0,
+        10
+      ],
+      "truncated_mean_c": -5,
+      "a5_temperature_c": -20,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 255,
+      "soc": 50,
+      "sensor_temperatures_c": [
+        26,
+        26,
+        26,
+        26
+      ],
+      "truncated_mean_c": 26,
+      "a5_temperature_c": 26,
+      "a5_soc": 50,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 255,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        0,
+        10,
+        20,
+        30
+      ],
+      "truncated_mean_c": 15,
+      "a5_temperature_c": 0,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 255,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        20,
+        30,
+        40,
+        50
+      ],
+      "truncated_mean_c": 35,
+      "a5_temperature_c": 50,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 255,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        25,
+        25,
+        25,
+        25
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 25,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 255,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        10,
+        20,
+        30,
+        40
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 10,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 255,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        11,
+        20,
+        30,
+        40
+      ],
+      "truncated_mean_c": 25,
+      "a5_temperature_c": 11,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 255,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        -20,
+        -10,
+        0,
+        10
+      ],
+      "truncated_mean_c": -5,
+      "a5_temperature_c": -20,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    },
+    {
+      "synthetic_bms_fill_byte": 255,
+      "soc": 100,
+      "sensor_temperatures_c": [
+        26,
+        26,
+        26,
+        26
+      ],
+      "truncated_mean_c": 26,
+      "a5_temperature_c": 26,
+      "a5_soc": 100,
+      "a5_reported_health_byte": 100,
+      "health_getter_27_returns_constant": true
+    }
+  ],
+  "pv_input_and_power_mirror": [
+    {
+      "synthetic_dc_input_state_bit": false,
+      "synthetic_pv_power_word": 0,
+      "synthetic_ac_power_word": 0,
+      "a8_hex": "04000000",
+      "a6_ac_input_word": 0,
+      "a6_dc_input_word": 0,
+      "power_mirror_equal": true
+    },
+    {
+      "synthetic_dc_input_state_bit": false,
+      "synthetic_pv_power_word": 0,
+      "synthetic_ac_power_word": 750,
+      "a8_hex": "04000000",
+      "a6_ac_input_word": 750,
+      "a6_dc_input_word": 0,
+      "power_mirror_equal": true
+    },
+    {
+      "synthetic_dc_input_state_bit": false,
+      "synthetic_pv_power_word": 1,
+      "synthetic_ac_power_word": 0,
+      "a8_hex": "04000100",
+      "a6_ac_input_word": 0,
+      "a6_dc_input_word": 1,
+      "power_mirror_equal": true
+    },
+    {
+      "synthetic_dc_input_state_bit": false,
+      "synthetic_pv_power_word": 1,
+      "synthetic_ac_power_word": 750,
+      "a8_hex": "04000100",
+      "a6_ac_input_word": 750,
+      "a6_dc_input_word": 1,
+      "power_mirror_equal": true
+    },
+    {
+      "synthetic_dc_input_state_bit": false,
+      "synthetic_pv_power_word": 6,
+      "synthetic_ac_power_word": 0,
+      "a8_hex": "04000600",
+      "a6_ac_input_word": 0,
+      "a6_dc_input_word": 6,
+      "power_mirror_equal": true
+    },
+    {
+      "synthetic_dc_input_state_bit": false,
+      "synthetic_pv_power_word": 6,
+      "synthetic_ac_power_word": 750,
+      "a8_hex": "04000600",
+      "a6_ac_input_word": 750,
+      "a6_dc_input_word": 6,
+      "power_mirror_equal": true
+    },
+    {
+      "synthetic_dc_input_state_bit": false,
+      "synthetic_pv_power_word": 123,
+      "synthetic_ac_power_word": 0,
+      "a8_hex": "04007b00",
+      "a6_ac_input_word": 0,
+      "a6_dc_input_word": 123,
+      "power_mirror_equal": true
+    },
+    {
+      "synthetic_dc_input_state_bit": false,
+      "synthetic_pv_power_word": 123,
+      "synthetic_ac_power_word": 750,
+      "a8_hex": "04007b00",
+      "a6_ac_input_word": 750,
+      "a6_dc_input_word": 123,
+      "power_mirror_equal": true
+    },
+    {
+      "synthetic_dc_input_state_bit": false,
+      "synthetic_pv_power_word": 600,
+      "synthetic_ac_power_word": 0,
+      "a8_hex": "04005802",
+      "a6_ac_input_word": 0,
+      "a6_dc_input_word": 600,
+      "power_mirror_equal": true
+    },
+    {
+      "synthetic_dc_input_state_bit": false,
+      "synthetic_pv_power_word": 600,
+      "synthetic_ac_power_word": 750,
+      "a8_hex": "04005802",
+      "a6_ac_input_word": 750,
+      "a6_dc_input_word": 600,
+      "power_mirror_equal": true
+    },
+    {
+      "synthetic_dc_input_state_bit": false,
+      "synthetic_pv_power_word": 65535,
+      "synthetic_ac_power_word": 0,
+      "a8_hex": "0400ffff",
+      "a6_ac_input_word": 0,
+      "a6_dc_input_word": 65535,
+      "power_mirror_equal": true
+    },
+    {
+      "synthetic_dc_input_state_bit": false,
+      "synthetic_pv_power_word": 65535,
+      "synthetic_ac_power_word": 750,
+      "a8_hex": "0400ffff",
+      "a6_ac_input_word": 750,
+      "a6_dc_input_word": 65535,
+      "power_mirror_equal": true
+    },
+    {
+      "synthetic_dc_input_state_bit": true,
+      "synthetic_pv_power_word": 0,
+      "synthetic_ac_power_word": 0,
+      "a8_hex": "04010000",
+      "a6_ac_input_word": 0,
+      "a6_dc_input_word": 0,
+      "power_mirror_equal": true
+    },
+    {
+      "synthetic_dc_input_state_bit": true,
+      "synthetic_pv_power_word": 0,
+      "synthetic_ac_power_word": 750,
+      "a8_hex": "04010000",
+      "a6_ac_input_word": 750,
+      "a6_dc_input_word": 0,
+      "power_mirror_equal": true
+    },
+    {
+      "synthetic_dc_input_state_bit": true,
+      "synthetic_pv_power_word": 1,
+      "synthetic_ac_power_word": 0,
+      "a8_hex": "04010100",
+      "a6_ac_input_word": 0,
+      "a6_dc_input_word": 1,
+      "power_mirror_equal": true
+    },
+    {
+      "synthetic_dc_input_state_bit": true,
+      "synthetic_pv_power_word": 1,
+      "synthetic_ac_power_word": 750,
+      "a8_hex": "04010100",
+      "a6_ac_input_word": 750,
+      "a6_dc_input_word": 1,
+      "power_mirror_equal": true
+    },
+    {
+      "synthetic_dc_input_state_bit": true,
+      "synthetic_pv_power_word": 6,
+      "synthetic_ac_power_word": 0,
+      "a8_hex": "04010600",
+      "a6_ac_input_word": 0,
+      "a6_dc_input_word": 6,
+      "power_mirror_equal": true
+    },
+    {
+      "synthetic_dc_input_state_bit": true,
+      "synthetic_pv_power_word": 6,
+      "synthetic_ac_power_word": 750,
+      "a8_hex": "04010600",
+      "a6_ac_input_word": 750,
+      "a6_dc_input_word": 6,
+      "power_mirror_equal": true
+    },
+    {
+      "synthetic_dc_input_state_bit": true,
+      "synthetic_pv_power_word": 123,
+      "synthetic_ac_power_word": 0,
+      "a8_hex": "04017b00",
+      "a6_ac_input_word": 0,
+      "a6_dc_input_word": 123,
+      "power_mirror_equal": true
+    },
+    {
+      "synthetic_dc_input_state_bit": true,
+      "synthetic_pv_power_word": 123,
+      "synthetic_ac_power_word": 750,
+      "a8_hex": "04017b00",
+      "a6_ac_input_word": 750,
+      "a6_dc_input_word": 123,
+      "power_mirror_equal": true
+    },
+    {
+      "synthetic_dc_input_state_bit": true,
+      "synthetic_pv_power_word": 600,
+      "synthetic_ac_power_word": 0,
+      "a8_hex": "04015802",
+      "a6_ac_input_word": 0,
+      "a6_dc_input_word": 600,
+      "power_mirror_equal": true
+    },
+    {
+      "synthetic_dc_input_state_bit": true,
+      "synthetic_pv_power_word": 600,
+      "synthetic_ac_power_word": 750,
+      "a8_hex": "04015802",
+      "a6_ac_input_word": 750,
+      "a6_dc_input_word": 600,
+      "power_mirror_equal": true
+    },
+    {
+      "synthetic_dc_input_state_bit": true,
+      "synthetic_pv_power_word": 65535,
+      "synthetic_ac_power_word": 0,
+      "a8_hex": "0401ffff",
+      "a6_ac_input_word": 0,
+      "a6_dc_input_word": 65535,
+      "power_mirror_equal": true
+    },
+    {
+      "synthetic_dc_input_state_bit": true,
+      "synthetic_pv_power_word": 65535,
+      "synthetic_ac_power_word": 750,
+      "a8_hex": "0401ffff",
+      "a6_ac_input_word": 750,
+      "a6_dc_input_word": 65535,
+      "power_mirror_equal": true
+    }
+  ],
+  "pv_incremental_update": [
+    {
+      "prior_power_word": 0,
+      "new_ram_power_word": 999,
+      "new_input_state_bit": false,
+      "a8_hex": "04000000",
+      "power_preserved_from_previous_buffer": true
+    },
+    {
+      "prior_power_word": 0,
+      "new_ram_power_word": 999,
+      "new_input_state_bit": true,
+      "a8_hex": "04010000",
+      "power_preserved_from_previous_buffer": true
+    },
+    {
+      "prior_power_word": 123,
+      "new_ram_power_word": 999,
+      "new_input_state_bit": false,
+      "a8_hex": "04007b00",
+      "power_preserved_from_previous_buffer": true
+    },
+    {
+      "prior_power_word": 123,
+      "new_ram_power_word": 999,
+      "new_input_state_bit": true,
+      "a8_hex": "04017b00",
+      "power_preserved_from_previous_buffer": true
+    },
+    {
+      "prior_power_word": 600,
+      "new_ram_power_word": 999,
+      "new_input_state_bit": false,
+      "a8_hex": "04005802",
+      "power_preserved_from_previous_buffer": true
+    },
+    {
+      "prior_power_word": 600,
+      "new_ram_power_word": 999,
+      "new_input_state_bit": true,
+      "a8_hex": "04015802",
+      "power_preserved_from_previous_buffer": true
+    }
+  ],
+  "current_error_code": [
+    {
+      "old_code": 0,
+      "synthetic_new_code": 0,
+      "a3_error_byte": 0,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 0,
+      "synthetic_new_code": 1,
+      "a3_error_byte": 1,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 0,
+      "synthetic_new_code": 2,
+      "a3_error_byte": 2,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 0,
+      "synthetic_new_code": 8,
+      "a3_error_byte": 8,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 0,
+      "synthetic_new_code": 27,
+      "a3_error_byte": 27,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 0,
+      "synthetic_new_code": 28,
+      "a3_error_byte": 28,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 0,
+      "synthetic_new_code": 32,
+      "a3_error_byte": 32,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 0,
+      "synthetic_new_code": 33,
+      "a3_error_byte": 33,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 0,
+      "synthetic_new_code": 36,
+      "a3_error_byte": 36,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 0,
+      "synthetic_new_code": 47,
+      "a3_error_byte": 47,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 0,
+      "synthetic_new_code": 255,
+      "a3_error_byte": 255,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 8,
+      "synthetic_new_code": 0,
+      "a3_error_byte": 0,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 8,
+      "synthetic_new_code": 1,
+      "a3_error_byte": 1,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 8,
+      "synthetic_new_code": 2,
+      "a3_error_byte": 2,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 8,
+      "synthetic_new_code": 8,
+      "a3_error_byte": 8,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 8,
+      "synthetic_new_code": 27,
+      "a3_error_byte": 27,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 8,
+      "synthetic_new_code": 28,
+      "a3_error_byte": 28,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 8,
+      "synthetic_new_code": 32,
+      "a3_error_byte": 32,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 8,
+      "synthetic_new_code": 33,
+      "a3_error_byte": 33,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 8,
+      "synthetic_new_code": 36,
+      "a3_error_byte": 36,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 8,
+      "synthetic_new_code": 47,
+      "a3_error_byte": 47,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 8,
+      "synthetic_new_code": 255,
+      "a3_error_byte": 255,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 36,
+      "synthetic_new_code": 0,
+      "a3_error_byte": 0,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 36,
+      "synthetic_new_code": 1,
+      "a3_error_byte": 1,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 36,
+      "synthetic_new_code": 2,
+      "a3_error_byte": 2,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 36,
+      "synthetic_new_code": 8,
+      "a3_error_byte": 8,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 36,
+      "synthetic_new_code": 27,
+      "a3_error_byte": 27,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 36,
+      "synthetic_new_code": 28,
+      "a3_error_byte": 28,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 36,
+      "synthetic_new_code": 32,
+      "a3_error_byte": 32,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 36,
+      "synthetic_new_code": 33,
+      "a3_error_byte": 33,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 36,
+      "synthetic_new_code": 36,
+      "a3_error_byte": 36,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 36,
+      "synthetic_new_code": 47,
+      "a3_error_byte": 47,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    },
+    {
+      "old_code": 36,
+      "synthetic_new_code": 255,
+      "a3_error_byte": 255,
+      "duplicate_within_1000_tick_units_suppressed": true,
+      "same_code_after_1000_tick_units_accepted": true,
+      "semantic_error_name": null
+    }
+  ]
+}

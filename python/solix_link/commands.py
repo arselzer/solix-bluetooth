@@ -1,6 +1,7 @@
 """Allowlisted gateway command shapes; protocol clients validate value ranges."""
 
 from .tou import TouPeriod, validate_periods
+from .protocol import validate_device_timeout
 
 COMMAND_FIELDS = {
     "set-charge-power": {"watts": int},
@@ -14,9 +15,10 @@ COMMAND_FIELDS = {
     "set-light": {"mode": int},
     "set-temperature-unit": {"fahrenheit": bool},
     "set-off-grid-alert": {"enabled": bool},
+    "set-device-timeout": {"minutes": int},
 }
 NATIVE_COMMANDS = ("set-charge-power", "set-charge-cap", "set-backup-reserve", "set-tou-plan", "return-grid")
-NATIVE_C1000_COMMANDS = ("set-temperature-unit", "set-off-grid-alert", "set-discharge-floor")
+NATIVE_C1000_COMMANDS = ("set-temperature-unit", "set-off-grid-alert", "set-discharge-floor", "set-device-timeout")
 
 
 def validate_command(command: str, values: dict) -> None:
@@ -37,3 +39,5 @@ def validate_command(command: str, values: dict) -> None:
             raise ValueError("Enabled Time-of-Use requires a nonempty schedule")
     if command == "return-grid" and not 5 <= values["timeout"] <= 120:
         raise ValueError("Grid confirmation timeout must be 5–120 seconds")
+    if command == "set-device-timeout":
+        validate_device_timeout(values["minutes"])

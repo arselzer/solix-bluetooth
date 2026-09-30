@@ -1,7 +1,7 @@
 """Sensors backed by the gateway's reported values."""
 
 from homeassistant.components.sensor import SensorDeviceClass, SensorEntity, SensorEntityDescription, SensorStateClass
-from homeassistant.const import PERCENTAGE, UnitOfPower, UnitOfTemperature
+from homeassistant.const import EntityCategory, PERCENTAGE, UnitOfPower, UnitOfTemperature
 from homeassistant.core import callback
 
 from .api import numeric
@@ -25,6 +25,9 @@ DESCRIPTIONS = (
                             options=["standard", "time_of_use", "self_consumption", "custom", "unknown"]),
     SensorEntityDescription(key="power_flow", translation_key="power_flow", device_class=SensorDeviceClass.ENUM,
                             options=["grid", "battery", "transitioning", "unknown"]),
+    *(SensorEntityDescription(key=key, translation_key=key, entity_category=EntityCategory.DIAGNOSTIC,
+                             entity_registry_enabled_default=False)
+      for key in ("dc_input_power_raw", "controller_error_code", "battery_health_raw")),
 )
 
 

@@ -30,6 +30,10 @@ METRIC_LABELS = {
     "usb_c2_power_w": "USB-C2 (W)",
     "usb_c3_power_w": "USB-C3 (W)",
     "solar_input_power_w": "Solar input (W)",
+    "dc_input_active": "DC/PV input active",
+    "dc_input_power_raw": "DC/PV input power (raw)",
+    "controller_error_code": "Controller error code (raw)",
+    "battery_health_raw": "Battery compatibility byte (raw)",
     "ac_charging_power_limit_w": "AC charging limit (W)",
     "max_charge_percentage": "Upper charge limit (%)",
     "min_charge_percentage": "Lower discharge limit (%)",
@@ -38,6 +42,7 @@ METRIC_LABELS = {
     "active_tariff": "Active tariff",
     "tou_schedule_slot_count": "Tariff periods",
     "display_timeout_seconds": "Display timeout (s)",
+    "device_timeout_minutes": "Device Timeout (min; 0 = Never)",
     "temperature_unit_fahrenheit": "Display uses Fahrenheit",
     "ac_off_grid_alert_enabled": "Off-grid alert enabled",
     "light_mode": "Light mode",
@@ -78,6 +83,7 @@ def controls_for(target: Target) -> tuple[Control, ...]:
                 Control("temperature-unit", "Temperature unit", "celsius or fahrenheit"),
                 Control("off-grid-alert", "Off-grid alert", "on or off"),
                 Control("discharge-floor", "Lower discharge limit", "1, 5, 10, 15 or 20%; requires reserve at least 5% higher"),
+                Control("device-timeout", "Device Timeout", "0 = Never; 30, 60, 120, 240, 360, 720 or 1440 minutes. Finite choices may turn the station off when idle. Never disables this timeout; other sleep behavior may still interrupt remote access."),
             )
         return items
     limits = {
@@ -88,6 +94,9 @@ def controls_for(target: Target) -> tuple[Control, ...]:
     }
     items = [Control("charge-power", "AC charging power", limits[target.model])]
     items.append(Control("display-timeout", "Display timeout", "30 or 60 seconds"))
+    if target.model in (Model.C1000, Model.C1000_GEN2) and (target.device is None or target.device.protocol == (
+            "legacy" if target.model == Model.C1000 else "prime")):
+        items.append(Control("device-timeout", "Device Timeout", "0 = Never; 30, 60, 120, 240, 360, 720 or 1440 minutes. Finite choices may turn the station off when idle. Never disables this timeout; other sleep behavior may still interrupt remote access."))
     if target.model in (Model.C300, Model.C1000):
         items.extend((
             Control("ac-output", "AC output", "Enter on or off; changes the AC sockets"),
@@ -98,6 +107,13 @@ def controls_for(target: Target) -> tuple[Control, ...]:
     elif target.model == Model.C1000_GEN2:
         items.append(Control("charge-limits", "Charge / discharge limits", "Upper,lower — e.g. 100,1"))
     return tuple(items)
+
+
+def parse_device_timeout(text: str) -> int:
+    value = text.strip()
+    if not value.isdecimal() or int(value) not in (0, 30, 60, 120, 240, 360, 720, 1440):
+        raise ValueError("Device Timeout must be 0 (Never), 30, 60, 120, 240, 360, 720 or 1440 minutes")
+    return int(value)
 
 
 def parse_plan(text: str) -> list[dict[str, Any]]:
@@ -367,6 +383,8 @@ class TuiBackend:
                     response = await self._native("set-off-grid-alert", enabled=value.strip().lower() == "on")
                 elif action == "discharge-floor":
                     response = await self._native("set-discharge-floor", lower=int(value))
+                elif action == "device-timeout":
+                    response = await self._native("set-device-timeout", minutes=parse_device_timeout(value))
                 else:
                     command, field_name = {
                         "charge-power": ("set-charge-power", "watts"),
@@ -375,7 +393,9 @@ class TuiBackend:
                     }[action]
                     response = await self._native(command, **{field_name: int(value)})
                 return public_snapshot(response)
-            if action == "ac-output":
+            if action == "device-timeout":
+                await self.monitor.set_device_timeout(parse_device_timeout(value))
+            elif action == "ac-output":
                 if value.strip().lower() not in ("on", "off"):
                     raise ValueError("Enter on or off")
                 await self.monitor.set_ac_output_enabled(value.strip().lower() == "on")

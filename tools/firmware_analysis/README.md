@@ -2,8 +2,8 @@
 
 These Python scripts execute selected retained C1000 Gen 2 main-controller
 instructions in Unicorn with synthetic inputs. They never connect to a device.
-There are **1,540 cases**: 1,063 settings, 20 alert, 245 charging and 212 feature
-candidate cases. Radio/DSP integrity tools provide separate checks.
+There are **1,842 cases**: 1,063 settings, 20 alert, 245 charging, 212 feature
+candidate, 147 additional telemetry and 155 timeout cases. Radio/DSP integrity tools provide separate checks.
 
 See [reproduction instructions](../../docs/firmware-analysis-reproduction.md)
 for the required firmware hash, setup, tested versions and substituted services.

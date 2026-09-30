@@ -2,6 +2,7 @@
 
 from homeassistant.components.binary_sensor import BinarySensorDeviceClass, BinarySensorEntity, BinarySensorEntityDescription
 from homeassistant.core import callback
+from homeassistant.const import EntityCategory
 
 from .api import binary_state
 from .coordinator import SolixConfigEntry
@@ -13,6 +14,9 @@ DESCRIPTIONS = (
                                   device_class=BinarySensorDeviceClass.POWER),
     BinarySensorEntityDescription(key="ac_output_enabled", translation_key="ac_output_enabled",
                                   device_class=BinarySensorDeviceClass.POWER),
+    BinarySensorEntityDescription(key="dc_input_active", translation_key="dc_input_active",
+                                  entity_category=EntityCategory.DIAGNOSTIC,
+                                  entity_registry_enabled_default=False),
 )
 
 

@@ -53,6 +53,8 @@ class Station:
             if not self.ignore:
                 if 0xA5 in fields:
                     self.a4[20] = fields[0xA5][1]
+                elif 0xA6 in fields:
+                    self.a4[14:16] = fields[0xA6][1:3]
                 else:
                     self.a4[32] = (self.a4[32] & ~2) | (fields[0xB0][1] << 1)
             self.mutate()
@@ -139,7 +141,7 @@ def test_acknowledged_but_ignored_write_is_not_success(tmp_path, builder, method
 
 
 @pytest.mark.parametrize("problem", ["a4_absent", "a4_short", "a4_type", "d9_short", "ac_absent",
-                                    "dc_absent", "mains_invalid", "temperature_invalid"])
+                                    "dc_absent", "mains_invalid", "temperature_invalid", "ac_type", "dc_type"])
 def test_incomplete_or_invalid_baseline_sends_no_write(tmp_path, problem):
     server, station = service(tmp_path)
     if problem.endswith("absent"):
@@ -152,6 +154,8 @@ def test_incomplete_or_invalid_baseline_sends_no_write(tmp_path, problem):
         station.d9 = station.d9[:-1]
     elif problem == "mains_invalid":
         station.a7[4] = 2
+    elif problem in ("ac_type", "dc_type"):
+        getattr(station, "a7" if problem == "ac_type" else "b2")[0] = 3
     else:
         station.a4[20] = 2
     with pytest.raises((ValueError, RuntimeError)):

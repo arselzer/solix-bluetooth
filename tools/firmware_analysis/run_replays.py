@@ -26,6 +26,8 @@ def main() -> None:
     from emulate_offgrid_alert import main as alert
     from emulate_charging_followup import main as charging
     from emulate_feature_candidates import main as features
+    from emulate_additional_features import main as additional
+    from emulate_device_timeout import main as timeout
 
     firmware_image()  # Refuse an absent or mismatched image before any emulation.
     suites = (
@@ -33,6 +35,8 @@ def main() -> None:
         (alert, "offgrid-alert-emulation-results.json", 20),
         (charging, "charging-followup-results.json", 245),
         (features, "feature-candidates-results.json", 212),
+        (additional, "additional-features-results.json", 147),
+        (timeout, "device-timeout-results.json", 155),
     )
     package = Path(__file__).resolve().parent
     results = {}

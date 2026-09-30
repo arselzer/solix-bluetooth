@@ -7,7 +7,7 @@ from solix_link.commands import NATIVE_COMMANDS, NATIVE_C1000_COMMANDS
 
 class Demo:
     def __init__(self):
-        self.devices = {name: SimpleNamespace(timezone_name="Europe/Vienna") for name in ("Office · C1000 Gen 2", "Server · C2000 Gen 2")}
+        self.devices = {name: SimpleNamespace(timezone_name="Europe/Vienna") for name in ("Office · C1000 Gen 2", "Server · C2000 Gen 2", "Spare · C1000")}
         self.commands = []
         self.overrides = {name: {} for name in self.devices}
         self.connected = True
@@ -18,6 +18,7 @@ class Demo:
     async def stop(self): pass
     def supported_commands(self, name):
         if self.readonly: return []
+        if name.startswith("Spare"): return ["set-charge-power", "set-device-timeout"]
         return list(NATIVE_COMMANDS) + (list(NATIVE_C1000_COMMANDS) if name.startswith("Office") else [])
     def snapshot(self, name):
         c1000 = name.startswith("Office")
@@ -34,7 +35,8 @@ class Demo:
                    "tou_schedule_slot_count": 2 if c1000 else 0, "device_timeout_minutes": 0,
                    "software_version": "1.1.4.9" if c1000 else "2.1.6.4", "software_version_module": "0.3.3.0"}
         metrics.update(self.overrides[name])
-        return {"name":name,"model":"c1000_gen2" if c1000 else "c2000_gen2","protocol":"native_mqtt",
+        original = name.startswith("Spare")
+        return {"name":name,"model":"c1000" if original else "c1000_gen2" if c1000 else "c2000_gen2","protocol":"legacy" if original else "native_mqtt",
                 "connected":self.connected,"available":self.available,"last_seen_timestamp":self.last_seen or now - 2,
                 "metrics":metrics,"power_flow":"battery" if c1000 else "grid"}
     def snapshots(self): return [self.snapshot(name) for name in self.devices]
@@ -42,7 +44,7 @@ class Demo:
         self.commands.append({"name":name,"command":command,**values})
         key={"set-charge-power":"ac_charging_power_limit_w","set-charge-cap":"max_charge_percentage",
              "set-backup-reserve":"backup_reserve_percentage", "set-discharge-floor":"min_charge_percentage","set-temperature-unit":"temperature_unit_fahrenheit",
-             "set-off-grid-alert":"ac_off_grid_alert_enabled"}.get(command)
+             "set-off-grid-alert":"ac_off_grid_alert_enabled", "set-device-timeout":"device_timeout_minutes"}.get(command)
         if key: self.overrides[name][key]=int(next(iter(values.values())))
         return self.snapshot(name)
     def subscribe(self): return asyncio.Queue()

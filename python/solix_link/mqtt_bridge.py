@@ -25,6 +25,7 @@ _FIELDS = {
     "fast_charge": ("enabled",),
     "ac_output": ("enabled",),
     "light_mode": ("mode",),
+    "device_timeout": ("minutes",),
 }
 _CONFIRMED = {
     "charge_limits": ("max_charge_percentage", "min_charge_percentage"),
@@ -34,16 +35,18 @@ _CONFIRMED = {
     "fast_charge": ("ac_fast_charge_enabled",),
     "ac_output": ("ac_output_enabled",),
     "light_mode": ("light_mode",),
+    "device_timeout": ("device_timeout_minutes",),
 }
 
 
 def _supports_operation(device: Any, operation: str) -> bool:
     if device.model in (Model.C300, Model.C1000) and device.protocol == "legacy":
-        return operation in ("display_timeout", "ac_charging_power", "ac_output", "light_mode")
+        return (operation in ("display_timeout", "ac_charging_power", "ac_output", "light_mode")
+                or (device.model == Model.C1000 and operation == "device_timeout"))
     if device.protocol != 'prime':
         return False
     if device.model == Model.C1000_GEN2:
-        return operation in ('charge_limits', 'ac_charging_power', 'display_timeout', 'fast_charge')
+        return operation in ('charge_limits', 'ac_charging_power', 'display_timeout', 'fast_charge', 'device_timeout')
     return device.model == Model.C2000_GEN2 and operation in ('charge_cap', 'ac_charging_power', 'display_timeout')
 
 

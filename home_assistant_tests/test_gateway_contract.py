@@ -42,6 +42,17 @@ def test_identity_and_secret_fields():
     assert "set-ac-output" not in parsed["controls"]
 
 
+def test_firmware_diagnostics_are_kept_raw_without_health_or_power_inferences():
+    raw = status(model="c1000_gen2")
+    raw["metrics"].update(dc_input_active=1, dc_input_power_raw=123,
+                          controller_error_code=27, battery_health_raw=100,
+                          battery_health=100, named_controller_fault="not-verified")
+    metrics = api.parse_snapshot(raw)["metrics"]
+    assert {key: metrics[key] for key in ("dc_input_active", "dc_input_power_raw", "controller_error_code", "battery_health_raw")} == {
+        "dc_input_active": 1, "dc_input_power_raw": 123, "controller_error_code": 27, "battery_health_raw": 100}
+    assert "battery_health" not in metrics and "named_controller_fault" not in metrics
+
+
 @pytest.mark.parametrize("url", ["ftp://gateway", "http://user:secret@gateway", "http://gateway/?token=secret",
                                  "http://gateway/#fragment", "http://gateway:99999", "http://gateway\n"])
 def test_url_rejects_credentials_parameters_and_invalid_values(url):

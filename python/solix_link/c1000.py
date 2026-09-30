@@ -94,7 +94,7 @@ def decode_c1000_telemetry(payload: bytes) -> tuple[dict[str, int | str], dict[i
 
 C1000_SETTINGS = (
     "display_timeout", "display_brightness", "display_enabled", "light_mode",
-    "ac_charging_power", "ac_output_enabled", "dc_output_enabled",
+    "ac_charging_power", "ac_output_enabled", "dc_output_enabled", "device_timeout",
 )
 
 
@@ -104,9 +104,10 @@ def c1000_setting(setting: str, value: int | bool) -> tuple[str, bytes, dict[str
     Live changes/restorations are documented for A1761 version code 151.
     Not every value or firmware version has been tested.
     """
-    from .protocol import tlv
+    from .protocol import DEVICE_TIMEOUT_MINUTES, tlv
 
     definitions = {
+        "device_timeout": ("4045", "device_timeout_minutes", 2, DEVICE_TIMEOUT_MINUTES),
         "display_timeout": ("4046", "display_timeout_seconds", 2, (20, 30, 60, 300, 1800)),
         "display_brightness": ("404c", "display_brightness", 1, (0, 1, 2, 3)),
         "display_enabled": ("4052", "display_enabled", 1, (False, True)),

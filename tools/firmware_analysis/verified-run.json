@@ -32,11 +32,23 @@
       "cases": 212,
       "sha256": "6782748bee8ab3dddd677fb47942f08c4c7b64417c1eeeff13d781cf392b87c9",
       "matches_expected": true
+    },
+    "additional-features-results.json": {
+      "cases": 147,
+      "sha256": "bc4bcd16a78acc52fce058870bc99bb88c4fea868043c9461c364578d670ff47",
+      "matches_expected": true
+    },
+    "device-timeout-results.json": {
+      "cases": 155,
+      "sha256": "97b0896dae6a089b0a248a472f4fe62d6f9a4e0b202df4419c2b3034d8ea5dcc",
+      "matches_expected": true
     }
   },
   "source_sha256": {
+    "emulate_additional_features.py": "baaeb837278e225a117ebaf025e1e463eed10f24d51af8d7f2946783ef12615e",
     "emulate_charging_followup.py": "47f845935c526ac13a9a9de119b8b442297d06039817e507ee3a6fb6e7591854",
     "emulate_clock_semantics.py": "945b649c3b5cec00d816041e783641085ccfbdb5f80efc2ed2c4e15f3bae30f2",
+    "emulate_device_timeout.py": "6fdbf60652982fb1dc7e22169c4bb36f4071ac4df44727c54d411e0a170fb95b",
     "emulate_feature_candidates.py": "2b03b97727d634ce9040052de99f73a4834c2ecac7c71a476b418ec05fbb9a82",
     "emulate_general_settings.py": "26ce041976a8fd1ac43feb2851c1717363761cb2f7da69f4d780b3f42b8ef0ba",
     "emulate_offgrid_alert.py": "2e5c7b09928399daf827bcc2a30ec5e4984f2a41845a8a705072d1e911873c0a",
@@ -46,7 +58,7 @@
     "emulate_tou_d9.py": "25bfc0d14c3f2e7ba50d7b7c01c750c836cf1ce3c81d8db21d2a3e6630b04894",
     "extract_dsp.py": "5a82593ea76fd784702e0ee501be2415a4540d2570c3f370d343e8512d2a87e9",
     "replay_io.py": "731d795a5ec37e2cf12b809b7122eaf7a29d84c21a2ecd43fafa3e2f8d962d30",
-    "run_replays.py": "956d11413b0a06e0d89305fb2146138c20b4bddb721795111a7379da48a5610e",
+    "run_replays.py": "3e06d11ba2af2be4f3aeb58059d8bd4e0d9320643d82fe8686ad43d705599003",
     "verify_radio_signature.py": "7b78f5ed26521490c405fbab1dce875cf2aa88c84ae6b0ce2a5df65559d51556"
   }
 }

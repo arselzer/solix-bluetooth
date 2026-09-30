@@ -1,0 +1,1297 @@
+{
+  "timeout_selection": [
+    {
+      "minutes": 0,
+      "previous_entry_armed": false,
+      "settings_only_target_changed": true,
+      "timeout_enabled": false,
+      "timeout_deadline": 10777,
+      "timeout_entry_armed": false,
+      "selected_entry": 255,
+      "rtc_alarm_armed": false,
+      "requested_alarms_seconds": []
+    },
+    {
+      "minutes": 0,
+      "previous_entry_armed": true,
+      "settings_only_target_changed": true,
+      "timeout_enabled": false,
+      "timeout_deadline": 10777,
+      "timeout_entry_armed": true,
+      "selected_entry": 255,
+      "rtc_alarm_armed": false,
+      "requested_alarms_seconds": []
+    },
+    {
+      "minutes": 30,
+      "previous_entry_armed": false,
+      "settings_only_target_changed": true,
+      "timeout_enabled": true,
+      "timeout_deadline": 11800,
+      "timeout_entry_armed": true,
+      "selected_entry": 1,
+      "rtc_alarm_armed": true,
+      "requested_alarms_seconds": [
+        1800
+      ]
+    },
+    {
+      "minutes": 30,
+      "previous_entry_armed": true,
+      "settings_only_target_changed": true,
+      "timeout_enabled": true,
+      "timeout_deadline": 10777,
+      "timeout_entry_armed": true,
+      "selected_entry": 1,
+      "rtc_alarm_armed": true,
+      "requested_alarms_seconds": [
+        777
+      ]
+    },
+    {
+      "minutes": 60,
+      "previous_entry_armed": false,
+      "settings_only_target_changed": true,
+      "timeout_enabled": true,
+      "timeout_deadline": 13600,
+      "timeout_entry_armed": true,
+      "selected_entry": 1,
+      "rtc_alarm_armed": true,
+      "requested_alarms_seconds": [
+        3600
+      ]
+    },
+    {
+      "minutes": 60,
+      "previous_entry_armed": true,
+      "settings_only_target_changed": true,
+      "timeout_enabled": true,
+      "timeout_deadline": 10777,
+      "timeout_entry_armed": true,
+      "selected_entry": 1,
+      "rtc_alarm_armed": true,
+      "requested_alarms_seconds": [
+        777
+      ]
+    },
+    {
+      "minutes": 120,
+      "previous_entry_armed": false,
+      "settings_only_target_changed": true,
+      "timeout_enabled": true,
+      "timeout_deadline": 17200,
+      "timeout_entry_armed": true,
+      "selected_entry": 1,
+      "rtc_alarm_armed": true,
+      "requested_alarms_seconds": [
+        7200
+      ]
+    },
+    {
+      "minutes": 120,
+      "previous_entry_armed": true,
+      "settings_only_target_changed": true,
+      "timeout_enabled": true,
+      "timeout_deadline": 10777,
+      "timeout_entry_armed": true,
+      "selected_entry": 1,
+      "rtc_alarm_armed": true,
+      "requested_alarms_seconds": [
+        777
+      ]
+    },
+    {
+      "minutes": 240,
+      "previous_entry_armed": false,
+      "settings_only_target_changed": true,
+      "timeout_enabled": true,
+      "timeout_deadline": 24400,
+      "timeout_entry_armed": true,
+      "selected_entry": 1,
+      "rtc_alarm_armed": true,
+      "requested_alarms_seconds": [
+        14400
+      ]
+    },
+    {
+      "minutes": 240,
+      "previous_entry_armed": true,
+      "settings_only_target_changed": true,
+      "timeout_enabled": true,
+      "timeout_deadline": 10777,
+      "timeout_entry_armed": true,
+      "selected_entry": 1,
+      "rtc_alarm_armed": true,
+      "requested_alarms_seconds": [
+        777
+      ]
+    },
+    {
+      "minutes": 360,
+      "previous_entry_armed": false,
+      "settings_only_target_changed": true,
+      "timeout_enabled": true,
+      "timeout_deadline": 31600,
+      "timeout_entry_armed": true,
+      "selected_entry": 1,
+      "rtc_alarm_armed": true,
+      "requested_alarms_seconds": [
+        21600
+      ]
+    },
+    {
+      "minutes": 360,
+      "previous_entry_armed": true,
+      "settings_only_target_changed": true,
+      "timeout_enabled": true,
+      "timeout_deadline": 10777,
+      "timeout_entry_armed": true,
+      "selected_entry": 1,
+      "rtc_alarm_armed": true,
+      "requested_alarms_seconds": [
+        777
+      ]
+    },
+    {
+      "minutes": 720,
+      "previous_entry_armed": false,
+      "settings_only_target_changed": true,
+      "timeout_enabled": true,
+      "timeout_deadline": 53200,
+      "timeout_entry_armed": true,
+      "selected_entry": 1,
+      "rtc_alarm_armed": true,
+      "requested_alarms_seconds": [
+        43200
+      ]
+    },
+    {
+      "minutes": 720,
+      "previous_entry_armed": true,
+      "settings_only_target_changed": true,
+      "timeout_enabled": true,
+      "timeout_deadline": 10777,
+      "timeout_entry_armed": true,
+      "selected_entry": 1,
+      "rtc_alarm_armed": true,
+      "requested_alarms_seconds": [
+        777
+      ]
+    },
+    {
+      "minutes": 1440,
+      "previous_entry_armed": false,
+      "settings_only_target_changed": true,
+      "timeout_enabled": true,
+      "timeout_deadline": 96400,
+      "timeout_entry_armed": true,
+      "selected_entry": 1,
+      "rtc_alarm_armed": true,
+      "requested_alarms_seconds": [
+        86400
+      ]
+    },
+    {
+      "minutes": 1440,
+      "previous_entry_armed": true,
+      "settings_only_target_changed": true,
+      "timeout_enabled": true,
+      "timeout_deadline": 10777,
+      "timeout_entry_armed": true,
+      "selected_entry": 1,
+      "rtc_alarm_armed": true,
+      "requested_alarms_seconds": [
+        777
+      ]
+    },
+    {
+      "minutes": 65535,
+      "previous_entry_armed": false,
+      "settings_only_target_changed": true,
+      "timeout_enabled": true,
+      "timeout_deadline": 3942100,
+      "timeout_entry_armed": true,
+      "selected_entry": 1,
+      "rtc_alarm_armed": true,
+      "requested_alarms_seconds": [
+        3932100
+      ]
+    },
+    {
+      "minutes": 65535,
+      "previous_entry_armed": true,
+      "settings_only_target_changed": true,
+      "timeout_enabled": true,
+      "timeout_deadline": 10777,
+      "timeout_entry_armed": true,
+      "selected_entry": 1,
+      "rtc_alarm_armed": true,
+      "requested_alarms_seconds": [
+        777
+      ]
+    }
+  ],
+  "pending_alarm_and_wake_reset": [
+    {
+      "original_minutes": 30,
+      "replacement_minutes": 0,
+      "setting_write_does_not_cancel_existing_alarm": true,
+      "normal_wake_clears_all_entry_armed_flags": true,
+      "after_wake_reset": {
+        "timeout_enabled": false,
+        "timeout_deadline": 11800,
+        "timeout_entry_armed": false,
+        "selected_entry": 255,
+        "rtc_alarm_armed": false,
+        "requested_alarms_seconds": []
+      }
+    },
+    {
+      "original_minutes": 30,
+      "replacement_minutes": 30,
+      "setting_write_does_not_cancel_existing_alarm": true,
+      "normal_wake_clears_all_entry_armed_flags": true,
+      "after_wake_reset": {
+        "timeout_enabled": true,
+        "timeout_deadline": 11810,
+        "timeout_entry_armed": true,
+        "selected_entry": 1,
+        "rtc_alarm_armed": true,
+        "requested_alarms_seconds": [
+          1800
+        ]
+      }
+    },
+    {
+      "original_minutes": 30,
+      "replacement_minutes": 720,
+      "setting_write_does_not_cancel_existing_alarm": true,
+      "normal_wake_clears_all_entry_armed_flags": true,
+      "after_wake_reset": {
+        "timeout_enabled": true,
+        "timeout_deadline": 53210,
+        "timeout_entry_armed": true,
+        "selected_entry": 1,
+        "rtc_alarm_armed": true,
+        "requested_alarms_seconds": [
+          43200
+        ]
+      }
+    },
+    {
+      "original_minutes": 720,
+      "replacement_minutes": 0,
+      "setting_write_does_not_cancel_existing_alarm": true,
+      "normal_wake_clears_all_entry_armed_flags": true,
+      "after_wake_reset": {
+        "timeout_enabled": false,
+        "timeout_deadline": 53200,
+        "timeout_entry_armed": false,
+        "selected_entry": 255,
+        "rtc_alarm_armed": false,
+        "requested_alarms_seconds": []
+      }
+    },
+    {
+      "original_minutes": 720,
+      "replacement_minutes": 30,
+      "setting_write_does_not_cancel_existing_alarm": true,
+      "normal_wake_clears_all_entry_armed_flags": true,
+      "after_wake_reset": {
+        "timeout_enabled": true,
+        "timeout_deadline": 11810,
+        "timeout_entry_armed": true,
+        "selected_entry": 1,
+        "rtc_alarm_armed": true,
+        "requested_alarms_seconds": [
+          1800
+        ]
+      }
+    },
+    {
+      "original_minutes": 720,
+      "replacement_minutes": 720,
+      "setting_write_does_not_cancel_existing_alarm": true,
+      "normal_wake_clears_all_entry_armed_flags": true,
+      "after_wake_reset": {
+        "timeout_enabled": true,
+        "timeout_deadline": 53210,
+        "timeout_entry_armed": true,
+        "selected_entry": 1,
+        "rtc_alarm_armed": true,
+        "requested_alarms_seconds": [
+          43200
+        ]
+      }
+    }
+  ],
+  "idle_state_bits": [
+    {
+      "minutes": 0,
+      "only_set_state_bit": 0,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 1,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 2,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 3,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 4,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 5,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 6,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 7,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 8,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 9,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 10,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 11,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 12,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 13,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 14,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 15,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 16,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 17,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 18,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 19,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 20,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 21,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 22,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 23,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 24,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 25,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 26,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 27,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 28,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 29,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 30,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 0,
+      "only_set_state_bit": 31,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 0,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 1,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 2,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 3,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 4,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 5,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 6,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 7,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 8,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 9,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 10,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 11,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 12,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 13,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 14,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 15,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 16,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 17,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 18,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 19,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 20,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 21,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 22,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 23,
+      "before": 12,
+      "after": 60,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 24,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 25,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 26,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 27,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 28,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 29,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 30,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 720,
+      "only_set_state_bit": 31,
+      "before": 12,
+      "after": 11,
+      "reset_to_60": false
+    }
+  ],
+  "power_gate_and_special_mode": [
+    {
+      "minutes": 0,
+      "raw_gate_byte": 0,
+      "special_mode": false,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 0,
+      "raw_gate_byte": 0,
+      "special_mode": true,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 0,
+      "raw_gate_byte": 1,
+      "special_mode": false,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "raw_gate_byte": 1,
+      "special_mode": true,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "raw_gate_byte": 2,
+      "special_mode": false,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "raw_gate_byte": 2,
+      "special_mode": true,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 0,
+      "raw_gate_byte": 3,
+      "special_mode": false,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "raw_gate_byte": 3,
+      "special_mode": true,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "raw_gate_byte": 4,
+      "special_mode": false,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 0,
+      "raw_gate_byte": 4,
+      "special_mode": true,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 0,
+      "raw_gate_byte": 5,
+      "special_mode": false,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "raw_gate_byte": 5,
+      "special_mode": true,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "raw_gate_byte": 6,
+      "special_mode": false,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "raw_gate_byte": 6,
+      "special_mode": true,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 0,
+      "raw_gate_byte": 7,
+      "special_mode": false,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "raw_gate_byte": 7,
+      "special_mode": true,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "raw_gate_byte": 0,
+      "special_mode": false,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 720,
+      "raw_gate_byte": 0,
+      "special_mode": true,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 720,
+      "raw_gate_byte": 1,
+      "special_mode": false,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "raw_gate_byte": 1,
+      "special_mode": true,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "raw_gate_byte": 2,
+      "special_mode": false,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "raw_gate_byte": 2,
+      "special_mode": true,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 720,
+      "raw_gate_byte": 3,
+      "special_mode": false,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "raw_gate_byte": 3,
+      "special_mode": true,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "raw_gate_byte": 4,
+      "special_mode": false,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 720,
+      "raw_gate_byte": 4,
+      "special_mode": true,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 720,
+      "raw_gate_byte": 5,
+      "special_mode": false,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "raw_gate_byte": 5,
+      "special_mode": true,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "raw_gate_byte": 6,
+      "special_mode": false,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "raw_gate_byte": 6,
+      "special_mode": true,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 720,
+      "raw_gate_byte": 7,
+      "special_mode": false,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "raw_gate_byte": 7,
+      "special_mode": true,
+      "reset_to_60": true
+    }
+  ],
+  "auxiliary_busy_states": [
+    {
+      "minutes": 0,
+      "display_timer_active": false,
+      "raw_auxiliary_200028fa": 0,
+      "raw_busy_20000728": 0,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 0,
+      "display_timer_active": false,
+      "raw_auxiliary_200028fa": 0,
+      "raw_busy_20000728": 1,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "display_timer_active": false,
+      "raw_auxiliary_200028fa": 1,
+      "raw_busy_20000728": 0,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "display_timer_active": false,
+      "raw_auxiliary_200028fa": 1,
+      "raw_busy_20000728": 1,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "display_timer_active": true,
+      "raw_auxiliary_200028fa": 0,
+      "raw_busy_20000728": 0,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "display_timer_active": true,
+      "raw_auxiliary_200028fa": 0,
+      "raw_busy_20000728": 1,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "display_timer_active": true,
+      "raw_auxiliary_200028fa": 1,
+      "raw_busy_20000728": 0,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 0,
+      "display_timer_active": true,
+      "raw_auxiliary_200028fa": 1,
+      "raw_busy_20000728": 1,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "display_timer_active": false,
+      "raw_auxiliary_200028fa": 0,
+      "raw_busy_20000728": 0,
+      "reset_to_60": false
+    },
+    {
+      "minutes": 720,
+      "display_timer_active": false,
+      "raw_auxiliary_200028fa": 0,
+      "raw_busy_20000728": 1,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "display_timer_active": false,
+      "raw_auxiliary_200028fa": 1,
+      "raw_busy_20000728": 0,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "display_timer_active": false,
+      "raw_auxiliary_200028fa": 1,
+      "raw_busy_20000728": 1,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "display_timer_active": true,
+      "raw_auxiliary_200028fa": 0,
+      "raw_busy_20000728": 0,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "display_timer_active": true,
+      "raw_auxiliary_200028fa": 0,
+      "raw_busy_20000728": 1,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "display_timer_active": true,
+      "raw_auxiliary_200028fa": 1,
+      "raw_busy_20000728": 0,
+      "reset_to_60": true
+    },
+    {
+      "minutes": 720,
+      "display_timer_active": true,
+      "raw_auxiliary_200028fa": 1,
+      "raw_busy_20000728": 1,
+      "reset_to_60": true
+    }
+  ],
+  "ac_substates": [
+    {
+      "minutes": 0,
+      "raw_ac_substate": 0,
+      "reported_ac_output_enabled": false,
+      "reset_to_60": false,
+      "physical_substate_producer_executed": false
+    },
+    {
+      "minutes": 0,
+      "raw_ac_substate": 1,
+      "reported_ac_output_enabled": true,
+      "reset_to_60": true,
+      "physical_substate_producer_executed": false
+    },
+    {
+      "minutes": 0,
+      "raw_ac_substate": 2,
+      "reported_ac_output_enabled": true,
+      "reset_to_60": false,
+      "physical_substate_producer_executed": false
+    },
+    {
+      "minutes": 0,
+      "raw_ac_substate": 3,
+      "reported_ac_output_enabled": true,
+      "reset_to_60": false,
+      "physical_substate_producer_executed": false
+    },
+    {
+      "minutes": 720,
+      "raw_ac_substate": 0,
+      "reported_ac_output_enabled": false,
+      "reset_to_60": false,
+      "physical_substate_producer_executed": false
+    },
+    {
+      "minutes": 720,
+      "raw_ac_substate": 1,
+      "reported_ac_output_enabled": true,
+      "reset_to_60": true,
+      "physical_substate_producer_executed": false
+    },
+    {
+      "minutes": 720,
+      "raw_ac_substate": 2,
+      "reported_ac_output_enabled": true,
+      "reset_to_60": false,
+      "physical_substate_producer_executed": false
+    },
+    {
+      "minutes": 720,
+      "raw_ac_substate": 3,
+      "reported_ac_output_enabled": true,
+      "reset_to_60": false,
+      "physical_substate_producer_executed": false
+    }
+  ],
+  "sleep_boundary": [
+    {
+      "minutes": 0,
+      "pv_state_active": false,
+      "countdown_sequence": [
+        1,
+        0
+      ],
+      "physical_sleep_boundary_reached": true,
+      "physical_sleep_executed": false
+    },
+    {
+      "minutes": 0,
+      "pv_state_active": true,
+      "countdown_sequence": [
+        60,
+        60
+      ],
+      "physical_sleep_boundary_reached": false,
+      "physical_sleep_executed": false
+    },
+    {
+      "minutes": 30,
+      "pv_state_active": false,
+      "countdown_sequence": [
+        1,
+        0
+      ],
+      "physical_sleep_boundary_reached": true,
+      "physical_sleep_executed": false
+    },
+    {
+      "minutes": 30,
+      "pv_state_active": true,
+      "countdown_sequence": [
+        60,
+        60
+      ],
+      "physical_sleep_boundary_reached": false,
+      "physical_sleep_executed": false
+    }
+  ],
+  "timeout_callback": [
+    {
+      "timer_preexisting": false,
+      "prior_events": 0,
+      "after_events": 4096,
+      "timer_create": [
+        {
+          "kind": "timer_create",
+          "repeating": false,
+          "interval_units": 5000,
+          "callback": "08008729"
+        }
+      ],
+      "event_delivery": {
+        "kind": "event_delivery",
+        "event_id": 5,
+        "delay": 0
+      },
+      "shutdown_event_consumer_executed": false
+    },
+    {
+      "timer_preexisting": false,
+      "prior_events": 2,
+      "after_events": 4098,
+      "timer_create": [
+        {
+          "kind": "timer_create",
+          "repeating": false,
+          "interval_units": 5000,
+          "callback": "08008729"
+        }
+      ],
+      "event_delivery": {
+        "kind": "event_delivery",
+        "event_id": 5,
+        "delay": 0
+      },
+      "shutdown_event_consumer_executed": false
+    },
+    {
+      "timer_preexisting": false,
+      "prior_events": 16384,
+      "after_events": 20480,
+      "timer_create": [
+        {
+          "kind": "timer_create",
+          "repeating": false,
+          "interval_units": 5000,
+          "callback": "08008729"
+        }
+      ],
+      "event_delivery": {
+        "kind": "event_delivery",
+        "event_id": 5,
+        "delay": 0
+      },
+      "shutdown_event_consumer_executed": false
+    },
+    {
+      "timer_preexisting": true,
+      "prior_events": 0,
+      "after_events": 4096,
+      "timer_create": [],
+      "event_delivery": {
+        "kind": "event_delivery",
+        "event_id": 5,
+        "delay": 0
+      },
+      "shutdown_event_consumer_executed": false
+    },
+    {
+      "timer_preexisting": true,
+      "prior_events": 2,
+      "after_events": 4098,
+      "timer_create": [],
+      "event_delivery": {
+        "kind": "event_delivery",
+        "event_id": 5,
+        "delay": 0
+      },
+      "shutdown_event_consumer_executed": false
+    },
+    {
+      "timer_preexisting": true,
+      "prior_events": 16384,
+      "after_events": 20480,
+      "timer_create": [],
+      "event_delivery": {
+        "kind": "event_delivery",
+        "event_id": 5,
+        "delay": 0
+      },
+      "shutdown_event_consumer_executed": false
+    }
+  ],
+  "idle_registration": [
+    {
+      "calls": [
+        {
+          "kind": "timer_create",
+          "repeating": true,
+          "interval_units": 1000,
+          "callback": "0800f125"
+        },
+        {
+          "kind": "timer_activate",
+          "timer_id": 42
+        }
+      ]
+    }
+  ]
+}

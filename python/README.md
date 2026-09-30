@@ -26,8 +26,8 @@ such as `monitor`, `serve` and `ap-service-status` keep their scripted behavior.
 | Model profile | Monitoring | Controls |
 | --- | --- | --- |
 | `c300` — C300/C300X AC | C300X tested live; C300 sibling uses the reference map | AC output, light, charging-power limit, screen timeout verified |
-| `c1000` — original A1761 | Live monitoring and restored control cycles, version code 151 | Validated types/ranges and fresh telemetry confirmation; no direct local MQTT yet |
-| `c1000_gen2` — A1763 | BLE and native MQTT tested live | Charge limits/power, display timeout, fast charge; native reserve, tariffs/grid return, temperature, alert and guarded discharge floor |
+| `c1000` — original A1761 | Live monitoring and restored control cycles, version code 151 | Charging/output/light/display/device timeout; BLE-to-MQTT charging verified; no direct local MQTT yet |
+| `c1000_gen2` — A1763 | BLE and native MQTT tested live | Charge limits/power, display/device timeout, fast charge; native reserve, tariffs/grid return, temperature, alert and guarded discharge floor |
 | `c2000_gen2` — A1783 | Tested live | Upper charge cap, charging power, screen timeout; native reserve, all-day Peak and confirmed grid return |
 
 C300 DC variants are not supported. The distribution and CLI are `solix-link`;
@@ -83,6 +83,19 @@ For unpaired Prime stations, follow `pair`/`interactive` main-button instruction
 first. The dashboard opens disconnected and connects only on request. Native
 MQTT selection uses an already-running AP-service worker; it does not create an AP.
 Controls honor model/worker permissions, and C2000 has no AC-output switch.
+
+Device Timeout is available for the two C1000 profiles:
+`solix-link set-device-timeout --name c1000-original --minutes 0` or
+`ap-service-set-device-timeout --directory /path/to/private-ap --minutes 0`.
+Zero means Never; finite choices are 30/60/120/240/360/720/1440 minutes.
+BLE fresh readback passed on both models; native MQTT timeout has synthetic
+tests only. Never disables this configured timeout, not every sleep path or
+already queued event. See [timeout behavior](../docs/device-timeout-behavior.md).
+
+Gen 2 `battery_health_raw` replaces the misleading packed `battery_health`:
+A1763/main 1.1.4.9 emits literal 100. New C1000 Gen 2 raw diagnostics are
+`dc_input_active`, `dc_input_power_raw` and `controller_error_code`; PV units
+and named fault meanings are unverified. See [firmware findings](../docs/gen2-additional-feature-investigation.md).
 Closing the dashboard disconnects monitoring; it does not restore settings.
 
 For multiple clients, run one [authenticated HTTP gateway](../docs/gateway-home-assistant.md)
@@ -431,7 +444,10 @@ solix_gen2/c300/set/display_timeout    {"seconds":60}
 
 Original C1000 has the same four operations as C300, using its own ranges.
 The underlying BLE control methods passed hardware change/restoration tests;
-an original-C1000 end-to-end broker test is still outstanding. No opt-in flag is required.
+an [end-to-end loopback broker test](../docs/c1000-bridge-charging-and-bypass.md)
+also verified 1000 → 100 → 1000 W, with both chain outputs on. No station Wi-Fi
+or opt-in flag is required. Lowering the charging limit below reported output
+did not force battery-only operation while its AC input remained supplied.
 The bridge checks types and the library's model-specific value ranges, uses its
 existing BLE connection, and waits for telemetry confirmation before
 publishing `result`. It ignores retained commands replayed at subscription,

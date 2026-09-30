@@ -7,7 +7,7 @@ from collections.abc import Callable
 import inspect
 from typing import Any
 
-from .protocol import COMMAND_UUID, TELEMETRY_UUID, Model, Session, parse_packet
+from .protocol import COMMAND_UUID, TELEMETRY_UUID, Model, Session, decode_telemetry, parse_packet, tlv
 from .diagnostics import decode_network_diagnostics
 
 UpdateCallback = Callable[[dict[str, int | str]], Any]
@@ -55,6 +55,7 @@ class SolixMonitor:
         self._telemetry_revision = 0
         self._field_revision: dict[str, int] = {}
         self.raw_tlvs: dict[int, bytes] = {}
+        self._raw_tlv_revision: dict[int, int] = {}
         self._session = Session(self.model, owner_user_id, protocol=self.protocol,
                                 timezone_name=self.timezone_name)
         self.owner_user_id = self._session.owner_user_id
@@ -205,7 +206,7 @@ class SolixMonitor:
         return {'4824': first,
                 '4825': second.hex() if second is not None else 'timeout'}
 
-    async def _write_setting(self, packet: bytes, expected: dict[str, int]) -> dict[str, int | str]:
+    async def _write_setting(self, packet: bytes, expected: dict[str, int | str]) -> dict[str, int | str]:
         if not self.connected:
             raise RuntimeError("Monitor is not connected")
         while not self._updates.empty():
@@ -280,6 +281,77 @@ class SolixMonitor:
         packet = self._session.light_mode_packet(mode)
         return await self._write_setting(packet, {"light_mode": mode})
 
+    async def set_device_timeout(self, minutes: int) -> dict[str, int | str]:
+        """Set C1000 idle timeout, preserving outputs and charging configuration.
+
+        Zero means Never for this setting. Independent sleep behavior and
+        previously queued events may still affect access. Require fresh baseline
+        and readback even for an idempotent write.
+        """
+        packet = self._session.device_timeout_packet(minutes)  # Validate before I/O.
+        if not self.connected:
+            raise RuntimeError("Monitor is not connected")
+        if self.model == Model.C1000_GEN2:
+            before_a4, before_d9, before = await self._fresh_timeout_configuration()
+            protected = ("ac_output_enabled", "dc_output_enabled", "ac_input_connected")
+            expected = {key: before[key] for key in protected}
+            expected["device_timeout_minutes"] = minutes
+            await self._write_setting(packet, expected)
+            a4, d9, metrics = await self._fresh_timeout_configuration()
+            expected_a4 = bytearray(before_a4)
+            expected_a4[14:16] = minutes.to_bytes(2, "little")
+            for start in (1, 9):
+                if int.from_bytes(a4[start:start + 4], "little") > int.from_bytes(before_a4[start:start + 4], "little"):
+                    raise RuntimeError("Output timer changed during Device Timeout confirmation")
+                expected_a4[start:start + 4] = a4[start:start + 4]
+            if metrics["device_timeout_minutes"] != minutes:
+                raise RuntimeError("Device Timeout not confirmed; settings may have changed")
+            if (a4 != bytes(expected_a4) or d9[2:] != before_d9[2:]
+                    or any(metrics[key] != before[key] for key in protected)):
+                raise RuntimeError("Protected setting changed; settings may have changed")
+            return self.metrics.copy()
+        required = ("device_timeout_minutes", "ac_output_enabled", "dc_output_enabled",
+                    "ac_charging_power_limit_w")
+        revision = self._telemetry_revision
+        await self.request_status()
+        async with asyncio.timeout(10):
+            while not all(self._field_revision.get(key, 0) > revision for key in required):
+                await self.wait_for_update(timeout=10)
+        if (any(type(self.metrics.get(key)) is not int for key in required)
+                or any(self.metrics[key] not in (0, 1) for key in required[1:3])):
+            raise RuntimeError("Missing valid fresh Device Timeout baseline; no write sent")
+        protected = ("ac_output_enabled", "dc_output_enabled", "ac_charging_power_limit_w",
+                     "ac_fast_charge_enabled", "max_charge_percentage", "min_charge_percentage",
+                     "backup_reserve_percentage", "port_memory_enabled", "display_timeout_seconds",
+                     "usage_mode", "tou_schedule_slot_count")
+        expected = {key: self.metrics[key] for key in protected
+                    if type(self.metrics.get(key)) in (int, str) and self._field_revision.get(key, 0) > revision}
+        expected["device_timeout_minutes"] = minutes
+        return await self._write_setting(packet, expected)
+
+    async def _fresh_timeout_configuration(self) -> tuple[bytes, bytes, dict[str, int | str]]:
+        """Require one complete fresh C1000 Gen 2 configuration, not cached TLVs."""
+        from .tou import periods_from_d9
+        revision = self._telemetry_revision
+        await self.request_status()
+        tags = (0xA4, 0xD9, 0xA7, 0xB2)
+        async with asyncio.timeout(10):
+            while not (all(self._raw_tlv_revision.get(tag, 0) > revision for tag in tags)
+                       and all(tag in self.raw_tlvs for tag in tags)):
+                await self.wait_for_update(timeout=10)
+        values = self.raw_tlvs.copy()
+        a4, d9 = values[0xA4], values[0xD9]
+        if len(a4) != 34 or a4[0] != 4:
+            raise RuntimeError("Missing complete C1000 Device Timeout baseline")
+        periods_from_d9(d9)
+        if any(len(values[tag]) < size or values[tag][0] != 4 for tag, size in ((0xA7, 5), (0xB2, 4))):
+            raise RuntimeError("Missing valid C1000 output baseline")
+        metrics, _ = decode_telemetry(b"".join(tlv(tag, value) for tag, value in values.items()), self.model)
+        for key in ("ac_output_enabled", "dc_output_enabled", "ac_input_connected"):
+            if type(metrics.get(key)) is not int or metrics[key] not in (0, 1):
+                raise RuntimeError("Missing valid C1000 output baseline")
+        return a4, d9, metrics
+
     async def set_display_timeout(self, seconds: int) -> dict[str, int | str]:
         """Set display timeout and confirm telemetry (C300/C2000: 30/60 s only)."""
         packet = self._session.display_timeout_packet(seconds)
@@ -292,6 +364,8 @@ class SolixMonitor:
         verified on A1761 version code 151. Record and restore baselines when
         testing; a timeout does not mean the write was ignored.
         """
+        if setting == "device_timeout":
+            return await self.set_device_timeout(value)
         from .c1000 import c1000_setting
         packet = self._session.c1000_control_packet(setting, value)
         _command, _payload, expected = c1000_setting(setting, value)
@@ -335,6 +409,7 @@ class SolixMonitor:
                 self._field_revision.update({name: self._telemetry_revision for name in update.telemetry})
                 self.metrics.update(update.telemetry)
                 self.raw_tlvs = update.raw_tlvs or {}
+                self._raw_tlv_revision.update({tag: self._telemetry_revision for tag in self.raw_tlvs})
                 snapshot = self.metrics.copy()
                 if self._updates.full():
                     self._updates.get_nowait()

@@ -91,6 +91,12 @@ def parser() -> argparse.ArgumentParser:
     display.add_argument("--seconds", type=int, required=True)
     display.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
 
+    timeout = subcommands.add_parser("set-device-timeout", help="Set supported C1000 idle shutdown; 0 means Never")
+    timeout.add_argument("--name", required=True)
+    timeout.add_argument("--minutes", type=int, choices=[0, 30, 60, 120, 240, 360, 720, 1440], required=True,
+                         help="0 = Never; finite settings may turn the station off when idle and interrupt remote access")
+    timeout.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
+
     ac = subcommands.add_parser("set-ac-output", help="Set C300 AC or original C1000 AC output")
     ac.add_argument("--name", required=True)
     ac.add_argument("--enabled", choices=["on", "off"], required=True)
@@ -216,14 +222,22 @@ async def _set(args: argparse.Namespace) -> None:
     legacy_setting = (device.model in (Model.C300, Model.C1000) and args.command in (
         "set-display-timeout", "set-charge-power", "set-ac-output", "set-light",
     ))
+    legacy_setting |= (device.model == Model.C1000 and device.protocol == "legacy"
+                       and args.command == "set-device-timeout")
     prime_setting = device.protocol == "prime" and (
-        (device.model == Model.C1000_GEN2 and args.command in ("set-limits", "set-display-timeout", "set-charge-power", "set-fast-charge", "set-charge-cap"))
+        (device.model == Model.C1000_GEN2 and args.command in ("set-limits", "set-display-timeout", "set-charge-power", "set-fast-charge", "set-charge-cap", "set-device-timeout"))
         or (device.model == Model.C2000_GEN2 and args.command in ("set-display-timeout", "set-charge-power", "set-charge-cap"))
     )
     if not legacy_setting and not prime_setting:
         raise ValueError("This setting is not verified for the selected device")
     if args.command == "set-charge-cap" and device.model != Model.C2000_GEN2:
         raise ValueError("set-charge-cap is verified only on C2000 Gen 2 Prime")
+    if args.command == "set-device-timeout":
+        if type(args.minutes) is not int or args.minutes not in (0, 30, 60, 120, 240, 360, 720, 1440):
+            raise ValueError("Device Timeout must be 0 (Never), 30, 60, 120, 240, 360, 720 or 1440 minutes")
+        if args.minutes:
+            print("The station may turn off when idle, interrupting remote access.", file=sys.stderr)
+        print("Never disables this timeout; other sleep behavior may still interrupt remote access.", file=sys.stderr)
     monitor = SolixMonitor(
         device.address, model=device.model, owner_user_id=device.client_id, protocol=device.protocol,
         timezone_name=device.timezone_name,
@@ -244,6 +258,9 @@ async def _set(args: argparse.Namespace) -> None:
         elif args.command == "set-display-timeout":
             metrics = await monitor.set_display_timeout(args.seconds)
             result = {"display_timeout_seconds": metrics["display_timeout_seconds"]}
+        elif args.command == "set-device-timeout":
+            metrics = await monitor.set_device_timeout(args.minutes)
+            result = {"device_timeout_minutes": metrics["device_timeout_minutes"]}
         elif args.command == "set-ac-output":
             metrics = await monitor.set_ac_output_enabled(args.enabled == "on")
             result = {"ac_output_enabled": metrics["ac_output_enabled"]}
@@ -360,7 +377,7 @@ def main(argv: list[str] | None = None) -> int:
                 topic_prefix=args.topic_prefix, username=args.username,
                 password_file=args.password_file, ca_file=args.ca_file,
             ).run())
-        elif args.command in ("set-limits", "set-charge-cap", "set-charge-power", "set-display-timeout", "set-fast-charge", "set-ac-output", "set-light"):
+        elif args.command in ("set-limits", "set-charge-cap", "set-charge-power", "set-display-timeout", "set-device-timeout", "set-fast-charge", "set-ac-output", "set-light"):
             asyncio.run(_set(args))
         elif args.command == "c1000-setting":
             asyncio.run(_c1000_setting(args))

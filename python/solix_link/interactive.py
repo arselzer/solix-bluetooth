@@ -165,6 +165,28 @@ def _show_status(status: dict) -> None:
                 "usage_mode", "active_tariff", "backup_reserve_percentage", "tou_schedule_slot_count"):
         if key in metrics:
             print(f"  {key}: {metrics[key]}")
+    if "device_timeout_minutes" in metrics:
+        minutes = metrics["device_timeout_minutes"]
+        print(f"  Device Timeout: {'Never' if minutes == 0 else str(minutes) + ' minutes'}")
+
+
+def device_timeout_menu(device: DeviceConfig | APServiceConfig, config_path: Path,
+                        directory: Path | None = None) -> None:
+    minutes = (0, 30, 60, 120, 240, 360, 720, 1440)
+    selected = choose("Device Timeout", ["Never", "30 minutes", "1 hour", "2 hours", "4 hours", "6 hours", "12 hours", "24 hours"])
+    if selected is None:
+        return
+    value = minutes[selected]
+    if value:
+        print("The station may turn off when idle, interrupting remote access.")
+    print("Never disables this timeout; other sleep behavior may still interrupt remote access.")
+    if choose("Apply Device Timeout?", ["Apply selected timeout"]) is None:
+        return
+    if directory is not None:
+        _show_status(asyncio.run(ap_service_request(directory, "set-device-timeout", name=device.name, minutes=value)))
+    else:
+        from .cli import _set
+        asyncio.run(_set(argparse.Namespace(command="set-device-timeout", name=device.name, minutes=value, config=config_path)))
 
 
 def native_session(directory: Path, config_path: Path, *, provision: bool, allow_control: bool,
@@ -196,14 +218,17 @@ def native_session(directory: Path, config_path: Path, *, provision: bool, allow
     try:
         print(f"Starting the AP service; logs: {log_path}. Radio reconnection can take several minutes.")
         while process.poll() is None:
-            selected = choose("AP-service session", ["Show live status", "Read controller readiness",
+            options = ["Show live status", "Read controller readiness",
                                                      "Set charging-power limit" if allow_control else "Charging controls disabled",
                                                      "Set upper charge limit" if allow_control else "Charge-cap controls disabled",
                                                      "Set backup reserve" if allow_control else "Reserve controls disabled",
                                                      "Store or activate hourly tariff plan" if allow_control else "Tariff controls disabled",
-                                                     "Clear plan and confirm grid power" if allow_control else "Grid-return control disabled",
-                                                     "Stop this AP session"])
-            if selected is None or selected == 7:
+                                                     "Clear plan and confirm grid power" if allow_control else "Grid-return control disabled"]
+            if config.model == Model.C1000_GEN2:
+                options.append("Set Device Timeout (Never / idle shutdown)" if allow_control else "Device Timeout controls disabled")
+            options.append("Stop this AP session")
+            selected = choose("AP-service session", options)
+            if selected is None or selected == len(options) - 1:
                 break
             try:
                 if selected == 0:
@@ -234,6 +259,8 @@ def native_session(directory: Path, config_path: Path, *, provision: bool, allow
                     _show_status(asyncio.run(ap_service_request(directory, "set-tou-plan", name=config.name, periods=periods, enabled=mode == 1)))
                 elif selected == 6 and allow_control:
                     _show_status(asyncio.run(ap_service_request(directory, "return-grid", name=config.name)))
+                elif selected == 7 and allow_control and config.model == Model.C1000_GEN2:
+                    device_timeout_menu(config, config_path, directory)
             except (ValueError, OSError, RuntimeError, TimeoutError) as error:
                 print(f"{type(error).__name__}: {error}. Check fresh status before retrying a control write.")
         if process.poll() is not None and process.returncode:
@@ -298,10 +325,14 @@ def run_interactive(config_path: Path, ap_service_directory: Path | None = None)
     print("SOLIX local monitoring — Ctrl-C stops an active monitor; 0 returns to the menu.")
     selected = select_device(config_path)
     while True:
-        action = choose(f"Station: {selected.name if selected else 'none selected'}", [
+        options = [
             "Select / rescan a station", "Monitor over Bluetooth", "Connect MQTT / isolated Wi-Fi",
             "Serve Bluetooth status over HTTP",
-        ])
+        ]
+        if selected and (selected.model == Model.C1000 and selected.protocol == "legacy"
+                         or selected.model == Model.C1000_GEN2 and selected.protocol == "prime"):
+            options.append("Set Device Timeout (Never / idle shutdown)")
+        action = choose(f"Station: {selected.name if selected else 'none selected'}", options)
         if action is None:
             return
         try:
@@ -325,6 +356,8 @@ def run_interactive(config_path: Path, ap_service_directory: Path | None = None)
                 host = prompt("HTTP listen address", "127.0.0.1")
                 port = int(prompt("HTTP port", "8765"))
                 run_server(MonitorService([selected]), host, port)
+            elif action == 4:
+                device_timeout_menu(selected, config_path)
         except KeyboardInterrupt:
             print("Stopped.")
         except Exception as error:

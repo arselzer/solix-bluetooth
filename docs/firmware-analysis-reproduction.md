@@ -2,7 +2,7 @@
 
 ## Included work
 
-The [offline replay tools](../tools/firmware_analysis/) reproduce **1,540 synthetic cases** against C1000 Gen 2 (A1763) main firmware **1.1.4.9**. They use Unicorn to execute selected original ARM Thumb instructions. No station connection, Anker account, phone capture, credentials, radio image or SDK installation is needed for the instruction replays.
+The [offline replay tools](../tools/firmware_analysis/) reproduce **1,842 synthetic cases** against C1000 Gen 2 (A1763) main firmware **1.1.4.9**. They use Unicorn to execute selected original ARM Thumb instructions. No station connection, Anker account, phone capture, credentials, radio image or SDK installation is needed for the instruction replays.
 
 | Suite | Cases | Evidence |
 | --- | ---: | --- |
@@ -10,6 +10,8 @@ The [offline replay tools](../tools/firmware_analysis/) reproduce **1,540 synthe
 | Alert consumer | 20 | Five-sample debounce, exact enable value, inhibit flag, notification descriptor and memory-write bounds |
 | Charging follow-up | 245 | Lower limit/reserve side effects, A4/D9 mirrors, downstream bounds, native fast-charge gating, power validation, default recovery |
 | Feature candidates | 212 | Fast-charge acceptance/automatic clearing, synthetic full-SOC/BMS-current states, 100/200 W settings-load preservation and internal descriptors |
+| Additional telemetry | 147 | Fixed compatibility byte, temperature selection, PV fields/freshness and raw controller error code |
+| Device Timeout | 155 | RTC selection, pending alarm replacement, independent idle sleep, activity flags and callback dispatch |
 
 The tools are independently runnable research code. Their arbitrary-byte tests establish handler behavior, **not supported or safe values for live control**. In particular, a zero-watt value can fail settings-load validation and reset settings, including Device Timeout Never.
 
@@ -39,13 +41,13 @@ python3 -m venv /tmp/solix-analysis-venv
   --output /tmp/solix-replay-results
 ```
 
-Dependency installation requires package access. The replay itself performs local file I/O and emulation only. The final line should report `total_cases: 1540` and `all_results_match: true`. Python optimization is rejected because it disables replay assertions.
+Dependency installation requires package access. The replay itself performs local file I/O and emulation only. The final line should report `total_cases: 1842` and `all_results_match: true`. Python optimization is rejected because it disables replay assertions.
 
-The output directory contains four suite result files and `reproduction-manifest.json`, recording firmware hash, source hashes, exact runtime versions and counts. The runner compares complete result values against the published `tools/firmware_analysis/expected_results/` files. Those files contain generated settings, synthetic packet bodies and synthetic event data; they are not sanitized phone captures.
+The output directory contains six suite result files and `reproduction-manifest.json`, recording firmware hash, source hashes, exact runtime versions and counts. The runner compares complete result values against the published `tools/firmware_analysis/expected_results/` files. Those files contain generated settings, synthetic packet bodies and synthetic event data; they are not sanitized phone captures.
 
 The published [verified-run manifest](../tools/firmware_analysis/verified-run.json) records a successful run matching every expected result. Input checks also rejected a missing image, a wrong-size image, a same-size image with the wrong hash, and optimized Python execution.
 
-To run one suite, invoke its `emulate_*.py` entry point with `SOLIX_ANALYSIS_OUTPUT` set. Entry points are `emulate_general_settings.py`, `emulate_offgrid_alert.py`, `emulate_charging_followup.py` and `emulate_feature_candidates.py`. Other modules supply the replay machinery; the D9 helper contains no capture reader. Feature replay assumptions and proposed future tests are in [the candidate report](gen2-feature-candidates.md).
+To run one suite, invoke its `emulate_*.py` entry point with `SOLIX_ANALYSIS_OUTPUT` set. Entry points are `emulate_general_settings.py`, `emulate_offgrid_alert.py`, `emulate_charging_followup.py`, `emulate_feature_candidates.py`, `emulate_additional_features.py` and `emulate_device_timeout.py`. Other modules supply the replay machinery; the D9 helper contains no capture reader. Feature replay assumptions and proposed future tests are in [feature candidates](gen2-feature-candidates.md), [additional telemetry](gen2-additional-feature-investigation.md) and [timeout behavior](device-timeout-behavior.md).
 
 ## Executed code and substitutions
 
@@ -73,6 +75,6 @@ and block CRC, then rejects modified digest/signature fixtures: three cases.
 The DSP parser verifies all 159 nested record CRCs, rejects six corruption,
 overlap and truncation fixtures, and exports sparse word-addressed big/little
 endian images plus manifests. All inputs are hash-checked. These nine fixtures
-are separate from the 1,540 instruction replay cases. DSP whole-component
+are separate from the 1,842 instruction replay cases. DSP whole-component
 checks and boot acceptance remain unresolved; radio signature success does
 not establish the physical device's eFuse or flash-protection state.

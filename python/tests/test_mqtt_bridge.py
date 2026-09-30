@@ -61,6 +61,10 @@ def test_bridge_uses_only_existing_c1000_link_and_ignores_retained_commands():
             self.calls.append(("light", mode))
             return {"light_mode": mode}
 
+        async def set_device_timeout(self, minutes):
+            self.calls.append(("device_timeout", minutes))
+            return {"device_timeout_minutes": minutes}
+
     async def scenario():
         service = MonitorService([
             DeviceConfig("c1000", "AA:BB:CC:DD:EE:01", Model.C1000_GEN2, "a" * 40),
@@ -104,6 +108,17 @@ def test_bridge_uses_only_existing_c1000_link_and_ignores_retained_commands():
             assert len(monitor.calls) == before
             with pytest.raises(ValueError, match="not verified"):
                 await service.apply_setting(name, "ac_output", enabled=False)
+        for name in ("c1000", "original"):
+            await bridge._handle_command(f"solix_gen2/{name}/set/device_timeout", b'{"minutes":0}', False)
+            assert monitor.calls[-1] == ("device_timeout", 0)
+            assert bridge._client.messages[-1][1]["confirmed"] == {"device_timeout_minutes": 0}
+            before = len(monitor.calls)
+            await bridge._handle_command(f"solix_gen2/{name}/set/device_timeout", b'{"minutes":720}', True)
+            assert len(monitor.calls) == before and not bridge._client.messages[-1][1]["ok"]
+        for name in ("c2000", "c300"):
+            before = len(monitor.calls)
+            await bridge._handle_command(f"solix_gen2/{name}/set/device_timeout", b'{"minutes":0}', False)
+            assert len(monitor.calls) == before
         with pytest.raises(ValueError, match="not verified"):
             await service.apply_setting("c2000", "charge_limits", upper=80, lower=1)
 

@@ -78,4 +78,4 @@ cmp /tmp/solix-feature-replays/feature-candidates-results.json \
   tools/firmware_analysis/expected_results/feature-candidates-results.json
 ```
 
-Use the existing Unicorn requirements and `SOLIX_FIRMWARE_DIR` override when needed. Tested with Python 3.12.3 and Unicorn 2.1.4. The standalone suite writes its own manifest; the combined `run_replays.py` also runs it and compares the complete result against the published fixture. The combined verified manifest covers all 1,540 cases. Published expected results are entirely synthetic and contain no captured identifiers, credentials or session keys.
+Use the existing Unicorn requirements and `SOLIX_FIRMWARE_DIR` override when needed. Tested with Python 3.12.3 and Unicorn 2.1.4. The standalone suite writes its own manifest; the combined `run_replays.py` also runs it and compares the complete result against the published fixture. The combined verified manifest covers all 1,842 cases. Published expected results are entirely synthetic and contain no captured identifiers, credentials or session keys.

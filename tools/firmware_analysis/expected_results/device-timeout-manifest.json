@@ -1,0 +1,28 @@
+{
+  "hardware_access": false,
+  "case_counts": {
+    "timeout_selection": 18,
+    "pending_alarm_and_wake_reset": 6,
+    "idle_state_bits": 64,
+    "power_gate_and_special_mode": 32,
+    "auxiliary_busy_states": 16,
+    "ac_substates": 8,
+    "sleep_boundary": 4,
+    "timeout_callback": 6,
+    "idle_registration": 1
+  },
+  "firmware": {
+    "filename": "MainMcu-decoded.bin",
+    "sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9"
+  },
+  "runtime": {
+    "python": "3.12.3",
+    "unicorn": "2.1.4"
+  },
+  "result_sha256": "97b0896dae6a089b0a248a472f4fe62d6f9a4e0b202df4419c2b3034d8ea5dcc",
+  "source_sha256": {
+    "emulate_device_timeout.py": "6fdbf60652982fb1dc7e22169c4bb36f4071ac4df44727c54d411e0a170fb95b",
+    "emulate_clock_semantics.py": "945b649c3b5cec00d816041e783641085ccfbdb5f80efc2ed2c4e15f3bae30f2",
+    "replay_io.py": "731d795a5ec37e2cf12b809b7122eaf7a29d84c21a2ecd43fafa3e2f8d962d30"
+  }
+}

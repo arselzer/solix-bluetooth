@@ -4,6 +4,13 @@ These notes record observations made on one C1000 Gen 2 (A1763) and one C2000 Ge
 
 ## Tested versions and outcome
 
+The latest [timeout controls and sleep analysis](device-timeout-behavior.md)
+confirm the C1000 Gen 2 Prime Never write with complete fresh A4/D9/output
+preservation. Historical notes below describe earlier untested attempts.
+[Additional telemetry findings](gen2-additional-feature-investigation.md)
+cover PV/DC input fields, raw error code and the fixed compatibility byte;
+none of these new A1763 controls are assumed compatible with C2000.
+
 | Device | Firmware | Session | Observed behavior | Final state |
 | --- | --- | --- | --- | --- |
 | C1000 Gen 2 | 1.1.4.3 | Legacy ECDH + AES-CBC | `0001` negotiation, `4100` subscription, live telemetry | 100% battery; AC on; DC off before update |

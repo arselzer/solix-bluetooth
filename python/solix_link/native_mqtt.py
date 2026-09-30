@@ -10,7 +10,7 @@ import re
 import secrets
 import time
 
-from .protocol import DATA_REQUEST, DATA_RESPONSE, Model, build_packet, decode_telemetry, parse_packet, tlv
+from .protocol import DATA_REQUEST, DATA_RESPONSE, Model, build_packet, decode_telemetry, parse_packet, tlv, validate_device_timeout
 from .tou import TouPeriod, validate_periods
 
 
@@ -107,6 +107,13 @@ class NativeMqttCommands:
     def off_grid_alert(self, enabled: bool) -> NativeMqttRequest:
         """Set the off-grid alert setting; verified on C1000 Gen 2 main 1.1.4.9."""
         return self._c1000_boolean(0xB0, enabled)
+
+    def device_timeout(self, minutes: int) -> NativeMqttRequest:
+        """Set C1000 idle timeout; zero does not disable every sleep path."""
+        if self.model != Model.C1000_GEN2:
+            raise ValueError("Device timeout supports C1000 Gen 2 only")
+        validate_device_timeout(minutes)
+        return self._request("0103", tlv(0xA6, b"\x02" + minutes.to_bytes(2, "little")), milliseconds=True)
 
     def _c1000_boolean(self, tag: int, value: bool) -> NativeMqttRequest:
         if self.model != Model.C1000_GEN2:

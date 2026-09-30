@@ -13,7 +13,7 @@ import aiohttp
 
 COMMANDS = frozenset({"set-charge-power", "set-charge-cap", "set-backup-reserve",
                       "set-tou-plan", "return-grid", "set-discharge-floor",
-                      "set-temperature-unit", "set-off-grid-alert"})
+                      "set-temperature-unit", "set-off-grid-alert", "set-device-timeout"})
 METRICS = frozenset({"battery_percentage", "temperature_c", "output_power_w",
                     "ac_input_power_w", "ac_output_power_w", "dc_output_power_w",
                     "ac_input_connected", "ac_output_enabled", "battery_status",
@@ -21,12 +21,16 @@ METRICS = frozenset({"battery_percentage", "temperature_c", "output_power_w",
                     "min_charge_percentage", "backup_reserve_percentage",
                     "active_tariff", "usage_mode", "tou_schedule_slot_count",
                     "ac_fast_charge_enabled", "software_version",
-                    "temperature_unit_fahrenheit", "ac_off_grid_alert_enabled"})
+                    "temperature_unit_fahrenheit", "ac_off_grid_alert_enabled", "device_timeout_minutes",
+                    "dc_input_active", "dc_input_power_raw", "controller_error_code",
+                    "battery_health_raw"})
 POWER_MINIMUM = {"c1000": 100, "c1000_gen2": 300, "c2000_gen2": 300}
 POWER_MAXIMUM = {"c1000": 1000, "c1000_gen2": 1200, "c2000_gen2": 1800}
 CHARGE_CAP_MODELS = frozenset({"c1000_gen2", "c2000_gen2"})
 NATIVE_MODELS = CHARGE_CAP_MODELS
 DISCHARGE_FLOORS = (1, 5, 10, 15, 20)
+DEVICE_TIMEOUT_OPTIONS = {"never": 0, "30_minutes": 30, "1_hour": 60, "2_hours": 120,
+                          "4_hours": 240, "6_hours": 360, "12_hours": 720, "24_hours": 1440}
 
 
 class GatewayError(Exception):
@@ -140,6 +144,18 @@ def discharge_floor_options(snapshot: dict) -> list[str]:
     return [f"{value}%" for value in DISCHARGE_FLOORS if value + 5 <= reserve]
 
 
+def device_timeout_options(snapshot: dict) -> list[str]:
+    """Require supported transport, advertised control and exact timeout readback."""
+    model, protocol = snapshot.get("model"), snapshot.get("protocol")
+    supported = (model == "c1000" and protocol == "legacy"
+                 or model == "c1000_gen2" and protocol in ("prime", "native_mqtt"))
+    value = snapshot.get("metrics", {}).get("device_timeout_minutes")
+    if (not supported or "set-device-timeout" not in snapshot.get("controls", [])
+            or type(value) is not int or value not in DEVICE_TIMEOUT_OPTIONS.values()):
+        return []
+    return list(DEVICE_TIMEOUT_OPTIONS)
+
+
 def validate_plan(periods: Any, enabled: Any) -> list[dict]:
     if type(enabled) is not bool or not isinstance(periods, list) or len(periods) > 6:
         raise ValueError("Use a boolean enabled value and at most six periods")
@@ -181,6 +197,7 @@ def validate_command(snapshot: dict, payload: dict) -> None:
         "set-discharge-floor": {"command", "lower"},
         "set-temperature-unit": {"command", "fahrenheit"},
         "set-off-grid-alert": {"command", "enabled"},
+        "set-device-timeout": {"command", "minutes"},
     }[command]
     if set(payload) != expected:
         raise ValueError("Unexpected command fields")
@@ -207,6 +224,10 @@ def validate_command(snapshot: dict, payload: dict) -> None:
                 or numeric(metrics.get("backup_reserve_percentage")) is None
                 or reserve % 5 or not 5 <= reserve <= 100 or not lower + 5 <= reserve <= upper):
             raise ValueError("Reserve must be within current caps, in steps of five")
+    elif command == "set-device-timeout":
+        minutes = integer(payload["minutes"], "Device Timeout")
+        if not device_timeout_options(snapshot) or minutes not in DEVICE_TIMEOUT_OPTIONS.values():
+            raise ValueError("Device Timeout requires supported C1000 telemetry and an allowed minute value; 0 means Never")
     elif command == "set-discharge-floor":
         lower = integer(payload["lower"], "Discharge floor")
         if f"{lower}%" not in discharge_floor_options(snapshot):

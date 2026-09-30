@@ -241,6 +241,10 @@ class LocalMqttServer:
         request = self.commands.off_grid_alert(enabled)
         return await self._set_c1000_boolean(request, "ac_off_grid_alert_enabled", enabled)
 
+    async def set_device_timeout(self, minutes: int) -> dict:
+        request = self.commands.device_timeout(minutes)
+        return await self._set_c1000_setting(request, "device_timeout_minutes", minutes)
+
     async def set_discharge_floor(self, lower: int) -> dict:
         """Confirm a lower limit without changing reserve or other settings.
 
@@ -291,6 +295,9 @@ class LocalMqttServer:
         if len(a4) != 34 or a4[0] != 4:
             raise RuntimeError("Missing complete C1000 settings baseline")
         periods_from_d9(d9)
+        if any(len(fields.get(tag, b"")) < size or fields[tag][0] != 4
+               for tag, size in ((0xA7, 5), (0xB2, 4))):
+            raise RuntimeError("Missing valid C1000 output/settings baseline")
         boolean_fields = ("ac_output_enabled", "dc_output_enabled", "ac_input_connected",
                           "temperature_unit_fahrenheit", "ac_off_grid_alert_enabled")
         if any(type(metrics.get(key)) is not int or metrics[key] not in (0, 1)
@@ -300,15 +307,20 @@ class LocalMqttServer:
         return a4, d9, metrics
 
     async def _set_c1000_boolean(self, request: NativeMqttRequest, metric: str, value: bool) -> dict:
+        if self.config.model != Model.C1000_GEN2 or type(value) is not bool:
+            raise ValueError("Boolean setting requires C1000 Gen 2 and a boolean value")
+        if metric not in ("temperature_unit_fahrenheit", "ac_off_grid_alert_enabled"):
+            raise ValueError("Unsupported C1000 boolean setting")
+        return await self._set_c1000_setting(request, metric, int(value))
+
+    async def _set_c1000_setting(self, request: NativeMqttRequest, metric: str, value: int) -> dict:
         """Confirm one setting against fresh raw configuration and output states.
 
         No write retry or automatic restoration: a failed confirmation can leave
         changed settings. Inspect fresh status before deciding the next action.
         """
-        if self.config.model != Model.C1000_GEN2 or type(value) is not bool:
-            raise ValueError("Boolean setting requires C1000 Gen 2 and a boolean value")
-        if metric not in ("temperature_unit_fahrenheit", "ac_off_grid_alert_enabled"):
-            raise ValueError("Unsupported C1000 boolean setting")
+        if metric not in ("temperature_unit_fahrenheit", "ac_off_grid_alert_enabled", "device_timeout_minutes"):
+            raise ValueError("Unsupported C1000 setting")
 
         async with self._control_lock:
             connection = self._control_connection()
@@ -321,6 +333,8 @@ class LocalMqttServer:
             expected = bytearray(before_a4)
             if metric == "temperature_unit_fahrenheit":
                 expected[20] = int(value)
+            elif metric == "device_timeout_minutes":
+                expected[14:16] = value.to_bytes(2, "little")
             else:
                 expected[32] = (expected[32] & ~2) | (int(value) << 1)
             # These are remaining seconds, not fixed timeout configuration.

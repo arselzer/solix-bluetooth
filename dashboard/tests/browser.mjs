@@ -84,6 +84,7 @@ try {
   await connect();
   assert.equal(await page.locator('#temperature-unit').count(), 1);
   assert.equal(await page.locator('#off-grid-alert').count(), 1);
+  assert.equal(await page.locator('#device-timeout').inputValue(), '0');
   assert.deepEqual(await page.evaluate(() => [localStorage.length, sessionStorage.length]), [0, 0]);
   assert.equal((await context.cookies()).length, 0);
   assert.equal(await page.getByRole('button', { name: /AC output/i }).count(), 0);
@@ -124,10 +125,33 @@ try {
   assert.deepEqual(calls[2], { name: 'Office · C1000 Gen 2', command: 'set-discharge-floor', lower: 5 });
   cases++; console.log(`Scenario ${cases} passed`);
 
+  await page.locator('#device-timeout').selectOption('30');
+  await refresh();
+  assert.equal(await page.locator('#device-timeout').inputValue(), '30');
+  await propose('device-timeout');
+  assert.ok((await page.getByTestId('command-review').textContent()).includes('interrupting remote access'));
+  await page.getByTestId('cancel-command').click();
+  assert.equal((await recorded()).length, 3);
+  await page.locator('#device-timeout').selectOption('0');
+  await propose('device-timeout');
+  assert.ok((await page.getByTestId('command-review').textContent()).includes('other sleep behavior'));
+  await page.getByTestId('confirm-command').click();
+  await page.getByTestId('gateway-notice').filter({ hasText: 'Command confirmed' }).waitFor();
+  assert.deepEqual((await recorded())[3], { name: 'Office · C1000 Gen 2', command: 'set-device-timeout', minutes: 0 });
+  await page.getByTestId('station-select').selectOption('Spare · C1000');
+  assert.equal(await page.locator('#device-timeout').inputValue(), '0');
+  await page.locator('#device-timeout').selectOption('120');
+  await propose('device-timeout');
+  await page.getByTestId('confirm-command').click();
+  await page.getByTestId('gateway-notice').filter({ hasText: 'Command confirmed' }).waitFor();
+  assert.deepEqual((await recorded())[4], { name: 'Spare · C1000', command: 'set-device-timeout', minutes: 120 });
+  cases++; console.log(`Scenario ${cases} passed`);
+
   await page.getByTestId('station-select').selectOption('Server · C2000 Gen 2');
   assert.equal(await page.locator('#temperature-unit').count(), 0);
   assert.equal(await page.locator('#discharge-floor').count(), 0);
   assert.equal(await page.locator('#off-grid-alert').count(), 0);
+  assert.equal(await page.locator('#device-timeout').count(), 0);
   await change({ readonly: true });
   await refresh();
   await page.getByText('This gateway is read-only. Monitoring remains available.').waitFor();
@@ -149,8 +173,8 @@ try {
   await page.getByTestId('confirm-command').click();
   await page.getByTestId('gateway-notice').filter({ hasText: 'Confirmation timed out' }).waitFor();
   await refresh();
-  assert.equal(posts, 4);
-  assert.equal((await recorded()).length, 3);
+  assert.equal(posts, 6);
+  assert.equal((await recorded()).length, 5);
   assert.equal((await page.textContent('body')).includes('PRIVATE-ERROR-TEXT'), false);
   cases++; console.log(`Scenario ${cases} passed`);
 

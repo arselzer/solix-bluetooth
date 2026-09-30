@@ -33,6 +33,25 @@ const floorValid = computed(() => {
     && lower + 5 <= reserve && reserve <= upper;
 });
 const displayTimes = computed(() => props.station.model === 'c1000' ? [20, 30, 60, 300, 1800] : [30, 60]);
+const deviceTimeouts = [0, 30, 60, 120, 240, 360, 720, 1440];
+const timeoutProfile = computed(() => props.station.model === 'c1000' && props.station.protocol === 'legacy'
+  || props.station.model === 'c1000_gen2' && ['prime', 'native_mqtt'].includes(props.station.protocol ?? ''));
+const timeoutAvailable = computed(() => timeoutProfile.value && allowed('set-device-timeout'));
+const timeoutReported = computed(() => {
+  const value = numberMetric(props.station, 'device_timeout_minutes');
+  return value !== null && Number.isInteger(value) && deviceTimeouts.includes(value);
+});
+const timeoutValid = computed(() => /^\d+$/.test(props.draft.timeoutMinutes)
+  && deviceTimeouts.includes(Number(props.draft.timeoutMinutes)));
+const timeoutLabel = (minutes: number) => minutes === 0 ? 'Never' : minutes === 30 ? '30 minutes' : `${minutes / 60} ${minutes === 60 ? 'hour' : 'hours'}`;
+function timeout() {
+  if (!timeoutReported.value || !timeoutValid.value) return;
+  const minutes = Number(props.draft.timeoutMinutes);
+  propose({ command: 'set-device-timeout', minutes }, 'Change Device Timeout?',
+    minutes ? 'The station may turn off when idle, interrupting remote access.' : 'Never disables this timeout; other sleep behavior may still interrupt remote access.',
+    [timeoutLabel(minutes), ...(minutes ? ['Never disables this timeout; other sleep behavior may still interrupt remote access.'] : []),
+      'An already armed sleep timer may remain until normal wake or reset.']);
+}
 const lights = computed(() => props.station.model === 'c1000' ? ['Off', 'Low', 'Medium', 'High', 'SOS'] : ['Off', 'Low', 'Medium', 'High']);
 const clock = computed(() => {
   if (!props.station.timezone_name) return 'Timezone unknown';
@@ -106,6 +125,13 @@ function addPeriod() {
         <label for="display-timeout">Screen timeout</label><p>Current {{ observed('display_timeout_seconds', ' s') }}</p>
         <div class="setting-input"><select id="display-timeout" v-model="draft.seconds" :disabled="!writable"><option v-for="seconds in displayTimes" :key="seconds" :value="String(seconds)">{{ seconds }} seconds</option></select>
           <button class="secondary" :disabled="!writable || !displayTimes.includes(Number(draft.seconds))" @click="propose({ command: 'set-display-timeout', seconds: Number(draft.seconds) }, 'Change screen timeout?', 'Set the display timeout.', [`${draft.seconds} seconds`])">Apply</button></div>
+      </div>
+      <div v-if="timeoutAvailable" class="setting">
+        <label for="device-timeout">Device Timeout</label><p>Current {{ timeoutReported ? timeoutLabel(Number(station.metrics.device_timeout_minutes)) : 'Not reported' }}</p>
+        <div class="setting-input"><select id="device-timeout" v-model="draft.timeoutMinutes" :disabled="!writable || !timeoutReported"><option v-for="minutes in deviceTimeouts" :key="minutes" :value="String(minutes)">{{ timeoutLabel(minutes) }}</option></select>
+          <button class="secondary" :disabled="!writable || !timeoutReported || !timeoutValid" @click="timeout">Apply</button></div>
+        <p class="hint">Never disables this timeout; other sleep behavior may still interrupt remote access.</p>
+        <p v-if="draft.timeoutMinutes !== '' && draft.timeoutMinutes !== '0'" class="validation-error">The station may turn off when idle, interrupting remote access.</p>
       </div>
       <div v-if="allowed('set-fast-charge')" class="setting">
         <label for="fast-charge">Fast charging</label><p>Current {{ numberMetric(station, 'ac_fast_charge_enabled') === 1 ? 'On' : numberMetric(station, 'ac_fast_charge_enabled') === 0 ? 'Off' : 'Not reported' }}</p>

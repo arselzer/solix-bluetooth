@@ -14,7 +14,7 @@ from .config import DEFAULT_CONFIG, load_config
 from .isolated_ap import IsolatedAP
 from .ap_service_config import APServiceConfig, add_ap_service_device, initialize_ap_service, load_ap_service, load_ap_service_profiles, private_write
 from .ap_service import ap_service_request
-from .protocol import Model, timezone_confer
+from .protocol import DEVICE_TIMEOUT_MINUTES, Model, timezone_confer
 from .tou import TouPeriod
 
 
@@ -54,6 +54,7 @@ def add_commands(subcommands) -> None:
                                ("ap-service-set-discharge-floor", "Set C1000 Gen 2 lower discharge limit without adjusting reserve"),
                                ("ap-service-set-temperature-unit", "Set and confirm C1000 Gen 2 temperature units"),
                                ("ap-service-set-off-grid-alert", "Set and confirm C1000 Gen 2 off-grid notification"),
+                               ("ap-service-set-device-timeout", "Set C1000 Gen 2 device timeout; 0 = Never"),
                                ("ap-service-set-reserve", "Set and confirm backup reserve without changing outputs"),
                                ("ap-service-set-tou", "Replace the native hourly schedule; explicit activation persists until changed"),
                                ("ap-service-grid", "Clear the plan and confirm return to grid power without toggling AC output")):
@@ -73,6 +74,9 @@ def add_commands(subcommands) -> None:
             parser.add_argument("--unit", choices=["celsius", "fahrenheit"], required=True)
         elif command == "ap-service-set-off-grid-alert":
             parser.add_argument("--state", choices=["on", "off"], required=True)
+        elif command == "ap-service-set-device-timeout":
+            parser.add_argument("--minutes", type=int, choices=DEVICE_TIMEOUT_MINUTES, required=True,
+                                help="0 disables this timeout; independent sleep behavior may remain")
         elif command == "ap-service-set-tou":
             parser.add_argument("--mode", choices=["standard", "time_of_use"], required=True)
             parser.add_argument("--period", action="append", default=[], metavar="TARIFF:START:END",
@@ -207,6 +211,7 @@ def dispatch(args) -> None:
                    "ap-service-set-discharge-floor": "set-discharge-floor",
                    "ap-service-set-temperature-unit": "set-temperature-unit",
                    "ap-service-set-off-grid-alert": "set-off-grid-alert",
+                   "ap-service-set-device-timeout": "set-device-timeout",
                    "ap-service-set-tou": "set-tou-plan", "ap-service-grid": "return-grid"}[args.command]
         fields = ({"watts": args.watts} if args.command == "ap-service-set-charge-power" else
                   {"upper": args.upper} if args.command == "ap-service-set-charge-cap" else {})
@@ -218,6 +223,8 @@ def dispatch(args) -> None:
             fields = {"fahrenheit": args.unit == "fahrenheit"}
         elif args.command == "ap-service-set-off-grid-alert":
             fields = {"enabled": args.state == "on"}
+        elif args.command == "ap-service-set-device-timeout":
+            fields = {"minutes": args.minutes}
         elif args.command == "ap-service-grid":
             fields = {"timeout": args.timeout}
         elif args.command == "ap-service-set-tou":

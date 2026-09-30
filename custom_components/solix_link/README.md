@@ -45,6 +45,16 @@ Authorization header. Treat HA configuration backups as containing credentials.
   lower discharge limit (1%, 5%, 10%, 15%, 20%). Available limits leave at least
   five percentage points below the current backup reserve; selecting a limit
   does not adjust the reserve. The temperature sensor continues to report Celsius.
+- Device Timeout select: original C1000 legacy BLE and C1000 Gen 2 Prime/native
+  MQTT, when advertised with fresh integer readback. Choices are Never and
+  30/60/120/240/360/720/1440 minutes. Never disables this timeout; independent
+  sleep behavior can still interrupt access. Finite choices may turn the
+  station off when idle. BLE writes/readback passed; the native timeout path
+  has synthetic tests only. See [versioned findings](../../docs/device-timeout-behavior.md).
+- Disabled diagnostic entities: raw DC/PV input activity/power and controller
+  error code for C1000 Gen 2, plus the raw Gen 2 battery compatibility byte.
+  That byte is hardcoded 100 on A1763/main 1.1.4.9; it is not measured health.
+  PV power units remain unverified, so no power class/statistics are assigned.
 - Configuration switch: C1000 Gen 2 native MQTT off-grid alert preference.
   Setting storage and readback were verified; actual alert delivery is untested.
 - **Return to grid**: C1000 Gen 2 and C2000 Gen 2 native MQTT. The gateway checks actual
@@ -84,7 +94,7 @@ device operation. HTTP deadlines include the gateway's worker budget, its
 five-second RPC margin and ten seconds for HTTP overhead: Return to grid uses
 175 seconds for its 30-second per-phase confirmation setting, schedule changes
 135 seconds, and other commands 60 seconds. Connection establishment remains
-limited to ten seconds. No AC-output, timer or firmware control is
+limited to ten seconds. No AC-output switch, output-countdown or firmware control is
 exposed. Existing gateway safety checks remain authoritative.
 
 Identity uses the original configured gateway endpoint plus its saved station
