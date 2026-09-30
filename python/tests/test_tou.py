@@ -221,6 +221,7 @@ def test_socket_rejects_bad_schedule_before_io_and_confirms_reserve(tmp_path):
         (tmp_path / "mqtt-response.json").write_text("{}")
         service = APService(mqtt.config, tmp_path, allow_control=True)
         service.mqtt = mqtt
+        service.stations[mqtt.config.name] = mqtt
         listener = await asyncio.start_unix_server(service._control, path=service.socket_path)
         service._servers.append(listener)
         try:

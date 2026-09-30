@@ -77,7 +77,7 @@ def test_saved_selection_survives_missing_bluetooth(monkeypatch, tmp_path):
 
 
 def test_nonroot_native_setup_prints_explicit_command_without_spawning(monkeypatch, tmp_path, capsys):
-    monkeypatch.setattr(interactive, "load_ap_service", lambda _path: SimpleNamespace(model=Model.C2000_GEN2))
+    monkeypatch.setattr(interactive, "load_ap_service_profiles", lambda path: {"ups": (SimpleNamespace(name="ups", model=Model.C2000_GEN2), path)})
     monkeypatch.setattr(interactive.os, "geteuid", lambda: 1000)
     monkeypatch.setattr(interactive.subprocess, "Popen", lambda *_args, **_kwargs: (_ for _ in ()).throw(AssertionError("must not spawn")))
     interactive.native_session(tmp_path / "private directory", tmp_path / "config.json", provision=True, allow_control=False)
@@ -93,7 +93,7 @@ def test_interactive_native_session_stops_owned_child(monkeypatch, tmp_path):
     directory = tmp_path / "ap_service"
     directory.mkdir(mode=0o700)
     spawned = []
-    monkeypatch.setattr(interactive, "load_ap_service", lambda _path: SimpleNamespace(model=Model.C1000_GEN2))
+    monkeypatch.setattr(interactive, "load_ap_service_profiles", lambda path: {"ups": (SimpleNamespace(name="ups", model=Model.C1000_GEN2), path)})
     class Child:
         returncode = None
         def __init__(self, command, **kwargs):

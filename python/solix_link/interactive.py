@@ -15,7 +15,7 @@ import time
 
 from .client import SolixMonitor, discover
 from .config import DeviceConfig, load_config, save_config
-from .ap_service_config import APServiceConfig, initialize_ap_service, load_ap_service, private_write
+from .ap_service_config import APServiceConfig, add_ap_service_device, initialize_ap_service, load_ap_service, load_ap_service_profiles, private_write
 from .ap_service import ap_service_request
 from .protocol import Model
 
@@ -124,6 +124,15 @@ def setup_ap_service(device: DeviceConfig, directory: Path) -> None:
     if device.model not in (Model.C1000_GEN2, Model.C2000_GEN2) or device.protocol != "prime" or not device.client_id:
         raise ValueError("AP setup requires a paired C1000 Gen 2 or C2000 Gen 2")
     print("Local MQTT uses a dedicated Wi-Fi adapter, a private API and an AP without an internet route.")
+    if (directory / "ap_service.json").exists():
+        from dataclasses import replace
+        parent = load_ap_service(directory / "ap_service.json")
+        serial = asyncio.run(read_serial(device))
+        config = replace(parent, name=device.name, model=device.model, device_serial=serial,
+                         account_id=device.client_id, timezone_name=device.timezone_name or "Etc/UTC")
+        add_ap_service_device(directory, config)
+        print(f"Added {device.name} to the shared AP; provision this station when starting the AP service.")
+        return
     adapters = wifi_adapters()
     if adapters:
         selected = choose("Select an unused Wi-Fi adapter (currently DOWN)", [f"{interface} / {phy}" for interface, phy in adapters])
@@ -158,13 +167,21 @@ def _show_status(status: dict) -> None:
             print(f"  {key}: {metrics[key]}")
 
 
-def native_session(directory: Path, config_path: Path, *, provision: bool, allow_control: bool) -> None:
-    config = load_ap_service(directory / "ap_service.json")
+def native_session(directory: Path, config_path: Path, *, provision: bool, allow_control: bool,
+                   name: str | None = None) -> None:
+    profiles = load_ap_service_profiles(directory)
+    if name is None and len(profiles) > 1:
+        names = list(profiles)
+        selected = choose("Select native station", names)
+        if selected is None:
+            return
+        name = names[selected]
+    config = profiles[name][0] if name is not None else next(iter(profiles.values()))[0]
     maximum_power = 1200 if config.model == Model.C1000_GEN2 else 1800
     command = [sys.executable, "-m", "solix_link", "ap-service-run", "--directory", str(directory.resolve()),
                "--config", str(config_path.resolve())]
     if provision:
-        command.append("--provision")
+        command.extend(["--provision", "--name", config.name])
     if allow_control:
         command.append("--allow-control")
     if os.geteuid() != 0:
@@ -190,18 +207,18 @@ def native_session(directory: Path, config_path: Path, *, provision: bool, allow
                 break
             try:
                 if selected == 0:
-                    _show_status(asyncio.run(ap_service_request(directory, "status")))
+                    _show_status(asyncio.run(ap_service_request(directory, "status", name=config.name)))
                 elif selected == 1:
-                    print(json.dumps(asyncio.run(ap_service_request(directory, "readiness"))))
+                    print(json.dumps(asyncio.run(ap_service_request(directory, "readiness", name=config.name))))
                 elif selected == 2 and allow_control:
                     watts = int(prompt(f"Charging-power limit (300–{maximum_power} W in 100 W steps)"))
-                    _show_status(asyncio.run(ap_service_request(directory, "set-charge-power", watts=watts)))
+                    _show_status(asyncio.run(ap_service_request(directory, "set-charge-power", name=config.name, watts=watts)))
                 elif selected == 3 and allow_control:
                     upper = int(prompt("Upper charge limit (80–100% in 5% steps)"))
-                    _show_status(asyncio.run(ap_service_request(directory, "set-charge-cap", upper=upper)))
+                    _show_status(asyncio.run(ap_service_request(directory, "set-charge-cap", name=config.name, upper=upper)))
                 elif selected == 4 and allow_control:
                     reserve = int(prompt("Backup reserve (5–100% in 5% steps, within charge limits)"))
-                    _show_status(asyncio.run(ap_service_request(directory, "set-backup-reserve", reserve=reserve)))
+                    _show_status(asyncio.run(ap_service_request(directory, "set-backup-reserve", name=config.name, reserve=reserve)))
                 elif selected == 5 and allow_control:
                     from .tou import TouPeriod
                     mode = choose("Plan mode", ["Store in Standard", "Activate Time-of-Use (persists until changed)"])
@@ -214,9 +231,9 @@ def native_session(directory: Path, config_path: Path, *, provision: bool, allow
                         if len(parts) != 3:
                             raise ValueError("Period format must be TARIFF:START:END")
                         periods.append(TouPeriod(parts[0], int(parts[1]), int(parts[2])).to_dict())
-                    _show_status(asyncio.run(ap_service_request(directory, "set-tou-plan", periods=periods, enabled=mode == 1)))
+                    _show_status(asyncio.run(ap_service_request(directory, "set-tou-plan", name=config.name, periods=periods, enabled=mode == 1)))
                 elif selected == 6 and allow_control:
-                    _show_status(asyncio.run(ap_service_request(directory, "return-grid")))
+                    _show_status(asyncio.run(ap_service_request(directory, "return-grid", name=config.name)))
             except (ValueError, OSError, RuntimeError, TimeoutError) as error:
                 print(f"{type(error).__name__}: {error}. Check fresh status before retrying a control write.")
         if process.poll() is not None and process.returncode:
@@ -256,14 +273,15 @@ def mqtt_menu(device: DeviceConfig, config_path: Path, directory: Path) -> None:
             elif action == 1:
                 setup_ap_service(device, directory)
             elif action in (2, 3):
-                config = load_ap_service(directory / "ap_service.json")
-                if config.name != device.name or config.model != device.model:
+                profiles = load_ap_service_profiles(directory)
+                config = profiles.get(device.name, (None, None))[0]
+                if config is None or config.model != device.model:
                     raise ValueError("AP service belongs to a different selected station")
                 controls = choose("Native control", ["Monitoring only", "Enable explicit charging and tariff commands"])
                 if controls is not None:
-                    native_session(directory, config_path, provision=action == 3, allow_control=controls == 1)
+                    native_session(directory, config_path, provision=action == 3, allow_control=controls == 1, name=device.name)
             elif action == 4:
-                _show_status(asyncio.run(ap_service_request(directory, "status")))
+                _show_status(asyncio.run(ap_service_request(directory, "status", name=device.name)))
             elif action == 5:
                 from .ap_service_monitor import APServiceMonitor
                 from .server import run_server

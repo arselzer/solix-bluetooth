@@ -23,8 +23,7 @@ def test_config_preserves_pairing_id_privately(tmp_path):
 
 @pytest.mark.parametrize("model", [Model.C1000_GEN2, Model.C300, Model.C1000])
 def test_http_auth_and_status(tmp_path, model):
-    pytest.importorskip("aiohttp")
-    from aiohttp.test_utils import TestClient, TestServer
+    from http_helpers import api_client
     from solix_gen2.server import create_app
 
     async def scenario():
@@ -38,15 +37,14 @@ def test_http_auth_and_status(tmp_path, model):
         service.stop = no_ble
         service._status["ups"]["connected"] = True
         service._on_update("ups", {"battery_percentage": 87, "ac_output_enabled": 1})
-        async with TestServer(create_app(service, token="test-token")) as server:
-            async with TestClient(server) as client:
-                assert (await client.get("/devices/ups")).status == 401
-                headers = {"Authorization": "Bearer test-token"}
-                response = await client.get("/devices/ups", headers=headers)
-                assert response.status == 200
-                assert (await response.json())["metrics"]["battery_percentage"] == 87
-                assert (await client.get("/devices/missing", headers=headers)).status == 404
-                metrics = await (await client.get("/metrics", headers=headers)).text()
-                assert 'solix_gen2_battery_percentage{device="ups"} 87' in metrics
+        async with api_client(create_app(service, token="test-token")) as client:
+            assert (await client.get("/devices/ups")).status_code == 401
+            headers = {"Authorization": "Bearer test-token"}
+            response = await client.get("/devices/ups", headers=headers)
+            assert response.status_code == 200
+            assert response.json()["metrics"]["battery_percentage"] == 87
+            assert (await client.get("/devices/missing", headers=headers)).status_code == 404
+            metrics = (await client.get("/metrics", headers=headers)).text
+            assert 'solix_gen2_battery_percentage{device="ups"} 87' in metrics
 
     asyncio.run(scenario())

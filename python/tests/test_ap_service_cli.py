@@ -9,10 +9,14 @@ from solix_link.cli import parser
     ("ap-service-init", ["--name", "ups", "--serial-file", "/tmp/serial",
                          "--interface", "wlan_unused", "--phy", "phy9", "--country", "AT"]),
     ("ap-service-run", []),
+    ("ap-service-add", ["--name", "office", "--serial-file", "/tmp/serial"]),
+    ("ap-service-set-discharge-floor", ["--lower", "5"]),
     ("ap-service-status", []),
     ("ap-service-readiness", []),
     ("ap-service-set-charge-power", ["--watts", "800"]),
     ("ap-service-set-charge-cap", ["--upper", "90"]),
+    ("ap-service-set-temperature-unit", ["--unit", "celsius"]),
+    ("ap-service-set-off-grid-alert", ["--state", "on"]),
     ("ap-service-set-reserve", ["--reserve", "85"]),
     ("ap-service-set-tou", ["--mode", "standard"]),
     ("ap-service-grid", ["--timeout", "20"]),
@@ -40,3 +44,12 @@ def test_energy_report_request_is_optional_and_explicit():
     command_parser = parser()
     assert not command_parser.parse_args(["ap-service-run", "--directory", "/tmp/private-ap"]).energy_reports
     assert command_parser.parse_args(["ap-service-run", "--directory", "/tmp/private-ap", "--energy-reports"]).energy_reports
+
+
+def test_shared_ap_command_target_and_optional_web_ui():
+    command_parser = parser()
+    for command, extra in (("ap-service-status", []), ("ap-service-set-charge-power", ["--watts", "1000"])):
+        args = command_parser.parse_args([command, "--directory", "/tmp/private", "--name", "office", *extra])
+        assert args.name == "office"
+    assert command_parser.parse_args(["serve", "--web-ui"]).web_ui
+    assert command_parser.parse_args(["ap-service-serve", "--directory", "/tmp/private", "--web-ui"]).web_ui

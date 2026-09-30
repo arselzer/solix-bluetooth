@@ -10,11 +10,13 @@ import signal
 import struct
 import time
 
-from .ap_service_config import APServiceConfig, load_ap_service, private_write
+from .ap_service_config import APServiceConfig, load_ap_service, load_ap_service_profiles, private_write
+from .ap_service_fleet import MqttDeviceRouter
 from .mqtt_intercept import LocalMqttServer
 from .protocol import Model, parse_tlvs, timezone_confer
 from .tou import PowerFlowTimeout, TouPeriod
 from .energy_report import decode_energy_events
+from .commands import validate_command
 
 
 def api_response(path: str, request: dict, config: APServiceConfig, credentials: bytes,
@@ -104,7 +106,12 @@ class APService:
             raise ValueError("Energy reporting must be a boolean")
         self.config, self.directory = config, directory
         self.energy_reports = energy_reports
-        self.mqtt = LocalMqttServer(config, directory, allow_control=allow_control, callback=callback)
+        profiles = load_ap_service_profiles(directory, config)
+        self.stations = {name: LocalMqttServer(item, path, allow_control=allow_control, callback=callback)
+                         for name, (item, path) in profiles.items()}
+        self.mqtt = self.stations[config.name]
+        self._router = MqttDeviceRouter(self.stations, directory) if len(self.stations) > 1 else None
+        self._by_serial = {station.config.device_serial: station for station in self.stations.values()}
         self.credentials = (directory / "mqtt-response.json").read_bytes()
         self._servers: list[asyncio.Server] = []
         self._transport = None
@@ -119,7 +126,10 @@ class APService:
         if self.socket_path.exists():
             raise RuntimeError("Existing AP service control socket; stop or recover the previous worker first")
         try:
-            await self.mqtt.start(port=mqtt_port)
+            if self._router:
+                await self._router.start(self.config.gateway, mqtt_port)
+            else:
+                await self.mqtt.start(port=mqtt_port)
             self._servers.append(await asyncio.start_server(self._api, self.config.gateway, api_port, limit=16384))
             self._transport, _ = await asyncio.get_running_loop().create_datagram_endpoint(
                 lambda: _Ntp(self.mqtt), local_addr=(self.config.gateway, ntp_port))
@@ -135,7 +145,8 @@ class APService:
 
     async def _refresh(self) -> None:
         while True:
-            self.mqtt.changed()
+            for station in self.stations.values():
+                station.changed()
             await asyncio.sleep(5)
 
     async def _api(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter) -> None:
@@ -166,7 +177,16 @@ class APService:
                 body = await reader.readexactly(length)
                 self.mqtt.record("api_request", headers_hex=headers.hex(), body_hex=body.hex())
                 request = json.loads(body or b"{}")
-                response, chunked = api_response(path, request, self.config, self.credentials,
+                if not isinstance(request, dict):
+                    raise ValueError("Invalid request")
+                identity = fields.get("device-sn") or request.get("device_sn")
+                if identity is None and len(self.stations) == 1:
+                    identity = self.config.device_serial
+                station = self._by_serial.get(identity) if isinstance(identity, str) else None
+                if station is None or request.get("device_sn", identity) != identity:
+                    raise ValueError("Unexpected device identity")
+                credentials = (station.directory / "mqtt-response.json").read_bytes()
+                response, chunked = api_response(path, request, station.config, credentials,
                                                  energy_reports=self.energy_reports)
                 if "/" + path.lstrip("/") == "/equipment/logging/upload_pb_events":
                     self.mqtt.record("energy_report", reports=decode_energy_events(request))
@@ -197,15 +217,35 @@ class APService:
                 if not isinstance(request, dict):
                     raise ValueError("Invalid request")
             action = request.get("command")
+            name = request.pop("name", None)
+            if action == "status" and name is None and len(self.stations) > 1:
+                response = {"ok": True, "result": {"devices": [station.snapshot() for station in self.stations.values()]}}
+                return
+            if name is None and len(self.stations) == 1:
+                name = self.config.name
+            if not isinstance(name, str) or name not in self.stations:
+                raise ValueError("Select a configured station by name")
+            mqtt = self.stations[name]
             async with asyncio.timeout(control_timeout(action, request)):
                 if action == "status":
-                    result = self.mqtt.snapshot()
+                    result = mqtt.snapshot()
                 elif action == "set-charge-power":
-                    result = await self.mqtt.set_ac_charging_power(request.get("watts"))
+                    result = await mqtt.set_ac_charging_power(request.get("watts"))
                 elif action == "set-charge-cap":
-                    result = await self.mqtt.set_charge_cap(request.get("upper"))
+                    result = await mqtt.set_charge_cap(request.get("upper"))
+                elif action == "set-discharge-floor":
+                    values = {key: value for key, value in request.items() if key != "command"}
+                    validate_command(action, values)
+                    result = await mqtt.set_discharge_floor(values["lower"])
+                elif action in ("set-temperature-unit", "set-off-grid-alert"):
+                    values = {key: value for key, value in request.items() if key != "command"}
+                    validate_command(action, values)
+                    if action == "set-temperature-unit":
+                        result = await mqtt.set_temperature_unit(values["fahrenheit"])
+                    else:
+                        result = await mqtt.set_off_grid_alert(values["enabled"])
                 elif action == "set-backup-reserve":
-                    result = await self.mqtt.set_backup_reserve(request.get("reserve"))
+                    result = await mqtt.set_backup_reserve(request.get("reserve"))
                 elif action == "set-tou-plan":
                     periods = request.get("periods", [])
                     if not isinstance(periods, list) or len(periods) > 6:
@@ -215,14 +255,14 @@ class APService:
                         if not isinstance(period, dict) or set(period) != {"tariff", "start_hour", "end_hour"}:
                             raise ValueError("Invalid schedule period")
                         parsed.append(TouPeriod(**period))
-                    result = await self.mqtt.set_tou_plan(parsed, enabled=request.get("enabled", False))
+                    result = await mqtt.set_tou_plan(parsed, enabled=request.get("enabled", False))
                 elif action == "return-grid":
-                    result = await self.mqtt.return_to_grid(timeout=request.get("timeout", 30))
+                    result = await mqtt.return_to_grid(timeout=request.get("timeout", 30))
                 elif action == "readiness":
-                    connection = self.mqtt.connection
+                    connection = mqtt.connection
                     if connection is None:
                         raise ConnectionError("Station is not connected")
-                    reply = await connection.request(self.mqtt.commands.readiness())
+                    reply = await connection.request(mqtt.commands.readiness())
                     fields = parse_tlvs(reply[1:])
                     # Opaque FD may contain an app identifier; never return it publicly.
                     result = {"controller_ready_prefix": fields.get(0xA1, b"").hex(),
@@ -262,7 +302,10 @@ class APService:
         for server in self._servers:
             await server.wait_closed()
         self._servers.clear()
-        await self.mqtt.stop()
+        if self._router:
+            await self._router.stop()
+        for station in self.stations.values():
+            await station.stop()
         if self._socket_owned:
             self.socket_path.unlink(missing_ok=True)
             self._socket_owned = False

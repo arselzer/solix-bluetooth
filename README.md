@@ -69,6 +69,12 @@ using entirely local MQTT. The [packaged CLI follow-up](docs/c2000-offpeak-grid-
 also verified Off-Peak grid return before clearing Standard. Python now exposes
 guarded reserve, hourly plans and flow-confirmed recovery, a [terminal dashboard](python/README.md#terminal-dashboard-and-ha-gateway),
 and an [authenticated HTTP/HA gateway](docs/gateway-home-assistant.md).
+An optional [FastAPI/Vue web dashboard](docs/web-dashboard.md) adds local charts
+and confirmed controls without a Node runtime or CDN. C1000 Gen 2
+[temperature and off-grid alert settings](docs/c1000-general-settings.md)
+are also verified through native MQTT.
+[Multiple stations on one isolated AP](docs/multiple-ap-devices.md) share
+one gateway while retaining separate certificates, telemetry and controls.
 The HA component is prepared and contract-tested; its runtime integration
 remains unverified. Timed schedules/reserve-floor behavior need live validation.
 The [offline tariff/energy follow-up](docs/tariff-energy-followup.md) adds

@@ -93,7 +93,10 @@ def test_native_target_uses_initialized_profile_model_and_limits(tmp_path, model
     assert model.value in target.label
     controls = controls_for(target)
     assert next(control for control in controls if control.key == "charge-power").hint == f"300–{maximum} W, in 100 W steps"
-    assert {control.key for control in controls} == {"charge-power", "charge-cap", "reserve"}
+    expected = {"charge-power", "charge-cap", "reserve"}
+    if model == Model.C1000_GEN2:
+        expected |= {"temperature-unit", "off-grid-alert", "discharge-floor"}
+    assert {control.key for control in controls} == expected
     assert config.account_id not in target.label and config.device_serial not in target.label
 
 
@@ -183,6 +186,33 @@ def test_native_controls_use_only_local_socket_actions(tmp_path):
         assert len(calls) == 6
         await backend.disconnect()
         assert len(calls) == 6  # Closing UI never changes a plan or stops the ap_service.
+    asyncio.run(run())
+
+
+def test_c1000_native_boolean_controls_parse_explicit_choices(tmp_path):
+    config = APServiceConfig("ups", "wlan_unused", "phy9", "AT", "A1763SYNTHETIC001", "a" * 40,
+                             model=Model.C1000_GEN2)
+    private_write(tmp_path / "ap_service.json", json.dumps(asdict(config)))
+    async def run():
+        calls = []
+        async def request(_directory, command, **fields):
+            calls.append((command, fields))
+            return {"control_enabled": True, "metrics": {}}
+        backend = TuiBackend([], tmp_path, requester=request)
+        await backend.connect("native")
+        await backend.control("temperature-unit", "fahrenheit")
+        await backend.control("temperature-unit", "celsius")
+        await backend.control("off-grid-alert", "on")
+        await backend.control("off-grid-alert", "off")
+        assert calls == [("status", {}), ("set-temperature-unit", {"fahrenheit": True}),
+                         ("set-temperature-unit", {"fahrenheit": False}),
+                         ("set-off-grid-alert", {"enabled": True}),
+                         ("set-off-grid-alert", {"enabled": False})]
+        for action, bad in (("temperature-unit", "1"), ("off-grid-alert", "true")):
+            with pytest.raises(ValueError):
+                await backend.control(action, bad)
+        assert len(calls) == 5
+        assert "temperature-unit" not in {c.key for c in controls_for(Target("ble", "test", Model.C1000_GEN2))}
     asyncio.run(run())
 
 

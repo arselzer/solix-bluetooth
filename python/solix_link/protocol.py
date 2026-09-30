@@ -254,6 +254,10 @@ def decode_telemetry(payload: bytes, model: Model | None = None) -> tuple[dict[s
         number("ac_fast_charge_enabled", 0xA4, 21, 22)
         number("display_enabled", 0xA4, 22, 23)
         number("port_memory_enabled", 0xA4, 23, 24)
+        settings = values.get(0xA4, b"")
+        if len(settings) >= 33 and settings[0] == 4:
+            # Recovered C1000 controller: alert getter -> A4[32], bit 1.
+            metrics["ac_off_grid_alert_enabled"] = (settings[32] >> 1) & 1
     number("dc_output_enabled", 0xB2, 1, 2)
     number("dc_output_power_w", 0xB2, 2, 4)
     number("max_charge_percentage", 0xD9, 4, 5)

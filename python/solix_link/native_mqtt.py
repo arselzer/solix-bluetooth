@@ -88,6 +88,33 @@ class NativeMqttCommands:
             raise ValueError("Charge cap must be 80–100 percent in 5 percent steps")
         return self._request("0103", tlv(0xAA, bytes((1, percentage))), milliseconds=True)
 
+    def discharge_floor(self, lower: int) -> NativeMqttRequest:
+        """Set only C1000's lower limit; callers must protect backup reserve.
+
+        Native transport is verified on C1000 Gen 2 main 1.1.4.9. Raising the
+        lower limit can also raise reserve; confirm both A4 and D9 readbacks.
+        """
+        if self.model != Model.C1000_GEN2:
+            raise ValueError("Discharge floor supports C1000 Gen 2 only")
+        if type(lower) is not int or lower not in (1, 5, 10, 15, 20):
+            raise ValueError("Discharge floor must be 1, 5, 10, 15, or 20 percent")
+        return self._request("0103", tlv(0xAB, bytes((1, lower))), milliseconds=True)
+
+    def temperature_unit(self, fahrenheit: bool) -> NativeMqttRequest:
+        """Set temperature units; verified on C1000 Gen 2 main 1.1.4.9."""
+        return self._c1000_boolean(0xA5, fahrenheit)
+
+    def off_grid_alert(self, enabled: bool) -> NativeMqttRequest:
+        """Set the off-grid alert setting; verified on C1000 Gen 2 main 1.1.4.9."""
+        return self._c1000_boolean(0xB0, enabled)
+
+    def _c1000_boolean(self, tag: int, value: bool) -> NativeMqttRequest:
+        if self.model != Model.C1000_GEN2:
+            raise ValueError("This setting supports C1000 Gen 2 only")
+        if type(value) is not bool:
+            raise ValueError("Setting value must be a boolean")
+        return self._request("0103", tlv(tag, bytes((1, int(value)))), milliseconds=True)
+
     def backup_reserve(self, percentage: int) -> NativeMqttRequest:
         """Set only backup reserve; callers must check upper/lower limits first."""
         if type(percentage) is not int or not 5 <= percentage <= 100 or percentage % 5:

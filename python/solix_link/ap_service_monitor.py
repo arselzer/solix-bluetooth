@@ -1,4 +1,4 @@
-"""Adapt namespace-worker snapshots to the existing read-only HTTP/SSE server."""
+"""Adapt namespace-worker snapshots and guarded controls to the HTTP/SSE server."""
 
 from __future__ import annotations
 
@@ -7,9 +7,10 @@ import json
 from pathlib import Path
 import time
 
-from .ap_service_config import APServiceConfig
-from .commands import NATIVE_COMMANDS, validate_command
+from .ap_service_config import APServiceConfig, load_ap_service_profiles
+from .commands import NATIVE_COMMANDS, NATIVE_C1000_COMMANDS, validate_command
 from .ap_service import ap_service_request
+from .protocol import Model
 
 
 class APServiceMonitor:
@@ -17,15 +18,17 @@ class APServiceMonitor:
 
     def __init__(self, config: APServiceConfig, directory: Path) -> None:
         self.config, self.directory = config, directory
-        self.devices = {config.name: config}
+        profiles = load_ap_service_profiles(directory, config)
+        self.devices = {name: item for name, (item, _) in profiles.items()}
+        self.directories = {name: path for name, (_, path) in profiles.items()}
         self._subscribers: set[asyncio.Queue] = set()
         self._task: asyncio.Task | None = None
 
     def snapshot(self, name: str) -> dict:
-        if name != self.config.name:
+        if name not in self.devices:
             raise KeyError(name)
         try:
-            path = self.directory / "status.json"
+            path = self.directories[name] / "status.json"
             status = json.loads(path.read_text())
             fresh = time.time() - path.stat().st_mtime < 15
             latest = status.get("last_seen_timestamp")
@@ -35,12 +38,14 @@ class APServiceMonitor:
                 status["power_flow"] = "unknown"
             return status
         except (OSError, ValueError):
-            return {"name": name, "model": self.config.model.value, "protocol": "native_mqtt",
+            return {"name": name, "model": self.devices[name].model.value, "protocol": "native_mqtt",
                     "connected": False, "available": False, "last_seen_timestamp": None,
                     "error": "AP service status unavailable", "metrics": {}}
 
     def supported_commands(self, name: str) -> list[str]:
-        return list(NATIVE_COMMANDS) if self.snapshot(name).get("control_enabled") else []
+        if not self.snapshot(name).get("control_enabled"):
+            return []
+        return list(NATIVE_COMMANDS + (NATIVE_C1000_COMMANDS if self.devices[name].model == Model.C1000_GEN2 else ()))
 
     async def command(self, name: str, command: str, **values) -> dict:
         validate_command(command, values)
@@ -48,10 +53,10 @@ class APServiceMonitor:
             raise PermissionError("Native worker controls are disabled")
         if not self.snapshot(name)["available"]:
             raise ConnectionError("Fresh native telemetry is unavailable")
-        return await ap_service_request(self.directory, command, **values)
+        return await ap_service_request(self.directory, command, name=name, **values)
 
     def snapshots(self) -> list[dict]:
-        return [self.snapshot(self.config.name)]
+        return [self.snapshot(name) for name in self.devices]
 
     def subscribe(self) -> asyncio.Queue:
         queue = asyncio.Queue(maxsize=20)
@@ -72,11 +77,12 @@ class APServiceMonitor:
     async def _poll(self) -> None:
         previous = None
         while True:
-            status = self.snapshot(self.config.name)
-            if status != previous:
-                for queue in self._subscribers:
-                    if queue.full():
-                        queue.get_nowait()
-                    queue.put_nowait(status)
-                previous = status
+            statuses = {name: self.snapshot(name) for name in self.devices}
+            for name, status in statuses.items():
+                if previous is None or status != previous.get(name):
+                    for queue in self._subscribers:
+                        if queue.full():
+                            queue.get_nowait()
+                        queue.put_nowait(status)
+            previous = statuses
             await asyncio.sleep(1)

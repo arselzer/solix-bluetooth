@@ -11,7 +11,7 @@ requires-python = ">=3.11"
 dependencies = ["bleak>=0.21", "cryptography>=41"]
 
 [project.optional-dependencies]
-server = ["aiohttp>=3.9,<4"]
+server = ["fastapi>=0.115,<1", "uvicorn>=0.30,<1"]
 mqtt = ["paho-mqtt>=2,<3"]
 tui = ["textual>=8.2,<9"]
 
@@ -22,3 +22,6 @@ solix-gen2 = "solix_link.cli:main"
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["solix_link*", "solix_gen2*"]
+
+[tool.setuptools.package-data]
+solix_link = ["web/*.html", "web/assets/*.css", "web/assets/*.js"]

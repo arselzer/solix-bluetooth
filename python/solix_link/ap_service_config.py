@@ -109,12 +109,59 @@ def load_ap_service(path: Path) -> APServiceConfig:
         raise ValueError("Invalid AP service configuration") from None
 
 
-def initialize_ap_service(directory: Path, config: APServiceConfig) -> Path:
+SHARED_AP_FIELDS = ("interface", "phy", "country", "ssid", "passphrase", "namespace", "gateway", "broker_host")
+MAX_AP_DEVICES = 8
+
+
+def load_ap_service_profiles(directory: Path, primary: APServiceConfig | None = None) -> dict[str, tuple[APServiceConfig, Path]]:
+    """Load one AP's station profiles; reject ambiguous identities or networks."""
+    primary = primary or load_ap_service(directory / "ap_service.json")
+    profiles = {primary.name: (primary, directory)}
+    serials = {primary.device_serial}
+    children = directory / "devices"
+    if children.is_symlink():
+        raise ValueError("Station profiles must not be symlinks")
+    for child in sorted(children.iterdir()) if children.exists() else []:
+        if child.is_symlink():
+            raise ValueError("Station profiles must not be symlinks")
+        if not child.is_dir() or not (child / "ap_service.json").exists():
+            continue
+        config = load_ap_service(child / "ap_service.json")
+        if config.name != child.name or config.name in profiles or config.device_serial in serials:
+            raise ValueError("Duplicate or mismatched station identity")
+        if any(getattr(config, field) != getattr(primary, field) for field in SHARED_AP_FIELDS):
+            raise ValueError("Station profiles must use the same AP network")
+        profiles[config.name] = (config, child)
+        serials.add(config.device_serial)
+    if len(profiles) > MAX_AP_DEVICES:
+        raise ValueError("An AP supports at most eight configured stations")
+    return profiles
+
+
+def add_ap_service_device(directory: Path, config: APServiceConfig) -> Path:
+    """Register another station with unique keys on an existing stopped AP."""
+    profiles = load_ap_service_profiles(directory)
+    if (directory / "control.sock").exists() or (directory / "ready").exists():
+        raise RuntimeError("Stop the AP service before adding a station")
+    if len(profiles) >= MAX_AP_DEVICES:
+        raise ValueError("An AP supports at most eight configured stations")
+    if config.name in profiles or any(config.device_serial == item.device_serial for item, _ in profiles.values()):
+        raise ValueError("Station name and serial must be unique")
+    children = directory / "devices"
+    private_directory(children)
+    return initialize_ap_service(children / config.name, config, authority=directory)
+
+
+def initialize_ap_service(directory: Path, config: APServiceConfig, *, authority: Path | None = None) -> Path:
     """Generate a local CA, server/client certificates and encrypted API fields.
 
     No Anker account request is made. Refuse an existing directory so keys and
     credentials cannot be accidentally replaced while a station uses them.
     """
+    if authority is not None:
+        parent = load_ap_service(authority / "ap_service.json")
+        if any(getattr(config, field) != getattr(parent, field) for field in SHARED_AP_FIELDS):
+            raise ValueError("Certificate authority must use the same AP network")
     directory.mkdir(parents=True, mode=0o700, exist_ok=False)
     now = datetime.now(timezone.utc)
     ca_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
@@ -125,10 +172,19 @@ def initialize_ap_service(directory: Path, config: APServiceConfig) -> Path:
           .add_extension(x509.BasicConstraints(ca=True, path_length=0), critical=True)
           .add_extension(x509.KeyUsage(False, False, False, False, False, True, True, False, False), critical=True)
           .sign(ca_key, hashes.SHA256()))
+    if authority is not None:
+        ca = x509.load_pem_x509_certificate((authority / "ca.pem").read_bytes())
+        ca_key = serialization.load_pem_private_key((authority / "ca-key.pem").read_bytes(), password=None)
+        ca_name = ca.subject
     pem = serialization.Encoding.PEM
     private_write(directory / "ca.pem", ca.public_bytes(pem))
-    private_write(directory / "ca-key.pem", ca_key.private_bytes(pem, serialization.PrivateFormat.TraditionalOpenSSL, serialization.NoEncryption()))
+    if authority is None:
+        private_write(directory / "ca-key.pem", ca_key.private_bytes(pem, serialization.PrivateFormat.TraditionalOpenSSL, serialization.NoEncryption()))
     for role in ("server", "client"):
+        if role == "server" and authority is not None:
+            for filename in ("server.pem", "server-key.pem"):
+                private_write(directory / filename, (authority / filename).read_bytes())
+            continue
         key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
         subject = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, config.broker_host if role == "server" else "SOLIX local station")])
         builder = (x509.CertificateBuilder().subject_name(subject).issuer_name(ca_name)

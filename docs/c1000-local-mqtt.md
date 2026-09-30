@@ -147,3 +147,10 @@ These tests do not establish C2000 MQTT with a generated ID, Anker app account
 recovery, arbitrary AP internet behavior, timed slot boundaries, lower reserve-floor
 transitions or compatibility with every firmware version. See
 [AP service setup](isolated-ap-mqtt.md) for commands and safeguards.
+
+## Additional native general settings
+
+Temperature units and the off-grid alert switch were individually changed and
+restored on the same firmware, with final independent BLE confirmation.
+The [general settings reference](c1000-general-settings.md) records exact TLVs,
+readback offsets, firmware side effects, offline replay counts and live results.

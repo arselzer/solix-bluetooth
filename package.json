@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "dev:dashboard": "vite --config dashboard/vite.config.ts",
+    "build:dashboard": "vue-tsc --project dashboard/tsconfig.json --noEmit && vite build --config dashboard/vite.config.ts",
+    "preview": "vite preview",
+    "test:dashboard": "node dashboard/tests/browser.mjs"
   },
   "dependencies": {
     "vue": "^3.5.30"
@@ -15,6 +18,7 @@
     "@types/node": "^24.12.2",
     "@vitejs/plugin-vue": "^6.0.5",
     "@vue/tsconfig": "^0.9.0",
+    "playwright": "^1.63.0",
     "tsx": "^4.21.0",
     "typescript": "~5.9.3",
     "vite": "^8.0.1",

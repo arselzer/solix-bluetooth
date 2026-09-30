@@ -390,24 +390,22 @@ def test_http_adapter_marks_stale_worker_and_readings_unavailable(ap_service, mo
 
 
 def test_native_http_auth_and_freshness(ap_service):
-    pytest.importorskip("aiohttp")
-    from aiohttp.test_utils import TestClient, TestServer
+    from http_helpers import api_client
     from solix_gen2.server import create_app
     async def run():
         config, directory = ap_service
         service = APServiceMonitor(config, directory)
         private_write(directory / "status.json", json.dumps({"name": config.name, "connected": True,
                       "last_seen_timestamp": time.time(), "metrics": {"battery_percentage": 90}}))
-        async with TestServer(create_app(service, token="test-token")) as server:
-            async with TestClient(server) as client:
-                assert (await client.get("/devices")).status == 401
-                headers = {"Authorization": "Bearer test-token"}
-                value = await (await client.get("/devices/ups", headers=headers)).json()
-                assert value["available"] and value["metrics"]["battery_percentage"] == 90
-                assert config.device_serial not in json.dumps(value)
-                private_write(directory / "status.json", json.dumps({"name": config.name, "connected": False,
-                              "last_seen_timestamp": time.time(), "metrics": {"battery_percentage": 90}}))
-                assert (await client.get("/health", headers=headers)).status == 503
+        async with api_client(create_app(service, token="test-token")) as client:
+            assert (await client.get("/devices")).status_code == 401
+            headers = {"Authorization": "Bearer test-token"}
+            value = (await client.get("/devices/ups", headers=headers)).json()
+            assert value["available"] and value["metrics"]["battery_percentage"] == 90
+            assert config.device_serial not in json.dumps(value)
+            private_write(directory / "status.json", json.dumps({"name": config.name, "connected": False,
+                          "last_seen_timestamp": time.time(), "metrics": {"battery_percentage": 90}}))
+            assert (await client.get("/health", headers=headers)).status_code == 503
     asyncio.run(run())
 
 

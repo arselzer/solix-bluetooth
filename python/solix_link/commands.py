@@ -5,14 +5,18 @@ from .tou import TouPeriod, validate_periods
 COMMAND_FIELDS = {
     "set-charge-power": {"watts": int},
     "set-charge-cap": {"upper": int},
+    "set-discharge-floor": {"lower": int},
     "set-backup-reserve": {"reserve": int},
     "set-tou-plan": {"periods": list, "enabled": bool},
     "return-grid": {"timeout": int},
     "set-display-timeout": {"seconds": int},
     "set-fast-charge": {"enabled": bool},
     "set-light": {"mode": int},
+    "set-temperature-unit": {"fahrenheit": bool},
+    "set-off-grid-alert": {"enabled": bool},
 }
 NATIVE_COMMANDS = ("set-charge-power", "set-charge-cap", "set-backup-reserve", "set-tou-plan", "return-grid")
+NATIVE_C1000_COMMANDS = ("set-temperature-unit", "set-off-grid-alert", "set-discharge-floor")
 
 
 def validate_command(command: str, values: dict) -> None:

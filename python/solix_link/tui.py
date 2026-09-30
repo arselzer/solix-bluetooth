@@ -38,6 +38,8 @@ METRIC_LABELS = {
     "active_tariff": "Active tariff",
     "tou_schedule_slot_count": "Tariff periods",
     "display_timeout_seconds": "Display timeout (s)",
+    "temperature_unit_fahrenheit": "Display uses Fahrenheit",
+    "ac_off_grid_alert_enabled": "Off-grid alert enabled",
     "light_mode": "Light mode",
     "time_remaining_minutes": "Remaining time (min)",
     "software_version": "Firmware",
@@ -52,6 +54,7 @@ class Target:
     native: bool = False
     device: DeviceConfig | None = field(default=None, repr=False)
     saved: bool = True
+    native_name: str | None = None
 
 
 @dataclass(frozen=True)
@@ -65,11 +68,18 @@ def controls_for(target: Target) -> tuple[Control, ...]:
     """Expose model-supported operations; C2000 never gets an AC switch."""
     if target.native:
         maximum = 1200 if target.model == Model.C1000_GEN2 else 1800
-        return (
+        items = (
             Control("charge-power", "AC charging power", f"300–{maximum} W, in 100 W steps"),
             Control("charge-cap", "Upper charge limit", "80–100%, in 5% steps"),
             Control("reserve", "Backup reserve", "5–100%, in 5% steps; within current charge limits"),
         )
+        if target.model == Model.C1000_GEN2:
+            items += (
+                Control("temperature-unit", "Temperature unit", "celsius or fahrenheit"),
+                Control("off-grid-alert", "Off-grid alert", "on or off"),
+                Control("discharge-floor", "Lower discharge limit", "1, 5, 10, 15 or 20%; requires reserve at least 5% higher"),
+            )
+        return items
     limits = {
         Model.C300: "100, 200, 300 or 330 W",
         Model.C1000: "100–1000 W, in 100 W steps; hardware verification pending",
@@ -137,7 +147,15 @@ class TuiBackend:
                         for d in devices]
         if ap_service_directory is not None:
             model = self._native_model(ap_service_directory)
-            self.targets.append(Target("native", f"Native MQTT · {model.value} · AP service", model, True))
+            from .ap_service_config import load_ap_service_profiles
+            if (ap_service_directory / "ap_service.json").exists():
+                profiles = load_ap_service_profiles(ap_service_directory)
+                for name, (config, _) in profiles.items():
+                    key = "native" if len(profiles) == 1 else f"native:{name}"
+                    self.targets.append(Target(key, f"{name} · {config.model.value} · Native MQTT", config.model,
+                                               True, native_name=name if len(profiles) > 1 else None))
+            else:
+                self.targets.append(Target("native", f"Native MQTT · {model.value} · AP service", model, True))
         self.directory = ap_service_directory
         self.monitor_factory = monitor_factory
         self.requester = requester
@@ -221,14 +239,42 @@ class TuiBackend:
                 self.target = updated
             return updated
 
-    async def _native(self, command: str, **fields: Any) -> dict:
+    async def _native(self, command: str, *, target: Target | None = None, **fields: Any) -> dict:
         if self.directory is None:
             raise RuntimeError("No AP-service directory was selected")
         requester = self.requester
         if requester is None:
             from .ap_service import ap_service_request
             requester = ap_service_request
+        target = target or self.target
+        if target and target.native_name:
+            fields["name"] = target.native_name
         return await requester(self.directory, command, **fields)
+
+    async def register_native(self) -> None:
+        """Add the connected paired station to a stopped AP, without device writes."""
+        from .ap_service_config import add_ap_service_device, load_ap_service, load_ap_service_profiles
+        async with self._lock:
+            target = self.target
+            if self.directory is None or target is None or target.native or target.device is None:
+                raise ValueError("Connect to a paired Gen 2 station over Bluetooth first")
+            device = target.device
+            if not target.saved or device.model not in (Model.C1000_GEN2, Model.C2000_GEN2) or device.protocol != "prime" or not device.client_id:
+                raise ValueError("Save and pair a Gen 2 station before adding it to the AP")
+            if not self._ble_snapshot()["available"]:
+                raise ConnectionError("Fresh Bluetooth telemetry is required")
+            serial = self.monitor.metrics.get("serial_number")
+            if not isinstance(serial, str):
+                raise RuntimeError("Device serial not reported; no AP profile changed")
+            parent = load_ap_service(self.directory / "ap_service.json")
+            config = replace(parent, name=device.name, model=device.model, device_serial=serial,
+                             account_id=device.client_id, timezone_name=device.timezone_name or "Etc/UTC")
+            await asyncio.to_thread(add_ap_service_device, self.directory, config)
+            profiles = load_ap_service_profiles(self.directory)
+            self.targets = [item for item in self.targets if not item.native]
+            for name, (item, _) in profiles.items():
+                self.targets.append(Target(f"native:{name}", f"{name} · {item.model.value} · Native MQTT", item.model,
+                                           True, native_name=name))
 
     async def _close(self) -> None:
         monitor, self.monitor = self.monitor, None
@@ -249,7 +295,7 @@ class TuiBackend:
             if target is None:
                 raise ValueError("Choose a saved station or a running AP service")
             if target.native:
-                snapshot = await self._native("status")
+                snapshot = await self._native("status", target=target)
                 self.target = target
                 self.control_enabled = snapshot.get("control_enabled") is True
                 return public_snapshot(snapshot)
@@ -311,6 +357,16 @@ class TuiBackend:
                     response = await self._native("set-tou-plan", periods=parse_plan(value), enabled=enabled)
                 elif action == "return-grid":
                     response = await self._native("return-grid", timeout=30)
+                elif action == "temperature-unit":
+                    if value.strip().lower() not in ("celsius", "fahrenheit"):
+                        raise ValueError("Enter celsius or fahrenheit")
+                    response = await self._native("set-temperature-unit", fahrenheit=value.strip().lower() == "fahrenheit")
+                elif action == "off-grid-alert":
+                    if value.strip().lower() not in ("on", "off"):
+                        raise ValueError("Enter on or off")
+                    response = await self._native("set-off-grid-alert", enabled=value.strip().lower() == "on")
+                elif action == "discharge-floor":
+                    response = await self._native("set-discharge-floor", lower=int(value))
                 else:
                     command, field_name = {
                         "charge-power": ("set-charge-power", "watts"),
@@ -458,7 +514,9 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
         .narrow #station { width: 100%; }
         .narrow #connection-buttons { width: 100%; }
         .narrow #discovery { layout: vertical; }
-        #discovery-buttons { width: 34; height: 3; }
+        #discovery-buttons { width: 52; height: 3; }
+        .narrow #discovery-buttons { width: 100%; }
+        .compact #add-to-ap { display: none; }
         .narrow #discovery-hint { width: 100%; padding-top: 0; }
         .narrow .form-row { layout: vertical; }
         .narrow .form-row Input { width: 100%; }
@@ -491,6 +549,7 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
                     with Horizontal(id="discovery-buttons"):
                         yield Button("Scan Bluetooth", id="scan")
                         yield Button("Save station", id="save-station", disabled=True)
+                        yield Button("Add to AP", id="add-to-ap", disabled=True)
                     yield Static("Scan nearby stations or choose a saved station.", id="discovery-hint", markup=False)
                 yield Static("Disconnected · Choose a station, then Connect.", id="connection-status", markup=False)
                 yield Static("Tab / Shift+Tab navigate · Enter select · F1–F4 panels · ? help", id="keyboard-hint", markup=False)
@@ -583,6 +642,7 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
             self.query_one("#connect", Button).disabled = self.busy or not self.selected
             self.query_one("#scan", Button).disabled = self.busy
             self.query_one("#save-station", Button).disabled = self.busy or backend.config_path is None or not target or target.saved
+            self.query_one("#add-to-ap", Button).disabled = self.busy or not connected or not fresh or backend.directory is None or not target or target.native or not target.saved or target.model not in (Model.C1000_GEN2, Model.C2000_GEN2)
             self.query_one("#disconnect", Button).disabled = self.busy or not connected
             self.query_one("#apply-setting", Button).disabled = self.busy or not connected or not fresh or not permitted
             for name in ("apply-plan", "return-grid"):
@@ -688,6 +748,12 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
                     self.refresh_targets()
                     self.event_log(f"Saved station as {target.device.name}.")
                 self.launch(save())
+            elif action == "add-to-ap":
+                async def add_to_ap() -> None:
+                    await backend.register_native()
+                    self.refresh_targets()
+                    self.event_log("Station added to the shared AP. Use ap-service-run --provision --name to join it.")
+                self.launch(add_to_ap())
             elif action == "apply-setting":
                 key = self.query_one("#setting", Select).value
                 if isinstance(key, str):

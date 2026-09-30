@@ -233,6 +233,109 @@ class LocalMqttServer:
             raise ConnectionError("Station is not connected")
         return self.connection
 
+    async def set_temperature_unit(self, fahrenheit: bool) -> dict:
+        request = self.commands.temperature_unit(fahrenheit)  # Model/type guard before I/O.
+        return await self._set_c1000_boolean(request, "temperature_unit_fahrenheit", fahrenheit)
+
+    async def set_off_grid_alert(self, enabled: bool) -> dict:
+        request = self.commands.off_grid_alert(enabled)
+        return await self._set_c1000_boolean(request, "ac_off_grid_alert_enabled", enabled)
+
+    async def set_discharge_floor(self, lower: int) -> dict:
+        """Confirm a lower limit without changing reserve or other settings.
+
+        Firmware can raise reserve as a side effect. Reject that combination
+        before writing; do not automatically adjust reserve or retry failures.
+        A failed confirmation can leave the requested setting applied.
+        """
+        request = self.commands.discharge_floor(lower)  # Model/type/range guard before I/O.
+        async with self._control_lock:
+            connection = self._control_connection()
+            before_a4, before_d9, before = await self._fresh_c1000_settings(connection)
+            upper, old_lower, reserve = (before[key] for key in (
+                "max_charge_percentage", "min_charge_percentage", "backup_reserve_percentage"))
+            if before_a4[24] != upper or before_a4[25] != old_lower:
+                raise RuntimeError("Conflicting discharge-floor readback; no write sent")
+            if (upper not in (80, 85, 90, 95, 100) or old_lower not in (1, 5, 10, 15, 20)
+                    or not 5 <= reserve <= 100 or reserve % 5):
+                raise RuntimeError("Invalid C1000 charge-limit baseline; no write sent")
+            if not lower + 5 <= reserve <= upper:
+                raise ValueError("Discharge floor would alter reserve or conflict with charge cap; no write sent")
+            await connection.request(request)
+            a4, d9, metrics = await self._fresh_c1000_settings(connection)
+            if metrics["min_charge_percentage"] != lower:
+                raise RuntimeError("Discharge floor not confirmed by telemetry; settings may have changed")
+            expected_a4 = bytearray(before_a4)
+            expected_a4[25] = lower  # Live A4 mirror of D9[5], including type04.
+            for start, key in ((1, "ac_output_timeout_seconds"), (9, "dc_output_timeout_seconds")):
+                if metrics[key] > before[key]:
+                    raise RuntimeError("Output timer changed during setting confirmation")
+                expected_a4[start:start + 4] = a4[start:start + 4]
+            expected_d9 = bytearray(before_d9)
+            expected_d9[5] = lower
+            # The active tariff is runtime state and may change at a boundary.
+            if (a4 != bytes(expected_a4) or d9[2:] != bytes(expected_d9[2:])
+                    or any(metrics[key] != before[key] for key in (
+                        "ac_output_enabled", "dc_output_enabled", "ac_input_connected"))):
+                raise RuntimeError("Protected setting changed; settings may have changed")
+            return self._tou_result(d9, metrics)
+
+    async def _fresh_c1000_settings(self, connection) -> tuple[bytes, bytes, dict]:
+        if self.config.model != Model.C1000_GEN2:
+            raise ValueError("Setting requires C1000 Gen 2 only")
+        reply = await connection.request(self.commands.status())
+        if not reply or reply[0] != 0:
+            raise RuntimeError("Status request failed")
+        metrics, fields = decode_telemetry(reply[1:], self.config.model)
+        a4, d9 = fields.get(0xA4, b""), fields.get(0xD9, b"")
+        if len(a4) != 34 or a4[0] != 4:
+            raise RuntimeError("Missing complete C1000 settings baseline")
+        periods_from_d9(d9)
+        boolean_fields = ("ac_output_enabled", "dc_output_enabled", "ac_input_connected",
+                          "temperature_unit_fahrenheit", "ac_off_grid_alert_enabled")
+        if any(type(metrics.get(key)) is not int or metrics[key] not in (0, 1)
+               for key in boolean_fields):
+            raise RuntimeError("Missing valid C1000 output/settings baseline")
+        metrics.pop("serial_number", None)
+        return a4, d9, metrics
+
+    async def _set_c1000_boolean(self, request: NativeMqttRequest, metric: str, value: bool) -> dict:
+        """Confirm one setting against fresh raw configuration and output states.
+
+        No write retry or automatic restoration: a failed confirmation can leave
+        changed settings. Inspect fresh status before deciding the next action.
+        """
+        if self.config.model != Model.C1000_GEN2 or type(value) is not bool:
+            raise ValueError("Boolean setting requires C1000 Gen 2 and a boolean value")
+        if metric not in ("temperature_unit_fahrenheit", "ac_off_grid_alert_enabled"):
+            raise ValueError("Unsupported C1000 boolean setting")
+
+        async with self._control_lock:
+            connection = self._control_connection()
+            before_a4, before_d9, before = await self._fresh_c1000_settings(connection)
+            await connection.request(request)
+            a4, d9, metrics = await self._fresh_c1000_settings(connection)
+            if metrics[metric] != int(value):
+                raise RuntimeError("Setting not confirmed by telemetry; settings may have changed")
+            protected = ("ac_output_enabled", "dc_output_enabled", "ac_input_connected")
+            expected = bytearray(before_a4)
+            if metric == "temperature_unit_fahrenheit":
+                expected[20] = int(value)
+            else:
+                expected[32] = (expected[32] & ~2) | (int(value) << 1)
+            # These are remaining seconds, not fixed timeout configuration.
+            # A running countdown may decrease; a disabled timer must stay zero.
+            for start, key in ((1, "ac_output_timeout_seconds"), (9, "dc_output_timeout_seconds")):
+                if metrics[key] > before[key]:
+                    raise RuntimeError("Output timer changed during setting confirmation")
+                expected[start:start + 4] = a4[start:start + 4]
+            # A tariff boundary can change the active tariff without altering
+            # mode, reserve, limits, schedule, or the remaining D9 configuration.
+            if (a4 != bytes(expected) or d9[2:] != before_d9[2:]
+                    or any(metrics[key] != before[key] for key in protected)):
+                raise RuntimeError("Protected setting changed; settings may have changed")
+            return self._tou_result(d9, metrics)
+
     async def _fresh_tou(self, connection, *, timeout: float = 12) -> tuple[bytes, dict]:
         reply = await connection.request(self.commands.status(), timeout=timeout)
         if not reply or reply[0] != 0:

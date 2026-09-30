@@ -8,6 +8,8 @@ C1000/C2000 Gen 2: `ap-service-init`, `ap-service-run`, `ap-service-status`, `ap
 `ap-service-set-charge-power`, `ap-service-set-charge-cap`, `ap-service-set-reserve`, `ap-service-set-tou`,
 `ap-service-grid` and `ap-service-serve`. It packages the
 local API, NTP and mTLS interception workflow, without an internet route.
+One [shared AP](../docs/multiple-ap-devices.md) supports multiple registered
+Gen 2 stations with terminal/browser/API selection.
 C1000 uses its generated BLE pairing ID for local MQTT; C2000 generated-ID
 MQTT remains unverified. See [C1000 findings](../docs/c1000-local-mqtt.md).
 Monitoring is the default;
@@ -25,7 +27,7 @@ such as `monitor`, `serve` and `ap-service-status` keep their scripted behavior.
 | --- | --- | --- |
 | `c300` — C300/C300X AC | C300X tested live; C300 sibling uses the reference map | AC output, light, charging-power limit, screen timeout verified |
 | `c1000` — original A1761 | Implemented, **not hardware tested** | Available normally with validation and telemetry confirmation |
-| `c1000_gen2` — A1763 | BLE and native MQTT tested live | Charge limits/power, display timeout, fast charge; native reserve, Peak/Mid-Peak and grid return |
+| `c1000_gen2` — A1763 | BLE and native MQTT tested live | Charge limits/power, display timeout, fast charge; native reserve, tariffs/grid return, temperature, alert and guarded discharge floor |
 | `c2000_gen2` — A1783 | Tested live | Upper charge cap, charging power, screen timeout; native reserve, all-day Peak and confirmed grid return |
 
 C300 DC variants are not supported. The distribution and CLI are `solix-link`;
@@ -232,7 +234,8 @@ The corrected local MQTT trial now verifies Time-of-Use activation on this
 C2000 firmware; the earlier failed trials used malformed schedules.
 The [firmware analysis](../docs/firmware-findings.md) traces the C1000's binding
 and network-readiness requirements. Recovered C1000 schedule encoding matches
-the retained C2000 data, but C1000 activation still requires its own live test.
+the retained C2000 data; subsequent [C1000 native tests](../docs/c1000-local-mqtt.md)
+confirmed local setup, activation and grid return.
 Native device MQTT remains experimental; the supported local MQTT bridge uses
 BLE to communicate with each station.
 C1000 Gen 2 firmware 1.1.4.3 uses legacy AES-CBC. After updating to 1.1.4.9,
@@ -298,8 +301,8 @@ existing device can be updated with `solix-link add` and its saved client ID.
 Use `--config /path/to/config.json` on `pair`, `add`, `monitor`, or `serve` to
 choose another path. This workspace already has a working, ignored config at
 `.solix-private/config.json`; copy it to the Home Assistant node with private
-file permissions to avoid pairing again. The monitor service and HTTP server
-never send setting or AC/DC output commands.
+file permissions to avoid pairing again. Monitoring is read-only by default. The HTTP server exposes only explicit
+allowlisted settings when controls are enabled; it has no AC-output switch.
 
 For a C1000 **Gen 2** still on firmware 1.1.4.3, use:
 
@@ -483,7 +486,9 @@ The battery stayed idle at its cap; this verified the setpoint, not charging
 current. Corrected native mode/reserve/schedule writes now activate Peak and
 battery discharge with mains connected. The [live trial](../docs/c2000-corrected-peak-trial.md)
 records the exact encoding and delayed grid-return observations. Those schedule
-controls remain private research probes. C1000 native MQTT remains unverified.
+controls are available through the guarded AP-service CLI and gateway.
+[C1000 native MQTT](../docs/c1000-local-mqtt.md) is also verified with a
+generated local identity and certificates, including charging and tariff controls.
 
 Use the decoder with a broker client or Home Assistant coordinator:
 
@@ -580,7 +585,8 @@ are not known; verify association and API traffic separately. Those C1000
 results predate the `4025` ordering fix: the builder now emits ascending TLV
 tags so the firmware does not silently skip service/model/timezone fields.
 This corrected layout established native MQTT on C2000 using a private probe;
-the corrected C1000 CLI workflow still needs a hardware retest.
+the corrected C1000 local workflow is now verified with a generated pairing
+identity and certificates; see the [live results](../docs/c1000-local-mqtt.md).
 
 Python callers can use `await monitor.join_wifi(...)` or
 `await monitor.send_wifi_provisioning(...)` with the same parameters. The
@@ -600,6 +606,10 @@ complete station binding; the successful C2000 AP-service setup also supplied a
 local API, DNS/NTP, and TLS MQTT broker.
 See the [credential and firmware findings](../docs/gen2-protocol.md#device-mqtt-credential-envelope).
 
+The server uses FastAPI/Uvicorn. Add `--web-ui` to `serve` or
+`ap-service-serve` for the optional packaged Vue dashboard at `/`; station APIs
+remain authenticated. See [dashboard setup and development](../docs/web-dashboard.md).
+
 The server provides:
 
 | Endpoint | Content |
@@ -613,7 +623,7 @@ The server provides:
 
 The default bind address is `127.0.0.1`. Use `--host 0.0.0.0` to let other
 machines on your network read it. Set `SOLIX_HTTP_TOKEN` to require a Bearer
-token on every endpoint; Home Assistant can send it in an `Authorization`
+token on every API endpoint; Home Assistant can send it in an `Authorization`
 header. The service reconnects BLE automatically and marks readings
 unavailable when the station stops reporting.
 
