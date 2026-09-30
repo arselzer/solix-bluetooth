@@ -1,0 +1,321 @@
+{
+  "messages": {
+    "0042": {
+      "a2": {
+        "name": "set_ac_output_timeout_seconds",
+        "state_name": "ac_output_timeout_seconds",
+        "type": {
+          "expression": "DeviceHexDataTypes.var.value"
+        },
+        "value_max": 86400,
+        "value_min": 0,
+        "value_step": 300
+      },
+      "command": {
+        "expression": "SolixMqttCommands.ac_output_timeout_seconds"
+      },
+      "expression": "CMD_AC_OUTPUT_TIMEOUT_SEC",
+      "source_line": 4793
+    },
+    "0043": {
+      "a2": {
+        "name": "set_dc_output_timeout_seconds",
+        "state_name": "dc_output_timeout_seconds",
+        "type": {
+          "expression": "DeviceHexDataTypes.var.value"
+        },
+        "value_max": 86400,
+        "value_min": 0,
+        "value_step": 300
+      },
+      "command": {
+        "expression": "SolixMqttCommands.dc_output_timeout_seconds"
+      },
+      "expression": "CMD_DC_OUTPUT_TIMEOUT_SEC",
+      "source_line": 4794
+    },
+    "0044": {
+      "a2": {
+        "name": "set_ac_input_limit",
+        "state_name": "ac_input_limit",
+        "type": {
+          "expression": "DeviceHexDataTypes.sile.value"
+        },
+        "value_max": 1000,
+        "value_min": 100,
+        "value_step": 100
+      },
+      "command": {
+        "expression": "SolixMqttCommands.ac_charge_limit"
+      },
+      "expression": "CMD_AC_CHARGE_LIMIT",
+      "source_line": 4795
+    },
+    "0045": {
+      "a2": {
+        "name": "set_device_timeout_min",
+        "state_name": "device_timeout_minutes",
+        "type": {
+          "expression": "DeviceHexDataTypes.sile.value"
+        },
+        "value_options": [
+          0,
+          30,
+          60,
+          120,
+          240,
+          360,
+          720,
+          1440
+        ]
+      },
+      "command": {
+        "expression": "SolixMqttCommands.device_timeout_minutes"
+      },
+      "expression": "CMD_DEVICE_TIMEOUT_MIN",
+      "source_line": 4804
+    },
+    "0046": {
+      "a2": {
+        "name": "set_display_timeout_sec",
+        "state_name": "display_timeout_seconds",
+        "type": {
+          "expression": "DeviceHexDataTypes.sile.value"
+        },
+        "value_options": [
+          20,
+          30,
+          60,
+          300,
+          1800
+        ]
+      },
+      "command": {
+        "expression": "SolixMqttCommands.display_timeout_seconds"
+      },
+      "expression": "CMD_DISPLAY_TIMEOUT_SEC",
+      "source_line": 4805
+    },
+    "004a": {
+      "a2": {
+        "name": "set_ac_output_switch",
+        "state_name": "ac_output_power_switch",
+        "type": {
+          "expression": "DeviceHexDataTypes.ui.value"
+        },
+        "value_options": {
+          "off": 0,
+          "on": 1
+        }
+      },
+      "command": {
+        "expression": "SolixMqttCommands.ac_output_switch"
+      },
+      "expression": "CMD_AC_OUTPUT_SWITCH",
+      "source_line": 4806
+    },
+    "004b": {
+      "a2": {
+        "name": "set_dc_output_switch",
+        "state_name": "dc_output_power_switch",
+        "type": {
+          "expression": "DeviceHexDataTypes.ui.value"
+        },
+        "value_options": {
+          "off": 0,
+          "on": 1
+        }
+      },
+      "command": {
+        "expression": "SolixMqttCommands.dc_output_switch"
+      },
+      "expression": "CMD_DC_OUTPUT_SWITCH",
+      "source_line": 4807
+    },
+    "004c": {
+      "a2": {
+        "name": "set_display_mode",
+        "state_name": "display_mode",
+        "type": {
+          "expression": "DeviceHexDataTypes.ui.value"
+        },
+        "value_options": {
+          "high": 3,
+          "low": 1,
+          "medium": 2,
+          "off": 0
+        }
+      },
+      "command": {
+        "expression": "SolixMqttCommands.display_mode_select"
+      },
+      "expression": "CMD_DISPLAY_MODE",
+      "source_line": 4808
+    },
+    "004f": {
+      "a2": {
+        "name": "set_light_mode",
+        "state_name": "light_mode",
+        "type": {
+          "expression": "DeviceHexDataTypes.ui.value"
+        },
+        "value_options": {
+          "blinking": 4,
+          "high": 3,
+          "low": 1,
+          "medium": 2,
+          "off": 0
+        }
+      },
+      "command": {
+        "expression": "SolixMqttCommands.light_mode_select"
+      },
+      "expression": "CMD_LIGHT_MODE",
+      "source_line": 4809
+    },
+    "0050": {
+      "a2": {
+        "name": "set_temp_unit_fahrenheit",
+        "state_name": "temp_unit_fahrenheit",
+        "type": {
+          "expression": "DeviceHexDataTypes.ui.value"
+        },
+        "value_options": {
+          "celsius": 0,
+          "fahrenheit": 1
+        }
+      },
+      "command": {
+        "expression": "SolixMqttCommands.temp_unit_switch"
+      },
+      "expression": "CMD_TEMP_UNIT",
+      "source_line": 4810
+    },
+    "0052": {
+      "a2": {
+        "name": "set_display_switch",
+        "state_name": "display_switch",
+        "type": {
+          "expression": "DeviceHexDataTypes.ui.value"
+        },
+        "value_options": {
+          "off": 0,
+          "on": 1
+        }
+      },
+      "command": {
+        "expression": "SolixMqttCommands.display_switch"
+      },
+      "expression": "CMD_DISPLAY_SWITCH",
+      "source_line": 4811
+    },
+    "0057": {
+      "a2": {
+        "name": "set_realtime_trigger",
+        "type": {
+          "expression": "DeviceHexDataTypes.ui.value"
+        },
+        "value_options": {
+          "off": 0,
+          "on": 1
+        }
+      },
+      "command": {
+        "expression": "SolixMqttCommands.realtime_trigger"
+      },
+      "expression": "CMD_REALTIME_TRIGGER",
+      "source_line": 4812
+    },
+    "005e": {
+      "a2": {
+        "name": "set_ac_fast_charge_switch",
+        "state_name": "ac_fast_charge_switch",
+        "type": {
+          "expression": "DeviceHexDataTypes.ui.value"
+        },
+        "value_options": {
+          "off": 0,
+          "on": 1
+        }
+      },
+      "command": {
+        "expression": "SolixMqttCommands.ac_fast_charge_switch"
+      },
+      "expression": "CMD_AC_FAST_CHARGE_SWITCH",
+      "source_line": 4813
+    },
+    "0076": {
+      "a2": {
+        "name": "set_dc_12v_output_mode",
+        "state_name": "dc_12v_output_mode",
+        "type": {
+          "expression": "DeviceHexDataTypes.ui.value"
+        },
+        "value_options": {
+          "normal": 1,
+          "smart": 0
+        }
+      },
+      "command": {
+        "expression": "SolixMqttCommands.dc_12v_output_mode_select"
+      },
+      "expression": "CMD_DC_12V_OUTPUT_MODE_INV",
+      "source_line": 4814
+    },
+    "0077": {
+      "a2": {
+        "name": "set_ac_output_mode",
+        "state_name": "ac_output_mode",
+        "type": {
+          "expression": "DeviceHexDataTypes.ui.value"
+        },
+        "value_options": {
+          "normal": 1,
+          "smart": 0
+        }
+      },
+      "command": {
+        "expression": "SolixMqttCommands.ac_output_mode_select"
+      },
+      "expression": "CMD_AC_OUTPUT_MODE_INV",
+      "source_line": 4815
+    },
+    "0405": {
+      "expression": "_A1761_0405",
+      "source_line": 4817
+    },
+    "0407": {
+      "expression": "_0407",
+      "source_line": 4819
+    },
+    "0830": {
+      "expression": "_PPS_VERSIONS_0830",
+      "source_line": 4821
+    }
+  },
+  "model": "A1761",
+  "provenance": {
+    "sha256": {
+      "mqttcmdmap.py": "3e9272acf28696cfa17e818d31d99a79f4a8cf753311dcacf3db966cdc6c9823",
+      "mqttmap.py": "cffc8bc5b95766f3e79a0e3f334bf82c0c801a6f1d181ba79af409a07f94bffb"
+    },
+    "upstream": "https://github.com/thomluther/anker-solix-api/tree/c2f8769/src/anker_solix_api"
+  },
+  "scope": "Static public source map only; no firmware or transport compatibility proof",
+  "selected_0405_fields": {
+    "a5": "ac_input_power",
+    "b3": "sw_version",
+    "b9": "sw_expansion",
+    "ba": "sw_controller",
+    "bc": "charging_status",
+    "d1": "ac_input_limit",
+    "d2": "device_timeout_minutes",
+    "e5": "ac_fast_charge_switch"
+  },
+  "unmapped_here_only": [
+    "0024",
+    "0025",
+    "0090",
+    "0103"
+  ]
+}

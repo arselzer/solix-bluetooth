@@ -27,12 +27,22 @@ BLE session keys, account credentials and raw live-device logs remain private.
 ## Reproduce observations
 
 The [offline replay tools](../tools/firmware_analysis/) default to this input
-directory and reproduce **1,540 synthetic cases**. Their emulation uses
+directory and reproduce **1,842 Gen 2 synthetic cases**. Their emulation uses
 substituted hardware/services and cannot establish physical behavior.
 See [setup and limits](../docs/firmware-analysis-reproduction.md).
 
 Keep firmware inputs separate from live device configuration. The repository
 provides no firmware-flashing command or tested replacement firmware.
+
+## Original C1000 input
+
+[`c1000_original/1.5.9/`](c1000_original/1.5.9/README.md) contains the untouched
+public vendor A1761 OTA package and its five decoded controller/DSP/BMS images.
+The downloaded bytes match the public size and MD5; the manifest records
+SHA-256 and component integrity checks. DSP strings identify 230 V hardware.
+The package has no listed radio image and does not match the tested station's
+installed 1.5.1 controller. A separate replay covers **1,317 synthetic cases**;
+its substitutions and unresolved container signature are documented there.
 
 ## Vendor notice
 

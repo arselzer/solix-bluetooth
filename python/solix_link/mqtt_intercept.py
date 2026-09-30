@@ -16,7 +16,7 @@ from typing import Callable
 
 from .ap_service_config import APServiceConfig, private_write
 from .native_mqtt import NativeMqttCommands, NativeMqttRequest, decode_mqtt_telemetry
-from .protocol import DATA_RESPONSE, Model, decode_telemetry, parse_packet, parse_tlvs
+from .protocol import DATA_RESPONSE, Model, decode_telemetry, parse_packet, parse_tlvs, timezone_confer
 from .tou import PowerFlowTimeout, TouPeriod, periods_from_d9, power_flow, validate_periods
 
 
@@ -48,14 +48,19 @@ async def read_mqtt(reader: asyncio.StreamReader) -> tuple[int, bytes]:
     return first, await reader.readexactly(remaining)
 
 
-def mqtt_string(body: bytes, position: int) -> tuple[str, int]:
+def mqtt_string(body: bytes, position: int, *, allow_zero_client_id: bool = False) -> tuple[str, int]:
     if position + 2 > len(body):
         raise ValueError("Truncated MQTT string")
     size = int.from_bytes(body[position:position + 2], "big")
     end = position + 2 + size
     if end > len(body):
         raise ValueError("Truncated MQTT string")
-    value = body[position + 2:end].decode("utf-8")
+    raw = body[position + 2:end]
+    # A1763 startup can send an all-zero 17-byte client ID. TLS and the exact
+    # station subscription identify the peer; this ID is never used for routing.
+    if allow_zero_client_id and size == 17 and raw == bytes(17):
+        return "", end
+    value = raw.decode("utf-8")
     if "\x00" in value:
         raise ValueError("Invalid MQTT string")
     return value, end
@@ -156,8 +161,8 @@ class LocalMqttServer:
         self._tasks.add(task)
         try:
             await connection.run()
-        except (OSError, ValueError, asyncio.IncompleteReadError, TimeoutError):
-            self.record("connection_closed")
+        except (OSError, ValueError, asyncio.IncompleteReadError, TimeoutError) as error:
+            self.record("connection_closed", reason=type(error).__name__)
         finally:
             await connection.close()
             self._clients.discard(connection)
@@ -184,6 +189,8 @@ class LocalMqttServer:
 
     async def set_ac_charging_power(self, watts: int) -> dict:
         request = self.commands.ac_charging_power(watts)  # Validate before I/O.
+        if self.config.model == Model.C1000_GEN2:
+            return await self._set_c1000_setting(request, "ac_charging_power_limit_w", watts)
         if not self.allow_control:
             raise PermissionError("Native charging control is disabled")
         async with self._control_lock:
@@ -245,6 +252,10 @@ class LocalMqttServer:
         request = self.commands.device_timeout(minutes)
         return await self._set_c1000_setting(request, "device_timeout_minutes", minutes)
 
+    async def set_fast_charge_enabled(self, enabled: bool) -> dict:
+        request = self.commands.fast_charge(enabled)
+        return await self._set_c1000_setting(request, "ac_fast_charge_enabled", int(enabled))
+
     async def set_discharge_floor(self, lower: int) -> dict:
         """Confirm a lower limit without changing reserve or other settings.
 
@@ -299,7 +310,8 @@ class LocalMqttServer:
                for tag, size in ((0xA7, 5), (0xB2, 4))):
             raise RuntimeError("Missing valid C1000 output/settings baseline")
         boolean_fields = ("ac_output_enabled", "dc_output_enabled", "ac_input_connected",
-                          "temperature_unit_fahrenheit", "ac_off_grid_alert_enabled")
+                          "temperature_unit_fahrenheit", "ac_off_grid_alert_enabled", "ac_fast_charge_enabled",
+                          "display_enabled")
         if any(type(metrics.get(key)) is not int or metrics[key] not in (0, 1)
                for key in boolean_fields):
             raise RuntimeError("Missing valid C1000 output/settings baseline")
@@ -319,35 +331,51 @@ class LocalMqttServer:
         No write retry or automatic restoration: a failed confirmation can leave
         changed settings. Inspect fresh status before deciding the next action.
         """
-        if metric not in ("temperature_unit_fahrenheit", "ac_off_grid_alert_enabled", "device_timeout_minutes"):
+        if metric not in ("temperature_unit_fahrenheit", "ac_off_grid_alert_enabled", "device_timeout_minutes",
+                          "ac_fast_charge_enabled", "ac_charging_power_limit_w"):
             raise ValueError("Unsupported C1000 setting")
 
         async with self._control_lock:
             connection = self._control_connection()
             before_a4, before_d9, before = await self._fresh_c1000_settings(connection)
+            if metric == "ac_fast_charge_enabled" and value and (
+                    before["usage_mode"] != "standard" or before["active_tariff"] != "none"
+                    or before["ac_input_connected"] != 1):
+                raise ValueError("Fast charge requires Standard mode and connected mains; no write sent")
             await connection.request(request)
-            a4, d9, metrics = await self._fresh_c1000_settings(connection)
-            if metrics[metric] != int(value):
-                raise RuntimeError("Setting not confirmed by telemetry; settings may have changed")
             protected = ("ac_output_enabled", "dc_output_enabled", "ac_input_connected")
             expected = bytearray(before_a4)
             if metric == "temperature_unit_fahrenheit":
                 expected[20] = int(value)
             elif metric == "device_timeout_minutes":
                 expected[14:16] = value.to_bytes(2, "little")
+            elif metric == "ac_fast_charge_enabled":
+                expected[21] = int(value)
+            elif metric == "ac_charging_power_limit_w":
+                expected[5:7] = value.to_bytes(2, "little")
             else:
                 expected[32] = (expected[32] & ~2) | (int(value) << 1)
-            # These are remaining seconds, not fixed timeout configuration.
-            # A running countdown may decrease; a disabled timer must stay zero.
-            for start, key in ((1, "ac_output_timeout_seconds"), (9, "dc_output_timeout_seconds")):
-                if metrics[key] > before[key]:
-                    raise RuntimeError("Output timer changed during setting confirmation")
-                expected[start:start + 4] = a4[start:start + 4]
-            # A tariff boundary can change the active tariff without altering
-            # mode, reserve, limits, schedule, or the remaining D9 configuration.
-            if (a4 != bytes(expected) or d9[2:] != before_d9[2:]
-                    or any(metrics[key] != before[key] for key in protected)):
-                raise RuntimeError("Protected setting changed; settings may have changed")
+            for sample in range(2 if metric == "ac_fast_charge_enabled" else 1):
+                if sample:
+                    # The controller can clear fast charge after acknowledging it.
+                    await asyncio.sleep(1)
+                a4, d9, metrics = await self._fresh_c1000_settings(connection)
+                if metrics[metric] != int(value):
+                    raise RuntimeError("Setting not confirmed by telemetry; settings may have changed")
+                if metric in ("ac_fast_charge_enabled", "ac_charging_power_limit_w"):
+                    # A4[22] is runtime display-timer activity. Fast-charge
+                    # and charge-power events wake it; expiry may clear it. Saved brightness,
+                    # timeout and port memory remain protected byte-for-byte.
+                    expected[22] = a4[22]
+                # Remaining timer seconds may decrease, but never increase.
+                for start, key in ((1, "ac_output_timeout_seconds"), (9, "dc_output_timeout_seconds")):
+                    if metrics[key] > before[key]:
+                        raise RuntimeError("Output timer changed during setting confirmation")
+                    expected[start:start + 4] = a4[start:start + 4]
+                # A tariff boundary may change active tariff without changing the plan.
+                if (a4 != bytes(expected) or d9[2:] != before_d9[2:]
+                        or any(metrics[key] != before[key] for key in protected)):
+                    raise RuntimeError("Protected setting changed; settings may have changed")
             return self._tou_result(d9, metrics)
 
     async def _fresh_tou(self, connection, *, timeout: float = 12) -> tuple[bytes, dict]:
@@ -434,6 +462,12 @@ class LocalMqttServer:
         """
         periods = validate_periods(periods)
         self.commands.tou_plan(periods, enabled=enabled)  # Validate before I/O.
+        all_day = len(periods) == 1 and periods[0].start_hour == 0 and periods[0].end_hour == 24
+        if (enabled and not all_day and self.config.model == Model.C1000_GEN2
+                and timezone_confer(self.config.timezone_name)[0] == bytes(4)):
+            raise ValueError(
+                "C1000 UTC synchronization can retain an old timezone offset; "
+                "use a nonzero-offset local timezone and verify its clock before activating hourly plans")
         async with self._control_lock:
             connection = self._control_connection()
             before_d9, before = await self._fresh_tou(connection)
@@ -594,7 +628,10 @@ class _Connection:
                 connect_flags = body[pos + 1]
                 if connect_flags & 1 or (connect_flags & 0x18) == 0x18 or (not connect_flags & 4 and connect_flags & 0x38) or (connect_flags & 0x40 and not connect_flags & 0x80):
                     raise ValueError("Invalid MQTT CONNECT flags")
-                _client_id, end = mqtt_string(body, pos + 4)
+                _client_id, end = mqtt_string(body, pos + 4, allow_zero_client_id=(
+                    self.server.config.model == Model.C1000_GEN2 and bool(connect_flags & 2)))
+                if not _client_id and body[pos + 4:pos + 6] == b"\x00\x11":
+                    self.server.record("zero_filled_client_id", length=17)
                 if connect_flags & 4:
                     _, end = mqtt_string(body, end)
                     # Will payload is binary; validate its length without UTF-8 decoding.

@@ -16,9 +16,11 @@ COMMAND_FIELDS = {
     "set-temperature-unit": {"fahrenheit": bool},
     "set-off-grid-alert": {"enabled": bool},
     "set-device-timeout": {"minutes": int},
+    "set-ac-power-saving": {"enabled": bool},
+    "set-dc-power-saving": {"enabled": bool},
 }
 NATIVE_COMMANDS = ("set-charge-power", "set-charge-cap", "set-backup-reserve", "set-tou-plan", "return-grid")
-NATIVE_C1000_COMMANDS = ("set-temperature-unit", "set-off-grid-alert", "set-discharge-floor", "set-device-timeout")
+NATIVE_C1000_COMMANDS = ("set-temperature-unit", "set-off-grid-alert", "set-discharge-floor", "set-device-timeout", "set-fast-charge")
 
 
 def validate_command(command: str, values: dict) -> None:

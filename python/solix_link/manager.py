@@ -101,7 +101,8 @@ class MonitorService:
             "display_timeout", "ac_charging_power", "ac_output", "light_mode",
         ))
         legacy_setting = legacy_setting or (device.model == Model.C1000 and device.protocol == "legacy"
-                                             and setting == "device_timeout")
+                                             and setting in ("device_timeout", "temperature_unit", "fast_charge",
+                                                             "ac_power_saving", "dc_power_saving"))
         if setting == "charge_cap" and device.model != Model.C2000_GEN2:
             raise ValueError("Charge-cap setting is verified only on C2000 Gen 2 Prime")
         prime_setting = device.protocol == "prime" and (
@@ -119,6 +120,9 @@ class MonitorService:
             "ac_output": {"enabled": bool},
             "light_mode": {"mode": int},
             "device_timeout": {"minutes": int},
+            "temperature_unit": {"fahrenheit": bool},
+            "ac_power_saving": {"enabled": bool},
+            "dc_power_saving": {"enabled": bool},
         }.get(setting)
         if expected is None:
             raise ValueError("Unsupported setting")
@@ -138,6 +142,12 @@ class MonitorService:
                 return await monitor.set_display_timeout(values["seconds"])
             if setting == "device_timeout":
                 return await monitor.set_device_timeout(values["minutes"])
+            if setting == "temperature_unit":
+                return await monitor.set_temperature_unit(values["fahrenheit"])
+            if setting == "ac_power_saving":
+                return await monitor.set_ac_power_saving_enabled(values["enabled"])
+            if setting == "dc_power_saving":
+                return await monitor.set_dc_power_saving_enabled(values["enabled"])
             if setting == "ac_output":
                 return await monitor.set_ac_output_enabled(values["enabled"])
             if setting == "light_mode":
@@ -148,7 +158,8 @@ class MonitorService:
         device = self.devices[name]
         if device.model in (Model.C300, Model.C1000):
             return ["set-charge-power", "set-display-timeout", "set-light"] + (
-                ["set-device-timeout"] if device.model == Model.C1000 and device.protocol == "legacy" else [])
+                ["set-device-timeout", "set-temperature-unit", "set-fast-charge", "set-ac-power-saving",
+                 "set-dc-power-saving"] if device.model == Model.C1000 and device.protocol == "legacy" else [])
         if device.protocol != "prime":
             return []
         if device.model == Model.C2000_GEN2:
@@ -163,7 +174,9 @@ class MonitorService:
             raise ConnectionError("Fresh Bluetooth telemetry is unavailable")
         setting = {"set-charge-power": "ac_charging_power", "set-charge-cap": "charge_cap",
                    "set-display-timeout": "display_timeout", "set-fast-charge": "fast_charge",
-                   "set-light": "light_mode", "set-device-timeout": "device_timeout"}[command]
+                   "set-light": "light_mode", "set-device-timeout": "device_timeout",
+                   "set-temperature-unit": "temperature_unit", "set-ac-power-saving": "ac_power_saving",
+                   "set-dc-power-saving": "dc_power_saving"}[command]
         await self.apply_setting(name, setting, **values)
         return self.snapshot(name)
 

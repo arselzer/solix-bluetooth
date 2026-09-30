@@ -269,9 +269,12 @@ def decode_telemetry(payload: bytes, model: Model | None = None) -> tuple[dict[s
         number("ac_output_timeout_seconds", 0xA4, 1, 5)
         number("dc_output_timeout_seconds", 0xA4, 9, 13)
         number("device_timeout_minutes", 0xA4, 14, 16)
-        number("display_mode", 0xA4, 18, 19)
+        # Firmware getter 0801a648: saved brightness, not an operating mode.
+        number("display_brightness", 0xA4, 18, 19)
         number("temperature_unit_fahrenheit", 0xA4, 20, 21)
         number("ac_fast_charge_enabled", 0xA4, 21, 22)
+        # Historical metric name: this is runtime display-timer activity,
+        # not a saved display configuration. Fast-charge events can wake it.
         number("display_enabled", 0xA4, 22, 23)
         number("port_memory_enabled", 0xA4, 23, 24)
         settings = values.get(0xA4, b"")
@@ -436,8 +439,9 @@ class Session:
         if self.model not in (Model.C1000_GEN2, Model.C2000_GEN2) or self.protocol != 'prime' or not self.ready:
             raise RuntimeError('Charging-power control requires a connected Gen 2 Prime session')
         maximum = 1800 if self.model == Model.C2000_GEN2 else 1200
-        if not 300 <= watts <= maximum or watts % 100:
-            raise ValueError(f'AC charging power must be 300–{maximum} W in 100 W steps')
+        minimum = 300 if self.model == Model.C2000_GEN2 else 100
+        if type(watts) is not int or not minimum <= watts <= maximum or watts % 100:
+            raise ValueError(f'AC charging power must be {minimum}–{maximum} W in 100 W steps')
         milliseconds = str(int(time.time() * 1000)).encode("ascii")
         payload = (b"\xa1\x01\x21" + tlv(0xA4, b"\x02" + watts.to_bytes(2, "little"))
                    + tlv(0xAB, b"\x02\x00\x00") + tlv(0xFD, b"\x00" + milliseconds))
@@ -503,26 +507,38 @@ class Session:
         return self._send(DATA_REQUEST, '4103', payload)
 
     def fast_charge_packet(self, enabled: bool) -> bytes:
-        """Build the C1000 4101 fast charge switch verified off/on/off."""
-        self._require_c1000_prime_control()
-        if not isinstance(enabled, bool):
+        """Build original 405e or Gen 2 Prime 4101 fast-charge control."""
+        if type(enabled) is not bool:
             raise ValueError('enabled must be a boolean')
+        if self.model == Model.C1000:
+            return self.c1000_control_packet("fast_charge_enabled", enabled)
+        self._require_c1000_prime_control()
         milliseconds = str(int(time.time() * 1000)).encode('ascii')
         payload = (b'\xa1\x01\x21' + tlv(0xA7, bytes((1, int(enabled))))
                    + tlv(0xFD, b'\x00' + milliseconds))
         return self._send(DATA_REQUEST, '4101', payload)
 
+    def temperature_unit_packet(self, fahrenheit: bool) -> bytes:
+        return self.c1000_control_packet("temperature_unit_fahrenheit", fahrenheit)
+
+    def power_saving_packet(self, enabled: bool, *, ac: bool) -> bytes:
+        if type(ac) is not bool:
+            raise ValueError("ac must be a boolean")
+        return self.c1000_control_packet(
+            "ac_power_saving_mode_enabled" if ac else "dc_power_saving_mode_enabled", enabled)
+
     def wifi_credentials_packet(self, ssid: str, passphrase: str, account_id: str) -> bytes:
-        """Build the observed C1000/C2000 4024 Wi-Fi credential write.
+        """Build model-specific 4024 Wi-Fi credentials over the negotiated session.
 
         This is an experimental packet builder. The Anker app's payload was
         decoded from a private HCI capture, and this builder joined a C1000
         Gen 2 to an isolated WPA2 AP on firmware 1.1.4.9, and the same shape
         joined the tested C2000 Gen 2. ``account_id`` is a 40-character ID;
         the generated local BLE ID also worked in this field.
+        Original A1761 uses the same untyped TLVs over legacy CBC, recovered
+        from the app and live-tested on main 1.5.1/radio 0.1.3.0.
         """
-        if self.protocol != "prime" or not self.ready:
-            raise RuntimeError("Wi-Fi join requires a connected Gen 2 Prime session")
+        self._require_wifi_session()
         if len(account_id) != 40 or any(c not in '0123456789abcdefABCDEF' for c in account_id):
             raise ValueError('account_id must be 40 hexadecimal characters')
         network = ssid.encode('utf-8')
@@ -539,32 +555,49 @@ class Session:
     def wifi_cloud_config_packet(
         self, account_id: str, api_url: str, posix_timezone: str,
         iana_timezone: str, *, c3_value: str = 'A2', allow_http: bool = False,
+        country_code: str = 'US',
     ) -> bytes:
-        """Build a Gen 2 4025 endpoint and timezone write.
+        """Build the model-specific 4025 endpoint and timezone write.
 
         The meaning of C3 and the 4825 response are not yet established.
         Tags must be ascending: the radio parser silently skips a field that
         follows a higher tag. The earlier reconstructed capture's C3 position
         hid the service/model/timezone fields; keep this opaque field last.
+        Original A1761's app-derived layout includes A5 country and omits C3.
         This method does not configure or emulate the remote API.
         """
-        if self.protocol != 'prime' or self.model not in (Model.C1000_GEN2, Model.C2000_GEN2):
-            raise ValueError('Wi-Fi endpoint provisioning requires a Prime Gen 2 station')
+        self._require_wifi_session()
         if len(account_id) != 40 or any(c not in '0123456789abcdefABCDEF' for c in account_id):
             raise ValueError('account_id must be 40 hexadecimal characters')
         if not (api_url.startswith('https://') or
                 (allow_http and api_url.startswith('http://'))) or not api_url.endswith('/'):
             raise ValueError('api_url must be an HTTPS base URL ending in /, unless allow_http=True')
-        if len(c3_value) != 2:
-            raise ValueError('c3_value must be two ASCII characters')
+        if self.model == Model.C1000:
+            if not isinstance(country_code, str) or not re.fullmatch(r'[A-Z]{2}', country_code):
+                raise ValueError('country_code must be two uppercase ASCII letters')
+            country = tlv(0xA5, country_code.encode('ascii'))
+            extra = b''
+            product = b'A1761'
+        else:
+            if len(c3_value) != 2 or not c3_value.isascii():
+                raise ValueError('c3_value must be two ASCII characters')
+            country = b''
+            extra = tlv(0xC3, c3_value.encode('ascii'))
+            product = b'A1783' if self.model == Model.C2000_GEN2 else b'A1763'
         payload = (tlv(0xA1, self._timestamp()) + tlv(0xA2, account_id.encode('ascii'))
                    + tlv(0xA3, api_url.encode('ascii'))
-                   + tlv(0xA4, posix_timezone.encode('ascii'))
+                   + tlv(0xA4, posix_timezone.encode('ascii')) + country
                    + tlv(0xA6, b'anker_power')
-                   + tlv(0xA7, b'A1783' if self.model == Model.C2000_GEN2 else b'A1763')
+                   + tlv(0xA7, product)
                    + tlv(0xA8, iana_timezone.encode('ascii'))
-                   + tlv(0xC3, c3_value.encode('ascii')))
+                   + extra)
         return self._send(DATA_REQUEST, '4025', payload)
+
+    def _require_wifi_session(self) -> None:
+        expected = 'legacy' if self.model == Model.C1000 else 'prime'
+        if (self.model not in (Model.C1000, Model.C1000_GEN2, Model.C2000_GEN2)
+                or self.protocol != expected or not self.ready):
+            raise RuntimeError('Wi-Fi provisioning requires a connected C1000 or Gen 2 session')
 
     def feed(self, data: bytes) -> ProtocolUpdate:
         packet = parse_packet(data)

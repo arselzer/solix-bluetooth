@@ -305,7 +305,7 @@ def test_c1000_setting_fields_decode_from_a4_status():
     assert metrics['ac_charging_power_limit_w'] == 1200
     assert metrics['device_timeout_minutes'] == 0
     assert metrics['display_timeout_seconds'] == 30
-    assert metrics['display_mode'] == 1
+    assert metrics['display_brightness'] == 1
     assert metrics['ac_fast_charge_enabled'] == 0
     assert metrics['display_enabled'] == 0
     assert metrics['port_memory_enabled'] == 1

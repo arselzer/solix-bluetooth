@@ -7,7 +7,7 @@ connection or contact Anker. This is an unofficial integration.
 ## Install and configure
 
 1. Run the repository's gateway and verify its `/devices` endpoint. Enable its
-   authenticated control option only if you want charging controls.
+   authenticated control option if you want to change station settings.
 2. Copy this whole `solix_link` directory into
    `<Home Assistant config>/custom_components/solix_link/`, then restart HA.
 3. In **Settings → Devices & services → Add integration**, select **SOLIX Link**.
@@ -33,16 +33,22 @@ Authorization header. Treat HA configuration backups as containing credentials.
 - Numbers: AC charging power limit, charge cap and backup reserve. A number is
   created only for a supported model when telemetry exists and the gateway
   advertises that command. Charging-power ranges are original C1000/A1761
-  100–1000 W, C1000 Gen 2 300–1200 W and C2000 Gen 2 300–1800 W, in 100 W
+  100–1000 W, C1000 Gen 2 100–1200 W and C2000 Gen 2 300–1800 W, in 100 W
   steps. Original C1000 charging-power changes/restoration passed library and
   HTTP tests on version code 151; other range values and physical enforcement
   remain untested.
+  C1000 Gen 2/main 1.1.4.9 native MQTT accepted 100 W and charged from 95% to 96% over
+  90 seconds with roughly 290–293 W input and 179–181 W output. A later 200 W
+  trial charged 97→98% with 389–390 W input and 180–181 W output; both lower
+  values also passed Prime readback/restoration. These are station readings,
+  not calibrated wall-meter or battery-current measurements.
   C300 charging power has discrete choices (including 330 W); this integration
   does not expose a charging-power number for it. Reserve limits follow the
   current charge caps; native MQTT supports reserve on both Gen 2 models.
   Original C1000 support adds no charge-cap/reserve controls.
-- Selects: C1000 Gen 2 native MQTT temperature display (Celsius/Fahrenheit) and
-  lower discharge limit (1%, 5%, 10%, 15%, 20%). Available limits leave at least
+- Selects: original C1000 legacy BLE and C1000 Gen 2 native MQTT temperature
+  display (Celsius/Fahrenheit); C1000 Gen 2 native MQTT lower discharge limit
+  (1%, 5%, 10%, 15%, 20%). Available limits leave at least
   five percentage points below the current backup reserve; selecting a limit
   does not adjust the reserve. The temperature sensor continues to report Celsius.
 - Device Timeout select: original C1000 legacy BLE and C1000 Gen 2 Prime/native
@@ -57,6 +63,20 @@ Authorization header. Treat HA configuration backups as containing credentials.
   PV power units remain unverified, so no power class/statistics are assigned.
 - Configuration switch: C1000 Gen 2 native MQTT off-grid alert preference.
   Setting storage and readback were verified; actual alert delivery is untested.
+- Fast-charging configuration switch: original C1000 legacy BLE, or C1000 Gen 2
+  Prime BLE/native MQTT. Enabling on Gen 2 requires reported Standard mode with
+  no active tariff; native MQTT also requires connected mains. Turning it off
+  remains possible while a tariff is active. The gateway confirms the stored
+  flag; that alone does not establish the actual charging rate.
+  Native MQTT flag change/restoration passed on C1000 Gen 2 firmware 1.1.4.9
+  at 100% SOC; actual charging power remains unverified.
+- AC/DC power-saving configuration switches: original C1000 legacy BLE only.
+  **Power saving may automatically turn the output off at low load.** Review
+  connected loads before enabling these switches or using them in automations.
+  The integration sends semantic enabled/disabled values and waits for readback;
+  stored settings do not prove the station's automatic low-load behavior.
+  Original C1000 temperature, fast-charge and both power-saving setters passed
+  readback and baseline restoration on firmware version code 151.
 - **Return to grid**: C1000 Gen 2 and C2000 Gen 2 native MQTT. The gateway checks actual
   power flow; changing the displayed mode alone is insufficient confirmation.
 - Action **`solix_link.set_tou_plan`**: select the HA device and supply `enabled`

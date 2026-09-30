@@ -65,6 +65,11 @@ with boolean `fahrenheit`, `set-off-grid-alert` with boolean `enabled`, and
 `set-discharge-floor` with integer `lower` (1,5,10,15,20, within reserve bounds).
 Temperature and alert settings were [checked live](c1000-general-settings.md),
 as was the [guarded lower discharge limit](c1000-charging-control-followup.md).
+Original C1000 BLE profiles expose `set-temperature-unit`/`fahrenheit`,
+`set-fast-charge`/`enabled`, `set-ac-power-saving`/`enabled`, and
+`set-dc-power-saving`/`enabled`. All values are booleans. Smart mode can
+automatically stop an output at low load; these configuration controls
+do not send an output-switch command. See the [physical trials](c1000-preferences-validation.md).
 Each period has `tariff`, `start_hour`, `end_hour`. Fields/types are strict;
 no arbitrary opcode, AC-output, timer or firmware command is exposed.
 

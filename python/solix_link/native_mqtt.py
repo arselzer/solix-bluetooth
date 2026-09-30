@@ -77,8 +77,9 @@ class NativeMqttCommands:
     def ac_charging_power(self, watts: int) -> NativeMqttRequest:
         """Set the charging-power limit; does not include an AC output switch."""
         maximum = 1200 if self.model == Model.C1000_GEN2 else 1800
-        if type(watts) is not int or not 300 <= watts <= maximum or watts % 100:
-            raise ValueError(f"Charging power must be 300–{maximum} W in 100 W steps")
+        minimum = 100 if self.model == Model.C1000_GEN2 else 300
+        if type(watts) is not int or not minimum <= watts <= maximum or watts % 100:
+            raise ValueError(f"Charging power must be {minimum}–{maximum} W in 100 W steps")
         fields = tlv(0xA4, b"\x02" + watts.to_bytes(2, "little"))
         return self._request("0101", fields, milliseconds=True)
 
@@ -114,6 +115,14 @@ class NativeMqttCommands:
             raise ValueError("Device timeout supports C1000 Gen 2 only")
         validate_device_timeout(minutes)
         return self._request("0103", tlv(0xA6, b"\x02" + minutes.to_bytes(2, "little")), milliseconds=True)
+
+    def fast_charge(self, enabled: bool) -> NativeMqttRequest:
+        """Set C1000 fast charge; callers must confirm retention and protect tariffs."""
+        if self.model != Model.C1000_GEN2:
+            raise ValueError("Fast charge supports C1000 Gen 2 only")
+        if type(enabled) is not bool:
+            raise ValueError("enabled must be a boolean")
+        return self._request("0101", tlv(0xA7, bytes((1, int(enabled)))), milliseconds=True)
 
     def _c1000_boolean(self, tag: int, value: bool) -> NativeMqttRequest:
         if self.model != Model.C1000_GEN2:

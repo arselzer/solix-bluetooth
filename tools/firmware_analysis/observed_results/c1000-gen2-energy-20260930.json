@@ -1,0 +1,186 @@
+{
+  "analysis_method": {
+    "counter_delta": "Second cumulative report minus first, within each matching group/field; initial cumulative values are not interval energy.",
+    "integration": "Linearly interpolate power only between actual bracketing packets at the two radio utc_ts values; sum delta_seconds*(previous_watts+next_watts)/2/3600.",
+    "power_source": "Decode nonretained native0421/0900 publications for exactly one A1763; use packet receipt timestamps.",
+    "source": "Private read-only local MQTT/HTTP capture; raw requests and station identity are not published.",
+    "timestamp_pairing": "Decode each raw energy API body and require exact equality with its separately logged energy_report event."
+  },
+  "counter_deltas_only": {
+    "backup_variant_1": {
+      "ac_charge_duration_raw": 0,
+      "ac_input_energy_raw": 0,
+      "ac_output_duration_raw": 0,
+      "ac_output_energy_raw": 0,
+      "dc_charge_duration_raw": 0,
+      "dc_input_energy_raw": 0,
+      "other_output_duration_raw": 0,
+      "other_output_energy_raw": 0
+    },
+    "backup_variant_2": {
+      "ac_charge_duration_raw": 0,
+      "ac_input_energy_raw": 0,
+      "ac_output_duration_raw": 0,
+      "ac_output_energy_raw": 0,
+      "dc_charge_duration_raw": 0,
+      "dc_input_energy_raw": 0,
+      "other_output_duration_raw": 0,
+      "other_output_energy_raw": 0
+    },
+    "standard": {
+      "ac_charge_duration_raw": 0,
+      "ac_input_energy_raw": 19,
+      "ac_output_duration_raw": 1,
+      "ac_output_energy_raw": 19,
+      "dc_charge_duration_raw": 0,
+      "dc_input_energy_raw": 0,
+      "other_output_duration_raw": 0,
+      "other_output_energy_raw": 0
+    },
+    "time_of_use": {
+      "ac_charge_duration_raw": 0,
+      "ac_input_energy_raw": 0,
+      "ac_output_duration_raw": 0,
+      "ac_output_energy_raw": 0,
+      "dc_charge_duration_raw": 0,
+      "dc_input_energy_raw": 0,
+      "other_output_duration_raw": 0,
+      "other_output_energy_raw": 0
+    }
+  },
+  "evidence_kind": "Sanitized live observation; not synthetic firmware replay output.",
+  "host_requested_sample_rows": 140,
+  "host_requested_sample_span_s": 702.3632671833038,
+  "host_sample_uncovered_first_radio_interval_s": 7.769995450973511,
+  "http_window": {
+    "ac_input_power_w": {
+      "bracketing_samples": 146,
+      "counter_minus_nominal_wh": 0.6115876456655371,
+      "counter_over_nominal_wh": 1.033259404557641,
+      "first_boundary_to_previous_sample_s": 8.409144878387451,
+      "integrated_wh_assuming_reported_watts": 18.388412354334463,
+      "interior_samples": 144,
+      "interpolated_boundary_power_w": [
+        179.0,
+        178.1068136313212
+      ],
+      "last_following_sample_to_boundary_s": 0.5270781517028809,
+      "max_bracketing_gap_s": 15.187132120132446,
+      "power_range_w": [
+        178,
+        180
+      ],
+      "weighted_mean_w": 178.91274478621537
+    },
+    "ac_output_power_w": {
+      "bracketing_samples": 146,
+      "counter_minus_nominal_wh": 0.6115876456655371,
+      "counter_over_nominal_wh": 1.033259404557641,
+      "first_boundary_to_previous_sample_s": 8.409144878387451,
+      "integrated_wh_assuming_reported_watts": 18.388412354334463,
+      "interior_samples": 144,
+      "interpolated_boundary_power_w": [
+        179.0,
+        178.1068136313212
+      ],
+      "last_following_sample_to_boundary_s": 0.5270781517028809,
+      "max_bracketing_gap_s": 15.187132120132446,
+      "power_range_w": [
+        178,
+        180
+      ],
+      "weighted_mean_w": 178.91274478621537
+    }
+  },
+  "interval": {
+    "http_receipt_s": 370.0031797885895,
+    "radio_utc_s": 370,
+    "radio_utc_to_receipt_delay_s": [
+      0.8775036334991455,
+      0.880683422088623
+    ]
+  },
+  "limitations": [
+    "Only one counter interval; first report contains prior cumulative accounting.",
+    "Radio timestamps are event construction times, not proven MCU sampling instants.",
+    "Host metrics report watts; DSP physical calibration remains unverified.",
+    "Native packet arrival times provide brackets; initial bracket gap is wider than regular polling.",
+    "Linear interpolation only inside available bracketing native packet samples; no extrapolation.",
+    "samples.json starts after the first energy event; full interval uses earlier retained MQTT power packet.",
+    "Counter increment is compared under a nominal Wh hypothesis; units_verified remains false."
+  ],
+  "main_version": "1.1.4.9",
+  "model": "C1000 Gen 2 A1763",
+  "module_version": "0.3.3.0",
+  "native_power_packet_rows": 281,
+  "native_power_span_s": 717.6645247936249,
+  "radio_window": {
+    "ac_input_power_w": {
+      "bracketing_samples": 146,
+      "counter_minus_nominal_wh": 0.6115490780678492,
+      "counter_over_nominal_wh": 1.0332572374184301,
+      "first_boundary_to_previous_sample_s": 7.531641244888306,
+      "integrated_wh_assuming_reported_watts": 18.38845092193215,
+      "interior_samples": 144,
+      "interpolated_boundary_power_w": [
+        179.0,
+        178.28528620517716
+      ],
+      "last_following_sample_to_boundary_s": 1.407761573791504,
+      "max_bracketing_gap_s": 15.187132120132446,
+      "power_range_w": [
+        178,
+        180
+      ],
+      "weighted_mean_w": 178.9146576187993
+    },
+    "ac_output_power_w": {
+      "bracketing_samples": 146,
+      "counter_minus_nominal_wh": 0.6115490780678492,
+      "counter_over_nominal_wh": 1.0332572374184301,
+      "first_boundary_to_previous_sample_s": 7.531641244888306,
+      "integrated_wh_assuming_reported_watts": 18.38845092193215,
+      "interior_samples": 144,
+      "interpolated_boundary_power_w": [
+        179.0,
+        178.28528620517716
+      ],
+      "last_following_sample_to_boundary_s": 1.407761573791504,
+      "max_bracketing_gap_s": 15.187132120132446,
+      "power_range_w": [
+        178,
+        180
+      ],
+      "weighted_mean_w": 178.9146576187993
+    }
+  },
+  "radio_window_states": {
+    "ac_input_connected": [
+      1
+    ],
+    "ac_output_enabled": [
+      1
+    ],
+    "active_tariff": [
+      "none"
+    ],
+    "battery_percentage": [
+      100
+    ],
+    "battery_status": [
+      "idle"
+    ],
+    "usage_mode": [
+      "standard"
+    ]
+  },
+  "reconnect_s": 13.519824981689453,
+  "reconnect_source": "retained read-only capture completion record",
+  "reports": 2,
+  "sampling_gap_s": {
+    "max": 15.187132120132446,
+    "mean": 2.5630875885486604,
+    "min": 0.11414885520935059
+  },
+  "units_verified": false
+}

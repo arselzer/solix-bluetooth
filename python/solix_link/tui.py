@@ -45,6 +45,9 @@ METRIC_LABELS = {
     "device_timeout_minutes": "Device Timeout (min; 0 = Never)",
     "temperature_unit_fahrenheit": "Display uses Fahrenheit",
     "ac_off_grid_alert_enabled": "Off-grid alert enabled",
+    "ac_fast_charge_enabled": "Fast charge enabled",
+    "ac_power_saving_mode_enabled": "AC power saving enabled",
+    "dc_power_saving_mode_enabled": "DC power saving enabled",
     "light_mode": "Light mode",
     "time_remaining_minutes": "Remaining time (min)",
     "software_version": "Firmware",
@@ -73,8 +76,9 @@ def controls_for(target: Target) -> tuple[Control, ...]:
     """Expose model-supported operations; C2000 never gets an AC switch."""
     if target.native:
         maximum = 1200 if target.model == Model.C1000_GEN2 else 1800
+        minimum = 100 if target.model == Model.C1000_GEN2 else 300
         items = (
-            Control("charge-power", "AC charging power", f"300–{maximum} W, in 100 W steps"),
+            Control("charge-power", "AC charging power", f"{minimum}–{maximum} W, in 100 W steps"),
             Control("charge-cap", "Upper charge limit", "80–100%, in 5% steps"),
             Control("reserve", "Backup reserve", "5–100%, in 5% steps; within current charge limits"),
         )
@@ -84,12 +88,13 @@ def controls_for(target: Target) -> tuple[Control, ...]:
                 Control("off-grid-alert", "Off-grid alert", "on or off"),
                 Control("discharge-floor", "Lower discharge limit", "1, 5, 10, 15 or 20%; requires reserve at least 5% higher"),
                 Control("device-timeout", "Device Timeout", "0 = Never; 30, 60, 120, 240, 360, 720 or 1440 minutes. Finite choices may turn the station off when idle. Never disables this timeout; other sleep behavior may still interrupt remote access."),
+                Control("fast-charge", "Fast charging", "on or off; enabling requires Standard mode, no active tariff and connected mains"),
             )
         return items
     limits = {
         Model.C300: "100, 200, 300 or 330 W",
         Model.C1000: "100–1000 W, in 100 W steps",
-        Model.C1000_GEN2: "300–1200 W, in 100 W steps",
+        Model.C1000_GEN2: "100–1200 W, in 100 W steps",
         Model.C2000_GEN2: "300–1800 W, in 100 W steps",
     }
     items = [Control("charge-power", "AC charging power", limits[target.model])]
@@ -97,6 +102,13 @@ def controls_for(target: Target) -> tuple[Control, ...]:
     if target.model in (Model.C1000, Model.C1000_GEN2) and (target.device is None or target.device.protocol == (
             "legacy" if target.model == Model.C1000 else "prime")):
         items.append(Control("device-timeout", "Device Timeout", "0 = Never; 30, 60, 120, 240, 360, 720 or 1440 minutes. Finite choices may turn the station off when idle. Never disables this timeout; other sleep behavior may still interrupt remote access."))
+        items.append(Control("fast-charge", "Fast charging", "on or off; Gen 2 enable requires Standard mode with no active tariff"))
+        if target.model == Model.C1000:
+            items.extend((
+                Control("temperature-unit", "Temperature display", "celsius or fahrenheit"),
+                Control("ac-power-saving", "AC power saving", "on or off; may automatically turn AC output off at low load; confirmation required"),
+                Control("dc-power-saving", "DC power saving", "on or off; may automatically turn DC output off at low load; confirmation required"),
+            ))
     if target.model in (Model.C300, Model.C1000):
         items.extend((
             Control("ac-output", "AC output", "Enter on or off; changes the AC sockets"),
@@ -114,6 +126,23 @@ def parse_device_timeout(text: str) -> int:
     if not value.isdecimal() or int(value) not in (0, 30, 60, 120, 240, 360, 720, 1440):
         raise ValueError("Device Timeout must be 0 (Never), 30, 60, 120, 240, 360, 720 or 1440 minutes")
     return int(value)
+
+
+def parse_enabled(text: str) -> bool:
+    value = text.strip().lower()
+    if value not in ("on", "off"):
+        raise ValueError("Enter on or off")
+    return value == "on"
+
+
+def validate_fast_charge(metrics: dict, target: Target, enabled: bool) -> None:
+    if type(metrics.get("ac_fast_charge_enabled")) is not int or metrics["ac_fast_charge_enabled"] not in (0, 1):
+        raise ValueError("Fresh fast-charge telemetry is required")
+    if target.model == Model.C1000_GEN2:
+        if target.native and (type(metrics.get("ac_input_connected")) is not int or metrics["ac_input_connected"] != 1):
+            raise ValueError("Native fast charge requires connected mains")
+        if enabled and (metrics.get("usage_mode") != "standard" or metrics.get("active_tariff") != "none"):
+            raise ValueError("Fast charge enable requires Standard mode with no active tariff")
 
 
 def parse_plan(text: str) -> list[dict[str, Any]]:
@@ -181,6 +210,7 @@ class TuiBackend:
         self.monitor: Any = None
         self.last_seen: float | None = None
         self.control_enabled = False
+        self.native_snapshot: dict = {}
         self._lock = asyncio.Lock()
 
     @staticmethod
@@ -265,7 +295,10 @@ class TuiBackend:
         target = target or self.target
         if target and target.native_name:
             fields["name"] = target.native_name
-        return await requester(self.directory, command, **fields)
+        response = await requester(self.directory, command, **fields)
+        if isinstance(response, dict) and isinstance(response.get("metrics"), dict):
+            self.native_snapshot = response
+        return response
 
     async def register_native(self) -> None:
         """Add the connected paired station to a stopped AP, without device writes."""
@@ -297,6 +330,7 @@ class TuiBackend:
         self.target = None
         self.last_seen = None
         self.control_enabled = False
+        self.native_snapshot = {}
         if monitor is not None:
             await monitor.disconnect()
 
@@ -385,6 +419,15 @@ class TuiBackend:
                     response = await self._native("set-discharge-floor", lower=int(value))
                 elif action == "device-timeout":
                     response = await self._native("set-device-timeout", minutes=parse_device_timeout(value))
+                elif action == "fast-charge":
+                    enabled = parse_enabled(value)
+                    snapshot = self.native_snapshot
+                    seen = snapshot.get("last_seen_timestamp")
+                    if (not snapshot.get("connected") or not snapshot.get("available")
+                            or type(seen) not in (int, float) or not -5 <= time.time() - seen <= 30):
+                        raise ValueError("Fresh connected telemetry is required for fast charge")
+                    validate_fast_charge(snapshot.get("metrics", {}), target, enabled)
+                    response = await self._native("set-fast-charge", enabled=enabled)
                 else:
                     command, field_name = {
                         "charge-power": ("set-charge-power", "watts"),
@@ -393,7 +436,23 @@ class TuiBackend:
                     }[action]
                     response = await self._native(command, **{field_name: int(value)})
                 return public_snapshot(response)
-            if action == "device-timeout":
+            if action == "fast-charge":
+                enabled = parse_enabled(value)
+                if not self._ble_snapshot().get("available"):
+                    raise ValueError("Fresh connected telemetry is required for fast charge")
+                validate_fast_charge(self.monitor.metrics, target, enabled)
+                await self.monitor.set_fast_charge_enabled(enabled)
+            elif action == "temperature-unit":
+                if value.strip().lower() not in ("celsius", "fahrenheit"):
+                    raise ValueError("Enter celsius or fahrenheit")
+                await self.monitor.set_temperature_unit(value.strip().lower() == "fahrenheit")
+            elif action in ("ac-power-saving", "dc-power-saving"):
+                enabled = parse_enabled(value)
+                if action == "ac-power-saving":
+                    await self.monitor.set_ac_power_saving_enabled(enabled)
+                else:
+                    await self.monitor.set_dc_power_saving_enabled(enabled)
+            elif action == "device-timeout":
                 await self.monitor.set_device_timeout(parse_device_timeout(value))
             elif action == "ac-output":
                 if value.strip().lower() not in ("on", "off"):
@@ -440,6 +499,40 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
                 super()._on_tab_pane_focused(event)
             else:
                 event.stop()
+
+    class PowerSavingConfirmScreen(ModalScreen[bool]):
+        BINDINGS = [("escape", "cancel", "Cancel")]
+        DEFAULT_CSS = """
+        PowerSavingConfirmScreen { align: center middle; background: #0c1424 85%; }
+        #saving-dialog { width: 62; max-width: 95%; height: auto; max-height: 90%;
+                         border: round #e6bd75; background: #13233a; padding: 1 2; }
+        #saving-title { text-style: bold; color: #e6bd75; margin-bottom: 1; }
+        #saving-actions { height: auto; margin-top: 1; }
+        #saving-actions Button { width: 1fr; }
+        """
+
+        def __init__(self, label: str, value: str) -> None:
+            super().__init__()
+            self.label, self.value = label, value
+
+        def compose(self) -> ComposeResult:
+            with VerticalScroll(id="saving-dialog"):
+                yield Static(f"Change {self.label} to {self.value}?", id="saving-title", markup=False)
+                yield Static("Power saving may automatically turn the output off at low load. Confirm this setting before applying it.", markup=False)
+                with Horizontal(id="saving-actions"):
+                    yield Button("Cancel", id="saving-cancel")
+                    yield Button("Apply", id="saving-confirm", variant="warning")
+
+        def action_cancel(self) -> None:
+            self.dismiss(False)
+
+        @on(Button.Pressed, "#saving-cancel")
+        def cancel(self) -> None:
+            self.dismiss(False)
+
+        @on(Button.Pressed, "#saving-confirm")
+        def confirm(self) -> None:
+            self.dismiss(True)
 
     class HelpScreen(ModalScreen):
         BINDINGS = [("escape", "dismiss", "Close"), ("question_mark", "dismiss", "Close")]
@@ -777,7 +870,23 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
             elif action == "apply-setting":
                 key = self.query_one("#setting", Select).value
                 if isinstance(key, str):
-                    self.launch(backend.control(key, self.query_one("#setting-value", Input).value), control=True)
+                    value = self.query_one("#setting-value", Input).value
+                    if key in ("ac-power-saving", "dc-power-saving"):
+                        try:
+                            parsed = parse_enabled(value)
+                        except ValueError as error:
+                            self.status(str(error), "error")
+                            return
+                        target = backend.target
+                        if target is None:
+                            return
+                        target_key = target.key
+                        def confirmed(result: bool | None) -> None:
+                            if result is True and backend.target and backend.target.key == target_key:
+                                self.launch(backend.control(key, value), control=True)
+                        self.push_screen(PowerSavingConfirmScreen(key[:2].upper() + " power saving", "on" if parsed else "off"), confirmed)
+                    else:
+                        self.launch(backend.control(key, value), control=True)
             elif action == "apply-plan":
                 text = self.query_one("#plan-text", Input).value
                 enabled = self.query_one("#plan-mode", Select).value == "activate"

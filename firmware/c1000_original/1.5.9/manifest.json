@@ -1,0 +1,114 @@
+{
+  "model": "A1761",
+  "main_version": "1.5.9",
+  "source_url": "https://public-aiot-fra-prod.s3.dualstack.eu-central-1.amazonaws.com/anker-power/public/ota/2025/07/22/iot-admin/NMvH3hGsgGHRWgg5/A1761_AllPackets_V1.5.9_20250617_HighVoltage.bin",
+  "metadata_source": "https://github.com/thomluther/anker-solix-api/discussions/221",
+  "source_kind": "Unauthenticated public vendor OTA download; not a device dump or phone capture",
+  "package": {
+    "filename": "A1761_AllPackets_V1.5.9_20250617_HighVoltage.bin",
+    "bytes": 417860,
+    "md5": "ce53b545926bf5ce88e886e5da1b12dc",
+    "sha256": "a395b1763e82cbfa93c8125b35f460a5c86cfcc0e9754680953d4901c645c3f5",
+    "encoded_payload_sum32": 53097609,
+    "encoded_payload_sum_verified": true,
+    "declared_extent": 417792,
+    "uninterpreted_trailer_bytes": 68,
+    "trailer_sha256": "d5574e3ced4dbc24ccbfd85c63263127185533ce14cd78f89149a6ed82f539c1",
+    "signature_verified": false
+  },
+  "component_xor_mask": "CRC-8 polynomial 0x31, initial 0, input byte 0..255; repeat 256 bytes per component",
+  "files": [
+    {
+      "name": "MainMcu",
+      "filename": "MainMcu-decoded.bin",
+      "offset": 1024,
+      "bytes": 158720,
+      "version_bytes": [
+        1,
+        59,
+        255,
+        255
+      ],
+      "sha256": "b295ee8613f5c96e70dcc905896df516621cab4dc590bb580eac6b84519911a6",
+      "manifest_check": 56219,
+      "check_algorithm": "CRC-16/MODBUS",
+      "computed_check": 56219,
+      "complete_private_pem_keys": 0,
+      "vector_initial_sp": "2000f9f8",
+      "vector_reset": "08005149",
+      "inferred_load_address": "08005000"
+    },
+    {
+      "name": "dspACDC",
+      "filename": "dspACDC-decoded.bin",
+      "offset": 159744,
+      "bytes": 76800,
+      "version_bytes": [
+        5,
+        11,
+        255,
+        255
+      ],
+      "sha256": "df1f7a9ea79f8c7fc54b558c2ea5e10ec8b73c258be942030ed16a13ca9b96f3",
+      "manifest_check": 29637,
+      "dsp_block_count": 74,
+      "all_dsp_block_crc16_verified": true,
+      "whole_component_check_verified": false,
+      "dsp_payload_octets": 63538,
+      "complete_private_pem_keys": 0
+    },
+    {
+      "name": "dspDCDC",
+      "filename": "dspDCDC-decoded.bin",
+      "offset": 236544,
+      "bytes": 88064,
+      "version_bytes": [
+        5,
+        11,
+        255,
+        255
+      ],
+      "sha256": "c3bb58186033dcdcf5880f0baeda66c1f55ab974fc0ffe3a8a0f21feffd9cb2d",
+      "manifest_check": 64255,
+      "dsp_block_count": 84,
+      "all_dsp_block_crc16_verified": true,
+      "whole_component_check_verified": false,
+      "dsp_payload_octets": 75184,
+      "complete_private_pem_keys": 0
+    },
+    {
+      "name": "MainBMS",
+      "filename": "MainBMS-decoded.bin",
+      "offset": 324608,
+      "bytes": 51200,
+      "version_bytes": [
+        1,
+        47,
+        255,
+        255
+      ],
+      "sha256": "dfb7106d8b189bf1ed19e7c2f6ae15555aeb54d84269292190727604168a1d92",
+      "manifest_check": 33080,
+      "check_algorithm": "CRC-16/XMODEM",
+      "computed_check": 33080,
+      "complete_private_pem_keys": 0
+    },
+    {
+      "name": "SubBMS",
+      "filename": "SubBMS-decoded.bin",
+      "offset": 375808,
+      "bytes": 41984,
+      "version_bytes": [
+        1,
+        14,
+        255,
+        255
+      ],
+      "sha256": "dc37fadf824193edcef2030d187d9f6320de8b7b8d1a57c2fd2c1483d8d2c627",
+      "manifest_check": 48504,
+      "check_algorithm": "CRC-16/XMODEM",
+      "computed_check": 48504,
+      "complete_private_pem_keys": 0
+    }
+  ]
+}

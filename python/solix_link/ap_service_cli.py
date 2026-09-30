@@ -55,6 +55,7 @@ def add_commands(subcommands) -> None:
                                ("ap-service-set-temperature-unit", "Set and confirm C1000 Gen 2 temperature units"),
                                ("ap-service-set-off-grid-alert", "Set and confirm C1000 Gen 2 off-grid notification"),
                                ("ap-service-set-device-timeout", "Set C1000 Gen 2 device timeout; 0 = Never"),
+                               ("ap-service-set-fast-charge", "Set C1000 Gen 2 fast charge with fresh retained readback"),
                                ("ap-service-set-reserve", "Set and confirm backup reserve without changing outputs"),
                                ("ap-service-set-tou", "Replace the native hourly schedule; explicit activation persists until changed"),
                                ("ap-service-grid", "Clear the plan and confirm return to grid power without toggling AC output")):
@@ -74,6 +75,8 @@ def add_commands(subcommands) -> None:
             parser.add_argument("--unit", choices=["celsius", "fahrenheit"], required=True)
         elif command == "ap-service-set-off-grid-alert":
             parser.add_argument("--state", choices=["on", "off"], required=True)
+        elif command == "ap-service-set-fast-charge":
+            parser.add_argument("--enabled", choices=["on", "off"], required=True)
         elif command == "ap-service-set-device-timeout":
             parser.add_argument("--minutes", type=int, choices=DEVICE_TIMEOUT_MINUTES, required=True,
                                 help="0 disables this timeout; independent sleep behavior may remain")
@@ -212,6 +215,7 @@ def dispatch(args) -> None:
                    "ap-service-set-temperature-unit": "set-temperature-unit",
                    "ap-service-set-off-grid-alert": "set-off-grid-alert",
                    "ap-service-set-device-timeout": "set-device-timeout",
+                   "ap-service-set-fast-charge": "set-fast-charge",
                    "ap-service-set-tou": "set-tou-plan", "ap-service-grid": "return-grid"}[args.command]
         fields = ({"watts": args.watts} if args.command == "ap-service-set-charge-power" else
                   {"upper": args.upper} if args.command == "ap-service-set-charge-cap" else {})
@@ -223,6 +227,8 @@ def dispatch(args) -> None:
             fields = {"fahrenheit": args.unit == "fahrenheit"}
         elif args.command == "ap-service-set-off-grid-alert":
             fields = {"enabled": args.state == "on"}
+        elif args.command == "ap-service-set-fast-charge":
+            fields = {"enabled": args.enabled == "on"}
         elif args.command == "ap-service-set-device-timeout":
             fields = {"minutes": args.minutes}
         elif args.command == "ap-service-grid":

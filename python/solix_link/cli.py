@@ -83,7 +83,7 @@ def parser() -> argparse.ArgumentParser:
 
     power = subcommands.add_parser("set-charge-power", help="Set a supported station's AC charging-power limit")
     power.add_argument("--name", required=True)
-    power.add_argument("--watts", type=int, required=True, help="C300:100/200/300/330; C1000:100–1000; Gen 2:300–1200; C2000:300–1800 W (100 W steps)")
+    power.add_argument("--watts", type=int, required=True, help="C300:100/200/300/330; C1000:100–1000; C1000 Gen 2:100–1200; C2000 Gen 2:300–1800 W (100 W steps)")
     power.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
 
     display = subcommands.add_parser("set-display-timeout", help="Set C300 AC, original C1000, or Gen 2 display timeout")
@@ -114,20 +114,31 @@ def parser() -> argparse.ArgumentParser:
     original.add_argument("--value", type=int, required=True, help="Integer value; enabled switches use 0 or 1")
     original.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
 
-    fast = subcommands.add_parser("set-fast-charge", help="Set C1000 fast charge switch")
+    fast = subcommands.add_parser("set-fast-charge", help="Set original C1000 or C1000 Gen 2 fast charging")
     fast.add_argument("--name", required=True)
     fast.add_argument("--enabled", choices=["on", "off"], required=True)
     fast.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
 
-    wifi = subcommands.add_parser("wifi-setup", help="Provision Gen 2 Wi-Fi/API settings over Bluetooth")
+    temperature = subcommands.add_parser("set-temperature-unit", help="Set original C1000 temperature display")
+    temperature.add_argument("--name", required=True)
+    temperature.add_argument("--unit", choices=["celsius", "fahrenheit"], required=True)
+    temperature.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
+    for name, label in (("ac", "AC"), ("dc", "DC")):
+        saving = subcommands.add_parser(f"set-{name}-power-saving", help=f"Set original C1000 {label} power saving; may turn output off at low load")
+        saving.add_argument("--name", required=True)
+        saving.add_argument("--enabled", choices=["on", "off"], required=True)
+        saving.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
+
+    wifi = subcommands.add_parser("wifi-setup", help="Provision original C1000 or Gen 2 Wi-Fi/API settings over Bluetooth")
     wifi.add_argument("--name", required=True)
     wifi.add_argument("--ssid", required=True)
     wifi.add_argument("--password-file", type=Path, help="Read Wi-Fi passphrase from a local file; otherwise prompt")
     wifi.add_argument("--api-url", required=True, help="API base URL supplied to the station")
     wifi.add_argument("--allow-http", action="store_true", help="Allow a local HTTP API URL for isolated AP-service use")
-    wifi.add_argument("--account-id", help="40-character account ID; defaults to the paired local client ID")
+    wifi.add_argument("--account-id", help="40-character provisioning ID; Gen 2 uses its paired ID, original C1000 saves a generated local ID when needed")
     wifi.add_argument("--posix-timezone", default="UTC0")
     wifi.add_argument("--iana-timezone", default="Etc/UTC")
+    wifi.add_argument("--country-code", default="US", help="Country code supplied during setup (default: US)")
     wifi.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
 
     join = subcommands.add_parser("wifi-join", help="Join a WPA2 AP from C1000/C2000 Bluetooth without cloud setup")
@@ -223,7 +234,8 @@ async def _set(args: argparse.Namespace) -> None:
         "set-display-timeout", "set-charge-power", "set-ac-output", "set-light",
     ))
     legacy_setting |= (device.model == Model.C1000 and device.protocol == "legacy"
-                       and args.command == "set-device-timeout")
+                       and args.command in ("set-device-timeout", "set-temperature-unit", "set-fast-charge",
+                                            "set-ac-power-saving", "set-dc-power-saving"))
     prime_setting = device.protocol == "prime" and (
         (device.model == Model.C1000_GEN2 and args.command in ("set-limits", "set-display-timeout", "set-charge-power", "set-fast-charge", "set-charge-cap", "set-device-timeout"))
         or (device.model == Model.C2000_GEN2 and args.command in ("set-display-timeout", "set-charge-power", "set-charge-cap"))
@@ -232,6 +244,12 @@ async def _set(args: argparse.Namespace) -> None:
         raise ValueError("This setting is not verified for the selected device")
     if args.command == "set-charge-cap" and device.model != Model.C2000_GEN2:
         raise ValueError("set-charge-cap is verified only on C2000 Gen 2 Prime")
+    if args.command in ("set-fast-charge", "set-ac-power-saving", "set-dc-power-saving") and args.enabled not in ("on", "off"):
+        raise ValueError("Enabled must be on or off")
+    if args.command == "set-temperature-unit" and args.unit not in ("celsius", "fahrenheit"):
+        raise ValueError("Unit must be celsius or fahrenheit")
+    if args.command in ("set-ac-power-saving", "set-dc-power-saving"):
+        print("Power saving may automatically turn the output off at low load.", file=sys.stderr)
     if args.command == "set-device-timeout":
         if type(args.minutes) is not int or args.minutes not in (0, 30, 60, 120, 240, 360, 720, 1440):
             raise ValueError("Device Timeout must be 0 (Never), 30, 60, 120, 240, 360, 720 or 1440 minutes")
@@ -261,6 +279,15 @@ async def _set(args: argparse.Namespace) -> None:
         elif args.command == "set-device-timeout":
             metrics = await monitor.set_device_timeout(args.minutes)
             result = {"device_timeout_minutes": metrics["device_timeout_minutes"]}
+        elif args.command == "set-temperature-unit":
+            metrics = await monitor.set_temperature_unit(args.unit == "fahrenheit")
+            result = {"temperature_unit_fahrenheit": metrics["temperature_unit_fahrenheit"]}
+        elif args.command in ("set-ac-power-saving", "set-dc-power-saving"):
+            method, field = ((monitor.set_ac_power_saving_enabled, "ac_power_saving_mode_enabled")
+                             if args.command == "set-ac-power-saving"
+                             else (monitor.set_dc_power_saving_enabled, "dc_power_saving_mode_enabled"))
+            metrics = await method(args.enabled == "on")
+            result = {field: metrics[field]}
         elif args.command == "set-ac-output":
             metrics = await monitor.set_ac_output_enabled(args.enabled == "on")
             result = {"ac_output_enabled": metrics["ac_output_enabled"]}
@@ -281,7 +308,7 @@ async def _c1000_setting(args: argparse.Namespace) -> None:
     if device is None or device.model != Model.C1000 or device.protocol != "legacy":
         raise ValueError("This test command requires an original C1000/A1761 legacy config")
     value = args.value
-    if args.setting.endswith("_enabled"):
+    if args.setting.endswith("_enabled") or args.setting == "temperature_unit_fahrenheit":
         if value not in (0, 1):
             raise ValueError("Enabled switches accept only 0 or 1")
         value = bool(value)
@@ -301,9 +328,17 @@ async def _wifi_setup(args: argparse.Namespace) -> None:
     device = next((saved for saved in load_config(args.config) if saved.name == args.name), None)
     if device is None:
         raise ValueError(f"Unknown configured device: {args.name}")
-    if device.protocol != "prime" or device.model not in (Model.C1000_GEN2, Model.C2000_GEN2):
-        raise ValueError("Wi-Fi setup requires a Gen 2 Prime station")
-    account_id = args.account_id or device.client_id
+    original = device.model == Model.C1000 and device.protocol == "legacy"
+    if not original and not (device.protocol == "prime" and device.model in (Model.C1000_GEN2, Model.C2000_GEN2)):
+        raise ValueError("Wi-Fi setup requires an original C1000 legacy or Gen 2 Prime station")
+    account_id = args.account_id if args.account_id is not None else device.client_id
+    if original and account_id is None:
+        from dataclasses import replace
+        import secrets
+        account_id = secrets.token_hex(20)
+        device = replace(device, client_id=account_id)
+        _upsert(device, args.config)
+        print("Generated and saved a local provisioning ID", file=sys.stderr)
     if account_id is None:
         raise ValueError("A paired client ID or --account-id is required")
     passphrase = (args.password_file.read_text().rstrip('\r\n') if args.password_file
@@ -323,6 +358,7 @@ async def _wifi_setup(args: argparse.Namespace) -> None:
                 ssid=args.ssid, passphrase=passphrase, account_id=account_id,
                 api_url=args.api_url, posix_timezone=args.posix_timezone,
                 iana_timezone=args.iana_timezone, allow_http=args.allow_http,
+                country_code=args.country_code,
             )
         print(json.dumps({"name": device.name, "ble_replies": replies}))
     finally:
@@ -377,7 +413,7 @@ def main(argv: list[str] | None = None) -> int:
                 topic_prefix=args.topic_prefix, username=args.username,
                 password_file=args.password_file, ca_file=args.ca_file,
             ).run())
-        elif args.command in ("set-limits", "set-charge-cap", "set-charge-power", "set-display-timeout", "set-device-timeout", "set-fast-charge", "set-ac-output", "set-light"):
+        elif args.command in ("set-limits", "set-charge-cap", "set-charge-power", "set-display-timeout", "set-device-timeout", "set-fast-charge", "set-temperature-unit", "set-ac-power-saving", "set-dc-power-saving", "set-ac-output", "set-light"):
             asyncio.run(_set(args))
         elif args.command == "c1000-setting":
             asyncio.run(_c1000_setting(args))

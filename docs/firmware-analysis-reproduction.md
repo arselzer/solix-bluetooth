@@ -2,7 +2,14 @@
 
 ## Included work
 
-The [offline replay tools](../tools/firmware_analysis/) reproduce **1,842 synthetic cases** against C1000 Gen 2 (A1763) main firmware **1.1.4.9**. They use Unicorn to execute selected original ARM Thumb instructions. No station connection, Anker account, phone capture, credentials, radio image or SDK installation is needed for the instruction replays.
+The [offline replay tools](../tools/firmware_analysis/) combined runner reproduces **1,842 synthetic cases** against C1000 Gen 2 (A1763) main firmware **1.1.4.9**. They use Unicorn to execute selected original ARM Thumb instructions. No station connection, Anker account, phone capture, credentials, radio image or SDK installation is needed for the instruction replays.
+
+Separate continuations add [1,317 original-C1000 v1.5.9 cases](c1000-legacy-network-investigation.md)
+and [1,347 original Smart-policy cases](c1000-smart-auto-off-policy.md),
+[49 Gen 2 energy scenarios plus 1,800 arithmetic checks](gen2-energy-counter-investigation.md),
+and [47 combined clock/schedule cases](gen2-schedule-clock-audit.md).
+These have independent commands and manifests; they are not included in the
+1,842-case combined runner. Their individual commands are in the linked records.
 
 | Suite | Cases | Evidence |
 | --- | ---: | --- |

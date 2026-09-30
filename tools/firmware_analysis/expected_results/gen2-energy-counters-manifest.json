@@ -1,0 +1,17 @@
+{
+  "model": "A1763 C1000 Gen 2",
+  "main_version": "1.1.4.9",
+  "radio_version": "0.3.3.0 (static inspection only)",
+  "firmware_sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9",
+  "radio_sha256": "e291ec115f013953e825cb51b9e457a8731889547ab55b3058640e599e8cfec8",
+  "python": "3.12.3",
+  "unicorn": "2.1.4",
+  "instruction_scenarios": 49,
+  "mathematical_rounding_checks": 1800,
+  "files": {
+    "tools/firmware_analysis/emulate_energy_counters.py": "240b5c5f35621c00e93023cb9b52dc94148a65382d7822658fc47bc5ce8a2ab3",
+    "tools/firmware_analysis/replay_io.py": "731d795a5ec37e2cf12b809b7122eaf7a29d84c21a2ecd43fafa3e2f8d962d30",
+    "tools/firmware_analysis/expected_results/gen2-energy-counters.json": "83f640772d99be9acbaa28231968b43a67d36237954550f0bb717e50cd2604e3",
+    "docs/gen2-energy-counter-investigation.md": "977691317a7fae6fa9fb10a515d8112e317bea8fb2c77f8e746bd140b6823d0c"
+  }
+}

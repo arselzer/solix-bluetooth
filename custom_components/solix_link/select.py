@@ -5,7 +5,7 @@ from homeassistant.const import EntityCategory
 from homeassistant.core import callback
 from homeassistant.exceptions import HomeAssistantError
 
-from .api import DEVICE_TIMEOUT_OPTIONS, binary_state, device_timeout_options, discharge_floor_options, native_gen2
+from .api import DEVICE_TIMEOUT_OPTIONS, binary_state, device_timeout_options, discharge_floor_options, native_gen2, temperature_unit_supported
 from .coordinator import SolixConfigEntry
 from .entity import SolixEntity
 
@@ -37,14 +37,14 @@ async def async_setup_entry(hass, entry: SolixConfigEntry, async_add_entities) -
         for name, snapshot in (coordinator.data or {}).items():
             for description in DESCRIPTIONS:
                 key = description.key
-                if key != "device_timeout_minutes" and (snapshot.get("model") != "c1000_gen2" or not native_gen2(snapshot)):
+                if key == "min_charge_percentage" and (snapshot.get("model") != "c1000_gen2" or not native_gen2(snapshot)):
                     continue
                 if (name, key) in added or SETTINGS[key] not in snapshot.get("controls", []):
                     continue
                 if key == "device_timeout_minutes":
                     reported = bool(device_timeout_options(snapshot))
                 else:
-                    reported = (binary_state(snapshot.get("metrics", {}).get(key)) is not None
+                    reported = (temperature_unit_supported(snapshot)
                                 if key == "temperature_unit_fahrenheit" else bool(discharge_floor_options(snapshot)))
                 if reported:
                     added.add((name, key))
@@ -72,7 +72,7 @@ class SolixSelect(SolixEntity, SelectEntity):
         if self.entity_description.key == "device_timeout_minutes":
             return device_timeout_options(self.snapshot)
         if self.entity_description.key == "temperature_unit_fahrenheit":
-            return ["celsius", "fahrenheit"]
+            return ["celsius", "fahrenheit"] if temperature_unit_supported(self.snapshot) else []
         return discharge_floor_options(self.snapshot)
 
     @property
@@ -82,6 +82,8 @@ class SolixSelect(SolixEntity, SelectEntity):
         if key == "device_timeout_minutes":
             return next((option for option in self.options if DEVICE_TIMEOUT_OPTIONS[option] == value), None)
         if key == "temperature_unit_fahrenheit":
+            if not temperature_unit_supported(self.snapshot):
+                return None
             state = binary_state(value)
             return None if state is None else "fahrenheit" if state else "celsius"
         option = f"{value}%" if type(value) is int else None
@@ -89,8 +91,13 @@ class SolixSelect(SolixEntity, SelectEntity):
 
     @property
     def available(self) -> bool:
-        supported = (bool(device_timeout_options(self.snapshot)) if self.entity_description.key == "device_timeout_minutes"
-                     else self.snapshot.get("model") == "c1000_gen2" and native_gen2(self.snapshot))
+        key = self.entity_description.key
+        if key == "device_timeout_minutes":
+            supported = bool(device_timeout_options(self.snapshot))
+        elif key == "temperature_unit_fahrenheit":
+            supported = temperature_unit_supported(self.snapshot)
+        else:
+            supported = self.snapshot.get("model") == "c1000_gen2" and native_gen2(self.snapshot)
         return supported and self.control_available(self.command) and self.current_option is not None
 
     async def async_select_option(self, option: str) -> None:

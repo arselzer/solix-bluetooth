@@ -162,7 +162,8 @@ def _show_status(status: dict) -> None:
     print(f"Connected: {status.get('connected', False)}; fresh data: {status.get('available', False)}")
     print(f"Power flow: {status.get('power_flow', 'unknown')}")
     for key in ("battery_percentage", "battery_status", "ac_output_enabled", "ac_input_power_w", "ac_output_power_w", "ac_charging_power_limit_w",
-                "usage_mode", "active_tariff", "backup_reserve_percentage", "tou_schedule_slot_count"):
+                "usage_mode", "active_tariff", "backup_reserve_percentage", "tou_schedule_slot_count",
+                "ac_fast_charge_enabled", "temperature_unit_fahrenheit", "ac_power_saving_mode_enabled", "dc_power_saving_mode_enabled"):
         if key in metrics:
             print(f"  {key}: {metrics[key]}")
     if "device_timeout_minutes" in metrics:
@@ -189,6 +190,37 @@ def device_timeout_menu(device: DeviceConfig | APServiceConfig, config_path: Pat
         asyncio.run(_set(argparse.Namespace(command="set-device-timeout", name=device.name, minutes=value, config=config_path)))
 
 
+def preference_menu(device: DeviceConfig | APServiceConfig, config_path: Path, directory: Path | None = None) -> None:
+    original = device.model == Model.C1000 and getattr(device, "protocol", None) == "legacy"
+    if original:
+        commands = ["set-temperature-unit", "set-fast-charge", "set-ac-power-saving", "set-dc-power-saving"]
+        labels = ["Temperature display", "Fast charging", "AC power saving (may turn output off)", "DC power saving (may turn output off)"]
+    elif device.model == Model.C1000_GEN2 and (directory is not None or getattr(device, "protocol", None) == "prime"):
+        commands, labels = ["set-fast-charge"], ["Fast charging"]
+    else:
+        print("These preferences are unavailable for this station profile.")
+        return
+    selected = choose("Station preferences", labels)
+    if selected is None:
+        return
+    command = commands[selected]
+    value = choose(labels[selected], ["Celsius", "Fahrenheit"] if command == "set-temperature-unit" else ["Off", "On"])
+    if value is None:
+        return
+    if command in ("set-ac-power-saving", "set-dc-power-saving"):
+        print("Power saving may automatically turn the output off at low load.")
+    if command == "set-fast-charge" and device.model == Model.C1000_GEN2:
+        print("Enabling requires Standard mode with no active tariff. Native MQTT also requires connected mains.")
+    if choose("Confirm preference change", ["Apply selected preference"]) is None:
+        return
+    if directory is not None:
+        _show_status(asyncio.run(ap_service_request(directory, command, name=device.name, enabled=value == 1)))
+    else:
+        from .cli import _set
+        arguments = {"unit": "fahrenheit" if value else "celsius"} if command == "set-temperature-unit" else {"enabled": "on" if value else "off"}
+        asyncio.run(_set(argparse.Namespace(command=command, name=device.name, config=config_path, **arguments)))
+
+
 def native_session(directory: Path, config_path: Path, *, provision: bool, allow_control: bool,
                    name: str | None = None) -> None:
     profiles = load_ap_service_profiles(directory)
@@ -200,6 +232,7 @@ def native_session(directory: Path, config_path: Path, *, provision: bool, allow
         name = names[selected]
     config = profiles[name][0] if name is not None else next(iter(profiles.values()))[0]
     maximum_power = 1200 if config.model == Model.C1000_GEN2 else 1800
+    minimum_power = 100 if config.model == Model.C1000_GEN2 else 300
     command = [sys.executable, "-m", "solix_link", "ap-service-run", "--directory", str(directory.resolve()),
                "--config", str(config_path.resolve())]
     if provision:
@@ -226,6 +259,7 @@ def native_session(directory: Path, config_path: Path, *, provision: bool, allow
                                                      "Clear plan and confirm grid power" if allow_control else "Grid-return control disabled"]
             if config.model == Model.C1000_GEN2:
                 options.append("Set Device Timeout (Never / idle shutdown)" if allow_control else "Device Timeout controls disabled")
+                options.append("Set fast charging" if allow_control else "Fast-charging controls disabled")
             options.append("Stop this AP session")
             selected = choose("AP-service session", options)
             if selected is None or selected == len(options) - 1:
@@ -236,7 +270,7 @@ def native_session(directory: Path, config_path: Path, *, provision: bool, allow
                 elif selected == 1:
                     print(json.dumps(asyncio.run(ap_service_request(directory, "readiness", name=config.name))))
                 elif selected == 2 and allow_control:
-                    watts = int(prompt(f"Charging-power limit (300–{maximum_power} W in 100 W steps)"))
+                    watts = int(prompt(f"Charging-power limit ({minimum_power}–{maximum_power} W in 100 W steps)"))
                     _show_status(asyncio.run(ap_service_request(directory, "set-charge-power", name=config.name, watts=watts)))
                 elif selected == 3 and allow_control:
                     upper = int(prompt("Upper charge limit (80–100% in 5% steps)"))
@@ -261,6 +295,8 @@ def native_session(directory: Path, config_path: Path, *, provision: bool, allow
                     _show_status(asyncio.run(ap_service_request(directory, "return-grid", name=config.name)))
                 elif selected == 7 and allow_control and config.model == Model.C1000_GEN2:
                     device_timeout_menu(config, config_path, directory)
+                elif selected == 8 and allow_control and config.model == Model.C1000_GEN2:
+                    preference_menu(config, config_path, directory)
             except (ValueError, OSError, RuntimeError, TimeoutError) as error:
                 print(f"{type(error).__name__}: {error}. Check fresh status before retrying a control write.")
         if process.poll() is not None and process.returncode:
@@ -332,6 +368,8 @@ def run_interactive(config_path: Path, ap_service_directory: Path | None = None)
         if selected and (selected.model == Model.C1000 and selected.protocol == "legacy"
                          or selected.model == Model.C1000_GEN2 and selected.protocol == "prime"):
             options.append("Set Device Timeout (Never / idle shutdown)")
+            options.append("Station preferences (temperature / fast charge / power saving)" if selected.model == Model.C1000
+                           else "Station preferences (fast charging)")
         action = choose(f"Station: {selected.name if selected else 'none selected'}", options)
         if action is None:
             return
@@ -358,6 +396,8 @@ def run_interactive(config_path: Path, ap_service_directory: Path | None = None)
                 run_server(MonitorService([selected]), host, port)
             elif action == 4:
                 device_timeout_menu(selected, config_path)
+            elif action == 5:
+                preference_menu(selected, config_path)
         except KeyboardInterrupt:
             print("Stopped.")
         except Exception as error:

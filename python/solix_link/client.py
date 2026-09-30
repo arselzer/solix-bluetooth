@@ -182,9 +182,9 @@ class SolixMonitor:
     async def send_wifi_provisioning(
         self, *, ssid: str, passphrase: str, account_id: str,
         api_url: str, posix_timezone: str, iana_timezone: str,
-        c3_value: str = 'A2', allow_http: bool = False,
+        c3_value: str = 'A2', allow_http: bool = False, country_code: str = 'US',
     ) -> dict[str, str]:
-        """Send Gen 2 Wi-Fi writes; return raw BLE acknowledgements.
+        """Send model-specific Wi-Fi writes; return raw BLE acknowledgements.
 
         Acknowledgements do not establish cloud registration or control.
         Credentials are never included in the returned value.
@@ -193,7 +193,7 @@ class SolixMonitor:
             raise RuntimeError('Monitor is not connected')
         cloud = self._session.wifi_cloud_config_packet(
             account_id, api_url, posix_timezone, iana_timezone,
-            c3_value=c3_value, allow_http=allow_http,
+            c3_value=c3_value, allow_http=allow_http, country_code=country_code,
         )
         first = await self.join_wifi(ssid=ssid, passphrase=passphrase, account_id=account_id)
         if first not in ('00', 'timeout'):
@@ -269,6 +269,9 @@ class SolixMonitor:
     async def set_ac_charging_power(self, watts: int) -> dict[str, int | str]:
         """Set the AC charging-power limit, then confirm fresh telemetry."""
         packet = self._session.ac_charging_power_packet(watts)
+        if self.model == Model.C1000_GEN2:
+            return await self._set_gen2_configuration(
+                packet, "ac_charging_power_limit_w", watts, 5, allow_display_activity=True)
         return await self._write_setting(packet, {"ac_charging_power_limit_w": watts})
 
     async def set_ac_output_enabled(self, enabled: bool) -> dict[str, int | str]:
@@ -292,24 +295,7 @@ class SolixMonitor:
         if not self.connected:
             raise RuntimeError("Monitor is not connected")
         if self.model == Model.C1000_GEN2:
-            before_a4, before_d9, before = await self._fresh_timeout_configuration()
-            protected = ("ac_output_enabled", "dc_output_enabled", "ac_input_connected")
-            expected = {key: before[key] for key in protected}
-            expected["device_timeout_minutes"] = minutes
-            await self._write_setting(packet, expected)
-            a4, d9, metrics = await self._fresh_timeout_configuration()
-            expected_a4 = bytearray(before_a4)
-            expected_a4[14:16] = minutes.to_bytes(2, "little")
-            for start in (1, 9):
-                if int.from_bytes(a4[start:start + 4], "little") > int.from_bytes(before_a4[start:start + 4], "little"):
-                    raise RuntimeError("Output timer changed during Device Timeout confirmation")
-                expected_a4[start:start + 4] = a4[start:start + 4]
-            if metrics["device_timeout_minutes"] != minutes:
-                raise RuntimeError("Device Timeout not confirmed; settings may have changed")
-            if (a4 != bytes(expected_a4) or d9[2:] != before_d9[2:]
-                    or any(metrics[key] != before[key] for key in protected)):
-                raise RuntimeError("Protected setting changed; settings may have changed")
-            return self.metrics.copy()
+            return await self._set_gen2_configuration(packet, "device_timeout_minutes", minutes, 14)
         required = ("device_timeout_minutes", "ac_output_enabled", "dc_output_enabled",
                     "ac_charging_power_limit_w")
         revision = self._telemetry_revision
@@ -329,7 +315,33 @@ class SolixMonitor:
         expected["device_timeout_minutes"] = minutes
         return await self._write_setting(packet, expected)
 
-    async def _fresh_timeout_configuration(self) -> tuple[bytes, bytes, dict[str, int | str]]:
+    async def _set_gen2_configuration(
+        self, packet: bytes, metric: str, value: int, offset: int, *, allow_display_activity: bool = False,
+    ) -> dict[str, int | str]:
+        if not self.connected:
+            raise RuntimeError("Monitor is not connected")
+        before_a4, before_d9, before = await self._fresh_gen2_configuration()
+        protected = ("ac_output_enabled", "dc_output_enabled", "ac_input_connected")
+        expected = {key: before[key] for key in protected}
+        expected[metric] = value
+        await self._write_setting(packet, expected)
+        a4, d9, metrics = await self._fresh_gen2_configuration()
+        expected_a4 = bytearray(before_a4)
+        expected_a4[offset:offset + 2] = value.to_bytes(2, "little")
+        if allow_display_activity:
+            expected_a4[22] = a4[22]
+        for start in (1, 9):
+            if int.from_bytes(a4[start:start + 4], "little") > int.from_bytes(before_a4[start:start + 4], "little"):
+                raise RuntimeError("Output timer changed during setting confirmation")
+            expected_a4[start:start + 4] = a4[start:start + 4]
+        if metrics[metric] != value:
+            raise RuntimeError("Setting not confirmed; settings may have changed")
+        if (a4 != bytes(expected_a4) or d9[2:] != before_d9[2:]
+                or any(metrics[key] != before[key] for key in protected)):
+            raise RuntimeError("Protected setting changed; settings may have changed")
+        return self.metrics.copy()
+
+    async def _fresh_gen2_configuration(self) -> tuple[bytes, bytes, dict[str, int | str]]:
         """Require one complete fresh C1000 Gen 2 configuration, not cached TLVs."""
         from .tou import periods_from_d9
         revision = self._telemetry_revision
@@ -342,12 +354,12 @@ class SolixMonitor:
         values = self.raw_tlvs.copy()
         a4, d9 = values[0xA4], values[0xD9]
         if len(a4) != 34 or a4[0] != 4:
-            raise RuntimeError("Missing complete C1000 Device Timeout baseline")
+            raise RuntimeError("Missing complete C1000 configuration baseline")
         periods_from_d9(d9)
         if any(len(values[tag]) < size or values[tag][0] != 4 for tag, size in ((0xA7, 5), (0xB2, 4))):
             raise RuntimeError("Missing valid C1000 output baseline")
         metrics, _ = decode_telemetry(b"".join(tlv(tag, value) for tag, value in values.items()), self.model)
-        for key in ("ac_output_enabled", "dc_output_enabled", "ac_input_connected"):
+        for key in ("ac_output_enabled", "dc_output_enabled", "ac_input_connected", "display_enabled"):
             if type(metrics.get(key)) is not int or metrics[key] not in (0, 1):
                 raise RuntimeError("Missing valid C1000 output baseline")
         return a4, d9, metrics
@@ -366,6 +378,9 @@ class SolixMonitor:
         """
         if setting == "device_timeout":
             return await self.set_device_timeout(value)
+        if setting in ("temperature_unit_fahrenheit", "fast_charge_enabled",
+                       "ac_power_saving_mode_enabled", "dc_power_saving_mode_enabled"):
+            return await self._set_original_configuration(setting, value)
         from .c1000 import c1000_setting
         packet = self._session.c1000_control_packet(setting, value)
         _command, _payload, expected = c1000_setting(setting, value)
@@ -373,8 +388,40 @@ class SolixMonitor:
 
     async def set_fast_charge_enabled(self, enabled: bool) -> dict[str, int | str]:
         """Set C1000 fast charge switch and confirm the reported value."""
+        if self.model == Model.C1000:
+            return await self._set_original_configuration("fast_charge_enabled", enabled)
         packet = self._session.fast_charge_packet(enabled)
         return await self._write_setting(packet, {"ac_fast_charge_enabled": int(enabled)})
+
+    async def set_temperature_unit(self, fahrenheit: bool) -> dict[str, int | str]:
+        return await self._set_original_configuration("temperature_unit_fahrenheit", fahrenheit)
+
+    async def set_ac_power_saving_enabled(self, enabled: bool) -> dict[str, int | str]:
+        """Select original C1000 Normal/Smart; Smart may turn outputs off at low load."""
+        return await self._set_original_configuration("ac_power_saving_mode_enabled", enabled)
+
+    async def set_dc_power_saving_enabled(self, enabled: bool) -> dict[str, int | str]:
+        return await self._set_original_configuration("dc_power_saving_mode_enabled", enabled)
+
+    async def _set_original_configuration(self, setting: str, value: bool) -> dict[str, int | str]:
+        from .c1000 import c1000_setting
+        packet = self._session.c1000_control_packet(setting, value)
+        _command, _body, target = c1000_setting(setting, value)
+        required = ("ac_output_enabled", "dc_output_enabled", "ac_charging_power_limit_w",
+                    "device_timeout_minutes", "display_timeout_seconds", "display_brightness", "light_mode",
+                    "temperature_unit_fahrenheit", "ac_fast_charge_enabled", "ac_power_saving_mode_enabled",
+                    "dc_power_saving_mode_enabled")
+        revision = self._telemetry_revision
+        await self.request_status()
+        async with asyncio.timeout(10):
+            while not all(self._field_revision.get(key, 0) > revision for key in required):
+                await self.wait_for_update(timeout=10)
+        before = {key: self.metrics[key] for key in required}
+        if (any(type(before[key]) is not int for key in required)
+                or any(before[key] not in (0, 1) for key in required if key.endswith("_enabled") or key == "temperature_unit_fahrenheit")):
+            raise RuntimeError("Invalid original C1000 settings baseline; no write sent")
+        expected = {**before, **target}
+        return await self._write_setting(packet, expected)
 
     async def confirm_pairing(self) -> None:
         """Retry Prime registration after one short main power button press."""

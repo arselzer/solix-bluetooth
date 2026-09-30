@@ -90,11 +90,11 @@ try {
   assert.equal(await page.getByRole('button', { name: /AC output/i }).count(), 0);
   cases++; console.log(`Scenario ${cases} passed`);
 
-  await page.locator('#charging-power').selectOption('1000');
+  await page.locator('#charging-power').selectOption('100');
   await page.getByRole('button', { name: 'Add period' }).click();
   await page.locator('.period-row').first().locator('input').nth(1).fill('6');
   await refresh();
-  assert.equal(await page.locator('#charging-power').inputValue(), '1000');
+  assert.equal(await page.locator('#charging-power').inputValue(), '100');
   assert.equal(await page.locator('.period-row').first().locator('input').nth(1).inputValue(), '6');
   cases++; console.log(`Scenario ${cases} passed`);
 
@@ -105,7 +105,7 @@ try {
   await page.getByTestId('confirm-command').click();
   await page.getByTestId('gateway-notice').filter({ hasText: 'Command confirmed' }).waitFor();
   let calls = await recorded();
-  assert.deepEqual(calls[0], { name: 'Office · C1000 Gen 2', command: 'set-charge-power', watts: 1000 });
+  assert.deepEqual(calls[0], { name: 'Office · C1000 Gen 2', command: 'set-charge-power', watts: 100 });
   assert.equal(posts, 1);
   cases++; console.log(`Scenario ${cases} passed`);
 
@@ -139,6 +139,10 @@ try {
   await page.getByTestId('gateway-notice').filter({ hasText: 'Command confirmed' }).waitFor();
   assert.deepEqual((await recorded())[3], { name: 'Office · C1000 Gen 2', command: 'set-device-timeout', minutes: 0 });
   await page.getByTestId('station-select').selectOption('Spare · C1000');
+  assert.ok((await page.getByTestId('input-reading').textContent()).includes('AC input not reported'));
+  assert.ok((await page.getByTestId('battery-reading').textContent()).includes('Activity unknown'));
+  assert.equal(await page.getByTestId('supply-reading').locator('.source-value').textContent(), 'Unknown');
+  assert.ok((await page.getByTestId('supply-reading').textContent()).includes('Mode unknown'));
   assert.equal(await page.locator('#device-timeout').inputValue(), '0');
   await page.locator('#device-timeout').selectOption('120');
   await propose('device-timeout');
@@ -147,11 +151,69 @@ try {
   assert.deepEqual((await recorded())[4], { name: 'Spare · C1000', command: 'set-device-timeout', minutes: 120 });
   cases++; console.log(`Scenario ${cases} passed`);
 
+  await page.locator('#temperature-unit').selectOption('1');
+  await propose('temperature-unit');
+  await page.getByTestId('confirm-command').click();
+  await page.getByTestId('gateway-notice').filter({ hasText: 'Command confirmed' }).waitFor();
+  assert.deepEqual((await recorded())[5], { name: 'Spare · C1000', command: 'set-temperature-unit', fahrenheit: true });
+  await page.locator('#ac-power-saving').selectOption('1');
+  await propose('ac-power-saving');
+  assert.ok((await page.getByTestId('command-review').textContent()).includes('automatically turn the output off at low load'));
+  await page.getByTestId('cancel-command').click();
+  assert.equal((await recorded()).length, 6);
+  await propose('ac-power-saving');
+  await page.getByTestId('confirm-command').click();
+  await page.getByTestId('gateway-notice').filter({ hasText: 'Command confirmed' }).waitFor();
+  assert.deepEqual((await recorded())[6], { name: 'Spare · C1000', command: 'set-ac-power-saving', enabled: true });
+  await page.locator('#dc-power-saving').selectOption('1');
+  await propose('dc-power-saving');
+  await page.getByTestId('confirm-command').click();
+  await page.getByTestId('gateway-notice').filter({ hasText: 'Command confirmed' }).waitFor();
+  assert.deepEqual((await recorded())[7], { name: 'Spare · C1000', command: 'set-dc-power-saving', enabled: true });
+  await page.locator('#fast-charge').selectOption('1');
+  await propose('fast-charge');
+  await page.getByTestId('confirm-command').click();
+  await page.getByTestId('gateway-notice').filter({ hasText: 'Command confirmed' }).waitFor();
+  assert.deepEqual((await recorded())[8], { name: 'Spare · C1000', command: 'set-fast-charge', enabled: true });
+  cases++; console.log(`Scenario ${cases} passed`);
+
+  await page.getByTestId('station-select').selectOption('Office · C1000 Gen 2');
+  assert.equal(await page.locator('#ac-power-saving').count(), 0);
+  assert.equal(await page.locator('#dc-power-saving').count(), 0);
+  await page.locator('#fast-charge').selectOption('1');
+  const fastApply = page.locator('.setting').filter({ has: page.locator('label[for="fast-charge"]') }).getByRole('button', { name: 'Apply', exact: true });
+  assert.equal(await fastApply.isDisabled(), true);
+  await change({ standard: true });
+  await refresh();
+  assert.equal(await fastApply.isDisabled(), false);
+  await propose('fast-charge');
+  await page.getByTestId('confirm-command').click();
+  await page.getByTestId('gateway-notice').filter({ hasText: 'Command confirmed' }).waitFor();
+  assert.deepEqual((await recorded())[9], { name: 'Office · C1000 Gen 2', command: 'set-fast-charge', enabled: true });
+  await change({ standard: false });
+  await refresh();
+  await page.locator('#fast-charge').selectOption('0');
+  await propose('fast-charge');
+  await page.getByTestId('confirm-command').click();
+  await page.getByTestId('gateway-notice').filter({ hasText: 'Command confirmed' }).waitFor();
+  assert.deepEqual((await recorded())[10], { name: 'Office · C1000 Gen 2', command: 'set-fast-charge', enabled: false });
+  await change({ mains: false });
+  await refresh();
+  assert.equal(await fastApply.isDisabled(), true);
+  await change({ mains: true });
+  await refresh();
+  cases++; console.log(`Scenario ${cases} passed`);
+
   await page.getByTestId('station-select').selectOption('Server · C2000 Gen 2');
+  assert.equal(await page.locator('#charging-power option[value="100"]').count(), 0);
+  assert.equal(await page.locator('#charging-power option[value="200"]').count(), 0);
   assert.equal(await page.locator('#temperature-unit').count(), 0);
   assert.equal(await page.locator('#discharge-floor').count(), 0);
   assert.equal(await page.locator('#off-grid-alert').count(), 0);
   assert.equal(await page.locator('#device-timeout').count(), 0);
+  assert.equal(await page.locator('#fast-charge').count(), 0);
+  assert.equal(await page.locator('#ac-power-saving').count(), 0);
+  assert.equal(await page.locator('#dc-power-saving').count(), 0);
   await change({ readonly: true });
   await refresh();
   await page.getByText('This gateway is read-only. Monitoring remains available.').waitFor();
@@ -173,8 +235,8 @@ try {
   await page.getByTestId('confirm-command').click();
   await page.getByTestId('gateway-notice').filter({ hasText: 'Confirmation timed out' }).waitFor();
   await refresh();
-  assert.equal(posts, 6);
-  assert.equal((await recorded()).length, 5);
+  assert.equal(posts, 12);
+  assert.equal((await recorded()).length, 11);
   assert.equal((await page.textContent('body')).includes('PRIVATE-ERROR-TEXT'), false);
   cases++; console.log(`Scenario ${cases} passed`);
 
@@ -231,6 +293,9 @@ try {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.screenshot({ path: `${screenshots}/web-dashboard-mobile.png`, fullPage: true });
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
+  await page.setViewportSize({ width: 1440, height: 1100 });
+  await page.getByTestId('station-select').selectOption('Spare · C1000');
+  await page.screenshot({ path: `${screenshots}/web-dashboard-c1000-preferences.png`, fullPage: true });
   assert.deepEqual(errors, []);
   assert.deepEqual(external, []);
   cases++; console.log(`Scenario ${cases} passed`);

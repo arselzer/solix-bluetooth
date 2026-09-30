@@ -4,9 +4,9 @@
 
 The Python package has a separate `Model.C1000` / `c1000` profile for
 the original C1000/C1000X, A1761. An original C1000 was tested on 2026-09-30:
-monitoring and seven settings passed fresh readback and restoration checks.
-Its B3 version code is **151**, formatted **1.5.1** by the reference convention;
-this formatting has not been independently checked against the app.
+monitoring and twelve settings passed fresh readback and restoration checks.
+Its B3 version code is **151**; a later device-originated local HTTP request
+independently reported main **v1.5.1** and radio **v0.1.3.0**.
 See [the chain test](c1000-chain-validation.md) for exact values and limits.
 The C1000X sibling and other firmware versions remain untested.
 
@@ -33,6 +33,8 @@ used as a fallback.
 | C1–C5 | Main/expansion charge, health, expansion count |
 | D0 / D1 / D2 / D3 | Serial / charging limit / device timeout / display timeout |
 | D7 / D8 / D9 / DC / DE | AC/DC switches / display brightness / light mode / display switch |
+| DD / E5 | Fahrenheit display preference / fast-charge switch |
+| F8 | Type01 packed DC/AC mode bytes: 1=Normal, 2=Smart |
 
 `AF` is called total input in one source and photovoltaic power in another;
 it remains raw. `BC` is exposed only as `charging_source_code`, not a battery
@@ -60,6 +62,10 @@ mains absence; A5 may describe battery charging rather than all AC input.
 | Light mode | `404f` | `01` + byte | 0–4 |
 | AC charging power | `4044` | `02` + uint16 LE | 100–1000 W, 100 W steps |
 | AC/DC output enabled | `404a` / `404b` | `01` + boolean | 0/1 |
+| Device Timeout | `4045` | `02` + uint16 LE | 0=Never; 30,60,120,240,360,720,1440 minutes |
+| Fahrenheit display preference | `4050` | `01` + boolean | 0=Celsius, 1=Fahrenheit |
+| Fast charge | `405e` | `01` + boolean | 0/1 |
+| DC/AC Smart mode | `4076` / `4077` | `01` + boolean | 0=Normal, 1=Smart |
 
 All bodies also carry `A1=21` and `FE=03` + Unix seconds LE32. BLE command
 numbers and application identifier differ from their MQTT counterparts.
@@ -69,13 +75,26 @@ The later [MQTT bridge test](c1000-bridge-charging-and-bypass.md) also verified
 1000/100 W with outputs kept on. Charging power below the reported load did
 not establish forced battery operation while AC input remained supplied.
 Other table values remain reference-derived.
+
+The later [preferences trial](c1000-preferences-validation.md) confirmed
+Celsius→Fahrenheit→Celsius, fast off→on→off, and both Smart→Normal→Smart
+cycles. **The upstream inverted Smart command values disagree with this
+hardware:** wire 0 selects Normal/status 1, wire 1 selects Smart/status 2.
+An independent original-model 1.5.9 firmware replay agrees. Do not send status
+value 2 as a command. Smart mode can automatically stop an output at low load;
+the short loaded trial verifies its configuration, not its shutdown threshold.
+The [1.5.9 Smart-policy replay](c1000-smart-auto-off-policy.md) shows that
+enabling Smart can inherit an already accumulated low-load interval.
 The generic `send_command` path permits only status for this model; dedicated
 control methods validate types and ranges. There is no opt-in flag. Use the
 standard `set_ac_charging_power`, `set_display_timeout`,
 `set_ac_output_enabled`, and `set_light_mode` methods, or
 `set_c1000_setting(setting, value)` for the full table. CLI power/display/AC/light
-commands and `c1000-setting` expose the same controls. The MQTT bridge exposes
-`ac_charging_power`, `display_timeout`, `ac_output`, and `light_mode`.
+commands and `c1000-setting` expose the same controls. Dedicated SDK methods
+also include `set_temperature_unit`, `set_fast_charge_enabled`,
+`set_ac_power_saving_enabled` and `set_dc_power_saving_enabled`.
+The bridge and authenticated gateway expose those preference settings with
+semantic boolean values; the gateway has no AC/DC output-switch command.
 
 Explicit nonzero or empty device acknowledgement status raises an error.
 Successful completion requires each expected field to be freshly decoded
@@ -104,26 +123,29 @@ performed automatically by monitoring or the HTTP server.
 
 ## MQTT and missing functionality
 
-The **BLE-to-MQTT bridge** supports charging power, display timeout, AC output
-and light. Here the station communicates over Bluetooth; the bridge connects
+The **BLE-to-MQTT bridge** supports charging power, display/device timeout,
+temperature units, fast charge, Smart modes, AC output and light.
+Here the station communicates over Bluetooth; the bridge connects
 to your broker. The HTTP gateway exposes charging power, display timeout and
 light, with no AC-output API command.
 The complete original-C1000 TCP MQTT/Paho/BLE write and restoration path is now
 verified; station Wi-Fi is unnecessary for the bridge.
 
-The upstream A1761 map includes cloud MQTT commands, so MQTT exists in the
-vendor protocol. That map does not establish local provisioning, endpoint
-replacement or authentication for A1761. Our isolated AP/native MQTT workflow
-currently accepts Gen 2 profiles only. No direct original-C1000 local MQTT
-connection was tested, and Gen 2 setup packets must not be assumed compatible.
+The upstream A1761 map includes cloud MQTT commands. Our later
+[isolated trial](c1000-original-wifi-validation.md) verified original-specific
+Wi-Fi provisioning and local endpoint replacement: the station reached the
+MQTT-bootstrap and binding HTTP paths without an Anker account. Direct TLS/MQTT
+authentication remains unverified. Its 16-character serial and radio 0.1.3.0
+must not be treated as the tested Gen 2 credential parser. The packaged native
+AP service currently accepts Gen 2 profiles only.
 
 Device Timeout is now exposed through the SDK, CLI, bridge and gateway/HA.
 The [timeout trial](device-timeout-behavior.md) confirmed legacy `4045/A2`
 and D2 readback for 720→0→720 minutes while keeping AC output on. Never
 disables the saved timeout; it cannot guarantee uninterrupted radio access.
 
-Open work includes Wi-Fi/binding setup; temperature units,
-fast charge and output timers; smart-output behavior; expansion-battery data;
+Open work includes direct MQTT credential/bootstrap acceptance; output timers; actual fast-charge rate
+and Smart-mode low-load behavior; expansion-battery data;
 charge/discharge limits if supported; and reliable mains/battery-state mapping.
 The reference lists additional commands, but their BLE numbers and physical
 behavior need validation. No reserve or tariff capability has been established

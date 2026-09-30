@@ -186,7 +186,8 @@ def test_native_model_profile_identity_and_charging_limit(model, product, maximu
     assert outer["head"]["device_sn"] == inner["device_sn"] == "SYNTHETIC"
     assert list(parse_tlvs(packet.payload)) == [0xA1, 0xA4, 0xFD]
     assert parse_tlvs(packet.payload)[0xA4] == b"\x02" + maximum.to_bytes(2, "little")
-    with pytest.raises(ValueError, match=f"300–{maximum}"):
+    minimum = 100 if model == Model.C1000_GEN2 else 300
+    with pytest.raises(ValueError, match=f"{minimum}–{maximum}"):
         commands.ac_charging_power(maximum + 100)
 
 

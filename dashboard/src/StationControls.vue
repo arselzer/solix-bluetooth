@@ -13,7 +13,7 @@ const observed = (key: string, unit = '') => {
 const powers = computed(() => {
   if (props.station.model === 'c300') return [100, 200, 300, 330];
   const maximum = props.station.model === 'c2000_gen2' ? 1800 : props.station.model === 'c1000_gen2' ? 1200 : 1000;
-  const minimum = props.station.model === 'c1000' ? 100 : 300;
+  const minimum = ['c1000', 'c1000_gen2'].includes(props.station.model) ? 100 : 300;
   return Array.from({ length: (maximum - minimum) / 100 + 1 }, (_, index) => minimum + index * 100);
 });
 const reserves = computed(() => {
@@ -33,6 +33,25 @@ const floorValid = computed(() => {
     && lower + 5 <= reserve && reserve <= upper;
 });
 const displayTimes = computed(() => props.station.model === 'c1000' ? [20, 30, 60, 300, 1800] : [30, 60]);
+const originalProfile = computed(() => props.station.model === 'c1000' && props.station.protocol === 'legacy');
+const nativeC1000 = computed(() => props.station.model === 'c1000_gen2' && props.station.protocol === 'native_mqtt');
+const booleanReported = (key: string) => [0, 1].includes(numberMetric(props.station, key) ?? -1);
+const fastAvailable = computed(() => allowed('set-fast-charge') && (originalProfile.value
+  || props.station.model === 'c1000_gen2' && ['prime', 'native_mqtt'].includes(props.station.protocol ?? '')));
+const fastValid = computed(() => booleanReported('ac_fast_charge_enabled') && ['0', '1'].includes(props.draft.fast)
+  && (!nativeC1000.value || numberMetric(props.station, 'ac_input_connected') === 1)
+  && (props.draft.fast === '0' || props.station.model !== 'c1000_gen2'
+    || props.station.metrics.usage_mode === 'standard' && props.station.metrics.active_tariff === 'none'));
+const temperatureAvailable = computed(() => allowed('set-temperature-unit') && (originalProfile.value || nativeC1000.value));
+const savingPorts = ['ac', 'dc'] as const;
+const savingValid = (port: 'ac' | 'dc') => booleanReported(`${port}_power_saving_mode_enabled`)
+  && ['0', '1'].includes(props.draft[port === 'ac' ? 'acSaving' : 'dcSaving']);
+function powerSaving(port: 'ac' | 'dc') {
+  if (!originalProfile.value || !savingValid(port)) return;
+  const enabled = props.draft[port === 'ac' ? 'acSaving' : 'dcSaving'] === '1';
+  propose({ command: `set-${port}-power-saving`, enabled }, `Change ${port.toUpperCase()} power saving?`,
+    'Power saving may automatically turn the output off at low load.', [enabled ? 'On' : 'Off', `Applies to the ${port.toUpperCase()} output`]);
+}
 const deviceTimeouts = [0, 30, 60, 120, 240, 360, 720, 1440];
 const timeoutProfile = computed(() => props.station.model === 'c1000' && props.station.protocol === 'legacy'
   || props.station.model === 'c1000_gen2' && ['prime', 'native_mqtt'].includes(props.station.protocol ?? ''));
@@ -130,29 +149,38 @@ function addPeriod() {
         <label for="device-timeout">Device Timeout</label><p>Current {{ timeoutReported ? timeoutLabel(Number(station.metrics.device_timeout_minutes)) : 'Not reported' }}</p>
         <div class="setting-input"><select id="device-timeout" v-model="draft.timeoutMinutes" :disabled="!writable || !timeoutReported"><option v-for="minutes in deviceTimeouts" :key="minutes" :value="String(minutes)">{{ timeoutLabel(minutes) }}</option></select>
           <button class="secondary" :disabled="!writable || !timeoutReported || !timeoutValid" @click="timeout">Apply</button></div>
-        <p class="hint">Never disables this timeout; other sleep behavior may still interrupt remote access.</p>
+        <p v-if="draft.timeoutMinutes === '0'" class="hint">Never disables this timeout; other sleep behavior may still interrupt remote access.</p>
         <p v-if="draft.timeoutMinutes !== '' && draft.timeoutMinutes !== '0'" class="validation-error">The station may turn off when idle, interrupting remote access.</p>
       </div>
-      <div v-if="allowed('set-fast-charge')" class="setting">
+      <div v-if="fastAvailable" class="setting">
         <label for="fast-charge">Fast charging</label><p>Current {{ numberMetric(station, 'ac_fast_charge_enabled') === 1 ? 'On' : numberMetric(station, 'ac_fast_charge_enabled') === 0 ? 'Off' : 'Not reported' }}</p>
         <div class="setting-input"><select id="fast-charge" v-model="draft.fast" :disabled="!writable"><option value="0">Off</option><option value="1">On</option></select>
-          <button class="secondary" :disabled="!writable" @click="propose({ command: 'set-fast-charge', enabled: draft.fast === '1' }, 'Change fast charging?', 'Set the station’s fast-charging switch.', [draft.fast === '1' ? 'On' : 'Off'])">Apply</button></div>
+          <button class="secondary" :disabled="!writable || !fastValid" @click="propose({ command: 'set-fast-charge', enabled: draft.fast === '1' }, 'Change fast charging?', 'Set the station’s fast-charging switch.', [draft.fast === '1' ? 'On' : 'Off'])">Apply</button></div>
+        <p v-if="station.model === 'c1000_gen2'" class="hint">Enabling requires Standard mode with no active tariff. Native MQTT also requires connected mains.</p>
       </div>
       <div v-if="allowed('set-light')" class="setting">
         <label for="light-mode">Light</label><p>Current {{ lights[numberMetric(station, 'light_mode') ?? -1] ?? 'Not reported' }}</p>
         <div class="setting-input"><select id="light-mode" v-model="draft.light" :disabled="!writable"><option v-for="(light, mode) in lights" :key="mode" :value="String(mode)">{{ light }}</option></select>
           <button class="secondary" :disabled="!writable || !lights[Number(draft.light)]" @click="propose({ command: 'set-light', mode: Number(draft.light) }, 'Change light mode?', 'Set the station light.', [lights[Number(draft.light)] ?? 'Off'])">Apply</button></div>
       </div>
-      <div v-if="allowed('set-temperature-unit')" class="setting">
+      <div v-if="temperatureAvailable" class="setting">
         <label for="temperature-unit">Temperature display</label><p>Current {{ numberMetric(station, 'temperature_unit_fahrenheit') === 1 ? 'Fahrenheit' : numberMetric(station, 'temperature_unit_fahrenheit') === 0 ? 'Celsius' : 'Not reported' }}</p>
         <div class="setting-input"><select id="temperature-unit" v-model="draft.fahrenheit" :disabled="!writable"><option value="0">Celsius · °C</option><option value="1">Fahrenheit · °F</option></select>
-          <button class="secondary" :disabled="!writable" @click="propose({ command: 'set-temperature-unit', fahrenheit: draft.fahrenheit === '1' }, 'Change temperature display?', 'Set the station’s temperature display unit.', [draft.fahrenheit === '1' ? 'Fahrenheit' : 'Celsius'])">Apply</button></div>
+          <button class="secondary" :disabled="!writable || !booleanReported('temperature_unit_fahrenheit') || !['0', '1'].includes(draft.fahrenheit)" @click="propose({ command: 'set-temperature-unit', fahrenheit: draft.fahrenheit === '1' }, 'Change temperature display?', 'Set the station’s temperature display unit.', [draft.fahrenheit === '1' ? 'Fahrenheit' : 'Celsius'])">Apply</button></div>
       </div>
       <div v-if="allowed('set-off-grid-alert')" class="setting">
         <label for="off-grid-alert">Off-grid alert</label><p>Current {{ numberMetric(station, 'ac_off_grid_alert_enabled') === 1 ? 'On' : numberMetric(station, 'ac_off_grid_alert_enabled') === 0 ? 'Off' : 'Not reported' }}</p>
         <div class="setting-input"><select id="off-grid-alert" v-model="draft.alert" :disabled="!writable"><option value="0">Off</option><option value="1">On</option></select>
           <button class="secondary" :disabled="!writable" @click="propose({ command: 'set-off-grid-alert', enabled: draft.alert === '1' }, 'Change off-grid alert?', 'Set the station’s AC off-grid alert preference.', [draft.alert === '1' ? 'On' : 'Off'])">Apply</button></div>
       </div>
+      <template v-for="port in savingPorts" :key="port">
+        <div v-if="originalProfile && allowed(`set-${port}-power-saving`)" class="setting">
+          <label :for="`${port}-power-saving`">{{ port.toUpperCase() }} power saving</label><p>Current {{ numberMetric(station, `${port}_power_saving_mode_enabled`) === 1 ? 'On' : numberMetric(station, `${port}_power_saving_mode_enabled`) === 0 ? 'Off' : 'Not reported' }}</p>
+          <div class="setting-input"><select :id="`${port}-power-saving`" v-model="draft[port === 'ac' ? 'acSaving' : 'dcSaving']" :disabled="!writable || !booleanReported(`${port}_power_saving_mode_enabled`)"><option value="0">Off</option><option value="1">On</option></select>
+            <button class="secondary" :disabled="!writable || !savingValid(port)" @click="powerSaving(port)">Apply</button></div>
+          <p class="validation-error">Power saving may automatically turn the output off at low load.</p>
+        </div>
+      </template>
     </div>
   </section>
 

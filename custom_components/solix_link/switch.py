@@ -1,19 +1,25 @@
-"""C1000 Gen 2 native AC off-grid alert preference; no output switches."""
+"""Capability-gated C1000 configuration switches confirmed by the gateway."""
 
 from typing import Any
 
-from homeassistant.components.switch import SwitchEntity
+from homeassistant.components.switch import SwitchEntity, SwitchEntityDescription
 from homeassistant.const import EntityCategory
 from homeassistant.core import callback
 from homeassistant.exceptions import HomeAssistantError
 
-from .api import binary_state, native_gen2
+from .api import binary_state, boolean_setting_supported, fast_charge_enable_allowed, native_gen2
 from .coordinator import SolixConfigEntry
 from .entity import SolixEntity
 
 PARALLEL_UPDATES = 0
-COMMAND = "set-off-grid-alert"
-METRIC = "ac_off_grid_alert_enabled"
+SETTINGS = {"ac_off_grid_alert_enabled": "set-off-grid-alert", "ac_fast_charge_enabled": "set-fast-charge",
+            "ac_power_saving_mode_enabled": "set-ac-power-saving", "dc_power_saving_mode_enabled": "set-dc-power-saving"}
+DESCRIPTIONS = (
+    SwitchEntityDescription(key="ac_off_grid_alert_enabled", translation_key="off_grid_alert", entity_category=EntityCategory.CONFIG),
+    SwitchEntityDescription(key="ac_fast_charge_enabled", translation_key="fast_charge", entity_category=EntityCategory.CONFIG),
+    SwitchEntityDescription(key="ac_power_saving_mode_enabled", translation_key="ac_power_saving", entity_category=EntityCategory.CONFIG),
+    SwitchEntityDescription(key="dc_power_saving_mode_enabled", translation_key="dc_power_saving", entity_category=EntityCategory.CONFIG),
+)
 
 
 async def async_setup_entry(hass, entry: SolixConfigEntry, async_add_entities) -> None:
@@ -26,11 +32,11 @@ async def async_setup_entry(hass, entry: SolixConfigEntry, async_add_entities) -
         if not coordinator.client.token:
             return
         for name, snapshot in (coordinator.data or {}).items():
-            if (name not in added and snapshot.get("model") == "c1000_gen2"
-                    and native_gen2(snapshot) and COMMAND in snapshot.get("controls", [])
-                    and binary_state(snapshot.get("metrics", {}).get(METRIC)) is not None):
-                added.add(name)
-                entities.append(OffGridAlertSwitch(coordinator, name, METRIC))
+            for description in DESCRIPTIONS:
+                key = description.key
+                if (name, key) not in added and boolean_setting_supported(snapshot, SETTINGS[key]):
+                    added.add((name, key))
+                    entities.append(SolixSettingSwitch(coordinator, name, description))
         if entities:
             async_add_entities(entities)
 
@@ -38,25 +44,35 @@ async def async_setup_entry(hass, entry: SolixConfigEntry, async_add_entities) -
     entry.async_on_unload(coordinator.async_add_listener(discover))
 
 
-class OffGridAlertSwitch(SolixEntity, SwitchEntity):
-    _attr_translation_key = "off_grid_alert"
-    _attr_entity_category = EntityCategory.CONFIG
+class SolixSettingSwitch(SolixEntity, SwitchEntity):
+    def __init__(self, coordinator, name, description: SwitchEntityDescription) -> None:
+        super().__init__(coordinator, name, description.key)
+        self.entity_description = description
+        self.command = SETTINGS[description.key]
+        if self.command in ("set-ac-power-saving", "set-dc-power-saving"):
+            self._attr_extra_state_attributes = {"output_behavior": "Power saving may automatically turn the output off at low load."}
+        elif self.command == "set-fast-charge" and self.snapshot.get("model") == "c1000_gen2":
+            self._attr_extra_state_attributes = {"enable_requirement": "C1000 Gen 2 requires Standard mode with no active tariff; native MQTT also requires connected mains."}
 
     @property
     def is_on(self) -> bool | None:
-        return binary_state(self.snapshot.get("metrics", {}).get(METRIC))
+        return binary_state(self.snapshot.get("metrics", {}).get(self.entity_description.key))
 
     @property
     def available(self) -> bool:
-        return (self.snapshot.get("model") == "c1000_gen2" and native_gen2(self.snapshot)
-                and self.control_available(COMMAND) and self.is_on is not None)
+        if self.command == "set-fast-charge" and native_gen2(self.snapshot):
+            if binary_state(self.snapshot.get("metrics", {}).get("ac_input_connected")) is not True:
+                return False
+        return boolean_setting_supported(self.snapshot, self.command) and self.control_available(self.command)
 
     async def _set_enabled(self, enabled: bool) -> None:
         if type(enabled) is not bool:
-            raise HomeAssistantError("Use an explicit enabled or disabled alert setting")
+            raise HomeAssistantError("Use an explicit enabled or disabled setting")
         if not self.available:
             raise HomeAssistantError("Fresh connected telemetry and an enabled gateway control are required")
-        await self.coordinator.async_command(self.station_name, {"command": COMMAND, "enabled": enabled})
+        if self.command == "set-fast-charge" and enabled and not fast_charge_enable_allowed(self.snapshot):
+            raise HomeAssistantError("Fast charge enable requires Standard mode with no active tariff")
+        await self.coordinator.async_command(self.station_name, {"command": self.command, "enabled": enabled})
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         await self._set_enabled(True)

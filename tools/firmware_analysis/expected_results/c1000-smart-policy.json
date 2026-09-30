@@ -1,0 +1,239 @@
+{
+  "boundaries": [
+    "Policy replay enters after output-enabled outer gate; actual timer-active gate runs",
+    "Stops immediately after queue request; does not execute physical shutdown",
+    "Actual GPIO reader uses synthetic 40011408; physical pin meaning unproven",
+    "Timer and SysTick tests use independent synthetic ticks/peripheral registers",
+    "No original DSP image or independent physical power calibration",
+    "Installed 1.5.1 and other models may differ from analyzed 1.5.9",
+    "Normal skips only this low-load shutdown path, not faults or other timers"
+  ],
+  "cases": {
+    "active_timer_skips_policy": 4,
+    "cache_to_typed_telemetry": 12,
+    "countdown_flag_provenance": 8,
+    "normal_to_smart_inherits_counter": 2,
+    "one_shot_timer_expiry_and_rearm": 15,
+    "policy_boundary_and_guards": 1300,
+    "systick_configuration": 1,
+    "systick_increment": 5,
+    "total": 1347
+  },
+  "cases_sha256": "60b0320c3255ce04c21998e67c42c81b4449c7fb66700b9e4f034d83b4998bc9",
+  "countdown_handlers": [
+    {
+      "blocking_bit": 0,
+      "domain": "ac",
+      "handler": "0800b990",
+      "opcode": "0042"
+    },
+    {
+      "blocking_bit": 1,
+      "domain": "car_dc",
+      "handler": "0800ba88",
+      "opcode": "0043"
+    }
+  ],
+  "counter_inheritance": [
+    {
+      "domain": "ac",
+      "next_sample_queued_stop": true,
+      "normal_counter": 451,
+      "smart_command_cleared_counter": false
+    },
+    {
+      "domain": "car_dc",
+      "next_sample_queued_stop": true,
+      "normal_counter": 9001,
+      "smart_command_cleared_counter": false
+    }
+  ],
+  "environment": {
+    "python": "3.12.3",
+    "unicorn": "2.1.4"
+  },
+  "firmware_version": "1.5.9",
+  "input_sha256": "b295ee8613f5c96e70dcc905896df516621cab4dc590bb580eac6b84519911a6",
+  "model": "A1761 original C1000",
+  "policy": {
+    "ac": {
+      "eligible_samples_from_zero": 451,
+      "nominal_sample_period_ticks": 2000,
+      "nominal_seconds_from_zero": 902,
+      "queued_stop_flag": 2,
+      "raw_power_threshold_inclusive": 20
+    },
+    "car_dc": {
+      "eligible_samples_from_zero": 9001,
+      "nominal_sample_period_ticks": 2000,
+      "nominal_seconds_from_zero": 18002,
+      "queued_stop_flag": 32,
+      "raw_power_threshold_inclusive": 3
+    }
+  },
+  "substitutions": {
+    "08007718": "command acknowledgment (existing helper)",
+    "0800ccf0": "debug log",
+    "0800d282": "interrupt priority programming",
+    "08010278": "capture output-stop event, no dispatch",
+    "08014e90": "unrelated SysTick housekeeping",
+    "080251f0": "Smart setting persistence (existing helper)"
+  },
+  "systick": {
+    "declared_clock_hz": 72000000,
+    "nominal_tick_hz": 1000,
+    "reload": 71999,
+    "vector": "08010189"
+  },
+  "telemetry": [
+    [
+      "ac",
+      0,
+      "a6",
+      "020000"
+    ],
+    [
+      "ac",
+      1,
+      "a6",
+      "020100"
+    ],
+    [
+      "ac",
+      3,
+      "a6",
+      "020300"
+    ],
+    [
+      "ac",
+      20,
+      "a6",
+      "021400"
+    ],
+    [
+      "ac",
+      1234,
+      "a6",
+      "02d204"
+    ],
+    [
+      "ac",
+      32767,
+      "a6",
+      "02ff7f"
+    ],
+    [
+      "car_dc",
+      0,
+      "ad",
+      "020000"
+    ],
+    [
+      "car_dc",
+      1,
+      "ad",
+      "020100"
+    ],
+    [
+      "car_dc",
+      3,
+      "ad",
+      "020300"
+    ],
+    [
+      "car_dc",
+      20,
+      "ad",
+      "021400"
+    ],
+    [
+      "car_dc",
+      1234,
+      "ad",
+      "02d204"
+    ],
+    [
+      "car_dc",
+      32767,
+      "ad",
+      "02ff7f"
+    ]
+  ],
+  "timer_cases": [
+    [
+      0,
+      0,
+      2
+    ],
+    [
+      0,
+      1999,
+      2
+    ],
+    [
+      0,
+      2000,
+      3
+    ],
+    [
+      0,
+      2001,
+      3
+    ],
+    [
+      0,
+      100000,
+      3
+    ],
+    [
+      10000,
+      0,
+      2
+    ],
+    [
+      10000,
+      1999,
+      2
+    ],
+    [
+      10000,
+      2000,
+      3
+    ],
+    [
+      10000,
+      2001,
+      3
+    ],
+    [
+      10000,
+      100000,
+      3
+    ],
+    [
+      4294967280,
+      0,
+      2
+    ],
+    [
+      4294967280,
+      1999,
+      2
+    ],
+    [
+      4294967280,
+      2000,
+      3
+    ],
+    [
+      4294967280,
+      2001,
+      3
+    ],
+    [
+      4294967280,
+      100000,
+      3
+    ]
+  ]
+}

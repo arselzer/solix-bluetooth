@@ -47,6 +47,8 @@ export interface Draft {
   light: string;
   fahrenheit: string;
   alert: string;
+  acSaving: string;
+  dcSaving: string;
   periods: DraftPeriod[];
 }
 
@@ -88,6 +90,8 @@ export function draftFor(station: Station): Draft {
     light: current('light_mode', '0'),
     fahrenheit: current('temperature_unit_fahrenheit', '0'),
     alert: current('ac_off_grid_alert_enabled', '0'),
+    acSaving: current('ac_power_saving_mode_enabled', ''),
+    dcSaving: current('dc_power_saving_mode_enabled', ''),
     periods: [],
   };
 }

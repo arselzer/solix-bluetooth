@@ -98,6 +98,13 @@ The user changed the C1000 upper limit 100→90→100 and lower limit 1→5→1 
 
 The user also changed AC charging power 1200→1000→300→1200 W in the app. These were `4101` writes with `A4` watt values; the public Python method changed 1200→1000→1200 W, with telemetry confirmation, and later 1200→300→1200 W with a 771 W AC load. The `4101` packet also includes `AB` set to zero and an `FD` TLV containing `00` followed by a 13-digit Unix millisecond timestamp. The Python client and CLI expose these two controls along with display timeout and fast charge, described below; all four check telemetry after a write. The implementation limits choices to upper 80–100% in 5% steps, lower 1%, 5%, 10%, 15%, or 20%, and AC charging power 300–1200 W in 100 W steps. The app did not offer a 2% lower limit on this tested unit. Upper 80%, 95%, and 100%, plus charging power 300/1000/1200 W, were independently exercised from the laptop; the other choices follow the app's observed range and encoding and may vary on other variants.
 
+The later [charging validation](c1000-charging-and-reserve-validation.md)
+extends C1000 Gen 2 charging power to **100–1200 W**. Both lower values passed
+Prime readback/restoration; actual native 100 W charging was observed below
+full SOC. It also confirms native fast-charge retention, reserve-floor grid
+return and cached-profile reconnect. Earlier ranges above describe those
+initial trials. A4[18] is `display_brightness`; A4[22] is runtime LCD activity.
+
 ### Other C1000 app writes decoded from the private capture
 
 These were identified by the user's timed app sequence on firmware 1.1.4.9. Their direct laptop behavior still needs checking. `FD` in the table means the app appended `fd0e00` plus a 13-digit Unix millisecond timestamp.

@@ -26,6 +26,9 @@ _FIELDS = {
     "ac_output": ("enabled",),
     "light_mode": ("mode",),
     "device_timeout": ("minutes",),
+    "temperature_unit": ("fahrenheit",),
+    "ac_power_saving": ("enabled",),
+    "dc_power_saving": ("enabled",),
 }
 _CONFIRMED = {
     "charge_limits": ("max_charge_percentage", "min_charge_percentage"),
@@ -36,13 +39,17 @@ _CONFIRMED = {
     "ac_output": ("ac_output_enabled",),
     "light_mode": ("light_mode",),
     "device_timeout": ("device_timeout_minutes",),
+    "temperature_unit": ("temperature_unit_fahrenheit",),
+    "ac_power_saving": ("ac_power_saving_mode_enabled",),
+    "dc_power_saving": ("dc_power_saving_mode_enabled",),
 }
 
 
 def _supports_operation(device: Any, operation: str) -> bool:
     if device.model in (Model.C300, Model.C1000) and device.protocol == "legacy":
         return (operation in ("display_timeout", "ac_charging_power", "ac_output", "light_mode")
-                or (device.model == Model.C1000 and operation == "device_timeout"))
+                or (device.model == Model.C1000 and operation in (
+                    "device_timeout", "temperature_unit", "fast_charge", "ac_power_saving", "dc_power_saving")))
     if device.protocol != 'prime':
         return False
     if device.model == Model.C1000_GEN2:
@@ -63,7 +70,7 @@ def decode_setting(operation: str, payload: bytes) -> dict[str, int | bool]:
     if not isinstance(values, dict) or set(values) != set(_FIELDS[operation]):
         raise ValueError(f"Expected JSON fields: {', '.join(_FIELDS[operation])}")
     for key, value in values.items():
-        expected = bool if key == "enabled" else int
+        expected = bool if key in ("enabled", "fahrenheit") else int
         if type(value) is not expected:
             raise ValueError(f"{key} must be a {'boolean' if expected is bool else 'whole number'}")
     return values

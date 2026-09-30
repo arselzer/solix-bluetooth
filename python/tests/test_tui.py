@@ -92,10 +92,11 @@ def test_native_target_uses_initialized_profile_model_and_limits(tmp_path, model
     assert target.native and target.model == model
     assert model.value in target.label
     controls = controls_for(target)
-    assert next(control for control in controls if control.key == "charge-power").hint == f"300–{maximum} W, in 100 W steps"
+    minimum = 100 if model == Model.C1000_GEN2 else 300
+    assert next(control for control in controls if control.key == "charge-power").hint == f"{minimum}–{maximum} W, in 100 W steps"
     expected = {"charge-power", "charge-cap", "reserve"}
     if model == Model.C1000_GEN2:
-        expected |= {"temperature-unit", "off-grid-alert", "discharge-floor", "device-timeout"}
+        expected |= {"temperature-unit", "off-grid-alert", "discharge-floor", "device-timeout", "fast-charge"}
     assert {control.key for control in controls} == expected
     assert config.account_id not in target.label and config.device_serial not in target.label
 

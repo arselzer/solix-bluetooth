@@ -26,7 +26,7 @@ such as `monitor`, `serve` and `ap-service-status` keep their scripted behavior.
 | Model profile | Monitoring | Controls |
 | --- | --- | --- |
 | `c300` — C300/C300X AC | C300X tested live; C300 sibling uses the reference map | AC output, light, charging-power limit, screen timeout verified |
-| `c1000` — original A1761 | Live monitoring and restored control cycles, version code 151 | Charging/output/light/display/device timeout; BLE-to-MQTT charging verified; no direct local MQTT yet |
+| `c1000` — original A1761 | Live monitoring and restored control cycles, version code 151 | Charging/output/light/display/device timeout, temperature units, fast charge and AC/DC Smart modes; no direct local MQTT yet |
 | `c1000_gen2` — A1763 | BLE and native MQTT tested live | Charge limits/power, display/device timeout, fast charge; native reserve, tariffs/grid return, temperature, alert and guarded discharge floor |
 | `c2000_gen2` — A1783 | Tested live | Upper charge cap, charging power, screen timeout; native reserve, all-day Peak and confirmed grid return |
 
@@ -97,6 +97,18 @@ A1763/main 1.1.4.9 emits literal 100. New C1000 Gen 2 raw diagnostics are
 `dc_input_active`, `dc_input_power_raw` and `controller_error_code`; PV units
 and named fault meanings are unverified. See [firmware findings](../docs/gen2-additional-feature-investigation.md).
 Closing the dashboard disconnects monitoring; it does not restore settings.
+
+C1000 Gen 2 A4[18] is now correctly named `display_brightness` (previously
+`display_mode`). The existing `display_enabled` field describes runtime
+display-timer activity, not saved configuration; fast charge can wake it.
+
+Original C1000 temperature, fast charge and AC/DC Smart preferences are
+[physically verified](../docs/c1000-preferences-validation.md) and exposed in
+the terminal/browser/CLI, bridge and gateway/HA. Boolean commands are
+`set-temperature-unit` (`fahrenheit`), `set-fast-charge`,
+`set-ac-power-saving` and `set-dc-power-saving` (`enabled`). Smart may
+automatically stop an output at low load; enabling it is a persistent setting.
+The original model uses command 0=Normal/1=Smart and status 1=Normal/2=Smart.
 
 For multiple clients, run one [authenticated HTTP gateway](../docs/gateway-home-assistant.md)
 with optional controls. The [prepared Home Assistant custom integration](../custom_components/solix_link/README.md)
@@ -180,6 +192,9 @@ charging-rate enforcement. Remaining runtime is explicitly unknown for oversized
 values and `ffff`; zero AC input power does not establish missing mains.
 See [original C1000 support](../docs/c1000-original-protocol.md) and
 [chain validation](../docs/c1000-chain-validation.md) for tested values and uncertainty.
+Original C1000 `wifi-join` / `wifi-setup --country-code AT` also join an isolated
+WPA2 AP and replace the radio API endpoint. The CLI privately saves a generated
+local provisioning ID when needed. See [the network trial](../docs/c1000-original-wifi-validation.md).
 The original C1000 can use the BLE-to-MQTT bridge; its own direct local MQTT
 provisioning and connection remain unverified.
 
@@ -354,8 +369,9 @@ solix-link set-charge-cap --name c2000 --upper 95
 
 Use `--config /path/to/config.json` if the saved device uses a nondefault
 config. On C1000 this implementation allows upper 80–100% in 5% steps, lower
-1%, 5%, 10%, 15%, or 20%, and 300–1200 W in 100 W steps. Upper 80%/95%/100% and
-charging power 300/1000/1200 W were independently exercised from the laptop. The direct Python methods are
+1%, 5%, 10%, 15%, or 20%, and 100–1200 W in 100 W steps. Upper 80%/95%/100% and
+charging power 100/200/300/1000/1200 W passed live readback; actual low-power
+charging is detailed in [the validation record](../docs/c1000-charging-and-reserve-validation.md). The direct Python methods are
 `await monitor.set_charge_limits(90, 1)` and
 `await monitor.set_ac_charging_power(1000)` (also on C2000), plus
 `await monitor.set_display_timeout(60)` (also on C2000) and

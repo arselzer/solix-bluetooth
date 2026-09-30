@@ -13,7 +13,8 @@ import aiohttp
 
 COMMANDS = frozenset({"set-charge-power", "set-charge-cap", "set-backup-reserve",
                       "set-tou-plan", "return-grid", "set-discharge-floor",
-                      "set-temperature-unit", "set-off-grid-alert", "set-device-timeout"})
+                      "set-temperature-unit", "set-off-grid-alert", "set-device-timeout",
+                      "set-fast-charge", "set-ac-power-saving", "set-dc-power-saving"})
 METRICS = frozenset({"battery_percentage", "temperature_c", "output_power_w",
                     "ac_input_power_w", "ac_output_power_w", "dc_output_power_w",
                     "ac_input_connected", "ac_output_enabled", "battery_status",
@@ -22,15 +23,18 @@ METRICS = frozenset({"battery_percentage", "temperature_c", "output_power_w",
                     "active_tariff", "usage_mode", "tou_schedule_slot_count",
                     "ac_fast_charge_enabled", "software_version",
                     "temperature_unit_fahrenheit", "ac_off_grid_alert_enabled", "device_timeout_minutes",
+                    "ac_power_saving_mode_enabled", "dc_power_saving_mode_enabled",
                     "dc_input_active", "dc_input_power_raw", "controller_error_code",
                     "battery_health_raw"})
-POWER_MINIMUM = {"c1000": 100, "c1000_gen2": 300, "c2000_gen2": 300}
+POWER_MINIMUM = {"c1000": 100, "c1000_gen2": 100, "c2000_gen2": 300}
 POWER_MAXIMUM = {"c1000": 1000, "c1000_gen2": 1200, "c2000_gen2": 1800}
 CHARGE_CAP_MODELS = frozenset({"c1000_gen2", "c2000_gen2"})
 NATIVE_MODELS = CHARGE_CAP_MODELS
 DISCHARGE_FLOORS = (1, 5, 10, 15, 20)
 DEVICE_TIMEOUT_OPTIONS = {"never": 0, "30_minutes": 30, "1_hour": 60, "2_hours": 120,
                           "4_hours": 240, "6_hours": 360, "12_hours": 720, "24_hours": 1440}
+BOOLEAN_SETTINGS = {"set-off-grid-alert": "ac_off_grid_alert_enabled", "set-fast-charge": "ac_fast_charge_enabled",
+                    "set-ac-power-saving": "ac_power_saving_mode_enabled", "set-dc-power-saving": "dc_power_saving_mode_enabled"}
 
 
 class GatewayError(Exception):
@@ -156,6 +160,36 @@ def device_timeout_options(snapshot: dict) -> list[str]:
     return list(DEVICE_TIMEOUT_OPTIONS)
 
 
+def temperature_unit_supported(snapshot: dict) -> bool:
+    supported = (snapshot.get("model") == "c1000" and snapshot.get("protocol") == "legacy"
+                 or snapshot.get("model") == "c1000_gen2" and native_gen2(snapshot))
+    return (supported and "set-temperature-unit" in snapshot.get("controls", [])
+            and binary_state(snapshot.get("metrics", {}).get("temperature_unit_fahrenheit")) is not None)
+
+
+def boolean_setting_supported(snapshot: dict, command: str) -> bool:
+    model, protocol = snapshot.get("model"), snapshot.get("protocol")
+    original = model == "c1000" and protocol == "legacy"
+    if command == "set-off-grid-alert":
+        supported = model == "c1000_gen2" and native_gen2(snapshot)
+    elif command == "set-fast-charge":
+        supported = original or model == "c1000_gen2" and protocol in ("prime", "native_mqtt")
+    elif command in ("set-ac-power-saving", "set-dc-power-saving"):
+        supported = original
+    else:
+        return False
+    return (supported and command in snapshot.get("controls", [])
+            and binary_state(snapshot.get("metrics", {}).get(BOOLEAN_SETTINGS[command])) is not None)
+
+
+def fast_charge_enable_allowed(snapshot: dict) -> bool:
+    """Gen 2 enables require explicit Standard/no-tariff telemetry."""
+    metrics = snapshot.get("metrics", {})
+    if snapshot.get("model") != "c1000_gen2":
+        return True
+    return metrics.get("usage_mode") == "standard" and metrics.get("active_tariff") == "none"
+
+
 def validate_plan(periods: Any, enabled: Any) -> list[dict]:
     if type(enabled) is not bool or not isinstance(periods, list) or len(periods) > 6:
         raise ValueError("Use a boolean enabled value and at most six periods")
@@ -198,6 +232,9 @@ def validate_command(snapshot: dict, payload: dict) -> None:
         "set-temperature-unit": {"command", "fahrenheit"},
         "set-off-grid-alert": {"command", "enabled"},
         "set-device-timeout": {"command", "minutes"},
+        "set-fast-charge": {"command", "enabled"},
+        "set-ac-power-saving": {"command", "enabled"},
+        "set-dc-power-saving": {"command", "enabled"},
     }[command]
     if set(payload) != expected:
         raise ValueError("Unexpected command fields")
@@ -232,13 +269,17 @@ def validate_command(snapshot: dict, payload: dict) -> None:
         lower = integer(payload["lower"], "Discharge floor")
         if f"{lower}%" not in discharge_floor_options(snapshot):
             raise ValueError("Discharge floor must preserve reserve on C1000 Gen 2 native MQTT")
-    elif command in ("set-temperature-unit", "set-off-grid-alert"):
-        parameter, metric = (("fahrenheit", "temperature_unit_fahrenheit")
-                             if command == "set-temperature-unit"
-                             else ("enabled", "ac_off_grid_alert_enabled"))
-        if (model != "c1000_gen2" or not native_gen2(snapshot)
-                or type(payload[parameter]) is not bool or binary_state(metrics.get(metric)) is None):
-            raise ValueError("This setting requires C1000 Gen 2 native MQTT and valid boolean telemetry")
+    elif command == "set-temperature-unit":
+        if type(payload["fahrenheit"]) is not bool or not temperature_unit_supported(snapshot):
+            raise ValueError("Temperature display requires a supported C1000 profile and valid boolean telemetry")
+    elif command in BOOLEAN_SETTINGS:
+        if type(payload["enabled"]) is not bool or not boolean_setting_supported(snapshot, command):
+            raise ValueError("This setting requires a supported C1000 profile and valid boolean telemetry")
+        if command == "set-fast-charge" and model == "c1000_gen2":
+            if native_gen2(snapshot) and binary_state(metrics.get("ac_input_connected")) is not True:
+                raise ValueError("Native fast charge requires connected mains")
+            if payload["enabled"] and not fast_charge_enable_allowed(snapshot):
+                raise ValueError("Fast charge enable requires Standard mode with no active tariff")
     elif command == "set-tou-plan":
         if not native_gen2(snapshot):
             raise ValueError("Time-of-Use control requires Gen 2 native MQTT")

@@ -1,0 +1,558 @@
+{
+  "model": "A1761 original C1000",
+  "main_version": "1.5.9",
+  "input_sha256": "b295ee8613f5c96e70dcc905896df516621cab4dc590bb580eac6b84519911a6",
+  "startup_data_sha256": "4a535e447619b12c31f5697b25526c8e927460eee1f411d2792592cdcb74e207",
+  "execution": {
+    "startup": "08005a88..08005aa0; actual scatter decompressor",
+    "substitutes": {
+      "08007718": "command_acknowledgement",
+      "0801e7d4": "deferred_configuration_persistence",
+      "080251f0": "smart_mode_file_persistence",
+      "080225c4": "response transport capture"
+    },
+    "peripheral_mapping": false
+  },
+  "tables": {
+    "function_0f_app": [
+      {
+        "opcode": "0040",
+        "handler": "0800adb0"
+      },
+      {
+        "opcode": "0041",
+        "handler": "0800aaf0"
+      },
+      {
+        "opcode": "0042",
+        "handler": "0800b990"
+      },
+      {
+        "opcode": "0043",
+        "handler": "0800ba88"
+      },
+      {
+        "opcode": "0044",
+        "handler": "0800b908"
+      },
+      {
+        "opcode": "0045",
+        "handler": "0800baec"
+      },
+      {
+        "opcode": "0046",
+        "handler": "0800bace"
+      },
+      {
+        "opcode": "0047",
+        "handler": "0800bb6e"
+      },
+      {
+        "opcode": "0048",
+        "handler": "0800bc40"
+      },
+      {
+        "opcode": "0049",
+        "handler": "0800bce8"
+      },
+      {
+        "opcode": "004a",
+        "handler": "0800b928"
+      },
+      {
+        "opcode": "004b",
+        "handler": "0800ba20"
+      },
+      {
+        "opcode": "004c",
+        "handler": "0800bb8c"
+      },
+      {
+        "opcode": "004d",
+        "handler": "0800b8f2"
+      },
+      {
+        "opcode": "004e",
+        "handler": "0800bb0c"
+      },
+      {
+        "opcode": "004f",
+        "handler": "0800b9d8"
+      },
+      {
+        "opcode": "0050",
+        "handler": "0800bd68"
+      },
+      {
+        "opcode": "0051",
+        "handler": "0800bc58"
+      },
+      {
+        "opcode": "0052",
+        "handler": "0800bba4"
+      },
+      {
+        "opcode": "0057",
+        "handler": "0800b2a8"
+      },
+      {
+        "opcode": "0059",
+        "handler": "0800a900"
+      },
+      {
+        "opcode": "005b",
+        "handler": "0800aa0e"
+      },
+      {
+        "opcode": "005d",
+        "handler": "0800bc88"
+      },
+      {
+        "opcode": "005e",
+        "handler": "0800bd00"
+      },
+      {
+        "opcode": "0063",
+        "handler": "0800bed8"
+      },
+      {
+        "opcode": "0064",
+        "handler": "0800b3e0"
+      },
+      {
+        "opcode": "0065",
+        "handler": "0800bd80"
+      },
+      {
+        "opcode": "0066",
+        "handler": "0800b5f8"
+      },
+      {
+        "opcode": "0067",
+        "handler": "0800a9c4"
+      },
+      {
+        "opcode": "0072",
+        "handler": "0800bc88"
+      },
+      {
+        "opcode": "0076",
+        "handler": "0800bd48"
+      },
+      {
+        "opcode": "0077",
+        "handler": "0800bd28"
+      }
+    ],
+    "function_10_module": [
+      {
+        "opcode": "0061",
+        "handler": "0800c3fa"
+      },
+      {
+        "opcode": "0004",
+        "handler": "0800c318"
+      },
+      {
+        "opcode": "0006",
+        "handler": "0800a934"
+      },
+      {
+        "opcode": "0008",
+        "handler": "0800c3e8"
+      },
+      {
+        "opcode": "000a",
+        "handler": "0800c09c"
+      },
+      {
+        "opcode": "000b",
+        "handler": "0800bf98"
+      },
+      {
+        "opcode": "000c",
+        "handler": "0800b518"
+      },
+      {
+        "opcode": "0010",
+        "handler": "0800c010"
+      },
+      {
+        "opcode": "0011",
+        "handler": "0800af58"
+      },
+      {
+        "opcode": "0026",
+        "handler": "0800c1b8"
+      },
+      {
+        "opcode": "0027",
+        "handler": "0800c2c8"
+      },
+      {
+        "opcode": "0801",
+        "handler": "0800bc08"
+      },
+      {
+        "opcode": "0802",
+        "handler": "0800ae2c"
+      },
+      {
+        "opcode": "0803",
+        "handler": "0800b230"
+      },
+      {
+        "opcode": "0805",
+        "handler": "0800ba1c"
+      },
+      {
+        "opcode": "0807",
+        "handler": "0800b30c"
+      },
+      {
+        "opcode": "080d",
+        "handler": "0800b8e4"
+      },
+      {
+        "opcode": "080f",
+        "handler": "0800b8f0"
+      },
+      {
+        "opcode": "081f",
+        "handler": "0800aedc"
+      },
+      {
+        "opcode": "0820",
+        "handler": "0800bb5c"
+      },
+      {
+        "opcode": "0821",
+        "handler": "0800a9fc"
+      },
+      {
+        "opcode": "0822",
+        "handler": "0800b204"
+      },
+      {
+        "opcode": "0823",
+        "handler": "0800aa24"
+      },
+      {
+        "opcode": "0824",
+        "handler": "0800a9b0"
+      },
+      {
+        "opcode": "0825",
+        "handler": "0800c2bc"
+      },
+      {
+        "opcode": "0829",
+        "handler": "0800c2a8"
+      },
+      {
+        "opcode": "082a",
+        "handler": "0800c22c"
+      },
+      {
+        "opcode": "0830",
+        "handler": "0800aa68"
+      },
+      {
+        "opcode": "0035",
+        "handler": "0800c24c"
+      },
+      {
+        "opcode": "0836",
+        "handler": "0800ab9c"
+      },
+      {
+        "opcode": "003a",
+        "handler": "0800aebc"
+      },
+      {
+        "opcode": "0054",
+        "handler": "0800b324"
+      }
+    ],
+    "function_01_library": [
+      {
+        "opcode": "0001",
+        "handler": "08018048"
+      },
+      {
+        "opcode": "0002",
+        "handler": "0801810c"
+      },
+      {
+        "opcode": "0003",
+        "handler": "08017fa0"
+      },
+      {
+        "opcode": "0005",
+        "handler": "0801816c"
+      },
+      {
+        "opcode": "0023",
+        "handler": "08017c38"
+      },
+      {
+        "opcode": "0024",
+        "handler": "08018274"
+      },
+      {
+        "opcode": "0029",
+        "handler": "08017d64"
+      },
+      {
+        "opcode": "002a",
+        "handler": "08017e50"
+      },
+      {
+        "opcode": "002b",
+        "handler": "080181c0"
+      },
+      {
+        "opcode": "002f",
+        "handler": "0801818c"
+      },
+      {
+        "opcode": "0030",
+        "handler": "08018120"
+      },
+      {
+        "opcode": "0025",
+        "handler": "08017ec4"
+      },
+      {
+        "opcode": "0026",
+        "handler": "08017f60"
+      },
+      {
+        "opcode": "001f",
+        "handler": "08017ca0"
+      }
+    ]
+  },
+  "cases": {
+    "fast_charge_raw_byte_and_unrelated_bits": 768,
+    "smart_raw_byte_and_actual_F8_serializer": 512,
+    "power_raw_store_and_actual_D1_clamp": 36,
+    "library_0025_reply": 1,
+    "total": 1317
+  },
+  "all_cases_sha256": "269b42f673537ed8905ae72a870d351a59229c2e6b9b864c5d11a6f14398f693",
+  "smart_wire_mapping": {
+    "0": "normal/status 1",
+    "1": "smart/status 2",
+    "2..255": "normal/status 1; unsupported public command inputs"
+  },
+  "power_results": [
+    {
+      "variant_byte": 0,
+      "raw_watts": 0,
+      "reported_D1_watts": 0
+    },
+    {
+      "variant_byte": 0,
+      "raw_watts": 1,
+      "reported_D1_watts": 1
+    },
+    {
+      "variant_byte": 0,
+      "raw_watts": 50,
+      "reported_D1_watts": 50
+    },
+    {
+      "variant_byte": 0,
+      "raw_watts": 99,
+      "reported_D1_watts": 99
+    },
+    {
+      "variant_byte": 0,
+      "raw_watts": 100,
+      "reported_D1_watts": 100
+    },
+    {
+      "variant_byte": 0,
+      "raw_watts": 200,
+      "reported_D1_watts": 200
+    },
+    {
+      "variant_byte": 0,
+      "raw_watts": 750,
+      "reported_D1_watts": 750
+    },
+    {
+      "variant_byte": 0,
+      "raw_watts": 1000,
+      "reported_D1_watts": 1000
+    },
+    {
+      "variant_byte": 0,
+      "raw_watts": 1001,
+      "reported_D1_watts": 1000
+    },
+    {
+      "variant_byte": 0,
+      "raw_watts": 1200,
+      "reported_D1_watts": 1000
+    },
+    {
+      "variant_byte": 0,
+      "raw_watts": 1400,
+      "reported_D1_watts": 1000
+    },
+    {
+      "variant_byte": 0,
+      "raw_watts": 65535,
+      "reported_D1_watts": 1000
+    },
+    {
+      "variant_byte": 1,
+      "raw_watts": 0,
+      "reported_D1_watts": 0
+    },
+    {
+      "variant_byte": 1,
+      "raw_watts": 1,
+      "reported_D1_watts": 1
+    },
+    {
+      "variant_byte": 1,
+      "raw_watts": 50,
+      "reported_D1_watts": 50
+    },
+    {
+      "variant_byte": 1,
+      "raw_watts": 99,
+      "reported_D1_watts": 99
+    },
+    {
+      "variant_byte": 1,
+      "raw_watts": 100,
+      "reported_D1_watts": 100
+    },
+    {
+      "variant_byte": 1,
+      "raw_watts": 200,
+      "reported_D1_watts": 200
+    },
+    {
+      "variant_byte": 1,
+      "raw_watts": 750,
+      "reported_D1_watts": 750
+    },
+    {
+      "variant_byte": 1,
+      "raw_watts": 1000,
+      "reported_D1_watts": 750
+    },
+    {
+      "variant_byte": 1,
+      "raw_watts": 1001,
+      "reported_D1_watts": 750
+    },
+    {
+      "variant_byte": 1,
+      "raw_watts": 1200,
+      "reported_D1_watts": 750
+    },
+    {
+      "variant_byte": 1,
+      "raw_watts": 1400,
+      "reported_D1_watts": 750
+    },
+    {
+      "variant_byte": 1,
+      "raw_watts": 65535,
+      "reported_D1_watts": 750
+    },
+    {
+      "variant_byte": 2,
+      "raw_watts": 0,
+      "reported_D1_watts": 0
+    },
+    {
+      "variant_byte": 2,
+      "raw_watts": 1,
+      "reported_D1_watts": 1
+    },
+    {
+      "variant_byte": 2,
+      "raw_watts": 50,
+      "reported_D1_watts": 50
+    },
+    {
+      "variant_byte": 2,
+      "raw_watts": 99,
+      "reported_D1_watts": 99
+    },
+    {
+      "variant_byte": 2,
+      "raw_watts": 100,
+      "reported_D1_watts": 100
+    },
+    {
+      "variant_byte": 2,
+      "raw_watts": 200,
+      "reported_D1_watts": 200
+    },
+    {
+      "variant_byte": 2,
+      "raw_watts": 750,
+      "reported_D1_watts": 750
+    },
+    {
+      "variant_byte": 2,
+      "raw_watts": 1000,
+      "reported_D1_watts": 750
+    },
+    {
+      "variant_byte": 2,
+      "raw_watts": 1001,
+      "reported_D1_watts": 750
+    },
+    {
+      "variant_byte": 2,
+      "raw_watts": 1200,
+      "reported_D1_watts": 750
+    },
+    {
+      "variant_byte": 2,
+      "raw_watts": 1400,
+      "reported_D1_watts": 750
+    },
+    {
+      "variant_byte": 2,
+      "raw_watts": 65535,
+      "reported_D1_watts": 750
+    }
+  ],
+  "library_0025_reply_fields": [
+    {
+      "tag": "a1",
+      "bytes": 2
+    },
+    {
+      "tag": "a2",
+      "bytes": 5,
+      "value": "2.0.1"
+    },
+    {
+      "tag": "a3",
+      "bytes": 11
+    },
+    {
+      "tag": "a4",
+      "bytes": 10,
+      "value": "2022-12-19"
+    }
+  ],
+  "limits": [
+    "Not the live station's installed 1.5.1 image",
+    "No whole-device execution, MQTT authentication, radio or physical power validation",
+    "Persistence, acknowledgements and transport substituted",
+    "D1 is an upper-clamped readback, not proof of a safe charging range",
+    "Missing opcodes apply only to the recovered function-0f table"
+  ]
+}

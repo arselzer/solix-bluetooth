@@ -11,8 +11,11 @@ Home Assistant integration for the local gateway.
 - Charging power and charge limits with fresh telemetry confirmation.
 - Gen 2 native MQTT: backup reserve, hourly Time-of-Use plans, battery discharge
   with mains connected, and confirmed return to grid.
-- C1000 Gen 2 native MQTT: temperature unit, off-grid alert and guarded lower
+- C1000 Gen 2 native MQTT: 100–1200 W charging, fast charge, temperature unit,
+  off-grid alert and guarded lower
   discharge limit without silently changing reserve.
+- Original C1000: temperature units, fast charge, AC/DC Smart modes and Device
+  Timeout through Bluetooth, the bridge and gateway interfaces; isolated Wi-Fi setup.
 - Authenticated JSON HTTP, SSE and Prometheus for multiple stations.
 - Up to eight Gen 2 stations on one isolated AP, with separate certificates,
   telemetry and command queues.
@@ -21,9 +24,9 @@ Home Assistant integration for the local gateway.
 
 | Device | Python Bluetooth | Native local MQTT | Tested / limitations |
 | --- | --- | --- | --- |
-| C1000 Gen 2, A1763 | Monitoring, charge limits/power, display timeout, fast charge | Charging/reserve, tariffs, temperature, alert, discharge floor | Main 1.1.4.9 / radio 0.3.3.0; older 1.1.4.3 uses legacy BLE |
+| C1000 Gen 2, A1763 | Monitoring, charge limits/power, display timeout, fast charge | Charging/fast/reserve, tariffs, temperature, alert, discharge floor | Main 1.1.4.9 / radio 0.3.3.0; older 1.1.4.3 uses legacy BLE |
 | C2000 Gen 2, A1783 | Monitoring, power/cap, display timeout | Charging/reserve, tariffs and return to grid | Main 2.1.6.4; AC-output writes blocked |
-| Original C1000, A1761 | Monitoring, charging power, display/brightness/timeout, light, AC/DC switches | — | Live control/restoration tests passed; version code 151 |
+| Original C1000, A1761 | Monitoring, charging power, display/device timeout, light, AC/DC switches, temperature, fast charge, Smart modes | — | Twelve control/restoration tests passed; version code 151 |
 | C300/C300X AC, A1722/A1723 | Monitoring, AC output, light, charging power, display timeout | — | C300X tested; C300 sibling untested; C300 DC unsupported |
 | Solarbank 3 E2700 Pro, A17C5 | Separate Web Bluetooth app | — | Browser telemetry tested; no Python profile |
 
@@ -112,15 +115,21 @@ web-dashboard guide. Commit Vue sources and compiled Python assets together.
 - [Firmware findings](docs/firmware-findings.md): handlers, readiness, tariffs,
   checksums and update verification.
 - [Firmware inputs](firmware/README.md): recovered vendor images, hashes and provenance.
+- [Original-C1000 preferences](docs/c1000-preferences-validation.md) and
+  [isolated Wi-Fi](docs/c1000-original-wifi-validation.md); direct MQTT remains open.
+- [Charging and reserve validation](docs/c1000-charging-and-reserve-validation.md):
+  native fast charge, lower charging power, reserve floor and cached reconnect.
 - [Reproduce 1,842 offline cases](docs/firmware-analysis-reproduction.md):
   original instruction execution with synthetic inputs and explicit substitutions.
 - [Charging follow-up](docs/c1000-charging-control-followup.md): reserve side
   effects, mirrored limits and why 0 W is unavailable as charge pause.
-- [Further candidates](docs/gen2-feature-candidates.md): fast-charge automatic
-  clearing and 100/200 W limits awaiting physical charging tests.
+- [Energy accounting](docs/gen2-energy-counter-investigation.md): sampling,
+  scheduler gaps and nominal Wh arithmetic; calibrated units remain unverified.
+- [Smart auto-off policy](docs/c1000-smart-auto-off-policy.md) and
+  [tariff clock](docs/gen2-schedule-clock-audit.md): recovered behavior and limits.
 
-Firmware results are version-specific. Timed schedules, low-SOC reserve
-behavior and actual alert delivery need further hardware validation.
+Firmware results are version-specific. Idle sleep, calibrated energy and
+actual alert delivery need further hardware validation.
 Keep IDs, credentials and raw captures in ignored `.solix-private/` files.
 Device tests record baselines, confirm fresh readback and restore settings.
 The development C2000 powers servers; its AC output is never toggled.

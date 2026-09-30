@@ -25,7 +25,15 @@ const age = computed(() => {
 const input = computed(() => selected.value ? powerMetric(selected.value, 'input') : null);
 const output = computed(() => selected.value ? powerMetric(selected.value, 'output') : null);
 const battery = computed(() => selected.value ? numberMetric(selected.value, 'battery_percentage') : null);
-const flow = computed(() => !fresh.value ? 'Unknown' : selected.value?.power_flow === 'grid' ? 'Grid' : selected.value?.power_flow === 'battery' ? 'Battery' : 'Transitioning');
+const flow = computed(() => {
+  if (!fresh.value) return 'Unknown';
+  switch (selected.value?.power_flow) {
+    case 'grid': return 'Grid';
+    case 'battery': return 'Battery';
+    case 'transitioning': return 'Transitioning';
+    default: return 'Unknown';
+  }
+});
 const confirmationStation = computed(() => proposal.value ? stations.value.find((station) => station.name === proposal.value!.station) : null);
 const canConfirm = computed(() => !!confirmationStation.value && gateway.fresh(confirmationStation.value)
   && !busy.value && !polling.value && !!proposal.value && confirmationStation.value.controls.includes(proposal.value.body.command));
@@ -97,10 +105,10 @@ function confirm() {
         <template v-if="selected">
           <div class="station-status"><span class="live-badge" :class="{ stale: !fresh }"><span class="status-dot"></span>{{ fresh ? 'Live telemetry' : 'Stale / unavailable' }}</span><span>Updated {{ age }}</span><span class="status-spacer"></span><span>{{ selected.controls.length ? 'Control enabled' : 'Read-only gateway' }}</span><span>{{ selected.timezone_name || 'Timezone not reported' }}</span></div>
           <div class="metric-grid" :class="{ 'metrics-stale': !fresh }">
-            <section class="metric-card battery-card"><div class="metric-top"><span>Battery</span><svg class="metric-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="17" height="12" rx="3" /><path d="M22 10v4M7 10h9v4H7z" /></svg></div><div class="metric-value">{{ format(battery) }}<span>%</span></div><p>{{ selected.metrics.battery_status ?? 'Activity unknown' }}</p></section>
-            <section class="metric-card"><div class="metric-top"><span>Power in</span><span class="metric-arrow input-arrow" aria-hidden="true">↙</span></div><div class="metric-value">{{ format(input) }}<span>W</span></div><p>{{ numberMetric(selected, 'ac_input_connected') === 1 ? 'AC input connected' : numberMetric(selected, 'ac_input_connected') === 0 ? 'AC input not connected' : 'AC input not reported' }}</p></section>
+            <section class="metric-card battery-card" data-testid="battery-reading"><div class="metric-top"><span>Battery</span><svg class="metric-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="17" height="12" rx="3" /><path d="M22 10v4M7 10h9v4H7z" /></svg></div><div class="metric-value">{{ format(battery) }}<span>%</span></div><p>{{ selected.metrics.battery_status ?? 'Activity unknown' }}</p></section>
+            <section class="metric-card" data-testid="input-reading"><div class="metric-top"><span>Power in</span><span class="metric-arrow input-arrow" aria-hidden="true">↙</span></div><div class="metric-value">{{ format(input) }}<span>W</span></div><p>{{ numberMetric(selected, 'ac_input_connected') === 1 ? 'AC input connected' : numberMetric(selected, 'ac_input_connected') === 0 ? 'AC input not connected' : 'AC input not reported' }}</p></section>
             <section class="metric-card"><div class="metric-top"><span>Power out</span><span class="metric-arrow output-arrow" aria-hidden="true">↗</span></div><div class="metric-value">{{ format(output) }}<span>W</span></div><p>{{ numberMetric(selected, 'ac_output_enabled') === 1 ? 'AC output enabled' : numberMetric(selected, 'ac_output_enabled') === 0 ? 'AC output off' : 'AC output not reported' }}</p></section>
-            <section class="metric-card"><div class="metric-top"><span>Supply source</span><span class="metric-arrow supply-arrow" aria-hidden="true">⌁</span></div><div class="metric-value source-value">{{ flow }}</div><p>{{ String(selected.metrics.usage_mode ?? 'Mode unknown').replaceAll('_', ' ') }}<span v-if="selected.metrics.active_tariff && selected.metrics.active_tariff !== 'none'"> · {{ String(selected.metrics.active_tariff).replaceAll('_', ' ') }}</span></p></section>
+            <section class="metric-card" data-testid="supply-reading"><div class="metric-top"><span>Supply source</span><span class="metric-arrow supply-arrow" aria-hidden="true">⌁</span></div><div class="metric-value source-value">{{ flow }}</div><p>{{ String(selected.metrics.usage_mode ?? 'Mode unknown').replaceAll('_', ' ') }}<span v-if="selected.metrics.active_tariff && selected.metrics.active_tariff !== 'none'"> · {{ String(selected.metrics.active_tariff).replaceAll('_', ' ') }}</span></p></section>
           </div>
           <div class="chart-grid"><HistoryChart :samples="history" :now="now" kind="power" /><HistoryChart :samples="history" :now="now" kind="battery" /></div>
           <div class="station-details"><span>Upper charge limit <strong>{{ format(numberMetric(selected, 'max_charge_percentage'), '%') }}</strong></span><span>Discharge floor <strong>{{ format(numberMetric(selected, 'min_charge_percentage'), '%') }}</strong></span><span>Reserve <strong>{{ format(numberMetric(selected, 'backup_reserve_percentage'), '%') }}</strong></span><span>Temperature <strong>{{ format(numberMetric(selected, 'temperature_c'), '°C') }}</strong></span><span>Firmware <strong>{{ selected.metrics.software_version ?? '—' }}</strong></span></div>

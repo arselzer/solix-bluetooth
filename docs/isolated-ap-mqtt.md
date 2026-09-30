@@ -94,7 +94,7 @@ sudo /path/to/venv/bin/solix-link ap-service-set-charge-power \
   --directory "$PWD/.solix-private/local-mqtt" --watts 1000
 ```
 
-The charging-power limit accepts 300–1200 W for C1000 or 300–1800 W for C2000,
+The charging-power limit accepts 100–1200 W for C1000 Gen 2 or 300–1800 W for C2000,
 in 100 W steps. A write requires
 a fresh baseline, a successful `0901` reply and a new `0900` status with the
 requested limit and unchanged AC-output state. The upper charge cap is also
@@ -104,6 +104,16 @@ available in 5% steps from 80% to 100%:
 sudo /path/to/venv/bin/solix-link ap-service-set-charge-cap \
   --directory "$PWD/.solix-private/local-mqtt" --upper 95
 ```
+
+C1000 power confirmation additionally preserves the full fresh A4/D9 settings
+and AC/DC/mains states, allowing runtime LCD wake without changing saved screen
+settings. Native fast charge is available with `ap-service-set-fast-charge
+--enabled on|off`; enabling requires Standard/no active tariff and mains, with
+two retained readbacks. See [charging validation](c1000-charging-and-reserve-validation.md).
+Hourly schedules use the controller's local clock; a UTC profile can retain a
+prior offset on tested C1000 firmware. See [clock behavior](gen2-schedule-clock-audit.md).
+C1000 activation of hourly plans is refused for a currently zero-offset
+timezone; all-day tariffs and inactive plan storage remain available.
 
 The cap request uses `0103`/`0903` and omits the lower-limit field. Fresh status
 must confirm the cap and preserve AC output, lower limit, reserve, charging

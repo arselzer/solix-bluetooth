@@ -54,13 +54,22 @@ def decode_c1000_telemetry(payload: bytes) -> tuple[dict[str, int | str], dict[i
         0xD8: "dc_output_enabled",
         0xD9: "display_brightness",
         0xDC: "light_mode",
+        0xDD: "temperature_unit_fahrenheit",
         0xDE: "display_enabled",
         0xE5: "ac_fast_charge_enabled",
     }
     for tag, name in fields.items():
         decoded = number(tag, signed=tag in (0xBD, 0xBE))
-        if decoded is not None:
+        if decoded is not None and (tag != 0xDD or decoded in (0, 1)):
             metrics[name] = decoded
+
+    modes = values.get(0xF8, b"")
+    # Live A1761 code151 uses type01 followed by two packed mode bytes.
+    # Readback is 1=Normal / 2=Smart; live code151 commands use 0/1.
+    if len(modes) == 3 and modes[0] == 1:
+        for offset, key in ((1, "dc_power_saving_mode_enabled"), (2, "ac_power_saving_mode_enabled")):
+            if modes[offset] in (1, 2):
+                metrics[key] = int(modes[offset] == 2)
 
     remaining = number(0xA4)
     if remaining is not None:
@@ -95,6 +104,8 @@ def decode_c1000_telemetry(payload: bytes) -> tuple[dict[str, int | str], dict[i
 C1000_SETTINGS = (
     "display_timeout", "display_brightness", "display_enabled", "light_mode",
     "ac_charging_power", "ac_output_enabled", "dc_output_enabled", "device_timeout",
+    "temperature_unit_fahrenheit", "fast_charge_enabled",
+    "ac_power_saving_mode_enabled", "dc_power_saving_mode_enabled",
 )
 
 
@@ -115,12 +126,17 @@ def c1000_setting(setting: str, value: int | bool) -> tuple[str, bytes, dict[str
         "ac_charging_power": ("4044", "ac_charging_power_limit_w", 2, tuple(range(100, 1001, 100))),
         "ac_output_enabled": ("404a", "ac_output_enabled", 1, (False, True)),
         "dc_output_enabled": ("404b", "dc_output_enabled", 1, (False, True)),
+        "temperature_unit_fahrenheit": ("4050", "temperature_unit_fahrenheit", 1, (False, True)),
+        "fast_charge_enabled": ("405e", "ac_fast_charge_enabled", 1, (False, True)),
+        "ac_power_saving_mode_enabled": ("4077", "ac_power_saving_mode_enabled", 1, (False, True)),
+        "dc_power_saving_mode_enabled": ("4076", "dc_power_saving_mode_enabled", 1, (False, True)),
     }
     if setting not in definitions:
         raise ValueError("Unsupported original C1000 setting")
     command, field, width, options = definitions[setting]
-    expected_type = bool if setting.endswith("_enabled") else int
+    expected_type = bool if setting.endswith("_enabled") or setting == "temperature_unit_fahrenheit" else int
     if type(value) is not expected_type or value not in options:
         raise ValueError(f"Invalid {setting}; expected {expected_type.__name__} in {options}")
-    typed = bytes((width,)) + int(value).to_bytes(width, "little")
+    wire_value = int(value)
+    typed = bytes((width,)) + wire_value.to_bytes(width, "little")
     return command, b"\xa1\x01\x21" + tlv(0xA2, typed), {field: int(value)}

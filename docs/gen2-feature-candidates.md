@@ -4,6 +4,11 @@
 
 This is **offline C1000 Gen 2 (A1763) main 1.1.4.9** evidence. No device, BLE, SSH, cloud, output, or configuration command was sent. It does not establish C2000 behavior or extend the SDK's currently exposed control ranges.
 
+**Later hardware validation:** the [September 30 charging trials](c1000-charging-and-reserve-validation.md)
+confirmed native fast-charge retention and actual 100/200 W charging; the SDK now
+allows 100–1200 W for C1000 Gen 2. The findings below describe the preceding
+offline investigation and its substitutions, not the live test itself.
+
 The new [feature replay](../tools/firmware_analysis/emulate_feature_candidates.py) executes **212 cases**: 160 fast-charge handler/policy combinations, four readiness/RTC/sensor transitions, and 48 low-power cases. Input is the hash-checked `MainMcu-decoded.bin` described in the [reproduction guide](firmware-analysis-reproduction.md). It reuses the published offline helpers without changing their original suites.
 
 ## Fast-charge acceptance and automatic clearing
@@ -63,7 +68,11 @@ There is stronger firmware support for 100 W and 200 W than for a zero-watt work
 
 These are **internal descriptor members**, not observed wall-power measurements. Fast charge bypasses the configured limit in these tested branches. The 48 cases vary SOC 50/100 and raw BMS current allowances 0/1/10; neither lower limit triggers a default reset or changes unrelated persistent settings.
 
-This supports a bounded future **C1000-only** enforcement test, rather than immediately widening a production range. First test 200 W with fast charge off, Standard mode, known mains, a recorded configuration baseline, and actual battery charging below the upper cap. Confirm both setting readback and measured input/battery behavior, then restore the original limit and independently verify the baseline. Consider 100 W only after that result. Do not use zero watts as pause, and do not infer charging-limit enforcement while the battery is full. No such live test was performed here.
+This offline result justified a bounded **C1000-only** enforcement test below
+the upper cap, with fast charge off and a recorded/restored baseline. The later
+[live validation](c1000-charging-and-reserve-validation.md) completed both lower
+rates; no device test was part of this emulator run. Do not use zero watts as
+pause or infer charging enforcement while the battery is full.
 
 ## Replay assumptions and reproduction
 

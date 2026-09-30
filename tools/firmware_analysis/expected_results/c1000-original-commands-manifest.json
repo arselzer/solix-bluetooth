@@ -1,0 +1,18 @@
+{
+  "model": "A1761 original C1000",
+  "main_version": "1.5.9",
+  "python_version": "3.12.3",
+  "unicorn_version": "2.1.4",
+  "synthetic_handler_cases": 1317,
+  "extractor_tests": 7,
+  "input_main_sha256": "b295ee8613f5c96e70dcc905896df516621cab4dc590bb580eac6b84519911a6",
+  "files": {
+    "tools/firmware_analysis/extract_c1000_original.py": "38947bc6ca399887b3a09453642ae8852f58b8aec7fb82992d1648643aeb454e",
+    "tools/firmware_analysis/emulate_c1000_original_commands.py": "598d83e15b6d7e982581439ea8b55fb0d7d3985009a6c1f4722363dff0f8ba5d",
+    "tools/firmware_analysis/test_c1000_original_package.py": "072d32d025c0c84a6ca1d8c018cff2e52f5eae3443975d49a1591bba01073658",
+    "tools/firmware_analysis/extract_dsp.py": "5a82593ea76fd784702e0ee501be2415a4540d2570c3f370d343e8512d2a87e9",
+    "tools/firmware_analysis/replay_io.py": "731d795a5ec37e2cf12b809b7122eaf7a29d84c21a2ecd43fafa3e2f8d962d30",
+    "tools/firmware_analysis/expected_results/c1000-original-commands.json": "add6def29977e3329a3a4417cf2dc58662ac9897295bd3334138c3debb5d8dd6",
+    "firmware/c1000_original/1.5.9/manifest.json": "4bbe398f00a6b192f02ac52d00cbc8cc26ae13581b3fbeb7a61a6e000b4ce806"
+  }
+}

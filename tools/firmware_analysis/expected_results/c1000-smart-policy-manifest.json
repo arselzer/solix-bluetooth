@@ -1,0 +1,27 @@
+{
+  "environment": {
+    "python": "3.12.3",
+    "unicorn": "2.1.4"
+  },
+  "files": {
+    "docs/c1000-smart-auto-off-policy.md": "d99553d99cd7d0715fba04add2678119bfbf0181bcf80a95b76037480a71a13a",
+    "tools/firmware_analysis/emulate_c1000_original_commands.py": "598d83e15b6d7e982581439ea8b55fb0d7d3985009a6c1f4722363dff0f8ba5d",
+    "tools/firmware_analysis/emulate_c1000_smart_policy.py": "7d4ba9f3bda00e6958728857341bcb79a14acf926dadd681e8ee11098c626197",
+    "tools/firmware_analysis/expected_results/c1000-smart-policy.json": "92c730199ba45ca12022080e97b376dcef608bd612ad885e1750c92a53a0199e"
+  },
+  "input_main_sha256": "b295ee8613f5c96e70dcc905896df516621cab4dc590bb580eac6b84519911a6",
+  "main_version": "1.5.9",
+  "model": "A1761 original C1000",
+  "privacy": "Only public firmware and synthetic inputs; no phone capture or device identifiers.",
+  "synthetic_cases": {
+    "active_timer_skips_policy": 4,
+    "cache_to_typed_telemetry": 12,
+    "countdown_flag_provenance": 8,
+    "normal_to_smart_inherits_counter": 2,
+    "one_shot_timer_expiry_and_rearm": 15,
+    "policy_boundary_and_guards": 1300,
+    "systick_configuration": 1,
+    "systick_increment": 5,
+    "total": 1347
+  }
+}
