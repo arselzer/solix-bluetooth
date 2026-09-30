@@ -1,0 +1,5472 @@
+{
+  "fast_acceptance_and_retention": [
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "standard",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "gap",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 1,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [
+          2
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 1,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          2,
+          10
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 1,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [
+          2
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 1,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          2,
+          10
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 1,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [
+          2
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 1,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          2,
+          10
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 1,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [
+          2
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 1,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          2,
+          10
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 2,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 2,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          2,
+          10
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 2,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 2,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          2,
+          10
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 2,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 2,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          2,
+          10
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 2,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "mid_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 2,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          2,
+          10
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": false,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 0,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 1,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 3,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 3,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 3,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 3,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 3,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 3,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": false,
+      "selected_tariff": 3,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [],
+        "sensor_kinds_read": [],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    },
+    {
+      "schedule": "off_peak",
+      "synthetic_network_ready": true,
+      "synthetic_power_gate": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "synthetic_ac_charge_available": true,
+      "selected_tariff": 3,
+      "enable_acknowledged": true,
+      "immediate_fast_readback": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "disable_readback": 0,
+      "persistent_settings_unchanged": true
+    }
+  ],
+  "fast_readiness_transitions": [
+    {
+      "change": "lose_power_gate",
+      "before": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "after": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "note": "Synthetic gate/RTC/sensor transition only; no gate producer or real device operation"
+    },
+    {
+      "change": "network_becomes_ready",
+      "before": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "after": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          2,
+          10
+        ],
+        "output_enabled_flag": true
+      },
+      "note": "Synthetic gate/RTC/sensor transition only; no gate producer or real device operation"
+    },
+    {
+      "change": "enter_scheduled_slot",
+      "before": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "after": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          2,
+          10
+        ],
+        "output_enabled_flag": true
+      },
+      "note": "Synthetic gate/RTC/sensor transition only; no gate producer or real device operation"
+    },
+    {
+      "change": "full_bms_stops_current",
+      "before": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "after": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      },
+      "note": "Synthetic gate/RTC/sensor transition only; no gate producer or real device operation"
+    }
+  ],
+  "low_power_limits": [
+    {
+      "configured_watts": 100,
+      "fast": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 100,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              88,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 100,
+      "fast": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 1,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 100,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              88,
+              600,
+              10
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 100,
+      "fast": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 100,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              88,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 100,
+      "fast": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 100,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              88,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 100,
+      "fast": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 1,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 100,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              88,
+              600,
+              10
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 100,
+      "fast": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 100,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              88,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 100,
+      "fast": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 100,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 100,
+      "fast": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 1,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 100,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              10
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 100,
+      "fast": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 100,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 100,
+      "fast": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 100,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 100,
+      "fast": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 1,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 100,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              10
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 100,
+      "fast": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 100,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 200,
+      "fast": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 200,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              176,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 200,
+      "fast": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 1,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 200,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              176,
+              600,
+              10
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 200,
+      "fast": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 200,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              176,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 200,
+      "fast": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 200,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              176,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 200,
+      "fast": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 1,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 200,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              176,
+              600,
+              10
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 200,
+      "fast": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 200,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              176,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 200,
+      "fast": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 200,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 200,
+      "fast": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 1,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 200,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              10
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 200,
+      "fast": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 200,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 200,
+      "fast": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 200,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 200,
+      "fast": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 1,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 200,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              10
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 200,
+      "fast": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 200,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 300,
+      "fast": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 300,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              264,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 300,
+      "fast": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 1,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 300,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              264,
+              600,
+              10
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 300,
+      "fast": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 300,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              264,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 300,
+      "fast": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 300,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              264,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 300,
+      "fast": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 1,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 300,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              264,
+              600,
+              10
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 300,
+      "fast": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 300,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              264,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 300,
+      "fast": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 300,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 300,
+      "fast": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 1,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 300,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              10
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 300,
+      "fast": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 300,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 300,
+      "fast": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 300,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 300,
+      "fast": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 1,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 300,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              10
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 300,
+      "fast": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 300,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 1200,
+      "fast": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 1200,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 1200,
+      "fast": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 1,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 1200,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              10
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 1200,
+      "fast": false,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 1200,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 1200,
+      "fast": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 1200,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 1200,
+      "fast": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 1,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 1200,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              10
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 1200,
+      "fast": false,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 1200,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 0,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 1200,
+      "fast": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 0,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 1200,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 1200,
+      "fast": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 1,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 1200,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              10
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 1200,
+      "fast": true,
+      "synthetic_soc": 50,
+      "synthetic_bms_current_limit": 10,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 1200,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 1200,
+      "fast": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 0,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 1200,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 1200,
+      "fast": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 1,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 1200,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              10
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    },
+    {
+      "configured_watts": 1200,
+      "fast": true,
+      "synthetic_soc": 100,
+      "synthetic_bms_current_limit": 10,
+      "validator_invalid": 0,
+      "loaded_power_preserved": 1200,
+      "device_timeout_preserved_minutes": 0,
+      "after_policy": {
+        "fast_readback": 1,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "sensor_kinds_read": [
+          10,
+          11
+        ],
+        "output_enabled_flag": true
+      }
+    }
+  ]
+}

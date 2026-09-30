@@ -102,7 +102,7 @@ def parser() -> argparse.ArgumentParser:
     light.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
 
     from .c1000 import C1000_SETTINGS
-    original = subcommands.add_parser("c1000-setting", help="Set an original C1000/A1761 control (hardware untested)")
+    original = subcommands.add_parser("c1000-setting", help="Set an original C1000/A1761 control with fresh readback")
     original.add_argument("--name", required=True)
     original.add_argument("--setting", choices=C1000_SETTINGS, required=True)
     original.add_argument("--value", type=int, required=True, help="Integer value; enabled switches use 0 or 1")

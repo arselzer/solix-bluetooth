@@ -82,7 +82,7 @@ def controls_for(target: Target) -> tuple[Control, ...]:
         return items
     limits = {
         Model.C300: "100, 200, 300 or 330 W",
-        Model.C1000: "100–1000 W, in 100 W steps; hardware verification pending",
+        Model.C1000: "100–1000 W, in 100 W steps",
         Model.C1000_GEN2: "300–1200 W, in 100 W steps",
         Model.C2000_GEN2: "300–1800 W, in 100 W steps",
     }
@@ -620,7 +620,7 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
             selector = self.query_one("#setting", Select)
             selector.set_options([(item.label, item.key) for item in options])
             selector.value = options[0].key if options else Select.NULL
-            note = "Original C1000 controls follow reference mappings; hardware verification is pending." if target and target.model == Model.C1000 else ""
+            note = "Original C1000 controls were verified on firmware code 151; record settings before testing other versions." if target and target.model == Model.C1000 else ""
             if target and target.native:
                 note = "Controls require the running AP service to have been started with --allow-control."
             self.query_one("#notice", Static).update(note)

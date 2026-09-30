@@ -32,7 +32,7 @@
   "services": {
     "set_tou_plan": {
       "name": "Set Time-of-Use plan",
-      "description": "Store or activate a schedule on a gateway-enabled C2000 Gen 2. Peak can discharge the battery with mains connected. Use Return to grid to confirm grid supply.",
+      "description": "Store or activate a schedule on a gateway-enabled C1000 Gen 2 or C2000 Gen 2 using native MQTT. Peak can discharge the battery with mains connected. Use Return to grid to confirm grid supply.",
       "fields": {
         "device_id": {"name": "Device", "description": "Select the SOLIX Link station."},
         "enabled": {"name": "Enable Time-of-Use", "description": "Activate the plan, or store it while in Standard mode."},
@@ -62,6 +62,11 @@
       "charge_cap": {"name": "Charge cap"},
       "backup_reserve": {"name": "Backup reserve"}
     },
-    "button": {"return_grid": {"name": "Return to grid"}}
+    "button": {"return_grid": {"name": "Return to grid"}},
+    "select": {
+      "temperature_unit": {"name": "Temperature display", "state": {"celsius": "Celsius", "fahrenheit": "Fahrenheit"}},
+      "discharge_floor": {"name": "Lower discharge limit"}
+    },
+    "switch": {"off_grid_alert": {"name": "Off-grid alert"}}
   }
 }

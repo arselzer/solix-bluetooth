@@ -1,0 +1,189 @@
+[
+  {
+    "setting": 0,
+    "inhibit_flag": 0,
+    "previous_power_gate": 1,
+    "new_power_gate": 0,
+    "notification_on_fifth_sample": false,
+    "events": [],
+    "writes_only_stack_and_alert_debounce_state": true
+  },
+  {
+    "setting": 0,
+    "inhibit_flag": 0,
+    "previous_power_gate": 0,
+    "new_power_gate": 1,
+    "notification_on_fifth_sample": false,
+    "events": [],
+    "writes_only_stack_and_alert_debounce_state": true
+  },
+  {
+    "setting": 0,
+    "inhibit_flag": 1,
+    "previous_power_gate": 1,
+    "new_power_gate": 0,
+    "notification_on_fifth_sample": false,
+    "events": [],
+    "writes_only_stack_and_alert_debounce_state": true
+  },
+  {
+    "setting": 0,
+    "inhibit_flag": 1,
+    "previous_power_gate": 0,
+    "new_power_gate": 1,
+    "notification_on_fifth_sample": false,
+    "events": [],
+    "writes_only_stack_and_alert_debounce_state": true
+  },
+  {
+    "setting": 1,
+    "inhibit_flag": 0,
+    "previous_power_gate": 1,
+    "new_power_gate": 0,
+    "notification_on_fifth_sample": true,
+    "events": [
+      {
+        "event": 89,
+        "flag": 1,
+        "payload": "49",
+        "size": 1
+      }
+    ],
+    "writes_only_stack_and_alert_debounce_state": true
+  },
+  {
+    "setting": 1,
+    "inhibit_flag": 0,
+    "previous_power_gate": 0,
+    "new_power_gate": 1,
+    "notification_on_fifth_sample": false,
+    "events": [],
+    "writes_only_stack_and_alert_debounce_state": true
+  },
+  {
+    "setting": 1,
+    "inhibit_flag": 1,
+    "previous_power_gate": 1,
+    "new_power_gate": 0,
+    "notification_on_fifth_sample": false,
+    "events": [],
+    "writes_only_stack_and_alert_debounce_state": true
+  },
+  {
+    "setting": 1,
+    "inhibit_flag": 1,
+    "previous_power_gate": 0,
+    "new_power_gate": 1,
+    "notification_on_fifth_sample": false,
+    "events": [],
+    "writes_only_stack_and_alert_debounce_state": true
+  },
+  {
+    "setting": 2,
+    "inhibit_flag": 0,
+    "previous_power_gate": 1,
+    "new_power_gate": 0,
+    "notification_on_fifth_sample": false,
+    "events": [],
+    "writes_only_stack_and_alert_debounce_state": true
+  },
+  {
+    "setting": 2,
+    "inhibit_flag": 0,
+    "previous_power_gate": 0,
+    "new_power_gate": 1,
+    "notification_on_fifth_sample": false,
+    "events": [],
+    "writes_only_stack_and_alert_debounce_state": true
+  },
+  {
+    "setting": 2,
+    "inhibit_flag": 1,
+    "previous_power_gate": 1,
+    "new_power_gate": 0,
+    "notification_on_fifth_sample": false,
+    "events": [],
+    "writes_only_stack_and_alert_debounce_state": true
+  },
+  {
+    "setting": 2,
+    "inhibit_flag": 1,
+    "previous_power_gate": 0,
+    "new_power_gate": 1,
+    "notification_on_fifth_sample": false,
+    "events": [],
+    "writes_only_stack_and_alert_debounce_state": true
+  },
+  {
+    "setting": 3,
+    "inhibit_flag": 0,
+    "previous_power_gate": 1,
+    "new_power_gate": 0,
+    "notification_on_fifth_sample": false,
+    "events": [],
+    "writes_only_stack_and_alert_debounce_state": true
+  },
+  {
+    "setting": 3,
+    "inhibit_flag": 0,
+    "previous_power_gate": 0,
+    "new_power_gate": 1,
+    "notification_on_fifth_sample": false,
+    "events": [],
+    "writes_only_stack_and_alert_debounce_state": true
+  },
+  {
+    "setting": 3,
+    "inhibit_flag": 1,
+    "previous_power_gate": 1,
+    "new_power_gate": 0,
+    "notification_on_fifth_sample": false,
+    "events": [],
+    "writes_only_stack_and_alert_debounce_state": true
+  },
+  {
+    "setting": 3,
+    "inhibit_flag": 1,
+    "previous_power_gate": 0,
+    "new_power_gate": 1,
+    "notification_on_fifth_sample": false,
+    "events": [],
+    "writes_only_stack_and_alert_debounce_state": true
+  },
+  {
+    "setting": 255,
+    "inhibit_flag": 0,
+    "previous_power_gate": 1,
+    "new_power_gate": 0,
+    "notification_on_fifth_sample": false,
+    "events": [],
+    "writes_only_stack_and_alert_debounce_state": true
+  },
+  {
+    "setting": 255,
+    "inhibit_flag": 0,
+    "previous_power_gate": 0,
+    "new_power_gate": 1,
+    "notification_on_fifth_sample": false,
+    "events": [],
+    "writes_only_stack_and_alert_debounce_state": true
+  },
+  {
+    "setting": 255,
+    "inhibit_flag": 1,
+    "previous_power_gate": 1,
+    "new_power_gate": 0,
+    "notification_on_fifth_sample": false,
+    "events": [],
+    "writes_only_stack_and_alert_debounce_state": true
+  },
+  {
+    "setting": 255,
+    "inhibit_flag": 1,
+    "previous_power_gate": 0,
+    "new_power_gate": 1,
+    "notification_on_fifth_sample": false,
+    "events": [],
+    "writes_only_stack_and_alert_debounce_state": true
+  }
+]

@@ -1,0 +1,27 @@
+{
+  "image_bytes": 1482800,
+  "signature_block_offset": "0x169000",
+  "block_magic": "0xe7",
+  "block_version": 2,
+  "rsa_bits": 3072,
+  "exponent": 65537,
+  "crc32_valid": true,
+  "image_sha256_matches_block": true,
+  "rsa_pss_signature_valid": true,
+  "other_signature_blocks_empty": true,
+  "tail_after_signature_sector_bytes": 48,
+  "cases": [
+    {
+      "case": "original",
+      "valid": true
+    },
+    {
+      "case": "modified_digest",
+      "valid": false
+    },
+    {
+      "case": "modified_signature",
+      "valid": false
+    }
+  ]
+}

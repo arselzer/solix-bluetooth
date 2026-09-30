@@ -369,7 +369,7 @@ class Session:
         return self.send_command(command, b"\xa1\x01\x21")
 
     def c1000_control_packet(self, setting: str, value: int | bool) -> bytes:
-        """Build a validated, reference-derived A1761 control (hardware untested)."""
+        """Build a validated A1761 control; see the versioned hardware findings."""
         if self.model != Model.C1000 or self.protocol != "legacy" or not self.ready:
             raise RuntimeError("Controls require a connected original C1000 legacy session")
         from .c1000 import c1000_setting

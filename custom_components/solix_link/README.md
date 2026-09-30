@@ -34,14 +34,24 @@ Authorization header. Treat HA configuration backups as containing credentials.
   created only for a supported model when telemetry exists and the gateway
   advertises that command. Charging-power ranges are original C1000/A1761
   100–1000 W, C1000 Gen 2 300–1200 W and C2000 Gen 2 300–1800 W, in 100 W
-  steps. Original C1000 support is reference-derived and hardware untested.
+  steps. Original C1000 charging-power changes/restoration passed library and
+  HTTP tests on version code 151; other range values and physical enforcement
+  remain untested.
   C300 charging power has discrete choices (including 330 W); this integration
   does not expose a charging-power number for it. Reserve limits follow the
-  current charge caps; original C1000 support adds no charge-cap/reserve controls.
-- **Return to grid**: C2000 Gen 2 native MQTT only. The gateway checks actual
+  current charge caps; native MQTT supports reserve on both Gen 2 models.
+  Original C1000 support adds no charge-cap/reserve controls.
+- Selects: C1000 Gen 2 native MQTT temperature display (Celsius/Fahrenheit) and
+  lower discharge limit (1%, 5%, 10%, 15%, 20%). Available limits leave at least
+  five percentage points below the current backup reserve; selecting a limit
+  does not adjust the reserve. The temperature sensor continues to report Celsius.
+- Configuration switch: C1000 Gen 2 native MQTT off-grid alert preference.
+  Setting storage and readback were verified; actual alert delivery is untested.
+- **Return to grid**: C1000 Gen 2 and C2000 Gen 2 native MQTT. The gateway checks actual
   power flow; changing the displayed mode alone is insufficient confirmation.
 - Action **`solix_link.set_tou_plan`**: select the HA device and supply `enabled`
-  plus up to six whole-hour, non-overlapping periods:
+  plus up to six whole-hour, non-overlapping periods. Both Gen 2 models are
+  supported through native MQTT:
 
   ```yaml
   action: solix_link.set_tou_plan

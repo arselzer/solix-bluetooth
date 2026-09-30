@@ -81,6 +81,60 @@ def test_sse_initial_update_and_disconnect_release_subscription():
     asyncio.run(run())
 
 
+def test_private_ble_fields_and_error_details_are_filtered_from_every_public_route():
+    gateway = Gateway()
+    original_snapshot = gateway.snapshot
+    private_fields = ("address", "serial_number", "owner_id", "owner_user_id", "client_id", "account_id", "raw_tlvs")
+
+    def snapshot(name):
+        value = original_snapshot(name)
+        value.update({field: "PRIVATE-SYNTHETIC" for field in private_fields})
+        value["metrics"].update({field: 123456789 for field in private_fields})
+        value["error"] = "RuntimeError: PRIVATE-SYNTHETIC"
+        return value
+
+    gateway.snapshot = snapshot
+    queue = asyncio.Queue()
+    gateway.subscribe = lambda: queue
+    gateway.unsubscribe = lambda value: None
+
+    def check(value):
+        assert all(field not in value and field not in value["metrics"] for field in private_fields)
+        assert value["error"] == "RuntimeError"
+        assert value["metrics"]["battery_percentage"] == 90
+
+    async def run():
+        app = server.create_app(gateway, token="test", allow_control=True)
+        async with api_client(app) as client:
+            headers = {"Authorization": "Bearer test"}
+            check((await client.get("/devices", headers=headers)).json()["devices"][0])
+            check((await client.get("/devices/ups", headers=headers)).json())
+            check((await client.post("/devices/ups/commands", headers=headers,
+                                    json={"command": "set-charge-power", "watts": 300})).json())
+            gateway.failure = RuntimeError("PRIVATE-SYNTHETIC")
+            check((await client.post("/devices/ups/commands", headers=headers,
+                                    json={"command": "set-charge-power", "watts": 300})).json()["device"])
+            text = (await client.get("/metrics", headers=headers)).text
+            assert "battery_percentage" in text
+            assert "123456789" not in text and "PRIVATE-SYNTHETIC" not in text
+            assert all(field not in text for field in private_fields)
+        endpoint = next(route.endpoint for route in app.routes if route.path == "/events")
+        stream = (await endpoint()).body_iterator
+        import json
+        try:
+            initial = await anext(stream)
+            check(json.loads(initial.split("data: ", 1)[1])["devices"][0])
+            queue.put_nowait(snapshot("ups"))
+            check(json.loads((await anext(stream)).split("data: ", 1)[1]))
+        finally:
+            await stream.aclose()
+        # Public filtering must not destroy the private service baseline.
+        assert gateway.snapshot("ups")["address"] == "PRIVATE-SYNTHETIC"
+        assert gateway.snapshot("ups")["metrics"]["serial_number"] == 123456789
+
+    asyncio.run(run())
+
+
 def test_real_http_sse_disconnect_and_server_shutdown_stop_monitor():
     import socket
     import httpx

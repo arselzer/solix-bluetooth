@@ -1,0 +1,52 @@
+{
+  "hardware_access": false,
+  "firmware": {
+    "filename": "MainMcu-decoded.bin",
+    "bytes": 198656,
+    "sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9",
+    "load_address": "0x8005000"
+  },
+  "runtime": {
+    "python": "3.12.3",
+    "unicorn": "2.1.4",
+    "system": "Linux",
+    "architecture": "x86_64"
+  },
+  "results": {
+    "general-settings-emulation-results.json": {
+      "cases": 1063,
+      "sha256": "a0e2d07dbfce1c17a7d57422924bf84eb38ba7b661c127713ac7475ab6580bf5",
+      "matches_expected": true
+    },
+    "offgrid-alert-emulation-results.json": {
+      "cases": 20,
+      "sha256": "b869b715321c15adb43b9a2a294cfedc9b27c72c5bb1473118840fc8f59c6774",
+      "matches_expected": true
+    },
+    "charging-followup-results.json": {
+      "cases": 245,
+      "sha256": "e6ee151bfe4f51fd8f5cc5f5e41a54c52ec9442081e8b8fe9c5f07aacf6c737b",
+      "matches_expected": true
+    },
+    "feature-candidates-results.json": {
+      "cases": 212,
+      "sha256": "6782748bee8ab3dddd677fb47942f08c4c7b64417c1eeeff13d781cf392b87c9",
+      "matches_expected": true
+    }
+  },
+  "source_sha256": {
+    "emulate_charging_followup.py": "47f845935c526ac13a9a9de119b8b442297d06039817e507ee3a6fb6e7591854",
+    "emulate_clock_semantics.py": "945b649c3b5cec00d816041e783641085ccfbdb5f80efc2ed2c4e15f3bae30f2",
+    "emulate_feature_candidates.py": "2b03b97727d634ce9040052de99f73a4834c2ecac7c71a476b418ec05fbb9a82",
+    "emulate_general_settings.py": "26ce041976a8fd1ac43feb2851c1717363761cb2f7da69f4d780b3f42b8ef0ba",
+    "emulate_offgrid_alert.py": "2e5c7b09928399daf827bcc2a30ec5e4984f2a41845a8a705072d1e911873c0a",
+    "emulate_soc_cap_handler.py": "fbac6e75825cb096190779f583ade26ea4d5e4cd9f5a76781185d39d33280c71",
+    "emulate_tariff_power_policy.py": "a5949c67bda519bb82e8c3d14a72e29381d1f0a8a908977555abfc96dfb1b774",
+    "emulate_tou_controller_encoding.py": "9d65518d92649f47b67c86562b7edd29f0775d778b02c25eca72b0acd55a0e22",
+    "emulate_tou_d9.py": "25bfc0d14c3f2e7ba50d7b7c01c750c836cf1ce3c81d8db21d2a3e6630b04894",
+    "extract_dsp.py": "5a82593ea76fd784702e0ee501be2415a4540d2570c3f370d343e8512d2a87e9",
+    "replay_io.py": "731d795a5ec37e2cf12b809b7122eaf7a29d84c21a2ecd43fafa3e2f8d962d30",
+    "run_replays.py": "956d11413b0a06e0d89305fb2146138c20b4bddb721795111a7379da48a5610e",
+    "verify_radio_signature.py": "7b78f5ed26521490c405fbab1dce875cf2aa88c84ae6b0ce2a5df65559d51556"
+  }
+}

@@ -67,7 +67,13 @@ def create_app(service: MonitorService, token: str | None = None, *, allow_contr
     def status_with_controls(status: dict) -> dict:
         commands = getattr(service, "supported_commands", None)
         config = service.devices.get(status["name"])
-        return {**status, "timezone_name": getattr(config, "timezone_name", None),
+        private_fields = {"address", "serial_number", "account_id", "owner_id", "owner_user_id", "client_id", "raw_tlvs"}
+        public = {key: value for key, value in status.items() if key not in private_fields}
+        public["metrics"] = {key: value for key, value in status["metrics"].items() if key not in private_fields}
+        if public.get("error"):
+            error_class = str(public["error"]).split(":", 1)[0]
+            public["error"] = error_class if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*Error", error_class) else "ConnectionError"
+        return {**public, "timezone_name": getattr(config, "timezone_name", None),
                 "controls": commands(status["name"]) if allow_control and commands else []}
 
     def snapshots() -> list[dict]:
@@ -146,7 +152,7 @@ def create_app(service: MonitorService, token: str | None = None, *, allow_contr
     @app.api_route("/metrics", methods=["GET", "HEAD"])
     async def metrics():
         lines = []
-        for status in service.snapshots():
+        for status in snapshots():
             name = status["name"].replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n")
             label = f'{{device="{name}"}}'
             lines.append(f"solix_gen2_available{label} {int(status['available'])}")

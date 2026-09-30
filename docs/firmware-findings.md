@@ -29,11 +29,15 @@ the C2000 firmware, so identical behavior on that model remains unproven.
 Firmware analysis used retained local files; separate live network probes are
 documented below and in the linked investigation. No firmware was flashed.
 
-Raw images, phone captures, disassembly, and reproducible extraction scripts
-remain in the ignored, owner-only `.solix-private/firmware-analysis/` directory.
-This document contains protocol findings and code addresses, without device or
-account identifiers. See [live protocol observations](gen2-protocol.md) for
-features already tested on hardware.
+With owner authorization, the recovered vendor application images and hashes
+are now public under [firmware/](../firmware/README.md). The
+[offline analysis tools](../tools/firmware_analysis/) reproduce 1,540 synthetic
+instruction cases, radio signature verification and DSP record extraction.
+See [reproduction and substitutions](firmware-analysis-reproduction.md).
+Phone captures, session keys, account/device identifiers and raw device logs
+remain owner-only in ignored `.solix-private/`. This document contains protocol
+findings and code addresses. See [live observations](gen2-protocol.md) and
+[new feature candidates](gen2-feature-candidates.md).
 
 ## Recovered components
 
@@ -97,10 +101,10 @@ accept unsigned replacements: their bootloaders and complete update validation
 are not recovered. C2000 firmware remains unavailable. Do not infer C2000
 flashability from these C1000 findings.
 
-Private reproducibility: `verify_radio_signature.py` and
-`firmware-signature-results.json` in `.solix-private/firmware-analysis/` retain
-the local verification procedure and three results. Images and signature/key
-material remain private.
+Public reproducibility: [verify_radio_signature.py](../tools/firmware_analysis/verify_radio_signature.py)
+checks the bundled radio image and three signature cases. Results without key
+contents are included beside the image. This includes the vendor's public
+verification data, not device credentials or private signing keys.
 
 ## Why storing a Time-of-Use plan is insufficient
 

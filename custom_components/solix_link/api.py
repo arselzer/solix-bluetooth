@@ -12,17 +12,21 @@ from urllib.parse import quote, urlsplit, urlunsplit
 import aiohttp
 
 COMMANDS = frozenset({"set-charge-power", "set-charge-cap", "set-backup-reserve",
-                      "set-tou-plan", "return-grid"})
+                      "set-tou-plan", "return-grid", "set-discharge-floor",
+                      "set-temperature-unit", "set-off-grid-alert"})
 METRICS = frozenset({"battery_percentage", "temperature_c", "output_power_w",
                     "ac_input_power_w", "ac_output_power_w", "dc_output_power_w",
                     "ac_input_connected", "ac_output_enabled", "battery_status",
                     "ac_charging_power_limit_w", "max_charge_percentage",
                     "min_charge_percentage", "backup_reserve_percentage",
                     "active_tariff", "usage_mode", "tou_schedule_slot_count",
-                    "ac_fast_charge_enabled", "software_version"})
+                    "ac_fast_charge_enabled", "software_version",
+                    "temperature_unit_fahrenheit", "ac_off_grid_alert_enabled"})
 POWER_MINIMUM = {"c1000": 100, "c1000_gen2": 300, "c2000_gen2": 300}
 POWER_MAXIMUM = {"c1000": 1000, "c1000_gen2": 1200, "c2000_gen2": 1800}
 CHARGE_CAP_MODELS = frozenset({"c1000_gen2", "c2000_gen2"})
+NATIVE_MODELS = CHARGE_CAP_MODELS
+DISCHARGE_FLOORS = (1, 5, 10, 15, 20)
 
 
 class GatewayError(Exception):
@@ -113,6 +117,29 @@ def integer(value: Any, label: str) -> int:
     return value
 
 
+def native_gen2(snapshot: dict) -> bool:
+    return snapshot.get("model") in NATIVE_MODELS and snapshot.get("protocol") == "native_mqtt"
+
+
+def reserve_supported(snapshot: dict) -> bool:
+    return snapshot.get("model") == "c2000_gen2" or native_gen2(snapshot)
+
+
+def discharge_floor_options(snapshot: dict) -> list[str]:
+    """Offer supported values that preserve the current reserve and charge cap."""
+    if (snapshot.get("model") != "c1000_gen2" or not native_gen2(snapshot)
+            or "set-discharge-floor" not in snapshot.get("controls", [])):
+        return []
+    metrics = snapshot.get("metrics", {})
+    lower, upper, reserve = (metrics.get(key) for key in (
+        "min_charge_percentage", "max_charge_percentage", "backup_reserve_percentage"))
+    if (any(type(value) is not int for value in (lower, upper, reserve))
+            or lower not in DISCHARGE_FLOORS or upper not in (80, 85, 90, 95, 100)
+            or not 5 <= reserve <= 100 or reserve % 5 or not lower + 5 <= reserve <= upper):
+        return []
+    return [f"{value}%" for value in DISCHARGE_FLOORS if value + 5 <= reserve]
+
+
 def validate_plan(periods: Any, enabled: Any) -> list[dict]:
     if type(enabled) is not bool or not isinstance(periods, list) or len(periods) > 6:
         raise ValueError("Use a boolean enabled value and at most six periods")
@@ -151,6 +178,9 @@ def validate_command(snapshot: dict, payload: dict) -> None:
         "set-backup-reserve": {"command", "reserve"},
         "set-tou-plan": {"command", "periods", "enabled"},
         "return-grid": {"command", "timeout"},
+        "set-discharge-floor": {"command", "lower"},
+        "set-temperature-unit": {"command", "fahrenheit"},
+        "set-off-grid-alert": {"command", "enabled"},
     }[command]
     if set(payload) != expected:
         raise ValueError("Unexpected command fields")
@@ -168,24 +198,35 @@ def validate_command(snapshot: dict, payload: dict) -> None:
         if numeric(metrics.get("max_charge_percentage")) is None:
             raise ValueError("Charge-cap telemetry is missing")
         reserve = numeric(metrics.get("backup_reserve_percentage"))
-        if model == "c2000_gen2" and (reserve is None or upper < reserve):
+        if reserve_supported(snapshot) and (reserve is None or upper < reserve):
             raise ValueError("Charge cap must preserve the reported backup reserve")
     elif command == "set-backup-reserve":
         reserve = integer(payload["reserve"], "Backup reserve")
         lower, upper = (numeric(metrics.get(key)) for key in ("min_charge_percentage", "max_charge_percentage"))
-        if (model != "c2000_gen2" or lower is None or upper is None
+        if (not reserve_supported(snapshot) or lower is None or upper is None
                 or numeric(metrics.get("backup_reserve_percentage")) is None
                 or reserve % 5 or not 5 <= reserve <= 100 or not lower + 5 <= reserve <= upper):
             raise ValueError("Reserve must be within current caps, in steps of five")
+    elif command == "set-discharge-floor":
+        lower = integer(payload["lower"], "Discharge floor")
+        if f"{lower}%" not in discharge_floor_options(snapshot):
+            raise ValueError("Discharge floor must preserve reserve on C1000 Gen 2 native MQTT")
+    elif command in ("set-temperature-unit", "set-off-grid-alert"):
+        parameter, metric = (("fahrenheit", "temperature_unit_fahrenheit")
+                             if command == "set-temperature-unit"
+                             else ("enabled", "ac_off_grid_alert_enabled"))
+        if (model != "c1000_gen2" or not native_gen2(snapshot)
+                or type(payload[parameter]) is not bool or binary_state(metrics.get(metric)) is None):
+            raise ValueError("This setting requires C1000 Gen 2 native MQTT and valid boolean telemetry")
     elif command == "set-tou-plan":
-        if model != "c2000_gen2" or snapshot["protocol"] != "native_mqtt":
-            raise ValueError("Time-of-Use control requires C2000 Gen 2 native MQTT")
+        if not native_gen2(snapshot):
+            raise ValueError("Time-of-Use control requires Gen 2 native MQTT")
         validate_plan(payload["periods"], payload["enabled"])
         if metrics.get("ac_fast_charge_enabled") != 0:
             raise ValueError("Fast charge must be off before changing Time-of-Use")
     elif command == "return-grid":
-        if model != "c2000_gen2" or snapshot["protocol"] != "native_mqtt":
-            raise ValueError("Return to grid requires C2000 Gen 2 native MQTT")
+        if not native_gen2(snapshot):
+            raise ValueError("Return to grid requires Gen 2 native MQTT")
         if integer(payload["timeout"], "Timeout") != 30:
             raise ValueError("Return-to-grid timeout must be 30 seconds")
     if command in ("set-tou-plan", "return-grid"):

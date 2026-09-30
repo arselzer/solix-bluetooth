@@ -3,6 +3,8 @@
     "binary_sensor": {"mains_present": {"default": "mdi:transmission-tower"}, "ac_output_enabled": {"default": "mdi:power-socket-eu"}},
     "button": {"return_grid": {"default": "mdi:transmission-tower"}},
     "number": {"charge_cap": {"default": "mdi:battery-charging-high"}, "backup_reserve": {"default": "mdi:battery-lock"}},
+    "select": {"temperature_unit": {"default": "mdi:thermometer"}, "discharge_floor": {"default": "mdi:battery-low"}},
+    "switch": {"off_grid_alert": {"default": "mdi:bell-alert-outline"}},
     "sensor": {"power_flow": {"default": "mdi:transmission-tower"}, "usage_mode": {"default": "mdi:cog"}, "active_tariff": {"default": "mdi:clock-outline"}}
   },
   "services": {"set_tou_plan": {"service": "mdi:calendar-clock"}}

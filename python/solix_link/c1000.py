@@ -1,4 +1,4 @@
-"""Original C1000/A1761 support derived from reference maps, not hardware tested.
+"""Original C1000/A1761 typed telemetry and controls.
 
 These typed TLVs differ from C300 and packed C1000 Gen 2 records. Keep
 ambiguous fields raw rather than borrowing names from another device.
@@ -64,7 +64,11 @@ def decode_c1000_telemetry(payload: bytes) -> tuple[dict[str, int | str], dict[i
 
     remaining = number(0xA4)
     if remaining is not None:
-        metrics["time_remaining_minutes"] = remaining * 6
+        metrics["time_remaining_raw"] = remaining
+        # Live A1761: AC connected -> ffff, isolated supply -> 153..178.
+        # The display saturates at 99.9 h. Publish an explicit unknown value
+        # so a new unavailable estimate clears the last numeric reading.
+        metrics["time_remaining_minutes"] = remaining * 6 if remaining <= 999 else "unknown"
 
     dc = values.get(0xB2, b"")
     if len(dc) == 4 and dc[0] == 4:
@@ -73,7 +77,7 @@ def decode_c1000_telemetry(payload: bytes) -> tuple[dict[str, int | str], dict[i
     version = number(0xB3)
     if version is not None:
         metrics["software_version_code"] = version
-        if 1000 <= version <= 9999:
+        if 100 <= version <= 9999:
             metrics["software_version"] = ".".join(str(version))
 
     serial = values.get(0xD0, b"")
@@ -97,7 +101,8 @@ C1000_SETTINGS = (
 def c1000_setting(setting: str, value: int | bool) -> tuple[str, bytes, dict[str, int]]:
     """Return a validated command body and telemetry expectation, without I/O.
 
-    Original C1000 packet shapes are reference-derived and hardware untested.
+    Live changes/restorations are documented for A1761 version code 151.
+    Not every value or firmware version has been tested.
     """
     from .protocol import tlv
 

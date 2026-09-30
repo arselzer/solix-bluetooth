@@ -1,0 +1,3739 @@
+{
+  "power_validator": [
+    {
+      "configured_watts": 0,
+      "invalid": 1
+    },
+    {
+      "configured_watts": 1,
+      "invalid": 1
+    },
+    {
+      "configured_watts": 99,
+      "invalid": 1
+    },
+    {
+      "configured_watts": 100,
+      "invalid": 0
+    },
+    {
+      "configured_watts": 101,
+      "invalid": 0
+    },
+    {
+      "configured_watts": 200,
+      "invalid": 0
+    },
+    {
+      "configured_watts": 300,
+      "invalid": 0
+    },
+    {
+      "configured_watts": 600,
+      "invalid": 0
+    },
+    {
+      "configured_watts": 1200,
+      "invalid": 0
+    },
+    {
+      "configured_watts": 1201,
+      "invalid": 1
+    },
+    {
+      "configured_watts": 65535,
+      "invalid": 1
+    }
+  ],
+  "power_policy": [
+    {
+      "configured_watts": 0,
+      "tariff": 0,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              0,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 0,
+      "tariff": 0,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": true,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 0,
+      "tariff": 1,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 1,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              0,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 0,
+      "tariff": 1,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 1,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              0,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 0,
+      "tariff": 2,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              0,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 0,
+      "tariff": 2,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              0,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 0,
+      "tariff": 3,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              0,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 0,
+      "tariff": 3,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              0,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 1,
+      "tariff": 0,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              0,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 1,
+      "tariff": 0,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": true,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 1,
+      "tariff": 1,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 1,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              0,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 1,
+      "tariff": 1,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 1,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              0,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 1,
+      "tariff": 2,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              0,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 1,
+      "tariff": 2,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              0,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 1,
+      "tariff": 3,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              0,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 1,
+      "tariff": 3,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              0,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 99,
+      "tariff": 0,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              87,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 99,
+      "tariff": 0,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": true,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 99,
+      "tariff": 1,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 1,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              87,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 99,
+      "tariff": 1,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 1,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              87,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 99,
+      "tariff": 2,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              87,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 99,
+      "tariff": 2,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              87,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 99,
+      "tariff": 3,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              87,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 99,
+      "tariff": 3,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              87,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 100,
+      "tariff": 0,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              88,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 100,
+      "tariff": 0,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": true,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 100,
+      "tariff": 1,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 1,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              88,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 100,
+      "tariff": 1,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 1,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              88,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 100,
+      "tariff": 2,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              88,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 100,
+      "tariff": 2,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              88,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 100,
+      "tariff": 3,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              88,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 100,
+      "tariff": 3,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              88,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 101,
+      "tariff": 0,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              88,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 101,
+      "tariff": 0,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": true,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 101,
+      "tariff": 1,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 1,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              88,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 101,
+      "tariff": 1,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 1,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              88,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 101,
+      "tariff": 2,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              88,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 101,
+      "tariff": 2,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              88,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 101,
+      "tariff": 3,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              88,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 101,
+      "tariff": 3,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              88,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 200,
+      "tariff": 0,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              176,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 200,
+      "tariff": 0,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": true,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 200,
+      "tariff": 1,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 1,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              176,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 200,
+      "tariff": 1,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 1,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              176,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 200,
+      "tariff": 2,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              176,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 200,
+      "tariff": 2,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              176,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 200,
+      "tariff": 3,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              176,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 200,
+      "tariff": 3,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              176,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 300,
+      "tariff": 0,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              264,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 300,
+      "tariff": 0,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": true,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 300,
+      "tariff": 1,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 1,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              264,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 300,
+      "tariff": 1,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 1,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              264,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 300,
+      "tariff": 2,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              264,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 300,
+      "tariff": 2,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              264,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 300,
+      "tariff": 3,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              264,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 300,
+      "tariff": 3,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              264,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 600,
+      "tariff": 0,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              528,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 600,
+      "tariff": 0,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": true,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 600,
+      "tariff": 1,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 1,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              528,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 600,
+      "tariff": 1,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 1,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              528,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 600,
+      "tariff": 2,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              528,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 600,
+      "tariff": 2,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              528,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 600,
+      "tariff": 3,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              528,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 600,
+      "tariff": 3,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              528,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 1200,
+      "tariff": 0,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 1200,
+      "tariff": 0,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": true,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 1200,
+      "tariff": 1,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 1,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 1200,
+      "tariff": 1,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 1,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 1200,
+      "tariff": 2,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 1200,
+      "tariff": 2,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 1200,
+      "tariff": 3,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 1200,
+      "tariff": 3,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 1201,
+      "tariff": 0,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 1201,
+      "tariff": 0,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": true,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 1201,
+      "tariff": 1,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 1,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 1201,
+      "tariff": 1,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 1,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 1201,
+      "tariff": 2,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 1201,
+      "tariff": 2,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 1201,
+      "tariff": 3,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 1201,
+      "tariff": 3,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1056,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 65535,
+      "tariff": 0,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 65535,
+      "tariff": 0,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": true,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 65535,
+      "tariff": 1,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 1,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 65535,
+      "tariff": 1,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 1,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 65535,
+      "tariff": 2,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 65535,
+      "tariff": 2,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              0
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 65535,
+      "tariff": 3,
+      "initial_fast": false,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    },
+    {
+      "configured_watts": 65535,
+      "tariff": 3,
+      "initial_fast": true,
+      "result": {
+        "mode_bits": 2,
+        "fast_charge": false,
+        "reserve": 10,
+        "charge_plans": [
+          {
+            "channel": 0,
+            "power_voltage_current": [
+              1400,
+              600,
+              100
+            ]
+          }
+        ],
+        "history_actions": [
+          1
+        ]
+      }
+    }
+  ],
+  "lower_caps": [
+    {
+      "baseline_reserve": 10,
+      "lower": 1,
+      "readback_reserve_upper_lower": [
+        10,
+        100,
+        1
+      ],
+      "changed_settings_offsets": [],
+      "bms_f015_bytes": [
+        100,
+        1,
+        1
+      ],
+      "restored_lower_only_readback": [
+        10,
+        100,
+        1
+      ]
+    },
+    {
+      "baseline_reserve": 10,
+      "lower": 5,
+      "readback_reserve_upper_lower": [
+        10,
+        100,
+        5
+      ],
+      "changed_settings_offsets": [
+        24
+      ],
+      "bms_f015_bytes": [
+        100,
+        5,
+        5
+      ],
+      "restored_lower_only_readback": [
+        10,
+        100,
+        1
+      ]
+    },
+    {
+      "baseline_reserve": 10,
+      "lower": 10,
+      "readback_reserve_upper_lower": [
+        15,
+        100,
+        10
+      ],
+      "changed_settings_offsets": [
+        24,
+        25
+      ],
+      "bms_f015_bytes": [
+        100,
+        10,
+        10
+      ],
+      "restored_lower_only_readback": [
+        15,
+        100,
+        1
+      ]
+    },
+    {
+      "baseline_reserve": 10,
+      "lower": 15,
+      "readback_reserve_upper_lower": [
+        20,
+        100,
+        15
+      ],
+      "changed_settings_offsets": [
+        24,
+        25
+      ],
+      "bms_f015_bytes": [
+        100,
+        15,
+        15
+      ],
+      "restored_lower_only_readback": [
+        20,
+        100,
+        1
+      ]
+    },
+    {
+      "baseline_reserve": 10,
+      "lower": 20,
+      "readback_reserve_upper_lower": [
+        25,
+        100,
+        20
+      ],
+      "changed_settings_offsets": [
+        24,
+        25
+      ],
+      "bms_f015_bytes": [
+        100,
+        20,
+        20
+      ],
+      "restored_lower_only_readback": [
+        25,
+        100,
+        1
+      ]
+    },
+    {
+      "baseline_reserve": 25,
+      "lower": 1,
+      "readback_reserve_upper_lower": [
+        25,
+        100,
+        1
+      ],
+      "changed_settings_offsets": [],
+      "bms_f015_bytes": [
+        100,
+        1,
+        1
+      ],
+      "restored_lower_only_readback": [
+        25,
+        100,
+        1
+      ]
+    },
+    {
+      "baseline_reserve": 25,
+      "lower": 5,
+      "readback_reserve_upper_lower": [
+        25,
+        100,
+        5
+      ],
+      "changed_settings_offsets": [
+        24
+      ],
+      "bms_f015_bytes": [
+        100,
+        5,
+        5
+      ],
+      "restored_lower_only_readback": [
+        25,
+        100,
+        1
+      ]
+    },
+    {
+      "baseline_reserve": 25,
+      "lower": 10,
+      "readback_reserve_upper_lower": [
+        25,
+        100,
+        10
+      ],
+      "changed_settings_offsets": [
+        24
+      ],
+      "bms_f015_bytes": [
+        100,
+        10,
+        10
+      ],
+      "restored_lower_only_readback": [
+        25,
+        100,
+        1
+      ]
+    },
+    {
+      "baseline_reserve": 25,
+      "lower": 15,
+      "readback_reserve_upper_lower": [
+        25,
+        100,
+        15
+      ],
+      "changed_settings_offsets": [
+        24
+      ],
+      "bms_f015_bytes": [
+        100,
+        15,
+        15
+      ],
+      "restored_lower_only_readback": [
+        25,
+        100,
+        1
+      ]
+    },
+    {
+      "baseline_reserve": 25,
+      "lower": 20,
+      "readback_reserve_upper_lower": [
+        25,
+        100,
+        20
+      ],
+      "changed_settings_offsets": [
+        24
+      ],
+      "bms_f015_bytes": [
+        100,
+        20,
+        20
+      ],
+      "restored_lower_only_readback": [
+        25,
+        100,
+        1
+      ]
+    },
+    {
+      "baseline_reserve": 85,
+      "lower": 1,
+      "readback_reserve_upper_lower": [
+        85,
+        100,
+        1
+      ],
+      "changed_settings_offsets": [],
+      "bms_f015_bytes": [
+        100,
+        1,
+        1
+      ],
+      "restored_lower_only_readback": [
+        85,
+        100,
+        1
+      ]
+    },
+    {
+      "baseline_reserve": 85,
+      "lower": 5,
+      "readback_reserve_upper_lower": [
+        85,
+        100,
+        5
+      ],
+      "changed_settings_offsets": [
+        24
+      ],
+      "bms_f015_bytes": [
+        100,
+        5,
+        5
+      ],
+      "restored_lower_only_readback": [
+        85,
+        100,
+        1
+      ]
+    },
+    {
+      "baseline_reserve": 85,
+      "lower": 10,
+      "readback_reserve_upper_lower": [
+        85,
+        100,
+        10
+      ],
+      "changed_settings_offsets": [
+        24
+      ],
+      "bms_f015_bytes": [
+        100,
+        10,
+        10
+      ],
+      "restored_lower_only_readback": [
+        85,
+        100,
+        1
+      ]
+    },
+    {
+      "baseline_reserve": 85,
+      "lower": 15,
+      "readback_reserve_upper_lower": [
+        85,
+        100,
+        15
+      ],
+      "changed_settings_offsets": [
+        24
+      ],
+      "bms_f015_bytes": [
+        100,
+        15,
+        15
+      ],
+      "restored_lower_only_readback": [
+        85,
+        100,
+        1
+      ]
+    },
+    {
+      "baseline_reserve": 85,
+      "lower": 20,
+      "readback_reserve_upper_lower": [
+        85,
+        100,
+        20
+      ],
+      "changed_settings_offsets": [
+        24
+      ],
+      "bms_f015_bytes": [
+        100,
+        20,
+        20
+      ],
+      "restored_lower_only_readback": [
+        85,
+        100,
+        1
+      ]
+    }
+  ],
+  "bms_bounds": [
+    {
+      "upper": 100,
+      "lower": 1,
+      "reserve": 10,
+      "tariff": 0,
+      "backup_active": false,
+      "bms_f015_bytes": [
+        100,
+        1,
+        1
+      ]
+    },
+    {
+      "upper": 100,
+      "lower": 1,
+      "reserve": 10,
+      "tariff": 0,
+      "backup_active": true,
+      "bms_f015_bytes": [
+        100,
+        1,
+        1
+      ]
+    },
+    {
+      "upper": 100,
+      "lower": 1,
+      "reserve": 10,
+      "tariff": 1,
+      "backup_active": false,
+      "bms_f015_bytes": [
+        100,
+        1,
+        10
+      ]
+    },
+    {
+      "upper": 100,
+      "lower": 1,
+      "reserve": 10,
+      "tariff": 1,
+      "backup_active": true,
+      "bms_f015_bytes": [
+        100,
+        1,
+        10
+      ]
+    },
+    {
+      "upper": 100,
+      "lower": 1,
+      "reserve": 10,
+      "tariff": 2,
+      "backup_active": false,
+      "bms_f015_bytes": [
+        100,
+        1,
+        10
+      ]
+    },
+    {
+      "upper": 100,
+      "lower": 1,
+      "reserve": 10,
+      "tariff": 2,
+      "backup_active": true,
+      "bms_f015_bytes": [
+        100,
+        1,
+        10
+      ]
+    },
+    {
+      "upper": 100,
+      "lower": 1,
+      "reserve": 10,
+      "tariff": 3,
+      "backup_active": false,
+      "bms_f015_bytes": [
+        100,
+        1,
+        10
+      ]
+    },
+    {
+      "upper": 100,
+      "lower": 1,
+      "reserve": 10,
+      "tariff": 3,
+      "backup_active": true,
+      "bms_f015_bytes": [
+        100,
+        1,
+        10
+      ]
+    },
+    {
+      "upper": 90,
+      "lower": 5,
+      "reserve": 85,
+      "tariff": 0,
+      "backup_active": false,
+      "bms_f015_bytes": [
+        90,
+        5,
+        5
+      ]
+    },
+    {
+      "upper": 90,
+      "lower": 5,
+      "reserve": 85,
+      "tariff": 0,
+      "backup_active": true,
+      "bms_f015_bytes": [
+        90,
+        5,
+        5
+      ]
+    },
+    {
+      "upper": 90,
+      "lower": 5,
+      "reserve": 85,
+      "tariff": 1,
+      "backup_active": false,
+      "bms_f015_bytes": [
+        90,
+        5,
+        85
+      ]
+    },
+    {
+      "upper": 90,
+      "lower": 5,
+      "reserve": 85,
+      "tariff": 1,
+      "backup_active": true,
+      "bms_f015_bytes": [
+        90,
+        5,
+        85
+      ]
+    },
+    {
+      "upper": 90,
+      "lower": 5,
+      "reserve": 85,
+      "tariff": 2,
+      "backup_active": false,
+      "bms_f015_bytes": [
+        90,
+        5,
+        85
+      ]
+    },
+    {
+      "upper": 90,
+      "lower": 5,
+      "reserve": 85,
+      "tariff": 2,
+      "backup_active": true,
+      "bms_f015_bytes": [
+        90,
+        5,
+        85
+      ]
+    },
+    {
+      "upper": 90,
+      "lower": 5,
+      "reserve": 85,
+      "tariff": 3,
+      "backup_active": false,
+      "bms_f015_bytes": [
+        90,
+        5,
+        85
+      ]
+    },
+    {
+      "upper": 90,
+      "lower": 5,
+      "reserve": 85,
+      "tariff": 3,
+      "backup_active": true,
+      "bms_f015_bytes": [
+        90,
+        5,
+        85
+      ]
+    },
+    {
+      "upper": 80,
+      "lower": 20,
+      "reserve": 85,
+      "tariff": 0,
+      "backup_active": false,
+      "bms_f015_bytes": [
+        80,
+        20,
+        20
+      ]
+    },
+    {
+      "upper": 80,
+      "lower": 20,
+      "reserve": 85,
+      "tariff": 0,
+      "backup_active": true,
+      "bms_f015_bytes": [
+        80,
+        20,
+        20
+      ]
+    },
+    {
+      "upper": 80,
+      "lower": 20,
+      "reserve": 85,
+      "tariff": 1,
+      "backup_active": false,
+      "bms_f015_bytes": [
+        80,
+        20,
+        80
+      ]
+    },
+    {
+      "upper": 80,
+      "lower": 20,
+      "reserve": 85,
+      "tariff": 1,
+      "backup_active": true,
+      "bms_f015_bytes": [
+        80,
+        20,
+        85
+      ]
+    },
+    {
+      "upper": 80,
+      "lower": 20,
+      "reserve": 85,
+      "tariff": 2,
+      "backup_active": false,
+      "bms_f015_bytes": [
+        80,
+        20,
+        80
+      ]
+    },
+    {
+      "upper": 80,
+      "lower": 20,
+      "reserve": 85,
+      "tariff": 2,
+      "backup_active": true,
+      "bms_f015_bytes": [
+        80,
+        20,
+        85
+      ]
+    },
+    {
+      "upper": 80,
+      "lower": 20,
+      "reserve": 85,
+      "tariff": 3,
+      "backup_active": false,
+      "bms_f015_bytes": [
+        80,
+        20,
+        80
+      ]
+    },
+    {
+      "upper": 80,
+      "lower": 20,
+      "reserve": 85,
+      "tariff": 3,
+      "backup_active": true,
+      "bms_f015_bytes": [
+        80,
+        20,
+        85
+      ]
+    },
+    {
+      "upper": 80,
+      "lower": 20,
+      "reserve": 10,
+      "tariff": 0,
+      "backup_active": false,
+      "bms_f015_bytes": [
+        80,
+        20,
+        20
+      ]
+    },
+    {
+      "upper": 80,
+      "lower": 20,
+      "reserve": 10,
+      "tariff": 0,
+      "backup_active": true,
+      "bms_f015_bytes": [
+        80,
+        20,
+        20
+      ]
+    },
+    {
+      "upper": 80,
+      "lower": 20,
+      "reserve": 10,
+      "tariff": 1,
+      "backup_active": false,
+      "bms_f015_bytes": [
+        80,
+        20,
+        20
+      ]
+    },
+    {
+      "upper": 80,
+      "lower": 20,
+      "reserve": 10,
+      "tariff": 1,
+      "backup_active": true,
+      "bms_f015_bytes": [
+        80,
+        20,
+        20
+      ]
+    },
+    {
+      "upper": 80,
+      "lower": 20,
+      "reserve": 10,
+      "tariff": 2,
+      "backup_active": false,
+      "bms_f015_bytes": [
+        80,
+        20,
+        20
+      ]
+    },
+    {
+      "upper": 80,
+      "lower": 20,
+      "reserve": 10,
+      "tariff": 2,
+      "backup_active": true,
+      "bms_f015_bytes": [
+        80,
+        20,
+        20
+      ]
+    },
+    {
+      "upper": 80,
+      "lower": 20,
+      "reserve": 10,
+      "tariff": 3,
+      "backup_active": false,
+      "bms_f015_bytes": [
+        80,
+        20,
+        20
+      ]
+    },
+    {
+      "upper": 80,
+      "lower": 20,
+      "reserve": 10,
+      "tariff": 3,
+      "backup_active": true,
+      "bms_f015_bytes": [
+        80,
+        20,
+        20
+      ]
+    }
+  ],
+  "native_power_handler": [
+    {
+      "configured_watts": 0,
+      "a4_readback": 0,
+      "feedback_codes": [
+        16
+      ],
+      "persistence_requests": 1,
+      "other_persistent_settings_unchanged": true
+    },
+    {
+      "configured_watts": 1,
+      "a4_readback": 1,
+      "feedback_codes": [
+        16
+      ],
+      "persistence_requests": 1,
+      "other_persistent_settings_unchanged": true
+    },
+    {
+      "configured_watts": 99,
+      "a4_readback": 99,
+      "feedback_codes": [
+        16
+      ],
+      "persistence_requests": 1,
+      "other_persistent_settings_unchanged": true
+    },
+    {
+      "configured_watts": 100,
+      "a4_readback": 100,
+      "feedback_codes": [
+        16
+      ],
+      "persistence_requests": 1,
+      "other_persistent_settings_unchanged": true
+    },
+    {
+      "configured_watts": 101,
+      "a4_readback": 101,
+      "feedback_codes": [
+        16
+      ],
+      "persistence_requests": 1,
+      "other_persistent_settings_unchanged": true
+    },
+    {
+      "configured_watts": 200,
+      "a4_readback": 200,
+      "feedback_codes": [
+        16
+      ],
+      "persistence_requests": 1,
+      "other_persistent_settings_unchanged": true
+    },
+    {
+      "configured_watts": 300,
+      "a4_readback": 300,
+      "feedback_codes": [
+        16
+      ],
+      "persistence_requests": 1,
+      "other_persistent_settings_unchanged": true
+    },
+    {
+      "configured_watts": 600,
+      "a4_readback": 600,
+      "feedback_codes": [
+        16
+      ],
+      "persistence_requests": 1,
+      "other_persistent_settings_unchanged": true
+    },
+    {
+      "configured_watts": 1200,
+      "a4_readback": 1200,
+      "feedback_codes": [],
+      "persistence_requests": 1,
+      "other_persistent_settings_unchanged": true
+    },
+    {
+      "configured_watts": 1201,
+      "a4_readback": 1201,
+      "feedback_codes": [],
+      "persistence_requests": 1,
+      "other_persistent_settings_unchanged": true
+    },
+    {
+      "configured_watts": 65535,
+      "a4_readback": 65535,
+      "feedback_codes": [],
+      "persistence_requests": 1,
+      "other_persistent_settings_unchanged": true
+    }
+  ],
+  "native_fast_charge": [
+    {
+      "active_tariff": 0,
+      "initial_fast": false,
+      "requested_byte": 0,
+      "readback": 0,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 0,
+      "initial_fast": false,
+      "requested_byte": 1,
+      "readback": 1,
+      "acknowledged": true,
+      "feedback_codes": [
+        9
+      ],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 0,
+      "initial_fast": false,
+      "requested_byte": 2,
+      "readback": 1,
+      "acknowledged": true,
+      "feedback_codes": [
+        9
+      ],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 0,
+      "initial_fast": false,
+      "requested_byte": 255,
+      "readback": 1,
+      "acknowledged": true,
+      "feedback_codes": [
+        9
+      ],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 0,
+      "initial_fast": true,
+      "requested_byte": 0,
+      "readback": 0,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 0,
+      "initial_fast": true,
+      "requested_byte": 1,
+      "readback": 1,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 0,
+      "initial_fast": true,
+      "requested_byte": 2,
+      "readback": 1,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 0,
+      "initial_fast": true,
+      "requested_byte": 255,
+      "readback": 1,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 1,
+      "initial_fast": false,
+      "requested_byte": 0,
+      "readback": 0,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 1,
+      "initial_fast": false,
+      "requested_byte": 1,
+      "readback": 0,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 1,
+      "initial_fast": false,
+      "requested_byte": 2,
+      "readback": 0,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 1,
+      "initial_fast": false,
+      "requested_byte": 255,
+      "readback": 0,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 1,
+      "initial_fast": true,
+      "requested_byte": 0,
+      "readback": 0,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 1,
+      "initial_fast": true,
+      "requested_byte": 1,
+      "readback": 1,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 1,
+      "initial_fast": true,
+      "requested_byte": 2,
+      "readback": 1,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 1,
+      "initial_fast": true,
+      "requested_byte": 255,
+      "readback": 1,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 2,
+      "initial_fast": false,
+      "requested_byte": 0,
+      "readback": 0,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 2,
+      "initial_fast": false,
+      "requested_byte": 1,
+      "readback": 0,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 2,
+      "initial_fast": false,
+      "requested_byte": 2,
+      "readback": 0,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 2,
+      "initial_fast": false,
+      "requested_byte": 255,
+      "readback": 0,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 2,
+      "initial_fast": true,
+      "requested_byte": 0,
+      "readback": 0,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 2,
+      "initial_fast": true,
+      "requested_byte": 1,
+      "readback": 1,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 2,
+      "initial_fast": true,
+      "requested_byte": 2,
+      "readback": 1,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 2,
+      "initial_fast": true,
+      "requested_byte": 255,
+      "readback": 1,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 3,
+      "initial_fast": false,
+      "requested_byte": 0,
+      "readback": 0,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 3,
+      "initial_fast": false,
+      "requested_byte": 1,
+      "readback": 0,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 3,
+      "initial_fast": false,
+      "requested_byte": 2,
+      "readback": 0,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 3,
+      "initial_fast": false,
+      "requested_byte": 255,
+      "readback": 0,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 3,
+      "initial_fast": true,
+      "requested_byte": 0,
+      "readback": 0,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 3,
+      "initial_fast": true,
+      "requested_byte": 1,
+      "readback": 1,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 3,
+      "initial_fast": true,
+      "requested_byte": 2,
+      "readback": 1,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    },
+    {
+      "active_tariff": 3,
+      "initial_fast": true,
+      "requested_byte": 255,
+      "readback": 1,
+      "acknowledged": true,
+      "feedback_codes": [],
+      "persistent_settings_unchanged": true
+    }
+  ],
+  "default_recovery": [
+    {
+      "initial_power": 0,
+      "recovered_power": 1200,
+      "device_timeout_before_minutes": 0,
+      "device_timeout_after_minutes": 720,
+      "changed_a4_offsets": [
+        5,
+        6,
+        8,
+        13,
+        14,
+        15,
+        18,
+        32
+      ],
+      "synthetic_product_option": 0,
+      "flash_loader_replayed": false
+    }
+  ],
+  "loaded_settings_decision": [
+    {
+      "loaded_power": 0,
+      "power_after_load_decision": 1200,
+      "timeout_after_minutes": 720,
+      "synthetic_successful_file_and_crc": true,
+      "actual_loader_branch": "08028944"
+    },
+    {
+      "loaded_power": 99,
+      "power_after_load_decision": 1200,
+      "timeout_after_minutes": 720,
+      "synthetic_successful_file_and_crc": true,
+      "actual_loader_branch": "08028944"
+    },
+    {
+      "loaded_power": 100,
+      "power_after_load_decision": 100,
+      "timeout_after_minutes": 0,
+      "synthetic_successful_file_and_crc": true,
+      "actual_loader_branch": "08028944"
+    },
+    {
+      "loaded_power": 1200,
+      "power_after_load_decision": 1200,
+      "timeout_after_minutes": 0,
+      "synthetic_successful_file_and_crc": true,
+      "actual_loader_branch": "08028944"
+    },
+    {
+      "loaded_power": 1201,
+      "power_after_load_decision": 1200,
+      "timeout_after_minutes": 720,
+      "synthetic_successful_file_and_crc": true,
+      "actual_loader_branch": "08028944"
+    }
+  ],
+  "a4_d9_limit_mirrors": [
+    {
+      "upper": 80,
+      "lower": 1,
+      "reserve": 10,
+      "a4_descriptor_mode": 1,
+      "upper_mirrors_a4_24_d9_4": 80,
+      "lower_mirrors_a4_25_d9_5": 1,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 80,
+      "lower": 1,
+      "reserve": 10,
+      "a4_descriptor_mode": 3,
+      "upper_mirrors_a4_24_d9_4": 80,
+      "lower_mirrors_a4_25_d9_5": 1,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 80,
+      "lower": 5,
+      "reserve": 10,
+      "a4_descriptor_mode": 1,
+      "upper_mirrors_a4_24_d9_4": 80,
+      "lower_mirrors_a4_25_d9_5": 5,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 80,
+      "lower": 5,
+      "reserve": 10,
+      "a4_descriptor_mode": 3,
+      "upper_mirrors_a4_24_d9_4": 80,
+      "lower_mirrors_a4_25_d9_5": 5,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 80,
+      "lower": 10,
+      "reserve": 15,
+      "a4_descriptor_mode": 1,
+      "upper_mirrors_a4_24_d9_4": 80,
+      "lower_mirrors_a4_25_d9_5": 10,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 80,
+      "lower": 10,
+      "reserve": 15,
+      "a4_descriptor_mode": 3,
+      "upper_mirrors_a4_24_d9_4": 80,
+      "lower_mirrors_a4_25_d9_5": 10,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 80,
+      "lower": 15,
+      "reserve": 20,
+      "a4_descriptor_mode": 1,
+      "upper_mirrors_a4_24_d9_4": 80,
+      "lower_mirrors_a4_25_d9_5": 15,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 80,
+      "lower": 15,
+      "reserve": 20,
+      "a4_descriptor_mode": 3,
+      "upper_mirrors_a4_24_d9_4": 80,
+      "lower_mirrors_a4_25_d9_5": 15,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 80,
+      "lower": 20,
+      "reserve": 25,
+      "a4_descriptor_mode": 1,
+      "upper_mirrors_a4_24_d9_4": 80,
+      "lower_mirrors_a4_25_d9_5": 20,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 80,
+      "lower": 20,
+      "reserve": 25,
+      "a4_descriptor_mode": 3,
+      "upper_mirrors_a4_24_d9_4": 80,
+      "lower_mirrors_a4_25_d9_5": 20,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 85,
+      "lower": 1,
+      "reserve": 10,
+      "a4_descriptor_mode": 1,
+      "upper_mirrors_a4_24_d9_4": 85,
+      "lower_mirrors_a4_25_d9_5": 1,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 85,
+      "lower": 1,
+      "reserve": 10,
+      "a4_descriptor_mode": 3,
+      "upper_mirrors_a4_24_d9_4": 85,
+      "lower_mirrors_a4_25_d9_5": 1,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 85,
+      "lower": 5,
+      "reserve": 10,
+      "a4_descriptor_mode": 1,
+      "upper_mirrors_a4_24_d9_4": 85,
+      "lower_mirrors_a4_25_d9_5": 5,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 85,
+      "lower": 5,
+      "reserve": 10,
+      "a4_descriptor_mode": 3,
+      "upper_mirrors_a4_24_d9_4": 85,
+      "lower_mirrors_a4_25_d9_5": 5,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 85,
+      "lower": 10,
+      "reserve": 15,
+      "a4_descriptor_mode": 1,
+      "upper_mirrors_a4_24_d9_4": 85,
+      "lower_mirrors_a4_25_d9_5": 10,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 85,
+      "lower": 10,
+      "reserve": 15,
+      "a4_descriptor_mode": 3,
+      "upper_mirrors_a4_24_d9_4": 85,
+      "lower_mirrors_a4_25_d9_5": 10,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 85,
+      "lower": 15,
+      "reserve": 20,
+      "a4_descriptor_mode": 1,
+      "upper_mirrors_a4_24_d9_4": 85,
+      "lower_mirrors_a4_25_d9_5": 15,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 85,
+      "lower": 15,
+      "reserve": 20,
+      "a4_descriptor_mode": 3,
+      "upper_mirrors_a4_24_d9_4": 85,
+      "lower_mirrors_a4_25_d9_5": 15,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 85,
+      "lower": 20,
+      "reserve": 25,
+      "a4_descriptor_mode": 1,
+      "upper_mirrors_a4_24_d9_4": 85,
+      "lower_mirrors_a4_25_d9_5": 20,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 85,
+      "lower": 20,
+      "reserve": 25,
+      "a4_descriptor_mode": 3,
+      "upper_mirrors_a4_24_d9_4": 85,
+      "lower_mirrors_a4_25_d9_5": 20,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 90,
+      "lower": 1,
+      "reserve": 10,
+      "a4_descriptor_mode": 1,
+      "upper_mirrors_a4_24_d9_4": 90,
+      "lower_mirrors_a4_25_d9_5": 1,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 90,
+      "lower": 1,
+      "reserve": 10,
+      "a4_descriptor_mode": 3,
+      "upper_mirrors_a4_24_d9_4": 90,
+      "lower_mirrors_a4_25_d9_5": 1,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 90,
+      "lower": 5,
+      "reserve": 10,
+      "a4_descriptor_mode": 1,
+      "upper_mirrors_a4_24_d9_4": 90,
+      "lower_mirrors_a4_25_d9_5": 5,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 90,
+      "lower": 5,
+      "reserve": 10,
+      "a4_descriptor_mode": 3,
+      "upper_mirrors_a4_24_d9_4": 90,
+      "lower_mirrors_a4_25_d9_5": 5,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 90,
+      "lower": 10,
+      "reserve": 15,
+      "a4_descriptor_mode": 1,
+      "upper_mirrors_a4_24_d9_4": 90,
+      "lower_mirrors_a4_25_d9_5": 10,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 90,
+      "lower": 10,
+      "reserve": 15,
+      "a4_descriptor_mode": 3,
+      "upper_mirrors_a4_24_d9_4": 90,
+      "lower_mirrors_a4_25_d9_5": 10,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 90,
+      "lower": 15,
+      "reserve": 20,
+      "a4_descriptor_mode": 1,
+      "upper_mirrors_a4_24_d9_4": 90,
+      "lower_mirrors_a4_25_d9_5": 15,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 90,
+      "lower": 15,
+      "reserve": 20,
+      "a4_descriptor_mode": 3,
+      "upper_mirrors_a4_24_d9_4": 90,
+      "lower_mirrors_a4_25_d9_5": 15,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 90,
+      "lower": 20,
+      "reserve": 25,
+      "a4_descriptor_mode": 1,
+      "upper_mirrors_a4_24_d9_4": 90,
+      "lower_mirrors_a4_25_d9_5": 20,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 90,
+      "lower": 20,
+      "reserve": 25,
+      "a4_descriptor_mode": 3,
+      "upper_mirrors_a4_24_d9_4": 90,
+      "lower_mirrors_a4_25_d9_5": 20,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 95,
+      "lower": 1,
+      "reserve": 10,
+      "a4_descriptor_mode": 1,
+      "upper_mirrors_a4_24_d9_4": 95,
+      "lower_mirrors_a4_25_d9_5": 1,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 95,
+      "lower": 1,
+      "reserve": 10,
+      "a4_descriptor_mode": 3,
+      "upper_mirrors_a4_24_d9_4": 95,
+      "lower_mirrors_a4_25_d9_5": 1,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 95,
+      "lower": 5,
+      "reserve": 10,
+      "a4_descriptor_mode": 1,
+      "upper_mirrors_a4_24_d9_4": 95,
+      "lower_mirrors_a4_25_d9_5": 5,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 95,
+      "lower": 5,
+      "reserve": 10,
+      "a4_descriptor_mode": 3,
+      "upper_mirrors_a4_24_d9_4": 95,
+      "lower_mirrors_a4_25_d9_5": 5,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 95,
+      "lower": 10,
+      "reserve": 15,
+      "a4_descriptor_mode": 1,
+      "upper_mirrors_a4_24_d9_4": 95,
+      "lower_mirrors_a4_25_d9_5": 10,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 95,
+      "lower": 10,
+      "reserve": 15,
+      "a4_descriptor_mode": 3,
+      "upper_mirrors_a4_24_d9_4": 95,
+      "lower_mirrors_a4_25_d9_5": 10,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 95,
+      "lower": 15,
+      "reserve": 20,
+      "a4_descriptor_mode": 1,
+      "upper_mirrors_a4_24_d9_4": 95,
+      "lower_mirrors_a4_25_d9_5": 15,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 95,
+      "lower": 15,
+      "reserve": 20,
+      "a4_descriptor_mode": 3,
+      "upper_mirrors_a4_24_d9_4": 95,
+      "lower_mirrors_a4_25_d9_5": 15,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 95,
+      "lower": 20,
+      "reserve": 25,
+      "a4_descriptor_mode": 1,
+      "upper_mirrors_a4_24_d9_4": 95,
+      "lower_mirrors_a4_25_d9_5": 20,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 95,
+      "lower": 20,
+      "reserve": 25,
+      "a4_descriptor_mode": 3,
+      "upper_mirrors_a4_24_d9_4": 95,
+      "lower_mirrors_a4_25_d9_5": 20,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 100,
+      "lower": 1,
+      "reserve": 10,
+      "a4_descriptor_mode": 1,
+      "upper_mirrors_a4_24_d9_4": 100,
+      "lower_mirrors_a4_25_d9_5": 1,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 100,
+      "lower": 1,
+      "reserve": 10,
+      "a4_descriptor_mode": 3,
+      "upper_mirrors_a4_24_d9_4": 100,
+      "lower_mirrors_a4_25_d9_5": 1,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 100,
+      "lower": 5,
+      "reserve": 10,
+      "a4_descriptor_mode": 1,
+      "upper_mirrors_a4_24_d9_4": 100,
+      "lower_mirrors_a4_25_d9_5": 5,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 100,
+      "lower": 5,
+      "reserve": 10,
+      "a4_descriptor_mode": 3,
+      "upper_mirrors_a4_24_d9_4": 100,
+      "lower_mirrors_a4_25_d9_5": 5,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 100,
+      "lower": 10,
+      "reserve": 15,
+      "a4_descriptor_mode": 1,
+      "upper_mirrors_a4_24_d9_4": 100,
+      "lower_mirrors_a4_25_d9_5": 10,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 100,
+      "lower": 10,
+      "reserve": 15,
+      "a4_descriptor_mode": 3,
+      "upper_mirrors_a4_24_d9_4": 100,
+      "lower_mirrors_a4_25_d9_5": 10,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 100,
+      "lower": 15,
+      "reserve": 20,
+      "a4_descriptor_mode": 1,
+      "upper_mirrors_a4_24_d9_4": 100,
+      "lower_mirrors_a4_25_d9_5": 15,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 100,
+      "lower": 15,
+      "reserve": 20,
+      "a4_descriptor_mode": 3,
+      "upper_mirrors_a4_24_d9_4": 100,
+      "lower_mirrors_a4_25_d9_5": 15,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 100,
+      "lower": 20,
+      "reserve": 25,
+      "a4_descriptor_mode": 1,
+      "upper_mirrors_a4_24_d9_4": 100,
+      "lower_mirrors_a4_25_d9_5": 20,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    },
+    {
+      "upper": 100,
+      "lower": 20,
+      "reserve": 25,
+      "a4_descriptor_mode": 3,
+      "upper_mirrors_a4_24_d9_4": 100,
+      "lower_mirrors_a4_25_d9_5": 20,
+      "only_lower_mirrors_changed": true,
+      "exact_round_trip": true
+    }
+  ]
+}

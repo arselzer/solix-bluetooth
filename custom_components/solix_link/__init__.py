@@ -16,7 +16,8 @@ from .api import GatewayClient, device_id
 from .const import CONF_TOKEN, CONF_URL, DOMAIN
 from .coordinator import SolixConfigEntry, SolixCoordinator
 
-PLATFORMS = [Platform.SENSOR, Platform.BINARY_SENSOR, Platform.NUMBER, Platform.BUTTON]
+PLATFORMS = [Platform.SENSOR, Platform.BINARY_SENSOR, Platform.NUMBER, Platform.BUTTON,
+             Platform.SELECT, Platform.SWITCH]
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 

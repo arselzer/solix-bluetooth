@@ -88,9 +88,10 @@ common-display-timer cases,4 exact restoration cases,12 brightness,8 display,
 
 `emulate_offgrid_alert.py`:20 passed. Total1,083.
 
-Run with `PYTHONPATH=python:/tmp/solix-analysis-tools:/tmp/solix-ble-deps python3
-.solix-private/firmware-analysis/emulate_general_settings.py`, and similarly for
-`emulate_offgrid_alert.py`. Results and SHA256 manifest remain owner-only. Manifest SHA256:
+Both suites are now available as [public offline replay tools](../tools/firmware_analysis/).
+Follow the [reproduction guide](firmware-analysis-reproduction.md) for bundled
+firmware, dependencies, expected synthetic results and explicit substitutions.
+The original private manifest remains retained. Its SHA256:
 `ee400a509161c91d9108f126b4dae4ea19e6cdec296db4655899214d416dc992`.
 
 ## Live test procedure

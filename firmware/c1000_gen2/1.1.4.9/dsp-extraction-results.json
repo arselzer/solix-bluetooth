@@ -1,0 +1,68 @@
+{
+  "images": [
+    {
+      "component": "dspACDC",
+      "source_sha256": "900627643390602121a67a5bfdedb30051e76f7e0738bed6a205cbdc0fce44e3",
+      "payload_offset_octets": 12288,
+      "metadata_record_offset_octets": 64,
+      "metadata_format": "<IIHH: payload octet offset, TI word address, octet length, CRC16/MODBUS",
+      "record_count": 76,
+      "all_block_crc16_verified": true,
+      "payload_octets": 67642,
+      "flat_word_base": 532480,
+      "flat_word_end_exclusive": 655358,
+      "flat_be_sha256": "fa30760fc88db49602ccc896a5f5af1393c4b19e9bebf6235d4bb7ff2274d5ad",
+      "flat_le_sha256": "49850ab0a15160140e94c492feacc756f74089dc7c6d63544663065485fe81f9",
+      "header_check": "b990",
+      "whole_component_check_verified": false
+    },
+    {
+      "component": "dspDCDC",
+      "source_sha256": "7ae2bb915812441b8316d1c3f3efc2379fcb488d4d03e950901cf507c224ceb8",
+      "payload_offset_octets": 12288,
+      "metadata_record_offset_octets": 64,
+      "metadata_format": "<IIHH: payload octet offset, TI word address, octet length, CRC16/MODBUS",
+      "record_count": 83,
+      "all_block_crc16_verified": true,
+      "payload_octets": 73856,
+      "flat_word_base": 532480,
+      "flat_word_end_exclusive": 655358,
+      "flat_be_sha256": "4a48c1ddd94f8a36144d2cca9ab1cf6dcf88defd30b3fb03137d82ede9c87d61",
+      "flat_le_sha256": "ba5d47707c782bd6a968ee484835de55454ce6b5f9d23aa805131b53f5c9e074",
+      "header_check": "5479",
+      "whole_component_check_verified": false
+    }
+  ],
+  "negative_cases": [
+    {
+      "component": "dspACDC",
+      "case": "payload_corruption",
+      "rejected": true
+    },
+    {
+      "component": "dspACDC",
+      "case": "word_overlap",
+      "rejected": true
+    },
+    {
+      "component": "dspACDC",
+      "case": "truncated_payload",
+      "rejected": true
+    },
+    {
+      "component": "dspDCDC",
+      "case": "payload_corruption",
+      "rejected": true
+    },
+    {
+      "component": "dspDCDC",
+      "case": "word_overlap",
+      "rejected": true
+    },
+    {
+      "component": "dspDCDC",
+      "case": "truncated_payload",
+      "rejected": true
+    }
+  ]
+}

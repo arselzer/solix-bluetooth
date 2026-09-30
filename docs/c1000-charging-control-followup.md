@@ -61,7 +61,7 @@ Audited `0102` A2 operates the **car/DC output** switch. Its “Car Charge Switc
 
 ## Reproducibility
 
-The owner-only replay script, results and SHA-256 manifest are retained under the ignored `.solix-private/firmware-analysis/` directory as `emulate_charging_followup.py`, `charging-followup-results.json` and `charging-followup-manifest.json`. The original 195-case artifacts remain in `charging-followup-before-a4-mirror/`. Public synthetic tests cover native framing, reserve/cap rejection before writes, incomplete or stale baselines, ignored acknowledgements, unrelated changes, countdowns, tariff boundaries and lost acknowledgements. Private captures and identifiers are not included here.
+The 245-case replay and synthetic results are now [public](../tools/firmware_analysis/), with bundled firmware and a [reproduction guide](firmware-analysis-reproduction.md). The original owner-only script/results/manifest and earlier 195-case artifacts remain retained under ignored `.solix-private/firmware-analysis/`. Public SDK tests cover native framing, reserve/cap rejection before writes, incomplete or stale baselines, ignored acknowledgements, unrelated changes, countdowns, tariff boundaries and lost acknowledgements. Private captures and identifiers are not published. A separate [212-case follow-up](gen2-feature-candidates.md) further checks fast-charge clearing and 100/200 W limits; physical charging enforcement remains untested.
 
 Offline manifest SHA256:
 `a9de32224089a96ad493f84990a2c0128642f5a0e35ced41e844f0091020c43e`.

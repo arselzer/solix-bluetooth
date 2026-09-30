@@ -1,0 +1,127 @@
+{
+  "model": "A1763",
+  "main_version": "1.1.4.9",
+  "radio_version": "0.3.3.0",
+  "source": "Vendor OTA payloads reconstructed from the owner-authorized 2026-09-28 update transfer; application images, not a device flash/NVS dump.",
+  "files": [
+    {
+      "filename": "MainMcu-decoded.bin",
+      "bytes": 198656,
+      "sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9",
+      "known_private_identifier_matches": false,
+      "complete_private_pem_keys": 0,
+      "component": "MainMcu",
+      "version_bytes": [
+        1,
+        1,
+        4,
+        9
+      ],
+      "manifest_check": 40589,
+      "crc16_modbus": 40589,
+      "crc16_xmodem": 22875,
+      "sum32": 19489075
+    },
+    {
+      "filename": "MainBMS-decoded.bin",
+      "bytes": 104448,
+      "sha256": "07161b18653fe9327e8890023dd8df2f3327c257f581b1afb37e3adbd30f8ab8",
+      "known_private_identifier_matches": false,
+      "complete_private_pem_keys": 0,
+      "component": "MainBMS",
+      "version_bytes": [
+        1,
+        0,
+        4,
+        2
+      ],
+      "manifest_check": 46539,
+      "crc16_modbus": 57653,
+      "crc16_xmodem": 46539,
+      "sum32": 9862953
+    },
+    {
+      "filename": "dspACDC-decoded.bin",
+      "bytes": 80896,
+      "sha256": "900627643390602121a67a5bfdedb30051e76f7e0738bed6a205cbdc0fce44e3",
+      "known_private_identifier_matches": false,
+      "complete_private_pem_keys": 0,
+      "component": "dspACDC",
+      "version_bytes": [
+        5,
+        0,
+        6,
+        0
+      ],
+      "manifest_check": 47504,
+      "crc16_modbus": 61218,
+      "crc16_xmodem": 2273,
+      "sum32": 9092321
+    },
+    {
+      "filename": "dspDCDC-decoded.bin",
+      "bytes": 87040,
+      "sha256": "7ae2bb915812441b8316d1c3f3efc2379fcb488d4d03e950901cf507c224ceb8",
+      "known_private_identifier_matches": false,
+      "complete_private_pem_keys": 0,
+      "component": "dspDCDC",
+      "version_bytes": [
+        5,
+        0,
+        6,
+        0
+      ],
+      "manifest_check": 21625,
+      "crc16_modbus": 58941,
+      "crc16_xmodem": 59494,
+      "sum32": 9614584
+    },
+    {
+      "filename": "lcd-decoded.bin",
+      "bytes": 925696,
+      "sha256": "c314816f396d6b6958a6a398476eafa182f7c368802569803b60bd6a4e6dc97d",
+      "known_private_identifier_matches": false,
+      "complete_private_pem_keys": 0,
+      "component": "lcd",
+      "version_bytes": [
+        0,
+        1,
+        9,
+        6
+      ],
+      "manifest_check": 55499718,
+      "crc16_modbus": 31777,
+      "crc16_xmodem": 39087,
+      "sum32": 55499718
+    },
+    {
+      "filename": "SW2505PD-decoded.bin",
+      "bytes": 91685,
+      "sha256": "198e6589486003916e403b3882295e902f9eab7c8b5557bef7d314846280ab24",
+      "known_private_identifier_matches": false,
+      "complete_private_pem_keys": 0,
+      "component": "SW2505PD",
+      "version_bytes": [
+        3,
+        1,
+        0,
+        255
+      ],
+      "manifest_check": 135,
+      "crc16_modbus": 23,
+      "crc16_xmodem": 3979,
+      "sum32": 7733534
+    },
+    {
+      "filename": "c1000-radio-validated.bin",
+      "bytes": 1482800,
+      "sha256": "e291ec115f013953e825cb51b9e457a8731889547ab55b3058640e599e8cfec8",
+      "known_private_identifier_matches": false,
+      "complete_private_pem_keys": 0,
+      "component": "radio",
+      "version": "0.3.3.0",
+      "transfer_padding_bytes": 48,
+      "signature": "RSA-3072/PSS-SHA256 verified"
+    }
+  ]
+}

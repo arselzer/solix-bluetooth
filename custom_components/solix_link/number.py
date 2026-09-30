@@ -7,7 +7,7 @@ from homeassistant.const import EntityCategory, PERCENTAGE, UnitOfPower
 from homeassistant.core import callback
 from homeassistant.exceptions import HomeAssistantError
 
-from .api import CHARGE_CAP_MODELS, numeric, POWER_MAXIMUM, POWER_MINIMUM
+from .api import CHARGE_CAP_MODELS, numeric, POWER_MAXIMUM, POWER_MINIMUM, reserve_supported
 from .coordinator import SolixConfigEntry
 from .entity import SolixEntity
 
@@ -48,7 +48,7 @@ async def async_setup_entry(hass, entry: SolixConfigEntry, async_add_entities) -
                     continue
                 if key == "max_charge_percentage" and snapshot["model"] not in CHARGE_CAP_MODELS:
                     continue
-                if key == "backup_reserve_percentage" and snapshot["model"] != "c2000_gen2":
+                if key == "backup_reserve_percentage" and not reserve_supported(snapshot):
                     continue
                 if numeric(snapshot["metrics"].get(key)) is not None:
                     added.add((name, key))
@@ -77,7 +77,7 @@ class SolixNumber(SolixEntity, NumberEntity):
         if self.parameter == "reserve":
             lower = numeric(self.snapshot.get("metrics", {}).get("min_charge_percentage"))
             return max(5, math.ceil((lower + 5) / 5) * 5) if lower is not None else 5
-        if self.parameter == "upper" and self.snapshot.get("model") == "c2000_gen2":
+        if self.parameter == "upper" and reserve_supported(self.snapshot):
             reserve = numeric(self.snapshot.get("metrics", {}).get("backup_reserve_percentage"))
             return max(80, math.ceil(reserve / 5) * 5) if reserve is not None else 80
         return self.entity_description.native_min_value
@@ -97,7 +97,7 @@ class SolixNumber(SolixEntity, NumberEntity):
         if self.parameter == "reserve" and any(numeric(metrics.get(k)) is None
                                                 for k in ("min_charge_percentage", "max_charge_percentage")):
             return False
-        if self.parameter == "upper" and self.snapshot.get("model") == "c2000_gen2" and numeric(metrics.get("backup_reserve_percentage")) is None:
+        if self.parameter == "upper" and reserve_supported(self.snapshot) and numeric(metrics.get("backup_reserve_percentage")) is None:
             return False
         return (self.control_available(self.command) and self.native_value is not None
                 and self.native_min_value <= self.native_max_value)

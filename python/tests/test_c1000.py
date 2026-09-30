@@ -1,4 +1,4 @@
-"""Original C1000 reference fixtures, not captures or hardware verification."""
+"""Original C1000 synthetic fixtures and selected nonprivate live field values."""
 
 import pytest
 
@@ -55,6 +55,25 @@ def test_original_c1000_decode_uses_reference_layout_not_browser_or_gen2_aliases
     assert raw[0xAB] == b"\x02\x84\x03"
     malformed = tlv(0xC1, b"\x02\x32") + tlv(0xD0, b"\x00\xff")
     assert decode_telemetry(malformed, Model.C1000)[0] == {}
+
+
+def test_original_c1000_three_digit_version_seen_on_hardware():
+    # Sanitized A1761 B3 field from the 2026-09-30 live baseline.
+    metrics, _ = decode_telemetry(bytes.fromhex("b303029700"), Model.C1000)
+    assert metrics["software_version_code"] == 151
+    assert metrics["software_version"] == "1.5.1"
+
+
+@pytest.mark.parametrize("wire,raw,minutes", [
+    ("a40302ffff", 65535, "unknown"),
+    ("a40302900d", 3472, "unknown"),
+    ("a40302b200", 178, 1068),
+    ("a403029900", 153, 918),
+])
+def test_original_c1000_runtime_sentinel_and_live_battery_estimates(wire, raw, minutes):
+    metrics, _ = decode_telemetry(bytes.fromhex(wire), Model.C1000)
+    assert metrics["time_remaining_raw"] == raw
+    assert metrics["time_remaining_minutes"] == minutes
 
 
 @pytest.mark.parametrize("setting,value,command,typed,expected", [

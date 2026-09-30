@@ -26,7 +26,7 @@ such as `monitor`, `serve` and `ap-service-status` keep their scripted behavior.
 | Model profile | Monitoring | Controls |
 | --- | --- | --- |
 | `c300` — C300/C300X AC | C300X tested live; C300 sibling uses the reference map | AC output, light, charging-power limit, screen timeout verified |
-| `c1000` — original A1761 | Implemented, **not hardware tested** | Available normally with validation and telemetry confirmation |
+| `c1000` — original A1761 | Live monitoring and restored control cycles, version code 151 | Validated types/ranges and fresh telemetry confirmation; no direct local MQTT yet |
 | `c1000_gen2` — A1763 | BLE and native MQTT tested live | Charge limits/power, display timeout, fast charge; native reserve, tariffs/grid return, temperature, alert and guarded discharge floor |
 | `c2000_gen2` — A1783 | Tested live | Upper charge cap, charging power, screen timeout; native reserve, all-day Peak and confirmed grid return |
 
@@ -151,8 +151,9 @@ USB-C supplied charging; it did not measure AC charging-rate enforcement.
 No battery-percentage cap or reliable mains-presence field is identified.
 See [C300 findings](../docs/c300-protocol.md).
 
-Original C1000 uses `--model c1000` / `Model.C1000`. Its decoder and controls
-are prepared from protocol references, with synthetic tests only. Controls
+Original C1000 uses `--model c1000` / `Model.C1000`. Live monitoring and restored
+display, timeout, brightness, light, charging-power and AC/DC control cycles
+passed on A1761 version code 151. Controls
 are available without an opt-in flag: use the standard power/display/AC/light
 methods and CLI commands, or `monitor.set_c1000_setting("display_brightness", 2)`
 and `c1000-setting` for additional settings. The bridge accepts the same four
@@ -160,8 +161,14 @@ operations as C300. Device rejection replies raise errors; success requires
 the requested fields to appear in fresh telemetry after the write. Cached
 readings or an acknowledgement alone cannot confirm a setting. A timeout
 can still mean the setting changed; inspect before retrying.
-See the [original C1000 test workflow](../docs/c1000-original-protocol.md)
-for available settings, baseline capture, restoration, and uncertain fields.
+Charging power and restoration also passed through the HTTP gateway on both
+C1000 generations. These full-battery checks confirm stored limits, not physical
+charging-rate enforcement. Remaining runtime is explicitly unknown for oversized
+values and `ffff`; zero AC input power does not establish missing mains.
+See [original C1000 support](../docs/c1000-original-protocol.md) and
+[chain validation](../docs/c1000-chain-validation.md) for tested values and uncertainty.
+The original C1000 can use the BLE-to-MQTT bridge; its own direct local MQTT
+provisioning and connection remain unverified.
 
 ### Gen 2 telemetry and diagnostics
 
@@ -236,8 +243,10 @@ The [firmware analysis](../docs/firmware-findings.md) traces the C1000's binding
 and network-readiness requirements. Recovered C1000 schedule encoding matches
 the retained C2000 data; subsequent [C1000 native tests](../docs/c1000-local-mqtt.md)
 confirmed local setup, activation and grid return.
-Native device MQTT remains experimental; the supported local MQTT bridge uses
-BLE to communicate with each station.
+Native device MQTT now has verified local setup and charging/tariff controls
+on both Gen 2 units. The separate MQTT bridge uses BLE to communicate with
+each station and also supports legacy models. Multi-station AP operation still
+needs a physical simultaneous-device test.
 C1000 Gen 2 firmware 1.1.4.3 uses legacy AES-CBC. After updating to 1.1.4.9,
 the same unit switched to Prime AES-GCM and required button pairing with a
 generated client ID. C2000 Gen 2 also uses Prime. Prime telemetry and the
@@ -420,8 +429,9 @@ solix_gen2/c300/set/ac_charging_power  {"watts":300}
 solix_gen2/c300/set/display_timeout    {"seconds":60}
 ```
 
-Original C1000 has the same four operations as C300, using its own ranges;
-these original C1000 paths are hardware untested. No opt-in flag is required.
+Original C1000 has the same four operations as C300, using its own ranges.
+The underlying BLE control methods passed hardware change/restoration tests;
+an original-C1000 end-to-end broker test is still outstanding. No opt-in flag is required.
 The bridge checks types and the library's model-specific value ranges, uses its
 existing BLE connection, and waits for telemetry confirmation before
 publishing `result`. It ignores retained commands replayed at subscription,

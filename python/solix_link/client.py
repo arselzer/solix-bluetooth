@@ -14,7 +14,7 @@ UpdateCallback = Callable[[dict[str, int | str]], Any]
 
 
 async def discover(timeout: float = 5.0) -> list[Any]:
-    """Return supported stations, including experimental original C1000."""
+    """Return supported stations, including original C1000."""
     from bleak import BleakScanner
 
     found = await BleakScanner.discover(timeout=timeout)
@@ -286,10 +286,11 @@ class SolixMonitor:
         return await self._write_setting(packet, {"display_timeout_seconds": seconds})
 
     async def set_c1000_setting(self, setting: str, value: int | bool) -> dict[str, int | str]:
-        """Apply a reference-derived original C1000 control and require fresh readback.
+        """Apply an original C1000 control and require fresh readback.
 
-        This path is not hardware verified. Record the baseline before testing
-        and restore it afterward. A timeout does not mean the write was ignored.
+        Display, brightness, timeout, light, power and AC/DC switches were
+        verified on A1761 version code 151. Record and restore baselines when
+        testing; a timeout does not mean the write was ignored.
         """
         from .c1000 import c1000_setting
         packet = self._session.c1000_control_packet(setting, value)

@@ -3,6 +3,7 @@
 from homeassistant.components.button import ButtonEntity
 from homeassistant.core import callback
 
+from .api import native_gen2
 from .coordinator import SolixConfigEntry
 from .entity import SolixEntity
 
@@ -20,7 +21,7 @@ async def async_setup_entry(hass, entry: SolixConfigEntry, async_add_entities) -
             return
         for name, snapshot in (coordinator.data or {}).items():
             if (name not in added and "return-grid" in snapshot["controls"]
-                    and snapshot["model"] == "c2000_gen2" and snapshot["protocol"] == "native_mqtt"):
+                    and native_gen2(snapshot)):
                 added.add(name)
                 entities.append(ReturnGridButton(coordinator, name, "return_grid"))
         if entities:

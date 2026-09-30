@@ -248,3 +248,114 @@ def test_manifest_and_translations():
     assert manifest["domain"] == "solix_link" and manifest["config_flow"] is True
     assert manifest["iot_class"] == "local_polling"
     assert json.loads((base / "strings.json").read_text()) == json.loads((base / "translations/en.json").read_text())
+
+
+def c1000_native(**changes):
+    snapshot = status(model="c1000_gen2")
+    snapshot["metrics"].update(ac_charging_power_limit_w=1200,
+                               temperature_unit_fahrenheit=0, ac_off_grid_alert_enabled=0)
+    snapshot.update(changes)
+    return snapshot
+
+
+@pytest.mark.parametrize("payload", [
+    {"command": "set-backup-reserve", "reserve": 15},
+    {"command": "set-discharge-floor", "lower": 5},
+    {"command": "set-temperature-unit", "fahrenheit": True},
+    {"command": "set-off-grid-alert", "enabled": False},
+    {"command": "return-grid", "timeout": 30},
+    {"command": "set-tou-plan", "enabled": True,
+     "periods": [{"tariff": "off_peak", "start_hour": 0, "end_hour": 24}]},
+])
+def test_c1000_native_capabilities_reach_ha(payload):
+    snapshot = api.parse_snapshot(c1000_native())
+    api.validate_command(snapshot, payload)
+    assert snapshot["metrics"]["temperature_unit_fahrenheit"] == 0
+    assert snapshot["metrics"]["ac_off_grid_alert_enabled"] == 0
+
+
+@pytest.mark.parametrize("payload", [
+    {"command": "set-discharge-floor", "lower": 5},
+    {"command": "set-temperature-unit", "fahrenheit": True},
+    {"command": "set-off-grid-alert", "enabled": False},
+])
+@pytest.mark.parametrize("changes", [
+    {"model": "c2000_gen2"}, {"model": "c1000"}, {"model": "c300"},
+    {"protocol": "prime"}, {"protocol": "legacy"},
+    {"controls": []}, {"last_seen_timestamp": 0},
+])
+def test_c1000_settings_refuse_wrong_profile_or_revoked_capability(payload, changes):
+    with pytest.raises(ValueError):
+        api.validate_command(api.parse_snapshot(c1000_native(**changes)), payload)
+
+
+@pytest.mark.parametrize("payload", [
+    {"command": "set-discharge-floor", "lower": True},
+    {"command": "set-discharge-floor", "lower": 2},
+    {"command": "set-discharge-floor", "lower": 10},  # Reserve is only 10%.
+    {"command": "set-discharge-floor", "lower": 5, "reserve": 15},
+    {"command": "set-temperature-unit", "fahrenheit": 1},
+    {"command": "set-off-grid-alert", "enabled": "false"},
+])
+def test_new_settings_strict_values_and_fields(payload):
+    with pytest.raises(ValueError):
+        api.validate_command(c1000_native(), payload)
+
+
+@pytest.mark.parametrize("metric", ["temperature_unit_fahrenheit", "ac_off_grid_alert_enabled"])
+@pytest.mark.parametrize("value", [None, 2, True, 0.0, "0"])
+def test_boolean_settings_need_explicit_readback(metric, value):
+    snapshot = c1000_native()
+    snapshot["metrics"][metric] = value
+    payload = ({"command": "set-temperature-unit", "fahrenheit": True}
+               if metric == "temperature_unit_fahrenheit"
+               else {"command": "set-off-grid-alert", "enabled": True})
+    with pytest.raises(ValueError):
+        api.validate_command(api.parse_snapshot(snapshot), payload)
+
+
+def test_discharge_floor_options_follow_fresh_reserve_without_adjusting_it():
+    snapshot = c1000_native()
+    assert api.discharge_floor_options(snapshot) == ["1%", "5%"]
+    snapshot["metrics"]["backup_reserve_percentage"] = 25
+    assert api.discharge_floor_options(snapshot) == ["1%", "5%", "10%", "15%", "20%"]
+    snapshot["metrics"]["backup_reserve_percentage"] = 5
+    assert api.discharge_floor_options(snapshot) == []  # Invalid current lower/reserve pair.
+    assert snapshot["metrics"]["backup_reserve_percentage"] == 5
+
+
+@pytest.mark.parametrize("command", ["set-backup-reserve", "set-tou-plan", "return-grid"])
+def test_c1000_native_charging_features_do_not_expand_ble_support(command):
+    payload = {"set-backup-reserve": {"reserve": 15},
+               "set-tou-plan": {"periods": [], "enabled": False},
+               "return-grid": {"timeout": 30}}[command]
+    with pytest.raises(ValueError):
+        api.validate_command(c1000_native(protocol="prime"), {"command": command, **payload})
+
+
+def test_c1000_native_cap_preserves_reserve():
+    snapshot = c1000_native()
+    snapshot["metrics"]["backup_reserve_percentage"] = 85
+    with pytest.raises(ValueError):
+        api.validate_command(snapshot, {"command": "set-charge-cap", "upper": 80})
+
+
+def test_c1000_http_settings_recheck_limits_and_do_not_retry_writes():
+    async def scenario(client, state):
+        state["snapshot"] = c1000_native()
+        payload = {"command": "set-discharge-floor", "lower": 5}
+        await client.async_command("UPS / office", payload)
+        assert state["posts"] == [payload]
+        state["snapshot"]["metrics"]["backup_reserve_percentage"] = 5
+        with pytest.raises(ValueError):
+            await client.async_command("UPS / office", payload)
+        assert state["posts"] == [payload]
+        state["snapshot"] = c1000_native()
+        state["post_status"] = 409
+        state["post_body"] = {"error": "RuntimeError", "settings_may_have_changed": True,
+                              "details": "PRIVATE diagnostic"}
+        with pytest.raises(api.GatewayCommandError, match="settings may have changed") as caught:
+            await client.async_command("UPS / office", {"command": "set-off-grid-alert", "enabled": True})
+        assert "PRIVATE" not in str(caught.value)
+        assert len(state["posts"]) == 2
+    asyncio.run(with_gateway(scenario))
