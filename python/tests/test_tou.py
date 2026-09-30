@@ -9,7 +9,7 @@ import time
 import pytest
 
 from solix_link import APServiceConfig, LocalMqttServer, NativeMqttCommands, PowerFlowTimeout, TouPeriod, power_flow
-from solix_link.protocol import decode_telemetry, parse_packet, parse_tlvs, tlv
+from solix_link.protocol import Model, decode_telemetry, parse_packet, parse_tlvs, tlv
 from solix_link.tou import periods_from_d9, validate_periods
 
 
@@ -77,6 +77,8 @@ class Station:
         self.plan = ()
         self.battery = False
         self.ignore_plans = self.grid_stuck = self.truncated = False
+        self.disaster_kind = 0
+        self.omit_d9 = False
         self.ready = b"\x34"
         self.requests = []
 
@@ -101,26 +103,31 @@ class Station:
             return b"\x00"
         assert command == "0100"
         d9 = bytes([4, self.plan[0][0] if self.mode and self.plan else 0,
-                    self.mode, self.reserve, 90, 1, len(self.plan)]) + b"".join(self.plan) + bytes(19)
+                    self.mode, self.reserve, 90, 1, len(self.plan)]) + b"".join(self.plan)
+        d9 += bytes([self.disaster_kind, int(self.disaster_kind == 1), int(self.disaster_kind == 2)]) + bytes(16)
         if self.truncated:
             d9 = d9[:-1]
         a4 = bytearray(34)
         a4[0] = 4
         a4[1:5] = self.timer.to_bytes(4, "little")
-        a4[5:7] = (1800).to_bytes(2, "little")
+        watts_limit = 1200 if self.server.config.model == Model.C1000_GEN2 else 1800
+        a4[5:7] = watts_limit.to_bytes(2, "little")
         a4[21] = self.fast
         watts = (900).to_bytes(2, "little")
         data = (tlv(0xA3, bytes([1, int(self.battery)]))
                 + tlv(0xA4, a4) + tlv(0xA5, bytes([4, 25, 0, 90, 100]))
                 + tlv(0xA6, b"\x04" + watts + (bytes(2) if self.battery else watts) + bytes(4))
-                + tlv(0xA7, b"\x04\x01" + watts + b"\x01\x00\x00") + tlv(0xD9, d9))
+                + tlv(0xA7, b"\x04\x01" + watts + b"\x01\x00\x00")
+                + (b"" if self.omit_d9 else tlv(0xD9, d9)))
         self.server.metrics, _ = decode_telemetry(data, self.server.config.model)
         self.server.last_seen = time.time()
         return b"\x00" + data
 
 
-def server(tmp_path, *, allow_control=True):
-    config = APServiceConfig("ups", "wlan_ap", "phy9", "AT", "A1783SYNTHETIC001", "a" * 40)
+def server(tmp_path, *, allow_control=True, model=Model.C2000_GEN2):
+    product = "A1763" if model == Model.C1000_GEN2 else "A1783"
+    config = APServiceConfig("ups", "wlan_ap", "phy9", "AT", product + "SYNTHETIC001", "a" * 40,
+                             model=model)
     result = LocalMqttServer(config, tmp_path, allow_control=allow_control)
     station = Station(result)
     result.connection = station
@@ -240,7 +247,8 @@ def test_socket_rejects_bad_schedule_before_io_and_confirms_reserve(tmp_path):
 def test_gen2_tou_guard_accepts_both_countdowns_and_rejects_active_timer(tmp_path, timer_key):
     before = {"ac_output_enabled": 1, "ac_input_connected": 1, "max_charge_percentage": 100,
               "min_charge_percentage": 1, "ac_charging_power_limit_w": 1200,
-              "ac_fast_charge_enabled": 0, "backup_reserve_percentage": 10, timer_key: 0}
+              "ac_fast_charge_enabled": 0, "backup_reserve_percentage": 10, timer_key: 0,
+              "disaster_preparation_active": 0}
     config = APServiceConfig("ups", "wlan_ap", "phy9", "AT", "A1763SYNTHETIC001", "a" * 40,
                              model="c1000_gen2")
     server = LocalMqttServer(config, tmp_path)
@@ -257,3 +265,54 @@ def test_gen2_tou_guard_accepts_both_countdowns_and_rejects_active_timer(tmp_pat
     with pytest.raises(ValueError, match="Active AC-output timer"):
         asyncio.run(server._tou_ready(connection, {**before, timer_key: 1}))
     assert len(requests) == 1  # Timer refusal precedes I/O.
+
+
+@pytest.mark.parametrize("kind", [1, 2, 3, None], ids=["manual", "automatic", "unknown", "missing"])
+def test_gen2_activation_requires_fresh_inactive_disaster_status(tmp_path, kind):
+    async def run():
+        service, station = server(tmp_path, model=Model.C1000_GEN2)
+        # Previously safe cached telemetry must not authorize a new activation.
+        service.metrics["disaster_preparation_active"] = 0
+        station.disaster_kind = kind if kind is not None else 0
+        station.omit_d9 = kind is None
+        with pytest.raises(ValueError, match="disaster preparation|Incomplete"):
+            await service.set_tou_plan((TouPeriod("peak", 0, 24),), enabled=True)
+        assert [command for command, _ in station.requests] == ["0100"]
+        assert station.mode == 0 and not station.plan
+    asyncio.run(run())
+
+
+def test_gen2_fresh_inactive_disaster_status_allows_activation(tmp_path):
+    async def run():
+        service, station = server(tmp_path, model=Model.C1000_GEN2)
+        service.metrics["disaster_preparation_active"] = 1
+        result = await service.set_tou_plan((TouPeriod("peak", 0, 24),), enabled=True)
+        assert result["metrics"]["disaster_preparation_active"] == 0
+        assert result["metrics"]["usage_mode"] == "time_of_use"
+        assert [command for command, _ in station.requests] == ["0100", "0089", "0090", "0100", "0090", "0100"]
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("kind", [1, 2, 3])
+@pytest.mark.parametrize("plan", [(), (TouPeriod("peak", 0, 24),)], ids=["clear", "inactive-storage"])
+def test_gen2_disaster_guard_permits_standard_and_inactive_storage(tmp_path, kind, plan):
+    async def run():
+        service, station = server(tmp_path, model=Model.C1000_GEN2)
+        station.disaster_kind = kind
+        result = await service.set_tou_plan(plan, enabled=False)
+        assert result["metrics"]["usage_mode"] == "standard"
+        writes = [(command, tags) for command, tags in station.requests if command != "0100"]
+        assert len(writes) == 1 and writes[0][0] == "0090"
+        assert writes[0][1][0xA2] == b"\x01\x00"
+        assert station.disaster_kind == kind
+    asyncio.run(run())
+
+
+def test_c2000_tariff_activation_does_not_infer_c1000_disaster_semantics(tmp_path):
+    async def run():
+        service, station = server(tmp_path)
+        station.disaster_kind = 2  # C2000 backup tail remains undecoded.
+        result = await service.set_tou_plan((TouPeriod("peak", 0, 24),), enabled=True)
+        assert "disaster_preparation_active" not in result["metrics"]
+        assert result["metrics"]["usage_mode"] == "time_of_use"
+    asyncio.run(run())

@@ -5,7 +5,9 @@ from homeassistant.const import EntityCategory
 from homeassistant.core import callback
 from homeassistant.exceptions import HomeAssistantError
 
-from .api import DEVICE_TIMEOUT_OPTIONS, binary_state, device_timeout_options, discharge_floor_options, native_gen2, temperature_unit_supported
+from .api import (DEVICE_TIMEOUT_OPTIONS, DISPLAY_BRIGHTNESS_OPTIONS, DISPLAY_TIMEOUT_OPTIONS,
+                  binary_state, device_timeout_options, discharge_floor_options, display_brightness_options,
+                  display_timeout_options, native_gen2, temperature_unit_supported)
 from .coordinator import SolixConfigEntry
 from .entity import SolixEntity
 
@@ -14,13 +16,21 @@ SETTINGS = {
     "temperature_unit_fahrenheit": "set-temperature-unit",
     "min_charge_percentage": "set-discharge-floor",
     "device_timeout_minutes": "set-device-timeout",
+    "display_brightness": "set-display-brightness",
+    "display_timeout_seconds": "set-display-timeout",
 }
+DISPLAY_OPTIONS = {"display_brightness": (DISPLAY_BRIGHTNESS_OPTIONS, display_brightness_options, "level"),
+                   "display_timeout_seconds": (DISPLAY_TIMEOUT_OPTIONS, display_timeout_options, "seconds")}
 DESCRIPTIONS = (
     SelectEntityDescription(key="temperature_unit_fahrenheit", translation_key="temperature_unit",
                             entity_category=EntityCategory.CONFIG),
     SelectEntityDescription(key="min_charge_percentage", translation_key="discharge_floor",
                             entity_category=EntityCategory.CONFIG),
     SelectEntityDescription(key="device_timeout_minutes", translation_key="device_timeout",
+                            entity_category=EntityCategory.CONFIG),
+    SelectEntityDescription(key="display_brightness", translation_key="display_brightness",
+                            entity_category=EntityCategory.CONFIG),
+    SelectEntityDescription(key="display_timeout_seconds", translation_key="display_timeout",
                             entity_category=EntityCategory.CONFIG),
 )
 
@@ -41,7 +51,9 @@ async def async_setup_entry(hass, entry: SolixConfigEntry, async_add_entities) -
                     continue
                 if (name, key) in added or SETTINGS[key] not in snapshot.get("controls", []):
                     continue
-                if key == "device_timeout_minutes":
+                if key in DISPLAY_OPTIONS:
+                    reported = bool(DISPLAY_OPTIONS[key][1](snapshot))
+                elif key == "device_timeout_minutes":
                     reported = bool(device_timeout_options(snapshot))
                 else:
                     reported = (temperature_unit_supported(snapshot)
@@ -69,6 +81,8 @@ class SolixSelect(SolixEntity, SelectEntity):
 
     @property
     def options(self) -> list[str]:
+        if self.entity_description.key in DISPLAY_OPTIONS:
+            return DISPLAY_OPTIONS[self.entity_description.key][1](self.snapshot)
         if self.entity_description.key == "device_timeout_minutes":
             return device_timeout_options(self.snapshot)
         if self.entity_description.key == "temperature_unit_fahrenheit":
@@ -79,6 +93,9 @@ class SolixSelect(SolixEntity, SelectEntity):
     def current_option(self) -> str | None:
         key = self.entity_description.key
         value = self.snapshot.get("metrics", {}).get(key)
+        if key in DISPLAY_OPTIONS:
+            options = DISPLAY_OPTIONS[key][0]
+            return next((option for option in self.options if options[option] == value), None)
         if key == "device_timeout_minutes":
             return next((option for option in self.options if DEVICE_TIMEOUT_OPTIONS[option] == value), None)
         if key == "temperature_unit_fahrenheit":
@@ -92,7 +109,9 @@ class SolixSelect(SolixEntity, SelectEntity):
     @property
     def available(self) -> bool:
         key = self.entity_description.key
-        if key == "device_timeout_minutes":
+        if key in DISPLAY_OPTIONS:
+            supported = bool(DISPLAY_OPTIONS[key][1](self.snapshot))
+        elif key == "device_timeout_minutes":
             supported = bool(device_timeout_options(self.snapshot))
         elif key == "temperature_unit_fahrenheit":
             supported = temperature_unit_supported(self.snapshot)
@@ -105,7 +124,10 @@ class SolixSelect(SolixEntity, SelectEntity):
             raise HomeAssistantError("Choose one of the currently available setting options")
         if not self.available:
             raise HomeAssistantError("Fresh connected telemetry and an enabled gateway control are required")
-        if self.entity_description.key == "device_timeout_minutes":
+        if self.entity_description.key in DISPLAY_OPTIONS:
+            choices, _, field = DISPLAY_OPTIONS[self.entity_description.key]
+            payload = {"command": self.command, field: choices[option]}
+        elif self.entity_description.key == "device_timeout_minutes":
             payload = {"command": self.command, "minutes": DEVICE_TIMEOUT_OPTIONS[option]}
         elif self.entity_description.key == "temperature_unit_fahrenheit":
             payload = {"command": self.command, "fahrenheit": option == "fahrenheit"}

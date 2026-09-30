@@ -11,9 +11,9 @@ from zoneinfo import ZoneInfo
 from datetime import datetime
 
 
-@pytest.mark.parametrize("model", [Model.C1000_GEN2, Model.C2000_GEN2])
+@pytest.mark.parametrize("model", [Model.C1000, Model.C1000_GEN2, Model.C2000_GEN2])
 def test_prime_negotiation_with_synthetic_device(model):
-    session = Session(model, timezone_name="Europe/Vienna")
+    session = Session(model, protocol="prime", timezone_name="Europe/Vienna")
     assert parse_packet(session.start()).command == bytes.fromhex("4001")
     first_reply = build_packet(
         NEGOTIATION, bytes.fromhex("4801"),
@@ -49,16 +49,30 @@ def test_prime_negotiation_with_synthetic_device(model):
         step = session.feed(response)
     assert session.ready
     subscribe = parse_packet(step.outgoing[0])
-    assert subscribe.command == bytes.fromhex("4100")
-    assert len(step.outgoing[0]) == 47  # Observed Prime 4100 frame length.
-    assert session._crypt(subscribe.payload, False).startswith(
-        bytes.fromhex("a10121a20a040100e3fbfcfe000000fe04")
-    )
+    if model == Model.C1000:
+        assert subscribe.command.hex() == "4040"
+        fields = parse_tlvs(session._crypt(subscribe.payload, False))
+        assert set(fields) == {0xA1, 0xFE}
+        assert fields[0xA1] == b"\x21" and len(fields[0xFE]) == 4
+        # Original typed fields stay original even with Prime encryption.
+        payload = tlv(0xC1, b"\x01\x62") + tlv(0xB3, b"\x02\xab\x00")
+        update = session.feed(build_packet(DATA_RESPONSE, bytes.fromhex("c840"),
+                                          b"\x11" + session._crypt(payload, True)))
+        assert update.telemetry["battery_percentage"] == 98
+        assert update.telemetry["software_version_code"] == 171
+        assert update.telemetry["software_version"] == "1.7.1"
+    else:
+        assert subscribe.command == bytes.fromhex("4100")
+        assert len(step.outgoing[0]) == 47  # Observed Prime 4100 frame length.
+        assert session._crypt(subscribe.payload, False).startswith(
+            bytes.fromhex("a10121a20a040100e3fbfcfe000000fe04")
+        )
 
 
-def test_prime_button_pairing_and_reconnect_id():
+@pytest.mark.parametrize("model", [Model.C1000, Model.C1000_GEN2, Model.C2000_GEN2])
+def test_prime_button_pairing_and_reconnect_id(model):
     owner = "0123456789abcdef0123456789abcdef01234567"
-    session = Session(Model.C2000_GEN2, owner_user_id=owner)
+    session = Session(model, owner_user_id=owner, protocol="prime")
     session._secret = bytes(range(32))
     reply = build_packet(NEGOTIATION, bytes.fromhex("4822"), session._crypt(b"\x00", True))
     registration = parse_packet(session.feed(reply).outgoing[0])
@@ -71,7 +85,7 @@ def test_prime_button_pairing_and_reconnect_id():
     accepted = build_packet(NEGOTIATION, bytes.fromhex("4827"), session._crypt(b"\x00", True))
     assert session.feed(accepted).ready
 
-    generated = Session(Model.C2000_GEN2)
+    generated = Session(model, protocol="prime")
     assert len(generated.owner_user_id) == 40
     assert set(generated.owner_user_id) <= set("0123456789abcdef")
 

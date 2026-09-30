@@ -22,6 +22,7 @@ _FIELDS = {
     "charge_cap": ("upper",),
     "ac_charging_power": ("watts",),
     "display_timeout": ("seconds",),
+    "display_brightness": ("level",),
     "fast_charge": ("enabled",),
     "ac_output": ("enabled",),
     "light_mode": ("mode",),
@@ -35,6 +36,7 @@ _CONFIRMED = {
     "charge_cap": ("max_charge_percentage", "min_charge_percentage"),
     "ac_charging_power": ("ac_charging_power_limit_w",),
     "display_timeout": ("display_timeout_seconds",),
+    "display_brightness": ("display_brightness",),
     "fast_charge": ("ac_fast_charge_enabled",),
     "ac_output": ("ac_output_enabled",),
     "light_mode": ("light_mode",),
@@ -52,6 +54,8 @@ def _supports_operation(device: Any, operation: str) -> bool:
                     "device_timeout", "temperature_unit", "fast_charge", "ac_power_saving", "dc_power_saving")))
     if device.protocol != 'prime':
         return False
+    if device.model == Model.C1000:
+        return operation in ("ac_charging_power", "device_timeout", "display_brightness")
     if device.model == Model.C1000_GEN2:
         return operation in ('charge_limits', 'ac_charging_power', 'display_timeout', 'fast_charge', 'device_timeout')
     return device.model == Model.C2000_GEN2 and operation in ('charge_cap', 'ac_charging_power', 'display_timeout')

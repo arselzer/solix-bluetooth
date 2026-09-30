@@ -56,6 +56,9 @@ def add_commands(subcommands) -> None:
                                ("ap-service-set-off-grid-alert", "Set and confirm C1000 Gen 2 off-grid notification"),
                                ("ap-service-set-device-timeout", "Set C1000 Gen 2 device timeout; 0 = Never"),
                                ("ap-service-set-fast-charge", "Set C1000 Gen 2 fast charge with fresh retained readback"),
+                               ("ap-service-set-display-brightness", "Set C1000 Gen 2 native MQTT display brightness"),
+                               ("ap-service-set-display-timeout", "Set C1000 Gen 2 native MQTT screen timeout"),
+                               ("ap-service-set-port-memory", "Set C1000 Gen 2 native MQTT output-port memory"),
                                ("ap-service-set-reserve", "Set and confirm backup reserve without changing outputs"),
                                ("ap-service-set-tou", "Replace the native hourly schedule; explicit activation persists until changed"),
                                ("ap-service-grid", "Clear the plan and confirm return to grid power without toggling AC output")):
@@ -64,7 +67,7 @@ def add_commands(subcommands) -> None:
         parser.add_argument("--name", help="Target station; required for writes when multiple stations share the AP")
         if command == "ap-service-set-charge-power":
             parser.add_argument("--watts", type=int, required=True,
-                                help="100 W steps, from 300 W to 1200 W (C1000 Gen 2) or 1800 W (C2000 Gen 2)")
+                                help="100 W steps: 100–1200 W (C1000 Gen 2), 300–1800 W (C2000 Gen 2)")
         elif command == "ap-service-set-charge-cap":
             parser.add_argument("--upper", type=int, required=True)
         elif command == "ap-service-set-discharge-floor":
@@ -77,6 +80,15 @@ def add_commands(subcommands) -> None:
             parser.add_argument("--state", choices=["on", "off"], required=True)
         elif command == "ap-service-set-fast-charge":
             parser.add_argument("--enabled", choices=["on", "off"], required=True)
+        elif command == "ap-service-set-display-brightness":
+            parser.add_argument("--level", type=int, choices=[1, 2, 3], required=True,
+                                help="1 low, 2 medium, 3 high; zero is not a brightness level")
+        elif command == "ap-service-set-display-timeout":
+            parser.add_argument("--seconds", type=int, choices=[0, 10, 20, 30, 60, 300, 1800], required=True,
+                                help="Screen timeout in seconds; 0 means Never")
+        elif command == "ap-service-set-port-memory":
+            parser.add_argument("--enabled", choices=["on", "off"], required=True,
+                                help="Off clears output-recovery bookkeeping; turning On does not restore it")
         elif command == "ap-service-set-device-timeout":
             parser.add_argument("--minutes", type=int, choices=DEVICE_TIMEOUT_MINUTES, required=True,
                                 help="0 disables this timeout; independent sleep behavior may remain")
@@ -216,6 +228,9 @@ def dispatch(args) -> None:
                    "ap-service-set-off-grid-alert": "set-off-grid-alert",
                    "ap-service-set-device-timeout": "set-device-timeout",
                    "ap-service-set-fast-charge": "set-fast-charge",
+                   "ap-service-set-display-brightness": "set-display-brightness",
+                   "ap-service-set-display-timeout": "set-display-timeout",
+                   "ap-service-set-port-memory": "set-port-memory",
                    "ap-service-set-tou": "set-tou-plan", "ap-service-grid": "return-grid"}[args.command]
         fields = ({"watts": args.watts} if args.command == "ap-service-set-charge-power" else
                   {"upper": args.upper} if args.command == "ap-service-set-charge-cap" else {})
@@ -228,6 +243,12 @@ def dispatch(args) -> None:
         elif args.command == "ap-service-set-off-grid-alert":
             fields = {"enabled": args.state == "on"}
         elif args.command == "ap-service-set-fast-charge":
+            fields = {"enabled": args.enabled == "on"}
+        elif args.command == "ap-service-set-display-brightness":
+            fields = {"level": args.level}
+        elif args.command == "ap-service-set-display-timeout":
+            fields = {"seconds": args.seconds}
+        elif args.command == "ap-service-set-port-memory":
             fields = {"enabled": args.enabled == "on"}
         elif args.command == "ap-service-set-device-timeout":
             fields = {"minutes": args.minutes}

@@ -10,7 +10,7 @@ import time
 from typing import Any, Callable
 
 from .client import SolixMonitor, discover
-from .config import DEFAULT_CONFIG, DeviceConfig, load_config, save_config
+from .config import DEFAULT_CONFIG, DeviceConfig, load_config, protocol_choices, save_config
 from .protocol import Model
 from .tou import TouPeriod, power_flow, validate_periods
 
@@ -42,6 +42,8 @@ METRIC_LABELS = {
     "active_tariff": "Active tariff",
     "tou_schedule_slot_count": "Tariff periods",
     "display_timeout_seconds": "Display timeout (s)",
+    "display_brightness": "Display brightness (1 low, 2 medium, 3 high)",
+    "port_memory_enabled": "Output port memory enabled",
     "device_timeout_minutes": "Device Timeout (min; 0 = Never)",
     "temperature_unit_fahrenheit": "Display uses Fahrenheit",
     "ac_off_grid_alert_enabled": "Off-grid alert enabled",
@@ -74,6 +76,12 @@ class Control:
 
 def controls_for(target: Target) -> tuple[Control, ...]:
     """Expose model-supported operations; C2000 never gets an AC switch."""
+    if not target.native and target.model == Model.C1000 and target.device and target.device.protocol == "prime":
+        return (
+            Control("charge-power", "AC charging power", "100–1000 W, in 100 W steps"),
+            Control("display-brightness", "Display brightness", "1 low, 2 medium, 3 high"),
+            Control("device-timeout", "Device Timeout", "0 = Never; 30, 60, 120, 240, 360, 720 or 1440 minutes. Finite choices may turn the station off when idle. Never disables this timeout; other sleep behavior may still interrupt remote access."),
+        )
     if target.native:
         maximum = 1200 if target.model == Model.C1000_GEN2 else 1800
         minimum = 100 if target.model == Model.C1000_GEN2 else 300
@@ -89,6 +97,9 @@ def controls_for(target: Target) -> tuple[Control, ...]:
                 Control("discharge-floor", "Lower discharge limit", "1, 5, 10, 15 or 20%; requires reserve at least 5% higher"),
                 Control("device-timeout", "Device Timeout", "0 = Never; 30, 60, 120, 240, 360, 720 or 1440 minutes. Finite choices may turn the station off when idle. Never disables this timeout; other sleep behavior may still interrupt remote access."),
                 Control("fast-charge", "Fast charging", "on or off; enabling requires Standard mode, no active tariff and connected mains"),
+                Control("display-brightness", "Display brightness", "1 low, 2 medium, 3 high; zero is not a brightness level"),
+                Control("display-timeout", "Display timeout", "0 = Never; 10, 20, 30, 60, 300 or 1800 seconds"),
+                Control("port-memory", "Output port memory", "on or off; Off clears output-recovery bookkeeping; turning On does not restore it"),
             )
         return items
     limits = {
@@ -188,7 +199,7 @@ class TuiBackend:
                  requester: Callable[..., Any] | None = None,
                  scanner: Callable[..., Any] | None = None,
                  config_path: Path | None = None) -> None:
-        self.targets = [Target(f"ble:{d.name}", f"{d.name} · {d.model.value}", d.model, device=d)
+        self.targets = [Target(f"ble:{d.name}", f"{d.name} · {d.model.value} · {d.protocol}", d.model, device=d)
                         for d in devices]
         if ap_service_directory is not None:
             model = self._native_model(ap_service_directory)
@@ -255,7 +266,7 @@ class TuiBackend:
                     config = DeviceConfig(name, device.address, model)
                 except ValueError:
                     continue
-                self.targets.append(Target(f"ble:{name}", f"{name} · {model.value} · new", model,
+                self.targets.append(Target(f"ble:{name}", f"{name} · {model.value} · {config.protocol} · new", model,
                                            device=config, saved=False))
                 addresses.add(device.address.upper())
                 names.add(name)
@@ -279,10 +290,39 @@ class TuiBackend:
                 name = target.device.name if target.device.name not in used else self._name(target.model, used)
                 device = replace(target.device, name=name)
                 await asyncio.to_thread(save_config, [*saved, device], self.config_path)
-            updated = Target(f"ble:{device.name}", f"{device.name} · {device.model.value}", device.model, device=device)
+            updated = Target(f"ble:{device.name}", f"{device.name} · {device.model.value} · {device.protocol}", device.model, device=device)
             self.targets = [updated if item.key == key else item for item in self.targets]
             if self.target and self.target.key == key:
                 self.target = updated
+            return updated
+
+    async def set_protocol(self, key: str, protocol: str) -> Target:
+        """Save a chosen transport; disconnect the old session before switching."""
+        async with self._lock:
+            target = next((item for item in self.targets if item.key == key), None)
+            if target is None or target.device is None or len(protocol_choices(target.model)) < 2:
+                raise ValueError("This station has no alternate Bluetooth protocol")
+            if protocol not in protocol_choices(target.model):
+                raise ValueError("Choose Prime or legacy")
+            device = target.device
+            saved = None
+            if target.saved:
+                if self.config_path is None:
+                    raise RuntimeError("No configuration path was provided")
+                saved = await asyncio.to_thread(load_config, self.config_path)
+                current = next((item for item in saved if item.name == device.name), None)
+                if current is None or current.address.upper() != device.address.upper() or current.model != device.model:
+                    raise ValueError("Saved station changed; reopen the dashboard before changing protocol")
+                device = current
+            device = replace(device, protocol=protocol,
+                             timezone_name=device.timezone_name or ("Etc/UTC" if protocol == "prime" else None))
+            if self.target and self.target.key == key:
+                await self._close()
+            if saved is not None:
+                await asyncio.to_thread(save_config, [device if item.name == device.name else item for item in saved], self.config_path)
+            suffix = "" if target.saved else " · new"
+            updated = replace(target, label=f"{device.name} · {device.model.value} · {protocol}{suffix}", device=device)
+            self.targets = [updated if item.key == key else item for item in self.targets]
             return updated
 
     async def _native(self, command: str, *, target: Target | None = None, **fields: Any) -> dict:
@@ -419,6 +459,24 @@ class TuiBackend:
                     response = await self._native("set-discharge-floor", lower=int(value))
                 elif action == "device-timeout":
                     response = await self._native("set-device-timeout", minutes=parse_device_timeout(value))
+                elif action in ("display-brightness", "display-timeout", "port-memory"):
+                    snapshot = self.native_snapshot
+                    seen = snapshot.get("last_seen_timestamp")
+                    if (not snapshot.get("connected") or not snapshot.get("available")
+                            or type(seen) not in (int, float) or not -5 <= time.time() - seen <= 30):
+                        raise ValueError("Fresh connected telemetry is required for display and port-memory controls")
+                    field, metric, options = {
+                        "display-brightness": ("level", "display_brightness", (1, 2, 3)),
+                        "display-timeout": ("seconds", "display_timeout_seconds", (0, 10, 20, 30, 60, 300, 1800)),
+                        "port-memory": ("enabled", "port_memory_enabled", (0, 1)),
+                    }[action]
+                    current = snapshot.get("metrics", {}).get(metric)
+                    if type(current) is not int or current not in options:
+                        raise ValueError("Valid setting readback is required")
+                    parsed = parse_enabled(value) if action == "port-memory" else int(value)
+                    if parsed not in options:
+                        raise ValueError("Choose a supported setting value")
+                    response = await self._native(f"set-{action}", **{field: parsed})
                 elif action == "fast-charge":
                     enabled = parse_enabled(value)
                     snapshot = self.native_snapshot
@@ -454,6 +512,11 @@ class TuiBackend:
                     await self.monitor.set_dc_power_saving_enabled(enabled)
             elif action == "device-timeout":
                 await self.monitor.set_device_timeout(parse_device_timeout(value))
+            elif action == "display-brightness":
+                level = int(value)
+                if level not in (1, 2, 3):
+                    raise ValueError("Choose brightness 1 low, 2 medium or 3 high")
+                await self.monitor.set_c1000_setting("display_brightness", level)
             elif action == "ac-output":
                 if value.strip().lower() not in ("on", "off"):
                     raise ValueError("Enter on or off")
@@ -511,14 +574,15 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
         #saving-actions Button { width: 1fr; }
         """
 
-        def __init__(self, label: str, value: str) -> None:
+        def __init__(self, label: str, value: str, detail: str | None = None) -> None:
             super().__init__()
             self.label, self.value = label, value
+            self.detail = detail or "Power saving may automatically turn the output off at low load. Confirm this setting before applying it."
 
         def compose(self) -> ComposeResult:
             with VerticalScroll(id="saving-dialog"):
                 yield Static(f"Change {self.label} to {self.value}?", id="saving-title", markup=False)
-                yield Static("Power saving may automatically turn the output off at low load. Confirm this setting before applying it.", markup=False)
+                yield Static(self.detail, markup=False)
                 with Horizontal(id="saving-actions"):
                     yield Button("Cancel", id="saving-cancel")
                     yield Button("Apply", id="saving-confirm", variant="warning")
@@ -533,6 +597,47 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
         @on(Button.Pressed, "#saving-confirm")
         def confirm(self) -> None:
             self.dismiss(True)
+
+    class ProtocolScreen(ModalScreen[str | None]):
+        BINDINGS = [("escape", "cancel", "Cancel")]
+        DEFAULT_CSS = """
+        ProtocolScreen { align: center middle; background: #0c1424 85%; }
+        #protocol-dialog { width: 64; max-width: 95%; height: auto; max-height: 90%;
+                           border: round #77dfc2; background: #13233a; padding: 1 2; }
+        #protocol-title { text-style: bold; color: #77dfc2; margin-bottom: 1; }
+        #protocol-choice { margin: 1 0; }
+        #protocol-actions { height: auto; }
+        #protocol-actions Button { width: 1fr; }
+        """
+
+        def __init__(self, target: Target) -> None:
+            super().__init__()
+            self.target = target
+
+        def compose(self) -> ComposeResult:
+            with VerticalScroll(id="protocol-dialog"):
+                yield Static("Bluetooth protocol", id="protocol-title", markup=False)
+                original = self.target.model == Model.C1000
+                yield Static(
+                    "Original C1000: legacy was verified on 1.5.1; Prime monitoring, charging power, brightness and Device Timeout on 1.7.1. Other Prime controls remain unavailable."
+                    if original else "C1000 Gen 2: legacy was verified on 1.1.4.3; Prime on 1.1.4.9.", markup=False)
+                yield Select([(choice.title(), choice) for choice in protocol_choices(self.target.model)],
+                             value=self.target.device.protocol, allow_blank=False, id="protocol-choice")
+                yield Static("This changes local configuration and disconnects the current session. Prime requires a saved pairing ID; use interactive or pair to register it.", markup=False)
+                with Horizontal(id="protocol-actions"):
+                    yield Button("Cancel", id="protocol-cancel")
+                    yield Button("Save protocol", id="protocol-save", variant="primary")
+
+        def action_cancel(self) -> None:
+            self.dismiss(None)
+
+        @on(Button.Pressed, "#protocol-cancel")
+        def cancel(self) -> None:
+            self.dismiss(None)
+
+        @on(Button.Pressed, "#protocol-save")
+        def save(self) -> None:
+            self.dismiss(self.query_one("#protocol-choice", Select).value)
 
     class HelpScreen(ModalScreen):
         BINDINGS = [("escape", "dismiss", "Close"), ("question_mark", "dismiss", "Close")]
@@ -627,9 +732,10 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
         .narrow #station { width: 100%; }
         .narrow #connection-buttons { width: 100%; }
         .narrow #discovery { layout: vertical; }
-        #discovery-buttons { width: 52; height: 3; }
+        #discovery-buttons { width: 70; height: 3; }
         .narrow #discovery-buttons { width: 100%; }
         .compact #add-to-ap { display: none; }
+        .compact #discovery-buttons Button { min-width: 12; width: 1fr; }
         .narrow #discovery-hint { width: 100%; padding-top: 0; }
         .narrow .form-row { layout: vertical; }
         .narrow .form-row Input { width: 100%; }
@@ -662,6 +768,7 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
                     with Horizontal(id="discovery-buttons"):
                         yield Button("Scan Bluetooth", id="scan")
                         yield Button("Save station", id="save-station", disabled=True)
+                        yield Button("Protocol", id="station-protocol", disabled=True)
                         yield Button("Add to AP", id="add-to-ap", disabled=True)
                     yield Static("Scan nearby stations or choose a saved station.", id="discovery-hint", markup=False)
                 yield Static("Disconnected · Choose a station, then Connect.", id="connection-status", markup=False)
@@ -734,6 +841,8 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
             selector.set_options([(item.label, item.key) for item in options])
             selector.value = options[0].key if options else Select.NULL
             note = "Original C1000 controls were verified on firmware code 151; record settings before testing other versions." if target and target.model == Model.C1000 else ""
+            if target and target.device and target.model == Model.C1000 and target.device.protocol == "prime":
+                note = "Original C1000 Prime 1.7.1: charging power, brightness and Device Timeout verified. Other controls remain unavailable."
             if target and target.native:
                 note = "Controls require the running AP service to have been started with --allow-control."
             self.query_one("#notice", Static).update(note)
@@ -741,7 +850,7 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
             if target and not target.saved:
                 guidance = f"Save as {target.device.name}, or connect for this session."
             if target and target.device and target.device.protocol == "prime" and not target.device.client_id:
-                guidance = "Gen 2 needs pairing: use solix-link interactive, confirm the main button, then reopen this dashboard."
+                guidance = "Prime needs pairing: use solix-link interactive or pair, then reopen this dashboard."
             self.query_one("#discovery-hint", Static).update(guidance)
             self.update_buttons()
 
@@ -755,9 +864,10 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
             self.query_one("#connect", Button).disabled = self.busy or not self.selected
             self.query_one("#scan", Button).disabled = self.busy
             self.query_one("#save-station", Button).disabled = self.busy or backend.config_path is None or not target or target.saved
+            self.query_one("#station-protocol", Button).disabled = self.busy or not target or target.device is None or len(protocol_choices(target.model)) < 2 or (target.saved and backend.config_path is None)
             self.query_one("#add-to-ap", Button).disabled = self.busy or not connected or not fresh or backend.directory is None or not target or target.native or not target.saved or target.model not in (Model.C1000_GEN2, Model.C2000_GEN2)
             self.query_one("#disconnect", Button).disabled = self.busy or not connected
-            self.query_one("#apply-setting", Button).disabled = self.busy or not connected or not fresh or not permitted
+            self.query_one("#apply-setting", Button).disabled = self.busy or not connected or not fresh or not permitted or not (target and controls_for(target))
             for name in ("apply-plan", "return-grid"):
                 self.query_one(f"#{name}", Button).disabled = self.busy or not connected or not fresh or not permitted or not (target and target.native)
 
@@ -861,6 +971,23 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
                     self.refresh_targets()
                     self.event_log(f"Saved station as {target.device.name}.")
                 self.launch(save())
+            elif action == "station-protocol":
+                target = self.current_target()
+                if target is None or target.device is None:
+                    return
+                target_key = target.key
+                def selected_protocol(protocol: str | None) -> None:
+                    if protocol is None or target_key != self.selected:
+                        return
+                    async def update_protocol() -> dict:
+                        await backend.set_protocol(target_key, protocol)
+                        self.snapshot = {}
+                        self.refresh_targets()
+                        self.configure_controls()
+                        self.event_log(f"Saved Bluetooth protocol: {protocol}.")
+                        return public_snapshot({"metrics": {}, "connected": False, "available": False})
+                    self.launch(update_protocol())
+                self.push_screen(ProtocolScreen(target), selected_protocol)
             elif action == "add-to-ap":
                 async def add_to_ap() -> None:
                     await backend.register_native()
@@ -871,9 +998,14 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
                 key = self.query_one("#setting", Select).value
                 if isinstance(key, str):
                     value = self.query_one("#setting-value", Input).value
-                    if key in ("ac-power-saving", "dc-power-saving"):
+                    if key in ("ac-power-saving", "dc-power-saving", "port-memory") or (
+                            backend.target and backend.target.native and key in ("display-brightness", "display-timeout")):
                         try:
-                            parsed = parse_enabled(value)
+                            parsed = parse_enabled(value) if key in ("ac-power-saving", "dc-power-saving", "port-memory") else int(value)
+                            if key == "display-brightness" and parsed not in (1, 2, 3):
+                                raise ValueError("Choose brightness 1 low, 2 medium or 3 high")
+                            if key == "display-timeout" and parsed not in (0, 10, 20, 30, 60, 300, 1800):
+                                raise ValueError("Choose a supported screen timeout")
                         except ValueError as error:
                             self.status(str(error), "error")
                             return
@@ -884,7 +1016,12 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
                         def confirmed(result: bool | None) -> None:
                             if result is True and backend.target and backend.target.key == target_key:
                                 self.launch(backend.control(key, value), control=True)
-                        self.push_screen(PowerSavingConfirmScreen(key[:2].upper() + " power saving", "on" if parsed else "off"), confirmed)
+                        label = next(item.label for item in controls_for(target) if item.key == key)
+                        detail = ("Off clears output-recovery bookkeeping; turning On does not restore that transient state." if key == "port-memory" else
+                                  "Set the display brightness. Zero is not a brightness level." if key == "display-brightness" else
+                                  "Set the screen timeout; zero means Never." if key == "display-timeout" else None)
+                        shown = str(parsed) if type(parsed) is int else "on" if parsed else "off"
+                        self.push_screen(PowerSavingConfirmScreen(label, shown, detail), confirmed)
                     else:
                         self.launch(backend.control(key, value), control=True)
             elif action == "apply-plan":

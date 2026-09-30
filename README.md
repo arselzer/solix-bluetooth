@@ -12,8 +12,8 @@ Home Assistant integration for the local gateway.
 - Gen 2 native MQTT: backup reserve, hourly Time-of-Use plans, battery discharge
   with mains connected, and confirmed return to grid.
 - C1000 Gen 2 native MQTT: 100–1200 W charging, fast charge, temperature unit,
-  off-grid alert and guarded lower
-  discharge limit without silently changing reserve.
+  off-grid alert, display brightness/timeout, output-port memory and guarded
+  lower discharge limit without silently changing reserve.
 - Original C1000: temperature units, fast charge, AC/DC Smart modes and Device
   Timeout through Bluetooth, the bridge and gateway interfaces; isolated Wi-Fi setup.
 - Authenticated JSON HTTP, SSE and Prometheus for multiple stations.
@@ -24,9 +24,9 @@ Home Assistant integration for the local gateway.
 
 | Device | Python Bluetooth | Native local MQTT | Tested / limitations |
 | --- | --- | --- | --- |
-| C1000 Gen 2, A1763 | Monitoring, charge limits/power, display timeout, fast charge | Charging/fast/reserve, tariffs, temperature, alert, discharge floor | Main 1.1.4.9 / radio 0.3.3.0; older 1.1.4.3 uses legacy BLE |
+| C1000 Gen 2, A1763 | Monitoring, charge limits/power, display timeout, fast charge | Charging/fast/reserve, tariffs, temperature/alert, display/memory, discharge floor | Main 1.1.4.9 / radio 0.3.3.0; older 1.1.4.3 uses legacy BLE |
 | C2000 Gen 2, A1783 | Monitoring, power/cap, display timeout | Charging/reserve, tariffs and return to grid | Main 2.1.6.4; AC-output writes blocked |
-| Original C1000, A1761 | Monitoring, charging power, display/device timeout, light, AC/DC switches, temperature, fast charge, Smart modes | — | Twelve control/restoration tests passed; version code 151 |
+| Original C1000, A1761 | Monitoring and twelve controls on legacy; Prime brightness/power/device timeout | — | Legacy 1.5.1; Prime 1.7.1 verified with settings restored; other Prime controls unvalidated |
 | C300/C300X AC, A1722/A1723 | Monitoring, AC output, light, charging power, display timeout | — | C300X tested; C300 sibling untested; C300 DC unsupported |
 | Solarbank 3 E2700 Pro, A17C5 | Separate Web Bluetooth app | — | Browser telemetry tested; no Python profile |
 
@@ -56,10 +56,13 @@ solix-link monitor --name office
 solix-link set-charge-power --name office --watts 300
 ```
 
-C300 AC and original C1000 use legacy BLE without a pairing ID. Prime Gen 2
+C300 AC and original C1000 firmware 1.5.1 use legacy BLE without a pairing ID.
+Original C1000 firmware 1.7.1 uses explicit Prime selection; monitoring,
+brightness, charging power and Device Timeout were verified with an existing
+app ID. Generated-ID pairing on this model remains unverified. Prime Gen 2
 pairing generates a local ID and can require one short **main power button**
 press. Save the ID for reconnects. Generated-identity native MQTT is verified
-on C1000; C2000 native provisioning uses an already working identity.
+on C1000 Gen 2; C2000 native provisioning uses an already working identity.
 See [pairing and version notes](docs/gen2-protocol.md).
 
 ## Browser, API and Home Assistant
@@ -119,6 +122,8 @@ web-dashboard guide. Commit Vue sources and compiled Python assets together.
   [isolated Wi-Fi](docs/c1000-original-wifi-validation.md); direct MQTT remains open.
 - [Charging and reserve validation](docs/c1000-charging-and-reserve-validation.md):
   native fast charge, lower charging power, reserve floor and cached reconnect.
+- [Native display/memory validation](docs/c1000-native-preferences-validation.md):
+  confirmed C1000 Gen 2 settings and restoration; final BLE check unavailable.
 - [Reproduce 1,842 offline cases](docs/firmware-analysis-reproduction.md):
   original instruction execution with synthetic inputs and explicit substitutions.
 - [Charging follow-up](docs/c1000-charging-control-followup.md): reserve side

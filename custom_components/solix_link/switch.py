@@ -13,12 +13,14 @@ from .entity import SolixEntity
 
 PARALLEL_UPDATES = 0
 SETTINGS = {"ac_off_grid_alert_enabled": "set-off-grid-alert", "ac_fast_charge_enabled": "set-fast-charge",
-            "ac_power_saving_mode_enabled": "set-ac-power-saving", "dc_power_saving_mode_enabled": "set-dc-power-saving"}
+            "ac_power_saving_mode_enabled": "set-ac-power-saving", "dc_power_saving_mode_enabled": "set-dc-power-saving",
+            "port_memory_enabled": "set-port-memory"}
 DESCRIPTIONS = (
     SwitchEntityDescription(key="ac_off_grid_alert_enabled", translation_key="off_grid_alert", entity_category=EntityCategory.CONFIG),
     SwitchEntityDescription(key="ac_fast_charge_enabled", translation_key="fast_charge", entity_category=EntityCategory.CONFIG),
     SwitchEntityDescription(key="ac_power_saving_mode_enabled", translation_key="ac_power_saving", entity_category=EntityCategory.CONFIG),
     SwitchEntityDescription(key="dc_power_saving_mode_enabled", translation_key="dc_power_saving", entity_category=EntityCategory.CONFIG),
+    SwitchEntityDescription(key="port_memory_enabled", translation_key="port_memory", entity_category=EntityCategory.CONFIG),
 )
 
 
@@ -51,6 +53,8 @@ class SolixSettingSwitch(SolixEntity, SwitchEntity):
         self.command = SETTINGS[description.key]
         if self.command in ("set-ac-power-saving", "set-dc-power-saving"):
             self._attr_extra_state_attributes = {"output_behavior": "Power saving may automatically turn the output off at low load."}
+        elif self.command == "set-port-memory":
+            self._attr_extra_state_attributes = {"recovery_behavior": "Off clears output-recovery bookkeeping; turning On does not restore that transient state."}
         elif self.command == "set-fast-charge" and self.snapshot.get("model") == "c1000_gen2":
             self._attr_extra_state_attributes = {"enable_requirement": "C1000 Gen 2 requires Standard mode with no active tariff; native MQTT also requires connected mains."}
 

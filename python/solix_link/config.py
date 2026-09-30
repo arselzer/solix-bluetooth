@@ -16,6 +16,15 @@ _ADDRESS = re.compile(r"^(?:[0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$")
 _NAME = re.compile(r"^[A-Za-z0-9_-]+$")
 
 
+def protocol_choices(model: Model) -> tuple[str, ...]:
+    """List explicit transport choices with the model default first."""
+    if model == Model.C1000:
+        return ("legacy", "prime")
+    if model == Model.C1000_GEN2:
+        return ("prime", "legacy")
+    return (model.resolve_protocol(),)
+
+
 @dataclass(frozen=True)
 class DeviceConfig:
     name: str

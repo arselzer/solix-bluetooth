@@ -65,6 +65,23 @@ with boolean `fahrenheit`, `set-off-grid-alert` with boolean `enabled`, and
 `set-discharge-floor` with integer `lower` (1,5,10,15,20, within reserve bounds).
 Temperature and alert settings were [checked live](c1000-general-settings.md),
 as was the [guarded lower discharge limit](c1000-charging-control-followup.md).
+Native C1000 Gen 2 also advertises the following
+[verified display/memory preferences](c1000-native-preferences-validation.md):
+
+| Command | Exact field | Values |
+| --- | --- | --- |
+| `set-display-brightness` | integer `level` | 1 Low / 2 Medium / 3 High; zero refused |
+| `set-display-timeout` | integer `seconds` | 0 Never, 10, 20, 30, 60, 300, 1800 |
+| `set-port-memory` | boolean `enabled` | `true` / `false` |
+
+Port-memory Off clears output-recovery bookkeeping; turning On does not restore
+that transient state. Only brightness 1/2/3, screen timeout 30/60 s and port
+memory on/off have live native readback/restoration for this trial. These new
+native capabilities are not exposed on C2000 or other models. Fresh telemetry
+and the selected station's advertised capability remain required. The native
+brightness setter also requires Standard/no active tariff and an inactive
+clock screen with no transfer in progress.
+
 Original C1000 BLE profiles expose `set-temperature-unit`/`fahrenheit`,
 `set-fast-charge`/`enabled`, `set-ac-power-saving`/`enabled`, and
 `set-dc-power-saving`/`enabled`. All values are booleans. Smart mode can

@@ -268,6 +268,8 @@ class SolixMonitor:
 
     async def set_ac_charging_power(self, watts: int) -> dict[str, int | str]:
         """Set the AC charging-power limit, then confirm fresh telemetry."""
+        if self.model == Model.C1000 and self.protocol == "prime":
+            return await self._set_original_configuration("ac_charging_power", watts)
         packet = self._session.ac_charging_power_packet(watts)
         if self.model == Model.C1000_GEN2:
             return await self._set_gen2_configuration(
@@ -291,6 +293,8 @@ class SolixMonitor:
         previously queued events may still affect access. Require fresh baseline
         and readback even for an idempotent write.
         """
+        if self.model == Model.C1000 and self.protocol == "prime":
+            return await self._set_original_configuration("device_timeout", minutes)
         packet = self._session.device_timeout_packet(minutes)  # Validate before I/O.
         if not self.connected:
             raise RuntimeError("Monitor is not connected")
@@ -378,6 +382,8 @@ class SolixMonitor:
         """
         if setting == "device_timeout":
             return await self.set_device_timeout(value)
+        if self.model == Model.C1000 and self.protocol == "prime":
+            return await self._set_original_configuration(setting, value)
         if setting in ("temperature_unit_fahrenheit", "fast_charge_enabled",
                        "ac_power_saving_mode_enabled", "dc_power_saving_mode_enabled"):
             return await self._set_original_configuration(setting, value)
@@ -403,25 +409,48 @@ class SolixMonitor:
     async def set_dc_power_saving_enabled(self, enabled: bool) -> dict[str, int | str]:
         return await self._set_original_configuration("dc_power_saving_mode_enabled", enabled)
 
-    async def _set_original_configuration(self, setting: str, value: bool) -> dict[str, int | str]:
-        from .c1000 import c1000_setting
-        packet = self._session.c1000_control_packet(setting, value)
-        _command, _body, target = c1000_setting(setting, value)
+    async def _fresh_original_configuration(self, *, after_write: bool = False) -> tuple[dict[str, int], bytes | None]:
+        """Read all verified original settings, including expanded Prime flags."""
+        if not self.connected:
+            raise RuntimeError("Monitor is not connected")
         required = ("ac_output_enabled", "dc_output_enabled", "ac_charging_power_limit_w",
                     "device_timeout_minutes", "display_timeout_seconds", "display_brightness", "light_mode",
                     "temperature_unit_fahrenheit", "ac_fast_charge_enabled", "ac_power_saving_mode_enabled",
                     "dc_power_saving_mode_enabled")
+        prime = self.protocol == "prime"
         revision = self._telemetry_revision
         await self.request_status()
         async with asyncio.timeout(10):
-            while not all(self._field_revision.get(key, 0) > revision for key in required):
+            while not (all(self._field_revision.get(key, 0) > revision for key in required)
+                       and (not prime or (self._raw_tlv_revision.get(0xF8, 0) > revision
+                                          and 0xF8 in self.raw_tlvs))):
                 await self.wait_for_update(timeout=10)
-        before = {key: self.metrics[key] for key in required}
-        if (any(type(before[key]) is not int for key in required)
-                or any(before[key] not in (0, 1) for key in required if key.endswith("_enabled") or key == "temperature_unit_fahrenheit")):
-            raise RuntimeError("Invalid original C1000 settings baseline; no write sent")
+        metrics = {key: self.metrics[key] for key in required}
+        failure = "the setting may have changed" if after_write else "no write sent"
+        if (any(type(metrics[key]) is not int for key in required)
+                or any(metrics[key] not in (0, 1) for key in required if key.endswith("_enabled") or key == "temperature_unit_fahrenheit")):
+            raise RuntimeError(f"Invalid original C1000 settings telemetry; {failure}")
+        flags = self.raw_tlvs.get(0xF8) if prime else None
+        if prime and (not isinstance(flags, bytes) or len(flags) != 21 or flags[0] != 4):
+            raise RuntimeError(f"Missing complete original C1000 Prime F8 flags; {failure}")
+        return metrics, flags
+
+    async def _set_original_configuration(self, setting: str, value: int | bool) -> dict[str, int | str]:
+        from .c1000 import c1000_setting
+        packet = self._session.c1000_control_packet(setting, value)
+        _command, _body, target = c1000_setting(setting, value)
+        before, flags = await self._fresh_original_configuration()
         expected = {**before, **target}
-        return await self._write_setting(packet, expected)
+        result = await self._write_setting(packet, expected)
+        if self.protocol == "prime":
+            try:
+                after, after_flags = await self._fresh_original_configuration(after_write=True)
+            except TimeoutError:
+                raise TimeoutError("Fresh original C1000 post-write telemetry is missing; the setting may have changed") from None
+            if after != expected or after_flags != flags:
+                raise RuntimeError("Protected original C1000 settings or F8 flags changed after write; the setting may have changed")
+            return self.metrics.copy()
+        return result
 
     async def confirm_pairing(self) -> None:
         """Retry Prime registration after one short main power button press."""

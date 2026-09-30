@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+from dataclasses import replace
 import json
 import os
 from pathlib import Path
@@ -14,7 +15,7 @@ import sys
 import time
 
 from .client import SolixMonitor, discover
-from .config import DeviceConfig, load_config, save_config
+from .config import DeviceConfig, load_config, protocol_choices, save_config
 from .ap_service_config import APServiceConfig, add_ap_service_device, initialize_ap_service, load_ap_service, load_ap_service_profiles, private_write
 from .ap_service import ap_service_request
 from .protocol import Model
@@ -71,10 +72,39 @@ def select_device(config_path: Path) -> DeviceConfig | None:
         name = prompt("Save station as", device.name)
         if any(existing.name == name for existing in saved):
             raise ValueError("That name already belongs to another station")
-        timezone_name = prompt("Timezone", "Etc/UTC") if device.protocol == "prime" else None
-        device = DeviceConfig(name, device.address, device.model, timezone_name=timezone_name)
+        protocol = device.protocol
+        choices = protocol_choices(device.model)
+        if len(choices) > 1:
+            selected_protocol = choose("Bluetooth protocol (choose for the installed firmware)", [
+                f"{choice.title()}{' (model default)' if index == 0 else ''}" for index, choice in enumerate(choices)
+            ])
+            if selected_protocol is None:
+                return None
+            protocol = choices[selected_protocol]
+        timezone_name = prompt("Timezone", "Etc/UTC") if protocol == "prime" else None
+        device = DeviceConfig(name, device.address, device.model, protocol=protocol, timezone_name=timezone_name)
         save_config([*saved, device], config_path)
     return device
+
+
+def change_protocol(device: DeviceConfig, config_path: Path) -> DeviceConfig:
+    """Change the saved Bluetooth transport without sending station commands."""
+    choices = protocol_choices(device.model)
+    selected = choose(f"Bluetooth protocol (current: {device.protocol})", [choice.title() for choice in choices])
+    if selected is None or choices[selected] == device.protocol:
+        return device
+    protocol = choices[selected]
+    timezone_name = device.timezone_name
+    if protocol == "prime" and timezone_name is None:
+        timezone_name = prompt("Timezone", "Etc/UTC")
+    updated = replace(device, protocol=protocol, timezone_name=timezone_name)
+    saved = load_config(config_path)
+    if not any(entry.name == device.name and entry.address.upper() == device.address.upper() for entry in saved):
+        raise ValueError("Saved station changed; select it again before changing protocol")
+    save_config([updated if entry.name == device.name else entry for entry in saved], config_path)
+    if device.model == Model.C1000 and protocol == "prime":
+        print("Original C1000 Prime 1.7.1: monitoring, charging power, brightness and Device Timeout are verified; other controls remain unavailable.")
+    return updated
 
 
 def ensure_paired(device: DeviceConfig, config_path: Path) -> DeviceConfig:
@@ -195,8 +225,19 @@ def preference_menu(device: DeviceConfig | APServiceConfig, config_path: Path, d
     if original:
         commands = ["set-temperature-unit", "set-fast-charge", "set-ac-power-saving", "set-dc-power-saving"]
         labels = ["Temperature display", "Fast charging", "AC power saving (may turn output off)", "DC power saving (may turn output off)"]
+    elif device.model == Model.C1000 and getattr(device, "protocol", None) == "prime":
+        brightness = choose("Display brightness", ["Low (1)", "Medium (2)", "High (3)"])
+        if brightness is None or choose("Apply display brightness?", ["Apply selected brightness"]) is None:
+            return
+        from .cli import _c1000_setting
+        asyncio.run(_c1000_setting(argparse.Namespace(name=device.name, setting="display_brightness",
+                                                     value=brightness + 1, config=config_path)))
+        return
     elif device.model == Model.C1000_GEN2 and (directory is not None or getattr(device, "protocol", None) == "prime"):
         commands, labels = ["set-fast-charge"], ["Fast charging"]
+        if directory is not None:
+            commands += ["set-display-brightness", "set-display-timeout", "set-port-memory"]
+            labels += ["Display brightness", "Screen timeout", "Output port memory"]
     else:
         print("These preferences are unavailable for this station profile.")
         return
@@ -204,17 +245,27 @@ def preference_menu(device: DeviceConfig | APServiceConfig, config_path: Path, d
     if selected is None:
         return
     command = commands[selected]
-    value = choose(labels[selected], ["Celsius", "Fahrenheit"] if command == "set-temperature-unit" else ["Off", "On"])
+    options = {
+        "set-temperature-unit": ["Celsius", "Fahrenheit"],
+        "set-display-brightness": ["Low", "Medium", "High"],
+        "set-display-timeout": ["Never", "10 seconds", "20 seconds", "30 seconds", "60 seconds", "5 minutes", "30 minutes"],
+    }.get(command, ["Off", "On"])
+    value = choose(labels[selected], options)
     if value is None:
         return
     if command in ("set-ac-power-saving", "set-dc-power-saving"):
         print("Power saving may automatically turn the output off at low load.")
     if command == "set-fast-charge" and device.model == Model.C1000_GEN2:
         print("Enabling requires Standard mode with no active tariff. Native MQTT also requires connected mains.")
+    if command == "set-port-memory":
+        print("Off clears output-recovery bookkeeping; turning On does not restore that transient state.")
     if choose("Confirm preference change", ["Apply selected preference"]) is None:
         return
     if directory is not None:
-        _show_status(asyncio.run(ap_service_request(directory, command, name=device.name, enabled=value == 1)))
+        fields = ({"level": value + 1} if command == "set-display-brightness" else
+                  {"seconds": (0, 10, 20, 30, 60, 300, 1800)[value]} if command == "set-display-timeout" else
+                  {"enabled": value == 1})
+        _show_status(asyncio.run(ap_service_request(directory, command, name=device.name, **fields)))
     else:
         from .cli import _set
         arguments = {"unit": "fahrenheit" if value else "celsius"} if command == "set-temperature-unit" else {"enabled": "on" if value else "off"}
@@ -259,7 +310,7 @@ def native_session(directory: Path, config_path: Path, *, provision: bool, allow
                                                      "Clear plan and confirm grid power" if allow_control else "Grid-return control disabled"]
             if config.model == Model.C1000_GEN2:
                 options.append("Set Device Timeout (Never / idle shutdown)" if allow_control else "Device Timeout controls disabled")
-                options.append("Set fast charging" if allow_control else "Fast-charging controls disabled")
+                options.append("Charging, display and port-memory preferences" if allow_control else "Station preferences disabled")
             options.append("Stop this AP session")
             selected = choose("AP-service session", options)
             if selected is None or selected == len(options) - 1:
@@ -365,11 +416,16 @@ def run_interactive(config_path: Path, ap_service_directory: Path | None = None)
             "Select / rescan a station", "Monitor over Bluetooth", "Connect MQTT / isolated Wi-Fi",
             "Serve Bluetooth status over HTTP",
         ]
-        if selected and (selected.model == Model.C1000 and selected.protocol == "legacy"
+        if selected and (selected.model == Model.C1000
                          or selected.model == Model.C1000_GEN2 and selected.protocol == "prime"):
             options.append("Set Device Timeout (Never / idle shutdown)")
-            options.append("Station preferences (temperature / fast charge / power saving)" if selected.model == Model.C1000
+            options.append("Station preferences (temperature / fast charge / power saving)" if selected.model == Model.C1000 and selected.protocol == "legacy"
+                           else "Station preferences (display brightness)" if selected.model == Model.C1000
                            else "Station preferences (fast charging)")
+        protocol_action = None
+        if selected and len(protocol_choices(selected.model)) > 1:
+            protocol_action = len(options)
+            options.append("Change Bluetooth protocol (Prime / legacy)")
         action = choose(f"Station: {selected.name if selected else 'none selected'}", options)
         if action is None:
             return
@@ -379,6 +435,9 @@ def run_interactive(config_path: Path, ap_service_directory: Path | None = None)
                 continue
             if selected is None:
                 print("Select a station first.")
+                continue
+            if action == protocol_action:
+                selected = change_protocol(selected, config_path)
                 continue
             selected = ensure_paired(selected, config_path)
             if action == 1:

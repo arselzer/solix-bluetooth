@@ -214,6 +214,9 @@ try {
   assert.equal(await page.locator('#fast-charge').count(), 0);
   assert.equal(await page.locator('#ac-power-saving').count(), 0);
   assert.equal(await page.locator('#dc-power-saving').count(), 0);
+  assert.equal(await page.locator('#display-brightness').count(), 0);
+  assert.equal(await page.locator('#display-timeout').count(), 0);
+  assert.equal(await page.locator('#port-memory').count(), 0);
   await change({ readonly: true });
   await refresh();
   await page.getByText('This gateway is read-only. Monitoring remains available.').waitFor();
@@ -258,6 +261,70 @@ try {
   await connect();
   cases++; console.log(`Scenario ${cases} passed`);
 
+  await page.getByTestId('station-select').selectOption('Office · C1000 Gen 2');
+  assert.equal(await page.locator('#display-brightness').inputValue(), '1');
+  assert.equal(await page.locator('#display-timeout option[value="0"]').textContent(), 'Never');
+  assert.equal(await page.locator('#port-memory').inputValue(), '1');
+  const beforePreferences = (await recorded()).length;
+  for (const [label, value, command, fields] of [
+    ['display-brightness', '2', 'set-display-brightness', { level: 2 }],
+    ['display-timeout', '60', 'set-display-timeout', { seconds: 60 }],
+    ['port-memory', '0', 'set-port-memory', { enabled: false }],
+  ]) {
+    await page.locator(`#${label}`).selectOption(value);
+    await refresh();
+    assert.equal(await page.locator(`#${label}`).inputValue(), value);
+    await propose(label);
+    if (label === 'port-memory') {
+      assert.ok((await page.getByTestId('command-review').textContent()).includes('does not restore that transient state'));
+      await page.getByTestId('cancel-command').click();
+      assert.equal((await recorded()).length, beforePreferences + 2);
+      await propose(label);
+    }
+    await page.getByTestId('confirm-command').click();
+    await page.getByTestId('gateway-notice').filter({ hasText: 'Command confirmed' }).waitFor();
+    assert.deepEqual((await recorded()).at(-1), { name: 'Office · C1000 Gen 2', command, ...fields });
+  }
+  await change({ available: false });
+  await refresh();
+  for (const label of ['display-brightness', 'display-timeout', 'port-memory']) {
+    assert.equal(await page.locator(`#${label}`).isDisabled(), true);
+  }
+  await change({ available: true });
+  await refresh();
+  cases++; console.log(`Scenario ${cases} passed`);
+
+  await page.getByTestId('station-select').selectOption('Updated · C1000');
+  assert.equal(await page.locator('#charging-power').inputValue(), '1000');
+  assert.equal(await page.locator('#display-brightness').inputValue(), '2');
+  assert.equal(await page.locator('#device-timeout').inputValue(), '720');
+  for (const label of ['display-timeout', 'port-memory', 'temperature-unit', 'fast-charge', 'ac-power-saving', 'dc-power-saving']) {
+    assert.equal(await page.locator(`#${label}`).count(), 0);
+  }
+  const beforeOriginalPrime = (await recorded()).length;
+  for (const [label, value, command, fields] of [
+    ['charging-power', '900', 'set-charge-power', { watts: 900 }],
+    ['display-brightness', '1', 'set-display-brightness', { level: 1 }],
+    ['device-timeout', '0', 'set-device-timeout', { minutes: 0 }],
+  ]) {
+    await page.locator(`#${label}`).selectOption(value);
+    await propose(label);
+    await page.getByTestId('cancel-command').click();
+    assert.equal((await recorded()).length, beforeOriginalPrime + ['charging-power', 'display-brightness', 'device-timeout'].indexOf(label));
+    await propose(label);
+    await page.getByTestId('confirm-command').click();
+    await page.getByTestId('gateway-notice').filter({ hasText: 'Command confirmed' }).waitFor();
+    assert.deepEqual((await recorded()).at(-1), { name: 'Updated · C1000', command, ...fields });
+  }
+  await change({ available: false });
+  await refresh();
+  for (const label of ['charging-power', 'display-brightness', 'device-timeout']) {
+    assert.equal(await page.locator(`#${label}`).isDisabled(), true);
+  }
+  await change({ available: true });
+  await refresh();
+  cases++; console.log(`Scenario ${cases} passed`);
+
   // Controlled browser clock and synthetic read-only responses produce a chart
   // without waiting 20 real minutes or contacting a station.
   const initial = await fetch(`${base}/devices`, { headers: { Authorization: authorization } }).then((response) => response.json());
@@ -296,6 +363,8 @@ try {
   await page.setViewportSize({ width: 1440, height: 1100 });
   await page.getByTestId('station-select').selectOption('Spare · C1000');
   await page.screenshot({ path: `${screenshots}/web-dashboard-c1000-preferences.png`, fullPage: true });
+  await page.getByTestId('station-select').selectOption('Updated · C1000');
+  await page.screenshot({ path: `${screenshots}/web-dashboard-original-prime.png`, fullPage: true });
   assert.deepEqual(errors, []);
   assert.deepEqual(external, []);
   cases++; console.log(`Scenario ${cases} passed`);

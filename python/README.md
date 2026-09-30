@@ -27,7 +27,7 @@ such as `monitor`, `serve` and `ap-service-status` keep their scripted behavior.
 | --- | --- | --- |
 | `c300` — C300/C300X AC | C300X tested live; C300 sibling uses the reference map | AC output, light, charging-power limit, screen timeout verified |
 | `c1000` — original A1761 | Live monitoring and restored control cycles, version code 151 | Charging/output/light/display/device timeout, temperature units, fast charge and AC/DC Smart modes; no direct local MQTT yet |
-| `c1000_gen2` — A1763 | BLE and native MQTT tested live | Charge limits/power, display/device timeout, fast charge; native reserve, tariffs/grid return, temperature, alert and guarded discharge floor |
+| `c1000_gen2` — A1763 | BLE and native MQTT tested live | Charge limits/power, display/device timeout, fast charge; native reserve, tariffs/grid return, temperature/alert, brightness/screen timeout, port memory and guarded discharge floor |
 | `c2000_gen2` — A1783 | Tested live | Upper charge cap, charging power, screen timeout; native reserve, all-day Peak and confirmed grid return |
 
 C300 DC variants are not supported. The distribution and CLI are `solix-link`;
@@ -78,7 +78,9 @@ add it with `python -m pip install './python[tui]'`. `solix-link interactive`
 always opens the line-based guide, even when the dashboard is installed.
 
 Scan merges nearby stations without changing saved configuration; Save station
-appends a selected device. C300/original C1000 connect without an account ID.
+appends a selected device. C300 and legacy original C1000 connect without a pairing ID.
+The Protocol button selects Prime or legacy for either C1000 generation; changing
+it saves local configuration and disconnects the current session.
 For unpaired Prime stations, follow `pair`/`interactive` main-button instructions
 first. The dashboard opens disconnected and connects only on request. Native
 MQTT selection uses an already-running AP-service worker; it does not create an AP.
@@ -101,6 +103,24 @@ Closing the dashboard disconnects monitoring; it does not restore settings.
 C1000 Gen 2 A4[18] is now correctly named `display_brightness` (previously
 `display_mode`). The existing `display_enabled` field describes runtime
 display-timer activity, not saved configuration; fast charge can wake it.
+
+C1000 Gen 2 native MQTT exposes guarded display/memory controls through the
+AP-service CLI, terminal/browser dashboard, HTTP API and HA selectors/switch:
+
+```sh
+solix-link ap-service-set-display-brightness --directory /path/to/private-ap --name office --level 2
+solix-link ap-service-set-display-timeout --directory /path/to/private-ap --name office --seconds 60
+solix-link ap-service-set-port-memory --directory /path/to/private-ap --name office --enabled off
+```
+
+Brightness accepts 1/2/3 (Low/Medium/High), never zero. Screen timeout accepts
+0 (Never), 10/20/30/60/300/1800 seconds. Port-memory Off clears recovery
+bookkeeping; turning On does not restore that transient state. On main **1.1.4.9**,
+brightness **1→2→3→1**, memory **1→0→1** and timeout **30→60→30 s** passed fresh native
+readback/restoration with AC on. Final independent BLE was unavailable.
+These new controls are native C1000 Gen 2 only, with `--allow-control` required.
+Brightness also requires Standard/no active tariff and an inactive clock screen.
+See [versioned validation and API schemas](../docs/c1000-native-preferences-validation.md).
 
 Original C1000 temperature, fast charge and AC/DC Smart preferences are
 [physically verified](../docs/c1000-preferences-validation.md) and exposed in
@@ -150,8 +170,8 @@ await monitor.connect()
 
 ### C300/C300X AC and original C1000
 
-These profiles automatically select legacy Bluetooth and do not need
-`owner_user_id` or `pair`. For example:
+These profiles default to legacy Bluetooth and do not need `owner_user_id` or
+`pair` with the tested C300 and original C1000 firmware 1.5.1. For example:
 
 ```bash
 solix-link scan
@@ -186,6 +206,30 @@ operations as C300. Device rejection replies raise errors; success requires
 the requested fields to appear in fresh telemetry after the write. Cached
 readings or an acknowledgement alone cannot confirm a setting. A timeout
 can still mean the setting changed; inspect before retrying.
+After the original C1000 update to **1.7.1**, legacy negotiation disconnected;
+explicit `protocol="prime"` with an existing 40-character app ID completed GCM
+negotiation, ECDH, registration and original `4040` telemetry. Select Prime in
+the dashboard's Protocol dialog or guided menu, or save it explicitly:
+
+```bash
+solix-link add --name c1000 --model c1000 --address AA:BB:CC:DD:EE:04 \
+  --protocol prime --client-id "$PAIRING_ID"
+solix-link monitor --name c1000
+solix-link set-charge-power --name c1000 --watts 900
+solix-link set-display-brightness --name c1000 --level 1
+solix-link set-device-timeout --name c1000 --minutes 0
+```
+
+The default stays legacy; firmware advertisements do not select the transport.
+On Prime 1.7.1 only charging power, brightness and Device Timeout are enabled:
+900/1000 W, brightness 1/2 and timeout 720/0 minutes were restored live. The
+SDK requires all eleven settings and the complete 21-byte `F8` flags freshly
+before and after each write, protecting other settings and unknown flags.
+Failure after a write can mean the setting changed; inspect fresh status before
+retrying. Other original Prime controls and direct local MQTT remain unavailable.
+The `pair --model c1000` workflow accepts existing IDs; generating and rebinding
+an original's ID has not yet been verified. See the
+[update capture](../docs/c1000-original-update-network.md).
 Charging power and restoration also passed through the HTTP gateway on both
 C1000 generations. These full-battery checks confirm stored limits, not physical
 charging-rate enforcement. Remaining runtime is explicitly unknown for oversized
@@ -583,6 +627,15 @@ reserve-clamping protection and telemetry confirmation. The raw builder only
 validates the range. Streams accept 1–120 seconds and must be renewed by the caller.
 Request payloads and topics contain private identifiers; do not log them
 publicly. These helpers make no network calls and implement no output switch.
+
+On a C1000 Gen 2 `LocalMqttServer`, use the guarded async
+`set_display_brightness(level)`, `set_display_timeout(seconds)` and
+`set_port_memory(enabled)` methods. Their raw `NativeMqttCommands` builders
+are `.display_brightness`, `.display_timeout` and `.port_memory`; select
+`model=Model.C1000_GEN2` when constructing that helper. Raw builders do not
+perform fresh baseline/readback checks. The new
+[validation report](../docs/c1000-native-preferences-validation.md) separates
+live tested values from synthetic range/guard coverage.
 
 ### Experimental Gen 2 Wi-Fi join and C1000 API setup
 

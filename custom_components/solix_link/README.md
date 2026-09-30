@@ -51,6 +51,15 @@ Authorization header. Treat HA configuration backups as containing credentials.
   (1%, 5%, 10%, 15%, 20%). Available limits leave at least
   five percentage points below the current backup reserve; selecting a limit
   does not adjust the reserve. The temperature sensor continues to report Celsius.
+- Display configuration selects: C1000 Gen 2 native MQTT brightness
+  (Low/Medium/High) and screen timeout (Never, 10/20/30/60/300/1800 seconds).
+  Brightness 1→2→3→1 and screen timeout 30→60→30 passed fresh readback and
+  baseline restoration on main 1.1.4.9, with AC output enabled. Other timeout
+  choices remain covered by firmware/range tests; luminance was not measured.
+- Output port memory configuration switch: C1000 Gen 2 native MQTT, with
+  fresh binary readback. Off clears output-recovery bookkeeping; turning On
+  does not restore that transient state. The 1→0→1 stored-setting trial passed
+  on main 1.1.4.9 while AC output stayed enabled.
 - Device Timeout select: original C1000 legacy BLE and C1000 Gen 2 Prime/native
   MQTT, when advertised with fresh integer readback. Choices are Never and
   30/60/120/240/360/720/1440 minutes. Never disables this timeout; independent

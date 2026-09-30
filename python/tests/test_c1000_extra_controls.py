@@ -41,14 +41,19 @@ def test_boolean_controls_reject_integer_and_other_shapes(setting, method, comma
 
 
 @pytest.mark.parametrize("dc,ac", [(1, 1), (1, 2), (2, 1), (2, 2)])
-def test_smart_status_is_packed_and_uses_one_normal_two_smart(dc, ac):
-    metrics, _ = decode_telemetry(tlv(0xDD, b"\x01\x01") + tlv(0xF8, bytes((1, dc, ac))), Model.C1000)
+@pytest.mark.parametrize("expanded", [False, True])
+def test_smart_status_is_packed_and_uses_one_normal_two_smart(dc, ac, expanded):
+    modes = bytes((4 if expanded else 1, dc, ac)) + (bytes(range(18)) if expanded else b"")
+    metrics, raw = decode_telemetry(tlv(0xDD, b"\x01\x01") + tlv(0xF8, modes), Model.C1000)
     assert metrics["temperature_unit_fahrenheit"] == 1
     assert metrics["dc_power_saving_mode_enabled"] == int(dc == 2)
     assert metrics["ac_power_saving_mode_enabled"] == int(ac == 2)
+    assert raw[0xF8] == modes
 
 
-@pytest.mark.parametrize("data", [b"", b"\x01\x02", b"\x04\x02\x02", b"\x01\x00\x03", b"\x01\x02\x02\x00"])
+@pytest.mark.parametrize("data", [b"", b"\x01\x02", b"\x04\x02\x02", b"\x01\x00\x03", b"\x01\x02\x02\x00",
+                                  b"\x04\x02\x02" + bytes(17), b"\x04\x02\x02" + bytes(19),
+                                  b"\x01\x02\x02" + bytes(18), b"\x04\x00\x03" + bytes(18)])
 def test_malformed_smart_status_is_omitted(data):
     metrics, _ = decode_telemetry(tlv(0xF8, data), Model.C1000)
     assert "ac_power_saving_mode_enabled" not in metrics

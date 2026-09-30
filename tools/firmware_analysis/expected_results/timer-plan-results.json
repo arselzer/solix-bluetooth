@@ -1,0 +1,327 @@
+{
+  "firmware_sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9",
+  "cases_passed": 60,
+  "hardware_or_network_used": false,
+  "source_sha256": {
+    "emulate_timer_plan.py": "4418ce209adc19ca4bd6553699df331fae6549c46c63053dbb233fbd42e36260",
+    "emulate_clock_semantics.py": "945b649c3b5cec00d816041e783641085ccfbdb5f80efc2ed2c4e15f3bae30f2",
+    "emulate_soc_cap_handler.py": "fbac6e75825cb096190779f583ade26ea4d5e4cd9f5a76781185d39d33280c71",
+    "emulate_tou_controller_encoding.py": "9d65518d92649f47b67c86562b7edd29f0775d778b02c25eca72b0acd55a0e22",
+    "replay_io.py": "731d795a5ec37e2cf12b809b7122eaf7a29d84c21a2ecd43fafa3e2f8d962d30"
+  },
+  "results": [
+    {
+      "case": "field_a2",
+      "stored_offset": 16,
+      "stored_hex": "83",
+      "changed_bytes": 2,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "field_a3",
+      "stored_offset": 17,
+      "stored_hex": "11223344",
+      "changed_bytes": 4,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "field_a4",
+      "stored_offset": 12,
+      "stored_hex": "78563412",
+      "changed_bytes": 4,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "field_a5",
+      "stored_offset": 23,
+      "stored_hex": "73796e74686574696300",
+      "changed_bytes": 9,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "field_a7",
+      "stored_offset": 21,
+      "stored_hex": "01",
+      "changed_bytes": 1,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "field_a8",
+      "stored_offset": 2,
+      "stored_hex": "e001",
+      "changed_bytes": 2,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "field_a9",
+      "stored_offset": 4,
+      "stored_hex": "fc03",
+      "changed_bytes": 2,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "field_aa",
+      "stored_offset": 22,
+      "stored_hex": "7f",
+      "changed_bytes": 1,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "field_ab",
+      "stored_offset": 6,
+      "stored_hex": "01",
+      "changed_bytes": 1,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "field_ac",
+      "stored_offset": 0,
+      "stored_hex": "02",
+      "changed_bytes": 1,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "field_ad",
+      "stored_offset": 6,
+      "stored_hex": "02",
+      "changed_bytes": 1,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "field_ae",
+      "stored_offset": 8,
+      "stored_hex": "2805",
+      "changed_bytes": 2,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "field_af",
+      "stored_offset": 10,
+      "stored_hex": "6801",
+      "changed_bytes": 2,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "asset_locator_alone_does_not_start_transfer",
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "flag_lsb_not_boolean_normalization",
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "window_07_59",
+      "brightness": 0,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "window_08_00",
+      "brightness": 5,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "window_16_59",
+      "brightness": 5,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "window_17_00",
+      "brightness": 0,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "weekday_28_mask_1",
+      "brightness": 5,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "weekday_28_mask_2",
+      "brightness": 0,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "weekday_28_mask_4",
+      "brightness": 0,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "weekday_28_mask_64",
+      "brightness": 0,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "weekday_28_mask_127",
+      "brightness": 5,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "weekday_29_mask_1",
+      "brightness": 0,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "weekday_29_mask_2",
+      "brightness": 5,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "weekday_29_mask_4",
+      "brightness": 0,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "weekday_29_mask_64",
+      "brightness": 0,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "weekday_29_mask_127",
+      "brightness": 5,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "weekday_30_mask_1",
+      "brightness": 0,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "weekday_30_mask_2",
+      "brightness": 0,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "weekday_30_mask_4",
+      "brightness": 5,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "weekday_30_mask_64",
+      "brightness": 0,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "weekday_30_mask_127",
+      "brightness": 5,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "brightness_ac",
+      "brightness": 20,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "brightness_ad",
+      "brightness": 20,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "overnight_28_21",
+      "brightness": 0,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "overnight_28_22",
+      "brightness": 5,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "overnight_29_5",
+      "brightness": 5,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "overnight_29_6",
+      "brightness": 0,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "overnight_29_22",
+      "brightness": 0,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "equal_endpoints_full_day_0",
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "equal_endpoints_full_day_8",
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "equal_endpoints_full_day_12",
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "equal_endpoints_full_day_23",
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "first_matching_window_wins",
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "visibility_gate_normal",
+      "eligible": 1,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "visibility_gate_no_power_gate",
+      "eligible": 0,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "visibility_gate_2024",
+      "eligible": 0,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "visibility_gate_2025",
+      "eligible": 1,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "visibility_gate_disabled",
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "recurring_timer_turns_screen_off_preserves_enable",
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "zero_weekday_mask_one_shot_disables_after_window",
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "active_normal_display_timer_defers_clock_screen",
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "asset_callback_False",
+      "final_transfer_status": 2,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "asset_callback_True",
+      "final_transfer_status": 0,
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "busy_asset_update_ack_without_committing",
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "rejected_transfer_start_still_marks_pending",
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "da_serializer_layout",
+      "value_hex": "048200616263647856341201e001fc035501010028056801",
+      "protected_power_settings_unchanged": true
+    },
+    {
+      "case": "query0092_readback_clears_failure",
+      "response_hex": "00a10131a2110482026162636478563412010000000055a30a0473796e746865746963",
+      "protected_power_settings_unchanged": true
+    }
+  ]
+}

@@ -65,6 +65,9 @@ def timezone_confer(timezone_name: str | None) -> tuple[bytes, bytes]:
     return seconds_west.to_bytes(4, "little", signed=True), posix
 
 
+C1000_PRIME_SETTINGS = frozenset(("display_brightness", "ac_charging_power", "device_timeout"))
+
+
 class Model(str, Enum):
     C300 = "c300"
     C1000 = "c1000"
@@ -88,7 +91,7 @@ class Model(str, Enum):
         raise ValueError(f"Unsupported SOLIX model: {name!r}")
 
     def resolve_protocol(self, protocol: str | None = None) -> str:
-        """Choose the model default while preserving explicit C1000 legacy use."""
+        """Choose the default; original C1000 firmware 1.7.1 can use Prime."""
         if protocol is None:
             protocol = "legacy" if self in (Model.C300, Model.C1000) else "prime"
         if protocol not in ("prime", "legacy"):
@@ -97,8 +100,6 @@ class Model(str, Enum):
             raise ValueError("C2000 Gen 2 requires Prime protocol")
         if self == Model.C300 and protocol != "legacy":
             raise ValueError("C300/C300X AC support requires legacy protocol")
-        if self == Model.C1000 and protocol != "legacy":
-            raise ValueError("Original C1000 support requires legacy protocol")
         return protocol
 
 
@@ -248,6 +249,11 @@ def decode_telemetry(payload: bytes, model: Model | None = None) -> tuple[dict[s
             if len(tail) >= 15:
                 metrics["expansion_battery_count"] = int(tail[12] == 1)
     if model == Model.C1000_GEN2:
+        from .clock_screen import decode_clock_screen
+        from .disaster_plan import decode_disaster_plan
+
+        metrics.update(decode_clock_screen(values.get(0xDA, b""), model=model))
+        metrics.update(decode_disaster_plan(values.get(0xD9, b"")))
         # Exact type/lengths come from A1763 main 1.1.4.9 serializers.
         # A8 incremental updates can retain an old power word, so use A6's
         # power field. Its watt scale still needs a nonzero physical PV check.
@@ -393,8 +399,12 @@ class Session:
 
     def c1000_control_packet(self, setting: str, value: int | bool) -> bytes:
         """Build a validated A1761 control; see the versioned hardware findings."""
-        if self.model != Model.C1000 or self.protocol != "legacy" or not self.ready:
-            raise RuntimeError("Controls require a connected original C1000 legacy session")
+        if self.model != Model.C1000 or not self.ready:
+            raise RuntimeError("Controls require a connected original C1000 legacy or supported Prime session")
+        if self.protocol == "prime" and setting not in C1000_PRIME_SETTINGS:
+            raise RuntimeError("This original C1000 control is verified only with a legacy session")
+        if self.protocol == "prime" and setting == "display_brightness" and (type(value) is not int or value not in (1, 2, 3)):
+            raise ValueError("Original C1000 Prime brightness must be 1, 2 or 3")
         from .c1000 import c1000_setting
         command, payload, _expected = c1000_setting(setting, value)
         timestamp = tlv(0xFE, b"\x03" + self._timestamp())

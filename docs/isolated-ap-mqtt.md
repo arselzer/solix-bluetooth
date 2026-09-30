@@ -125,6 +125,39 @@ setting changed: inspect the next fresh status before retrying. The limit is
 a charging setpoint; it does not redirect AC loads to the battery.
 AC switching is not exposed by this endpoint.
 
+## C1000 Gen 2 display and port-memory preferences
+
+These native MQTT controls are C1000 Gen 2 only and require the same writable
+worker. Use `--name` when several stations share the AP:
+
+```sh
+sudo /path/to/venv/bin/solix-link ap-service-set-display-brightness \
+  --directory "$PWD/.solix-private/local-mqtt" --name office --level 2
+sudo /path/to/venv/bin/solix-link ap-service-set-display-timeout \
+  --directory "$PWD/.solix-private/local-mqtt" --name office --seconds 60
+sudo /path/to/venv/bin/solix-link ap-service-set-port-memory \
+  --directory "$PWD/.solix-private/local-mqtt" --name office --enabled off
+```
+
+Brightness is 1 Low / 2 Medium / 3 High; zero is refused because it reaches
+display-off behavior. Screen timeout accepts 0 Never and
+10/20/30/60/300/1800 seconds. Port memory accepts on/off. **Off clears recovery
+bookkeeping; turning On does not restore that transient state.**
+
+The guarded service confirms the target against fresh complete A4/D9 and
+preserves unrelated settings and outputs, allowing runtime display activity
+to change. Brightness additionally requires Standard/no active tariff and
+reported inactive clock-screen DA/transfer state, then protects that state. Store
+your baseline before a temporary test; failed confirmation may still mean a
+setting changed, and stopping the tool does not restore it.
+
+On main **1.1.4.9** / radio **0.3.3.0**, brightness **1→2→3→1**, port memory
+**1→0→1**, and screen timeout **30→60→30 s** passed seven fresh native
+confirmations and three final baseline samples with AC/mains on and DC off.
+The independent final BLE check was unavailable, not passed. Other timeout
+values have firmware/SDK coverage only. See
+[live versus synthetic evidence](c1000-native-preferences-validation.md).
+
 ## Reserve, hourly plans and grid return
 
 Explicit native tariff controls require the same `--allow-control` worker:
@@ -210,6 +243,9 @@ runs inside the isolated namespace; `ap_service_request` uses its filesystem Uni
 socket from a host process. `LocalMqttServer` also offers `set_backup_reserve`,
 `set_tou_plan` and `return_to_grid`, using exported `TouPeriod` values. Raw
 `NativeMqttCommands` builders only encode packets; they do not confirm writes.
+On C1000 Gen 2, guarded methods also include `set_display_brightness(level)`,
+`set_display_timeout(seconds)` and `set_port_memory(enabled)`. The raw builder
+methods are `display_brightness`, `display_timeout` and `port_memory`.
 For an HA coordinator, pass a callback to
 `LocalMqttServer`/`APService`, or consume the host HTTP event stream.
 

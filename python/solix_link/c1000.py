@@ -64,9 +64,11 @@ def decode_c1000_telemetry(payload: bytes) -> tuple[dict[str, int | str], dict[i
             metrics[name] = decoded
 
     modes = values.get(0xF8, b"")
-    # Live A1761 code151 uses type01 followed by two packed mode bytes.
-    # Readback is 1=Normal / 2=Smart; live code151 commands use 0/1.
-    if len(modes) == 3 and modes[0] == 1:
+    # Code151 reports type01 with two mode bytes. Code171 reports the
+    # type04/21-byte structure reproduced from main1.5.9's F8 serializer.
+    # Both start with DC/AC modes: 1=Normal / 2=Smart. Preserve the expanded
+    # structure's remaining bytes as raw data; their meanings are separate.
+    if (len(modes) == 3 and modes[0] == 1) or (len(modes) == 21 and modes[0] == 4):
         for offset, key in ((1, "dc_power_saving_mode_enabled"), (2, "ac_power_saving_mode_enabled")):
             if modes[offset] in (1, 2):
                 metrics[key] = int(modes[offset] == 2)

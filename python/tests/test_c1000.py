@@ -23,8 +23,9 @@ def test_original_c1000_identity_is_distinct_from_gen2():
     session = Session(Model.C1000)
     assert session.protocol == "legacy" and session.owner_user_id is None
     assert parse_packet(session.start()).command.hex() == "0001"
-    with pytest.raises(ValueError, match="legacy"):
-        Session(Model.C1000, protocol="prime")
+    prime = Session(Model.C1000, protocol="prime")
+    assert prime.protocol == "prime" and len(prime.owner_user_id) == 40
+    assert parse_packet(prime.start()).command.hex() == "4001"
 
 
 def test_original_c1000_decode_uses_reference_layout_not_browser_or_gen2_aliases():

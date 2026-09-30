@@ -237,7 +237,8 @@ class APService:
                     values = {key: value for key, value in request.items() if key != "command"}
                     validate_command(action, values)
                     result = await mqtt.set_discharge_floor(values["lower"])
-                elif action in ("set-temperature-unit", "set-off-grid-alert", "set-device-timeout", "set-fast-charge"):
+                elif action in ("set-temperature-unit", "set-off-grid-alert", "set-device-timeout", "set-fast-charge",
+                                "set-display-brightness", "set-display-timeout", "set-port-memory"):
                     values = {key: value for key, value in request.items() if key != "command"}
                     validate_command(action, values)
                     if action == "set-temperature-unit":
@@ -246,6 +247,12 @@ class APService:
                         result = await mqtt.set_device_timeout(values["minutes"])
                     elif action == "set-fast-charge":
                         result = await mqtt.set_fast_charge_enabled(values["enabled"])
+                    elif action == "set-display-brightness":
+                        result = await mqtt.set_display_brightness(values["level"])
+                    elif action == "set-display-timeout":
+                        result = await mqtt.set_display_timeout(values["seconds"])
+                    elif action == "set-port-memory":
+                        result = await mqtt.set_port_memory(values["enabled"])
                     else:
                         result = await mqtt.set_off_grid_alert(values["enabled"])
                 elif action == "set-backup-reserve":

@@ -256,6 +256,18 @@ class LocalMqttServer:
         request = self.commands.fast_charge(enabled)
         return await self._set_c1000_setting(request, "ac_fast_charge_enabled", int(enabled))
 
+    async def set_display_brightness(self, level: int) -> dict:
+        request = self.commands.display_brightness(level)
+        return await self._set_c1000_setting(request, "display_brightness", level)
+
+    async def set_display_timeout(self, seconds: int) -> dict:
+        request = self.commands.display_timeout(seconds)
+        return await self._set_c1000_setting(request, "display_timeout_seconds", seconds)
+
+    async def set_port_memory(self, enabled: bool) -> dict:
+        request = self.commands.port_memory(enabled)
+        return await self._set_c1000_setting(request, "port_memory_enabled", int(enabled))
+
     async def set_discharge_floor(self, lower: int) -> dict:
         """Confirm a lower limit without changing reserve or other settings.
 
@@ -332,12 +344,18 @@ class LocalMqttServer:
         changed settings. Inspect fresh status before deciding the next action.
         """
         if metric not in ("temperature_unit_fahrenheit", "ac_off_grid_alert_enabled", "device_timeout_minutes",
-                          "ac_fast_charge_enabled", "ac_charging_power_limit_w"):
+                          "ac_fast_charge_enabled", "ac_charging_power_limit_w", "display_brightness",
+                          "display_timeout_seconds", "port_memory_enabled"):
             raise ValueError("Unsupported C1000 setting")
 
         async with self._control_lock:
             connection = self._control_connection()
             before_a4, before_d9, before = await self._fresh_c1000_settings(connection)
+            if metric == "display_brightness" and (
+                    before["usage_mode"] != "standard" or before["active_tariff"] != "none"
+                    or before.get("clock_screen_enabled") != 0
+                    or before.get("clock_screen_transfer_status_raw") != 0):
+                raise ValueError("Brightness requires Standard mode and an inactive clock screen; no write sent")
             if metric == "ac_fast_charge_enabled" and value and (
                     before["usage_mode"] != "standard" or before["active_tariff"] != "none"
                     or before["ac_input_connected"] != 1):
@@ -353,6 +371,12 @@ class LocalMqttServer:
                 expected[21] = int(value)
             elif metric == "ac_charging_power_limit_w":
                 expected[5:7] = value.to_bytes(2, "little")
+            elif metric == "display_brightness":
+                expected[18] = value
+            elif metric == "display_timeout_seconds":
+                expected[16:18] = value.to_bytes(2, "little")
+            elif metric == "port_memory_enabled":
+                expected[23] = value
             else:
                 expected[32] = (expected[32] & ~2) | (int(value) << 1)
             for sample in range(2 if metric == "ac_fast_charge_enabled" else 1):
@@ -362,10 +386,11 @@ class LocalMqttServer:
                 a4, d9, metrics = await self._fresh_c1000_settings(connection)
                 if metrics[metric] != int(value):
                     raise RuntimeError("Setting not confirmed by telemetry; settings may have changed")
-                if metric in ("ac_fast_charge_enabled", "ac_charging_power_limit_w"):
+                if metric in ("ac_fast_charge_enabled", "ac_charging_power_limit_w", "display_brightness",
+                              "display_timeout_seconds", "port_memory_enabled"):
                     # A4[22] is runtime display-timer activity. Fast-charge
-                    # and charge-power events wake it; expiry may clear it. Saved brightness,
-                    # timeout and port memory remain protected byte-for-byte.
+                    # charge-power and display events wake it; expiry may clear
+                    # it. The saved preferences remain protected independently.
                     expected[22] = a4[22]
                 # Remaining timer seconds may decrease, but never increase.
                 for start, key in ((1, "ac_output_timeout_seconds"), (9, "dc_output_timeout_seconds")):
@@ -376,6 +401,10 @@ class LocalMqttServer:
                 if (a4 != bytes(expected) or d9[2:] != before_d9[2:]
                         or any(metrics[key] != before[key] for key in protected)):
                     raise RuntimeError("Protected setting changed; settings may have changed")
+                if metric == "display_brightness" and any(
+                        metrics.get(key) != value for key, value in before.items()
+                        if key.startswith("clock_screen_")):
+                    raise RuntimeError("Clock-screen configuration changed during brightness confirmation")
             return self._tou_result(d9, metrics)
 
     async def _fresh_tou(self, connection, *, timeout: float = 12) -> tuple[bytes, dict]:
@@ -407,6 +436,13 @@ class LocalMqttServer:
 
     async def _tou_ready(self, connection, metrics: dict) -> None:
         self._tou_protected(metrics)
+        if self.config.model == Model.C1000_GEN2:
+            # Use the freshly decoded status, never the cached snapshot. Active
+            # backup plans override tariff charging suppression and saved caps.
+            disaster_active = metrics.get("disaster_preparation_active")
+            if type(disaster_active) is not int or disaster_active != 0:
+                raise ValueError(
+                    "Time-of-Use activation requires fresh confirmation that disaster preparation is inactive")
         if metrics["ac_output_enabled"] != 1 or metrics["ac_input_connected"] != 1:
             raise RuntimeError("Time-of-Use activation requires enabled AC output and connected mains")
         if metrics["ac_fast_charge_enabled"] != 0:

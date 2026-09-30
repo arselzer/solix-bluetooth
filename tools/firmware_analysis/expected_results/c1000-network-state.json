@@ -1,0 +1,81 @@
+{
+  "0824_observation": "Zero maps to5500 persistence marker; every nonzero byte maps to0000.",
+  "0825_observation": "All payload-byte values set generic startup ACK flag; the payload/context is not read.",
+  "cases": {
+    "0824_zero_vs_nonzero": 256,
+    "0825_null_context_not_read": 1,
+    "0825_payload_ignored": 768,
+    "internal_0025_builder": 6,
+    "module_0027_state": 12,
+    "network_window_timer_registration": 2,
+    "startup_wait_ack_and_retry": 120,
+    "total": 1165
+  },
+  "cases_sha256": "636db6cda4c0c4a38c85511f35b18978486dd8d8c09ad00a7b8dc1356c4e90a2",
+  "environment": {
+    "python": "3.12.3",
+    "unicorn": "2.1.4"
+  },
+  "input_sha256": "b295ee8613f5c96e70dcc905896df516621cab4dc590bb580eac6b84519911a6",
+  "internal_0025_frames": [
+    {
+      "command": 37,
+      "function": 16,
+      "payload": "a10100a20100"
+    },
+    {
+      "command": 37,
+      "function": 16,
+      "payload": "a10100a20101"
+    },
+    {
+      "command": 37,
+      "function": 16,
+      "payload": "a10100a20102"
+    },
+    {
+      "command": 37,
+      "function": 16,
+      "payload": "a10101a20100"
+    },
+    {
+      "command": 37,
+      "function": 16,
+      "payload": "a10101a20101"
+    },
+    {
+      "command": 37,
+      "function": 16,
+      "payload": "a10101a20102"
+    }
+  ],
+  "limits": [
+    "Installed main1.5.1 differs from analyzed1.5.9.",
+    "Original radio firmware0.1.3.0 is unavailable; no HTTP/MQTT parser or error producer runs.",
+    "Function10/0025 is internal radio control, not app function0f/0025 activation.",
+    "Startup waiting state is replayed with synthetic elapsed ticks and flags.",
+    "Button handlers and timer callbacks were inspected statically, not executed.",
+    "No safe remote reset-free bootstrap recovery command is established."
+  ],
+  "main_version": "1.5.9",
+  "model": "Original C1000 A1761",
+  "network_timers": [
+    {
+      "callback": "08011274",
+      "context_offset": "b7",
+      "period_ticks": 300000,
+      "repeating": false
+    },
+    {
+      "callback": "08007b40",
+      "context_offset": "b8",
+      "period_ticks": 300000,
+      "repeating": false
+    }
+  ],
+  "substitutions": {
+    "0800d6b0": "capture configuration persistence marker; no storage write",
+    "08012b38": "capture MCU-to-module transport; no send",
+    "080225c4": "capture module response; existing helper"
+  }
+}

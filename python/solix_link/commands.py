@@ -11,6 +11,8 @@ COMMAND_FIELDS = {
     "set-tou-plan": {"periods": list, "enabled": bool},
     "return-grid": {"timeout": int},
     "set-display-timeout": {"seconds": int},
+    "set-display-brightness": {"level": int},
+    "set-port-memory": {"enabled": bool},
     "set-fast-charge": {"enabled": bool},
     "set-light": {"mode": int},
     "set-temperature-unit": {"fahrenheit": bool},
@@ -20,7 +22,8 @@ COMMAND_FIELDS = {
     "set-dc-power-saving": {"enabled": bool},
 }
 NATIVE_COMMANDS = ("set-charge-power", "set-charge-cap", "set-backup-reserve", "set-tou-plan", "return-grid")
-NATIVE_C1000_COMMANDS = ("set-temperature-unit", "set-off-grid-alert", "set-discharge-floor", "set-device-timeout", "set-fast-charge")
+NATIVE_C1000_COMMANDS = ("set-temperature-unit", "set-off-grid-alert", "set-discharge-floor", "set-device-timeout", "set-fast-charge",
+                        "set-display-brightness", "set-display-timeout", "set-port-memory")
 
 
 def validate_command(command: str, values: dict) -> None:
@@ -43,3 +46,5 @@ def validate_command(command: str, values: dict) -> None:
         raise ValueError("Grid confirmation timeout must be 5–120 seconds")
     if command == "set-device-timeout":
         validate_device_timeout(values["minutes"])
+    if command == "set-display-brightness" and values["level"] not in (1, 2, 3):
+        raise ValueError("Display brightness must be 1 (low), 2 (medium) or 3 (high)")

@@ -70,9 +70,11 @@
     "select": {
       "temperature_unit": {"name": "Temperature display", "state": {"celsius": "Celsius", "fahrenheit": "Fahrenheit"}},
       "discharge_floor": {"name": "Lower discharge limit"},
-      "device_timeout": {"name": "Device Timeout", "state": {"never": "Never", "30_minutes": "30 minutes", "1_hour": "1 hour", "2_hours": "2 hours", "4_hours": "4 hours", "6_hours": "6 hours", "12_hours": "12 hours", "24_hours": "24 hours"}}
+      "device_timeout": {"name": "Device Timeout", "state": {"never": "Never", "30_minutes": "30 minutes", "1_hour": "1 hour", "2_hours": "2 hours", "4_hours": "4 hours", "6_hours": "6 hours", "12_hours": "12 hours", "24_hours": "24 hours"}},
+      "display_brightness": {"name": "Display brightness", "state": {"low": "Low", "medium": "Medium", "high": "High"}},
+      "display_timeout": {"name": "Screen timeout", "state": {"never": "Never", "10_seconds": "10 seconds", "20_seconds": "20 seconds", "30_seconds": "30 seconds", "1_minute": "1 minute", "5_minutes": "5 minutes", "30_minutes": "30 minutes"}}
     },
     "switch": {"off_grid_alert": {"name": "Off-grid alert"}, "fast_charge": {"name": "Fast charging"},
-               "ac_power_saving": {"name": "AC power saving"}, "dc_power_saving": {"name": "DC power saving"}}
+               "ac_power_saving": {"name": "AC power saving"}, "dc_power_saving": {"name": "DC power saving"}, "port_memory": {"name": "Output port memory"}}
   }
 }

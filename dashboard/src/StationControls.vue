@@ -32,10 +32,17 @@ const floorValid = computed(() => {
   return dischargeFloors.includes(lower) && reserve !== null && upper !== null
     && lower + 5 <= reserve && reserve <= upper;
 });
-const displayTimes = computed(() => props.station.model === 'c1000' ? [20, 30, 60, 300, 1800] : [30, 60]);
+const displayTimes = computed(() => nativeC1000.value ? [0, 10, 20, 30, 60, 300, 1800]
+  : props.station.model === 'c1000' ? [20, 30, 60, 300, 1800] : [30, 60]);
 const originalProfile = computed(() => props.station.model === 'c1000' && props.station.protocol === 'legacy');
+const originalPrimeProfile = computed(() => props.station.model === 'c1000' && props.station.protocol === 'prime');
 const nativeC1000 = computed(() => props.station.model === 'c1000_gen2' && props.station.protocol === 'native_mqtt');
 const booleanReported = (key: string) => [0, 1].includes(numberMetric(props.station, key) ?? -1);
+const brightnesses = ['Low', 'Medium', 'High'];
+const brightnessReported = computed(() => [1, 2, 3].includes(numberMetric(props.station, 'display_brightness') ?? -1));
+const displayValid = computed(() => /^\d+$/.test(props.draft.seconds) && displayTimes.value.includes(Number(props.draft.seconds))
+  && (!nativeC1000.value || displayTimes.value.includes(numberMetric(props.station, 'display_timeout_seconds') ?? -1)));
+const portMemoryValid = computed(() => booleanReported('port_memory_enabled') && ['0', '1'].includes(props.draft.portMemory));
 const fastAvailable = computed(() => allowed('set-fast-charge') && (originalProfile.value
   || props.station.model === 'c1000_gen2' && ['prime', 'native_mqtt'].includes(props.station.protocol ?? '')));
 const fastValid = computed(() => booleanReported('ac_fast_charge_enabled') && ['0', '1'].includes(props.draft.fast)
@@ -53,7 +60,7 @@ function powerSaving(port: 'ac' | 'dc') {
     'Power saving may automatically turn the output off at low load.', [enabled ? 'On' : 'Off', `Applies to the ${port.toUpperCase()} output`]);
 }
 const deviceTimeouts = [0, 30, 60, 120, 240, 360, 720, 1440];
-const timeoutProfile = computed(() => props.station.model === 'c1000' && props.station.protocol === 'legacy'
+const timeoutProfile = computed(() => props.station.model === 'c1000' && ['legacy', 'prime'].includes(props.station.protocol ?? '')
   || props.station.model === 'c1000_gen2' && ['prime', 'native_mqtt'].includes(props.station.protocol ?? ''));
 const timeoutAvailable = computed(() => timeoutProfile.value && allowed('set-device-timeout'));
 const timeoutReported = computed(() => {
@@ -142,8 +149,19 @@ function addPeriod() {
       </div>
       <div v-if="allowed('set-display-timeout')" class="setting">
         <label for="display-timeout">Screen timeout</label><p>Current {{ observed('display_timeout_seconds', ' s') }}</p>
-        <div class="setting-input"><select id="display-timeout" v-model="draft.seconds" :disabled="!writable"><option v-for="seconds in displayTimes" :key="seconds" :value="String(seconds)">{{ seconds }} seconds</option></select>
-          <button class="secondary" :disabled="!writable || !displayTimes.includes(Number(draft.seconds))" @click="propose({ command: 'set-display-timeout', seconds: Number(draft.seconds) }, 'Change screen timeout?', 'Set the display timeout.', [`${draft.seconds} seconds`])">Apply</button></div>
+        <div class="setting-input"><select id="display-timeout" v-model="draft.seconds" :disabled="!writable"><option v-for="seconds in displayTimes" :key="seconds" :value="String(seconds)">{{ seconds === 0 ? 'Never' : `${seconds} seconds` }}</option></select>
+          <button class="secondary" :disabled="!writable || !displayValid" @click="propose({ command: 'set-display-timeout', seconds: Number(draft.seconds) }, 'Change screen timeout?', 'Set the display timeout.', [draft.seconds === '0' ? 'Never' : `${draft.seconds} seconds`])">Apply</button></div>
+      </div>
+      <div v-if="(nativeC1000 || originalPrimeProfile) && allowed('set-display-brightness')" class="setting">
+        <label for="display-brightness">Display brightness</label><p>Current {{ brightnesses[(numberMetric(station, 'display_brightness') ?? 0) - 1] ?? 'Not reported' }}</p>
+        <div class="setting-input"><select id="display-brightness" v-model="draft.brightness" :disabled="!writable || !brightnessReported"><option v-for="(label, index) in brightnesses" :key="label" :value="String(index + 1)">{{ label }}</option></select>
+          <button class="secondary" :disabled="!writable || !brightnessReported || !['1', '2', '3'].includes(draft.brightness)" @click="propose({ command: 'set-display-brightness', level: Number(draft.brightness) }, 'Change display brightness?', 'Set the saved display brightness level.', [brightnesses[Number(draft.brightness) - 1] ?? 'Not reported'])">Apply</button></div>
+      </div>
+      <div v-if="nativeC1000 && allowed('set-port-memory')" class="setting">
+        <label for="port-memory">Output port memory</label><p>Current {{ numberMetric(station, 'port_memory_enabled') === 1 ? 'On' : numberMetric(station, 'port_memory_enabled') === 0 ? 'Off' : 'Not reported' }}</p>
+        <div class="setting-input"><select id="port-memory" v-model="draft.portMemory" :disabled="!writable || !booleanReported('port_memory_enabled')"><option value="0">Off</option><option value="1">On</option></select>
+          <button class="secondary" :disabled="!writable || !portMemoryValid" @click="propose({ command: 'set-port-memory', enabled: draft.portMemory === '1' }, 'Change output port memory?', 'Off clears output-recovery bookkeeping; turning On does not restore that transient state.', [draft.portMemory === '1' ? 'On' : 'Off'])">Apply</button></div>
+        <p class="hint">Off clears output-recovery bookkeeping; turning On does not restore that transient state.</p>
       </div>
       <div v-if="timeoutAvailable" class="setting">
         <label for="device-timeout">Device Timeout</label><p>Current {{ timeoutReported ? timeoutLabel(Number(station.metrics.device_timeout_minutes)) : 'Not reported' }}</p>

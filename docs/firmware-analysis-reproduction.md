@@ -6,8 +6,12 @@ The [offline replay tools](../tools/firmware_analysis/) combined runner reproduc
 
 Separate continuations add [1,317 original-C1000 v1.5.9 cases](c1000-legacy-network-investigation.md)
 and [1,347 original Smart-policy cases](c1000-smart-auto-off-policy.md),
+[1,165 original bootstrap-state cases](c1000-bootstrap-state-investigation.md),
 [49 Gen 2 energy scenarios plus 1,800 arithmetic checks](gen2-energy-counter-investigation.md),
-and [47 combined clock/schedule cases](gen2-schedule-clock-audit.md).
+[47 tariff clock/offset cases](gen2-schedule-clock-audit.md),
+[1,060 preference cases](gen2-preference-candidates.md),
+[60 LCD clock-screen cases](gen2-timer-plan-investigation.md), and
+[762 disaster-plan cases](gen2-disaster-plan-investigation.md).
 These have independent commands and manifests; they are not included in the
 1,842-case combined runner. Their individual commands are in the linked records.
 
@@ -55,6 +59,58 @@ The output directory contains six suite result files and `reproduction-manifest.
 The published [verified-run manifest](../tools/firmware_analysis/verified-run.json) records a successful run matching every expected result. Input checks also rejected a missing image, a wrong-size image, a same-size image with the wrong hash, and optimized Python execution.
 
 To run one suite, invoke its `emulate_*.py` entry point with `SOLIX_ANALYSIS_OUTPUT` set. Entry points are `emulate_general_settings.py`, `emulate_offgrid_alert.py`, `emulate_charging_followup.py`, `emulate_feature_candidates.py`, `emulate_additional_features.py` and `emulate_device_timeout.py`. Other modules supply the replay machinery; the D9 helper contains no capture reader. Feature replay assumptions and proposed future tests are in [feature candidates](gen2-feature-candidates.md), [additional telemetry](gen2-additional-feature-investigation.md) and [timeout behavior](device-timeout-behavior.md).
+
+## Standalone preference, schedule and bootstrap continuations
+
+These commands are **additional suites**, not changes to the combined runner:
+
+```sh
+SOLIX_ANALYSIS_OUTPUT=/tmp/solix-preferences \
+  python3 tools/firmware_analysis/emulate_preference_candidates.py
+cmp /tmp/solix-preferences/preference-candidates-results.json \
+  tools/firmware_analysis/expected_results/preference-candidates-results.json
+
+python3 tools/firmware_analysis/emulate_timer_plan.py \
+  --firmware-dir firmware/c1000_gen2/1.1.4.9 \
+  --output /tmp/solix-clock-screen.json
+cmp /tmp/solix-clock-screen.json \
+  tools/firmware_analysis/expected_results/timer-plan-results.json
+
+SOLIX_ANALYSIS_OUTPUT=/tmp/solix-disaster \
+  python3 tools/firmware_analysis/emulate_disaster_plan.py
+cmp /tmp/solix-disaster/disaster-plan-results.json \
+  tools/firmware_analysis/expected_results/disaster-plan-results.json
+
+python3 tools/firmware_analysis/emulate_c1000_network_state.py \
+  --output /tmp/c1000-network-state.json
+```
+
+| Suite | Cases | Exact scope |
+| --- | ---: | --- |
+| Preferences | 1,060 | Brightness duty lookup, ambient setter stub, raw language storage/LCD copy and Smart storage; no visible display or asynchronous output-shutdown validation |
+| LCD clock screen | 60 | `0091` handler, weekday/minute windows, visibility, one-shot expiry, DA/0092 readback and asset-update boundaries; **not a charging scheduler** |
+| Disaster plans | 762 | Manual/automatic storage, activation/expiry, D9, charging policy and periodic BMS-limit tail; effective 100%/1% bounds and cancellation side effects |
+| Original bootstrap | 1,165 | A1761 **main 1.5.9** ACK handlers, internal serializers, radio-state retries and timer registration; installed main **1.5.1** behavior is separate |
+
+The first three require the same Gen 2 main image as the combined runner.
+The original-bootstrap tool validates the distinct bundled
+`firmware/c1000_original/1.5.9/MainMcu-decoded.bin` and accepts `--firmware`.
+Its SHA-256 is
+`b295ee8613f5c96e70dcc905896df516621cab4dc590bb580eac6b84519911a6`.
+The 60 LCD cases must not be confused with the separate 47 tariff-clock cases.
+
+Newer suites execute some paths that older helpers substituted: the disaster
+suite runs actual active-plan selection, for example, but substitutes calendar
+conversion and captures charge/BMS delivery. The LCD suite captures asset
+transfer, timer and display boundaries. Read each investigation's substitution
+list before drawing a conclusion from its results. No disaster-plan actuator
+or live safety guarantee follows from its replay.
+
+The [original-C1000 OTA capture audit](c1000-app-ota-capture-investigation.md)
+uses a retained private Android app and two synthetic framing checks. It is
+not a public firmware-suite dependency. It identifies conditional URL logging,
+internal file storage and encrypted OTA chunks; it does not install the
+offered 1.7.1 update or establish guaranteed non-root plaintext recovery.
 
 ## Executed code and substitutions
 

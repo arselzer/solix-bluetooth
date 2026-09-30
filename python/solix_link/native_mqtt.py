@@ -109,6 +109,26 @@ class NativeMqttCommands:
         """Set the off-grid alert setting; verified on C1000 Gen 2 main 1.1.4.9."""
         return self._c1000_boolean(0xB0, enabled)
 
+    def display_brightness(self, level: int) -> NativeMqttRequest:
+        """Set C1000 brightness to 1/2/3; zero is a separate display-off action."""
+        if self.model != Model.C1000_GEN2:
+            raise ValueError("Display brightness supports C1000 Gen 2 only")
+        if type(level) is not int or level not in (1, 2, 3):
+            raise ValueError("Display brightness must be 1, 2, or 3")
+        return self._request("0103", tlv(0xA3, bytes((1, level))), milliseconds=True)
+
+    def display_timeout(self, seconds: int) -> NativeMqttRequest:
+        """Set C1000 screen timeout; native 30/60-second round trips are verified."""
+        if self.model != Model.C1000_GEN2:
+            raise ValueError("Display timeout supports C1000 Gen 2 only")
+        if type(seconds) is not int or seconds not in (0, 10, 20, 30, 60, 300, 1800):
+            raise ValueError("Display timeout must be 0, 10, 20, 30, 60, 300, or 1800 seconds")
+        return self._request("0103", tlv(0xA4, b"\x02" + seconds.to_bytes(2, "little")), milliseconds=True)
+
+    def port_memory(self, enabled: bool) -> NativeMqttRequest:
+        """Set C1000 port memory; disabling clears transient recovery bookkeeping."""
+        return self._c1000_boolean(0xA8, enabled)
+
     def device_timeout(self, minutes: int) -> NativeMqttRequest:
         """Set C1000 idle timeout; zero does not disable every sleep path."""
         if self.model != Model.C1000_GEN2:

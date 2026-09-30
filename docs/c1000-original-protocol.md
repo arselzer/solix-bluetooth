@@ -8,10 +8,19 @@ monitoring and twelve settings passed fresh readback and restoration checks.
 Its B3 version code is **151**; a later device-originated local HTTP request
 independently reported main **v1.5.1** and radio **v0.1.3.0**.
 See [the chain test](c1000-chain-validation.md) for exact values and limits.
-The C1000X sibling and other firmware versions remain untested.
+The C1000X sibling remains untested. Later that day, an official update completed
+and **v1.7.1** was independently confirmed over Prime/AES-GCM Bluetooth.
+Monitoring and restored brightness, charging power and Device Timeout passed
+on that version; all 11 checked settings matched the pre-update baseline.
+Other Prime controls remain unvalidated. See the
+[isolated update capture](c1000-original-update-network.md).
 
-The profile uses the legacy P-256/AES-CBC handshake and `4040` status request.
-It needs no Prime client ID. C1000 Gen 2/A1763 remains `c1000_gen2`, with its
+The default profile uses the legacy P-256/AES-CBC handshake tested on 1.5.1,
+without a Prime client ID. The updated test unit requires explicit `prime`
+selection and a persisted 40-character client ID; its status request is still
+`4040` and its telemetry uses the original-model map. The successful live tests
+used the retained app identifier; generated-ID pairing on this model has not
+yet been independently validated. C1000 Gen 2/A1763 remains `c1000_gen2`, with its
 existing firmware-dependent protocol and separately verified controls.
 
 ## Telemetry and conflicting references
@@ -34,7 +43,7 @@ used as a fallback.
 | D0 / D1 / D2 / D3 | Serial / charging limit / device timeout / display timeout |
 | D7 / D8 / D9 / DC / DE | AC/DC switches / display brightness / light mode / display switch |
 | DD / E5 | Fahrenheit display preference / fast-charge switch |
-| F8 | Type01 packed DC/AC mode bytes: 1=Normal, 2=Smart |
+| F8 | Type01 length3 or type04 length21; DC/AC modes at offsets 1/2: 1=Normal, 2=Smart |
 
 `AF` is called total input in one source and photovoltaic power in another;
 it remains raw. `BC` is exposed only as `charging_source_code`, not a battery

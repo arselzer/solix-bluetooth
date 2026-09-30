@@ -43,6 +43,14 @@ requires a review and explicit confirmation; offline or busy controls are
 disabled. Charging settings and draft hourly tariff plans use the same strict
 command API as the CLI and Home Assistant. Native C1000 Gen 2 also exposes
 [verified temperature and off-grid alert settings](c1000-general-settings.md).
+Its native profile now includes Low/Medium/High display brightness, screen
+timeout (Never or 10/20/30/60/300/1800 seconds), and output port memory.
+Port-memory Off clears recovery bookkeeping; turning On does not restore that
+transient state. Each form requires valid fresh readback and explicit review.
+See [tested values and restoration](c1000-native-preferences-validation.md);
+other models and Gen 2 BLE brightness are unchanged.
+The native brightness setter checks Standard/no active tariff and an inactive
+clock screen before writing.
 C1000 Gen 2 also has a guarded lower discharge limit; it cannot silently
 adjust reserve. There is no HTTP AC-output switch. Several native stations can
 share one AP: see [registration and selection](multiple-ap-devices.md).

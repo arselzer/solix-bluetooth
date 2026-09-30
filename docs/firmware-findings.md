@@ -20,6 +20,24 @@ verifies local MQTT discharge with mains present. It also records a delay
 between restoring Standard and confirming grid input, with twelve additional
 C1000 firmware cases identifying a possible internal-mode retention mechanism.
 
+The September 30 continuations add these independently reproducible results:
+
+| Investigation | Offline cases | Main finding |
+| --- | ---: | --- |
+| [Gen 2 preferences](gen2-preference-candidates.md) | 1,060 | Brightness levels, ambient setter stub, raw language storage and Smart-mode side effects |
+| [Clock-screen schedule](gen2-timer-plan-investigation.md) | 60 | `0091` controls the LCD clock screen and display windows, **not charging** |
+| [Disaster plans / Storm Guard](gen2-disaster-plan-investigation.md) | 762 | Active plans override charging policy and effective BMS bounds; cancellation can alter other windows |
+| [Original C1000 bootstrap state](c1000-bootstrap-state-investigation.md) | 1,165 | MCU acknowledgements, radio-state retries and window timers; no validated remote recovery command |
+
+These counts are separate from the combined 1,842-case runner. Original-C1000
+replays use public main **1.5.9**; the live control tests used **1.5.1**.
+The [app OTA capture audit](c1000-app-ota-capture-investigation.md) identifies
+candidate download/logging and encrypted-chunk paths. During the subsequent
+[isolated official update](c1000-original-update-network.md), the app reported
+installed **1.7.1** after Retry. Prime Bluetooth independently confirms that
+version, unchanged baseline settings and brightness/power/timeout round trips.
+A plaintext 1.7.1 image and its post-update radio version remain unrecovered.
+
 ## Scope and evidence
 
 These findings come from offline analysis of the owner's retained **C1000 Gen 2
@@ -233,14 +251,14 @@ same field is supported on C2000. Values below are after the usual type marker.
 
 | Command / field | Firmware label or behavior | Remaining work |
 | --- | --- | --- |
-| `0103/A3` | LCD brightness, one byte | Valid range and visible effect |
-| `0103/A5` | Temperature unit, one byte | Confirm enum values in app/telemetry |
-| `0103/A7` | Ambient light, one byte | Determine supported hardware behavior |
-| `0103/A9` | Language, one byte | Determine enum and applicable displays |
-| `0103/B0` | AC off-grid alert switch, one byte | Confirm notification behavior |
+| `0103/A3` | LCD brightness: 1/2/3; A4[18] | Actual duty lookup confirmed offline; zero turns the display off without replacing saved brightness |
+| `0103/A5` | Temperature unit: 0 Celsius / 1 Fahrenheit; A4[20] | Native C1000 setting round trip validated; see [general settings](c1000-general-settings.md) |
+| `0103/A7` | Ambient-light setter is a return-only stub | ACK does not establish a working feature; no justified control |
+| `0103/A9` | Language stored raw; A4[26], copied to LCD state | Names, valid enum and visible effect remain unresolved |
+| `0103/B0` | AC off-grid alert switch; A4[32] bit 1 | Setting round trip validated; real outage notification/delivery remains untested |
 | `0101/A5` | AC frequency, one byte | **Do not test on the server-backed C2000** |
-| `005e` | Manual/automatic disaster-preparation plans | Decode complete plan and activation rules |
-| `0091` | Separate timer/clock plan with multiple flags and time fields | Decode semantics before writing |
+| `005e` | Manual/automatic disaster-preparation plans | Decoded and replayed; effective 100%/1% BMS bounds, fast ceiling and cancellation side effects preclude a simple guarded switch |
+| `0091` | LCD clock screen/theme, weekday mask and two display windows | DA readback decoded; asset changes can start a transfer; no charging function established |
 
 The existing display, timeout, output-memory, charging-power, charge-cap, and
 fast-charge fields also have matching handlers. `0103` is at `0x0800c530`,
@@ -248,12 +266,70 @@ fast-charge fields also have matching handlers. `0103` is at `0x0800c530`,
 `0x0800c314`. These are internal opcode numbers; ordinary encrypted app packets
 use the previously documented `41xx`/`40xx` form and app command namespace.
 
+The [preference audit](gen2-preference-candidates.md) distinguishes raw byte
+acceptance from supported values. Smart AC/DC settings can later shut outputs
+off under low load. Port-memory OFF clears recovery bookkeeping, so restoring
+ON does not recreate that transient state.
+
+The [disaster-plan replay](gen2-disaster-plan-investigation.md) executes both
+manual and automatic activation, D9 readback and charging/BMS consumers. An
+active plan bypasses Peak/Mid-Peak charging suppression, uses the internal fast
+ceiling and requests effective upper/lower limits **100%/1%** while leaving
+saved power/caps/reserve unchanged. BMS zero-current allowance still prevents
+requested current. Manual disable works but invalidates overlapping automatic
+windows; D9 does not contain a complete backup of those windows. There is no
+public actuator or live validation for this override.
+
+The [LCD schedule audit](gen2-timer-plan-investigation.md) establishes that
+`0091` time fields are minutes since local midnight. Weekday mask zero has
+one-shot behavior; asset metadata can initiate an asynchronous resource update.
+Existing DA telemetry is preferable to `0092` as a passive source because the
+query clears a failure flag after replying. Its 60 cases are distinct from the
+47 [tariff clock/offset cases](gen2-schedule-clock-audit.md).
+
 Additional code tracks tariff-only solar-to-battery, grid-to-battery and
 battery-to-load sums, separately from a general AC/DC report. The [101-case
 follow-up](tariff-energy-followup.md) recovered a binary protobuf report and
 its local logging-API route. It corrects earlier descriptions that attributed
 the named tariff-only counters directly to that report. Runtime units, reset
 rules and C2000 equivalence remain unverified; passive decoding is available.
+
+## Original C1000 bootstrap and official update
+
+The [bootstrap-state investigation](c1000-bootstrap-state-investigation.md)
+decodes the app's `4825=26` category as server-connection failure. The recovered
+main 1.5.9 function-`10` `0825` handler merely sets an acknowledgement flag;
+it cannot explain that radio error. Internal module commands and button/window
+timers are not established app-facing remote recovery controls.
+
+In the later September 30 cached-profile retry on installed **main 1.5.1 /
+radio 0.1.3.0**, the passive AP initially saw no association. Repeating only the
+known same-profile `4024` join returned ACK `00`; association, DHCP and NTP then
+occurred, but **no configured API or MQTT connection was observed**. No `4025`
+activation or power control was sent in that retry. Three independent final
+BLE samples matched all **11 protected settings**, including AC output on.
+This advances the observed network boundary without proving local MQTT works
+or identifying why the radio never reached the API. Raw logs and identities
+remain private.
+
+The user later confirmed **1.7.1** in the app after an official update using a
+temporary internet AP that blocked the home LAN. The
+[OTA capture audit](c1000-app-ota-capture-investigation.md) finds URL/path logging
+before download, internal `App.bin` storage and deletion on screen closure.
+Logging is runtime-dependent. The inherited original-model `002f` chunk sender
+uses normal encrypted framing, so HCI alone does not guarantee plaintext
+firmware recovery. Its two synthetic app-framing cases and raw app analysis
+remain separate from the public controller replay counts.
+The [update-network record](c1000-original-update-network.md) documents the
+failed attempt, faster retry, encrypted download limits and local-updater
+prerequisites. Neither the update nor cloud TLS proves direct local MQTT works.
+The tested unit then accepted Prime/GCM hello and original `4040` status;
+legacy hello had disconnected without a reply. Its expanded F8 matches the
+older public MCU serializer, allowing all 11 baseline settings to be checked.
+Brightness, charging limit and Device Timeout each passed a round trip with
+AC on. The [app security selector](c1000-original-update-network.md#app-security-selection)
+uses capability and cached product state; no automatic firmware-version
+threshold or on-air capability-byte mapping is established.
 
 ## Modbus: radio bridge found, controller support missing from dispatch table
 
@@ -293,12 +369,19 @@ C2000 controller support is unknown.
   explanation. Correcting A6/A7 now activates Peak and discharge on C2000.
   A [packaged CLI follow-up](c2000-offpeak-grid-return.md) confirmed tariff-3
   return to grid before clearing Standard. Investigate persistent scheduling
-  and reserve floors.
-  C1000 still needs a hardware comparison; do not
-  substitute the different `4038` layout.
-- When C1000 is reachable again, validate its own schedule layout and benign
-  display/alert settings with baseline, telemetry, and restoration checks.
-- Map the energy counters for read-only monitoring.
+  and reserve floors. C1000 Gen 2 now has its own
+  [native MQTT validation](c1000-local-mqtt.md); original C1000 bootstrap remains
+  unresolved. Do not substitute the different `4038` layout.
+- Follow the [preference](gen2-preference-candidates.md),
+  [LCD schedule](gen2-timer-plan-investigation.md) and
+  [disaster-plan](gen2-disaster-plan-investigation.md) prerequisites before
+  exposing further controls; preserve unknown plan and asset fields.
+- Continue [energy-unit calibration](gen2-energy-counter-investigation.md)
+  using event timestamps and measured power, without relabeling raw counters
+  as verified Wh.
+- Continue original-C1000 bootstrap and unvalidated Prime controls separately
+  from the verified monitoring/three settings. Recover a verified public image
+  before proposing local OTA.
 - Obtain C2000 firmware evidence before assuming its controller can service
   the Modbus bridge. Keep its AC output enabled throughout any live work.
 

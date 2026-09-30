@@ -42,6 +42,8 @@ export interface Draft {
   lower: string;
   reserve: string;
   seconds: string;
+  brightness: string;
+  portMemory: string;
   timeoutMinutes: string;
   fast: string;
   light: string;
@@ -85,6 +87,8 @@ export function draftFor(station: Station): Draft {
     lower: current('min_charge_percentage', '1'),
     reserve: current('backup_reserve_percentage', '10'),
     seconds: current('display_timeout_seconds', '30'),
+    brightness: current('display_brightness', ''),
+    portMemory: current('port_memory_enabled', ''),
     timeoutMinutes: current('device_timeout_minutes', ''),
     fast: current('ac_fast_charge_enabled', '0'),
     light: current('light_mode', '0'),

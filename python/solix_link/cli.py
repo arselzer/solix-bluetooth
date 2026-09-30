@@ -13,7 +13,7 @@ from importlib.util import find_spec
 from .client import SolixMonitor, discover
 from .config import DEFAULT_CONFIG, DeviceConfig, load_config, save_config
 from .manager import MonitorService
-from .protocol import Model
+from .protocol import C1000_PRIME_SETTINGS, Model
 
 
 def parser() -> argparse.ArgumentParser:
@@ -34,14 +34,14 @@ def parser() -> argparse.ArgumentParser:
     add.add_argument("--address", required=True)
     add.add_argument("--model", choices=[model.value for model in Model], required=True)
     add.add_argument("--client-id", help="Previously paired 40-character Prime client ID")
-    add.add_argument("--protocol", choices=["prime", "legacy"], help="Default: legacy for C300/original C1000, Prime for Gen 2")
+    add.add_argument("--protocol", choices=["prime", "legacy"], help="Default: legacy for C300/original C1000, Prime for Gen 2; original C1000 1.7.1 supports explicit Prime monitoring")
     add.add_argument("--timezone", help="Station timezone, for example Europe/Vienna")
     add.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
 
-    pair = subcommands.add_parser("pair", help="Pair a Prime Gen 2 station with one main button press")
+    pair = subcommands.add_parser("pair", help="Pair a Prime station, including original C1000 1.7.1")
     pair.add_argument("--name", required=True)
     pair.add_argument("--address", required=True)
-    pair.add_argument("--model", choices=[Model.C1000_GEN2.value, Model.C2000_GEN2.value], default=Model.C2000_GEN2.value)
+    pair.add_argument("--model", choices=[Model.C1000.value, Model.C1000_GEN2.value, Model.C2000_GEN2.value], default=Model.C2000_GEN2.value)
     pair.add_argument("--client-id", help="Use an existing 40-character ID")
     pair.add_argument("--timezone", help="Station timezone, for example Europe/Vienna")
     pair.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
@@ -90,6 +90,11 @@ def parser() -> argparse.ArgumentParser:
     display.add_argument("--name", required=True)
     display.add_argument("--seconds", type=int, required=True)
     display.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
+
+    brightness = subcommands.add_parser("set-display-brightness", help="Set original C1000 Prime display brightness")
+    brightness.add_argument("--name", required=True)
+    brightness.add_argument("--level", type=int, choices=[1, 2, 3], required=True, help="1 low, 2 medium, 3 high")
+    brightness.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
 
     timeout = subcommands.add_parser("set-device-timeout", help="Set supported C1000 idle shutdown; 0 means Never")
     timeout.add_argument("--name", required=True)
@@ -230,14 +235,17 @@ async def _set(args: argparse.Namespace) -> None:
     device = next((saved for saved in load_config(args.config) if saved.name == args.name), None)
     if device is None:
         raise ValueError(f"Unknown configured device: {args.name}")
-    legacy_setting = (device.model in (Model.C300, Model.C1000) and args.command in (
+    if device.model == Model.C1000 and device.protocol == "prime" and args.command not in ("set-charge-power", "set-device-timeout", "set-display-brightness"):
+        raise ValueError("This control is not verified for original C1000 Prime firmware")
+    legacy_setting = (device.protocol == "legacy" and device.model in (Model.C300, Model.C1000) and args.command in (
         "set-display-timeout", "set-charge-power", "set-ac-output", "set-light",
     ))
     legacy_setting |= (device.model == Model.C1000 and device.protocol == "legacy"
                        and args.command in ("set-device-timeout", "set-temperature-unit", "set-fast-charge",
                                             "set-ac-power-saving", "set-dc-power-saving"))
     prime_setting = device.protocol == "prime" and (
-        (device.model == Model.C1000_GEN2 and args.command in ("set-limits", "set-display-timeout", "set-charge-power", "set-fast-charge", "set-charge-cap", "set-device-timeout"))
+        (device.model == Model.C1000 and args.command in ("set-charge-power", "set-device-timeout", "set-display-brightness"))
+        or (device.model == Model.C1000_GEN2 and args.command in ("set-limits", "set-display-timeout", "set-charge-power", "set-fast-charge", "set-charge-cap", "set-device-timeout"))
         or (device.model == Model.C2000_GEN2 and args.command in ("set-display-timeout", "set-charge-power", "set-charge-cap"))
     )
     if not legacy_setting and not prime_setting:
@@ -276,6 +284,9 @@ async def _set(args: argparse.Namespace) -> None:
         elif args.command == "set-display-timeout":
             metrics = await monitor.set_display_timeout(args.seconds)
             result = {"display_timeout_seconds": metrics["display_timeout_seconds"]}
+        elif args.command == "set-display-brightness":
+            metrics = await monitor.set_c1000_setting("display_brightness", args.level)
+            result = {"display_brightness": metrics["display_brightness"]}
         elif args.command == "set-device-timeout":
             metrics = await monitor.set_device_timeout(args.minutes)
             result = {"device_timeout_minutes": metrics["device_timeout_minutes"]}
@@ -305,8 +316,10 @@ async def _set(args: argparse.Namespace) -> None:
 
 async def _c1000_setting(args: argparse.Namespace) -> None:
     device = next((saved for saved in load_config(args.config) if saved.name == args.name), None)
-    if device is None or device.model != Model.C1000 or device.protocol != "legacy":
-        raise ValueError("This test command requires an original C1000/A1761 legacy config")
+    if device is None or device.model != Model.C1000:
+        raise ValueError("This command requires an original C1000/A1761 config")
+    if device.protocol == "prime" and args.setting not in C1000_PRIME_SETTINGS:
+        raise ValueError("This control is not verified for original C1000 Prime firmware")
     value = args.value
     if args.setting.endswith("_enabled") or args.setting == "temperature_unit_fahrenheit":
         if value not in (0, 1):
@@ -314,7 +327,8 @@ async def _c1000_setting(args: argparse.Namespace) -> None:
         value = bool(value)
     from .c1000 import c1000_setting
     _command, _payload, expected = c1000_setting(args.setting, value)
-    async with SolixMonitor(device.address, model=device.model, protocol=device.protocol) as monitor:
+    async with SolixMonitor(device.address, model=device.model, protocol=device.protocol,
+                            owner_user_id=device.client_id, timezone_name=device.timezone_name) as monitor:
         await monitor.wait_for_update(timeout=15)
         baseline = {field: monitor.metrics.get(field) for field in expected}
         if any(item is None for item in baseline.values()):
@@ -413,7 +427,7 @@ def main(argv: list[str] | None = None) -> int:
                 topic_prefix=args.topic_prefix, username=args.username,
                 password_file=args.password_file, ca_file=args.ca_file,
             ).run())
-        elif args.command in ("set-limits", "set-charge-cap", "set-charge-power", "set-display-timeout", "set-device-timeout", "set-fast-charge", "set-temperature-unit", "set-ac-power-saving", "set-dc-power-saving", "set-ac-output", "set-light"):
+        elif args.command in ("set-limits", "set-charge-cap", "set-charge-power", "set-display-timeout", "set-display-brightness", "set-device-timeout", "set-fast-charge", "set-temperature-unit", "set-ac-power-saving", "set-dc-power-saving", "set-ac-output", "set-light"):
             asyncio.run(_set(args))
         elif args.command == "c1000-setting":
             asyncio.run(_c1000_setting(args))
