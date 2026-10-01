@@ -27,6 +27,12 @@ added an eighth Bluetooth control on main 1.7.1. Fast retained its flag at
 also passed, bringing native MQTT to eight controls. Actual Fast charging rate
 and reboot persistence remain unverified.
 
+The subsequent [Prime AC/Smart trial and SDK repeat](c1000-prime-ac-smart-validation.md)
+added AC output and AC Smart: **ten Prime SDK controls, nine gateway
+preferences**, versus eight independently verified native controls. Both new
+Prime controls require fresh inactive AC countdowns; AC Smart additionally
+requires AC output off in either direction. Whole settings/F8 restoration passed.
+
 The default profile uses the legacy P-256/AES-CBC handshake tested on 1.5.1,
 without a Prime client ID. The updated test unit requires explicit `prime`
 selection and a persisted 40-character client ID; its status request is still

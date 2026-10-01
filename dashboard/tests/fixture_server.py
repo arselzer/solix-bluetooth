@@ -19,6 +19,8 @@ class Demo:
         self.standard = False
         self.mains = True
         self.dc_output = 0
+        self.ac_output = 1
+        self.ac_countdown = 0
     async def start(self): pass
     async def stop(self): pass
     def supported_commands(self, name):
@@ -36,7 +38,7 @@ class Demo:
         metrics = {"battery_percentage": 91 if c1000 else 88, "battery_status": "discharging" if c1000 else "idle",
                    "ac_input_power_w": 120 if c1000 else 490, "ac_output_power_w": 310 if c1000 else 490,
                    "total_input_power_w": 120 if c1000 else 490, "total_output_power_w": 310 if c1000 else 490,
-                   "ac_input_connected": int(self.mains), "ac_output_enabled": 1, "dc_output_enabled": self.dc_output,
+                   "ac_input_connected": int(self.mains), "ac_output_enabled": self.ac_output, "dc_output_enabled": self.dc_output,
                    "ac_charging_power_limit_w": 800 if original else 1200 if c1000 else 1800, "max_charge_percentage": 100,
                    "min_charge_percentage": 1, "backup_reserve_percentage": 10,
                    "ac_fast_charge_enabled": 0, "temperature_c": 28,
@@ -49,7 +51,7 @@ class Demo:
             metrics.update(display_brightness=1, display_timeout_seconds=30, port_memory_enabled=1, pv_weak_light_locked=0)
         if original:
             metrics.update(display_brightness=2, display_timeout_seconds=30, light_mode=0,
-                           device_timeout_minutes=720 if updated else 0)
+                           device_timeout_minutes=720 if updated else 0, ac_output_timer_remaining_seconds=self.ac_countdown)
             if updated or local: metrics.update(software_version="1.7.1", ac_charging_power_limit_w=1000)
             for key in ("max_charge_percentage", "min_charge_percentage", "backup_reserve_percentage", "usage_mode",
                         "active_tariff", "tou_schedule_slot_count", "software_version_module", "ac_input_connected",

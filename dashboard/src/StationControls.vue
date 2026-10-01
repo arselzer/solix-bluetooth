@@ -36,6 +36,7 @@ const displayTimes = computed(() => nativeC1000.value ? [0, 10, 20, 30, 60, 300,
   : props.station.model === 'c1000' ? [20, 30, 60, 300, 1800] : [30, 60]);
 const originalProfile = computed(() => props.station.model === 'c1000' && props.station.protocol === 'legacy');
 const guardedDcSmart = computed(() => props.station.model === 'c1000' && ['prime', 'native_mqtt'].includes(props.station.protocol ?? ''));
+const guardedAcSmart = computed(() => props.station.model === 'c1000' && props.station.protocol === 'prime');
 const originalPreferenceProfile = computed(() => props.station.model === 'c1000' && ['prime', 'native_mqtt'].includes(props.station.protocol ?? ''));
 const nativeC1000 = computed(() => props.station.model === 'c1000_gen2' && props.station.protocol === 'native_mqtt');
 const booleanReported = (key: string) => [0, 1].includes(numberMetric(props.station, key) ?? -1);
@@ -56,19 +57,24 @@ const fastValid = computed(() => booleanReported('ac_fast_charge_enabled') && ['
     || props.station.metrics.usage_mode === 'standard' && props.station.metrics.active_tariff === 'none'));
 const temperatureAvailable = computed(() => allowed('set-temperature-unit') && (originalProfile.value || originalPreferenceProfile.value || nativeC1000.value));
 const savingPorts = ['ac', 'dc'] as const;
-const savingProfile = (port: 'ac' | 'dc') => originalProfile.value || guardedDcSmart.value && port === 'dc';
+const savingProfile = (port: 'ac' | 'dc') => originalProfile.value
+  || guardedDcSmart.value && port === 'dc' || guardedAcSmart.value && port === 'ac';
 const dcSmartReady = computed(() => numberMetric(props.station, 'dc_output_enabled') === 0);
+const acSmartReady = computed(() => numberMetric(props.station, 'ac_output_enabled') === 0
+  && numberMetric(props.station, 'ac_output_timer_remaining_seconds') === 0);
+const guardedSaving = (port: 'ac' | 'dc') => port === 'dc' ? guardedDcSmart.value : guardedAcSmart.value;
 const savingValid = (port: 'ac' | 'dc') => booleanReported(`${port}_power_saving_mode_enabled`)
   && (!(guardedDcSmart.value && port === 'dc') || dcSmartReady.value)
+  && (!(guardedAcSmart.value && port === 'ac') || acSmartReady.value)
   && ['0', '1'].includes(props.draft[port === 'ac' ? 'acSaving' : 'dcSaving']);
 function powerSaving(port: 'ac' | 'dc') {
   if (!savingProfile(port) || !savingValid(port)) return;
   const enabled = props.draft[port === 'ac' ? 'acSaving' : 'dcSaving'] === '1';
-  const prime = guardedDcSmart.value && port === 'dc';
-  propose({ command: `set-${port}-power-saving`, enabled }, prime ? 'Change DC Smart mode?' : `Change ${port.toUpperCase()} power saving?`,
-    prime ? 'Requires fresh DC output OFF. Smart may inherit an inactivity counter and later turn DC output off at low load; enabling does not guarantee a new grace period.'
+  const guarded = guardedDcSmart.value && port === 'dc' || guardedAcSmart.value && port === 'ac';
+  propose({ command: `set-${port}-power-saving`, enabled }, guarded ? `Change ${port.toUpperCase()} Smart mode?` : `Change ${port.toUpperCase()} power saving?`,
+    guarded ? `Requires fresh ${port.toUpperCase()} output OFF${port === 'ac' ? ' and an inactive AC countdown' : ''}. Smart may inherit an inactivity counter and later turn ${port.toUpperCase()} output off at low load; enabling does not guarantee a new grace period.`
       : 'Power saving may automatically turn the output off at low load.',
-    [prime ? enabled ? 'Smart' : 'Normal' : enabled ? 'On' : 'Off', `Applies to the ${port.toUpperCase()} output`]);
+    [guarded ? enabled ? 'Smart' : 'Normal' : enabled ? 'On' : 'Off', `Applies to the ${port.toUpperCase()} output`]);
 }
 const deviceTimeouts = [0, 30, 60, 120, 240, 360, 720, 1440];
 const timeoutProfile = computed(() => props.station.model === 'c1000' && ['legacy', 'prime', 'native_mqtt'].includes(props.station.protocol ?? '')
@@ -207,11 +213,11 @@ function addPeriod() {
       </div>
       <template v-for="port in savingPorts" :key="port">
         <div v-if="savingProfile(port) && allowed(`set-${port}-power-saving`)" class="setting">
-          <label :for="`${port}-power-saving`">{{ guardedDcSmart ? 'DC Smart mode' : `${port.toUpperCase()} power saving` }}</label><p>Current {{ numberMetric(station, `${port}_power_saving_mode_enabled`) === 1 ? guardedDcSmart ? 'Smart' : 'On' : numberMetric(station, `${port}_power_saving_mode_enabled`) === 0 ? guardedDcSmart ? 'Normal' : 'Off' : 'Not reported' }}</p>
-          <div class="setting-input"><select :id="`${port}-power-saving`" v-model="draft[port === 'ac' ? 'acSaving' : 'dcSaving']" :disabled="!writable || !booleanReported(`${port}_power_saving_mode_enabled`) || guardedDcSmart && !dcSmartReady"><option value="0">{{ guardedDcSmart ? 'Normal' : 'Off' }}</option><option value="1">{{ guardedDcSmart ? 'Smart' : 'On' }}</option></select>
+          <label :for="`${port}-power-saving`">{{ guardedSaving(port) ? `${port.toUpperCase()} Smart mode` : `${port.toUpperCase()} power saving` }}</label><p>Current {{ numberMetric(station, `${port}_power_saving_mode_enabled`) === 1 ? guardedSaving(port) ? 'Smart' : 'On' : numberMetric(station, `${port}_power_saving_mode_enabled`) === 0 ? guardedSaving(port) ? 'Normal' : 'Off' : 'Not reported' }}</p>
+          <div class="setting-input"><select :id="`${port}-power-saving`" v-model="draft[port === 'ac' ? 'acSaving' : 'dcSaving']" :disabled="!writable || !booleanReported(`${port}_power_saving_mode_enabled`) || guardedSaving(port) && !(port === 'dc' ? dcSmartReady : acSmartReady)"><option value="0">{{ guardedSaving(port) ? 'Normal' : 'Off' }}</option><option value="1">{{ guardedSaving(port) ? 'Smart' : 'On' }}</option></select>
             <button class="secondary" :disabled="!writable || !savingValid(port)" @click="powerSaving(port)">Apply</button></div>
           <p class="validation-error">Power saving may automatically turn the output off at low load.</p>
-          <p v-if="guardedDcSmart" class="validation-error">Requires fresh DC output OFF. Smart may inherit an inactivity counter; enabling does not guarantee a new grace period.</p>
+          <p v-if="guardedSaving(port)" class="validation-error">Requires fresh {{ port.toUpperCase() }} output OFF{{ port === 'ac' ? ' and an inactive AC countdown' : '' }}. Smart may inherit an inactivity counter; enabling does not guarantee a new grace period.</p>
         </div>
       </template>
     </div>

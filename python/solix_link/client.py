@@ -278,6 +278,8 @@ class SolixMonitor:
 
     async def set_ac_output_enabled(self, enabled: bool) -> dict[str, int | str]:
         """Set C300/original C1000 AC output and confirm; unavailable on C2000."""
+        if self.model == Model.C1000 and self.protocol == "prime":
+            return await self._set_original_configuration("ac_output_enabled", enabled)
         packet = self._session.ac_output_packet(enabled)
         return await self._write_setting(packet, {"ac_output_enabled": int(enabled)})
 
@@ -407,7 +409,7 @@ class SolixMonitor:
         return await self._set_original_configuration("temperature_unit_fahrenheit", fahrenheit)
 
     async def set_ac_power_saving_enabled(self, enabled: bool) -> dict[str, int | str]:
-        """Select original C1000 Normal/Smart; Smart may turn outputs off at low load."""
+        """Select original Normal/Smart; Prime requires AC off and no AC timer."""
         return await self._set_original_configuration("ac_power_saving_mode_enabled", enabled)
 
     async def set_dc_power_saving_enabled(self, enabled: bool) -> dict[str, int | str]:
@@ -440,18 +442,28 @@ class SolixMonitor:
             raise RuntimeError(f"Missing complete original C1000 Prime F8 flags; {failure}")
         return metrics, flags
 
+    def _require_inactive_original_ac_timer(self, *, after_write: bool = False) -> None:
+        failure = "the setting may have changed" if after_write else "no write sent"
+        if (self._raw_tlv_revision.get(0xA2, 0) != self._telemetry_revision
+                or self.raw_tlvs.get(0xA2) != b"\x03\x00\x00\x00\x00"):
+            raise RuntimeError(f"Original C1000 Prime control requires a fresh inactive AC timer; {failure}")
+
     async def _set_original_configuration(self, setting: str, value: int | bool) -> dict[str, int | str]:
         from .c1000 import c1000_setting
         packet = self._session.c1000_control_packet(setting, value)
         _command, _body, target = c1000_setting(setting, value)
         before, flags = await self._fresh_original_configuration()
         expected_flags = flags
-        if self.protocol == "prime" and setting == "dc_power_saving_mode_enabled":
-            if before["dc_output_enabled"] != 0:
-                raise RuntimeError("Original C1000 Prime DC Smart control requires the DC output to be off; no write sent")
+        ac_control = self.protocol == "prime" and setting in ("ac_output_enabled", "ac_power_saving_mode_enabled")
+        if ac_control:
+            self._require_inactive_original_ac_timer()
+        if self.protocol == "prime" and setting in ("dc_power_saving_mode_enabled", "ac_power_saving_mode_enabled"):
+            domain = "dc" if setting == "dc_power_saving_mode_enabled" else "ac"
+            if before[f"{domain}_output_enabled"] != 0:
+                raise RuntimeError(f"Original C1000 Prime {domain.upper()} Smart control requires the {domain.upper()} output to be off; no write sent")
             # Preserve the complete live flags, including the unknown firmware tail.
             changed_flags = bytearray(flags)
-            changed_flags[1] = int(value) + 1  # Command 0/1 maps to Normal 1 / Smart 2.
+            changed_flags[1 if domain == "dc" else 2] = int(value) + 1  # Normal 1 / Smart 2.
             expected_flags = bytes(changed_flags)
         expected = {**before, **target}
         result = await self._write_setting(packet, expected)
@@ -462,6 +474,8 @@ class SolixMonitor:
                 raise TimeoutError("Fresh original C1000 post-write telemetry is missing; the setting may have changed") from None
             if after != expected or after_flags != expected_flags:
                 raise RuntimeError("Protected original C1000 settings or F8 flags changed after write; the setting may have changed")
+            if ac_control:
+                self._require_inactive_original_ac_timer(after_write=True)
             return self.metrics.copy()
         return result
 

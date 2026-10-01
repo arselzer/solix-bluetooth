@@ -42,6 +42,8 @@ brings both updated-version whitelists to seven controls.
 A later [Prime Fast trial](c1000-prime-fast-validation.md) brings BLE to eight;
 the [independent native Fast trial](c1000-native-fast-validation.md) then brings
 native to eight. Actual Fast rate and reboot persistence remain unverified.
+The subsequent [Prime AC/Smart trial](c1000-prime-ac-smart-validation.md)
+brings Prime to ten SDK controls/nine gateway preferences; native remains eight.
 A plaintext 1.7.1 main image remains unrecovered.
 
 ## Scope and evidence
@@ -386,7 +388,7 @@ C2000 controller support is unknown.
   using event timestamps and measured power, without relabeling raw counters
   as verified Wh.
 - Continue original-C1000 generated-ID setup and remaining Prime controls
-  separately from the verified eight BLE/eight native controls. Recover a verified public
+  separately from the verified ten BLE/eight native controls. Recover a verified public
   1.7.1 image before proposing local OTA.
 - Obtain C2000 firmware evidence before assuming its controller can service
   the Modbus bridge. Keep its AC output enabled throughout any live work.
@@ -523,3 +525,29 @@ can mark a locked MPPT state for retry without changing outputs. The SOC ≤1
 branch has additional timer/peripheral effects. Physical recovery and timing
 remain unverified; a naturally locked, adequately charged PV trial is required
 before exposing any automatic recovery behavior. No recovery API was added.
+
+## October 1: Prime AC/Smart, SOC history and MPPT actuation
+
+The [original Prime AC/Smart prototype and public SDK repeat](c1000-prime-ac-smart-validation.md)
+each passed four writes and twenty complete snapshots on **main 1.7.1**:
+AC off, Normal, Smart, AC on. Full original settings/F8 and read-only upstream
+Gen 2 settings/D9/A4 were restored. Prime now has ten SDK controls and nine
+gateway preferences; native remains eight. Fresh inactive AC countdowns guard
+both new controls; AC Smart additionally requires AC off in either direction.
+No C2000 connection, cloud access or firmware change was involved.
+
+[78 original SOC/recharge cases](c1000-soc-and-recharge-firmware.md) execute
+public **main 1.5.9 / MainBMS 0.0.33 / SubBMS 0.0.5** paths. C1 is a cached
+primary-BMS estimate, separate from C2. Rounding, a full-related latch, capacity
+history and charge-phase rebasing can preserve a reported 100%. This does not
+establish why installed 1.7.1 stayed at 100% in the earlier rate trials, an exact
+recharge threshold, a total input budget, or a forced-discharge command.
+
+[140 Gen 2 PV actuation cases](gen2-pv-retry-actuation.md) trace qualified
+DCDC register `0126` state through real controller policy rows, configuration
+and `0015` start/stop requests, then DSP event/fault guards. Configuration
+success checks current input again; input loss requests stop, and stop wins
+over simultaneous start. Status may retain an earlier state before its qualifier
+is set. UART, full converter sequencing, physical PV and actual recovery remain
+unverified. The existing brightness write remains a recovery candidate; no
+automatic recovery API or internal-register control was introduced.

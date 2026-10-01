@@ -70,6 +70,7 @@ C1000_PRIME_SETTINGS = frozenset((
     "light_mode", "temperature_unit_fahrenheit",
     "dc_power_saving_mode_enabled",
     "fast_charge_enabled",
+    "ac_output_enabled", "ac_power_saving_mode_enabled",
 ))
 
 

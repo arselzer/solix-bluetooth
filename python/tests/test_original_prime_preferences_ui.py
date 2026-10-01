@@ -92,7 +92,7 @@ class FakeMonitor:
         return self.changed("ac_fast_charge_enabled", int(enabled))
 
 
-def test_terminal_new_preferences_route_sdk_and_keep_switches_unavailable():
+def test_terminal_preferences_route_sdk_and_reject_unknown_ac_countdown():
     async def run():
         backend = TuiBackend([original()], monitor_factory=FakeMonitor)
         await backend.connect("ble:original")
@@ -104,8 +104,9 @@ def test_terminal_new_preferences_route_sdk_and_keep_switches_unavailable():
         await backend.control("fast-charge", "off")
         assert backend.monitor.calls[-2:] == [("fast_charge", True), ("fast_charge", False)]
         for action in ("ac-output", "ac-power-saving"):
-            with pytest.raises(ValueError, match="unavailable"):
+            with pytest.raises(ValueError, match="inactive AC countdown"):
                 await backend.control(action, "on")
+        assert len(backend.monitor.calls) == 5
         assert backend.monitor.metrics["ac_output_enabled"] == 1 and backend.monitor.metrics["dc_output_enabled"] == 0
         await backend.disconnect()
     asyncio.run(run())

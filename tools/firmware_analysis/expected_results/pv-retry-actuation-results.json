@@ -1,0 +1,1591 @@
+{
+  "dcdc_status_predicate": [
+    {
+      "qualifier": 0,
+      "mode": 0,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_register_0126": 0,
+      "new_register_0126": 0,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 0,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_register_0126": 32,
+      "new_register_0126": 32,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 0,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_register_0126": 65503,
+      "new_register_0126": 65503,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 0,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_register_0126": 65535,
+      "new_register_0126": 65535,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 0,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_register_0126": 0,
+      "new_register_0126": 0,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 0,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_register_0126": 32,
+      "new_register_0126": 32,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 0,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_register_0126": 65503,
+      "new_register_0126": 65503,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 0,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_register_0126": 65535,
+      "new_register_0126": 65535,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 0,
+      "fault_words": [
+        0,
+        32768
+      ],
+      "old_register_0126": 0,
+      "new_register_0126": 0,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 0,
+      "fault_words": [
+        0,
+        32768
+      ],
+      "old_register_0126": 32,
+      "new_register_0126": 32,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 0,
+      "fault_words": [
+        0,
+        32768
+      ],
+      "old_register_0126": 65503,
+      "new_register_0126": 65503,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 0,
+      "fault_words": [
+        0,
+        32768
+      ],
+      "old_register_0126": 65535,
+      "new_register_0126": 65535,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 4,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_register_0126": 0,
+      "new_register_0126": 0,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 4,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_register_0126": 32,
+      "new_register_0126": 32,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 4,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_register_0126": 65503,
+      "new_register_0126": 65503,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 4,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_register_0126": 65535,
+      "new_register_0126": 65535,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 4,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_register_0126": 0,
+      "new_register_0126": 0,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 4,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_register_0126": 32,
+      "new_register_0126": 32,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 4,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_register_0126": 65503,
+      "new_register_0126": 65503,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 4,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_register_0126": 65535,
+      "new_register_0126": 65535,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 4,
+      "fault_words": [
+        0,
+        32768
+      ],
+      "old_register_0126": 0,
+      "new_register_0126": 0,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 4,
+      "fault_words": [
+        0,
+        32768
+      ],
+      "old_register_0126": 32,
+      "new_register_0126": 32,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 4,
+      "fault_words": [
+        0,
+        32768
+      ],
+      "old_register_0126": 65503,
+      "new_register_0126": 65503,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 4,
+      "fault_words": [
+        0,
+        32768
+      ],
+      "old_register_0126": 65535,
+      "new_register_0126": 65535,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 5,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_register_0126": 0,
+      "new_register_0126": 0,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 5,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_register_0126": 32,
+      "new_register_0126": 32,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 5,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_register_0126": 65503,
+      "new_register_0126": 65503,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 5,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_register_0126": 65535,
+      "new_register_0126": 65535,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 5,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_register_0126": 0,
+      "new_register_0126": 0,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 5,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_register_0126": 32,
+      "new_register_0126": 32,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 5,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_register_0126": 65503,
+      "new_register_0126": 65503,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 5,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_register_0126": 65535,
+      "new_register_0126": 65535,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 5,
+      "fault_words": [
+        0,
+        32768
+      ],
+      "old_register_0126": 0,
+      "new_register_0126": 0,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 5,
+      "fault_words": [
+        0,
+        32768
+      ],
+      "old_register_0126": 32,
+      "new_register_0126": 32,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 5,
+      "fault_words": [
+        0,
+        32768
+      ],
+      "old_register_0126": 65503,
+      "new_register_0126": 65503,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 0,
+      "mode": 5,
+      "fault_words": [
+        0,
+        32768
+      ],
+      "old_register_0126": 65535,
+      "new_register_0126": 65535,
+      "unchanged_when_qualifier_zero": true,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 0,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_register_0126": 0,
+      "new_register_0126": 32,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 0,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_register_0126": 32,
+      "new_register_0126": 32,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 0,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_register_0126": 65503,
+      "new_register_0126": 65535,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 0,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_register_0126": 65535,
+      "new_register_0126": 65535,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 0,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_register_0126": 0,
+      "new_register_0126": 0,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 0,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_register_0126": 32,
+      "new_register_0126": 0,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 0,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_register_0126": 65503,
+      "new_register_0126": 65503,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 0,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_register_0126": 65535,
+      "new_register_0126": 65503,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 0,
+      "fault_words": [
+        0,
+        32768
+      ],
+      "old_register_0126": 0,
+      "new_register_0126": 0,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 0,
+      "fault_words": [
+        0,
+        32768
+      ],
+      "old_register_0126": 32,
+      "new_register_0126": 0,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 0,
+      "fault_words": [
+        0,
+        32768
+      ],
+      "old_register_0126": 65503,
+      "new_register_0126": 65503,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 0,
+      "fault_words": [
+        0,
+        32768
+      ],
+      "old_register_0126": 65535,
+      "new_register_0126": 65503,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 4,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_register_0126": 0,
+      "new_register_0126": 0,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 4,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_register_0126": 32,
+      "new_register_0126": 0,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 4,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_register_0126": 65503,
+      "new_register_0126": 65503,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 4,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_register_0126": 65535,
+      "new_register_0126": 65503,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 4,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_register_0126": 0,
+      "new_register_0126": 0,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 4,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_register_0126": 32,
+      "new_register_0126": 0,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 4,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_register_0126": 65503,
+      "new_register_0126": 65503,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 4,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_register_0126": 65535,
+      "new_register_0126": 65503,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 4,
+      "fault_words": [
+        0,
+        32768
+      ],
+      "old_register_0126": 0,
+      "new_register_0126": 0,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 4,
+      "fault_words": [
+        0,
+        32768
+      ],
+      "old_register_0126": 32,
+      "new_register_0126": 0,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 4,
+      "fault_words": [
+        0,
+        32768
+      ],
+      "old_register_0126": 65503,
+      "new_register_0126": 65503,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 4,
+      "fault_words": [
+        0,
+        32768
+      ],
+      "old_register_0126": 65535,
+      "new_register_0126": 65503,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 5,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_register_0126": 0,
+      "new_register_0126": 32,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 5,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_register_0126": 32,
+      "new_register_0126": 32,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 5,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_register_0126": 65503,
+      "new_register_0126": 65535,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 5,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_register_0126": 65535,
+      "new_register_0126": 65535,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 5,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_register_0126": 0,
+      "new_register_0126": 0,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 5,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_register_0126": 32,
+      "new_register_0126": 0,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 5,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_register_0126": 65503,
+      "new_register_0126": 65503,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 5,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_register_0126": 65535,
+      "new_register_0126": 65503,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 5,
+      "fault_words": [
+        0,
+        32768
+      ],
+      "old_register_0126": 0,
+      "new_register_0126": 0,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 5,
+      "fault_words": [
+        0,
+        32768
+      ],
+      "old_register_0126": 32,
+      "new_register_0126": 0,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 5,
+      "fault_words": [
+        0,
+        32768
+      ],
+      "old_register_0126": 65503,
+      "new_register_0126": 65503,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    },
+    {
+      "qualifier": 1,
+      "mode": 5,
+      "fault_words": [
+        0,
+        32768
+      ],
+      "old_register_0126": 65535,
+      "new_register_0126": 65503,
+      "unchanged_when_qualifier_zero": false,
+      "function_returns_substituted": false
+    }
+  ],
+  "real_dc_input_policy": [
+    {
+      "previous_dc_input_bit": false,
+      "global_bit23": false,
+      "bms_sensor11_word": 0,
+      "rising": false,
+      "dc_input_bit_after": 0,
+      "output_state_and_saved_settings_preserved": true
+    },
+    {
+      "previous_dc_input_bit": false,
+      "global_bit23": false,
+      "bms_sensor11_word": 0,
+      "rising": true,
+      "dc_input_bit_after": 0,
+      "output_state_and_saved_settings_preserved": true
+    },
+    {
+      "previous_dc_input_bit": false,
+      "global_bit23": false,
+      "bms_sensor11_word": 1,
+      "rising": false,
+      "dc_input_bit_after": 0,
+      "output_state_and_saved_settings_preserved": true
+    },
+    {
+      "previous_dc_input_bit": false,
+      "global_bit23": false,
+      "bms_sensor11_word": 1,
+      "rising": true,
+      "dc_input_bit_after": 1,
+      "output_state_and_saved_settings_preserved": true
+    },
+    {
+      "previous_dc_input_bit": false,
+      "global_bit23": true,
+      "bms_sensor11_word": 0,
+      "rising": false,
+      "dc_input_bit_after": 0,
+      "output_state_and_saved_settings_preserved": true
+    },
+    {
+      "previous_dc_input_bit": false,
+      "global_bit23": true,
+      "bms_sensor11_word": 0,
+      "rising": true,
+      "dc_input_bit_after": 0,
+      "output_state_and_saved_settings_preserved": true
+    },
+    {
+      "previous_dc_input_bit": false,
+      "global_bit23": true,
+      "bms_sensor11_word": 1,
+      "rising": false,
+      "dc_input_bit_after": 0,
+      "output_state_and_saved_settings_preserved": true
+    },
+    {
+      "previous_dc_input_bit": false,
+      "global_bit23": true,
+      "bms_sensor11_word": 1,
+      "rising": true,
+      "dc_input_bit_after": 0,
+      "output_state_and_saved_settings_preserved": true
+    },
+    {
+      "previous_dc_input_bit": true,
+      "global_bit23": false,
+      "bms_sensor11_word": 0,
+      "rising": false,
+      "dc_input_bit_after": 0,
+      "output_state_and_saved_settings_preserved": true
+    },
+    {
+      "previous_dc_input_bit": true,
+      "global_bit23": false,
+      "bms_sensor11_word": 0,
+      "rising": true,
+      "dc_input_bit_after": 0,
+      "output_state_and_saved_settings_preserved": true
+    },
+    {
+      "previous_dc_input_bit": true,
+      "global_bit23": false,
+      "bms_sensor11_word": 1,
+      "rising": false,
+      "dc_input_bit_after": 0,
+      "output_state_and_saved_settings_preserved": true
+    },
+    {
+      "previous_dc_input_bit": true,
+      "global_bit23": false,
+      "bms_sensor11_word": 1,
+      "rising": true,
+      "dc_input_bit_after": 1,
+      "output_state_and_saved_settings_preserved": true
+    },
+    {
+      "previous_dc_input_bit": true,
+      "global_bit23": true,
+      "bms_sensor11_word": 0,
+      "rising": false,
+      "dc_input_bit_after": 0,
+      "output_state_and_saved_settings_preserved": true
+    },
+    {
+      "previous_dc_input_bit": true,
+      "global_bit23": true,
+      "bms_sensor11_word": 0,
+      "rising": true,
+      "dc_input_bit_after": 0,
+      "output_state_and_saved_settings_preserved": true
+    },
+    {
+      "previous_dc_input_bit": true,
+      "global_bit23": true,
+      "bms_sensor11_word": 1,
+      "rising": false,
+      "dc_input_bit_after": 0,
+      "output_state_and_saved_settings_preserved": true
+    },
+    {
+      "previous_dc_input_bit": true,
+      "global_bit23": true,
+      "bms_sensor11_word": 1,
+      "rising": true,
+      "dc_input_bit_after": 0,
+      "output_state_and_saved_settings_preserved": true
+    }
+  ],
+  "queued_mppt_actions": [
+    {
+      "case": "inactive_no_previous_command",
+      "queued": [],
+      "buffers_freed": 0,
+      "diagnostic_boundaries": [
+        "MPPT diagnostic collector"
+      ],
+      "output_state_and_saved_settings_preserved": true
+    },
+    {
+      "case": "inactive_previous_command",
+      "queued": [
+        {
+          "selector": 1,
+          "register": 21,
+          "payload_hex": "5800",
+          "callback": "00000000",
+          "accepted_by_substitute": true
+        }
+      ],
+      "buffers_freed": 0,
+      "diagnostic_boundaries": [
+        "MPPT diagnostic collector"
+      ],
+      "output_state_and_saved_settings_preserved": true
+    },
+    {
+      "case": "active_configuration_then_enable",
+      "queued": [
+        {
+          "selector": 1,
+          "register": 22,
+          "payload_hex": "0000ec0e78054402a00ff00a",
+          "callback": "0801649d",
+          "accepted_by_substitute": true
+        },
+        {
+          "selector": 1,
+          "register": 21,
+          "payload_hex": "5700",
+          "callback": "00000000",
+          "accepted_by_substitute": true
+        }
+      ],
+      "buffers_freed": 0,
+      "diagnostic_boundaries": [
+        "MPPT diagnostic collector"
+      ],
+      "output_state_and_saved_settings_preserved": true
+    },
+    {
+      "case": "configuration_failure_no_enable",
+      "queued": [
+        {
+          "selector": 1,
+          "register": 22,
+          "payload_hex": "0000ec0e78054402a00ff00a",
+          "callback": "0801649d",
+          "accepted_by_substitute": true
+        }
+      ],
+      "buffers_freed": 0,
+      "diagnostic_boundaries": [
+        "MPPT diagnostic collector"
+      ],
+      "output_state_and_saved_settings_preserved": true
+    },
+    {
+      "case": "input_lost_before_configuration_ack",
+      "queued": [
+        {
+          "selector": 1,
+          "register": 22,
+          "payload_hex": "0000ec0e78054402a00ff00a",
+          "callback": "0801649d",
+          "accepted_by_substitute": true
+        },
+        {
+          "selector": 1,
+          "register": 21,
+          "payload_hex": "5800",
+          "callback": "00000000",
+          "accepted_by_substitute": true
+        }
+      ],
+      "buffers_freed": 0,
+      "diagnostic_boundaries": [
+        "MPPT diagnostic collector"
+      ],
+      "output_state_and_saved_settings_preserved": true
+    },
+    {
+      "case": "allocation_failure",
+      "queued": [],
+      "buffers_freed": 0,
+      "diagnostic_boundaries": [
+        "MPPT diagnostic collector"
+      ],
+      "output_state_and_saved_settings_preserved": true
+    },
+    {
+      "case": "queue_failure",
+      "queued": [
+        {
+          "selector": 1,
+          "register": 22,
+          "payload_hex": "0000ec0e78054402a00ff00a",
+          "callback": "0801649d",
+          "accepted_by_substitute": false
+        }
+      ],
+      "buffers_freed": 1,
+      "diagnostic_boundaries": [
+        "MPPT diagnostic collector"
+      ],
+      "output_state_and_saved_settings_preserved": true
+    }
+  ],
+  "dcdc_command_events": [
+    {
+      "register_0015_word": 87,
+      "event_bank0_bits": 8,
+      "function_returns_substituted": false,
+      "entry_assumes_register_pending_bit": true
+    },
+    {
+      "register_0015_word": 88,
+      "event_bank0_bits": 16,
+      "function_returns_substituted": false,
+      "entry_assumes_register_pending_bit": true
+    },
+    {
+      "register_0015_word": 89,
+      "event_bank0_bits": 32,
+      "function_returns_substituted": false,
+      "entry_assumes_register_pending_bit": true
+    },
+    {
+      "register_0015_word": 86,
+      "event_bank0_bits": 0,
+      "function_returns_substituted": false,
+      "entry_assumes_register_pending_bit": true
+    },
+    {
+      "register_0015_word": 0,
+      "event_bank0_bits": 0,
+      "function_returns_substituted": false,
+      "entry_assumes_register_pending_bit": true
+    }
+  ],
+  "dcdc_mode1_request_guard": [
+    {
+      "event_bits": 0,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_run_request": 0,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 0,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_run_request": 1,
+      "new_run_request": 1,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 0,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_run_request": 0,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 0,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_run_request": 1,
+      "new_run_request": 1,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 0,
+      "fault_words": [
+        0,
+        16
+      ],
+      "old_run_request": 0,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 0,
+      "fault_words": [
+        0,
+        16
+      ],
+      "old_run_request": 1,
+      "new_run_request": 1,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 0,
+      "fault_words": [
+        0,
+        32
+      ],
+      "old_run_request": 0,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 0,
+      "fault_words": [
+        0,
+        32
+      ],
+      "old_run_request": 1,
+      "new_run_request": 1,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 0,
+      "fault_words": [
+        0,
+        2
+      ],
+      "old_run_request": 0,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 0,
+      "fault_words": [
+        0,
+        2
+      ],
+      "old_run_request": 1,
+      "new_run_request": 1,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 8,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_run_request": 0,
+      "new_run_request": 1,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 8,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_run_request": 1,
+      "new_run_request": 1,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 8,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_run_request": 0,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 8,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_run_request": 1,
+      "new_run_request": 1,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 8,
+      "fault_words": [
+        0,
+        16
+      ],
+      "old_run_request": 0,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 8,
+      "fault_words": [
+        0,
+        16
+      ],
+      "old_run_request": 1,
+      "new_run_request": 1,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 8,
+      "fault_words": [
+        0,
+        32
+      ],
+      "old_run_request": 0,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 8,
+      "fault_words": [
+        0,
+        32
+      ],
+      "old_run_request": 1,
+      "new_run_request": 1,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 8,
+      "fault_words": [
+        0,
+        2
+      ],
+      "old_run_request": 0,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 8,
+      "fault_words": [
+        0,
+        2
+      ],
+      "old_run_request": 1,
+      "new_run_request": 1,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 16,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_run_request": 0,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 16,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_run_request": 1,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 16,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_run_request": 0,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 16,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_run_request": 1,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 16,
+      "fault_words": [
+        0,
+        16
+      ],
+      "old_run_request": 0,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 16,
+      "fault_words": [
+        0,
+        16
+      ],
+      "old_run_request": 1,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 16,
+      "fault_words": [
+        0,
+        32
+      ],
+      "old_run_request": 0,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 16,
+      "fault_words": [
+        0,
+        32
+      ],
+      "old_run_request": 1,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 16,
+      "fault_words": [
+        0,
+        2
+      ],
+      "old_run_request": 0,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 16,
+      "fault_words": [
+        0,
+        2
+      ],
+      "old_run_request": 1,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 24,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_run_request": 0,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 24,
+      "fault_words": [
+        0,
+        0
+      ],
+      "old_run_request": 1,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 24,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_run_request": 0,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 24,
+      "fault_words": [
+        1,
+        0
+      ],
+      "old_run_request": 1,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 24,
+      "fault_words": [
+        0,
+        16
+      ],
+      "old_run_request": 0,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 24,
+      "fault_words": [
+        0,
+        16
+      ],
+      "old_run_request": 1,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 24,
+      "fault_words": [
+        0,
+        32
+      ],
+      "old_run_request": 0,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 24,
+      "fault_words": [
+        0,
+        32
+      ],
+      "old_run_request": 1,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 24,
+      "fault_words": [
+        0,
+        2
+      ],
+      "old_run_request": 0,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    },
+    {
+      "event_bits": 24,
+      "fault_words": [
+        0,
+        2
+      ],
+      "old_run_request": 1,
+      "new_run_request": 0,
+      "function_returns_substituted": false,
+      "stopped_before_periodic_converter_sequence": true
+    }
+  ]
+}

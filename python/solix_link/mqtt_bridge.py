@@ -56,6 +56,8 @@ def _supports_operation(device: Any, operation: str) -> bool:
     if device.protocol != 'prime':
         return False
     if device.model == Model.C1000:
+        if operation == "ac_output":
+            return False  # Prime output switching is limited to direct SDK/CLI/TUI.
         return original_prime_operation_supported(operation)
     if device.model == Model.C1000_GEN2:
         return operation in ('charge_limits', 'ac_charging_power', 'display_timeout', 'fast_charge', 'device_timeout')

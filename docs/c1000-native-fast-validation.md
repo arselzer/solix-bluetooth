@@ -39,8 +39,10 @@ station setting write; correcting the local deployment file allowed the tests.
 
 ## Tool support
 
-Original Prime BLE and native MQTT now have **eight independently verified
-controls**. Fast is available through `NativeMqttCommands.fast_charge(bool)`,
+This stage brought original Prime BLE and native MQTT to **eight independently
+verified controls**. The subsequent [Prime AC/Smart trial](c1000-prime-ac-smart-validation.md)
+brings Prime to ten SDK controls/nine gateway preferences; native remains eight.
+Fast is available through `NativeMqttCommands.fast_charge(bool)`,
 `LocalMqttServer.set_fast_charge_enabled(bool)`, the AP service, its HTTP gateway,
 CLI, terminal/browser controls and the Home Assistant gateway switch:
 

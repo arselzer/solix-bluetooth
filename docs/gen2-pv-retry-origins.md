@@ -81,6 +81,9 @@ argument is 10, but scheduler delivery and real hardware timing were not
 executed. The producer of the module flag and downstream MPPT power actions
 were also excluded. This proves that the flag can make the controller cycle an
 input state; it does not prove that a panel will supply power afterward.
+The subsequent [actuation trace](gen2-pv-retry-actuation.md) resolves the
+qualified DCDC state producer, real policy rows, MPPT configuration/start/stop
+queue and DSP fault guards. Physical converter switching remains untested.
 
 ## Low-SOC side effects matter
 

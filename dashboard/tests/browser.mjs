@@ -305,9 +305,10 @@ try {
   assert.equal(await page.locator('#display-timeout option[value="10"]').count(), 0);
   assert.equal(await page.locator('#light-mode').inputValue(), '0');
   assert.equal(await page.locator('#temperature-unit').inputValue(), '0');
-  for (const label of ['port-memory', 'ac-power-saving']) {
+  for (const label of ['port-memory']) {
     assert.equal(await page.locator(`#${label}`).count(), 0);
   }
+  assert.equal(await page.locator('#ac-power-saving').isDisabled(), true);
   const beforeOriginalPrime = (await recorded()).length;
   for (const [label, value, command, fields] of [
     ['charging-power', '900', 'set-charge-power', { watts: 900 }],
@@ -350,6 +351,34 @@ try {
   await change({ dc_output: 0 });
   await refresh();
   assert.equal(await page.locator('#dc-power-saving').isDisabled(), false);
+  cases++; console.log(`Scenario ${cases} passed`);
+
+  await change({ ac_output: 0, ac_countdown: 0 });
+  await refresh();
+  assert.equal(await page.locator('#ac-power-saving').isDisabled(), false);
+  const beforeAcSmart = (await recorded()).length;
+  for (const value of ['1', '0']) {
+    await page.locator('#ac-power-saving').selectOption(value);
+    await propose('ac-power-saving');
+    assert.match(await page.getByTestId('command-review').textContent(), /AC output OFF.*inactive AC countdown.*inactivity counter/s);
+    await page.getByTestId('cancel-command').click();
+    assert.equal((await recorded()).length, beforeAcSmart + (value === '1' ? 0 : 1));
+    await propose('ac-power-saving');
+    await page.getByTestId('confirm-command').click();
+    await page.getByTestId('gateway-notice').filter({ hasText: 'Command confirmed' }).waitFor();
+    assert.deepEqual((await recorded()).at(-1), { name: 'Updated · C1000', command: 'set-ac-power-saving', enabled: value === '1' });
+  }
+  await change({ ac_countdown: 60 });
+  await refresh();
+  assert.equal(await page.locator('#ac-power-saving').isDisabled(), true);
+  await change({ ac_countdown: null });
+  await refresh();
+  assert.equal(await page.locator('#ac-power-saving').isDisabled(), true);
+  assert.equal((await recorded()).length, beforeAcSmart + 2);
+  assert.equal(await page.locator('#ac-output').count(), 0);
+  await change({ ac_output: 1, ac_countdown: 0 });
+  await refresh();
+  assert.equal(await page.locator('#ac-power-saving').isDisabled(), true);
   cases++; console.log(`Scenario ${cases} passed`);
 
   await page.getByTestId('station-select').selectOption('Local · C1000');

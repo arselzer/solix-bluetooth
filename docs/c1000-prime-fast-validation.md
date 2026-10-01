@@ -39,9 +39,11 @@ solix-link set-fast-charge --name original --enabled off
 The SDK method is `await monitor.set_fast_charge_enabled(True)`. It uses the
 fresh original configuration guard and post-write readback. CLI, Bluetooth
 HTTP gateway, BLE-to-MQTT bridge, terminal and browser controls, and the gateway
-Home Assistant switch share that verified capability. **Prime has eight
-controls.** The subsequent [independent native Fast trial](c1000-native-fast-validation.md)
+Home Assistant switch share that verified capability. **This stage established
+eight Prime controls.** The subsequent [independent native Fast trial](c1000-native-fast-validation.md)
 also brought native MQTT to eight; the measurements here describe Bluetooth.
+The later [Prime AC/Smart trial](c1000-prime-ac-smart-validation.md) increases
+Prime to ten SDK controls and nine gateway preferences; native remains eight.
 
 An independent public-SDK repeat then passed the same off/on/off round trip,
 four held samples and three restored checks, without packet overrides. Its

@@ -45,7 +45,7 @@ class Monitor:
 
 
 def test_independently_verified_prime_and_native_eighth_capability():
-    assert len(original_prime_commands()) == 8
+    assert len(original_prime_commands()) == 9
     assert "set-fast-charge" in MonitorService([original()]).supported_commands("original")
     assert _supports_operation(original(), "fast_charge")
     assert decode_setting("fast_charge", b'{"enabled":true}') == {"enabled": True}

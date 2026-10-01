@@ -19,7 +19,7 @@ from .config import DeviceConfig, load_config, protocol_choices, save_config
 from .ap_service_config import APServiceConfig, add_ap_service_device, initialize_ap_service, load_ap_service, load_ap_service_profiles, private_write
 from .ap_service import ap_service_request
 from .protocol import Model
-from .c1000_capabilities import ORIGINAL_DC_SMART_WARNING, ORIGINAL_FAST_CHARGE_WARNING, original_prime_commands
+from .c1000_capabilities import ORIGINAL_AC_SMART_WARNING, ORIGINAL_DC_SMART_WARNING, ORIGINAL_FAST_CHARGE_WARNING, original_prime_commands, original_prime_operation_supported
 from .commands import native_commands_for_model
 
 
@@ -105,7 +105,7 @@ def change_protocol(device: DeviceConfig, config_path: Path) -> DeviceConfig:
         raise ValueError("Saved station changed; select it again before changing protocol")
     save_config([updated if entry.name == device.name else entry for entry in saved], config_path)
     if device.model == Model.C1000 and protocol == "prime":
-        print("Original C1000 Prime 1.7.1 supports the listed verified settings; output switches and AC Smart remain unavailable. DC Smart requires DC output off. Fast charging requires adequate AC supply.")
+        print("Original C1000 Prime 1.7.1 supports the listed settings and confirmed AC socket changes with an inactive AC countdown. AC Smart requires AC output off; DC Smart requires DC output off. Fast charging requires adequate AC supply.")
     return updated
 
 
@@ -232,8 +232,12 @@ def preference_menu(device: DeviceConfig | APServiceConfig, config_path: Path, d
         candidates = [("set-display-brightness", "Display brightness"), ("set-display-timeout", "Screen timeout"),
                       ("set-light", "Light mode"), ("set-temperature-unit", "Temperature display"),
                       ("set-dc-power-saving", "DC Smart mode (requires DC output off)"),
-                      ("set-fast-charge", "Fast charging (requires adequate AC supply)")]
+                      ("set-fast-charge", "Fast charging (requires adequate AC supply)"),
+                      ("set-ac-power-saving", "AC Smart mode (requires AC output off and inactive timer)"),
+                      ("set-ac-output", "AC sockets (changes powered loads)")]
         supported = native_commands_for_model(device.model) if directory is not None else original_prime_commands()
+        if directory is None and original_prime_operation_supported("ac_output"):
+            supported += ["set-ac-output"]
         commands = [command for command, _ in candidates if command in supported]
         labels = [label for command, label in candidates if command in supported]
     elif device.model == Model.C1000_GEN2 and (directory is not None or getattr(device, "protocol", None) == "prime"):
@@ -264,7 +268,9 @@ def preference_menu(device: DeviceConfig | APServiceConfig, config_path: Path, d
     if command in ("set-ac-power-saving", "set-dc-power-saving"):
         print("Power saving may automatically turn the output off at low load.")
         if device.model == Model.C1000 and (directory is not None or getattr(device, "protocol", None) == "prime"):
-            print(ORIGINAL_DC_SMART_WARNING)
+            print(ORIGINAL_AC_SMART_WARNING if command == "set-ac-power-saving" else ORIGINAL_DC_SMART_WARNING)
+    if command == "set-ac-output":
+        print("This changes power at the AC sockets. Original Prime requires a fresh inactive AC countdown; review connected loads before applying.")
     if command == "set-fast-charge" and device.model == Model.C1000_GEN2:
         print("Enabling requires Standard mode with no active tariff. Native MQTT also requires connected mains.")
     if command == "set-fast-charge" and device.model == Model.C1000:
@@ -283,6 +289,7 @@ def preference_menu(device: DeviceConfig | APServiceConfig, config_path: Path, d
     else:
         from .cli import _set
         arguments = ({"unit": "fahrenheit" if value else "celsius"} if command == "set-temperature-unit" else
+                     {"enabled": "on" if value else "off"} if command == "set-ac-output" else
                      {"level": value + 1} if command == "set-display-brightness" else
                      {"seconds": (20, 30, 60, 300, 1800)[value]} if command == "set-display-timeout" else
                      {"mode": ("off", "low", "medium", "high", "sos")[value]} if command == "set-light" else

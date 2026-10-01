@@ -14,7 +14,7 @@ from .client import SolixMonitor, discover
 from .config import DEFAULT_CONFIG, DeviceConfig, load_config, save_config
 from .manager import MonitorService
 from .protocol import C1000_PRIME_SETTINGS, Model
-from .c1000_capabilities import ORIGINAL_DC_SMART_WARNING, ORIGINAL_FAST_CHARGE_WARNING, original_prime_commands
+from .c1000_capabilities import ORIGINAL_AC_SMART_WARNING, ORIGINAL_DC_SMART_WARNING, ORIGINAL_FAST_CHARGE_WARNING, original_prime_commands, original_prime_operation_supported
 
 
 def parser() -> argparse.ArgumentParser:
@@ -236,7 +236,9 @@ async def _set(args: argparse.Namespace) -> None:
     device = next((saved for saved in load_config(args.config) if saved.name == args.name), None)
     if device is None:
         raise ValueError(f"Unknown configured device: {args.name}")
-    if device.model == Model.C1000 and device.protocol == "prime" and args.command not in original_prime_commands():
+    original_prime_output = (device.model == Model.C1000 and device.protocol == "prime"
+                             and args.command == "set-ac-output" and original_prime_operation_supported("ac_output"))
+    if device.model == Model.C1000 and device.protocol == "prime" and args.command not in original_prime_commands() and not original_prime_output:
         raise ValueError("This control is not verified for original C1000 Prime firmware")
     legacy_setting = (device.protocol == "legacy" and device.model in (Model.C300, Model.C1000) and args.command in (
         "set-display-timeout", "set-charge-power", "set-ac-output", "set-light",
@@ -245,7 +247,7 @@ async def _set(args: argparse.Namespace) -> None:
                        and args.command in ("set-device-timeout", "set-temperature-unit", "set-fast-charge",
                                             "set-ac-power-saving", "set-dc-power-saving"))
     prime_setting = device.protocol == "prime" and (
-        (device.model == Model.C1000 and args.command in original_prime_commands())
+        (device.model == Model.C1000 and (args.command in original_prime_commands() or original_prime_output))
         or (device.model == Model.C1000_GEN2 and args.command in ("set-limits", "set-display-timeout", "set-charge-power", "set-fast-charge", "set-charge-cap", "set-device-timeout"))
         or (device.model == Model.C2000_GEN2 and args.command in ("set-display-timeout", "set-charge-power", "set-charge-cap"))
     )
@@ -253,7 +255,7 @@ async def _set(args: argparse.Namespace) -> None:
         raise ValueError("This setting is not verified for the selected device")
     if args.command == "set-charge-cap" and device.model != Model.C2000_GEN2:
         raise ValueError("set-charge-cap is verified only on C2000 Gen 2 Prime")
-    if args.command in ("set-fast-charge", "set-ac-power-saving", "set-dc-power-saving") and args.enabled not in ("on", "off"):
+    if args.command in ("set-fast-charge", "set-ac-power-saving", "set-dc-power-saving", "set-ac-output") and args.enabled not in ("on", "off"):
         raise ValueError("Enabled must be on or off")
     if args.command == "set-temperature-unit" and args.unit not in ("celsius", "fahrenheit"):
         raise ValueError("Unit must be celsius or fahrenheit")
@@ -262,7 +264,7 @@ async def _set(args: argparse.Namespace) -> None:
     if args.command in ("set-ac-power-saving", "set-dc-power-saving"):
         print("Power saving may automatically turn the output off at low load.", file=sys.stderr)
         if device.protocol == "prime":
-            print(ORIGINAL_DC_SMART_WARNING, file=sys.stderr)
+            print(ORIGINAL_AC_SMART_WARNING if args.command == "set-ac-power-saving" else ORIGINAL_DC_SMART_WARNING, file=sys.stderr)
     if args.command == "set-device-timeout":
         if type(args.minutes) is not int or args.minutes not in (0, 30, 60, 120, 240, 360, 720, 1440):
             raise ValueError("Device Timeout must be 0 (Never), 30, 60, 120, 240, 360, 720 or 1440 minutes")

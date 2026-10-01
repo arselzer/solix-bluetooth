@@ -67,6 +67,9 @@ command on the basis of these observations. A useful next rate test needs a
 stable, naturally below-full battery, independent input/output measurement and
 both ceilings restored afterward; another brief full-battery outage alone is
 insufficient evidence.
+The [older SOC producer follow-up](c1000-soc-and-recharge-firmware.md) traces
+rounding, a full-related latch and capacity-history effects that can retain
+reported 100%. It does not establish the cause or timing on installed 1.7.1.
 
 ## Scope
 

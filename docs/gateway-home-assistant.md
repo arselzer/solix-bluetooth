@@ -101,6 +101,19 @@ Original C1000 **Prime/native MQTT 1.7.1** shares these eight controls:
 | `set-dc-power-saving` | boolean `enabled` | false Normal / true Smart; requires fresh DC output off |
 | `set-fast-charge` | boolean `enabled` | `true` / `false`; adequate AC supply required |
 
+Prime BLE additionally exposes `set-ac-power-saving` with boolean `enabled`,
+making nine gateway preferences. Both directions require fresh AC output off,
+an exact integer zero AC countdown and valid mode readback. The prototype and
+public SDK each passed four writes/twenty explicit complete fresh snapshots:
+AC off, AC Smart off/on, AC on restoration. All eleven settings/F8 and the
+read-only upstream baseline were restored; only F8 AC mode byte 2 may change
+for this setting. Smart can inherit an inactivity counter and later stop the
+output at low load; enabling does not guarantee a new grace period. Native
+AC Smart remains unsupported, even if an incorrect capability is advertised.
+Direct SDK/CLI/terminal AC output control requires the same inactive countdown
+and complete readback confirmation, giving ten direct Prime controls. HTTP/browser/HA and
+the Prime BLE MQTT bridge do not expose output switching. C2000 AC is blocked.
+
 Both directions of DC Smart require fresh DC output off. The BLE prototype
 and public SDK each passed two writes/nine fresh samples. Native prototype
 and public SDK trials passed two writes each with 15/11 explicit samples,
@@ -123,14 +136,13 @@ screen timeout 30/60 s, light Off/Low and Celsius/Fahrenheit. Every Prime write
 requires all eleven settings and the full 21-byte `F8` flags freshly before and
 afterward; protected fields and unknown flags must remain unchanged. AC was
 enabled and DC disabled throughout the recorded snapshots. Other values have
-synthetic/range coverage. AC Smart and AC/DC switches remain unavailable on
-both profiles. Both independently expose `set-fast-charge`
+synthetic/range coverage. Both independently expose `set-fast-charge`
 with boolean `enabled`. Its 1.7.1 OFF→ON flag held for at least twelve seconds
 at 100% SOC, then restored OFF with AC outputs on and complete settings/F8
 baseline preservation. Removing AC input cleared the flag. Use an adequate AC
 supply; no charging-speed or reboot-persistence claim is made. The browser
 requires confirmation, and HA requires advertised capability/fresh binary
-readback. Prime and native have eight controls. Native `005e` OFF→ON→OFF
+readback. Prime has nine gateway preferences; native has eight. Native `005e` OFF→ON→OFF
 passed two writes/twenty explicit complete fresh snapshots, with four held
 samples over at least twelve seconds, complete eleven-preference/F8 restoration
 and AC on/DC off at 100% SOC. Use

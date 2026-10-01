@@ -1,0 +1,43 @@
+{
+  "hardware_access": false,
+  "case_counts": {
+    "dcdc_status_predicate": 72,
+    "real_dc_input_policy": 16,
+    "queued_mppt_actions": 7,
+    "dcdc_command_events": 5,
+    "dcdc_mode1_request_guard": 40
+  },
+  "firmware": {
+    "MainMcu-decoded.bin": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9",
+    "dspDCDC-decoded.bin": "7ae2bb915812441b8316d1c3f3efc2379fcb488d4d03e950901cf507c224ceb8"
+  },
+  "runtime": {
+    "python": "3.12.3",
+    "unicorn": "2.1.4"
+  },
+  "result_sha256": "83978139e018508c6dace148eeb46373d4520a8c11446a9ae645a7ef6353fa8f",
+  "source_sha256": {
+    "emulate_pv_retry_actuation.py": "2927f2edd80e0ea1e000e3b99a786aaa6cf506ecfbc41676b05f929a4dbc690c",
+    "emulate_pv_retry_origins.py": "5ed18f3be5527848eeda567c77ecd7ce400c57365947545d956c9371c6804f54",
+    "emulate_general_settings.py": "26ce041976a8fd1ac43feb2851c1717363761cb2f7da69f4d780b3f42b8ef0ba",
+    "emulate_additional_features.py": "baaeb837278e225a117ebaf025e1e463eed10f24d51af8d7f2946783ef12615e",
+    "emulate_clock_semantics.py": "945b649c3b5cec00d816041e783641085ccfbdb5f80efc2ed2c4e15f3bae30f2",
+    "replay_io.py": "731d795a5ec37e2cf12b809b7122eaf7a29d84c21a2ecd43fafa3e2f8d962d30",
+    "extract_dsp.py": "5a82593ea76fd784702e0ee501be2415a4540d2570c3f370d343e8512d2a87e9"
+  },
+  "substitutions": [
+    "inherited LCD/persistence/timer/ACK/logging boundaries",
+    "allocation/free",
+    "internal command queue",
+    "MPPT diagnostic collector",
+    "XT60i auxiliary configuration"
+  ],
+  "excluded": [
+    "DSP periodic qualification producer",
+    "full DSP state machine/fault producers",
+    "UART",
+    "real asynchronous event delivery",
+    "physical charger",
+    "initial device wake path"
+  ]
+}

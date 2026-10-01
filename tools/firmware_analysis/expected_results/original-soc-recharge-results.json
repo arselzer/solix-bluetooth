@@ -1,0 +1,841 @@
+{
+  "main_image_sha256": "b295ee8613f5c96e70dcc905896df516621cab4dc590bb580eac6b84519911a6",
+  "bms_image_sha256": {
+    "main": "dfb7106d8b189bf1ed19e7c2f6ae15555aeb54d84269292190727604168a1d92",
+    "expansion": "dc37fadf824193edcef2030d187d9f6320de8b7b8d1a57c2fd2c1483d8d2c627"
+  },
+  "unicorn_version": "2.1.4",
+  "scope": "Public original 1.5.9 bundle; synthetic RAM; no 1.7.1, physical SOC, timing or DSP validation",
+  "capacity_rounding": [
+    {
+      "bms": "main",
+      "remaining_raw": 0,
+      "full_raw": 100000,
+      "ratio_tenths": 0,
+      "candidate_percent": 0
+    },
+    {
+      "bms": "main",
+      "remaining_raw": 500,
+      "full_raw": 100000,
+      "ratio_tenths": 5,
+      "candidate_percent": 1
+    },
+    {
+      "bms": "main",
+      "remaining_raw": 98500,
+      "full_raw": 100000,
+      "ratio_tenths": 985,
+      "candidate_percent": 99
+    },
+    {
+      "bms": "main",
+      "remaining_raw": 99400,
+      "full_raw": 100000,
+      "ratio_tenths": 994,
+      "candidate_percent": 99
+    },
+    {
+      "bms": "main",
+      "remaining_raw": 99499,
+      "full_raw": 100000,
+      "ratio_tenths": 994,
+      "candidate_percent": 99
+    },
+    {
+      "bms": "main",
+      "remaining_raw": 99500,
+      "full_raw": 100000,
+      "ratio_tenths": 995,
+      "candidate_percent": 100
+    },
+    {
+      "bms": "main",
+      "remaining_raw": 99900,
+      "full_raw": 100000,
+      "ratio_tenths": 999,
+      "candidate_percent": 100
+    },
+    {
+      "bms": "main",
+      "remaining_raw": 100000,
+      "full_raw": 100000,
+      "ratio_tenths": 1000,
+      "candidate_percent": 100
+    },
+    {
+      "bms": "expansion",
+      "remaining_raw": 0,
+      "full_raw": 100000,
+      "ratio_tenths": 0,
+      "candidate_percent": 0
+    },
+    {
+      "bms": "expansion",
+      "remaining_raw": 500,
+      "full_raw": 100000,
+      "ratio_tenths": 5,
+      "candidate_percent": 1
+    },
+    {
+      "bms": "expansion",
+      "remaining_raw": 98500,
+      "full_raw": 100000,
+      "ratio_tenths": 985,
+      "candidate_percent": 99
+    },
+    {
+      "bms": "expansion",
+      "remaining_raw": 99400,
+      "full_raw": 100000,
+      "ratio_tenths": 994,
+      "candidate_percent": 99
+    },
+    {
+      "bms": "expansion",
+      "remaining_raw": 99499,
+      "full_raw": 100000,
+      "ratio_tenths": 994,
+      "candidate_percent": 99
+    },
+    {
+      "bms": "expansion",
+      "remaining_raw": 99500,
+      "full_raw": 100000,
+      "ratio_tenths": 995,
+      "candidate_percent": 100
+    },
+    {
+      "bms": "expansion",
+      "remaining_raw": 99900,
+      "full_raw": 100000,
+      "ratio_tenths": 999,
+      "candidate_percent": 100
+    },
+    {
+      "bms": "expansion",
+      "remaining_raw": 100000,
+      "full_raw": 100000,
+      "ratio_tenths": 1000,
+      "candidate_percent": 100
+    }
+  ],
+  "full_soc_latch": [
+    {
+      "bms": "main",
+      "candidate_percent": 98,
+      "latch_byte": 0,
+      "cached_reported_percent": 98
+    },
+    {
+      "bms": "main",
+      "candidate_percent": 98,
+      "latch_byte": 90,
+      "cached_reported_percent": 98
+    },
+    {
+      "bms": "main",
+      "candidate_percent": 99,
+      "latch_byte": 0,
+      "cached_reported_percent": 99
+    },
+    {
+      "bms": "main",
+      "candidate_percent": 99,
+      "latch_byte": 90,
+      "cached_reported_percent": 99
+    },
+    {
+      "bms": "main",
+      "candidate_percent": 100,
+      "latch_byte": 0,
+      "cached_reported_percent": 99
+    },
+    {
+      "bms": "main",
+      "candidate_percent": 100,
+      "latch_byte": 90,
+      "cached_reported_percent": 100
+    },
+    {
+      "bms": "expansion",
+      "candidate_percent": 98,
+      "latch_byte": 0,
+      "cached_reported_percent": 98
+    },
+    {
+      "bms": "expansion",
+      "candidate_percent": 98,
+      "latch_byte": 90,
+      "cached_reported_percent": 98
+    },
+    {
+      "bms": "expansion",
+      "candidate_percent": 99,
+      "latch_byte": 0,
+      "cached_reported_percent": 99
+    },
+    {
+      "bms": "expansion",
+      "candidate_percent": 99,
+      "latch_byte": 90,
+      "cached_reported_percent": 99
+    },
+    {
+      "bms": "expansion",
+      "candidate_percent": 100,
+      "latch_byte": 0,
+      "cached_reported_percent": 99
+    },
+    {
+      "bms": "expansion",
+      "candidate_percent": 100,
+      "latch_byte": 90,
+      "cached_reported_percent": 100
+    }
+  ],
+  "history_denominator": [
+    {
+      "remaining_raw": 99000,
+      "full_raw": 100000,
+      "primary_candidate": 99,
+      "history_denominator_raw": 100000,
+      "latch_byte": 0,
+      "reported_percent": 99,
+      "note": "Denominator deliberately seeded; its learning and previous history are not simulated"
+    },
+    {
+      "remaining_raw": 99000,
+      "full_raw": 100000,
+      "primary_candidate": 99,
+      "history_denominator_raw": 100000,
+      "latch_byte": 90,
+      "reported_percent": 99,
+      "note": "Denominator deliberately seeded; its learning and previous history are not simulated"
+    },
+    {
+      "remaining_raw": 99000,
+      "full_raw": 100000,
+      "primary_candidate": 99,
+      "history_denominator_raw": 99000,
+      "latch_byte": 0,
+      "reported_percent": 99,
+      "note": "Denominator deliberately seeded; its learning and previous history are not simulated"
+    },
+    {
+      "remaining_raw": 99000,
+      "full_raw": 100000,
+      "primary_candidate": 99,
+      "history_denominator_raw": 99000,
+      "latch_byte": 90,
+      "reported_percent": 100,
+      "note": "Denominator deliberately seeded; its learning and previous history are not simulated"
+    },
+    {
+      "remaining_raw": 99000,
+      "full_raw": 100000,
+      "primary_candidate": 99,
+      "history_denominator_raw": 98000,
+      "latch_byte": 0,
+      "reported_percent": 99,
+      "note": "Denominator deliberately seeded; its learning and previous history are not simulated"
+    },
+    {
+      "remaining_raw": 99000,
+      "full_raw": 100000,
+      "primary_candidate": 99,
+      "history_denominator_raw": 98000,
+      "latch_byte": 90,
+      "reported_percent": 100,
+      "note": "Denominator deliberately seeded; its learning and previous history are not simulated"
+    }
+  ],
+  "full_latch_clear": [
+    {
+      "bms": "main",
+      "candidate_percent": 97,
+      "reported_percent": 100,
+      "cell_cache_raw": 3320,
+      "phase": 0,
+      "timer_before": 201,
+      "latch_after": 90,
+      "timer_after": 0
+    },
+    {
+      "bms": "main",
+      "candidate_percent": 97,
+      "reported_percent": 100,
+      "cell_cache_raw": 3319,
+      "phase": 1,
+      "timer_before": 201,
+      "latch_after": 90,
+      "timer_after": 0
+    },
+    {
+      "bms": "main",
+      "candidate_percent": 97,
+      "reported_percent": 100,
+      "cell_cache_raw": 3319,
+      "phase": 0,
+      "timer_before": 200,
+      "latch_after": 90,
+      "timer_after": 200
+    },
+    {
+      "bms": "main",
+      "candidate_percent": 97,
+      "reported_percent": 100,
+      "cell_cache_raw": 3319,
+      "phase": 0,
+      "timer_before": 201,
+      "latch_after": 0,
+      "timer_after": 201
+    },
+    {
+      "bms": "main",
+      "candidate_percent": 96,
+      "reported_percent": 100,
+      "cell_cache_raw": 3400,
+      "phase": 2,
+      "timer_before": 200,
+      "latch_after": 90,
+      "timer_after": 200
+    },
+    {
+      "bms": "main",
+      "candidate_percent": 96,
+      "reported_percent": 100,
+      "cell_cache_raw": 3400,
+      "phase": 2,
+      "timer_before": 201,
+      "latch_after": 0,
+      "timer_after": 201
+    },
+    {
+      "bms": "main",
+      "candidate_percent": 99,
+      "reported_percent": 99,
+      "cell_cache_raw": 3400,
+      "phase": 2,
+      "timer_before": 201,
+      "latch_after": 0,
+      "timer_after": 201
+    },
+    {
+      "bms": "expansion",
+      "candidate_percent": 97,
+      "reported_percent": 100,
+      "cell_cache_raw": 3320,
+      "phase": 0,
+      "timer_before": 201,
+      "latch_after": 90,
+      "timer_after": 0
+    },
+    {
+      "bms": "expansion",
+      "candidate_percent": 97,
+      "reported_percent": 100,
+      "cell_cache_raw": 3319,
+      "phase": 1,
+      "timer_before": 201,
+      "latch_after": 90,
+      "timer_after": 0
+    },
+    {
+      "bms": "expansion",
+      "candidate_percent": 97,
+      "reported_percent": 100,
+      "cell_cache_raw": 3319,
+      "phase": 0,
+      "timer_before": 200,
+      "latch_after": 90,
+      "timer_after": 200
+    },
+    {
+      "bms": "expansion",
+      "candidate_percent": 97,
+      "reported_percent": 100,
+      "cell_cache_raw": 3319,
+      "phase": 0,
+      "timer_before": 201,
+      "latch_after": 0,
+      "timer_after": 201
+    },
+    {
+      "bms": "expansion",
+      "candidate_percent": 96,
+      "reported_percent": 100,
+      "cell_cache_raw": 3400,
+      "phase": 2,
+      "timer_before": 200,
+      "latch_after": 90,
+      "timer_after": 200
+    },
+    {
+      "bms": "expansion",
+      "candidate_percent": 96,
+      "reported_percent": 100,
+      "cell_cache_raw": 3400,
+      "phase": 2,
+      "timer_before": 201,
+      "latch_after": 0,
+      "timer_after": 201
+    },
+    {
+      "bms": "expansion",
+      "candidate_percent": 99,
+      "reported_percent": 99,
+      "cell_cache_raw": 3400,
+      "phase": 2,
+      "timer_before": 201,
+      "latch_after": 0,
+      "timer_after": 201
+    }
+  ],
+  "expansion_packet_override": [
+    {
+      "cached_soc": 50,
+      "raw_byte_20000974": 0,
+      "serialized_soc": 100,
+      "cached_soc_after": 50,
+      "note": "Meaning of this raw mode byte is not assigned"
+    },
+    {
+      "cached_soc": 50,
+      "raw_byte_20000974": 1,
+      "serialized_soc": 50,
+      "cached_soc_after": 50,
+      "note": "Meaning of this raw mode byte is not assigned"
+    },
+    {
+      "cached_soc": 99,
+      "raw_byte_20000974": 0,
+      "serialized_soc": 100,
+      "cached_soc_after": 99,
+      "note": "Meaning of this raw mode byte is not assigned"
+    },
+    {
+      "cached_soc": 99,
+      "raw_byte_20000974": 1,
+      "serialized_soc": 99,
+      "cached_soc_after": 99,
+      "note": "Meaning of this raw mode byte is not assigned"
+    },
+    {
+      "cached_soc": 100,
+      "raw_byte_20000974": 0,
+      "serialized_soc": 100,
+      "cached_soc_after": 100,
+      "note": "Meaning of this raw mode byte is not assigned"
+    },
+    {
+      "cached_soc": 100,
+      "raw_byte_20000974": 1,
+      "serialized_soc": 100,
+      "cached_soc_after": 100,
+      "note": "Meaning of this raw mode byte is not assigned"
+    }
+  ],
+  "primary_packet_soc": [
+    {
+      "cached_soc": 50,
+      "body_32_soc": 50
+    },
+    {
+      "cached_soc": 99,
+      "body_32_soc": 99
+    },
+    {
+      "cached_soc": 100,
+      "body_32_soc": 100
+    }
+  ],
+  "independent_status_fields": [
+    {
+      "primary_soc": 100,
+      "expansion_soc": 50,
+      "fields": {
+        "c1": "0164",
+        "c2": "0132"
+      }
+    },
+    {
+      "primary_soc": 99,
+      "expansion_soc": 100,
+      "fields": {
+        "c1": "0163",
+        "c2": "0164"
+      }
+    },
+    {
+      "primary_soc": 50,
+      "expansion_soc": 99,
+      "fields": {
+        "c1": "0132",
+        "c2": "0163"
+      }
+    }
+  ],
+  "charge_phase_resync": [
+    {
+      "bms": "main",
+      "phase": 1,
+      "history_seen_before": 0,
+      "reported_soc": 100,
+      "remaining_before": 98000,
+      "remaining_after": 98000,
+      "history_seen_after": 0
+    },
+    {
+      "bms": "main",
+      "phase": 2,
+      "history_seen_before": 0,
+      "reported_soc": 100,
+      "remaining_before": 98000,
+      "remaining_after": 100000,
+      "history_seen_after": 1
+    },
+    {
+      "bms": "main",
+      "phase": 2,
+      "history_seen_before": 1,
+      "reported_soc": 100,
+      "remaining_before": 98000,
+      "remaining_after": 98000,
+      "history_seen_after": 1
+    },
+    {
+      "bms": "expansion",
+      "phase": 1,
+      "history_seen_before": 0,
+      "reported_soc": 100,
+      "remaining_before": 98000,
+      "remaining_after": 98000,
+      "history_seen_after": 0
+    },
+    {
+      "bms": "expansion",
+      "phase": 2,
+      "history_seen_before": 0,
+      "reported_soc": 100,
+      "remaining_before": 98000,
+      "remaining_after": 100000,
+      "history_seen_after": 1
+    },
+    {
+      "bms": "expansion",
+      "phase": 2,
+      "history_seen_before": 1,
+      "reported_soc": 100,
+      "remaining_before": 98000,
+      "remaining_after": 98000,
+      "history_seen_after": 1
+    }
+  ],
+  "full_flag_policy": [
+    {
+      "soc_held": 99,
+      "saved_normal_watts": 100,
+      "traces": [
+        {
+          "bms_full_flag": 1,
+          "policy_state": 7,
+          "descriptor_power_voltage_current": [
+            91,
+            384,
+            1500
+          ]
+        },
+        {
+          "bms_full_flag": 1,
+          "policy_state": 7,
+          "descriptor_power_voltage_current": [
+            91,
+            384,
+            1500
+          ]
+        },
+        {
+          "bms_full_flag": 0,
+          "policy_state": 0,
+          "descriptor_power_voltage_current": [
+            91,
+            384,
+            1500
+          ]
+        },
+        {
+          "bms_full_flag": 0,
+          "policy_state": 0,
+          "descriptor_power_voltage_current": [
+            91,
+            384,
+            1500
+          ]
+        }
+      ],
+      "protected_settings_unchanged": true,
+      "note": "Charging descriptor, not measured total AC input or proof of battery current"
+    },
+    {
+      "soc_held": 99,
+      "saved_normal_watts": 300,
+      "traces": [
+        {
+          "bms_full_flag": 1,
+          "policy_state": 7,
+          "descriptor_power_voltage_current": [
+            273,
+            384,
+            1500
+          ]
+        },
+        {
+          "bms_full_flag": 1,
+          "policy_state": 7,
+          "descriptor_power_voltage_current": [
+            273,
+            384,
+            1500
+          ]
+        },
+        {
+          "bms_full_flag": 0,
+          "policy_state": 0,
+          "descriptor_power_voltage_current": [
+            273,
+            384,
+            1500
+          ]
+        },
+        {
+          "bms_full_flag": 0,
+          "policy_state": 0,
+          "descriptor_power_voltage_current": [
+            273,
+            384,
+            1500
+          ]
+        }
+      ],
+      "protected_settings_unchanged": true,
+      "note": "Charging descriptor, not measured total AC input or proof of battery current"
+    },
+    {
+      "soc_held": 99,
+      "saved_normal_watts": 1000,
+      "traces": [
+        {
+          "bms_full_flag": 1,
+          "policy_state": 7,
+          "descriptor_power_voltage_current": [
+            910,
+            384,
+            1500
+          ]
+        },
+        {
+          "bms_full_flag": 1,
+          "policy_state": 7,
+          "descriptor_power_voltage_current": [
+            910,
+            384,
+            1500
+          ]
+        },
+        {
+          "bms_full_flag": 0,
+          "policy_state": 0,
+          "descriptor_power_voltage_current": [
+            910,
+            384,
+            1500
+          ]
+        },
+        {
+          "bms_full_flag": 0,
+          "policy_state": 0,
+          "descriptor_power_voltage_current": [
+            910,
+            384,
+            1500
+          ]
+        }
+      ],
+      "protected_settings_unchanged": true,
+      "note": "Charging descriptor, not measured total AC input or proof of battery current"
+    },
+    {
+      "soc_held": 100,
+      "saved_normal_watts": 100,
+      "traces": [
+        {
+          "bms_full_flag": 1,
+          "policy_state": 7,
+          "descriptor_power_voltage_current": [
+            91,
+            384,
+            1500
+          ]
+        },
+        {
+          "bms_full_flag": 1,
+          "policy_state": 7,
+          "descriptor_power_voltage_current": [
+            91,
+            384,
+            1500
+          ]
+        },
+        {
+          "bms_full_flag": 0,
+          "policy_state": 0,
+          "descriptor_power_voltage_current": [
+            91,
+            384,
+            1500
+          ]
+        },
+        {
+          "bms_full_flag": 0,
+          "policy_state": 2,
+          "descriptor_power_voltage_current": [
+            91,
+            384,
+            1500
+          ]
+        }
+      ],
+      "protected_settings_unchanged": true,
+      "note": "Charging descriptor, not measured total AC input or proof of battery current"
+    },
+    {
+      "soc_held": 100,
+      "saved_normal_watts": 300,
+      "traces": [
+        {
+          "bms_full_flag": 1,
+          "policy_state": 7,
+          "descriptor_power_voltage_current": [
+            273,
+            384,
+            1500
+          ]
+        },
+        {
+          "bms_full_flag": 1,
+          "policy_state": 7,
+          "descriptor_power_voltage_current": [
+            273,
+            384,
+            1500
+          ]
+        },
+        {
+          "bms_full_flag": 0,
+          "policy_state": 0,
+          "descriptor_power_voltage_current": [
+            273,
+            384,
+            1500
+          ]
+        },
+        {
+          "bms_full_flag": 0,
+          "policy_state": 2,
+          "descriptor_power_voltage_current": [
+            273,
+            384,
+            1500
+          ]
+        }
+      ],
+      "protected_settings_unchanged": true,
+      "note": "Charging descriptor, not measured total AC input or proof of battery current"
+    },
+    {
+      "soc_held": 100,
+      "saved_normal_watts": 1000,
+      "traces": [
+        {
+          "bms_full_flag": 1,
+          "policy_state": 7,
+          "descriptor_power_voltage_current": [
+            910,
+            384,
+            1500
+          ]
+        },
+        {
+          "bms_full_flag": 1,
+          "policy_state": 7,
+          "descriptor_power_voltage_current": [
+            910,
+            384,
+            1500
+          ]
+        },
+        {
+          "bms_full_flag": 0,
+          "policy_state": 0,
+          "descriptor_power_voltage_current": [
+            910,
+            384,
+            1500
+          ]
+        },
+        {
+          "bms_full_flag": 0,
+          "policy_state": 2,
+          "descriptor_power_voltage_current": [
+            910,
+            384,
+            1500
+          ]
+        }
+      ],
+      "protected_settings_unchanged": true,
+      "note": "Charging descriptor, not measured total AC input or proof of battery current"
+    }
+  ],
+  "serialized_latch_flag": [
+    {
+      "raw_status_low_byte": 0,
+      "full_related_latch": 0,
+      "body_54_low_byte": 0,
+      "main_mcu_bms_31": 0
+    },
+    {
+      "raw_status_low_byte": 0,
+      "full_related_latch": 90,
+      "body_54_low_byte": 1,
+      "main_mcu_bms_31": 1
+    },
+    {
+      "raw_status_low_byte": 1,
+      "full_related_latch": 0,
+      "body_54_low_byte": 1,
+      "main_mcu_bms_31": 1
+    },
+    {
+      "raw_status_low_byte": 1,
+      "full_related_latch": 90,
+      "body_54_low_byte": 1,
+      "main_mcu_bms_31": 1
+    },
+    {
+      "raw_status_low_byte": 2,
+      "full_related_latch": 0,
+      "body_54_low_byte": 2,
+      "main_mcu_bms_31": 0
+    },
+    {
+      "raw_status_low_byte": 2,
+      "full_related_latch": 90,
+      "body_54_low_byte": 3,
+      "main_mcu_bms_31": 1
+    }
+  ],
+  "cases": 78,
+  "script_sha256": "1d101a9369712c51b5e7a3cdf9a237bc54f5bd7b26e925eedd92f86bf87572e0"
+}

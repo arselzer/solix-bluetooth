@@ -14,6 +14,9 @@ C1000_PRIME_OPERATIONS = {
     "temperature_unit": "temperature_unit_fahrenheit",
     "dc_power_saving": "dc_power_saving_mode_enabled",
     "fast_charge": "fast_charge_enabled",
+    "ac_power_saving": "ac_power_saving_mode_enabled",
+    # Direct BLE SDK/CLI/TUI only; gateway commands exclude output switching.
+    "ac_output": "ac_output_enabled",
 }
 C1000_PRIME_COMMAND_OPERATIONS = {
     "set-charge-power": "ac_charging_power",
@@ -24,6 +27,7 @@ C1000_PRIME_COMMAND_OPERATIONS = {
     "set-temperature-unit": "temperature_unit",
     "set-dc-power-saving": "dc_power_saving",
     "set-fast-charge": "fast_charge",
+    "set-ac-power-saving": "ac_power_saving",
 }
 # Native writes require their own live verification, independent of BLE Prime.
 # Independent 2026-10-01 native trials confirmed these eight with restoration;
@@ -35,6 +39,8 @@ ORIGINAL_DC_SMART_WARNING = ("Requires fresh DC output OFF. Smart may inherit an
                           "turn the DC output off at low load; enabling does not guarantee a new grace period.")
 ORIGINAL_FAST_CHARGE_WARNING = ("Use an adequate AC supply. The fast-charge flag may clear when AC input is removed; "
                                "stored readback does not establish charging speed or reboot persistence.")
+ORIGINAL_AC_SMART_WARNING = ("Requires fresh AC output OFF and an inactive AC timer. Smart may inherit an inactivity "
+                            "counter and later turn AC output off at low load; enabling does not guarantee a new grace period.")
 
 
 def original_prime_operation_supported(operation: str) -> bool:

@@ -28,7 +28,7 @@ such as `monitor`, `serve` and `ap-service-status` keep their scripted behavior.
 | Model profile | Monitoring | Controls |
 | --- | --- | --- |
 | `c300` — C300/C300X AC | C300X tested live; C300 sibling uses the reference map | AC output, light, charging-power limit, screen timeout verified |
-| `c1000` — original A1761 | Legacy 1.5.1, explicit Prime 1.7.1 and native MQTT/radio 0.3.3.0 tested live | Legacy controls; Prime/native eight preferences, including Fast flag and DC Smart only while DC output is off |
+| `c1000` — original A1761 | Legacy 1.5.1, explicit Prime 1.7.1 and native MQTT/radio 0.3.3.0 tested live | Prime: ten direct SDK controls / nine gateway preferences; native eight. Smart requires its output off; Prime AC controls require inactive countdown |
 | `c1000_gen2` — A1763 | BLE and native MQTT tested live | Charge limits/power, display/device timeout, fast charge; native reserve, tariffs/grid return, temperature/alert, brightness/screen timeout, port memory and guarded discharge floor |
 | `c2000_gen2` — A1783 | Tested live | Upper charge cap, charging power, screen timeout; native reserve, all-day Peak and confirmed grid return |
 
@@ -226,9 +226,11 @@ solix-link set-temperature-unit --name c1000 --unit fahrenheit
 ```
 
 The default stays legacy; firmware advertisements do not select the transport.
-Prime 1.7.1 exposes eight settings: charging power, brightness, Device Timeout,
-screen timeout, light, temperature unit, DC Smart and Fast charging. All eight
-are independently verified through native MQTT on radio 0.3.3.0.
+Prime 1.7.1 exposes ten direct SDK controls: charging power, brightness, Device
+Timeout, screen timeout, light, temperature unit, DC Smart, Fast charging,
+AC Smart and AC output. The gateway exposes nine preferences, excluding the
+output switch. Native MQTT/radio 0.3.3.0 independently supports the first eight;
+native AC Smart/output remain unavailable.
 Live restoration covered 900/1000 W,
 brightness 1/2, Device Timeout 720/0 minutes, screen timeout 30/60 seconds,
 light Off/Low and Celsius/Fahrenheit. The three added preferences also passed
@@ -237,8 +239,9 @@ tests rather than live confirmation. Original screen timeout choices are
 20/30/60/300/1800 seconds; the Gen 2 native-only Never/10 s options are excluded.
 The SDK requires all eleven settings and the complete 21-byte `F8` flags freshly
 before and after each write, protecting other settings and unknown flags.
-For DC Smart only, F8 byte 1 changes between Normal `1` and Smart `2`;
-all other bytes remain exact and restoration matches the whole original F8.
+For DC Smart, F8 byte 1 changes between Normal `1` and Smart `2`; Prime AC
+Smart changes byte 2 instead. All other bytes remain exact and restoration
+matches the whole original F8.
 Both directions of `set-dc-power-saving --name original --enabled on|off`
 require fresh **DC output off**. Prototype and public SDK trials each passed
 two writes and nine fresh samples with AC enabled, DC disabled and full
@@ -253,7 +256,18 @@ Use `ap-service-set-dc-power-saving --enabled on` (or `off`), with the private
 `--directory` and configured station `--name`, for the local MQTT setting; both
 directions require fresh DC output off. Other models and AC Smart remain blocked.
 Failure after a write can mean the setting changed; inspect fresh status before
-retrying. Original Prime output switches and AC Smart remain unavailable.
+retrying. Prime AC output uses the direct CLI
+`set-ac-output --name original --enabled on|off`, SDK or confirmed terminal
+workflow. Both directions require a fresh inactive typed AC countdown and full
+settings/F8 confirmation. Prime AC Smart uses
+`set-ac-power-saving --name original --enabled on|off` and additionally requires
+fresh AC output off in both directions. Prototype and public SDK each passed
+four writes/twenty explicit complete fresh snapshots: AC off, Smart off/on,
+then AC on restoration. All eleven preferences/F8 and the read-only upstream
+station's baseline were restored. Smart can inherit an inactivity counter;
+enabling does not guarantee a new grace period. Output switching is excluded
+from HTTP/browser/HA, native MQTT and the Prime BLE broker bridge. C2000 AC
+output remains blocked. Native AC Smart is also blocked.
 Prime Fast uses `set-fast-charge --name original --enabled on|off`, with the
 stored flag verified OFF→ON, held for at least twelve seconds, then restored
 OFF at 100% SOC while AC outputs stayed on and all eleven settings/F8 matched

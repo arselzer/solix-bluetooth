@@ -25,6 +25,10 @@ CONTROLS = (
     ("dc_power_saving_mode_enabled", "4076", "0100", "dc_power_saving_mode_enabled", False),
     ("fast_charge_enabled", "405e", "0101", "ac_fast_charge_enabled", True),
     ("fast_charge_enabled", "405e", "0100", "ac_fast_charge_enabled", False),
+    ("ac_output_enabled", "404a", "0100", "ac_output_enabled", False),
+    ("ac_output_enabled", "404a", "0101", "ac_output_enabled", True),
+    ("ac_power_saving_mode_enabled", "4077", "0100", "ac_power_saving_mode_enabled", False),
+    ("ac_power_saving_mode_enabled", "4077", "0101", "ac_power_saving_mode_enabled", True),
 )
 
 
@@ -35,7 +39,7 @@ def payload_for(metrics, flags=FLAGS):
               (0xDC, "light_mode", 1), (0xDD, "temperature_unit_fahrenheit", 1),
               (0xE5, "ac_fast_charge_enabled", 1))
     return b"".join(tlv(tag, bytes((width,)) + metrics[key].to_bytes(width, "little"))
-                    for tag, key, width in fields) + tlv(0xF8, flags)
+                    for tag, key, width in fields) + tlv(0xF8, flags) + tlv(0xA2, b"\x03\x00\x00\x00\x00")
 
 
 @pytest.mark.parametrize("setting,command,typed,metric,value", CONTROLS)
@@ -57,8 +61,7 @@ def test_prime_wire_uses_verified_original_body_and_gcm_timestamp(monkeypatch, s
 
 
 @pytest.mark.parametrize("setting,value", [
-    ("ac_output_enabled", False), ("dc_output_enabled", True), ("display_enabled", False),
-    ("ac_power_saving_mode_enabled", False),
+    ("dc_output_enabled", True), ("display_enabled", False),
 ])
 def test_original_prime_unverified_controls_are_rejected(setting, value):
     session = Session(Model.C1000, protocol="prime")
@@ -75,6 +78,7 @@ def test_original_prime_unverified_controls_are_rejected(setting, value):
     ("light_mode", 5), ("temperature_unit_fahrenheit", 1),
     ("dc_power_saving_mode_enabled", 1),
     ("fast_charge_enabled", 1), ("fast_charge_enabled", "on"),
+    ("ac_output_enabled", 1), ("ac_power_saving_mode_enabled", 0),
 ])
 def test_prime_invalid_control_values_fail_before_transport(setting, value):
     monitor = SolixMonitor("AA:BB:CC:DD:EE:04", model=Model.C1000, protocol="prime")
@@ -97,8 +101,10 @@ def test_prime_sdk_requires_fresh_protected_settings_and_complete_flags(
         monitor.metrics = BASELINE.copy()  # Cached values cannot satisfy the guard.
         monitor.raw_tlvs = {0xF8: FLAGS}
         state = BASELINE.copy()
-        if setting == "fast_charge_enabled":
+        if setting in ("fast_charge_enabled", "ac_output_enabled", "ac_power_saving_mode_enabled"):
             state[metric] = int(not value)
+        if setting == "ac_power_saving_mode_enabled":
+            state["ac_output_enabled"] = 0
         initial = state.copy()
         writes, status_after_write = [], 0
 
@@ -119,7 +125,8 @@ def test_prime_sdk_requires_fresh_protected_settings_and_complete_flags(
                 elif received == "4040":
                     changed = command in writes
                     status_after_write += int(changed)
-                    flags = FLAGS[:1] + bytes((int(state["dc_power_saving_mode_enabled"]) + 1,)) + FLAGS[2:]
+                    flags = FLAGS[:1] + bytes((int(state["dc_power_saving_mode_enabled"]) + 1,
+                                              int(state["ac_power_saving_mode_enabled"]) + 1)) + FLAGS[3:]
                     if problem == "legacy_flags":
                         flags = b"\x01\x02\x02"
                     elif changed and problem == "unknown_flag_changed":
@@ -129,7 +136,8 @@ def test_prime_sdk_requires_fresh_protected_settings_and_complete_flags(
                         state[protected] = BASELINE[protected] + 1
                     if changed and problem == "reverted_final" and status_after_write >= 2:
                         state[metric] = initial[metric]
-                        flags = FLAGS
+                        flags = FLAGS[:1] + bytes((initial["dc_power_saving_mode_enabled"] + 1,
+                                                  initial["ac_power_saving_mode_enabled"] + 1)) + FLAGS[3:]
                     if problem == "stale_baseline" or (changed and problem == "stale_final" and status_after_write >= 2):
                         plain = tlv(0xC1, b"\x01\x62")
                     else:
@@ -164,12 +172,17 @@ def test_prime_sdk_requires_fresh_protected_settings_and_complete_flags(
             apply = monitor.set_dc_power_saving_enabled(value)
         elif setting == "fast_charge_enabled":
             apply = monitor.set_fast_charge_enabled(value)
+        elif setting == "ac_output_enabled":
+            apply = monitor.set_ac_output_enabled(value)
+        elif setting == "ac_power_saving_mode_enabled":
+            apply = monitor.set_ac_power_saving_enabled(value)
         else:
             apply = monitor.set_temperature_unit(value)
         if problem == "matching":
             result = await apply
-            assert all(result[key] == expected for key, expected in {**BASELINE, metric: value}.items())
-            expected_flags = FLAGS[:1] + bytes((int(result["dc_power_saving_mode_enabled"]) + 1,)) + FLAGS[2:]
+            assert all(result[key] == expected for key, expected in {**initial, metric: int(value)}.items())
+            expected_flags = FLAGS[:1] + bytes((int(result["dc_power_saving_mode_enabled"]) + 1,
+                                               int(result["ac_power_saving_mode_enabled"]) + 1)) + FLAGS[3:]
             assert monitor.raw_tlvs[0xF8] == expected_flags
         elif problem in ("unknown_flag_changed", "reverted_final"):
             with pytest.raises(RuntimeError, match="setting may have changed"):
