@@ -1,0 +1,1085 @@
+{
+  "image_sha256": "b295ee8613f5c96e70dcc905896df516621cab4dc590bb580eac6b84519911a6",
+  "unicorn_version": "2.1.4",
+  "scope": "Original A1761 main 1.5.9; synthetic state, not a 1.7.1 or electrical test",
+  "complete_policy_retention": [
+    {
+      "soc": 99,
+      "initial_policy_state": 0,
+      "selected_bms": 0,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        0
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 0,
+      "selected_bms": 0,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        0
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 0,
+      "selected_bms": 1,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        0
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 0,
+      "selected_bms": 1,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        0
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 1,
+      "selected_bms": 0,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        1
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 1,
+      "selected_bms": 0,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        1
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 1,
+      "selected_bms": 1,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        1
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 1,
+      "selected_bms": 1,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        1
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 2,
+      "selected_bms": 0,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        2
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 2,
+      "selected_bms": 0,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        2
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 2,
+      "selected_bms": 1,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        2
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 2,
+      "selected_bms": 1,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        2
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 3,
+      "selected_bms": 0,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        3
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 3,
+      "selected_bms": 0,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        3
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 3,
+      "selected_bms": 1,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        3
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 3,
+      "selected_bms": 1,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        3
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 4,
+      "selected_bms": 0,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        4
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 4,
+      "selected_bms": 0,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        4
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 4,
+      "selected_bms": 1,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        4
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 4,
+      "selected_bms": 1,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        4
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 5,
+      "selected_bms": 0,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        0,
+        5
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 5,
+      "selected_bms": 0,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        0,
+        5
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 5,
+      "selected_bms": 1,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        0,
+        5
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 5,
+      "selected_bms": 1,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        0,
+        5
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 6,
+      "selected_bms": 0,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        6
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 6,
+      "selected_bms": 0,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        6
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 6,
+      "selected_bms": 1,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        6
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 6,
+      "selected_bms": 1,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        6
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 7,
+      "selected_bms": 0,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        0,
+        7
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 7,
+      "selected_bms": 0,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        0,
+        7
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 7,
+      "selected_bms": 1,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        0,
+        7
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 99,
+      "initial_policy_state": 7,
+      "selected_bms": 1,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        0,
+        7
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 0,
+      "selected_bms": 0,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        0,
+        2
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 0,
+      "selected_bms": 0,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        0,
+        2
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 0,
+      "selected_bms": 1,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        0,
+        2
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 0,
+      "selected_bms": 1,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        0,
+        2
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 1,
+      "selected_bms": 0,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        1
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 1,
+      "selected_bms": 0,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        1
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 1,
+      "selected_bms": 1,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        1
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 1,
+      "selected_bms": 1,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        1
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 2,
+      "selected_bms": 0,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        2
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 2,
+      "selected_bms": 0,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        2
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 2,
+      "selected_bms": 1,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        2
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 2,
+      "selected_bms": 1,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        2
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 3,
+      "selected_bms": 0,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        3
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 3,
+      "selected_bms": 0,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        3
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 3,
+      "selected_bms": 1,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        3
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 3,
+      "selected_bms": 1,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        3
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 4,
+      "selected_bms": 0,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        4
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 4,
+      "selected_bms": 0,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        4
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 4,
+      "selected_bms": 1,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        4
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 4,
+      "selected_bms": 1,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        4
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 5,
+      "selected_bms": 0,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        0,
+        2,
+        5
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 5,
+      "selected_bms": 0,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        0,
+        2,
+        5
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 5,
+      "selected_bms": 1,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        0,
+        2,
+        5
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 5,
+      "selected_bms": 1,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        0,
+        2,
+        5
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 6,
+      "selected_bms": 0,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        6
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 6,
+      "selected_bms": 0,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        6
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 6,
+      "selected_bms": 1,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        6
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 6,
+      "selected_bms": 1,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        6
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 7,
+      "selected_bms": 0,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        0,
+        2,
+        7
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 7,
+      "selected_bms": 0,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        0,
+        2,
+        7
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 7,
+      "selected_bms": 1,
+      "input_present": false,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        0,
+        2,
+        7
+      ],
+      "retained_e5": "0100",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    },
+    {
+      "soc": 100,
+      "initial_policy_state": 7,
+      "selected_bms": 1,
+      "input_present": true,
+      "callback_iterations": 120,
+      "visited_policy_states": [
+        0,
+        2,
+        7
+      ],
+      "retained_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true,
+      "last_requested_fast_after_policy": 1
+    }
+  ],
+  "runtime_vs_request_cache": [
+    {
+      "runtime_fast": 0,
+      "last_requested_fast": 0,
+      "typed_e5": "0100",
+      "cache_changed": false
+    },
+    {
+      "runtime_fast": 0,
+      "last_requested_fast": 1,
+      "typed_e5": "0100",
+      "cache_changed": false
+    },
+    {
+      "runtime_fast": 1,
+      "last_requested_fast": 0,
+      "typed_e5": "0101",
+      "cache_changed": false
+    },
+    {
+      "runtime_fast": 1,
+      "last_requested_fast": 1,
+      "typed_e5": "0101",
+      "cache_changed": false
+    }
+  ],
+  "fast_full_f8_roundtrip": [
+    {
+      "initial_fast": false,
+      "seeded_timer_enable_bits": 0,
+      "full_f8_before_and_after": "040201010100000000000000000000000000000000",
+      "settings_and_timers_restored": true,
+      "note": "Timer callback is not run; no claim about elapsed countdown safety"
+    },
+    {
+      "initial_fast": false,
+      "seeded_timer_enable_bits": 3,
+      "full_f8_before_and_after": "040201010100000000000000000000000000000000",
+      "settings_and_timers_restored": true,
+      "note": "Timer callback is not run; no claim about elapsed countdown safety"
+    },
+    {
+      "initial_fast": true,
+      "seeded_timer_enable_bits": 0,
+      "full_f8_before_and_after": "040201010100000000000000000000000000000000",
+      "settings_and_timers_restored": true,
+      "note": "Timer callback is not run; no claim about elapsed countdown safety"
+    },
+    {
+      "initial_fast": true,
+      "seeded_timer_enable_bits": 3,
+      "full_f8_before_and_after": "040201010100000000000000000000000000000000",
+      "settings_and_timers_restored": true,
+      "note": "Timer callback is not run; no claim about elapsed countdown safety"
+    }
+  ],
+  "bms_exception_retention": [
+    {
+      "selected_bms": 0,
+      "bms_byte_offset": "2d",
+      "raw_value": 1,
+      "policy_state": 5,
+      "callback_iterations": 120,
+      "typed_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true
+    },
+    {
+      "selected_bms": 0,
+      "bms_byte_offset": "31",
+      "raw_value": 1,
+      "policy_state": 7,
+      "callback_iterations": 120,
+      "typed_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true
+    },
+    {
+      "selected_bms": 1,
+      "bms_byte_offset": "2d",
+      "raw_value": 1,
+      "policy_state": 5,
+      "callback_iterations": 120,
+      "typed_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true
+    },
+    {
+      "selected_bms": 1,
+      "bms_byte_offset": "31",
+      "raw_value": 1,
+      "policy_state": 7,
+      "callback_iterations": 120,
+      "typed_e5": "0101",
+      "full_f8_and_protected_state_unchanged": true
+    }
+  ],
+  "defaults_clear_block": [
+    {
+      "typed_e5": "0100",
+      "last_requested_fast": 1,
+      "scope": "Only 08023b9e..08023ba4, not the complete defaults routine"
+    }
+  ],
+  "battery_state_readback": [
+    {
+      "primary_raw_state": 0,
+      "expansion_raw_state": 0,
+      "bf": "0100",
+      "c0": "0100",
+      "unrecognized_value_preserved": true
+    },
+    {
+      "primary_raw_state": 0,
+      "expansion_raw_state": 1,
+      "bf": "0100",
+      "c0": "0101",
+      "unrecognized_value_preserved": true
+    },
+    {
+      "primary_raw_state": 0,
+      "expansion_raw_state": 2,
+      "bf": "0100",
+      "c0": "0102",
+      "unrecognized_value_preserved": true
+    },
+    {
+      "primary_raw_state": 0,
+      "expansion_raw_state": 255,
+      "bf": "0100",
+      "c0": "01ff",
+      "unrecognized_value_preserved": true
+    },
+    {
+      "primary_raw_state": 1,
+      "expansion_raw_state": 0,
+      "bf": "0101",
+      "c0": "0100",
+      "unrecognized_value_preserved": true
+    },
+    {
+      "primary_raw_state": 1,
+      "expansion_raw_state": 1,
+      "bf": "0101",
+      "c0": "0101",
+      "unrecognized_value_preserved": true
+    },
+    {
+      "primary_raw_state": 1,
+      "expansion_raw_state": 2,
+      "bf": "0101",
+      "c0": "0102",
+      "unrecognized_value_preserved": true
+    },
+    {
+      "primary_raw_state": 1,
+      "expansion_raw_state": 255,
+      "bf": "0101",
+      "c0": "01ff",
+      "unrecognized_value_preserved": true
+    },
+    {
+      "primary_raw_state": 2,
+      "expansion_raw_state": 0,
+      "bf": "0102",
+      "c0": "0100",
+      "unrecognized_value_preserved": true
+    },
+    {
+      "primary_raw_state": 2,
+      "expansion_raw_state": 1,
+      "bf": "0102",
+      "c0": "0101",
+      "unrecognized_value_preserved": true
+    },
+    {
+      "primary_raw_state": 2,
+      "expansion_raw_state": 2,
+      "bf": "0102",
+      "c0": "0102",
+      "unrecognized_value_preserved": true
+    },
+    {
+      "primary_raw_state": 2,
+      "expansion_raw_state": 255,
+      "bf": "0102",
+      "c0": "01ff",
+      "unrecognized_value_preserved": true
+    },
+    {
+      "primary_raw_state": 255,
+      "expansion_raw_state": 0,
+      "bf": "01ff",
+      "c0": "0100",
+      "unrecognized_value_preserved": true
+    },
+    {
+      "primary_raw_state": 255,
+      "expansion_raw_state": 1,
+      "bf": "01ff",
+      "c0": "0101",
+      "unrecognized_value_preserved": true
+    },
+    {
+      "primary_raw_state": 255,
+      "expansion_raw_state": 2,
+      "bf": "01ff",
+      "c0": "0102",
+      "unrecognized_value_preserved": true
+    },
+    {
+      "primary_raw_state": 255,
+      "expansion_raw_state": 255,
+      "bf": "01ff",
+      "c0": "01ff",
+      "unrecognized_value_preserved": true
+    }
+  ],
+  "cases": 93,
+  "policy_callback_executions": 8192,
+  "script_sha256": "0b1c968df8a2a79856cf8baaa60cee4f1e57a65ccead91928a2dc9087ec9b08c"
+}

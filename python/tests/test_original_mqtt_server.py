@@ -21,13 +21,14 @@ NATIVE_CONTROLS = (
     ("display_timeout", "4046", "023c00", "display_timeout_seconds", 60),
     ("light_mode", "404f", "0101", "light_mode", 1),
     ("temperature_unit_fahrenheit", "4050", "0101", "temperature_unit_fahrenheit", True),
+    ("dc_power_saving_mode_enabled", "4076", "0100", "dc_power_saving_mode_enabled", False),
 )
 
 
 def test_native_control_coverage_does_not_follow_ble_only_additions():
     from solix_link.c1000_capabilities import C1000_NATIVE_SETTINGS
     assert {row[0] for row in NATIVE_CONTROLS} == C1000_NATIVE_SETTINGS
-    assert "dc_power_saving_mode_enabled" not in C1000_NATIVE_SETTINGS
+    assert "ac_power_saving_mode_enabled" not in C1000_NATIVE_SETTINGS
 
 
 @pytest.mark.parametrize("setting,ble_command,typed,metric,value", NATIVE_CONTROLS)
@@ -81,7 +82,9 @@ def test_original_tls_settings_send_once_and_confirm_full_status(
                     command = frame.command.hex()
                     captured.append(command)
                     if command == "0040":
-                        flags = FLAGS[:-1] + bytes((FLAGS[-1] ^ 1,)) if changed and problem == "flags_changed" else FLAGS
+                        flags = FLAGS[:1] + bytes((state["dc_power_saving_mode_enabled"] + 1,)) + FLAGS[2:]
+                        if changed and problem == "flags_changed":
+                            flags = flags[:-1] + bytes((flags[-1] ^ 1,))
                         complete = payload_for(state, flags)
                         # These cannot satisfy a status request: retained, other
                         # identity, incomplete report, and network-only command.
@@ -120,7 +123,8 @@ def test_original_tls_settings_send_once_and_confirm_full_status(
                       "device_timeout": server.set_device_timeout,
                       "display_timeout": server.set_display_timeout,
                       "light_mode": server.set_light_mode,
-                      "temperature_unit_fahrenheit": server.set_temperature_unit}[setting]
+                      "temperature_unit_fahrenheit": server.set_temperature_unit,
+                      "dc_power_saving_mode_enabled": server.set_dc_power_saving_enabled}[setting]
             async with asyncio.timeout(3):
                 if problem == "matching":
                     snapshot = await method(value)
@@ -179,6 +183,34 @@ def test_original_write_ignores_cached_settings_when_reply_is_incomplete(tmp_pat
             await server.set_ac_charging_power(900)
         assert connection.writes == int(problem == "incomplete_confirmation")
         assert connection.finished == (problem == "incomplete_confirmation")
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("enabled", [False, True])
+def test_native_dc_smart_rejects_fresh_dc_on_even_with_cached_off(tmp_path, enabled):
+    async def run():
+        config = APServiceConfig("original", "wlan_ap", "phy9", "AT", "A1761TEST0000001", "a" * 40,
+                                 model=Model.C1000)
+        server = LocalMqttServer(config, tmp_path, allow_control=True)
+        server.metrics = BASELINE.copy()
+
+        class Connection:
+            writes = 0
+            reads = 0
+
+            async def request(self, request):
+                self.reads += 1
+                assert request.response_command == "0840"
+                return b"\x00" + payload_for({**BASELINE, "dc_output_enabled": 1})
+
+            async def send_original_setting(self, _request):
+                self.writes += 1
+
+        connection = Connection()
+        server.connection = connection
+        with pytest.raises(RuntimeError, match="DC output to be off; no write sent"):
+            await server.set_dc_power_saving_enabled(enabled)
+        assert connection.reads == 1 and connection.writes == 0
     asyncio.run(run())
 
 

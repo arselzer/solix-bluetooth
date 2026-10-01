@@ -1,0 +1,17 @@
+{
+  "firmware_file": "firmware/c1000_original/1.5.9/MainMcu-decoded.bin",
+  "firmware_sha256": "b295ee8613f5c96e70dcc905896df516621cab4dc590bb580eac6b84519911a6",
+  "case_count": 93,
+  "policy_callback_executions": 8192,
+  "python": "3.12.3",
+  "unicorn": "2.1.4",
+  "sha256": {
+    "tools/firmware_analysis/expected_results/original-fast-retention-results.json": "610c8e3d5cd937f87d01ea006f17c883510ee5678497020d6ff4dcd1c03cabaf",
+    "tools/firmware_analysis/emulate_original_fast_retention.py": "0b1c968df8a2a79856cf8baaa60cee4f1e57a65ccead91928a2dc9087ec9b08c",
+    "tools/firmware_analysis/emulate_original_timers_modes.py": "4a830e88b9ca5c2d0b290d3c5d33ddda9e16e24fb70e43115f1e7c4e22ad0795",
+    "tools/firmware_analysis/emulate_original_power_paths.py": "416910da3fb6aa7e34eedeaae0a13ec55ee06416a5b591232eecfbe6077c37b6",
+    "tools/firmware_analysis/emulate_c1000_original_commands.py": "598d83e15b6d7e982581439ea8b55fb0d7d3985009a6c1f4722363dff0f8ba5d",
+    "tools/firmware_analysis/requirements.txt": "a8a6028b04ca02c58d43b215db65f3a1ff8d59f9d092d1d373c191af6564e85e"
+  },
+  "scope": "Public firmware and synthetic cases only; no device or private capture inputs."
+}

@@ -16,6 +16,7 @@ from .ap_service_config import APServiceConfig, add_ap_service_device, initializ
 from .ap_service import ap_service_request
 from .protocol import DEVICE_TIMEOUT_MINUTES, Model, timezone_confer
 from .tou import TouPeriod
+from .c1000_capabilities import ORIGINAL_DC_SMART_WARNING
 
 
 def add_commands(subcommands) -> None:
@@ -59,6 +60,7 @@ def add_commands(subcommands) -> None:
                                ("ap-service-set-display-brightness", "Set original/Gen 2 C1000 native MQTT display brightness"),
                                ("ap-service-set-display-timeout", "Set original/Gen 2 C1000 native MQTT screen timeout"),
                                ("ap-service-set-light", "Set and confirm original C1000 native MQTT light mode"),
+                               ("ap-service-set-dc-power-saving", "Set original C1000 native DC Smart; requires DC output OFF"),
                                ("ap-service-set-port-memory", "Set C1000 Gen 2 native MQTT output-port memory"),
                                ("ap-service-set-reserve", "Set and confirm backup reserve without changing outputs"),
                                ("ap-service-set-tou", "Replace the native hourly schedule; explicit activation persists until changed"),
@@ -81,6 +83,9 @@ def add_commands(subcommands) -> None:
             parser.add_argument("--state", choices=["on", "off"], required=True)
         elif command == "ap-service-set-fast-charge":
             parser.add_argument("--enabled", choices=["on", "off"], required=True)
+        elif command == "ap-service-set-dc-power-saving":
+            parser.add_argument("--enabled", choices=["on", "off"], required=True,
+                                help="On selects Smart; Off selects Normal. " + ORIGINAL_DC_SMART_WARNING)
         elif command == "ap-service-set-display-brightness":
             parser.add_argument("--level", type=int, choices=[1, 2, 3], required=True,
                                 help="1 low, 2 medium, 3 high; zero is not a brightness level")
@@ -235,6 +240,7 @@ def dispatch(args) -> None:
                    "ap-service-set-display-brightness": "set-display-brightness",
                    "ap-service-set-display-timeout": "set-display-timeout",
                    "ap-service-set-light": "set-light",
+                   "ap-service-set-dc-power-saving": "set-dc-power-saving",
                    "ap-service-set-port-memory": "set-port-memory",
                    "ap-service-set-tou": "set-tou-plan", "ap-service-grid": "return-grid"}[args.command]
         fields = ({"watts": args.watts} if args.command == "ap-service-set-charge-power" else
@@ -255,6 +261,9 @@ def dispatch(args) -> None:
             fields = {"seconds": args.seconds}
         elif args.command == "ap-service-set-light":
             fields = {"mode": ("off", "low", "medium", "high", "sos").index(args.mode)}
+        elif args.command == "ap-service-set-dc-power-saving":
+            print(ORIGINAL_DC_SMART_WARNING, file=sys.stderr)
+            fields = {"enabled": args.enabled == "on"}
         elif args.command == "ap-service-set-port-memory":
             fields = {"enabled": args.enabled == "on"}
         elif args.command == "ap-service-set-device-timeout":

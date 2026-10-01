@@ -51,7 +51,7 @@ def test_original_native_readonly_monitor_and_terminal(original_ap):
     assert monitor.snapshot(config.name)["power_flow"] == "unknown"
     assert monitor.supported_commands(config.name) == []
     expected = {"set-charge-power", "set-device-timeout", "set-display-brightness",
-                "set-display-timeout", "set-light", "set-temperature-unit"}
+                "set-display-timeout", "set-light", "set-temperature-unit", "set-dc-power-saving"}
     assert set(native_commands_for_model(Model.C1000)) == expected
     async def run():
         calls = []
@@ -61,7 +61,7 @@ def test_original_native_readonly_monitor_and_terminal(original_ap):
         backend = TuiBackend([], directory, requester=request)
         assert backend.targets[0].model == Model.C1000
         assert {item.key for item in controls_for(backend.targets[0])} == {
-            "charge-power", "device-timeout", "display-brightness", "display-timeout", "light", "temperature-unit"}
+            "charge-power", "device-timeout", "display-brightness", "display-timeout", "light", "temperature-unit", "dc-power-saving"}
         await backend.connect("native")
         for action in ("charge-cap", "reserve", "plan", "return-grid", "ac-output", "fast-charge", "port-memory"):
             with pytest.raises(ValueError, match="unavailable"):
@@ -92,14 +92,15 @@ def test_private_socket_rejects_every_unverified_original_write(original_ap):
     asyncio.run(run())
 
 
-def test_native_original_socket_routes_only_six_validated_shapes(original_ap):
+def test_native_original_socket_routes_only_seven_validated_shapes(original_ap):
     config, directory = original_ap
     cases = (("set-charge-power", "set_ac_charging_power", {"watts": 900}),
              ("set-device-timeout", "set_device_timeout", {"minutes": 0}),
              ("set-display-brightness", "set_display_brightness", {"level": 2}),
              ("set-display-timeout", "set_display_timeout", {"seconds": 60}),
              ("set-light", "set_light_mode", {"mode": 1}),
-             ("set-temperature-unit", "set_temperature_unit", {"fahrenheit": True}))
+             ("set-temperature-unit", "set_temperature_unit", {"fahrenheit": True}),
+             ("set-dc-power-saving", "set_dc_power_saving_enabled", {"enabled": False}))
     async def run():
         service = APService(config, directory, allow_control=True)
         calls = []
@@ -122,14 +123,15 @@ def test_native_original_socket_routes_only_six_validated_shapes(original_ap):
     asyncio.run(run())
 
 
-def test_terminal_original_native_routes_six_and_preserves_original_choices(original_ap):
+def test_terminal_original_native_routes_seven_and_preserves_original_choices(original_ap):
     config, directory = original_ap
     async def run():
         calls = []
         status = {"connected": True, "available": True, "control_enabled": True,
                   "last_seen_timestamp": time.time(), "metrics": {
                       "display_brightness": 2, "display_timeout_seconds": 30, "device_timeout_minutes": 720,
-                      "light_mode": 0, "temperature_unit_fahrenheit": 0, "ac_charging_power_limit_w": 1000}}
+                      "light_mode": 0, "temperature_unit_fahrenheit": 0, "ac_charging_power_limit_w": 1000,
+                      "dc_output_enabled": 0, "dc_power_saving_mode_enabled": 1}}
         async def request(_directory, command, **fields):
             calls.append((command, fields))
             return status
@@ -142,13 +144,14 @@ def test_terminal_original_native_routes_six_and_preserves_original_choices(orig
             ("display-timeout", "60", "set-display-timeout", {"seconds": 60}),
             ("light", "1", "set-light", {"mode": 1}),
             ("temperature-unit", "fahrenheit", "set-temperature-unit", {"fahrenheit": True}),
+            ("dc-power-saving", "off", "set-dc-power-saving", {"enabled": False}),
         ):
             await backend.control(action, value)
             assert calls[-1] == (command, fields)
         for value in ("0", "10"):
             with pytest.raises(ValueError, match="supported setting"):
                 await backend.control("display-timeout", value)
-        assert len(calls) == 7
+        assert len(calls) == 8
     asyncio.run(run())
 
 
@@ -157,6 +160,7 @@ def test_terminal_original_native_routes_six_and_preserves_original_choices(orig
     ("2", "3", "set-display-timeout", {"seconds": 60}),
     ("3", "2", "set-light", {"mode": 1}),
     ("4", "2", "set-temperature-unit", {"fahrenheit": True}),
+    ("5", "2", "set-dc-power-saving", {"enabled": True}),
 ])
 @pytest.mark.parametrize("confirmation", ["0", "1"])
 def test_line_original_native_preferences_require_confirmation(original_ap, monkeypatch, selection, value,

@@ -29,9 +29,11 @@ confirmation requires fresh protected settings and complete F8, with exactly
 the intended mode-byte change. Missing, reverted or changed protected data
 fails the operation; the writer does not retry a setting automatically.
 
-This adds a seventh verified **BLE Prime** preference. Native MQTT remains
-limited to its six independently verified controls; this trial does not enable
-native DC Smart. Legacy 1.5.1 support remains separate.
+This adds a seventh verified **BLE Prime** preference. A subsequent
+[independent native MQTT trial](c1000-native-dc-smart-validation.md) also
+confirmed DC Smart, bringing that separate whitelist to seven. This Bluetooth
+trial itself supplies no native transport evidence. Legacy 1.5.1 support
+remains separate.
 
 The test establishes mode storage/readback with DC off, not low-load shutdown
 timing or behavior with DC powered. The [1.5.9 firmware follow-up](c1000-timer-and-mode-followup.md)

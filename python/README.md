@@ -9,8 +9,8 @@ original C1000 and C1000/C2000 Gen 2: `ap-service-init`, `ap-service-run`, `ap-s
 `ap-service-grid` and `ap-service-serve`. It packages the
 local API, NTP and mTLS interception workflow, without an internet route.
 One [shared AP](../docs/multiple-ap-devices.md) supports multiple registered
-stations with terminal/browser/API selection. Native original C1000 exposes only its
-six validated preferences; controller readiness and Gen 2 tariff/charge-cap
+stations with terminal/browser/API selection. Native original C1000 exposes its
+seven validated preferences; controller readiness and Gen 2 tariff/charge-cap
 controls are unavailable on that model.
 C1000 Gen 2 uses its generated BLE pairing ID for local MQTT; C2000 generated-ID
 MQTT remains unverified. See [C1000 findings](../docs/c1000-local-mqtt.md).
@@ -28,7 +28,7 @@ such as `monitor`, `serve` and `ap-service-status` keep their scripted behavior.
 | Model profile | Monitoring | Controls |
 | --- | --- | --- |
 | `c300` — C300/C300X AC | C300X tested live; C300 sibling uses the reference map | AC output, light, charging-power limit, screen timeout verified |
-| `c1000` — original A1761 | Legacy 1.5.1, explicit Prime 1.7.1 and native MQTT/radio 0.3.3.0 tested live | Legacy controls; Prime/native six preferences; Prime-only DC Smart while DC output is off |
+| `c1000` — original A1761 | Legacy 1.5.1, explicit Prime 1.7.1 and native MQTT/radio 0.3.3.0 tested live | Legacy controls; Prime/native seven preferences, including DC Smart only while DC output is off |
 | `c1000_gen2` — A1763 | BLE and native MQTT tested live | Charge limits/power, display/device timeout, fast charge; native reserve, tariffs/grid return, temperature/alert, brightness/screen timeout, port memory and guarded discharge floor |
 | `c2000_gen2` — A1783 | Tested live | Upper charge cap, charging power, screen timeout; native reserve, all-day Peak and confirmed grid return |
 
@@ -227,8 +227,8 @@ solix-link set-temperature-unit --name c1000 --unit fahrenheit
 
 The default stays legacy; firmware advertisements do not select the transport.
 Prime 1.7.1 exposes seven settings: charging power, brightness, Device Timeout,
-screen timeout, light, temperature unit and DC Smart. The first six are also
-verified through native MQTT; DC Smart remains **BLE Prime only**.
+screen timeout, light, temperature unit and DC Smart. All seven are also
+verified through native MQTT on radio 0.3.3.0.
 Live restoration covered 900/1000 W,
 brightness 1/2, Device Timeout 720/0 minutes, screen timeout 30/60 seconds,
 light Off/Low and Celsius/Fahrenheit. The three added preferences also passed
@@ -244,6 +244,14 @@ require fresh **DC output off**. Prototype and public SDK trials each passed
 two writes and nine fresh samples with AC enabled, DC disabled and full
 baseline restoration. Smart may inherit an inactivity counter and later turn
 DC output off at low load; enabling does not guarantee a new grace period.
+Native DC Smart additionally passed a two-write prototype with fifteen fresh
+snapshots, AC enabled, DC disabled and complete eleven-setting/F8 restoration.
+The public SDK repeat passed two writes and eleven explicit fresh snapshots,
+in addition to its internal fresh baseline/confirmation reads, with the same
+complete restoration and unchanged outputs.
+Use `ap-service-set-dc-power-saving --enabled on` (or `off`), with the private
+`--directory` and configured station `--name`, for the local MQTT setting; both
+directions require fresh DC output off. Other models and AC Smart remain blocked.
 Failure after a write can mean the setting changed; inspect fresh status before
 retrying. Original Prime output switches, fast charge and AC Smart remain
 unavailable. CLI, guided menu, TUI, HTTP gateway, MQTT bridge
@@ -281,7 +289,7 @@ its serial file must contain **16** characters (Gen 2 uses 17).
 the tested `AT`, to model-specific Wi-Fi provisioning. Use
 `ap-service-set-light --directory /private/ap --name original --mode low`
 for the original-only light control. The HTTP/browser/HA gateway exposes the
-same six commands when enabled. Supply source, mains connection and battery
+same seven commands when enabled. Supply source, mains connection and battery
 activity remain unknown when their telemetry fields are absent.
 
 ### Gen 2 telemetry and diagnostics

@@ -1,0 +1,32 @@
+{
+  "dependencies": [
+    {
+      "filename": "emulate_energy_counters.py",
+      "sha256": "240b5c5f35621c00e93023cb9b52dc94148a65382d7822658fc47bc5ce8a2ab3"
+    },
+    {
+      "filename": "replay_io.py",
+      "sha256": "731d795a5ec37e2cf12b809b7122eaf7a29d84c21a2ecd43fafa3e2f8d962d30"
+    },
+    {
+      "filename": "emulate_settings_report_candidate.py",
+      "sha256": "db5acf931abb0146bb2cade3f45e3cee540394b2632ac73df7d45abf40d5596c"
+    }
+  ],
+  "input": {
+    "filename": "MainMcu-decoded.bin",
+    "main_version": "1.1.4.9",
+    "model": "C1000 Gen 2",
+    "sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9",
+    "size": 198656
+  },
+  "python": "3.12.3",
+  "results": {
+    "cases": 12,
+    "filename": "settings-report-candidate-results.json",
+    "sha256": "f9447314d722973c7d23cc5fd3062ccd548fca037a13bc8b9a6067771ceb8ea4"
+  },
+  "scope": "Isolated actual settings diagnostic callback and encoder with synthetic RAM. Logging and persistence scheduling substituted; no transport, flash or network.",
+  "tool": "emulate_settings_report_candidate.py",
+  "unicorn": "2.1.4"
+}

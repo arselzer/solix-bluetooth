@@ -224,7 +224,7 @@ def boolean_setting_supported(snapshot: dict, command: str) -> bool:
     elif command == "set-fast-charge":
         supported = original or model == "c1000_gen2" and protocol in ("prime", "native_mqtt")
     elif command in ("set-ac-power-saving", "set-dc-power-saving"):
-        supported = original or (command == "set-dc-power-saving" and model == "c1000" and protocol == "prime"
+        supported = original or (command == "set-dc-power-saving" and model == "c1000" and protocol in ("prime", "native_mqtt")
                                  and binary_state(snapshot.get("metrics", {}).get("dc_output_enabled")) is False)
     else:
         return False

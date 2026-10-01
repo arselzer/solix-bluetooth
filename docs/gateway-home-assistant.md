@@ -88,7 +88,7 @@ Original C1000 **legacy** BLE profiles expose `set-temperature-unit`/`fahrenheit
 automatically stop an output at low load; these configuration controls
 do not send an output-switch command. See the [physical trials](c1000-preferences-validation.md).
 
-Original C1000 **Prime/native MQTT 1.7.1** shares these six controls:
+Original C1000 **Prime/native MQTT 1.7.1** shares these seven controls:
 
 | Command | Exact field | Values |
 | --- | --- | --- |
@@ -98,18 +98,24 @@ Original C1000 **Prime/native MQTT 1.7.1** shares these six controls:
 | `set-display-timeout` | integer `seconds` | 20, 30, 60, 300, 1800 |
 | `set-light` | integer `mode` | 0 Off / 1 Low / 2 Medium / 3 High / 4 SOS |
 | `set-temperature-unit` | boolean `fahrenheit` | `true` / `false` |
+| `set-dc-power-saving` | boolean `enabled` | false Normal / true Smart; requires fresh DC output off |
 
-BLE Prime additionally advertises `set-dc-power-saving` with boolean `enabled`
-(`true` Smart, `false` Normal), making **seven BLE controls and six native**.
-Both directions require fresh DC output off. Prototype and public SDK trials
-each passed two writes/nine fresh samples with AC enabled, DC disabled and
-full baseline restoration. DC Smart changes only F8 byte 1 (Normal `1`, Smart
+Both directions of DC Smart require fresh DC output off. The BLE prototype
+and public SDK each passed two writes/nine fresh samples. Native prototype
+and public SDK trials passed two writes each with 15/11 explicit samples,
+respectively. All kept AC enabled and DC disabled with full baseline
+restoration. DC Smart changes only F8 byte 1 (Normal `1`, Smart
 `2`), preserving every other flag byte and the other ten settings.
 The browser requires confirmation; HA exposes the configuration switch only
 with the capability and valid readback, disabling it while DC is on or unknown.
 Smart may inherit an inactivity counter and later turn DC output off at low
-load; enabling does not guarantee a new grace period. Native DC Smart remains
-unavailable.
+load; enabling does not guarantee a new grace period. The native prototype
+passed two writes/fifteen fresh snapshots with all eleven settings and the full
+F8 restored, AC enabled and DC disabled. Its AP CLI is
+`ap-service-set-dc-power-saving --enabled on|off`; include the private
+`--directory` and configured station `--name`. AC Smart and Gen 2 remain excluded.
+A public SDK repeat also passed two writes/eleven explicit fresh journal
+snapshots, alongside the setter's internal fresh reads, with full restoration.
 
 Live restoration covered 900/1000 W, brightness 1/2, Device Timeout 720/0 min,
 screen timeout 30/60 s, light Off/Low and Celsius/Fahrenheit. Every Prime write

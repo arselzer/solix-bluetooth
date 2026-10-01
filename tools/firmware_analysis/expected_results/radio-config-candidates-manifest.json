@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "unicorn": "2.1.4"
+  },
+  "input": {
+    "filename": "c1000-radio-validated.bin",
+    "model": "C1000 Gen 2",
+    "radio_version": "0.3.3.0",
+    "sha256": "e291ec115f013953e825cb51b9e457a8731889547ab55b3058640e599e8cfec8",
+    "size": 1482800
+  },
+  "python": "3.12.3",
+  "results": {
+    "cases": 15,
+    "filename": "radio-config-candidates-results.json",
+    "sha256": "0d48d827b6f2d50b24d0f1a56ac6f5c67fe517d3104f451e51b6044f62e998c1"
+  },
+  "scope": "Offline exact RISC-V function replay, entirely synthetic input. No app binary or private capture required. JSON, allocation, file I/O, libc, identity and logging substituted. Does not execute real flash or network operations.",
+  "tool": "emulate_radio_config_candidates.py",
+  "tool_sha256": "79020d2d44b663ce84154b37391c93efa7e1b10f2f70506bebf9740fc9eb54f3"
+}

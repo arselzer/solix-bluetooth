@@ -9,6 +9,11 @@ The existing [D9 restoration limitation](gen2-disaster-plan-investigation.md#d9-
 therefore remains: inactive backup status is insufficient to reconstruct and
 restore every saved automatic window and maximum-SOC byte.
 
+The [subsequent radio/app follow-up](gen2-backup-export-radio-app.md) resolves
+device-parameter, MQTT-file and BackupMind candidates. Its diagnostic callback
+exports tracking history and can clear it during serialization; this is not
+a passive full-record backup query.
+
 There is a useful read-only route for the separately stored **tariff plan,
 reserve, UTC timestamp and clock-screen status**: the normal native `0100`
 status request, without optional A2. A new replay passes **24 synthetic

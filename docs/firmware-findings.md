@@ -37,6 +37,8 @@ candidate download/logging and encrypted-chunk paths. During the subsequent
 installed **1.7.1** after Retry. Prime Bluetooth independently confirms that
 version and six restored BLE controls. The later [original native MQTT trial](c1000-original-mqtt-followup.md)
 confirmed main 1.7.1/radio 0.3.3.0 and the same six controls locally.
+A subsequent [DC Smart transport trial](c1000-native-dc-smart-validation.md)
+brings both updated-version whitelists to seven controls.
 A plaintext 1.7.1 main image remains unrecovered.
 
 ## Scope and evidence
@@ -372,7 +374,7 @@ C2000 controller support is unknown.
   return to grid before clearing Standard. Investigate persistent scheduling
   and reserve floors. C1000 Gen 2 now has its own
   [native MQTT validation](c1000-local-mqtt.md); the updated original C1000
-  now has [native MQTT and six controls](c1000-original-mqtt-followup.md). Do not substitute the different `4038` layout.
+  now has [native MQTT and seven controls](c1000-original-mqtt-followup.md). Do not substitute the different `4038` layout.
 - Follow the [preference](gen2-preference-candidates.md),
   [LCD schedule](gen2-timer-plan-investigation.md) and
   [disaster-plan](gen2-disaster-plan-investigation.md) prerequisites before
@@ -381,7 +383,7 @@ C2000 controller support is unknown.
   using event timestamps and measured power, without relabeling raw counters
   as verified Wh.
 - Continue original-C1000 generated-ID setup and remaining Prime controls
-  separately from the verified seven BLE/six native controls. Recover a verified public
+  separately from the verified seven BLE/seven native controls. Recover a verified public
   1.7.1 image before proposing local OTA.
 - Obtain C2000 firmware evidence before assuming its controller can service
   the Modbus bridge. Keep its AC output enabled throughout any live work.
@@ -435,5 +437,32 @@ countdown. Normal charging allowance uses saved watts × 0.91; Fast changes a
 volatile allowance rather than disabling the charging input.
 
 A separate live **main 1.7.1** [DC Smart test](c1000-prime-dc-smart-validation.md)
-confirmed `4076` and full F8 restoration while DC stayed off. It enables only
-BLE Prime DC Smart; native DC Smart and AC Smart remain unverified.
+confirmed `4076` and full F8 restoration while DC stayed off. That trial
+established BLE Prime DC Smart; the later native evidence follows below.
+AC Smart remains unverified on the updated version.
+
+## October 1: native DC Smart and remaining export candidates
+
+An [independent original C1000 native DC Smart trial](c1000-native-dc-smart-validation.md)
+now confirms `0076` on **main 1.7.1/radio 0.3.3.0**, followed by a public SDK
+repeat and independent final Bluetooth check. The original native whitelist
+is seven controls. DC must be off in both directions; all protected settings
+and the full F8 are confirmed. Original AC Smart and Fast on this version
+remain unverified.
+
+The [93-case original Fast/BMS replay](c1000-fast-status-retention.md) executes
+8,192 full charging callbacks in main **1.5.9**. Fresh E5 reports the runtime
+Fast flag, not the last request; SOC 100% alone does not clear it in the tested
+mains-present paths. BF/C0 expose raw main/expansion BMS state bytes. The
+decoder now exports those strict byte fields, without inferring UPS states;
+43 retained main-1.7.1 reports confirm their shape with both codes zero.
+
+[27 new Gen 2 radio/diagnostic cases](gen2-backup-export-radio-app.md) resolve
+further backup-export candidates. The radio's device-parameter builder queries
+energy point `20001`; its backup file is MQTT connection storage. App `0490`
+BackupMind links to the existing energy report. Its `SETTING_MSG_DESC` callback
+serializes tracking sessions rather than the saved backup block, and clears
+tracking during construction, including some nested encoding failures. Saved
+configuration stays unchanged in the bounded replay. Whole-report delivery
+and physical effects were not tested; do not trigger it as a passive backup
+export. Complete disaster-record readback remains unresolved.

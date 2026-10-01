@@ -63,6 +63,14 @@ def decode_c1000_telemetry(payload: bytes) -> tuple[dict[str, int | str], dict[i
         if decoded is not None and (tag != 0xDD or decoded in (0, 1)):
             metrics[name] = decoded
 
+    # Main 1.5.9 getters/serializer emit byte BMS state codes; 1.7.1 captures
+    # confirm this shape. Keep unknown codes raw, without inferring mains or
+    # assigning charging/discharging labels from another model.
+    for tag, name in ((0xBF, "battery_state_code"), (0xC0, "expansion_battery_state_code")):
+        state = values.get(tag, b"")
+        if len(state) == 2 and state[0] == 1:
+            metrics[name] = state[1]
+
     modes = values.get(0xF8, b"")
     # Code151 reports type01 with two mode bytes. Code171 reports the
     # type04/21-byte structure reproduced from main1.5.9's F8 serializer.

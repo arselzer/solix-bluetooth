@@ -169,6 +169,10 @@ class NativeMqttCommands:
         """Set the original C1000 light mode using its validated 0–4 domain."""
         return self._original_setting("light_mode", mode)
 
+    def dc_power_saving(self, enabled: bool) -> NativeMqttRequest:
+        """Set original C1000 DC Normal/Smart; callers must require DC off."""
+        return self._original_setting("dc_power_saving_mode_enabled", enabled)
+
     def _original_setting(self, setting: str, value: int | bool) -> NativeMqttRequest:
         if self.model != Model.C1000:
             raise ValueError("This setting supports original C1000 only")

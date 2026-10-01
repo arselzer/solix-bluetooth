@@ -15,7 +15,9 @@ and [1,347 original Smart-policy cases](c1000-smart-auto-off-policy.md),
 [87 original charging-path and 48 ACK cases](c1000-bypass-firmware-followup.md),
 [16 complete-backup-readback cases](gen2-persistent-plan-followup.md),
 [24 non-clearing full-status cases](gen2-backup-query-investigation.md), and
-[73 original timer/Smart/Fast cases](c1000-timer-and-mode-followup.md).
+[73 original timer/Smart/Fast cases](c1000-timer-and-mode-followup.md), and
+[93 original Fast-retention/BMS cases](c1000-fast-status-retention.md), and
+[27 radio/diagnostic export-candidate cases](gen2-backup-export-radio-app.md).
 These have independent commands and manifests; they are not included in the
 1,842-case combined runner. Their individual commands are in the linked records.
 

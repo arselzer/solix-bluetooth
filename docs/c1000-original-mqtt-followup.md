@@ -1,5 +1,9 @@
 # Original C1000: native MQTT after the 1.7.1 update
 
+Later on 2026-10-01, an [independent native DC Smart trial](c1000-native-dc-smart-validation.md)
+and public SDK repeat added a seventh control, with DC off and full F8
+restoration. The six-control measurements below describe the earlier trial.
+
 ## What the local trial established
 
 On **2026-10-01**, an original **A1761 C1000**, main **1.7.1** and radio

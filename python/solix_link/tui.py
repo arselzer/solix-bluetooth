@@ -12,7 +12,7 @@ from typing import Any, Callable
 from .client import SolixMonitor, discover
 from .config import DEFAULT_CONFIG, DeviceConfig, load_config, protocol_choices, save_config
 from .protocol import Model
-from .c1000_capabilities import PRIME_DC_SMART_WARNING, original_prime_operation_supported
+from .c1000_capabilities import ORIGINAL_DC_SMART_WARNING, original_prime_operation_supported
 from .commands import native_commands_for_model
 from .tou import TouPeriod, power_flow, validate_periods
 
@@ -86,7 +86,7 @@ def controls_for(target: Target) -> tuple[Control, ...]:
             ("display_timeout", Control("display-timeout", "Display timeout", "20, 30, 60, 300 or 1800 seconds")),
             ("light_mode", Control("light", "Light mode", "0 off · 1 low · 2 medium · 3 high · 4 SOS")),
             ("temperature_unit", Control("temperature-unit", "Temperature display", "celsius or fahrenheit")),
-            ("dc_power_saving", Control("dc-power-saving", "DC Smart mode", "on = Smart, off = Normal. " + PRIME_DC_SMART_WARNING)),
+            ("dc_power_saving", Control("dc-power-saving", "DC Smart mode", "on = Smart, off = Normal. " + ORIGINAL_DC_SMART_WARNING)),
         )
         if target.native:
             commands = native_commands_for_model(target.model)
@@ -469,6 +469,19 @@ class TuiBackend:
                     response = await self._native("set-discharge-floor", lower=int(value))
                 elif action == "device-timeout":
                     response = await self._native("set-device-timeout", minutes=parse_device_timeout(value))
+                elif action == "dc-power-saving":
+                    enabled = parse_enabled(value)
+                    snapshot = self.native_snapshot
+                    seen = snapshot.get("last_seen_timestamp")
+                    if (not snapshot.get("connected") or not snapshot.get("available")
+                            or type(seen) not in (int, float) or not -5 <= time.time() - seen <= 30):
+                        raise ValueError("Fresh native telemetry is required for DC Smart")
+                    metrics = snapshot.get("metrics", {})
+                    if (type(metrics.get("dc_output_enabled")) is not int or metrics["dc_output_enabled"] != 0
+                            or type(metrics.get("dc_power_saving_mode_enabled")) is not int
+                            or metrics["dc_power_saving_mode_enabled"] not in (0, 1)):
+                        raise ValueError(ORIGINAL_DC_SMART_WARNING)
+                    response = await self._native("set-dc-power-saving", enabled=enabled)
                 elif action == "light":
                     mode = int(value)
                     if mode not in (0, 1, 2, 3, 4):
@@ -528,7 +541,7 @@ class TuiBackend:
                     if (type(metrics.get("dc_output_enabled")) is not int or metrics["dc_output_enabled"] != 0
                             or type(metrics.get("dc_power_saving_mode_enabled")) is not int
                             or metrics["dc_power_saving_mode_enabled"] not in (0, 1)):
-                        raise ValueError(PRIME_DC_SMART_WARNING)
+                        raise ValueError(ORIGINAL_DC_SMART_WARNING)
                 if action == "ac-power-saving":
                     await self.monitor.set_ac_power_saving_enabled(enabled)
                 else:
@@ -893,7 +906,7 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
             self.query_one("#add-to-ap", Button).disabled = self.busy or not connected or not fresh or backend.directory is None or not target or target.native or not target.saved or target.model not in (Model.C1000, Model.C1000_GEN2, Model.C2000_GEN2) or not target.device or target.device.protocol != "prime" or not target.device.client_id
             self.query_one("#disconnect", Button).disabled = self.busy or not connected
             self.query_one("#apply-setting", Button).disabled = self.busy or not connected or not fresh or not permitted or not (target and controls_for(target))
-            if (target and target.device and target.model == Model.C1000 and target.device.protocol == "prime"
+            if (target and target.model == Model.C1000 and (target.native or target.device and target.device.protocol == "prime")
                     and self.query_one("#setting", Select).value == "dc-power-saving"):
                 metrics = self.snapshot.get("metrics", {})
                 if (type(metrics.get("dc_output_enabled")) is not int or metrics["dc_output_enabled"] != 0
@@ -1053,7 +1066,7 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
                         detail = ("Off clears output-recovery bookkeeping; turning On does not restore that transient state." if key == "port-memory" else
                                   "Set the display brightness. Zero is not a brightness level." if key == "display-brightness" else
                                   "Set the screen timeout; zero means Never." if key == "display-timeout" else
-                                  PRIME_DC_SMART_WARNING if key == "dc-power-saving" and target.model == Model.C1000 and target.device and target.device.protocol == "prime" else None)
+                                  ORIGINAL_DC_SMART_WARNING if key == "dc-power-saving" and target.model == Model.C1000 and (target.native or target.device and target.device.protocol == "prime") else None)
                         shown = str(parsed) if type(parsed) is int else "on" if parsed else "off"
                         self.push_screen(PowerSavingConfirmScreen(label, shown, detail), confirmed)
                     else:

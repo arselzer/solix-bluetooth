@@ -1,0 +1,187 @@
+{
+  "actual_functions": [
+    "08016bb0",
+    "0801701c",
+    "080097ae",
+    "0800ff40",
+    "0801a010",
+    "08022be0",
+    "08022af0",
+    "08022d4c"
+  ],
+  "cases": 12,
+  "image_sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9",
+  "limits": "Audit the protobuf settings candidate named SETTING_MSG_DESC.\n\nExecutes C1000 Gen 2 1.1.4.9's actual callback, session decoder, protobuf\nencoder, getters and history clearing routine against synthetic RAM.\nPersistence scheduling and logging are substituted; no network, station,\nflash or power-policy loop runs. The isolated callback has no enclosing\nreport delivery or acknowledgement. This is not a complete firmware audit.",
+  "model": "C1000 Gen 2 main 1.1.4.9",
+  "results": [
+    {
+      "callback_return": 0,
+      "complete_saved_configuration_preserved": true,
+      "encoded_bytes": 0,
+      "encoded_hex": "",
+      "output_capacity": 0,
+      "persistence_requests": 0,
+      "reads_from_38_byte_backup_block": 0,
+      "session": "valid_change",
+      "submessage_encoder_returns": [],
+      "tracking_records_cleared": false
+    },
+    {
+      "callback_return": 0,
+      "complete_saved_configuration_preserved": true,
+      "encoded_bytes": 2,
+      "encoded_hex": "c201",
+      "output_capacity": 2,
+      "persistence_requests": 0,
+      "reads_from_38_byte_backup_block": 0,
+      "session": "valid_change",
+      "submessage_encoder_returns": [
+        0
+      ],
+      "tracking_records_cleared": false
+    },
+    {
+      "callback_return": 1,
+      "complete_saved_configuration_preserved": true,
+      "encoded_bytes": 45,
+      "encoded_hex": "c20127086610661867206d286e306f38704071487250735874607568767068786980016a88016b90016cc2012a",
+      "output_capacity": 64,
+      "persistence_requests": 1,
+      "reads_from_38_byte_backup_block": 0,
+      "session": "valid_change",
+      "submessage_encoder_returns": [
+        1,
+        0
+      ],
+      "tracking_records_cleared": true
+    },
+    {
+      "callback_return": 1,
+      "complete_saved_configuration_preserved": true,
+      "encoded_bytes": 87,
+      "encoded_hex": "c20127086610661867206d286e306f38704071487250735874607568767068786980016a88016b90016cc2012a086610661867206d286e306f3870407148725073587460756876700778648001c8018801ac0290019003",
+      "output_capacity": 1024,
+      "persistence_requests": 1,
+      "reads_from_38_byte_backup_block": 0,
+      "session": "valid_change",
+      "submessage_encoder_returns": [
+        1,
+        1
+      ],
+      "tracking_records_cleared": true
+    },
+    {
+      "callback_return": 0,
+      "complete_saved_configuration_preserved": true,
+      "encoded_bytes": 0,
+      "encoded_hex": "",
+      "output_capacity": 0,
+      "persistence_requests": 0,
+      "reads_from_38_byte_backup_block": 0,
+      "session": "no_changes",
+      "submessage_encoder_returns": [],
+      "tracking_records_cleared": false
+    },
+    {
+      "callback_return": 1,
+      "complete_saved_configuration_preserved": true,
+      "encoded_bytes": 2,
+      "encoded_hex": "c201",
+      "output_capacity": 2,
+      "persistence_requests": 1,
+      "reads_from_38_byte_backup_block": 0,
+      "session": "no_changes",
+      "submessage_encoder_returns": [
+        0
+      ],
+      "tracking_records_cleared": true
+    },
+    {
+      "callback_return": 1,
+      "complete_saved_configuration_preserved": true,
+      "encoded_bytes": 42,
+      "encoded_hex": "c20127086610661867206d286e306f38704071487250735874607568767068786980016a88016b90016c",
+      "output_capacity": 64,
+      "persistence_requests": 1,
+      "reads_from_38_byte_backup_block": 0,
+      "session": "no_changes",
+      "submessage_encoder_returns": [
+        1
+      ],
+      "tracking_records_cleared": true
+    },
+    {
+      "callback_return": 1,
+      "complete_saved_configuration_preserved": true,
+      "encoded_bytes": 42,
+      "encoded_hex": "c20127086610661867206d286e306f38704071487250735874607568767068786980016a88016b90016c",
+      "output_capacity": 1024,
+      "persistence_requests": 1,
+      "reads_from_38_byte_backup_block": 0,
+      "session": "no_changes",
+      "submessage_encoder_returns": [
+        1
+      ],
+      "tracking_records_cleared": true
+    },
+    {
+      "callback_return": 0,
+      "complete_saved_configuration_preserved": true,
+      "encoded_bytes": 0,
+      "encoded_hex": "",
+      "output_capacity": 0,
+      "persistence_requests": 0,
+      "reads_from_38_byte_backup_block": 0,
+      "session": "truncated_session",
+      "submessage_encoder_returns": [],
+      "tracking_records_cleared": false
+    },
+    {
+      "callback_return": 1,
+      "complete_saved_configuration_preserved": true,
+      "encoded_bytes": 2,
+      "encoded_hex": "c201",
+      "output_capacity": 2,
+      "persistence_requests": 1,
+      "reads_from_38_byte_backup_block": 0,
+      "session": "truncated_session",
+      "submessage_encoder_returns": [
+        0
+      ],
+      "tracking_records_cleared": true
+    },
+    {
+      "callback_return": 1,
+      "complete_saved_configuration_preserved": true,
+      "encoded_bytes": 42,
+      "encoded_hex": "c20127086610661867206d286e306f38704071487250735874607568767068786980016a88016b90016c",
+      "output_capacity": 64,
+      "persistence_requests": 1,
+      "reads_from_38_byte_backup_block": 0,
+      "session": "truncated_session",
+      "submessage_encoder_returns": [
+        1
+      ],
+      "tracking_records_cleared": true
+    },
+    {
+      "callback_return": 1,
+      "complete_saved_configuration_preserved": true,
+      "encoded_bytes": 42,
+      "encoded_hex": "c20127086610661867206d286e306f38704071487250735874607568767068786980016a88016b90016c",
+      "output_capacity": 1024,
+      "persistence_requests": 1,
+      "reads_from_38_byte_backup_block": 0,
+      "session": "truncated_session",
+      "submessage_encoder_returns": [
+        1
+      ],
+      "tracking_records_cleared": true
+    }
+  ],
+  "substitutions": {
+    "0800d284": "logging",
+    "08015c4c": "record persistence scheduling"
+  },
+  "tool_sha256": "db5acf931abb0146bb2cade3f45e3cee540394b2632ac73df7d45abf40d5596c"
+}

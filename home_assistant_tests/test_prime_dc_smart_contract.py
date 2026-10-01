@@ -20,8 +20,9 @@ def station(**changes):
 
 
 @pytest.mark.parametrize("enabled", [False, True])
-def test_prime_dc_smart_requires_advertisement_and_semantic_bool(enabled):
-    snapshot = api.parse_snapshot(station())
+@pytest.mark.parametrize("protocol", ["prime", "native_mqtt"])
+def test_dc_smart_requires_advertisement_and_semantic_bool(enabled, protocol):
+    snapshot = api.parse_snapshot(station(protocol=protocol))
     assert api.boolean_setting_supported(snapshot, "set-dc-power-saving")
     api.validate_command(snapshot, {"command": "set-dc-power-saving", "enabled": enabled})
     assert not api.boolean_setting_supported(snapshot, "set-ac-power-saving")
@@ -29,15 +30,16 @@ def test_prime_dc_smart_requires_advertisement_and_semantic_bool(enabled):
 
 @pytest.mark.parametrize("dc_output", [1, None, True, 0.0, "0", 255])
 @pytest.mark.parametrize("enabled", [False, True])
-def test_prime_dc_smart_refuses_active_or_unknown_dc(dc_output, enabled):
-    snapshot = station(metrics={"dc_power_saving_mode_enabled": 1, "dc_output_enabled": dc_output})
+@pytest.mark.parametrize("protocol", ["prime", "native_mqtt"])
+def test_dc_smart_refuses_active_or_unknown_dc(dc_output, enabled, protocol):
+    snapshot = station(protocol=protocol, metrics={"dc_power_saving_mode_enabled": 1, "dc_output_enabled": dc_output})
     assert not api.boolean_setting_supported(snapshot, "set-dc-power-saving")
     with pytest.raises(ValueError):
         api.validate_command(snapshot, {"command": "set-dc-power-saving", "enabled": enabled})
 
 
 @pytest.mark.parametrize("changes", [{"controls": []}, {"connected": False}, {"available": False},
-                                     {"last_seen_timestamp": 0}, {"protocol": "native_mqtt"},
+                                     {"last_seen_timestamp": 0},
                                      {"model": "c1000_gen2"}, {"model": "c2000_gen2"}, {"model": "c300"}])
 def test_prime_dc_smart_does_not_widen_native_or_other_models(changes):
     with pytest.raises(ValueError):

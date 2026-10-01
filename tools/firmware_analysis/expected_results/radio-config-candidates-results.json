@@ -1,0 +1,185 @@
+{
+  "actual_functions": [
+    "420224d8",
+    "42026918",
+    "420265fa",
+    "42026878"
+  ],
+  "cases": 15,
+  "image_sha256": "e291ec115f013953e825cb51b9e457a8731889547ab55b3058640e599e8cfec8",
+  "limits": "Replay two radio candidates that do not export controller backup plans.\n\nRuns exact C1000 Gen 2 radio 0.3.3.0 RISC-V instructions. JSON primitives,\nallocation, file reads/writes, libc, identity providers and logging are host\nsubstitutes. All data is synthetic. No app binary, network or device access.\nThis is a bounded function audit, not proof that no other export exists.",
+  "model": "C1000 Gen 2 radio 0.3.3.0",
+  "results": [
+    {
+      "case": "point_switch_request",
+      "destination": "user",
+      "file_calls": [],
+      "parameter_names": [
+        "20001"
+      ],
+      "return": 0,
+      "synthetic_account_length": 1
+    },
+    {
+      "case": "point_switch_request",
+      "destination": "user",
+      "file_calls": [],
+      "parameter_names": [
+        "20001"
+      ],
+      "return": 0,
+      "synthetic_account_length": 40
+    },
+    {
+      "case": "null_output",
+      "json_allocations": 0,
+      "return": 5
+    },
+    {
+      "case": "occupied_output",
+      "json_allocations": 0,
+      "return": 5
+    },
+    {
+      "case": "null_account",
+      "json_allocations": 0,
+      "return": 5
+    },
+    {
+      "case": "json_boundary_failure",
+      "failure_call": 1,
+      "output_null": true,
+      "return": 2
+    },
+    {
+      "case": "json_boundary_failure",
+      "failure_call": 2,
+      "output_null": true,
+      "return": 2
+    },
+    {
+      "case": "json_boundary_failure",
+      "failure_call": 3,
+      "output_null": true,
+      "return": 2
+    },
+    {
+      "case": "json_boundary_failure",
+      "failure_call": 4,
+      "output_null": true,
+      "return": 2
+    },
+    {
+      "case": "json_boundary_failure",
+      "failure_call": 5,
+      "output_null": true,
+      "return": 2
+    },
+    {
+      "case": "json_boundary_failure",
+      "failure_call": 6,
+      "output_null": true,
+      "return": 2
+    },
+    {
+      "backup_magic_ok": true,
+      "backup_read_ok": true,
+      "case": "mqtt_file_recovery",
+      "file_calls": [
+        {
+          "file": "mqtt_client_file",
+          "operation": "normal_read",
+          "size": 340
+        }
+      ],
+      "normal_read_ok": true,
+      "return": 0,
+      "synthetic_connection_record_restored": true
+    },
+    {
+      "backup_magic_ok": true,
+      "backup_read_ok": true,
+      "case": "mqtt_file_recovery",
+      "file_calls": [
+        {
+          "file": "mqtt_client_file",
+          "operation": "normal_read",
+          "size": 340
+        },
+        {
+          "file": "mqtt_client_file",
+          "operation": "backup_read",
+          "size": 340
+        },
+        {
+          "file": "mqtt_client_file",
+          "operation": "normal_write",
+          "size": 340
+        }
+      ],
+      "normal_read_ok": false,
+      "return": 0,
+      "synthetic_connection_record_restored": true
+    },
+    {
+      "backup_magic_ok": true,
+      "backup_read_ok": false,
+      "case": "mqtt_file_recovery",
+      "file_calls": [
+        {
+          "file": "mqtt_client_file",
+          "operation": "normal_read",
+          "size": 340
+        },
+        {
+          "file": "mqtt_client_file",
+          "operation": "backup_read",
+          "size": 340
+        },
+        {
+          "file": "mqtt_client_file",
+          "operation": "normal_write",
+          "size": 340
+        },
+        {
+          "file": "mqtt_client_file",
+          "operation": "normal_write",
+          "size": 340
+        }
+      ],
+      "normal_read_ok": false,
+      "return": 0,
+      "synthetic_connection_record_restored": true
+    },
+    {
+      "backup_magic_ok": false,
+      "backup_read_ok": true,
+      "case": "mqtt_file_recovery",
+      "file_calls": [
+        {
+          "file": "mqtt_client_file",
+          "operation": "normal_read",
+          "size": 340
+        },
+        {
+          "file": "mqtt_client_file",
+          "operation": "backup_read",
+          "size": 340
+        },
+        {
+          "file": "mqtt_client_file",
+          "operation": "normal_write",
+          "size": 340
+        },
+        {
+          "file": "mqtt_client_file",
+          "operation": "normal_write",
+          "size": 340
+        }
+      ],
+      "normal_read_ok": false,
+      "return": 0,
+      "synthetic_connection_record_restored": true
+    }
+  ]
+}

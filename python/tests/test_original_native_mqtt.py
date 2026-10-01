@@ -98,6 +98,36 @@ def test_original_power_domain_rejects_invalid_values_before_request(watts):
     assert commands._sequence == 0
 
 
+@pytest.mark.parametrize("enabled", [False, True])
+def test_original_dc_smart_native_packet_has_typed_bool_and_no_status_alias(enabled):
+    commands = NativeMqttCommands(SERIAL, ACCOUNT, model=Model.C1000)
+    request = commands.dc_power_saving(enabled)
+    _, _, packet = unpack(request)
+    assert packet.command.hex() == "0076" and request.response_command == "0876"
+    assert request.response_aliases == ()
+    fields = parse_tlvs(packet.payload)
+    assert set(fields) == {0xA1, 0xA2, 0xFE}
+    assert fields[0xA1] == b"\x22" and fields[0xA2] == bytes((1, int(enabled)))
+    assert fields[0xFE][0] == 3 and len(fields[0xFE]) == 5
+
+
+@pytest.mark.parametrize("enabled", [0, 1, None, "on", 0.0])
+def test_original_dc_smart_rejects_non_boolean_without_constructing_request(enabled):
+    commands = NativeMqttCommands(SERIAL, ACCOUNT, model=Model.C1000)
+    with pytest.raises(ValueError):
+        commands.dc_power_saving(enabled)
+    assert commands._sequence == 0
+
+
+@pytest.mark.parametrize("model", [Model.C1000_GEN2, Model.C2000_GEN2])
+@pytest.mark.parametrize("enabled", [False, True])
+def test_dc_smart_native_builder_does_not_enable_other_models(model, enabled):
+    commands = NativeMqttCommands(SERIAL, ACCOUNT, model=model)
+    with pytest.raises(ValueError, match="original C1000 only"):
+        commands.dc_power_saving(enabled)
+    assert commands._sequence == 0
+
+
 @pytest.mark.parametrize("method,args,kwargs", [
     ("readiness", (), {}), ("charge_cap", (90,), {}),
     ("discharge_floor", (5,), {}), ("off_grid_alert", (True,), {}),

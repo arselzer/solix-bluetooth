@@ -19,7 +19,7 @@ from .config import DeviceConfig, load_config, protocol_choices, save_config
 from .ap_service_config import APServiceConfig, add_ap_service_device, initialize_ap_service, load_ap_service, load_ap_service_profiles, private_write
 from .ap_service import ap_service_request
 from .protocol import Model
-from .c1000_capabilities import PRIME_DC_SMART_WARNING, original_prime_commands
+from .c1000_capabilities import ORIGINAL_DC_SMART_WARNING, original_prime_commands
 from .commands import native_commands_for_model
 
 
@@ -262,8 +262,8 @@ def preference_menu(device: DeviceConfig | APServiceConfig, config_path: Path, d
         return
     if command in ("set-ac-power-saving", "set-dc-power-saving"):
         print("Power saving may automatically turn the output off at low load.")
-        if device.model == Model.C1000 and getattr(device, "protocol", None) == "prime":
-            print(PRIME_DC_SMART_WARNING)
+        if device.model == Model.C1000 and (directory is not None or getattr(device, "protocol", None) == "prime"):
+            print(ORIGINAL_DC_SMART_WARNING)
     if command == "set-fast-charge" and device.model == Model.C1000_GEN2:
         print("Enabling requires Standard mode with no active tariff. Native MQTT also requires connected mains.")
     if command == "set-port-memory":

@@ -18,7 +18,8 @@ All 11 protected settings and the complete F8 block matched the baseline. See th
 On 2026-10-01, a [DC Smart trial and public-SDK repeat](c1000-prime-dc-smart-validation.md)
 added a seventh verified Prime Bluetooth preference. Both directions require
 fresh DC-output-off telemetry; only the intended F8 mode byte may change.
-The separate native MQTT whitelist remains six controls.
+The [subsequent independent native DC Smart trial](c1000-native-dc-smart-validation.md)
+also passed, bringing native MQTT to seven controls with the same DC-off guard.
 
 The default profile uses the legacy P-256/AES-CBC handshake tested on 1.5.1,
 without a Prime client ID. The updated test unit requires explicit `prime`
@@ -44,6 +45,7 @@ used as a fallback.
 | AE / B0 | DC input / total output watts |
 | B2 | Packed DC status and output watts |
 | B3 / BD / BE | Main version code / main and expansion temperature |
+| BF / C0 | Raw main/expansion BMS state codes; strict `01 + byte`, without inferred UPS labels |
 | C1–C5 | Main/expansion charge, health, expansion count |
 | D0 / D1 / D2 / D3 | Serial / charging limit / device timeout / display timeout |
 | D7 / D8 / D9 / DC / DE | AC/DC switches / display brightness / light mode / display switch |
@@ -148,7 +150,8 @@ verified; station Wi-Fi is unnecessary for the bridge.
 The upstream A1761 map includes cloud MQTT commands. The later
 [local native trial](c1000-original-mqtt-followup.md) established isolated
 bootstrap, mutual TLS and six confirmed native controls on main **1.7.1 /
-radio 0.3.3.0**. The AP service supports the original 16-character serial and
+radio 0.3.3.0**; [DC Smart later added a seventh](c1000-native-dc-smart-validation.md).
+The AP service supports the original 16-character serial and
 original provisioning layout. This trial used the existing account ID;
 generated-ID setup remains unverified. The earlier main 1.5.1/radio 0.1.3.0
 [Wi-Fi trial](c1000-original-wifi-validation.md) remains historical evidence.
