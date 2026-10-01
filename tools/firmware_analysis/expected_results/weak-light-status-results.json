@@ -1,0 +1,1558 @@
+{
+  "getter_and_serializer": [
+    {
+      "synthetic_flags": 0,
+      "serializer_mode": 1,
+      "a3_weak_light_lock": 0,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 0,
+      "serializer_mode": 3,
+      "a3_weak_light_lock": 0,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 1,
+      "serializer_mode": 1,
+      "a3_weak_light_lock": 0,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 1,
+      "serializer_mode": 3,
+      "a3_weak_light_lock": 0,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 2,
+      "serializer_mode": 1,
+      "a3_weak_light_lock": 1,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 2,
+      "serializer_mode": 3,
+      "a3_weak_light_lock": 1,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 3,
+      "serializer_mode": 1,
+      "a3_weak_light_lock": 1,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 3,
+      "serializer_mode": 3,
+      "a3_weak_light_lock": 1,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 4,
+      "serializer_mode": 1,
+      "a3_weak_light_lock": 0,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 4,
+      "serializer_mode": 3,
+      "a3_weak_light_lock": 0,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 8,
+      "serializer_mode": 1,
+      "a3_weak_light_lock": 0,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 8,
+      "serializer_mode": 3,
+      "a3_weak_light_lock": 0,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 16,
+      "serializer_mode": 1,
+      "a3_weak_light_lock": 0,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 16,
+      "serializer_mode": 3,
+      "a3_weak_light_lock": 0,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 18,
+      "serializer_mode": 1,
+      "a3_weak_light_lock": 1,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 18,
+      "serializer_mode": 3,
+      "a3_weak_light_lock": 1,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 32,
+      "serializer_mode": 1,
+      "a3_weak_light_lock": 0,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 32,
+      "serializer_mode": 3,
+      "a3_weak_light_lock": 0,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 34,
+      "serializer_mode": 1,
+      "a3_weak_light_lock": 1,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 34,
+      "serializer_mode": 3,
+      "a3_weak_light_lock": 1,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 64,
+      "serializer_mode": 1,
+      "a3_weak_light_lock": 0,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 64,
+      "serializer_mode": 3,
+      "a3_weak_light_lock": 0,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 66,
+      "serializer_mode": 1,
+      "a3_weak_light_lock": 1,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 66,
+      "serializer_mode": 3,
+      "a3_weak_light_lock": 1,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 128,
+      "serializer_mode": 1,
+      "a3_weak_light_lock": 0,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 128,
+      "serializer_mode": 3,
+      "a3_weak_light_lock": 0,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 130,
+      "serializer_mode": 1,
+      "a3_weak_light_lock": 1,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 130,
+      "serializer_mode": 3,
+      "a3_weak_light_lock": 1,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 252,
+      "serializer_mode": 1,
+      "a3_weak_light_lock": 0,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 252,
+      "serializer_mode": 3,
+      "a3_weak_light_lock": 0,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 255,
+      "serializer_mode": 1,
+      "a3_weak_light_lock": 1,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    },
+    {
+      "synthetic_flags": 255,
+      "serializer_mode": 3,
+      "a3_weak_light_lock": 1,
+      "a3_length": 14,
+      "a3_type": 4,
+      "lock_state_and_settings_unchanged": true
+    }
+  ],
+  "lock_accumulation": [
+    {
+      "initial_mode_nibble": 0,
+      "condition_argument": 0,
+      "sequence": [
+        {
+          "event": 1,
+          "newly_locked": 0,
+          "flags": 16,
+          "event_count": 0,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 2,
+          "newly_locked": 0,
+          "flags": 16,
+          "event_count": 0,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 3,
+          "newly_locked": 0,
+          "flags": 16,
+          "event_count": 0,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 4,
+          "newly_locked": 0,
+          "flags": 16,
+          "event_count": 0,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 5,
+          "newly_locked": 0,
+          "flags": 16,
+          "event_count": 0,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        }
+      ],
+      "backup_write_values": [],
+      "substituted_low_soc_actions": []
+    },
+    {
+      "initial_mode_nibble": 0,
+      "condition_argument": 1,
+      "sequence": [
+        {
+          "event": 1,
+          "newly_locked": 0,
+          "flags": 16,
+          "event_count": 0,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 2,
+          "newly_locked": 0,
+          "flags": 17,
+          "event_count": 1,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 3,
+          "newly_locked": 0,
+          "flags": 17,
+          "event_count": 2,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 4,
+          "newly_locked": 0,
+          "flags": 17,
+          "event_count": 3,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 5,
+          "newly_locked": 1,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        }
+      ],
+      "backup_write_values": [
+        273,
+        529,
+        785,
+        19
+      ],
+      "substituted_low_soc_actions": [
+        0
+      ]
+    },
+    {
+      "initial_mode_nibble": 1,
+      "condition_argument": 0,
+      "sequence": [
+        {
+          "event": 1,
+          "newly_locked": 0,
+          "flags": 16,
+          "event_count": 0,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 2,
+          "newly_locked": 0,
+          "flags": 16,
+          "event_count": 0,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 3,
+          "newly_locked": 0,
+          "flags": 16,
+          "event_count": 0,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 4,
+          "newly_locked": 0,
+          "flags": 16,
+          "event_count": 0,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 5,
+          "newly_locked": 0,
+          "flags": 16,
+          "event_count": 0,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        }
+      ],
+      "backup_write_values": [],
+      "substituted_low_soc_actions": []
+    },
+    {
+      "initial_mode_nibble": 1,
+      "condition_argument": 1,
+      "sequence": [
+        {
+          "event": 1,
+          "newly_locked": 0,
+          "flags": 17,
+          "event_count": 1,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 2,
+          "newly_locked": 0,
+          "flags": 17,
+          "event_count": 2,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 3,
+          "newly_locked": 0,
+          "flags": 17,
+          "event_count": 3,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 4,
+          "newly_locked": 1,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 5,
+          "newly_locked": 0,
+          "flags": 19,
+          "event_count": 1,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        }
+      ],
+      "backup_write_values": [
+        273,
+        529,
+        785,
+        19,
+        275
+      ],
+      "substituted_low_soc_actions": [
+        0
+      ]
+    },
+    {
+      "initial_mode_nibble": 2,
+      "condition_argument": 0,
+      "sequence": [
+        {
+          "event": 1,
+          "newly_locked": 0,
+          "flags": 16,
+          "event_count": 0,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 2,
+          "newly_locked": 0,
+          "flags": 16,
+          "event_count": 0,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 3,
+          "newly_locked": 0,
+          "flags": 16,
+          "event_count": 0,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 4,
+          "newly_locked": 0,
+          "flags": 16,
+          "event_count": 0,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 5,
+          "newly_locked": 0,
+          "flags": 16,
+          "event_count": 0,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        }
+      ],
+      "backup_write_values": [],
+      "substituted_low_soc_actions": []
+    },
+    {
+      "initial_mode_nibble": 2,
+      "condition_argument": 1,
+      "sequence": [
+        {
+          "event": 1,
+          "newly_locked": 0,
+          "flags": 17,
+          "event_count": 1,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 2,
+          "newly_locked": 0,
+          "flags": 17,
+          "event_count": 2,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 3,
+          "newly_locked": 0,
+          "flags": 17,
+          "event_count": 3,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 4,
+          "newly_locked": 1,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 5,
+          "newly_locked": 0,
+          "flags": 19,
+          "event_count": 1,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        }
+      ],
+      "backup_write_values": [
+        289,
+        529,
+        785,
+        19,
+        275
+      ],
+      "substituted_low_soc_actions": [
+        0
+      ]
+    },
+    {
+      "initial_mode_nibble": 3,
+      "condition_argument": 0,
+      "sequence": [
+        {
+          "event": 1,
+          "newly_locked": 0,
+          "flags": 16,
+          "event_count": 0,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 2,
+          "newly_locked": 0,
+          "flags": 16,
+          "event_count": 0,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 3,
+          "newly_locked": 0,
+          "flags": 16,
+          "event_count": 0,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 4,
+          "newly_locked": 0,
+          "flags": 16,
+          "event_count": 0,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 5,
+          "newly_locked": 0,
+          "flags": 16,
+          "event_count": 0,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        }
+      ],
+      "backup_write_values": [],
+      "substituted_low_soc_actions": []
+    },
+    {
+      "initial_mode_nibble": 3,
+      "condition_argument": 1,
+      "sequence": [
+        {
+          "event": 1,
+          "newly_locked": 0,
+          "flags": 16,
+          "event_count": 0,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 2,
+          "newly_locked": 0,
+          "flags": 17,
+          "event_count": 1,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 3,
+          "newly_locked": 0,
+          "flags": 17,
+          "event_count": 2,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 4,
+          "newly_locked": 0,
+          "flags": 17,
+          "event_count": 3,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        },
+        {
+          "event": 5,
+          "newly_locked": 1,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 0
+        }
+      ],
+      "backup_write_values": [
+        273,
+        529,
+        785,
+        19
+      ],
+      "substituted_low_soc_actions": [
+        0
+      ]
+    }
+  ],
+  "clear_state": [
+    {
+      "initial_flags": 0,
+      "initial_event_count": 3,
+      "state": {
+        "flags": 0,
+        "event_count": 0,
+        "lock": 0,
+        "retry_flag": 0,
+        "timer_count": 0,
+        "start_rtc": 0
+      },
+      "backup_register_after": 0
+    },
+    {
+      "initial_flags": 1,
+      "initial_event_count": 3,
+      "state": {
+        "flags": 0,
+        "event_count": 0,
+        "lock": 0,
+        "retry_flag": 0,
+        "timer_count": 0,
+        "start_rtc": 0
+      },
+      "backup_register_after": 0
+    },
+    {
+      "initial_flags": 2,
+      "initial_event_count": 3,
+      "state": {
+        "flags": 0,
+        "event_count": 0,
+        "lock": 0,
+        "retry_flag": 0,
+        "timer_count": 0,
+        "start_rtc": 0
+      },
+      "backup_register_after": 0
+    },
+    {
+      "initial_flags": 3,
+      "initial_event_count": 3,
+      "state": {
+        "flags": 0,
+        "event_count": 0,
+        "lock": 0,
+        "retry_flag": 0,
+        "timer_count": 0,
+        "start_rtc": 0
+      },
+      "backup_register_after": 0
+    },
+    {
+      "initial_flags": 4,
+      "initial_event_count": 3,
+      "state": {
+        "flags": 0,
+        "event_count": 0,
+        "lock": 0,
+        "retry_flag": 0,
+        "timer_count": 0,
+        "start_rtc": 0
+      },
+      "backup_register_after": 0
+    },
+    {
+      "initial_flags": 8,
+      "initial_event_count": 3,
+      "state": {
+        "flags": 0,
+        "event_count": 0,
+        "lock": 0,
+        "retry_flag": 0,
+        "timer_count": 0,
+        "start_rtc": 0
+      },
+      "backup_register_after": 0
+    },
+    {
+      "initial_flags": 16,
+      "initial_event_count": 3,
+      "state": {
+        "flags": 0,
+        "event_count": 0,
+        "lock": 0,
+        "retry_flag": 0,
+        "timer_count": 0,
+        "start_rtc": 0
+      },
+      "backup_register_after": 0
+    },
+    {
+      "initial_flags": 18,
+      "initial_event_count": 3,
+      "state": {
+        "flags": 0,
+        "event_count": 0,
+        "lock": 0,
+        "retry_flag": 0,
+        "timer_count": 0,
+        "start_rtc": 0
+      },
+      "backup_register_after": 0
+    },
+    {
+      "initial_flags": 32,
+      "initial_event_count": 3,
+      "state": {
+        "flags": 0,
+        "event_count": 0,
+        "lock": 0,
+        "retry_flag": 0,
+        "timer_count": 0,
+        "start_rtc": 0
+      },
+      "backup_register_after": 0
+    },
+    {
+      "initial_flags": 34,
+      "initial_event_count": 3,
+      "state": {
+        "flags": 0,
+        "event_count": 0,
+        "lock": 0,
+        "retry_flag": 0,
+        "timer_count": 0,
+        "start_rtc": 0
+      },
+      "backup_register_after": 0
+    },
+    {
+      "initial_flags": 64,
+      "initial_event_count": 3,
+      "state": {
+        "flags": 0,
+        "event_count": 0,
+        "lock": 0,
+        "retry_flag": 0,
+        "timer_count": 0,
+        "start_rtc": 0
+      },
+      "backup_register_after": 0
+    },
+    {
+      "initial_flags": 66,
+      "initial_event_count": 3,
+      "state": {
+        "flags": 0,
+        "event_count": 0,
+        "lock": 0,
+        "retry_flag": 0,
+        "timer_count": 0,
+        "start_rtc": 0
+      },
+      "backup_register_after": 0
+    },
+    {
+      "initial_flags": 128,
+      "initial_event_count": 3,
+      "state": {
+        "flags": 0,
+        "event_count": 0,
+        "lock": 0,
+        "retry_flag": 0,
+        "timer_count": 0,
+        "start_rtc": 0
+      },
+      "backup_register_after": 0
+    },
+    {
+      "initial_flags": 130,
+      "initial_event_count": 3,
+      "state": {
+        "flags": 0,
+        "event_count": 0,
+        "lock": 0,
+        "retry_flag": 0,
+        "timer_count": 0,
+        "start_rtc": 0
+      },
+      "backup_register_after": 0
+    },
+    {
+      "initial_flags": 252,
+      "initial_event_count": 3,
+      "state": {
+        "flags": 0,
+        "event_count": 0,
+        "lock": 0,
+        "retry_flag": 0,
+        "timer_count": 0,
+        "start_rtc": 0
+      },
+      "backup_register_after": 0
+    },
+    {
+      "initial_flags": 255,
+      "initial_event_count": 3,
+      "state": {
+        "flags": 0,
+        "event_count": 0,
+        "lock": 0,
+        "retry_flag": 0,
+        "timer_count": 0,
+        "start_rtc": 0
+      },
+      "backup_register_after": 0
+    }
+  ],
+  "timer_transitions": [
+    {
+      "case": "unlocked",
+      "synthetic_rtc": 1600,
+      "initial_start_rtc": 1000,
+      "state": {
+        "flags": 16,
+        "event_count": 0,
+        "lock": 0,
+        "retry_flag": 0,
+        "timer_count": 0,
+        "start_rtc": 4294967295
+      },
+      "substituted_low_soc_actions": []
+    },
+    {
+      "case": "user_action",
+      "synthetic_rtc": 1600,
+      "initial_start_rtc": 1000,
+      "state": {
+        "flags": 4,
+        "event_count": 0,
+        "lock": 0,
+        "retry_flag": 1,
+        "timer_count": 0,
+        "start_rtc": 4294967295
+      },
+      "substituted_low_soc_actions": []
+    },
+    {
+      "case": "global_gate",
+      "synthetic_rtc": 1601,
+      "initial_start_rtc": 1000,
+      "state": {
+        "flags": 27,
+        "event_count": 0,
+        "lock": 1,
+        "retry_flag": 0,
+        "timer_count": 0,
+        "start_rtc": 1000
+      },
+      "substituted_low_soc_actions": []
+    },
+    {
+      "case": "equal_start",
+      "synthetic_rtc": 1000,
+      "initial_start_rtc": 1000,
+      "state": {
+        "flags": 19,
+        "event_count": 0,
+        "lock": 1,
+        "retry_flag": 0,
+        "timer_count": 1,
+        "start_rtc": 1000
+      },
+      "substituted_low_soc_actions": []
+    },
+    {
+      "case": "earlier_rtc",
+      "synthetic_rtc": 999,
+      "initial_start_rtc": 1000,
+      "state": {
+        "flags": 19,
+        "event_count": 0,
+        "lock": 1,
+        "retry_flag": 0,
+        "timer_count": 1,
+        "start_rtc": 999
+      },
+      "substituted_low_soc_actions": []
+    },
+    {
+      "case": "elapsed_600",
+      "synthetic_rtc": 1600,
+      "initial_start_rtc": 1000,
+      "state": {
+        "flags": 19,
+        "event_count": 0,
+        "lock": 1,
+        "retry_flag": 0,
+        "timer_count": 1,
+        "start_rtc": 1000
+      },
+      "substituted_low_soc_actions": []
+    },
+    {
+      "case": "elapsed_601",
+      "synthetic_rtc": 1601,
+      "initial_start_rtc": 1000,
+      "state": {
+        "flags": 23,
+        "event_count": 0,
+        "lock": 1,
+        "retry_flag": 1,
+        "timer_count": 1,
+        "start_rtc": 4294967295
+      },
+      "substituted_low_soc_actions": [
+        1
+      ]
+    },
+    {
+      "case": "callback_count",
+      "activity_byte": 0,
+      "module_bit5": false,
+      "sequence": [
+        {
+          "callback": 1,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 2,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 2,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 3,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 3,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 4,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 4,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 5,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 5,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 6,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 6,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 7,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 7,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 8,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 8,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 9,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 9,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 10,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 10,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 11,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 11,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 12,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 12,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 13,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 13,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 14,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 14,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 15,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 15,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 16,
+          "flags": 0,
+          "event_count": 0,
+          "lock": 0,
+          "retry_flag": 0,
+          "timer_count": 0,
+          "start_rtc": 1000
+        }
+      ]
+    },
+    {
+      "case": "callback_count",
+      "activity_byte": 1,
+      "module_bit5": false,
+      "sequence": [
+        {
+          "callback": 1,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 2,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 3,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 4,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 5,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 6,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 7,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 8,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 9,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 10,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 11,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 12,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 13,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 14,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 15,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 16,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        }
+      ]
+    },
+    {
+      "case": "callback_count",
+      "activity_byte": 0,
+      "module_bit5": true,
+      "sequence": [
+        {
+          "callback": 1,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 2,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 3,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 4,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 5,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 6,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 7,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 8,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 9,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 10,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 11,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 12,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 13,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 14,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 15,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        },
+        {
+          "callback": 16,
+          "flags": 19,
+          "event_count": 0,
+          "lock": 1,
+          "retry_flag": 0,
+          "timer_count": 1,
+          "start_rtc": 1000
+        }
+      ]
+    }
+  ],
+  "remaining_time": [
+    {
+      "synthetic_rtc": 1000,
+      "start_rtc": 4294967295,
+      "internal_remaining_value": 600
+    },
+    {
+      "synthetic_rtc": 999,
+      "start_rtc": 1000,
+      "internal_remaining_value": 600
+    },
+    {
+      "synthetic_rtc": 1000,
+      "start_rtc": 1000,
+      "internal_remaining_value": 600
+    },
+    {
+      "synthetic_rtc": 1001,
+      "start_rtc": 1000,
+      "internal_remaining_value": 599
+    },
+    {
+      "synthetic_rtc": 1599,
+      "start_rtc": 1000,
+      "internal_remaining_value": 1
+    },
+    {
+      "synthetic_rtc": 1600,
+      "start_rtc": 1000,
+      "internal_remaining_value": 0
+    },
+    {
+      "synthetic_rtc": 1601,
+      "start_rtc": 1000,
+      "internal_remaining_value": 0
+    }
+  ]
+}

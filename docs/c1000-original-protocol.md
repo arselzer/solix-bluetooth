@@ -20,6 +20,10 @@ added a seventh verified Prime Bluetooth preference. Both directions require
 fresh DC-output-off telemetry; only the intended F8 mode byte may change.
 The [subsequent independent native DC Smart trial](c1000-native-dc-smart-validation.md)
 also passed, bringing native MQTT to seven controls with the same DC-off guard.
+The later [Prime Fast validation and public-SDK repeat](c1000-prime-fast-validation.md)
+added an eighth Bluetooth control on main 1.7.1. Fast retained its flag at
+100% SOC and cleared after input loss while original AC stayed on. Native
+Fast remains unverified; charging-rate and reboot-persistence claims are excluded.
 
 The default profile uses the legacy P-256/AES-CBC handshake tested on 1.5.1,
 without a Prime client ID. The updated test unit requires explicit `prime`

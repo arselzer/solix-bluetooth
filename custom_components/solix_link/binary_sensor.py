@@ -17,6 +17,9 @@ DESCRIPTIONS = (
     BinarySensorEntityDescription(key="dc_input_active", translation_key="dc_input_active",
                                   entity_category=EntityCategory.DIAGNOSTIC,
                                   entity_registry_enabled_default=False),
+    BinarySensorEntityDescription(key="pv_weak_light_locked", translation_key="pv_weak_light_locked",
+                                  entity_category=EntityCategory.DIAGNOSTIC,
+                                  entity_registry_enabled_default=False),
 )
 
 
@@ -30,6 +33,8 @@ async def async_setup_entry(hass, entry: SolixConfigEntry, async_add_entities) -
         for name, snapshot in (coordinator.data or {}).items():
             for description in DESCRIPTIONS:
                 key = description.key
+                if key == "pv_weak_light_locked" and snapshot.get("model") != "c1000_gen2":
+                    continue
                 if key in snapshot["metrics"] and (name, key) not in added:
                     added.add((name, key))
                     entities.append(SolixBinarySensor(coordinator, name, description))
@@ -44,6 +49,8 @@ class SolixBinarySensor(SolixEntity, BinarySensorEntity):
     def __init__(self, coordinator, name, description: BinarySensorEntityDescription) -> None:
         super().__init__(coordinator, name, description.key)
         self.entity_description = description
+        if description.key == "pv_weak_light_locked":
+            self._attr_extra_state_attributes = {"provenance": "C1000 Gen 2 firmware-derived flag; physical PV behavior untested."}
 
     @property
     def is_on(self) -> bool | None:

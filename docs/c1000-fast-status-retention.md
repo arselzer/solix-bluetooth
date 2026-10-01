@@ -4,6 +4,9 @@ Offline follow-up dated 2026-10-01 using the public **A1761 main 1.5.9**
 controller image. The available station runs **main 1.7.1, radio 0.3.3.0**;
 its main image is unavailable here. These instruction addresses and synthetic
 results do not validate Fast over that station's Prime or native transport.
+The subsequent [Prime hardware trial](c1000-prime-fast-validation.md) independently
+validated Bluetooth retention, restoration and input-loss clearing on 1.7.1;
+native Fast remains unverified.
 The instruction replay accessed no device, network, cloud, output or
 persistent storage. A separate retained-capture comparison is described below.
 
@@ -99,7 +102,10 @@ both fields, including unrecognized values. The parser branches on code 2 at
 code 2; `0801683c` uses the same code to reconcile the remaining-time estimate
 with net power. This supports the charge-side interpretation of **2**.
 
-Codes 0 and 1 are not assigned firmware-proven names here. The Python decoder
+This first trace did not assign names to codes 0 and 1. The subsequent
+[BMS producer replay](c1000-battery-phase-firmware.md) proves delayed charge/discharge
+phase meanings for 2/1 in the older BMS images; neither is instantaneous flow,
+and zero is not proof of healthy idle or bypass. The Python decoder
 now exposes raw `battery_state_code` and `expansion_battery_state_code`, only
 when the field is exactly `01 + byte`. Other models do not inherit them;
 unknown byte codes are retained without semantic labels. Expansion state needs
@@ -113,7 +119,7 @@ BF/C0=`01 00`. This verifies the observed byte format, not transitions or the
 meaning of zero. Raw captures remain private. Synthetic decoder tests cover
 0/1/2/255, malformed types/lengths, native status routing and model separation.
 
-## Prerequisites for a 1.7.1 Fast trial
+## Prerequisites and subsequent 1.7.1 validation
 
 Use a complete fresh baseline: both outputs, charging ceiling, all existing
 protected preferences, E5, **whole raw F8**, zero A2/A3 countdowns, SOC, and
@@ -131,6 +137,10 @@ Actual charging-rate validation needs a separate below-full trial.
 The [Prime DC Smart validation](c1000-prime-dc-smart-validation.md) establishes
 one different 1.7.1 control; it does not validate Fast. No Gen 2 or C2000
 control follows from this original-model analysis.
+The later [Prime Fast validation](c1000-prime-fast-validation.md) follows these
+fresh-baseline and restoration requirements, confirming the flag at full SOC
+and automatic clearing after input loss. Actual Fast charging rate and native
+MQTT Fast still require separate evidence.
 
 ## Reproduce
 

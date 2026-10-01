@@ -56,14 +56,15 @@ Authorization header. Treat HA configuration backups as containing credentials.
   Brightness 1/2, screen timeout 30/60 s, Off/Low and Celsius/Fahrenheit passed
   live readback/restoration with AC enabled and DC disabled. Other enum values
   have synthetic/range coverage. The gateway protects all eleven fresh settings
-  and complete `F8` flags. Fast charge, AC Smart and output switches remain unavailable
+  and complete `F8` flags. AC Smart and output switches remain unavailable
   on original Prime/native; generated-ID pairing remains unverified.
   Original **BLE Prime/native MQTT** adds the DC power-saving configuration switch,
   with fresh DC output OFF required in both directions. Prototype and public
   SDK each passed two writes/nine samples with AC on, DC off and complete
   baseline restoration. Only its F8 mode byte may change. Smart may inherit an
   inactivity counter and later turn DC output off at low load; enabling does
-  not guarantee a new grace period. Both transports expose seven controls.
+  not guarantee a new grace period. Prime exposes eight controls; native MQTT
+  exposes seven, excluding Fast charging.
   The native DC Smart prototype also passed two writes/fifteen fresh samples
   with complete settings/F8 restoration, AC on and DC off. Other models and
   AC Smart remain unsupported by this guarded native route.
@@ -93,13 +94,19 @@ Authorization header. Treat HA configuration backups as containing credentials.
   error code for C1000 Gen 2, plus the raw Gen 2 battery compatibility byte.
   That byte is hardcoded 100 on A1763/main 1.1.4.9; it is not measured health.
   PV power units remain unverified, so no power class/statistics are assigned.
+  C1000 Gen 2 also exposes a disabled PV weak-light-lock binary diagnostic
+  from the strict firmware-derived A3 flag. Its physical PV behavior is untested.
 - Configuration switch: C1000 Gen 2 native MQTT off-grid alert preference.
   Setting storage and readback were verified; actual alert delivery is untested.
-- Fast-charging configuration switch: original C1000 legacy BLE, or C1000 Gen 2
+- Fast-charging configuration switch: original C1000 legacy/Prime BLE, or C1000 Gen 2
   Prime BLE/native MQTT. Enabling on Gen 2 requires reported Standard mode with
   no active tariff; native MQTT also requires connected mains. Turning it off
   remains possible while a tariff is active. The gateway confirms the stored
   flag; that alone does not establish the actual charging rate.
+  Original main 1.7.1 Prime OFF→ON, at least twelve seconds of flag retention,
+  OFF restoration and all protected settings/F8 passed at 100% SOC with AC on.
+  Input removal cleared its flag. Use adequate AC supply; charging speed and
+  reboot persistence remain unverified. Original native MQTT Fast is blocked.
   Native MQTT flag change/restoration passed on C1000 Gen 2 firmware 1.1.4.9
   at 100% SOC; actual charging power remains unverified.
 - AC/DC power-saving configuration switches: original C1000 legacy BLE only.

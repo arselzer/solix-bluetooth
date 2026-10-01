@@ -25,7 +25,7 @@ METRICS = frozenset({"battery_percentage", "temperature_c", "output_power_w",
                     "ac_fast_charge_enabled", "software_version",
                     "temperature_unit_fahrenheit", "ac_off_grid_alert_enabled", "device_timeout_minutes",
                     "ac_power_saving_mode_enabled", "dc_power_saving_mode_enabled",
-                    "dc_input_active", "dc_input_power_raw", "controller_error_code",
+                    "dc_input_active", "pv_weak_light_locked", "dc_input_power_raw", "controller_error_code",
                     "battery_health_raw", "display_brightness", "display_timeout_seconds", "port_memory_enabled", "light_mode"})
 POWER_MINIMUM = {"c1000": 100, "c1000_gen2": 100, "c2000_gen2": 300}
 POWER_MAXIMUM = {"c1000": 1000, "c1000_gen2": 1200, "c2000_gen2": 1800}
@@ -222,7 +222,8 @@ def boolean_setting_supported(snapshot: dict, command: str) -> bool:
     if command in ("set-off-grid-alert", "set-port-memory"):
         supported = model == "c1000_gen2" and native_gen2(snapshot)
     elif command == "set-fast-charge":
-        supported = original or model == "c1000_gen2" and protocol in ("prime", "native_mqtt")
+        supported = (model == "c1000" and protocol in ("legacy", "prime")
+                     or model == "c1000_gen2" and protocol in ("prime", "native_mqtt"))
     elif command in ("set-ac-power-saving", "set-dc-power-saving"):
         supported = original or (command == "set-dc-power-saving" and model == "c1000" and protocol in ("prime", "native_mqtt")
                                  and binary_state(snapshot.get("metrics", {}).get("dc_output_enabled")) is False)

@@ -1,0 +1,38 @@
+{
+  "hardware_access": false,
+  "case_counts": {
+    "getter_and_serializer": 32,
+    "lock_accumulation": 8,
+    "clear_state": 16,
+    "timer_transitions": 10,
+    "remaining_time": 7
+  },
+  "firmware": {
+    "filename": "MainMcu-decoded.bin",
+    "sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9"
+  },
+  "runtime": {
+    "python": "3.12.3",
+    "unicorn": "2.1.4"
+  },
+  "result_sha256": "d62d27105be8885c272b6c528a8914a5ac3a25559ae71ee1800cf6f684681d1f",
+  "source_sha256": {
+    "emulate_weak_light_status.py": "7cdf4244159bb196cb0d5db4d0f6d3018f17d58477291213e13b7350bfc8da9f",
+    "emulate_additional_features.py": "baaeb837278e225a117ebaf025e1e463eed10f24d51af8d7f2946783ef12615e",
+    "emulate_clock_semantics.py": "945b649c3b5cec00d816041e783641085ccfbdb5f80efc2ed2c4e15f3bae30f2",
+    "replay_io.py": "731d795a5ec37e2cf12b809b7122eaf7a29d84c21a2ecd43fafa3e2f8d962d30"
+  },
+  "substitutions": [
+    "backup-register read/write",
+    "low-SOC action helper",
+    "logging",
+    "memcpy/memset",
+    "system ticks"
+  ],
+  "not_executed": [
+    "MPPT/DSP physical producer",
+    "scheduler",
+    "PV hardware",
+    "actuators"
+  ]
+}

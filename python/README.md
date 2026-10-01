@@ -28,7 +28,7 @@ such as `monitor`, `serve` and `ap-service-status` keep their scripted behavior.
 | Model profile | Monitoring | Controls |
 | --- | --- | --- |
 | `c300` — C300/C300X AC | C300X tested live; C300 sibling uses the reference map | AC output, light, charging-power limit, screen timeout verified |
-| `c1000` — original A1761 | Legacy 1.5.1, explicit Prime 1.7.1 and native MQTT/radio 0.3.3.0 tested live | Legacy controls; Prime/native seven preferences, including DC Smart only while DC output is off |
+| `c1000` — original A1761 | Legacy 1.5.1, explicit Prime 1.7.1 and native MQTT/radio 0.3.3.0 tested live | Legacy controls; Prime eight/native seven preferences, including DC Smart only while DC output is off; Prime adds Fast flag |
 | `c1000_gen2` — A1763 | BLE and native MQTT tested live | Charge limits/power, display/device timeout, fast charge; native reserve, tariffs/grid return, temperature/alert, brightness/screen timeout, port memory and guarded discharge floor |
 | `c2000_gen2` — A1783 | Tested live | Upper charge cap, charging power, screen timeout; native reserve, all-day Peak and confirmed grid return |
 
@@ -226,9 +226,10 @@ solix-link set-temperature-unit --name c1000 --unit fahrenheit
 ```
 
 The default stays legacy; firmware advertisements do not select the transport.
-Prime 1.7.1 exposes seven settings: charging power, brightness, Device Timeout,
-screen timeout, light, temperature unit and DC Smart. All seven are also
-verified through native MQTT on radio 0.3.3.0.
+Prime 1.7.1 exposes eight settings: charging power, brightness, Device Timeout,
+screen timeout, light, temperature unit, DC Smart and Fast charging. The first
+seven are also verified through native MQTT on radio 0.3.3.0; native Fast is
+not supported.
 Live restoration covered 900/1000 W,
 brightness 1/2, Device Timeout 720/0 minutes, screen timeout 30/60 seconds,
 light Off/Low and Celsius/Fahrenheit. The three added preferences also passed
@@ -253,8 +254,17 @@ Use `ap-service-set-dc-power-saving --enabled on` (or `off`), with the private
 `--directory` and configured station `--name`, for the local MQTT setting; both
 directions require fresh DC output off. Other models and AC Smart remain blocked.
 Failure after a write can mean the setting changed; inspect fresh status before
-retrying. Original Prime output switches, fast charge and AC Smart remain
-unavailable. CLI, guided menu, TUI, HTTP gateway, MQTT bridge
+retrying. Original Prime output switches and AC Smart remain unavailable.
+Prime Fast uses `set-fast-charge --name original --enabled on|off`, with the
+stored flag verified OFF→ON, held for at least twelve seconds, then restored
+OFF at 100% SOC while AC outputs stayed on and all eleven settings/F8 matched
+the baseline. Input removal subsequently cleared the flag automatically.
+An independent public-SDK repeat passed both writes, four held samples and
+three restored checks after read-only recharge settling; see the
+[versioned Fast validation](../docs/c1000-prime-fast-validation.md).
+Use an adequate AC supply; these trials do not establish charging speed or
+reboot persistence. Native MQTT Fast remains unsupported.
+CLI, guided menu, TUI, HTTP gateway, MQTT bridge
 and the browser/HA controls use the supported capabilities; no default changes
 or automatic write retries are made.
 The `pair --model c1000` workflow accepts existing IDs; generating and rebinding

@@ -57,7 +57,7 @@ class FakeMonitor:
         self.connected = False
         self.callback = kwargs.get("on_update", lambda _metrics: None)
         self.metrics = {"display_timeout_seconds": 30, "light_mode": 0, "temperature_unit_fahrenheit": 0,
-                        "ac_output_enabled": 1, "dc_output_enabled": 0}
+                        "ac_output_enabled": 1, "dc_output_enabled": 0, "ac_fast_charge_enabled": 0}
         self.calls = []
 
     async def connect(self, **_kwargs):
@@ -87,6 +87,10 @@ class FakeMonitor:
         self.calls.append(("temperature_unit", fahrenheit))
         return self.changed("temperature_unit_fahrenheit", int(fahrenheit))
 
+    async def set_fast_charge_enabled(self, enabled):
+        self.calls.append(("fast_charge", enabled))
+        return self.changed("ac_fast_charge_enabled", int(enabled))
+
 
 def test_terminal_new_preferences_route_sdk_and_keep_switches_unavailable():
     async def run():
@@ -96,7 +100,10 @@ def test_terminal_new_preferences_route_sdk_and_keep_switches_unavailable():
         await backend.control("light", "1")
         await backend.control("temperature-unit", "fahrenheit")
         assert backend.monitor.calls == [("display_timeout", 60), ("light_mode", 1), ("temperature_unit", True)]
-        for action in ("ac-output", "fast-charge", "ac-power-saving"):
+        await backend.control("fast-charge", "on")
+        await backend.control("fast-charge", "off")
+        assert backend.monitor.calls[-2:] == [("fast_charge", True), ("fast_charge", False)]
+        for action in ("ac-output", "ac-power-saving"):
             with pytest.raises(ValueError, match="unavailable"):
                 await backend.control(action, "on")
         assert backend.monitor.metrics["ac_output_enabled"] == 1 and backend.monitor.metrics["dc_output_enabled"] == 0
@@ -129,7 +136,11 @@ def test_http_and_bridge_preferences_advertise_and_route_exact_payloads():
                 assert response.status_code == 200
             assert monitor.calls == [("display_timeout", 60), ("light_mode", 1), ("temperature_unit", True)]
             response = await client.post("/devices/original/commands", json={"command": "set-fast-charge", "enabled": True}, headers=headers)
-            assert 400 <= response.status_code < 500 and len(monitor.calls) == 3
+            assert response.status_code == 200 and monitor.calls[-1] == ("fast_charge", True)
+            response = await client.post("/devices/original/commands", json={"command": "set-fast-charge", "enabled": False}, headers=headers)
+            assert response.status_code == 200 and monitor.calls[-1] == ("fast_charge", False)
+            response = await client.post("/devices/original/commands", json={"command": "set-fast-charge", "enabled": 1}, headers=headers)
+            assert 400 <= response.status_code < 500 and len(monitor.calls) == 5
         assert _supports_operation(original(), "temperature_unit")
         assert decode_setting("temperature_unit", b'{"fahrenheit":true}') == {"fahrenheit": True}
         with pytest.raises(ValueError):

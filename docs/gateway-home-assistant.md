@@ -122,9 +122,17 @@ screen timeout 30/60 s, light Off/Low and Celsius/Fahrenheit. Every Prime write
 requires all eleven settings and the full 21-byte `F8` flags freshly before and
 afterward; protected fields and unknown flags must remain unchanged. AC was
 enabled and DC disabled throughout the recorded snapshots. Other values have
-synthetic/range coverage. Fast charge, AC Smart and AC/DC switches stay
-unavailable on this Prime profile. The browser and HA expose matching settings,
+synthetic/range coverage. AC Smart and AC/DC switches remain unavailable on
+both profiles. Prime additionally exposes `set-fast-charge`
+with boolean `enabled`. Its 1.7.1 OFF→ON flag held for at least twelve seconds
+at 100% SOC, then restored OFF with AC outputs on and complete settings/F8
+baseline preservation. Removing AC input cleared the flag. Use an adequate AC
+supply; no charging-speed or reboot-persistence claim is made. The browser
+requires confirmation, and HA requires advertised capability/fresh binary
+readback. Prime has eight controls; native remains seven. The browser and HA expose matching settings,
 including a Light select; the temperature sensor continues reporting Celsius.
+The [independent Fast public-SDK repeat](c1000-prime-fast-validation.md)
+also passed two writes with baseline restoration after read-only recharge settling.
 Original native MQTT/radio 0.3.3.0 confirmed these six settings with 12 writes,
 restoration, 18 fresh snapshots and three matching final samples. Every native
 write is sent once and confirmed through fresh original status, preserving all

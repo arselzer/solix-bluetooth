@@ -45,7 +45,11 @@ const displayValid = computed(() => /^\d+$/.test(props.draft.seconds) && display
   && (!(nativeC1000.value || originalPreferenceProfile.value) || displayTimes.value.includes(numberMetric(props.station, 'display_timeout_seconds') ?? -1)));
 const portMemoryValid = computed(() => booleanReported('port_memory_enabled') && ['0', '1'].includes(props.draft.portMemory));
 const fastAvailable = computed(() => allowed('set-fast-charge') && (originalProfile.value
+  || props.station.model === 'c1000' && props.station.protocol === 'prime'
   || props.station.model === 'c1000_gen2' && ['prime', 'native_mqtt'].includes(props.station.protocol ?? '')));
+const fastCaution = computed(() => props.station.model === 'c1000'
+  ? 'Use an adequate AC supply. The flag may clear when AC input is removed; stored readback does not establish charging speed or reboot persistence.'
+  : 'Set the station’s fast-charging switch.');
 const fastValid = computed(() => booleanReported('ac_fast_charge_enabled') && ['0', '1'].includes(props.draft.fast)
   && (!nativeC1000.value || numberMetric(props.station, 'ac_input_connected') === 1)
   && (props.draft.fast === '0' || props.station.model !== 'c1000_gen2'
@@ -182,8 +186,9 @@ function addPeriod() {
       <div v-if="fastAvailable" class="setting">
         <label for="fast-charge">Fast charging</label><p>Current {{ numberMetric(station, 'ac_fast_charge_enabled') === 1 ? 'On' : numberMetric(station, 'ac_fast_charge_enabled') === 0 ? 'Off' : 'Not reported' }}</p>
         <div class="setting-input"><select id="fast-charge" v-model="draft.fast" :disabled="!writable"><option value="0">Off</option><option value="1">On</option></select>
-          <button class="secondary" :disabled="!writable || !fastValid" @click="propose({ command: 'set-fast-charge', enabled: draft.fast === '1' }, 'Change fast charging?', 'Set the station’s fast-charging switch.', [draft.fast === '1' ? 'On' : 'Off'])">Apply</button></div>
+          <button class="secondary" :disabled="!writable || !fastValid" @click="propose({ command: 'set-fast-charge', enabled: draft.fast === '1' }, 'Change fast charging?', fastCaution, [draft.fast === '1' ? 'On' : 'Off'])">Apply</button></div>
         <p v-if="station.model === 'c1000_gen2'" class="hint">Enabling requires Standard mode with no active tariff. Native MQTT also requires connected mains.</p>
+        <p v-else-if="station.model === 'c1000'" class="hint">{{ fastCaution }}</p>
       </div>
       <div v-if="allowed('set-light')" class="setting">
         <label for="light-mode">Light</label><p>Current {{ lights[numberMetric(station, 'light_mode') ?? -1] ?? 'Not reported' }}</p>

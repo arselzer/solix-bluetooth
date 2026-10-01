@@ -85,6 +85,8 @@ try {
   assert.equal(await page.locator('#temperature-unit').count(), 1);
   assert.equal(await page.locator('#off-grid-alert').count(), 1);
   assert.equal(await page.locator('#device-timeout').inputValue(), '0');
+  assert.match(await page.getByTestId('pv-weak-light-lock').textContent(), /Inactive/);
+  assert.match(await page.getByTestId('pv-weak-light-lock').getAttribute('title'), /physical PV behavior untested/);
   assert.deepEqual(await page.evaluate(() => [localStorage.length, sessionStorage.length]), [0, 0]);
   assert.equal((await context.cookies()).length, 0);
   assert.equal(await page.getByRole('button', { name: /AC output/i }).count(), 0);
@@ -303,7 +305,7 @@ try {
   assert.equal(await page.locator('#display-timeout option[value="10"]').count(), 0);
   assert.equal(await page.locator('#light-mode').inputValue(), '0');
   assert.equal(await page.locator('#temperature-unit').inputValue(), '0');
-  for (const label of ['port-memory', 'fast-charge', 'ac-power-saving']) {
+  for (const label of ['port-memory', 'ac-power-saving']) {
     assert.equal(await page.locator(`#${label}`).count(), 0);
   }
   const beforeOriginalPrime = (await recorded()).length;
@@ -315,14 +317,18 @@ try {
     ['light-mode', '1', 'set-light', { mode: 1 }],
     ['temperature-unit', '1', 'set-temperature-unit', { fahrenheit: true }],
     ['dc-power-saving', '1', 'set-dc-power-saving', { enabled: true }],
+    ['fast-charge', '1', 'set-fast-charge', { enabled: true }],
   ]) {
     await page.locator(`#${label}`).selectOption(value);
     await propose(label);
     if (label === 'dc-power-saving') {
       assert.match(await page.getByTestId('command-review').textContent(), /DC output OFF.*inactivity counter/s);
     }
+    if (label === 'fast-charge') {
+      assert.match(await page.getByTestId('command-review').textContent(), /adequate AC supply.*reboot persistence/s);
+    }
     await page.getByTestId('cancel-command').click();
-    assert.equal((await recorded()).length, beforeOriginalPrime + ['charging-power', 'display-brightness', 'device-timeout', 'display-timeout', 'light-mode', 'temperature-unit', 'dc-power-saving'].indexOf(label));
+    assert.equal((await recorded()).length, beforeOriginalPrime + ['charging-power', 'display-brightness', 'device-timeout', 'display-timeout', 'light-mode', 'temperature-unit', 'dc-power-saving', 'fast-charge'].indexOf(label));
     await propose(label);
     await page.getByTestId('confirm-command').click();
     await page.getByTestId('gateway-notice').filter({ hasText: 'Command confirmed' }).waitFor();
@@ -330,7 +336,7 @@ try {
   }
   await change({ available: false });
   await refresh();
-  for (const label of ['charging-power', 'display-brightness', 'device-timeout', 'display-timeout', 'light-mode', 'temperature-unit', 'dc-power-saving']) {
+  for (const label of ['charging-power', 'display-brightness', 'device-timeout', 'display-timeout', 'light-mode', 'temperature-unit', 'dc-power-saving', 'fast-charge']) {
     assert.equal(await page.locator(`#${label}`).isDisabled(), true);
   }
   await change({ available: true });
@@ -347,6 +353,7 @@ try {
   cases++; console.log(`Scenario ${cases} passed`);
 
   await page.getByTestId('station-select').selectOption('Local · C1000');
+  assert.equal(await page.getByTestId('pv-weak-light-lock').count(), 0);
   assert.equal(await page.locator('#charging-power option').first().getAttribute('value'), '100');
   assert.equal(await page.locator('#charging-power option').last().getAttribute('value'), '1000');
   assert.deepEqual(await page.locator('#display-timeout option').evaluateAll((options) => options.map((option) => option.value)), ['20', '30', '60', '300', '1800']);

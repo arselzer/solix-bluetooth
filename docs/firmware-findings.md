@@ -39,6 +39,8 @@ version and six restored BLE controls. The later [original native MQTT trial](c1
 confirmed main 1.7.1/radio 0.3.3.0 and the same six controls locally.
 A subsequent [DC Smart transport trial](c1000-native-dc-smart-validation.md)
 brings both updated-version whitelists to seven controls.
+A later [Prime Fast trial](c1000-prime-fast-validation.md) brings BLE to eight;
+the independent native whitelist remains seven.
 A plaintext 1.7.1 main image remains unrecovered.
 
 ## Scope and evidence
@@ -383,7 +385,7 @@ C2000 controller support is unknown.
   using event timestamps and measured power, without relabeling raw counters
   as verified Wh.
 - Continue original-C1000 generated-ID setup and remaining Prime controls
-  separately from the verified seven BLE/seven native controls. Recover a verified public
+  separately from the verified eight BLE/seven native controls. Recover a verified public
   1.7.1 image before proposing local OTA.
 - Obtain C2000 firmware evidence before assuming its controller can service
   the Modbus bridge. Keep its AC output enabled throughout any live work.
@@ -447,8 +449,8 @@ An [independent original C1000 native DC Smart trial](c1000-native-dc-smart-vali
 now confirms `0076` on **main 1.7.1/radio 0.3.3.0**, followed by a public SDK
 repeat and independent final Bluetooth check. The original native whitelist
 is seven controls. DC must be off in both directions; all protected settings
-and the full F8 are confirmed. Original AC Smart and Fast on this version
-remain unverified.
+and the full F8 are confirmed. Original AC Smart and native Fast remain
+unverified; the subsequent BLE Fast validation follows below.
 
 The [93-case original Fast/BMS replay](c1000-fast-status-retention.md) executes
 8,192 full charging callbacks in main **1.5.9**. Fresh E5 reports the runtime
@@ -466,3 +468,27 @@ tracking during construction, including some nested encoding failures. Saved
 configuration stays unchanged in the bounded replay. Whole-report delivery
 and physical effects were not tested; do not trigger it as a passive backup
 export. Complete disaster-record readback remains unresolved.
+
+## October 1: Prime Fast, BMS phases and solar weak-light lock
+
+The [original Prime Fast trial](c1000-prime-fast-validation.md) confirms
+`405e` retention and restoration at full SOC on **main 1.7.1 / radio 0.3.3.0**.
+A separate C1000-chain input-loss trial cleared Fast while original AC stayed
+on, then restored the upstream supply and every protected setting. This
+establishes the eighth Prime BLE control, independently of native MQTT;
+actual Fast charging-rate enforcement and reboot persistence remain untested.
+
+[59 BMS producer cases](c1000-battery-phase-firmware.md) execute both original
+MainBMS/SubBMS images from the public 1.5.9 package. Codes 1/2 are latched
+discharge/charge phases, with asymmetric delayed clearing. Zero can also arise
+through protection/reset paths, and code 4 is produced but unassigned.
+BF/C0 remain raw SDK values; these are not instantaneous mains/UPS indicators.
+The installed 1.7.1 BMS component versions were not recovered.
+
+[73 new weak-light cases](gen2-weak-light-observability.md) trace the C1000
+Gen 2 MPPT lock producer, full/incremental serialization, timer and retry
+branches. The strict A3 diagnostic `pv_weak_light_locked` is now surfaced in
+monitoring, the browser/TUI and a disabled HA binary diagnostic. An elapsed
+RTC difference greater than 600 sets a retry flag without clearing this lock;
+the fixed 600 in A3 is not a countdown. Physical solar behavior remains
+unvalidated, and no new recovery command is exposed.

@@ -19,7 +19,7 @@ from .config import DeviceConfig, load_config, protocol_choices, save_config
 from .ap_service_config import APServiceConfig, add_ap_service_device, initialize_ap_service, load_ap_service, load_ap_service_profiles, private_write
 from .ap_service import ap_service_request
 from .protocol import Model
-from .c1000_capabilities import ORIGINAL_DC_SMART_WARNING, original_prime_commands
+from .c1000_capabilities import ORIGINAL_DC_SMART_WARNING, ORIGINAL_FAST_CHARGE_WARNING, original_prime_commands
 from .commands import native_commands_for_model
 
 
@@ -105,7 +105,7 @@ def change_protocol(device: DeviceConfig, config_path: Path) -> DeviceConfig:
         raise ValueError("Saved station changed; select it again before changing protocol")
     save_config([updated if entry.name == device.name else entry for entry in saved], config_path)
     if device.model == Model.C1000 and protocol == "prime":
-        print("Original C1000 Prime 1.7.1 supports the listed verified settings; output switches, fast charge and AC Smart remain unavailable. DC Smart requires DC output off.")
+        print("Original C1000 Prime 1.7.1 supports the listed verified settings; output switches and AC Smart remain unavailable. DC Smart requires DC output off. Fast charging requires adequate AC supply.")
     return updated
 
 
@@ -231,7 +231,8 @@ def preference_menu(device: DeviceConfig | APServiceConfig, config_path: Path, d
     elif device.model == Model.C1000 and (directory is not None or getattr(device, "protocol", None) == "prime"):
         candidates = [("set-display-brightness", "Display brightness"), ("set-display-timeout", "Screen timeout"),
                       ("set-light", "Light mode"), ("set-temperature-unit", "Temperature display"),
-                      ("set-dc-power-saving", "DC Smart mode (requires DC output off)")]
+                      ("set-dc-power-saving", "DC Smart mode (requires DC output off)"),
+                      ("set-fast-charge", "Fast charging (requires adequate AC supply)")]
         supported = native_commands_for_model(device.model) if directory is not None else original_prime_commands()
         commands = [command for command, _ in candidates if command in supported]
         labels = [label for command, label in candidates if command in supported]
@@ -266,6 +267,8 @@ def preference_menu(device: DeviceConfig | APServiceConfig, config_path: Path, d
             print(ORIGINAL_DC_SMART_WARNING)
     if command == "set-fast-charge" and device.model == Model.C1000_GEN2:
         print("Enabling requires Standard mode with no active tariff. Native MQTT also requires connected mains.")
+    if command == "set-fast-charge" and device.model == Model.C1000:
+        print(ORIGINAL_FAST_CHARGE_WARNING)
     if command == "set-port-memory":
         print("Off clears output-recovery bookkeeping; turning On does not restore that transient state.")
     if choose("Confirm preference change", ["Apply selected preference"]) is None:

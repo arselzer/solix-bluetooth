@@ -44,7 +44,8 @@
     "binary_sensor": {
       "mains_present": {"name": "Mains present"},
       "ac_output_enabled": {"name": "AC output enabled"},
-      "dc_input_active": {"name": "DC/PV input active"}
+      "dc_input_active": {"name": "DC/PV input active"},
+      "pv_weak_light_locked": {"name": "PV weak-light lock"}
     },
     "sensor": {
       "battery": {"name": "Battery"},

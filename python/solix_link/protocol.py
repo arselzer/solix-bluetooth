@@ -69,6 +69,7 @@ C1000_PRIME_SETTINGS = frozenset((
     "display_brightness", "ac_charging_power", "device_timeout", "display_timeout",
     "light_mode", "temperature_unit_fahrenheit",
     "dc_power_saving_mode_enabled",
+    "fast_charge_enabled",
 ))
 
 
@@ -276,6 +277,10 @@ def decode_telemetry(payload: bytes, model: Model | None = None) -> tuple[dict[s
         work = values.get(0xA3, b"")
         if len(work) == 14 and work[0] == 4:
             metrics["controller_error_code"] = work[2]
+            # A1763 main 1.1.4.9: MPPT weak-light lock getter 08015494.
+            # Firmware-derived state; physical PV behavior is not validated.
+            if work[13] in (0, 1):
+                metrics["pv_weak_light_locked"] = work[13]
         # Unlike C2000's F9, the observed C1000 block includes a type04 byte.
         versions = values.get(0xF9, b"")
         if len(versions) >= 29 and versions[0] == 4:

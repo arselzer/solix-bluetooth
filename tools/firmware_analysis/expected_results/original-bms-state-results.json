@@ -1,0 +1,795 @@
+{
+  "main_image_sha256": "b295ee8613f5c96e70dcc905896df516621cab4dc590bb580eac6b84519911a6",
+  "bms_image_sha256": {
+    "main": "dfb7106d8b189bf1ed19e7c2f6ae15555aeb54d84269292190727604168a1d92",
+    "expansion": "dc37fadf824193edcef2030d187d9f6320de8b7b8d1a57c2fd2c1483d8d2c627"
+  },
+  "unicorn_version": "2.1.4",
+  "scope": "Synthetic original 1.5.9 package BMS blocks; no 1.7.1, DSP, ADC or real-time validation",
+  "current_entry": [
+    {
+      "bms": "main",
+      "signed_current_ma": -1000,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 1,
+        "102": 1
+      },
+      "serialized": {
+        "state": 1,
+        "discharge_current_ma": 1000,
+        "charge_current_ma": 0
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 1000,
+        "stored_raw_state": 1
+      }
+    },
+    {
+      "bms": "main",
+      "signed_current_ma": -201,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 1,
+        "102": 1
+      },
+      "serialized": {
+        "state": 1,
+        "discharge_current_ma": 201,
+        "charge_current_ma": 0
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 201,
+        "stored_raw_state": 1
+      }
+    },
+    {
+      "bms": "main",
+      "signed_current_ma": -200,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 1,
+        "102": 1
+      },
+      "serialized": {
+        "state": 1,
+        "discharge_current_ma": 200,
+        "charge_current_ma": 0
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 200,
+        "stored_raw_state": 1
+      }
+    },
+    {
+      "bms": "main",
+      "signed_current_ma": -199,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 0,
+        "102": 0
+      },
+      "serialized": {
+        "state": 0,
+        "discharge_current_ma": 199,
+        "charge_current_ma": 0
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 199,
+        "stored_raw_state": 0
+      }
+    },
+    {
+      "bms": "main",
+      "signed_current_ma": -35,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 0,
+        "102": 0
+      },
+      "serialized": {
+        "state": 0,
+        "discharge_current_ma": 35,
+        "charge_current_ma": 0
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 35,
+        "stored_raw_state": 0
+      }
+    },
+    {
+      "bms": "main",
+      "signed_current_ma": -34,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 0,
+        "102": 0
+      },
+      "serialized": {
+        "state": 0,
+        "discharge_current_ma": 0,
+        "charge_current_ma": 0
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 0,
+        "stored_raw_state": 0
+      }
+    },
+    {
+      "bms": "main",
+      "signed_current_ma": 0,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 0,
+        "102": 0
+      },
+      "serialized": {
+        "state": 0,
+        "discharge_current_ma": 0,
+        "charge_current_ma": 0
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 0,
+        "stored_raw_state": 0
+      }
+    },
+    {
+      "bms": "main",
+      "signed_current_ma": 34,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 0,
+        "102": 0
+      },
+      "serialized": {
+        "state": 0,
+        "discharge_current_ma": 0,
+        "charge_current_ma": 0
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 0,
+        "stored_raw_state": 0
+      }
+    },
+    {
+      "bms": "main",
+      "signed_current_ma": 35,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 0,
+        "102": 0
+      },
+      "serialized": {
+        "state": 0,
+        "discharge_current_ma": 0,
+        "charge_current_ma": 35
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 0,
+        "stored_raw_state": 0
+      }
+    },
+    {
+      "bms": "main",
+      "signed_current_ma": 199,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 0,
+        "102": 0
+      },
+      "serialized": {
+        "state": 0,
+        "discharge_current_ma": 0,
+        "charge_current_ma": 199
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 0,
+        "stored_raw_state": 0
+      }
+    },
+    {
+      "bms": "main",
+      "signed_current_ma": 200,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 2,
+        "102": 2
+      },
+      "serialized": {
+        "state": 2,
+        "discharge_current_ma": 0,
+        "charge_current_ma": 200
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 200,
+        "stored_raw_state": 2
+      }
+    },
+    {
+      "bms": "main",
+      "signed_current_ma": 201,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 2,
+        "102": 2
+      },
+      "serialized": {
+        "state": 2,
+        "discharge_current_ma": 0,
+        "charge_current_ma": 201
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 201,
+        "stored_raw_state": 2
+      }
+    },
+    {
+      "bms": "main",
+      "signed_current_ma": 1000,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 2,
+        "102": 2
+      },
+      "serialized": {
+        "state": 2,
+        "discharge_current_ma": 0,
+        "charge_current_ma": 1000
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 1000,
+        "stored_raw_state": 2
+      }
+    },
+    {
+      "bms": "expansion",
+      "signed_current_ma": -1000,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 1,
+        "102": 1
+      },
+      "serialized": {
+        "state": 1,
+        "discharge_current_ma": 1000,
+        "charge_current_ma": 0
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 1000,
+        "stored_raw_state": 1
+      }
+    },
+    {
+      "bms": "expansion",
+      "signed_current_ma": -201,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 1,
+        "102": 1
+      },
+      "serialized": {
+        "state": 1,
+        "discharge_current_ma": 201,
+        "charge_current_ma": 0
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 201,
+        "stored_raw_state": 1
+      }
+    },
+    {
+      "bms": "expansion",
+      "signed_current_ma": -200,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 1,
+        "102": 1
+      },
+      "serialized": {
+        "state": 1,
+        "discharge_current_ma": 200,
+        "charge_current_ma": 0
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 200,
+        "stored_raw_state": 1
+      }
+    },
+    {
+      "bms": "expansion",
+      "signed_current_ma": -199,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 0,
+        "102": 0
+      },
+      "serialized": {
+        "state": 0,
+        "discharge_current_ma": 199,
+        "charge_current_ma": 0
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 199,
+        "stored_raw_state": 0
+      }
+    },
+    {
+      "bms": "expansion",
+      "signed_current_ma": -35,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 0,
+        "102": 0
+      },
+      "serialized": {
+        "state": 0,
+        "discharge_current_ma": 35,
+        "charge_current_ma": 0
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 35,
+        "stored_raw_state": 0
+      }
+    },
+    {
+      "bms": "expansion",
+      "signed_current_ma": -34,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 0,
+        "102": 0
+      },
+      "serialized": {
+        "state": 0,
+        "discharge_current_ma": 0,
+        "charge_current_ma": 0
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 0,
+        "stored_raw_state": 0
+      }
+    },
+    {
+      "bms": "expansion",
+      "signed_current_ma": 0,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 0,
+        "102": 0
+      },
+      "serialized": {
+        "state": 0,
+        "discharge_current_ma": 0,
+        "charge_current_ma": 0
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 0,
+        "stored_raw_state": 0
+      }
+    },
+    {
+      "bms": "expansion",
+      "signed_current_ma": 34,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 0,
+        "102": 0
+      },
+      "serialized": {
+        "state": 0,
+        "discharge_current_ma": 0,
+        "charge_current_ma": 0
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 0,
+        "stored_raw_state": 0
+      }
+    },
+    {
+      "bms": "expansion",
+      "signed_current_ma": 35,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 0,
+        "102": 0
+      },
+      "serialized": {
+        "state": 0,
+        "discharge_current_ma": 0,
+        "charge_current_ma": 35
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 0,
+        "stored_raw_state": 0
+      }
+    },
+    {
+      "bms": "expansion",
+      "signed_current_ma": 199,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 0,
+        "102": 0
+      },
+      "serialized": {
+        "state": 0,
+        "discharge_current_ma": 0,
+        "charge_current_ma": 199
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 0,
+        "stored_raw_state": 0
+      }
+    },
+    {
+      "bms": "expansion",
+      "signed_current_ma": 200,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 2,
+        "102": 2
+      },
+      "serialized": {
+        "state": 2,
+        "discharge_current_ma": 0,
+        "charge_current_ma": 200
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 200,
+        "stored_raw_state": 2
+      }
+    },
+    {
+      "bms": "expansion",
+      "signed_current_ma": 201,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 2,
+        "102": 2
+      },
+      "serialized": {
+        "state": 2,
+        "discharge_current_ma": 0,
+        "charge_current_ma": 201
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 201,
+        "stored_raw_state": 2
+      }
+    },
+    {
+      "bms": "expansion",
+      "signed_current_ma": 1000,
+      "states_by_producer_sample": {
+        "1": 0,
+        "100": 0,
+        "101": 2,
+        "102": 2
+      },
+      "serialized": {
+        "state": 2,
+        "discharge_current_ma": 0,
+        "charge_current_ma": 1000
+      },
+      "main_consumer": {
+        "selected_pack_current_ma": 1000,
+        "stored_raw_state": 2
+      }
+    }
+  ],
+  "zero_current_decay": [
+    {
+      "bms": "main",
+      "initial_state": 0,
+      "states_by_producer_sample": {
+        "100": 0,
+        "101": 0,
+        "8000": 0,
+        "8001": 0,
+        "8002": 0
+      },
+      "note": "Normal producer fragment only; other outer-loop policies are excluded"
+    },
+    {
+      "bms": "main",
+      "initial_state": 1,
+      "states_by_producer_sample": {
+        "100": 1,
+        "101": 1,
+        "8000": 1,
+        "8001": 0,
+        "8002": 0
+      },
+      "note": "Normal producer fragment only; other outer-loop policies are excluded"
+    },
+    {
+      "bms": "main",
+      "initial_state": 2,
+      "states_by_producer_sample": {
+        "100": 2,
+        "101": 0,
+        "8000": 0,
+        "8001": 0,
+        "8002": 0
+      },
+      "note": "Normal producer fragment only; other outer-loop policies are excluded"
+    },
+    {
+      "bms": "main",
+      "initial_state": 4,
+      "states_by_producer_sample": {
+        "100": 4,
+        "101": 4,
+        "8000": 4,
+        "8001": 0,
+        "8002": 0
+      },
+      "note": "Normal producer fragment only; other outer-loop policies are excluded"
+    },
+    {
+      "bms": "expansion",
+      "initial_state": 0,
+      "states_by_producer_sample": {
+        "100": 0,
+        "101": 0,
+        "8000": 0,
+        "8001": 0,
+        "8002": 0
+      },
+      "note": "Normal producer fragment only; other outer-loop policies are excluded"
+    },
+    {
+      "bms": "expansion",
+      "initial_state": 1,
+      "states_by_producer_sample": {
+        "100": 1,
+        "101": 1,
+        "8000": 1,
+        "8001": 0,
+        "8002": 0
+      },
+      "note": "Normal producer fragment only; other outer-loop policies are excluded"
+    },
+    {
+      "bms": "expansion",
+      "initial_state": 2,
+      "states_by_producer_sample": {
+        "100": 2,
+        "101": 0,
+        "8000": 0,
+        "8001": 0,
+        "8002": 0
+      },
+      "note": "Normal producer fragment only; other outer-loop policies are excluded"
+    },
+    {
+      "bms": "expansion",
+      "initial_state": 4,
+      "states_by_producer_sample": {
+        "100": 4,
+        "101": 4,
+        "8000": 4,
+        "8001": 0,
+        "8002": 0
+      },
+      "note": "Normal producer fragment only; other outer-loop policies are excluded"
+    }
+  ],
+  "interrupted_entry": [
+    {
+      "bms": "main",
+      "signed_current_ma": 200,
+      "sequence": "60 qualifying, 10 zero-current, 51 qualifying samples",
+      "counter_after_gap": 50,
+      "final_state": 2,
+      "consecutive_samples_required": false
+    },
+    {
+      "bms": "main",
+      "signed_current_ma": -200,
+      "sequence": "60 qualifying, 10 zero-current, 51 qualifying samples",
+      "counter_after_gap": 50,
+      "final_state": 1,
+      "consecutive_samples_required": false
+    },
+    {
+      "bms": "expansion",
+      "signed_current_ma": 200,
+      "sequence": "60 qualifying, 10 zero-current, 51 qualifying samples",
+      "counter_after_gap": 50,
+      "final_state": 2,
+      "consecutive_samples_required": false
+    },
+    {
+      "bms": "expansion",
+      "signed_current_ma": -200,
+      "sequence": "60 qualifying, 10 zero-current, 51 qualifying samples",
+      "counter_after_gap": 50,
+      "final_state": 1,
+      "consecutive_samples_required": false
+    }
+  ],
+  "mask_reset": [
+    {
+      "bms": "main",
+      "initial_state": 1,
+      "status_mask": "1000",
+      "state_after": 0,
+      "nonzero_current_cache_unchanged": true
+    },
+    {
+      "bms": "main",
+      "initial_state": 1,
+      "status_mask": "2000",
+      "state_after": 0,
+      "nonzero_current_cache_unchanged": true
+    },
+    {
+      "bms": "main",
+      "initial_state": 1,
+      "status_mask": "4000",
+      "state_after": 0,
+      "nonzero_current_cache_unchanged": true
+    },
+    {
+      "bms": "main",
+      "initial_state": 1,
+      "status_mask": "8000",
+      "state_after": 0,
+      "nonzero_current_cache_unchanged": true
+    },
+    {
+      "bms": "main",
+      "initial_state": 2,
+      "status_mask": "1000",
+      "state_after": 0,
+      "nonzero_current_cache_unchanged": true
+    },
+    {
+      "bms": "main",
+      "initial_state": 2,
+      "status_mask": "2000",
+      "state_after": 0,
+      "nonzero_current_cache_unchanged": true
+    },
+    {
+      "bms": "main",
+      "initial_state": 2,
+      "status_mask": "4000",
+      "state_after": 0,
+      "nonzero_current_cache_unchanged": true
+    },
+    {
+      "bms": "main",
+      "initial_state": 2,
+      "status_mask": "8000",
+      "state_after": 0,
+      "nonzero_current_cache_unchanged": true
+    },
+    {
+      "bms": "expansion",
+      "initial_state": 1,
+      "status_mask": "1000",
+      "state_after": 0,
+      "nonzero_current_cache_unchanged": true
+    },
+    {
+      "bms": "expansion",
+      "initial_state": 1,
+      "status_mask": "2000",
+      "state_after": 0,
+      "nonzero_current_cache_unchanged": true
+    },
+    {
+      "bms": "expansion",
+      "initial_state": 1,
+      "status_mask": "4000",
+      "state_after": 0,
+      "nonzero_current_cache_unchanged": true
+    },
+    {
+      "bms": "expansion",
+      "initial_state": 1,
+      "status_mask": "8000",
+      "state_after": 0,
+      "nonzero_current_cache_unchanged": true
+    },
+    {
+      "bms": "expansion",
+      "initial_state": 2,
+      "status_mask": "1000",
+      "state_after": 0,
+      "nonzero_current_cache_unchanged": true
+    },
+    {
+      "bms": "expansion",
+      "initial_state": 2,
+      "status_mask": "2000",
+      "state_after": 0,
+      "nonzero_current_cache_unchanged": true
+    },
+    {
+      "bms": "expansion",
+      "initial_state": 2,
+      "status_mask": "4000",
+      "state_after": 0,
+      "nonzero_current_cache_unchanged": true
+    },
+    {
+      "bms": "expansion",
+      "initial_state": 2,
+      "status_mask": "8000",
+      "state_after": 0,
+      "nonzero_current_cache_unchanged": true
+    }
+  ],
+  "main_remaining_estimate": [
+    {
+      "state_branch": 0,
+      "remaining_mah": 1000,
+      "full_mah": 4000,
+      "selected_current_ma": 1000,
+      "estimate_tenths_hour": 10,
+      "formula": "remaining * 10 / discharge_current"
+    },
+    {
+      "state_branch": 1,
+      "remaining_mah": 1000,
+      "full_mah": 4000,
+      "selected_current_ma": 1000,
+      "estimate_tenths_hour": 10,
+      "formula": "remaining * 10 / discharge_current"
+    },
+    {
+      "state_branch": 2,
+      "remaining_mah": 1000,
+      "full_mah": 4000,
+      "selected_current_ma": 1000,
+      "estimate_tenths_hour": 30,
+      "formula": "(full - remaining) * 10 / charge_current"
+    },
+    {
+      "state_branch": 4,
+      "remaining_mah": 1000,
+      "full_mah": 4000,
+      "selected_current_ma": 1000,
+      "estimate_tenths_hour": 10,
+      "formula": "remaining * 10 / discharge_current"
+    }
+  ],
+  "special_state": [
+    {
+      "bms": "main",
+      "state": 4,
+      "producer": "08006440..0800645c",
+      "meaning": "unassigned"
+    }
+  ],
+  "cases": 59,
+  "script_sha256": "0d8aa871b6b28c1b5507f42d6935fdc1dc61f127e652acbc33189ca330802fef"
+}

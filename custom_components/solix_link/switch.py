@@ -61,6 +61,10 @@ class SolixSettingSwitch(SolixEntity, SwitchEntity):
             self._attr_extra_state_attributes = {"recovery_behavior": "Off clears output-recovery bookkeeping; turning On does not restore that transient state."}
         elif self.command == "set-fast-charge" and self.snapshot.get("model") == "c1000_gen2":
             self._attr_extra_state_attributes = {"enable_requirement": "C1000 Gen 2 requires Standard mode with no active tariff; native MQTT also requires connected mains."}
+        elif self.command == "set-fast-charge" and self.snapshot.get("model") == "c1000":
+            self._attr_extra_state_attributes = {
+                "supply_requirement": "Use an adequate AC supply.",
+                "persistence_behavior": "The flag may clear when AC input is removed; charging speed and reboot persistence are unverified."}
 
     @property
     def is_on(self) -> bool | None:

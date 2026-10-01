@@ -23,6 +23,8 @@ CONTROLS = (
     ("light_mode", "404f", "0101", "light_mode", 1),
     ("temperature_unit_fahrenheit", "4050", "0101", "temperature_unit_fahrenheit", True),
     ("dc_power_saving_mode_enabled", "4076", "0100", "dc_power_saving_mode_enabled", False),
+    ("fast_charge_enabled", "405e", "0101", "ac_fast_charge_enabled", True),
+    ("fast_charge_enabled", "405e", "0100", "ac_fast_charge_enabled", False),
 )
 
 
@@ -56,7 +58,6 @@ def test_prime_wire_uses_verified_original_body_and_gcm_timestamp(monkeypatch, s
 
 @pytest.mark.parametrize("setting,value", [
     ("ac_output_enabled", False), ("dc_output_enabled", True), ("display_enabled", False),
-    ("fast_charge_enabled", True),
     ("ac_power_saving_mode_enabled", False),
 ])
 def test_original_prime_unverified_controls_are_rejected(setting, value):
@@ -73,6 +74,7 @@ def test_original_prime_unverified_controls_are_rejected(setting, value):
     ("display_timeout", True), ("display_timeout", 25), ("light_mode", False),
     ("light_mode", 5), ("temperature_unit_fahrenheit", 1),
     ("dc_power_saving_mode_enabled", 1),
+    ("fast_charge_enabled", 1), ("fast_charge_enabled", "on"),
 ])
 def test_prime_invalid_control_values_fail_before_transport(setting, value):
     monitor = SolixMonitor("AA:BB:CC:DD:EE:04", model=Model.C1000, protocol="prime")
@@ -95,6 +97,9 @@ def test_prime_sdk_requires_fresh_protected_settings_and_complete_flags(
         monitor.metrics = BASELINE.copy()  # Cached values cannot satisfy the guard.
         monitor.raw_tlvs = {0xF8: FLAGS}
         state = BASELINE.copy()
+        if setting == "fast_charge_enabled":
+            state[metric] = int(not value)
+        initial = state.copy()
         writes, status_after_write = [], 0
 
         class Client:
@@ -123,7 +128,7 @@ def test_prime_sdk_requires_fresh_protected_settings_and_complete_flags(
                         protected = "light_mode" if metric != "light_mode" else "display_brightness"
                         state[protected] = BASELINE[protected] + 1
                     if changed and problem == "reverted_final" and status_after_write >= 2:
-                        state[metric] = BASELINE[metric]
+                        state[metric] = initial[metric]
                         flags = FLAGS
                     if problem == "stale_baseline" or (changed and problem == "stale_final" and status_after_write >= 2):
                         plain = tlv(0xC1, b"\x01\x62")
@@ -157,6 +162,8 @@ def test_prime_sdk_requires_fresh_protected_settings_and_complete_flags(
             apply = monitor.set_light_mode(value)
         elif setting == "dc_power_saving_mode_enabled":
             apply = monitor.set_dc_power_saving_enabled(value)
+        elif setting == "fast_charge_enabled":
+            apply = monitor.set_fast_charge_enabled(value)
         else:
             apply = monitor.set_temperature_unit(value)
         if problem == "matching":

@@ -14,7 +14,7 @@ from .client import SolixMonitor, discover
 from .config import DEFAULT_CONFIG, DeviceConfig, load_config, save_config
 from .manager import MonitorService
 from .protocol import C1000_PRIME_SETTINGS, Model
-from .c1000_capabilities import ORIGINAL_DC_SMART_WARNING, original_prime_commands
+from .c1000_capabilities import ORIGINAL_DC_SMART_WARNING, ORIGINAL_FAST_CHARGE_WARNING, original_prime_commands
 
 
 def parser() -> argparse.ArgumentParser:
@@ -257,6 +257,8 @@ async def _set(args: argparse.Namespace) -> None:
         raise ValueError("Enabled must be on or off")
     if args.command == "set-temperature-unit" and args.unit not in ("celsius", "fahrenheit"):
         raise ValueError("Unit must be celsius or fahrenheit")
+    if args.command == "set-fast-charge" and device.model == Model.C1000:
+        print(ORIGINAL_FAST_CHARGE_WARNING, file=sys.stderr)
     if args.command in ("set-ac-power-saving", "set-dc-power-saving"):
         print("Power saving may automatically turn the output off at low load.", file=sys.stderr)
         if device.protocol == "prime":
