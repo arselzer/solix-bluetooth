@@ -12,6 +12,8 @@ from typing import Any, Callable
 from .client import SolixMonitor, discover
 from .config import DEFAULT_CONFIG, DeviceConfig, load_config, protocol_choices, save_config
 from .protocol import Model
+from .c1000_capabilities import original_prime_operation_supported
+from .commands import native_commands_for_model
 from .tou import TouPeriod, power_flow, validate_periods
 
 
@@ -76,12 +78,19 @@ class Control:
 
 def controls_for(target: Target) -> tuple[Control, ...]:
     """Expose model-supported operations; C2000 never gets an AC switch."""
-    if not target.native and target.model == Model.C1000 and target.device and target.device.protocol == "prime":
-        return (
-            Control("charge-power", "AC charging power", "100–1000 W, in 100 W steps"),
-            Control("display-brightness", "Display brightness", "1 low, 2 medium, 3 high"),
-            Control("device-timeout", "Device Timeout", "0 = Never; 30, 60, 120, 240, 360, 720 or 1440 minutes. Finite choices may turn the station off when idle. Never disables this timeout; other sleep behavior may still interrupt remote access."),
+    if target.model == Model.C1000 and (target.native or target.device and target.device.protocol == "prime"):
+        candidates = (
+            ("ac_charging_power", Control("charge-power", "AC charging power", "100–1000 W, in 100 W steps")),
+            ("display_brightness", Control("display-brightness", "Display brightness", "1 low, 2 medium, 3 high")),
+            ("device_timeout", Control("device-timeout", "Device Timeout", "0 = Never; 30, 60, 120, 240, 360, 720 or 1440 minutes. Finite choices may turn the station off when idle. Never disables this timeout; other sleep behavior may still interrupt remote access.")),
+            ("display_timeout", Control("display-timeout", "Display timeout", "20, 30, 60, 300 or 1800 seconds")),
+            ("light_mode", Control("light", "Light mode", "0 off · 1 low · 2 medium · 3 high · 4 SOS")),
+            ("temperature_unit", Control("temperature-unit", "Temperature display", "celsius or fahrenheit")),
         )
+        if target.native:
+            commands = native_commands_for_model(target.model)
+            return tuple(control for _operation, control in candidates if f"set-{control.key}" in commands)
+        return tuple(control for operation, control in candidates if original_prime_operation_supported(operation))
     if target.native:
         maximum = 1200 if target.model == Model.C1000_GEN2 else 1800
         minimum = 100 if target.model == Model.C1000_GEN2 else 300
@@ -346,10 +355,10 @@ class TuiBackend:
         async with self._lock:
             target = self.target
             if self.directory is None or target is None or target.native or target.device is None:
-                raise ValueError("Connect to a paired Gen 2 station over Bluetooth first")
+                raise ValueError("Connect to a paired Prime station over Bluetooth first")
             device = target.device
-            if not target.saved or device.model not in (Model.C1000_GEN2, Model.C2000_GEN2) or device.protocol != "prime" or not device.client_id:
-                raise ValueError("Save and pair a Gen 2 station before adding it to the AP")
+            if not target.saved or device.model not in (Model.C1000, Model.C1000_GEN2, Model.C2000_GEN2) or device.protocol != "prime" or not device.client_id:
+                raise ValueError("Save and pair a supported Prime station before adding it to the AP")
             if not self._ble_snapshot()["available"]:
                 raise ConnectionError("Fresh Bluetooth telemetry is required")
             serial = self.monitor.metrics.get("serial_number")
@@ -436,7 +445,7 @@ class TuiBackend:
             if target is None:
                 raise RuntimeError("Connect to a station first")
             allowed = {item.key for item in controls_for(target)}
-            if target.native:
+            if target.native and target.model in (Model.C1000_GEN2, Model.C2000_GEN2):
                 allowed.update(("plan", "return-grid"))
             if action not in allowed:
                 raise ValueError("This operation is unavailable for the selected station")
@@ -459,6 +468,11 @@ class TuiBackend:
                     response = await self._native("set-discharge-floor", lower=int(value))
                 elif action == "device-timeout":
                     response = await self._native("set-device-timeout", minutes=parse_device_timeout(value))
+                elif action == "light":
+                    mode = int(value)
+                    if mode not in (0, 1, 2, 3, 4):
+                        raise ValueError("Choose light mode 0, 1, 2, 3 or 4")
+                    response = await self._native("set-light", mode=mode)
                 elif action in ("display-brightness", "display-timeout", "port-memory"):
                     snapshot = self.native_snapshot
                     seen = snapshot.get("last_seen_timestamp")
@@ -467,7 +481,7 @@ class TuiBackend:
                         raise ValueError("Fresh connected telemetry is required for display and port-memory controls")
                     field, metric, options = {
                         "display-brightness": ("level", "display_brightness", (1, 2, 3)),
-                        "display-timeout": ("seconds", "display_timeout_seconds", (0, 10, 20, 30, 60, 300, 1800)),
+                        "display-timeout": ("seconds", "display_timeout_seconds", (20, 30, 60, 300, 1800) if target.model == Model.C1000 else (0, 10, 20, 30, 60, 300, 1800)),
                         "port-memory": ("enabled", "port_memory_enabled", (0, 1)),
                     }[action]
                     current = snapshot.get("metrics", {}).get(metric)
@@ -527,12 +541,12 @@ class TuiBackend:
                     raise ValueError("Enter upper,lower percentages, for example 100,1")
                 await self.monitor.set_charge_limits(*(int(part.strip()) for part in parts))
             else:
-                method = {
-                    "charge-power": self.monitor.set_ac_charging_power,
-                    "charge-cap": self.monitor.set_charge_cap,
-                    "display-timeout": self.monitor.set_display_timeout,
-                    "light": self.monitor.set_light_mode,
-                }[action]
+                method = getattr(self.monitor, {
+                    "charge-power": "set_ac_charging_power",
+                    "charge-cap": "set_charge_cap",
+                    "display-timeout": "set_display_timeout",
+                    "light": "set_light_mode",
+                }[action])
                 await method(int(value))
             return self._ble_snapshot()
 
@@ -619,7 +633,7 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
                 yield Static("Bluetooth protocol", id="protocol-title", markup=False)
                 original = self.target.model == Model.C1000
                 yield Static(
-                    "Original C1000: legacy was verified on 1.5.1; Prime monitoring, charging power, brightness and Device Timeout on 1.7.1. Other Prime controls remain unavailable."
+                    "Original C1000: legacy was verified on 1.5.1; Prime monitoring and the listed settings on 1.7.1. Prime output switches, fast charge and Smart modes remain unavailable."
                     if original else "C1000 Gen 2: legacy was verified on 1.1.4.3; Prime on 1.1.4.9.", markup=False)
                 yield Select([(choice.title(), choice) for choice in protocol_choices(self.target.model)],
                              value=self.target.device.protocol, allow_blank=False, id="protocol-choice")
@@ -842,9 +856,11 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
             selector.value = options[0].key if options else Select.NULL
             note = "Original C1000 controls were verified on firmware code 151; record settings before testing other versions." if target and target.model == Model.C1000 else ""
             if target and target.device and target.model == Model.C1000 and target.device.protocol == "prime":
-                note = "Original C1000 Prime 1.7.1: charging power, brightness and Device Timeout verified. Other controls remain unavailable."
+                note = "Original C1000 Prime 1.7.1: the listed settings are verified. Output switches, fast charge and Smart modes remain unavailable."
             if target and target.native:
                 note = "Controls require the running AP service to have been started with --allow-control."
+                if target.model == Model.C1000 and not controls_for(target):
+                    note = "Original C1000 native MQTT monitoring is verified; native controls remain unavailable."
             self.query_one("#notice", Static).update(note)
             guidance = "Scan nearby stations or choose a saved station."
             if target and not target.saved:
@@ -865,11 +881,11 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
             self.query_one("#scan", Button).disabled = self.busy
             self.query_one("#save-station", Button).disabled = self.busy or backend.config_path is None or not target or target.saved
             self.query_one("#station-protocol", Button).disabled = self.busy or not target or target.device is None or len(protocol_choices(target.model)) < 2 or (target.saved and backend.config_path is None)
-            self.query_one("#add-to-ap", Button).disabled = self.busy or not connected or not fresh or backend.directory is None or not target or target.native or not target.saved or target.model not in (Model.C1000_GEN2, Model.C2000_GEN2)
+            self.query_one("#add-to-ap", Button).disabled = self.busy or not connected or not fresh or backend.directory is None or not target or target.native or not target.saved or target.model not in (Model.C1000, Model.C1000_GEN2, Model.C2000_GEN2) or not target.device or target.device.protocol != "prime" or not target.device.client_id
             self.query_one("#disconnect", Button).disabled = self.busy or not connected
             self.query_one("#apply-setting", Button).disabled = self.busy or not connected or not fresh or not permitted or not (target and controls_for(target))
             for name in ("apply-plan", "return-grid"):
-                self.query_one(f"#{name}", Button).disabled = self.busy or not connected or not fresh or not permitted or not (target and target.native)
+                self.query_one(f"#{name}", Button).disabled = self.busy or not connected or not fresh or not permitted or not (target and target.native and target.model in (Model.C1000_GEN2, Model.C2000_GEN2))
 
         def render_snapshot(self, snapshot: dict) -> None:
             self.snapshot = snapshot

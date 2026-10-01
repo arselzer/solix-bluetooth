@@ -296,6 +296,10 @@ def test_c1000_native_capabilities_reach_ha(payload):
     {"controls": []}, {"last_seen_timestamp": 0},
 ])
 def test_c1000_settings_refuse_wrong_profile_or_revoked_capability(payload, changes):
+    if changes == {"model": "c1000"} and payload["command"] == "set-temperature-unit":
+        # Original native support requires this explicit advertised capability.
+        api.validate_command(api.parse_snapshot(c1000_native(**changes)), payload)
+        return
     with pytest.raises(ValueError):
         api.validate_command(api.parse_snapshot(c1000_native(**changes)), payload)
 

@@ -15,7 +15,7 @@ COMMANDS = frozenset({"set-charge-power", "set-charge-cap", "set-backup-reserve"
                       "set-tou-plan", "return-grid", "set-discharge-floor",
                       "set-temperature-unit", "set-off-grid-alert", "set-device-timeout",
                       "set-fast-charge", "set-ac-power-saving", "set-dc-power-saving",
-                      "set-display-brightness", "set-display-timeout", "set-port-memory"})
+                      "set-display-brightness", "set-display-timeout", "set-port-memory", "set-light"})
 METRICS = frozenset({"battery_percentage", "temperature_c", "output_power_w",
                     "ac_input_power_w", "ac_output_power_w", "dc_output_power_w",
                     "ac_input_connected", "ac_output_enabled", "battery_status",
@@ -26,7 +26,7 @@ METRICS = frozenset({"battery_percentage", "temperature_c", "output_power_w",
                     "temperature_unit_fahrenheit", "ac_off_grid_alert_enabled", "device_timeout_minutes",
                     "ac_power_saving_mode_enabled", "dc_power_saving_mode_enabled",
                     "dc_input_active", "dc_input_power_raw", "controller_error_code",
-                    "battery_health_raw", "display_brightness", "display_timeout_seconds", "port_memory_enabled"})
+                    "battery_health_raw", "display_brightness", "display_timeout_seconds", "port_memory_enabled", "light_mode"})
 POWER_MINIMUM = {"c1000": 100, "c1000_gen2": 100, "c2000_gen2": 300}
 POWER_MAXIMUM = {"c1000": 1000, "c1000_gen2": 1200, "c2000_gen2": 1800}
 CHARGE_CAP_MODELS = frozenset({"c1000_gen2", "c2000_gen2"})
@@ -37,6 +37,8 @@ DEVICE_TIMEOUT_OPTIONS = {"never": 0, "30_minutes": 30, "1_hour": 60, "2_hours":
 DISPLAY_BRIGHTNESS_OPTIONS = {"low": 1, "medium": 2, "high": 3}
 DISPLAY_TIMEOUT_OPTIONS = {"never": 0, "10_seconds": 10, "20_seconds": 20, "30_seconds": 30,
                            "1_minute": 60, "5_minutes": 300, "30_minutes": 1800}
+ORIGINAL_DISPLAY_TIMEOUT_OPTIONS = {key: seconds for key, seconds in DISPLAY_TIMEOUT_OPTIONS.items() if seconds >= 20}
+LIGHT_MODE_OPTIONS = {"off": 0, "low": 1, "medium": 2, "high": 3, "sos": 4}
 BOOLEAN_SETTINGS = {"set-off-grid-alert": "ac_off_grid_alert_enabled", "set-fast-charge": "ac_fast_charge_enabled",
                     "set-ac-power-saving": "ac_power_saving_mode_enabled", "set-dc-power-saving": "dc_power_saving_mode_enabled",
                     "set-port-memory": "port_memory_enabled"}
@@ -134,6 +136,11 @@ def native_gen2(snapshot: dict) -> bool:
     return snapshot.get("model") in NATIVE_MODELS and snapshot.get("protocol") == "native_mqtt"
 
 
+def original_encrypted_preferences(snapshot: dict) -> bool:
+    """Original preferences still require each command to be advertised below."""
+    return snapshot.get("model") == "c1000" and snapshot.get("protocol") in ("prime", "native_mqtt")
+
+
 def reserve_supported(snapshot: dict) -> bool:
     return snapshot.get("model") == "c2000_gen2" or native_gen2(snapshot)
 
@@ -156,7 +163,7 @@ def discharge_floor_options(snapshot: dict) -> list[str]:
 def device_timeout_options(snapshot: dict) -> list[str]:
     """Require supported transport, advertised control and exact timeout readback."""
     model, protocol = snapshot.get("model"), snapshot.get("protocol")
-    supported = (model == "c1000" and protocol in ("legacy", "prime")
+    supported = (model == "c1000" and protocol in ("legacy", "prime", "native_mqtt")
                  or model == "c1000_gen2" and protocol in ("prime", "native_mqtt"))
     value = snapshot.get("metrics", {}).get("device_timeout_minutes")
     if (not supported or "set-device-timeout" not in snapshot.get("controls", [])
@@ -166,7 +173,7 @@ def device_timeout_options(snapshot: dict) -> list[str]:
 
 
 def temperature_unit_supported(snapshot: dict) -> bool:
-    supported = (snapshot.get("model") == "c1000" and snapshot.get("protocol") == "legacy"
+    supported = (snapshot.get("model") == "c1000" and snapshot.get("protocol") in ("legacy", "prime", "native_mqtt")
                  or snapshot.get("model") == "c1000_gen2" and native_gen2(snapshot))
     return (supported and "set-temperature-unit" in snapshot.get("controls", [])
             and binary_state(snapshot.get("metrics", {}).get("temperature_unit_fahrenheit")) is not None)
@@ -181,7 +188,7 @@ def _native_display_options(snapshot: dict, command: str, metric: str, options: 
 
 
 def display_brightness_options(snapshot: dict) -> list[str]:
-    if snapshot.get("model") == "c1000" and snapshot.get("protocol") == "prime":
+    if original_encrypted_preferences(snapshot):
         value = snapshot.get("metrics", {}).get("display_brightness")
         if ("set-display-brightness" in snapshot.get("controls", [])
                 and type(value) is int and value in DISPLAY_BRIGHTNESS_OPTIONS.values()):
@@ -191,7 +198,22 @@ def display_brightness_options(snapshot: dict) -> list[str]:
 
 
 def display_timeout_options(snapshot: dict) -> list[str]:
+    if original_encrypted_preferences(snapshot):
+        value = snapshot.get("metrics", {}).get("display_timeout_seconds")
+        if ("set-display-timeout" in snapshot.get("controls", [])
+                and type(value) is int and value in ORIGINAL_DISPLAY_TIMEOUT_OPTIONS.values()):
+            return list(ORIGINAL_DISPLAY_TIMEOUT_OPTIONS)
+        return []
     return _native_display_options(snapshot, "set-display-timeout", "display_timeout_seconds", DISPLAY_TIMEOUT_OPTIONS)
+
+
+def light_mode_options(snapshot: dict) -> list[str]:
+    value = snapshot.get("metrics", {}).get("light_mode")
+    if (original_encrypted_preferences(snapshot)
+            and "set-light" in snapshot.get("controls", [])
+            and type(value) is int and value in LIGHT_MODE_OPTIONS.values()):
+        return list(LIGHT_MODE_OPTIONS)
+    return []
 
 
 def boolean_setting_supported(snapshot: dict, command: str) -> bool:
@@ -265,6 +287,7 @@ def validate_command(snapshot: dict, payload: dict) -> None:
         "set-port-memory": {"command", "enabled"},
         "set-display-brightness": {"command", "level"},
         "set-display-timeout": {"command", "seconds"},
+        "set-light": {"command", "mode"},
     }[command]
     if set(payload) != expected:
         raise ValueError("Unexpected command fields")
@@ -301,8 +324,12 @@ def validate_command(snapshot: dict, payload: dict) -> None:
             raise ValueError("Display brightness requires a supported C1000 transport and level 1, 2 or 3")
     elif command == "set-display-timeout":
         seconds = integer(payload["seconds"], "Screen timeout")
-        if not display_timeout_options(snapshot) or seconds not in DISPLAY_TIMEOUT_OPTIONS.values():
-            raise ValueError("Screen timeout requires C1000 Gen 2 native MQTT and a supported second value")
+        if seconds not in [DISPLAY_TIMEOUT_OPTIONS[option] for option in display_timeout_options(snapshot)]:
+            raise ValueError("Screen timeout requires a supported C1000 transport and second value")
+    elif command == "set-light":
+        mode = integer(payload["mode"], "Light mode")
+        if mode not in [LIGHT_MODE_OPTIONS[option] for option in light_mode_options(snapshot)]:
+            raise ValueError("Light control requires supported original C1000 telemetry and mode 0 through 4")
     elif command == "set-discharge-floor":
         lower = integer(payload["lower"], "Discharge floor")
         if f"{lower}%" not in discharge_floor_options(snapshot):

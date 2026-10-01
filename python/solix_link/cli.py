@@ -14,6 +14,7 @@ from .client import SolixMonitor, discover
 from .config import DEFAULT_CONFIG, DeviceConfig, load_config, save_config
 from .manager import MonitorService
 from .protocol import C1000_PRIME_SETTINGS, Model
+from .c1000_capabilities import original_prime_commands
 
 
 def parser() -> argparse.ArgumentParser:
@@ -235,7 +236,7 @@ async def _set(args: argparse.Namespace) -> None:
     device = next((saved for saved in load_config(args.config) if saved.name == args.name), None)
     if device is None:
         raise ValueError(f"Unknown configured device: {args.name}")
-    if device.model == Model.C1000 and device.protocol == "prime" and args.command not in ("set-charge-power", "set-device-timeout", "set-display-brightness"):
+    if device.model == Model.C1000 and device.protocol == "prime" and args.command not in original_prime_commands():
         raise ValueError("This control is not verified for original C1000 Prime firmware")
     legacy_setting = (device.protocol == "legacy" and device.model in (Model.C300, Model.C1000) and args.command in (
         "set-display-timeout", "set-charge-power", "set-ac-output", "set-light",
@@ -244,7 +245,7 @@ async def _set(args: argparse.Namespace) -> None:
                        and args.command in ("set-device-timeout", "set-temperature-unit", "set-fast-charge",
                                             "set-ac-power-saving", "set-dc-power-saving"))
     prime_setting = device.protocol == "prime" and (
-        (device.model == Model.C1000 and args.command in ("set-charge-power", "set-device-timeout", "set-display-brightness"))
+        (device.model == Model.C1000 and args.command in original_prime_commands())
         or (device.model == Model.C1000_GEN2 and args.command in ("set-limits", "set-display-timeout", "set-charge-power", "set-fast-charge", "set-charge-cap", "set-device-timeout"))
         or (device.model == Model.C2000_GEN2 and args.command in ("set-display-timeout", "set-charge-power", "set-charge-cap"))
     )
@@ -342,11 +343,11 @@ async def _wifi_setup(args: argparse.Namespace) -> None:
     device = next((saved for saved in load_config(args.config) if saved.name == args.name), None)
     if device is None:
         raise ValueError(f"Unknown configured device: {args.name}")
-    original = device.model == Model.C1000 and device.protocol == "legacy"
+    original = device.model == Model.C1000 and device.protocol in ("legacy", "prime")
     if not original and not (device.protocol == "prime" and device.model in (Model.C1000_GEN2, Model.C2000_GEN2)):
-        raise ValueError("Wi-Fi setup requires an original C1000 legacy or Gen 2 Prime station")
+        raise ValueError("Wi-Fi setup requires an original C1000 legacy/Prime or Gen 2 Prime station")
     account_id = args.account_id if args.account_id is not None else device.client_id
-    if original and account_id is None:
+    if original and device.protocol == "legacy" and account_id is None:
         from dataclasses import replace
         import secrets
         account_id = secrets.token_hex(20)

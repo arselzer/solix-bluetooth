@@ -5,9 +5,9 @@ from homeassistant.const import EntityCategory
 from homeassistant.core import callback
 from homeassistant.exceptions import HomeAssistantError
 
-from .api import (DEVICE_TIMEOUT_OPTIONS, DISPLAY_BRIGHTNESS_OPTIONS, DISPLAY_TIMEOUT_OPTIONS,
+from .api import (DEVICE_TIMEOUT_OPTIONS, DISPLAY_BRIGHTNESS_OPTIONS, DISPLAY_TIMEOUT_OPTIONS, LIGHT_MODE_OPTIONS,
                   binary_state, device_timeout_options, discharge_floor_options, display_brightness_options,
-                  display_timeout_options, native_gen2, temperature_unit_supported)
+                  display_timeout_options, light_mode_options, native_gen2, temperature_unit_supported)
 from .coordinator import SolixConfigEntry
 from .entity import SolixEntity
 
@@ -18,9 +18,11 @@ SETTINGS = {
     "device_timeout_minutes": "set-device-timeout",
     "display_brightness": "set-display-brightness",
     "display_timeout_seconds": "set-display-timeout",
+    "light_mode": "set-light",
 }
 DISPLAY_OPTIONS = {"display_brightness": (DISPLAY_BRIGHTNESS_OPTIONS, display_brightness_options, "level"),
-                   "display_timeout_seconds": (DISPLAY_TIMEOUT_OPTIONS, display_timeout_options, "seconds")}
+                   "display_timeout_seconds": (DISPLAY_TIMEOUT_OPTIONS, display_timeout_options, "seconds"),
+                   "light_mode": (LIGHT_MODE_OPTIONS, light_mode_options, "mode")}
 DESCRIPTIONS = (
     SelectEntityDescription(key="temperature_unit_fahrenheit", translation_key="temperature_unit",
                             entity_category=EntityCategory.CONFIG),
@@ -31,6 +33,8 @@ DESCRIPTIONS = (
     SelectEntityDescription(key="display_brightness", translation_key="display_brightness",
                             entity_category=EntityCategory.CONFIG),
     SelectEntityDescription(key="display_timeout_seconds", translation_key="display_timeout",
+                            entity_category=EntityCategory.CONFIG),
+    SelectEntityDescription(key="light_mode", translation_key="light_mode",
                             entity_category=EntityCategory.CONFIG),
 )
 

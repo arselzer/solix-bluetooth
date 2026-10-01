@@ -22,7 +22,7 @@ def test_device_credential_matches_openssl_vector():
     assert decrypt_device_credential(SERIAL, CIPHERTEXT) == PLAINTEXT
 
 
-@pytest.mark.parametrize("serial", ["", "short", "A" * 16, "A" * 18, "ä" * 17])
+@pytest.mark.parametrize("serial", [None, "", "short", "A" * 15, "A" * 18, "ä" * 17])
 def test_reject_unobserved_serial_formats(serial):
     with pytest.raises(ValueError, match="serial"):
         encrypt_device_credential(serial, PLAINTEXT)

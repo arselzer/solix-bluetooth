@@ -19,6 +19,9 @@ CONTROLS = (
     ("display_brightness", "404c", "0101", "display_brightness", 1),
     ("ac_charging_power", "4044", "028403", "ac_charging_power_limit_w", 900),
     ("device_timeout", "4045", "020000", "device_timeout_minutes", 0),
+    ("display_timeout", "4046", "023c00", "display_timeout_seconds", 60),
+    ("light_mode", "404f", "0101", "light_mode", 1),
+    ("temperature_unit_fahrenheit", "4050", "0101", "temperature_unit_fahrenheit", True),
 )
 
 
@@ -51,8 +54,8 @@ def test_prime_wire_uses_verified_original_body_and_gcm_timestamp(monkeypatch, s
 
 
 @pytest.mark.parametrize("setting,value", [
-    ("ac_output_enabled", False), ("dc_output_enabled", True), ("display_timeout", 60),
-    ("light_mode", 1), ("temperature_unit_fahrenheit", True), ("fast_charge_enabled", True),
+    ("ac_output_enabled", False), ("dc_output_enabled", True), ("display_enabled", False),
+    ("fast_charge_enabled", True),
     ("ac_power_saving_mode_enabled", False), ("dc_power_saving_mode_enabled", False),
 ])
 def test_original_prime_unverified_controls_are_rejected(setting, value):
@@ -66,6 +69,8 @@ def test_original_prime_unverified_controls_are_rejected(setting, value):
     ("display_brightness", 0), ("display_brightness", True), ("display_brightness", 4),
     ("ac_charging_power", True), ("ac_charging_power", 150), ("device_timeout", False),
     ("device_timeout", 90),
+    ("display_timeout", True), ("display_timeout", 25), ("light_mode", False),
+    ("light_mode", 5), ("temperature_unit_fahrenheit", 1),
 ])
 def test_prime_invalid_control_values_fail_before_transport(setting, value):
     monitor = SolixMonitor("AA:BB:CC:DD:EE:04", model=Model.C1000, protocol="prime")
@@ -113,7 +118,8 @@ def test_prime_sdk_requires_fresh_protected_settings_and_complete_flags(
                     elif changed and problem == "unknown_flag_changed":
                         flags = FLAGS[:-1] + bytes((FLAGS[-1] ^ 1,))
                     if changed and problem == "protected_changed":
-                        state["light_mode"] = 1
+                        protected = "light_mode" if metric != "light_mode" else "display_brightness"
+                        state[protected] = BASELINE[protected] + 1
                     if changed and problem == "reverted_final" and status_after_write >= 2:
                         state[metric] = BASELINE[metric]
                     if problem == "stale_baseline" or (changed and problem == "stale_final" and status_after_write >= 2):
@@ -140,8 +146,14 @@ def test_prime_sdk_requires_fresh_protected_settings_and_complete_flags(
             apply = monitor.set_c1000_setting(setting, value)
         elif setting == "ac_charging_power":
             apply = monitor.set_ac_charging_power(value)
-        else:
+        elif setting == "device_timeout":
             apply = monitor.set_device_timeout(value)
+        elif setting == "display_timeout":
+            apply = monitor.set_display_timeout(value)
+        elif setting == "light_mode":
+            apply = monitor.set_light_mode(value)
+        else:
+            apply = monitor.set_temperature_unit(value)
         if problem == "matching":
             result = await apply
             assert all(result[key] == expected for key, expected in {**BASELINE, metric: value}.items())

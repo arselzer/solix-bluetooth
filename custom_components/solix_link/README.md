@@ -46,11 +46,23 @@ Authorization header. Treat HA configuration backups as containing credentials.
   does not expose a charging-power number for it. Reserve limits follow the
   current charge caps; native MQTT supports reserve on both Gen 2 models.
   Original C1000 support adds no charge-cap/reserve controls.
-- Selects: original C1000 legacy BLE and C1000 Gen 2 native MQTT temperature
+- Selects: original C1000 legacy/Prime BLE/native MQTT and C1000 Gen 2 native MQTT temperature
   display (Celsius/Fahrenheit); C1000 Gen 2 native MQTT lower discharge limit
   (1%, 5%, 10%, 15%, 20%). Available limits leave at least
   five percentage points below the current backup reserve; selecting a limit
   does not adjust the reserve. The temperature sensor continues to report Celsius.
+- Original C1000 Prime/native MQTT/main 1.7.1 configuration selects also expose brightness,
+  screen timeout (20/30/60/300/1800 seconds) and Light (Off/Low/Medium/High/SOS).
+  Brightness 1/2, screen timeout 30/60 s, Off/Low and Celsius/Fahrenheit passed
+  live readback/restoration with AC enabled and DC disabled. Other enum values
+  have synthetic/range coverage. The gateway protects all eleven fresh settings
+  and complete `F8` flags. Fast charge, Smart and output switches remain unavailable
+  on original Prime/native; generated-ID pairing remains unverified.
+  Native MQTT/radio 0.3.3.0 confirmed all six preferences with 12 writes,
+  restoration and three matching final samples. Its gateway requires fresh
+  telemetry; a packaged AP service/SDK repeat passed 14 writes and restoration.
+  It advertises only those commands. Missing mains, battery activity
+  and supply-source fields remain unknown. HA runtime deployment was not tested.
 - Display configuration selects: C1000 Gen 2 native MQTT brightness
   (Low/Medium/High) and screen timeout (Never, 10/20/30/60/300/1800 seconds).
   Brightness 1→2→3→1 and screen timeout 30→60→30 passed fresh readback and
@@ -60,7 +72,7 @@ Authorization header. Treat HA configuration backups as containing credentials.
   fresh binary readback. Off clears output-recovery bookkeeping; turning On
   does not restore that transient state. The 1→0→1 stored-setting trial passed
   on main 1.1.4.9 while AC output stayed enabled.
-- Device Timeout select: original C1000 legacy BLE and C1000 Gen 2 Prime/native
+- Device Timeout select: original C1000 legacy/Prime BLE/native MQTT and C1000 Gen 2 Prime/native
   MQTT, when advertised with fresh integer readback. Choices are Never and
   30/60/120/240/360/720/1440 minutes. Never disables this timeout; independent
   sleep behavior can still interrupt access. Finite choices may turn the

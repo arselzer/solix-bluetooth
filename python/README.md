@@ -4,13 +4,15 @@ Async Python monitoring over local Bluetooth, with a CLI, HTTP server, and
 MQTT bridge. It uses no cloud account.
 
 An experimental **isolated Wi-Fi/native MQTT endpoint** is also available for
-C1000/C2000 Gen 2: `ap-service-init`, `ap-service-run`, `ap-service-status`, `ap-service-readiness`,
+original C1000 and C1000/C2000 Gen 2: `ap-service-init`, `ap-service-run`, `ap-service-status`, `ap-service-readiness`,
 `ap-service-set-charge-power`, `ap-service-set-charge-cap`, `ap-service-set-reserve`, `ap-service-set-tou`,
 `ap-service-grid` and `ap-service-serve`. It packages the
 local API, NTP and mTLS interception workflow, without an internet route.
 One [shared AP](../docs/multiple-ap-devices.md) supports multiple registered
-Gen 2 stations with terminal/browser/API selection.
-C1000 uses its generated BLE pairing ID for local MQTT; C2000 generated-ID
+stations with terminal/browser/API selection. Original C1000 exposes only its
+six validated preferences; controller readiness and Gen 2 tariff/charge-cap
+controls are unavailable on that model.
+C1000 Gen 2 uses its generated BLE pairing ID for local MQTT; C2000 generated-ID
 MQTT remains unverified. See [C1000 findings](../docs/c1000-local-mqtt.md).
 Monitoring is the default;
 native charging writes require `--allow-control` and fresh confirmation.
@@ -26,7 +28,7 @@ such as `monitor`, `serve` and `ap-service-status` keep their scripted behavior.
 | Model profile | Monitoring | Controls |
 | --- | --- | --- |
 | `c300` — C300/C300X AC | C300X tested live; C300 sibling uses the reference map | AC output, light, charging-power limit, screen timeout verified |
-| `c1000` — original A1761 | Live monitoring and restored control cycles, version code 151 | Charging/output/light/display/device timeout, temperature units, fast charge and AC/DC Smart modes; no direct local MQTT yet |
+| `c1000` — original A1761 | Legacy 1.5.1, explicit Prime 1.7.1 and native MQTT/radio 0.3.3.0 tested live | Legacy controls; Prime/native charging power, brightness, device/screen timeout, light and temperature unit |
 | `c1000_gen2` — A1763 | BLE and native MQTT tested live | Charge limits/power, display/device timeout, fast charge; native reserve, tariffs/grid return, temperature/alert, brightness/screen timeout, port memory and guarded discharge floor |
 | `c2000_gen2` — A1783 | Tested live | Upper charge cap, charging power, screen timeout; native reserve, all-day Peak and confirmed grid return |
 
@@ -218,15 +220,26 @@ solix-link monitor --name c1000
 solix-link set-charge-power --name c1000 --watts 900
 solix-link set-display-brightness --name c1000 --level 1
 solix-link set-device-timeout --name c1000 --minutes 0
+solix-link set-display-timeout --name c1000 --seconds 60
+solix-link set-light --name c1000 --mode low
+solix-link set-temperature-unit --name c1000 --unit fahrenheit
 ```
 
 The default stays legacy; firmware advertisements do not select the transport.
-On Prime 1.7.1 only charging power, brightness and Device Timeout are enabled:
-900/1000 W, brightness 1/2 and timeout 720/0 minutes were restored live. The
-SDK requires all eleven settings and the complete 21-byte `F8` flags freshly
+Prime 1.7.1 exposes six settings: charging power, brightness, Device Timeout,
+screen timeout, light and temperature unit. Live restoration covered 900/1000 W,
+brightness 1/2, Device Timeout 720/0 minutes, screen timeout 30/60 seconds,
+light Off/Low and Celsius/Fahrenheit. The three added preferences also passed
+the public SDK without packet overrides. Other enum values have packet/range
+tests rather than live confirmation. Original screen timeout choices are
+20/30/60/300/1800 seconds; the Gen 2 native-only Never/10 s options are excluded.
+The SDK requires all eleven settings and the complete 21-byte `F8` flags freshly
 before and after each write, protecting other settings and unknown flags.
 Failure after a write can mean the setting changed; inspect fresh status before
-retrying. Other original Prime controls and direct local MQTT remain unavailable.
+retrying. Original Prime output switches, fast charge and Smart modes remain
+unavailable. CLI, guided menu, TUI, HTTP gateway, MQTT bridge
+and the browser/HA controls use the supported capabilities; no default changes
+or automatic write retries are made.
 The `pair --model c1000` workflow accepts existing IDs; generating and rebinding
 an original's ID has not yet been verified. See the
 [update capture](../docs/c1000-original-update-network.md).
@@ -237,10 +250,30 @@ values and `ffff`; zero AC input power does not establish missing mains.
 See [original C1000 support](../docs/c1000-original-protocol.md) and
 [chain validation](../docs/c1000-chain-validation.md) for tested values and uncertainty.
 Original C1000 `wifi-join` / `wifi-setup --country-code AT` also join an isolated
-WPA2 AP and replace the radio API endpoint. The CLI privately saves a generated
+WPA2 AP and replace the radio API endpoint. The legacy CLI privately saves a generated
 local provisioning ID when needed. See [the network trial](../docs/c1000-original-wifi-validation.md).
-The original C1000 can use the BLE-to-MQTT bridge; its own direct local MQTT
-provisioning and connection remain unverified.
+On original C1000 main **1.7.1 / radio 0.3.3.0**, explicit Prime provisioning,
+local credential bootstrap, mutual TLS, MQTT subscription and fresh `0405`
+telemetry passed live with the existing app pairing ID. Native validation
+covered all six preferences above: **12 writes with restoration, 18 fresh
+snapshots and three matching final samples**, preserving all eleven settings,
+the entire `F8` flags and AC output enabled. The radio suppresses setter ACKs;
+the backend sends each write once and confirms fresh status. This does not
+measure charging-rate enforcement or light brightness.
+The packaged AP service/public SDK subsequently repeated all six roundtrips
+(**14 writes**, including timeout checks), restored the same baseline and kept
+AC enabled. With Never selected, a 30-second observation and local server
+stop/start passed; the station reconnected in about 2.26 seconds without
+reprovisioning. This short check does not establish indefinite availability:
+other sleep behavior can still interrupt access.
+A saved paired Prime profile can use `ap-service-init` / `ap-service-add`;
+its serial file must contain **16** characters (Gen 2 uses 17).
+`ap-service-run --provision` passes the profile's country code, including
+the tested `AT`, to model-specific Wi-Fi provisioning. Use
+`ap-service-set-light --directory /private/ap --name original --mode low`
+for the original-only light control. The HTTP/browser/HA gateway exposes the
+same six commands when enabled. Supply source, mains connection and battery
+activity remain unknown when their telemetry fields are absent.
 
 ### Gen 2 telemetry and diagnostics
 

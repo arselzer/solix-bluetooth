@@ -82,11 +82,44 @@ and the selected station's advertised capability remain required. The native
 brightness setter also requires Standard/no active tariff and an inactive
 clock screen with no transfer in progress.
 
-Original C1000 BLE profiles expose `set-temperature-unit`/`fahrenheit`,
+Original C1000 **legacy** BLE profiles expose `set-temperature-unit`/`fahrenheit`,
 `set-fast-charge`/`enabled`, `set-ac-power-saving`/`enabled`, and
 `set-dc-power-saving`/`enabled`. All values are booleans. Smart mode can
 automatically stop an output at low load; these configuration controls
 do not send an output-switch command. See the [physical trials](c1000-preferences-validation.md).
+
+Original C1000 **Prime/native MQTT 1.7.1** advertises only these six controls:
+
+| Command | Exact field | Values |
+| --- | --- | --- |
+| `set-charge-power` | integer `watts` | 100–1000 W in 100 W steps |
+| `set-display-brightness` | integer `level` | 1 Low / 2 Medium / 3 High |
+| `set-device-timeout` | integer `minutes` | 0 Never, 30, 60, 120, 240, 360, 720, 1440 |
+| `set-display-timeout` | integer `seconds` | 20, 30, 60, 300, 1800 |
+| `set-light` | integer `mode` | 0 Off / 1 Low / 2 Medium / 3 High / 4 SOS |
+| `set-temperature-unit` | boolean `fahrenheit` | `true` / `false` |
+
+Live restoration covered 900/1000 W, brightness 1/2, Device Timeout 720/0 min,
+screen timeout 30/60 s, light Off/Low and Celsius/Fahrenheit. Every Prime write
+requires all eleven settings and the full 21-byte `F8` flags freshly before and
+afterward; protected fields and unknown flags must remain unchanged. AC was
+enabled and DC disabled throughout the recorded snapshots. Other values have
+synthetic/range coverage. Fast charge, Smart modes and AC/DC switches stay
+unavailable on this Prime profile. The browser and HA expose matching settings,
+including a Light select; the temperature sensor continues reporting Celsius.
+Original native MQTT/radio 0.3.3.0 confirmed these six settings with 12 writes,
+restoration, 18 fresh snapshots and three matching final samples. Every native
+write is sent once and confirmed through fresh original status, preserving all
+eleven settings and the complete `F8` flags. No Gen 2 charging caps, reserve,
+tariffs, port memory, off-grid alert or fast-charge controls are offered on it.
+The packaged AP service/public SDK subsequently passed all six roundtrips
+(14 writes with restoration). A 30-second Never check and local server restart
+also passed, reconnecting in about 2.26 seconds without BLE reprovisioning;
+independent sleep behavior and long-term availability remain unproven.
+Generated-ID pairing remains unverified. Missing mains, battery activity and
+supply-source fields stay unknown; standalone HA contracts do not establish
+Home Assistant runtime compatibility.
+
 Each period has `tariff`, `start_hour`, `end_hour`. Fields/types are strict;
 no arbitrary opcode, AC-output, timer or firmware command is exposed.
 

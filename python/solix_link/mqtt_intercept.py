@@ -20,6 +20,23 @@ from .protocol import DATA_RESPONSE, Model, decode_telemetry, parse_packet, pars
 from .tou import PowerFlowTimeout, TouPeriod, periods_from_d9, power_flow, validate_periods
 
 
+def _original_settings(payload: bytes) -> tuple[dict, bytes]:
+    """Require a complete report; cached/partial telemetry cannot guard a write."""
+    metrics, raw = decode_telemetry(payload, Model.C1000)
+    required = ("ac_output_enabled", "dc_output_enabled", "ac_charging_power_limit_w",
+                "device_timeout_minutes", "display_timeout_seconds", "display_brightness", "light_mode",
+                "temperature_unit_fahrenheit", "ac_fast_charge_enabled", "ac_power_saving_mode_enabled",
+                "dc_power_saving_mode_enabled")
+    if (any(type(metrics.get(key)) is not int for key in required)
+            or any(metrics[key] not in (0, 1) for key in required
+                   if key.endswith("_enabled") or key == "temperature_unit_fahrenheit")):
+        raise RuntimeError("Missing valid fresh original C1000 settings")
+    flags = raw.get(0xF8)
+    if not isinstance(flags, bytes) or len(flags) != 21 or flags[0] != 4:
+        raise RuntimeError("Missing complete original C1000 F8 flags")
+    return {key: metrics[key] for key in required}, flags
+
+
 def mqtt_packet(first: int, body: bytes) -> bytes:
     remaining = len(body)
     if remaining > 131072:
@@ -118,7 +135,7 @@ class LocalMqttServer:
                 "available": bool(connected and self.last_seen and time.time() - self.last_seen < 30),
                 "last_seen_timestamp": self.last_seen, "error": self.error, "metrics": self.metrics.copy(),
                 "control_enabled": self.allow_control,
-                "power_flow": power_flow(self.metrics) if connected and self.last_seen and time.time() - self.last_seen < 30 else "unknown"}
+                "power_flow": power_flow(self.metrics) if self.config.model != Model.C1000 and connected and self.last_seen and time.time() - self.last_seen < 30 else "unknown"}
 
     def record(self, event: str, **fields) -> None:
         # Full protocol evidence is deliberately kept only in this private file.
@@ -189,6 +206,8 @@ class LocalMqttServer:
 
     async def set_ac_charging_power(self, watts: int) -> dict:
         request = self.commands.ac_charging_power(watts)  # Validate before I/O.
+        if self.config.model == Model.C1000:
+            return await self._set_original_setting(request, "ac_charging_power_limit_w", watts)
         if self.config.model == Model.C1000_GEN2:
             return await self._set_c1000_setting(request, "ac_charging_power_limit_w", watts)
         if not self.allow_control:
@@ -242,6 +261,8 @@ class LocalMqttServer:
 
     async def set_temperature_unit(self, fahrenheit: bool) -> dict:
         request = self.commands.temperature_unit(fahrenheit)  # Model/type guard before I/O.
+        if self.config.model == Model.C1000:
+            return await self._set_original_setting(request, "temperature_unit_fahrenheit", int(fahrenheit))
         return await self._set_c1000_boolean(request, "temperature_unit_fahrenheit", fahrenheit)
 
     async def set_off_grid_alert(self, enabled: bool) -> dict:
@@ -250,6 +271,8 @@ class LocalMqttServer:
 
     async def set_device_timeout(self, minutes: int) -> dict:
         request = self.commands.device_timeout(minutes)
+        if self.config.model == Model.C1000:
+            return await self._set_original_setting(request, "device_timeout_minutes", minutes)
         return await self._set_c1000_setting(request, "device_timeout_minutes", minutes)
 
     async def set_fast_charge_enabled(self, enabled: bool) -> dict:
@@ -258,11 +281,53 @@ class LocalMqttServer:
 
     async def set_display_brightness(self, level: int) -> dict:
         request = self.commands.display_brightness(level)
+        if self.config.model == Model.C1000:
+            return await self._set_original_setting(request, "display_brightness", level)
         return await self._set_c1000_setting(request, "display_brightness", level)
 
     async def set_display_timeout(self, seconds: int) -> dict:
         request = self.commands.display_timeout(seconds)
+        if self.config.model == Model.C1000:
+            return await self._set_original_setting(request, "display_timeout_seconds", seconds)
         return await self._set_c1000_setting(request, "display_timeout_seconds", seconds)
+
+    async def set_light_mode(self, mode: int) -> dict:
+        """Set original C1000 light mode without writing output switches."""
+        request = self.commands.light_mode(mode)
+        return await self._set_original_setting(request, "light_mode", mode)
+
+    async def _fresh_original_settings(self, connection) -> tuple[dict, bytes]:
+        reply = await connection.request(self.commands.status())
+        if not reply or reply[0] != 0:
+            raise RuntimeError("Original C1000 status request failed")
+        return _original_settings(reply[1:])
+
+    async def _set_original_setting(self, request: NativeMqttRequest, metric: str, value: int) -> dict:
+        if self.config.model != Model.C1000 or metric not in (
+                "ac_charging_power_limit_w", "device_timeout_minutes", "display_brightness",
+                "display_timeout_seconds", "light_mode", "temperature_unit_fahrenheit"):
+            raise ValueError("Unsupported original C1000 native setting")
+        async with self._control_lock:
+            connection = self._control_connection()
+            before, flags = await self._fresh_original_settings(connection)
+            expected = {**before, metric: value}
+            try:
+                # Connected original firmware suppresses setter ACKs. Publish
+                # once, then confirm via two explicit full status requests.
+                await connection.send_original_setting(request)
+                for _ in range(2):
+                    after, after_flags = await self._fresh_original_settings(connection)
+                    connection.check_original_setting_response()
+                    if after != expected or after_flags != flags:
+                        raise RuntimeError("Protected original C1000 settings or F8 flags changed")
+            except (RuntimeError, TimeoutError, ConnectionError, OSError) as error:
+                raise RuntimeError("Original C1000 confirmation failed; the setting may have changed") from error
+            except asyncio.CancelledError:
+                connection.writer.close()
+                raise
+            finally:
+                connection.finish_original_setting()
+            return self.snapshot()
 
     async def set_port_memory(self, enabled: bool) -> dict:
         request = self.commands.port_memory(enabled)
@@ -597,6 +662,8 @@ class _Connection:
         self.connected = False
         self.subscribed = False
         self.pending: tuple[str, asyncio.Future] | None = None
+        self._response_aliases: tuple[str, ...] = ()
+        self._original_ack: tuple[str, bytes | None] | None = None
         self.lock = asyncio.Lock()
         self.poller: asyncio.Task | None = None
         self._command_ready_at = 0.0
@@ -630,6 +697,7 @@ class _Connection:
                     raise ConnectionError("Station disconnected during startup")
             future = asyncio.get_running_loop().create_future()
             self.pending = (request.response_command, future)
+            self._response_aliases = request.response_aliases
             topic = request.topic.encode()
             try:
                 self.server.record("request", payload=request.payload)
@@ -643,6 +711,35 @@ class _Connection:
                 raise
             finally:
                 self.pending = None
+                self._response_aliases = ()
+
+    async def send_original_setting(self, request: NativeMqttRequest) -> None:
+        """Send one verified original setter, accepting an optional ACK only."""
+        if (self.server.config.model != Model.C1000 or request.response_aliases
+                or request.response_command not in ("0844", "0845", "0846", "084c", "084f", "0850")):
+            raise ValueError("Unsupported original C1000 native setting")
+        async with self.lock:
+            if self.writer.is_closing() or not self.subscribed:
+                raise ConnectionError("Station command subscription is unavailable")
+            if self._original_ack is not None:
+                raise RuntimeError("Original setting confirmation is already active")
+            self._original_ack = (request.response_command, None)
+            topic = request.topic.encode()
+            self.server.record("request", payload=request.payload)
+            try:
+                await self.send(0x30, len(topic).to_bytes(2, "big") + topic + request.payload.encode())
+            except (asyncio.CancelledError, OSError):
+                self.writer.close()
+                raise
+
+    def check_original_setting_response(self) -> None:
+        if self._original_ack is not None:
+            response = self._original_ack[1]
+            if response is not None and (not response or response[0] != 0):
+                raise RuntimeError("Station rejected original native setting")
+
+    def finish_original_setting(self) -> None:
+        self._original_ack = None
 
     async def poll(self) -> None:
         try:
@@ -665,7 +762,7 @@ class _Connection:
                 if connect_flags & 1 or (connect_flags & 0x18) == 0x18 or (not connect_flags & 4 and connect_flags & 0x38) or (connect_flags & 0x40 and not connect_flags & 0x80):
                     raise ValueError("Invalid MQTT CONNECT flags")
                 _client_id, end = mqtt_string(body, pos + 4, allow_zero_client_id=(
-                    self.server.config.model == Model.C1000_GEN2 and bool(connect_flags & 2)))
+                    self.server.config.model in (Model.C1000, Model.C1000_GEN2) and bool(connect_flags & 2)))
                 if not _client_id and body[pos + 4:pos + 6] == b"\x00\x11":
                     self.server.record("zero_filled_client_id", length=17)
                 if connect_flags & 4:
@@ -737,8 +834,28 @@ class _Connection:
                         self.server.last_seen = time.time()
                         self.server.error = None
                         self.server.changed()
-                    if self.pending and frame.command.hex() == self.pending[0] and not self.pending[1].done():
+                    command = frame.command.hex()
+                    if self._original_ack and command == self._original_ack[0]:
+                        previous = self._original_ack[1]
+                        # A duplicate success must not erase an explicit
+                        # rejection received during this confirmation window.
+                        if previous is None or (previous and previous[0] == 0):
+                            self._original_ack = (command, frame.payload)
+                    if self.pending and command == self.pending[0] and not self.pending[1].done():
                         self.pending[1].set_result(frame.payload)
+                    elif (self.server.config.model == Model.C1000 and update is not None
+                          and command == "0405" and command in self._response_aliases and self.pending
+                          and self.pending[0] == "0840" and not self.pending[1].done()):
+                        # The connected original controller defers 0040 into a
+                        # full 0405 report. Normalize it to the success-prefixed
+                        # direct reply shape, after identity/retained checks and
+                        # telemetry decoding. It cannot acknowledge a write.
+                        try:
+                            _original_settings(frame.payload)
+                        except RuntimeError:
+                            self.server.record("incomplete_original_status")
+                        else:
+                            self.pending[1].set_result(b"\x00" + frame.payload)
                 except ValueError:
                     self.server.record("decode_error")
             elif kind == 12 and flags == 0 and not body:

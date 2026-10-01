@@ -10,6 +10,7 @@ from typing import Any
 from .client import SolixMonitor
 from .config import DeviceConfig
 from .protocol import Model
+from .c1000_capabilities import original_prime_commands, original_prime_operation_supported
 from .commands import validate_command
 from .tou import power_flow
 
@@ -97,7 +98,7 @@ class MonitorService:
         device = self.devices.get(name)
         if device is None:
             raise ValueError("Unknown device")
-        if device.model == Model.C1000 and device.protocol == "prime" and setting not in ("ac_charging_power", "device_timeout", "display_brightness"):
+        if device.model == Model.C1000 and device.protocol == "prime" and not original_prime_operation_supported(setting):
             raise ValueError("This control is not verified for original C1000 Prime firmware")
         legacy_setting = (device.protocol == "legacy" and device.model in (Model.C300, Model.C1000) and setting in (
             "display_timeout", "ac_charging_power", "ac_output", "light_mode",
@@ -108,7 +109,7 @@ class MonitorService:
         if setting == "charge_cap" and device.model != Model.C2000_GEN2:
             raise ValueError("Charge-cap setting is verified only on C2000 Gen 2 Prime")
         prime_setting = device.protocol == "prime" and (
-            (device.model == Model.C1000 and setting in ("ac_charging_power", "device_timeout", "display_brightness"))
+            (device.model == Model.C1000 and original_prime_operation_supported(setting))
             or (device.model == Model.C1000_GEN2 and setting in ("charge_limits", "ac_charging_power", "display_timeout", "fast_charge", "device_timeout"))
             or (device.model == Model.C2000_GEN2 and setting in ("charge_cap", "ac_charging_power", "display_timeout"))
         )
@@ -164,7 +165,7 @@ class MonitorService:
         device = self.devices[name]
         if device.model in (Model.C300, Model.C1000):
             if device.protocol != "legacy":
-                return ["set-charge-power", "set-device-timeout", "set-display-brightness"] if device.model == Model.C1000 else []
+                return original_prime_commands() if device.model == Model.C1000 else []
             return ["set-charge-power", "set-display-timeout", "set-light"] + (
                 ["set-device-timeout", "set-temperature-unit", "set-fast-charge", "set-ac-power-saving",
                  "set-dc-power-saving"] if device.model == Model.C1000 and device.protocol == "legacy" else [])

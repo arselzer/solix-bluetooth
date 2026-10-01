@@ -24,7 +24,7 @@ from .protocol import Model, timezone_confer
 
 @dataclass(frozen=True)
 class APServiceConfig:
-    """One Gen 2 station and a dedicated Wi-Fi adapter; secrets stay out of repr."""
+    """One supported station and a dedicated adapter; secrets stay out of repr."""
 
     name: str
     interface: str
@@ -42,16 +42,17 @@ class APServiceConfig:
 
     def __post_init__(self) -> None:
         model = Model(self.model)
-        if model not in (Model.C1000_GEN2, Model.C2000_GEN2):
-            raise ValueError("AP service supports C1000 Gen 2 and C2000 Gen 2 only")
+        if model not in (Model.C1000, Model.C1000_GEN2, Model.C2000_GEN2):
+            raise ValueError("AP service supports original C1000 and C1000/C2000 Gen 2 only")
         object.__setattr__(self, "model", model)
         for value in (self.name, self.interface, self.phy, self.namespace):
             if not isinstance(value, str) or not re.fullmatch(r"[A-Za-z0-9_-]{1,32}", value):
                 raise ValueError("AP service names must contain only letters, digits, _ or -")
         if not re.fullmatch(r"[A-Z]{2}", self.country):
             raise ValueError("Country must be a two-letter regulatory code")
-        if not re.fullmatch(r"[A-Za-z0-9]{17}", self.device_serial):
-            raise ValueError("AP service requires the observed 17-character device serial")
+        serial_length = 16 if model == Model.C1000 else 17
+        if not isinstance(self.device_serial, str) or not re.fullmatch(rf"[A-Za-z0-9]{{{serial_length}}}", self.device_serial):
+            raise ValueError(f"AP service requires this model's observed {serial_length}-character device serial")
         if not re.fullmatch(r"[0-9a-fA-F]{40}", self.account_id):
             raise ValueError("AP service account ID must be 40 hexadecimal characters")
         if not self.ssid.isascii() or not 1 <= len(self.ssid) <= 32 or any(c in self.ssid for c in "\r\n\x00"):
@@ -67,7 +68,7 @@ class APServiceConfig:
 
     @property
     def product(self) -> str:
-        return "A1763" if self.model == Model.C1000_GEN2 else "A1783"
+        return {Model.C1000: "A1761", Model.C1000_GEN2: "A1763", Model.C2000_GEN2: "A1783"}[self.model]
 
     @property
     def api_url(self) -> str:

@@ -35,13 +35,13 @@ const floorValid = computed(() => {
 const displayTimes = computed(() => nativeC1000.value ? [0, 10, 20, 30, 60, 300, 1800]
   : props.station.model === 'c1000' ? [20, 30, 60, 300, 1800] : [30, 60]);
 const originalProfile = computed(() => props.station.model === 'c1000' && props.station.protocol === 'legacy');
-const originalPrimeProfile = computed(() => props.station.model === 'c1000' && props.station.protocol === 'prime');
+const originalPreferenceProfile = computed(() => props.station.model === 'c1000' && ['prime', 'native_mqtt'].includes(props.station.protocol ?? ''));
 const nativeC1000 = computed(() => props.station.model === 'c1000_gen2' && props.station.protocol === 'native_mqtt');
 const booleanReported = (key: string) => [0, 1].includes(numberMetric(props.station, key) ?? -1);
 const brightnesses = ['Low', 'Medium', 'High'];
 const brightnessReported = computed(() => [1, 2, 3].includes(numberMetric(props.station, 'display_brightness') ?? -1));
 const displayValid = computed(() => /^\d+$/.test(props.draft.seconds) && displayTimes.value.includes(Number(props.draft.seconds))
-  && (!nativeC1000.value || displayTimes.value.includes(numberMetric(props.station, 'display_timeout_seconds') ?? -1)));
+  && (!(nativeC1000.value || originalPreferenceProfile.value) || displayTimes.value.includes(numberMetric(props.station, 'display_timeout_seconds') ?? -1)));
 const portMemoryValid = computed(() => booleanReported('port_memory_enabled') && ['0', '1'].includes(props.draft.portMemory));
 const fastAvailable = computed(() => allowed('set-fast-charge') && (originalProfile.value
   || props.station.model === 'c1000_gen2' && ['prime', 'native_mqtt'].includes(props.station.protocol ?? '')));
@@ -49,7 +49,7 @@ const fastValid = computed(() => booleanReported('ac_fast_charge_enabled') && ['
   && (!nativeC1000.value || numberMetric(props.station, 'ac_input_connected') === 1)
   && (props.draft.fast === '0' || props.station.model !== 'c1000_gen2'
     || props.station.metrics.usage_mode === 'standard' && props.station.metrics.active_tariff === 'none'));
-const temperatureAvailable = computed(() => allowed('set-temperature-unit') && (originalProfile.value || nativeC1000.value));
+const temperatureAvailable = computed(() => allowed('set-temperature-unit') && (originalProfile.value || originalPreferenceProfile.value || nativeC1000.value));
 const savingPorts = ['ac', 'dc'] as const;
 const savingValid = (port: 'ac' | 'dc') => booleanReported(`${port}_power_saving_mode_enabled`)
   && ['0', '1'].includes(props.draft[port === 'ac' ? 'acSaving' : 'dcSaving']);
@@ -60,7 +60,7 @@ function powerSaving(port: 'ac' | 'dc') {
     'Power saving may automatically turn the output off at low load.', [enabled ? 'On' : 'Off', `Applies to the ${port.toUpperCase()} output`]);
 }
 const deviceTimeouts = [0, 30, 60, 120, 240, 360, 720, 1440];
-const timeoutProfile = computed(() => props.station.model === 'c1000' && ['legacy', 'prime'].includes(props.station.protocol ?? '')
+const timeoutProfile = computed(() => props.station.model === 'c1000' && ['legacy', 'prime', 'native_mqtt'].includes(props.station.protocol ?? '')
   || props.station.model === 'c1000_gen2' && ['prime', 'native_mqtt'].includes(props.station.protocol ?? ''));
 const timeoutAvailable = computed(() => timeoutProfile.value && allowed('set-device-timeout'));
 const timeoutReported = computed(() => {
@@ -79,6 +79,8 @@ function timeout() {
       'An already armed sleep timer may remain until normal wake or reset.']);
 }
 const lights = computed(() => props.station.model === 'c1000' ? ['Off', 'Low', 'Medium', 'High', 'SOS'] : ['Off', 'Low', 'Medium', 'High']);
+const lightReported = computed(() => Number.isInteger(numberMetric(props.station, 'light_mode'))
+  && Boolean(lights.value[numberMetric(props.station, 'light_mode') ?? -1]));
 const clock = computed(() => {
   if (!props.station.timezone_name) return 'Timezone unknown';
   try { return new Intl.DateTimeFormat([], { timeZone: props.station.timezone_name, hour: '2-digit', minute: '2-digit' }).format(new Date()); }
@@ -152,7 +154,7 @@ function addPeriod() {
         <div class="setting-input"><select id="display-timeout" v-model="draft.seconds" :disabled="!writable"><option v-for="seconds in displayTimes" :key="seconds" :value="String(seconds)">{{ seconds === 0 ? 'Never' : `${seconds} seconds` }}</option></select>
           <button class="secondary" :disabled="!writable || !displayValid" @click="propose({ command: 'set-display-timeout', seconds: Number(draft.seconds) }, 'Change screen timeout?', 'Set the display timeout.', [draft.seconds === '0' ? 'Never' : `${draft.seconds} seconds`])">Apply</button></div>
       </div>
-      <div v-if="(nativeC1000 || originalPrimeProfile) && allowed('set-display-brightness')" class="setting">
+      <div v-if="(nativeC1000 || originalPreferenceProfile) && allowed('set-display-brightness')" class="setting">
         <label for="display-brightness">Display brightness</label><p>Current {{ brightnesses[(numberMetric(station, 'display_brightness') ?? 0) - 1] ?? 'Not reported' }}</p>
         <div class="setting-input"><select id="display-brightness" v-model="draft.brightness" :disabled="!writable || !brightnessReported"><option v-for="(label, index) in brightnesses" :key="label" :value="String(index + 1)">{{ label }}</option></select>
           <button class="secondary" :disabled="!writable || !brightnessReported || !['1', '2', '3'].includes(draft.brightness)" @click="propose({ command: 'set-display-brightness', level: Number(draft.brightness) }, 'Change display brightness?', 'Set the saved display brightness level.', [brightnesses[Number(draft.brightness) - 1] ?? 'Not reported'])">Apply</button></div>
@@ -178,8 +180,8 @@ function addPeriod() {
       </div>
       <div v-if="allowed('set-light')" class="setting">
         <label for="light-mode">Light</label><p>Current {{ lights[numberMetric(station, 'light_mode') ?? -1] ?? 'Not reported' }}</p>
-        <div class="setting-input"><select id="light-mode" v-model="draft.light" :disabled="!writable"><option v-for="(light, mode) in lights" :key="mode" :value="String(mode)">{{ light }}</option></select>
-          <button class="secondary" :disabled="!writable || !lights[Number(draft.light)]" @click="propose({ command: 'set-light', mode: Number(draft.light) }, 'Change light mode?', 'Set the station light.', [lights[Number(draft.light)] ?? 'Off'])">Apply</button></div>
+        <div class="setting-input"><select id="light-mode" v-model="draft.light" :disabled="!writable || !lightReported"><option v-for="(light, mode) in lights" :key="mode" :value="String(mode)">{{ light }}</option></select>
+          <button class="secondary" :disabled="!writable || !lightReported || !lights[Number(draft.light)]" @click="propose({ command: 'set-light', mode: Number(draft.light) }, 'Change light mode?', 'Set the station light.', [lights[Number(draft.light)] ?? 'Off'])">Apply</button></div>
       </div>
       <div v-if="temperatureAvailable" class="setting">
         <label for="temperature-unit">Temperature display</label><p>Current {{ numberMetric(station, 'temperature_unit_fahrenheit') === 1 ? 'Fahrenheit' : numberMetric(station, 'temperature_unit_fahrenheit') === 0 ? 'Celsius' : 'Not reported' }}</p>

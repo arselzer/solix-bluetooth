@@ -35,8 +35,9 @@ The [app OTA capture audit](c1000-app-ota-capture-investigation.md) identifies
 candidate download/logging and encrypted-chunk paths. During the subsequent
 [isolated official update](c1000-original-update-network.md), the app reported
 installed **1.7.1** after Retry. Prime Bluetooth independently confirms that
-version, unchanged baseline settings and brightness/power/timeout round trips.
-A plaintext 1.7.1 image and its post-update radio version remain unrecovered.
+version and six restored BLE controls. The later [original native MQTT trial](c1000-original-mqtt-followup.md)
+confirmed main 1.7.1/radio 0.3.3.0 and the same six controls locally.
+A plaintext 1.7.1 main image remains unrecovered.
 
 ## Scope and evidence
 
@@ -276,8 +277,8 @@ manual and automatic activation, D9 readback and charging/BMS consumers. An
 active plan bypasses Peak/Mid-Peak charging suppression, uses the internal fast
 ceiling and requests effective upper/lower limits **100%/1%** while leaving
 saved power/caps/reserve unchanged. BMS zero-current allowance still prevents
-requested current. Manual disable works but invalidates overlapping automatic
-windows; D9 does not contain a complete backup of those windows. There is no
+requested current. Manual disable invalidates automatic windows covering the
+current UTC time, including disabled records; D9 cannot provide their complete backup. There is no
 public actuator or live validation for this override.
 
 The [LCD schedule audit](gen2-timer-plan-investigation.md) establishes that
@@ -370,8 +371,8 @@ C2000 controller support is unknown.
   A [packaged CLI follow-up](c2000-offpeak-grid-return.md) confirmed tariff-3
   return to grid before clearing Standard. Investigate persistent scheduling
   and reserve floors. C1000 Gen 2 now has its own
-  [native MQTT validation](c1000-local-mqtt.md); original C1000 bootstrap remains
-  unresolved. Do not substitute the different `4038` layout.
+  [native MQTT validation](c1000-local-mqtt.md); the updated original C1000
+  now has [native MQTT and six controls](c1000-original-mqtt-followup.md). Do not substitute the different `4038` layout.
 - Follow the [preference](gen2-preference-candidates.md),
   [LCD schedule](gen2-timer-plan-investigation.md) and
   [disaster-plan](gen2-disaster-plan-investigation.md) prerequisites before
@@ -379,12 +380,32 @@ C2000 controller support is unknown.
 - Continue [energy-unit calibration](gen2-energy-counter-investigation.md)
   using event timestamps and measured power, without relabeling raw counters
   as verified Wh.
-- Continue original-C1000 bootstrap and unvalidated Prime controls separately
-  from the verified monitoring/three settings. Recover a verified public image
-  before proposing local OTA.
+- Continue original-C1000 generated-ID setup and remaining Prime controls
+  separately from the verified six-control subset. Recover a verified public
+  1.7.1 image before proposing local OTA.
 - Obtain C2000 firmware evidence before assuming its controller can service
   the Modbus bridge. Keep its AC output enabled throughout any live work.
 
 The later [report lifecycle investigation](energy-report-lifecycle.md) traces
 analytics point 20001, report retry/completion and accounting persistence.
 Local C2000 report capture now confirms the known protobuf transport.
+
+## October 1: original native controls and charging/backup limits
+
+The original C1000 now joins the isolated AP, receives local credentials and
+establishes authenticated TLS/MQTT on main **1.7.1/radio 0.3.3.0**. Six controls
+passed changes and restoration. Actual main-1.5.9 instruction replay explains
+status routing and suppressed setter ACKs; installed-version readback supplies
+the live evidence. See [the native record](c1000-original-mqtt-followup.md).
+
+Two new original replays cover **87 charging-path cases** and **48 actual ACK
+cases**. Internal converter disable preserves the output bit in RAM, but no
+supported external force-discharge/bypass command was identified. A zero
+charging ceiling still takes the active charging-producer path. See
+[charging paths and ACK suppression](c1000-bypass-firmware-followup.md).
+
+**16 Gen 2 backup cases** show D9 omits dormant records and saved maximums.
+Manual disable invalidates automatic windows covering now, even with their
+switch off; future and expired windows survive. Complete record backup is
+required before a reversible backup-mode trial. See
+[persistence and complete readback](gen2-persistent-plan-followup.md).

@@ -1,6 +1,7 @@
 """Credential envelope used by the device's get_mqtt_info endpoint.
 
-Verified against a saved C1000 Gen 2 response for the client certificate/key;
+Verified on original C1000 radio 0.3.3.0 (16-character serial) and Gen 2
+stations (17-character serial) for the client certificate/key;
 the device response's root CA field remains plain PEM. This differs from the account
 API, which returns PEM directly. These helpers perform no network requests.
 The serial-derived key does not provide secrecy from someone with the serial.
@@ -16,12 +17,14 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
 
 def _cipher(device_serial: str) -> Cipher:
+    if not isinstance(device_serial, str):
+        raise ValueError("Device serial must be 16 or 17 ASCII characters")
     try:
         serial = device_serial.encode("ascii")
     except UnicodeEncodeError:
-        raise ValueError("Device serial must be 17 ASCII characters") from None
-    if len(serial) != 17:
-        raise ValueError("Only the observed 17-character device serial format is supported")
+        raise ValueError("Device serial must be 16 or 17 ASCII characters") from None
+    if len(serial) not in (16, 17):
+        raise ValueError("Only observed 16- or 17-character device serial formats are supported")
     return Cipher(algorithms.AES((serial * 2)[:32]), modes.CBC(serial[:16]))
 
 

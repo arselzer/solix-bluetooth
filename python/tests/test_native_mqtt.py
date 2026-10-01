@@ -165,7 +165,7 @@ def test_reject_invalid_native_request_identity(serial, account):
         NativeMqttCommands(serial, account)
 
 
-@pytest.mark.parametrize("model", [Model.C1000, Model.C300])
+@pytest.mark.parametrize("model", [Model.C300])
 def test_reject_unsupported_native_request_model(model):
     with pytest.raises(ValueError, match="Gen 2 only"):
         NativeMqttCommands("SYNTHETIC", "a" * 40, model=model)

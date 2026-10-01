@@ -113,6 +113,6 @@ def test_wifi_setup_rejects_other_profiles_before_connecting(tmp_path, monkeypat
     path = tmp_path / "devices.json"
     save_config([DeviceConfig("ups", "AA:BB:CC:DD:EE:01", model, protocol=protocol)], path)
     monkeypatch.setattr(cli, "SolixMonitor", lambda *_args, **_kwargs: pytest.fail("No connection for unsupported profile"))
-    with pytest.raises(ValueError, match="original C1000 legacy or Gen 2 Prime"):
+    with pytest.raises(ValueError, match="original C1000 legacy/Prime or Gen 2 Prime"):
         asyncio.run(cli._wifi_setup(arguments(tmp_path)))
     assert load_config(path)[0].client_id is None

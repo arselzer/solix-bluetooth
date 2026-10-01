@@ -65,7 +65,10 @@ def timezone_confer(timezone_name: str | None) -> tuple[bytes, bytes]:
     return seconds_west.to_bytes(4, "little", signed=True), posix
 
 
-C1000_PRIME_SETTINGS = frozenset(("display_brightness", "ac_charging_power", "device_timeout"))
+C1000_PRIME_SETTINGS = frozenset((
+    "display_brightness", "ac_charging_power", "device_timeout", "display_timeout",
+    "light_mode", "temperature_unit_fahrenheit",
+))
 
 
 class Model(str, Enum):
@@ -545,8 +548,8 @@ class Session:
         Gen 2 to an isolated WPA2 AP on firmware 1.1.4.9, and the same shape
         joined the tested C2000 Gen 2. ``account_id`` is a 40-character ID;
         the generated local BLE ID also worked in this field.
-        Original A1761 uses the same untyped TLVs over legacy CBC, recovered
-        from the app and live-tested on main 1.5.1/radio 0.1.3.0.
+        Original A1761 uses the same untyped TLVs over legacy CBC on main
+        1.5.1/radio 0.1.3.0 and Prime GCM on main 1.7.1/radio 0.3.3.0.
         """
         self._require_wifi_session()
         if len(account_id) != 40 or any(c not in '0123456789abcdefABCDEF' for c in account_id):
@@ -604,9 +607,9 @@ class Session:
         return self._send(DATA_REQUEST, '4025', payload)
 
     def _require_wifi_session(self) -> None:
-        expected = 'legacy' if self.model == Model.C1000 else 'prime'
+        protocols = ('legacy', 'prime') if self.model == Model.C1000 else ('prime',)
         if (self.model not in (Model.C1000, Model.C1000_GEN2, Model.C2000_GEN2)
-                or self.protocol != expected or not self.ready):
+                or self.protocol not in protocols or not self.ready):
             raise RuntimeError('Wi-Fi provisioning requires a connected C1000 or Gen 2 session')
 
     def feed(self, data: bytes) -> ProtocolUpdate:

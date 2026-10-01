@@ -19,19 +19,19 @@ from .tou import TouPeriod
 
 
 def add_commands(subcommands) -> None:
-    init = subcommands.add_parser("ap-service-init", help="Generate private isolated-AP configuration and local MQTT certificates (C1000/C2000 Gen 2)")
+    init = subcommands.add_parser("ap-service-init", help="Generate private isolated-AP configuration and local MQTT certificates")
     init.add_argument("--directory", type=Path, required=True, help="New private directory; existing directories are refused")
-    init.add_argument("--name", required=True, help="Existing paired C1000 Gen 2 or C2000 Gen 2 config name")
-    init.add_argument("--serial-file", type=Path, required=True, help="Owner-only file with the 17-character device serial")
+    init.add_argument("--name", required=True, help="Paired Prime original C1000, C1000 Gen 2 or C2000 Gen 2 config name")
+    init.add_argument("--serial-file", type=Path, required=True, help="Owner-only serial file: 16 characters for original C1000, 17 for Gen 2")
     init.add_argument("--account-id-file", type=Path, help="Otherwise use the paired BLE client ID")
     init.add_argument("--interface", required=True, help="Dedicated, unused Linux Wi-Fi interface")
     init.add_argument("--phy", required=True)
     init.add_argument("--country", required=True, help="Wi-Fi regulatory country, for example AT")
     init.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
 
-    add = subcommands.add_parser("ap-service-add", help="Register another paired Gen 2 station on the same stopped AP")
+    add = subcommands.add_parser("ap-service-add", help="Register another paired Prime station on the same stopped AP")
     add.add_argument("--directory", type=Path, required=True)
-    add.add_argument("--name", required=True, help="Existing paired Gen 2 config name")
+    add.add_argument("--name", required=True, help="Existing paired Prime config name")
     add.add_argument("--serial-file", type=Path, required=True)
     add.add_argument("--account-id-file", type=Path)
     add.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
@@ -49,15 +49,16 @@ def add_commands(subcommands) -> None:
 
     for command, help_text in (("ap-service-status", "Query live native MQTT status"),
                                ("ap-service-readiness", "Read native controller readiness without writing settings"),
-                               ("ap-service-set-charge-power", "Set and confirm Gen 2 native MQTT charging power"),
+                               ("ap-service-set-charge-power", "Set and confirm supported native MQTT charging power"),
                                ("ap-service-set-charge-cap", "Set and confirm the Gen 2 native MQTT upper charge limit"),
                                ("ap-service-set-discharge-floor", "Set C1000 Gen 2 lower discharge limit without adjusting reserve"),
-                               ("ap-service-set-temperature-unit", "Set and confirm C1000 Gen 2 temperature units"),
+                               ("ap-service-set-temperature-unit", "Set and confirm original/Gen 2 C1000 temperature units"),
                                ("ap-service-set-off-grid-alert", "Set and confirm C1000 Gen 2 off-grid notification"),
-                               ("ap-service-set-device-timeout", "Set C1000 Gen 2 device timeout; 0 = Never"),
+                               ("ap-service-set-device-timeout", "Set original/Gen 2 C1000 device timeout; 0 = Never"),
                                ("ap-service-set-fast-charge", "Set C1000 Gen 2 fast charge with fresh retained readback"),
-                               ("ap-service-set-display-brightness", "Set C1000 Gen 2 native MQTT display brightness"),
-                               ("ap-service-set-display-timeout", "Set C1000 Gen 2 native MQTT screen timeout"),
+                               ("ap-service-set-display-brightness", "Set original/Gen 2 C1000 native MQTT display brightness"),
+                               ("ap-service-set-display-timeout", "Set original/Gen 2 C1000 native MQTT screen timeout"),
+                               ("ap-service-set-light", "Set and confirm original C1000 native MQTT light mode"),
                                ("ap-service-set-port-memory", "Set C1000 Gen 2 native MQTT output-port memory"),
                                ("ap-service-set-reserve", "Set and confirm backup reserve without changing outputs"),
                                ("ap-service-set-tou", "Replace the native hourly schedule; explicit activation persists until changed"),
@@ -67,7 +68,7 @@ def add_commands(subcommands) -> None:
         parser.add_argument("--name", help="Target station; required for writes when multiple stations share the AP")
         if command == "ap-service-set-charge-power":
             parser.add_argument("--watts", type=int, required=True,
-                                help="100 W steps: 100–1200 W (C1000 Gen 2), 300–1800 W (C2000 Gen 2)")
+                                help="100 W steps: 100–1000 W (original C1000), 100–1200 W (C1000 Gen 2), 300–1800 W (C2000 Gen 2)")
         elif command == "ap-service-set-charge-cap":
             parser.add_argument("--upper", type=int, required=True)
         elif command == "ap-service-set-discharge-floor":
@@ -85,10 +86,12 @@ def add_commands(subcommands) -> None:
                                 help="1 low, 2 medium, 3 high; zero is not a brightness level")
         elif command == "ap-service-set-display-timeout":
             parser.add_argument("--seconds", type=int, choices=[0, 10, 20, 30, 60, 300, 1800], required=True,
-                                help="Screen timeout in seconds; 0 means Never")
+                                help="Screen timeout in seconds; original C1000 excludes 0/10; Gen 2 0 means Never")
         elif command == "ap-service-set-port-memory":
             parser.add_argument("--enabled", choices=["on", "off"], required=True,
                                 help="Off clears output-recovery bookkeeping; turning On does not restore it")
+        elif command == "ap-service-set-light":
+            parser.add_argument("--mode", choices=["off", "low", "medium", "high", "sos"], required=True)
         elif command == "ap-service-set-device-timeout":
             parser.add_argument("--minutes", type=int, choices=DEVICE_TIMEOUT_MINUTES, required=True,
                                 help="0 disables this timeout; independent sleep behavior may remain")
@@ -108,8 +111,8 @@ def add_commands(subcommands) -> None:
 
 def _device(args, name: str):
     device = next((device for device in load_config(args.config) if device.name == name), None)
-    if device is None or device.model not in (Model.C1000_GEN2, Model.C2000_GEN2) or device.protocol != "prime" or not device.client_id:
-        raise ValueError("Configure and pair a C1000 Gen 2 or C2000 Gen 2 before local MQTT setup")
+    if device is None or device.model not in (Model.C1000, Model.C1000_GEN2, Model.C2000_GEN2) or device.protocol != "prime" or not device.client_id:
+        raise ValueError("Local MQTT setup requires a paired Prime original C1000, C1000 Gen 2 or C2000 Gen 2")
     return device
 
 
@@ -171,6 +174,7 @@ async def run_ap_service(args) -> None:
                 ssid=config.ssid, passphrase=config.passphrase, account_id=provision_config.account_id,
                 api_url=config.api_url, posix_timezone=timezone_confer(provision_config.timezone_name)[1].decode(),
                 iana_timezone=provision_config.timezone_name, allow_http=True,
+                country_code=provision_config.country,
             )
             private_write(directory / "provisioning-replies.json", json.dumps(replies))
             if replies["4824"] not in ("00", "timeout"):
@@ -230,6 +234,7 @@ def dispatch(args) -> None:
                    "ap-service-set-fast-charge": "set-fast-charge",
                    "ap-service-set-display-brightness": "set-display-brightness",
                    "ap-service-set-display-timeout": "set-display-timeout",
+                   "ap-service-set-light": "set-light",
                    "ap-service-set-port-memory": "set-port-memory",
                    "ap-service-set-tou": "set-tou-plan", "ap-service-grid": "return-grid"}[args.command]
         fields = ({"watts": args.watts} if args.command == "ap-service-set-charge-power" else
@@ -248,6 +253,8 @@ def dispatch(args) -> None:
             fields = {"level": args.level}
         elif args.command == "ap-service-set-display-timeout":
             fields = {"seconds": args.seconds}
+        elif args.command == "ap-service-set-light":
+            fields = {"mode": ("off", "low", "medium", "high", "sos").index(args.mode)}
         elif args.command == "ap-service-set-port-memory":
             fields = {"enabled": args.enabled == "on"}
         elif args.command == "ap-service-set-device-timeout":

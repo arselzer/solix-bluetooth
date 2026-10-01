@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import base64
 import binascii
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 import json
 import re
 import secrets
@@ -12,6 +12,7 @@ import time
 
 from .protocol import DATA_REQUEST, DATA_RESPONSE, Model, build_packet, decode_telemetry, parse_packet, tlv, validate_device_timeout
 from .tou import TouPeriod, validate_periods
+from .c1000 import c1000_setting
 
 
 @dataclass(frozen=True)
@@ -29,11 +30,12 @@ class NativeMqttRequest:
     topic: str = field(repr=False)
     payload: str = field(repr=False)
     response_command: str
+    response_aliases: tuple[str, ...] = ()
 
 
 @dataclass
 class NativeMqttCommands:
-    """Build Gen 2 native requests; callers own publishing and confirmation.
+    """Build model-specific native requests; callers own confirmation.
 
     Requires a provisioned station and the configured account ID. These methods
     do not contact Anker, connect to a broker, or determine whether a write took
@@ -48,34 +50,52 @@ class NativeMqttCommands:
 
     def __post_init__(self) -> None:
         self.model = Model(self.model)
-        if self.model not in (Model.C1000_GEN2, Model.C2000_GEN2):
-            raise ValueError("Native MQTT commands support C1000 Gen 2 and C2000 Gen 2 only")
+        if self.model not in (Model.C1000, Model.C1000_GEN2, Model.C2000_GEN2):
+            raise ValueError("Native MQTT commands support original C1000 and C1000/C2000 Gen 2 only")
         if not isinstance(self.device_serial, str) or not re.fullmatch(r"[A-Za-z0-9_-]{1,64}", self.device_serial):
             raise ValueError("Invalid native MQTT device serial")
         if not isinstance(self.account_id, str) or not re.fullmatch(r"[0-9a-fA-F]{40}", self.account_id):
             raise ValueError("Native MQTT account ID must be 40 hexadecimal characters")
 
     def status(self) -> NativeMqttRequest:
-        """Request a single 0900 telemetry reply."""
-        return self._request("0100", b"", milliseconds=False)
+        """Request full telemetry, allowing original C1000's deferred report.
+
+        Original MCU 1.5.9 routes 0040 through a pending 0405 publication while
+        network reporting is active; otherwise it replies directly with 0840.
+        An alias is a fresh full status report, never an acknowledgement of a
+        setting write. Callers must validate identity and match only after send.
+        """
+        request = self._request("0040" if self.model == Model.C1000 else "0100", b"", milliseconds=False)
+        return replace(request, response_aliases=("0405",)) if self.model == Model.C1000 else request
 
     @property
     def product(self) -> str:
-        return "A1763" if self.model == Model.C1000_GEN2 else "A1783"
+        return {Model.C1000: "A1761", Model.C1000_GEN2: "A1763", Model.C2000_GEN2: "A1783"}[self.model]
 
     def readiness(self) -> NativeMqttRequest:
         """Read controller readiness (0089/0889); opaque fields stay private."""
+        self._require_gen2("Controller readiness")
         return self._request("0089", b"", milliseconds=False)
 
     def stream(self, seconds: int = 60) -> NativeMqttRequest:
-        """Request a bounded telemetry stream; renew explicitly if needed."""
+        """Request a telemetry window; renew explicitly if needed.
+
+        Original MCU 1.5.9 retains an existing timer's duration if it is already
+        running. A renewal may therefore keep its prior expiry interval.
+        """
         if type(seconds) is not int or not 1 <= seconds <= 120:
             raise ValueError("Stream duration must be an integer from 1 to 120 seconds")
-        fields = tlv(0xA2, b"\x01\x01") + tlv(0xA3, b"\x03" + seconds.to_bytes(4, "little"))
+        interval = (b"\x02" + seconds.to_bytes(2, "little") if self.model == Model.C1000
+                    else b"\x03" + seconds.to_bytes(4, "little"))
+        fields = tlv(0xA2, b"\x01\x01") + tlv(0xA3, interval)
         return self._request("0057", fields, milliseconds=False)
 
     def ac_charging_power(self, watts: int) -> NativeMqttRequest:
         """Set the charging-power limit; does not include an AC output switch."""
+        if self.model == Model.C1000:
+            if type(watts) is not int or not 100 <= watts <= 1000 or watts % 100:
+                raise ValueError("Charging power must be 100–1000 W in 100 W steps")
+            return self._request("0044", tlv(0xA2, b"\x02" + watts.to_bytes(2, "little")), milliseconds=False)
         maximum = 1200 if self.model == Model.C1000_GEN2 else 1800
         minimum = 100 if self.model == Model.C1000_GEN2 else 300
         if type(watts) is not int or not minimum <= watts <= maximum or watts % 100:
@@ -85,6 +105,7 @@ class NativeMqttCommands:
 
     def charge_cap(self, percentage: int) -> NativeMqttRequest:
         """Set only the upper charge limit; omit the lower-limit field entirely."""
+        self._require_gen2("Charge cap")
         if type(percentage) is not int or percentage not in (80, 85, 90, 95, 100):
             raise ValueError("Charge cap must be 80–100 percent in 5 percent steps")
         return self._request("0103", tlv(0xAA, bytes((1, percentage))), milliseconds=True)
@@ -102,7 +123,9 @@ class NativeMqttCommands:
         return self._request("0103", tlv(0xAB, bytes((1, lower))), milliseconds=True)
 
     def temperature_unit(self, fahrenheit: bool) -> NativeMqttRequest:
-        """Set temperature units; verified on C1000 Gen 2 main 1.1.4.9."""
+        """Set C1000 temperature units using its model-specific command."""
+        if self.model == Model.C1000:
+            return self._original_setting("temperature_unit_fahrenheit", fahrenheit)
         return self._c1000_boolean(0xA5, fahrenheit)
 
     def off_grid_alert(self, enabled: bool) -> NativeMqttRequest:
@@ -110,7 +133,9 @@ class NativeMqttCommands:
         return self._c1000_boolean(0xB0, enabled)
 
     def display_brightness(self, level: int) -> NativeMqttRequest:
-        """Set C1000 brightness to 1/2/3; zero is a separate display-off action."""
+        """Set C1000 brightness; original accepts 0–3, Gen 2 accepts 1–3."""
+        if self.model == Model.C1000:
+            return self._original_setting("display_brightness", level)
         if self.model != Model.C1000_GEN2:
             raise ValueError("Display brightness supports C1000 Gen 2 only")
         if type(level) is not int or level not in (1, 2, 3):
@@ -118,7 +143,9 @@ class NativeMqttCommands:
         return self._request("0103", tlv(0xA3, bytes((1, level))), milliseconds=True)
 
     def display_timeout(self, seconds: int) -> NativeMqttRequest:
-        """Set C1000 screen timeout; native 30/60-second round trips are verified."""
+        """Set C1000 screen timeout with model-specific allowed durations."""
+        if self.model == Model.C1000:
+            return self._original_setting("display_timeout", seconds)
         if self.model != Model.C1000_GEN2:
             raise ValueError("Display timeout supports C1000 Gen 2 only")
         if type(seconds) is not int or seconds not in (0, 10, 20, 30, 60, 300, 1800):
@@ -131,10 +158,24 @@ class NativeMqttCommands:
 
     def device_timeout(self, minutes: int) -> NativeMqttRequest:
         """Set C1000 idle timeout; zero does not disable every sleep path."""
+        if self.model == Model.C1000:
+            return self._original_setting("device_timeout", minutes)
         if self.model != Model.C1000_GEN2:
             raise ValueError("Device timeout supports C1000 Gen 2 only")
         validate_device_timeout(minutes)
         return self._request("0103", tlv(0xA6, b"\x02" + minutes.to_bytes(2, "little")), milliseconds=True)
+
+    def light_mode(self, mode: int) -> NativeMqttRequest:
+        """Set the original C1000 light mode using its validated 0–4 domain."""
+        return self._original_setting("light_mode", mode)
+
+    def _original_setting(self, setting: str, value: int | bool) -> NativeMqttRequest:
+        if self.model != Model.C1000:
+            raise ValueError("This setting supports original C1000 only")
+        command, body, _ = c1000_setting(setting, value)
+        # The shared BLE builder includes source21; _request supplies source22
+        # and the native UTC-seconds field. No output switch is added.
+        return self._request(f"{int(command, 16) & 0x3fff:04x}", body[3:], milliseconds=False)
 
     def fast_charge(self, enabled: bool) -> NativeMqttRequest:
         """Set C1000 fast charge; callers must confirm retention and protect tariffs."""
@@ -153,6 +194,7 @@ class NativeMqttCommands:
 
     def backup_reserve(self, percentage: int) -> NativeMqttRequest:
         """Set only backup reserve; callers must check upper/lower limits first."""
+        self._require_gen2("Backup reserve")
         if type(percentage) is not int or not 5 <= percentage <= 100 or percentage % 5:
             raise ValueError("Backup reserve must be 5–100 percent in 5 percent steps")
         return self._request("0090", tlv(0xA5, bytes((1, percentage))), milliseconds=True)
@@ -163,6 +205,7 @@ class NativeMqttCommands:
         A6 carries the count. A7 has type04 plus triplets, with no second count.
         This changes mode/schedule only; it never includes an output switch.
         """
+        self._require_gen2("Time-of-Use")
         periods = validate_periods(periods)
         if type(enabled) is not bool or (enabled and not periods):
             raise ValueError("Enabled Time-of-Use requires a nonempty schedule")
@@ -170,6 +213,10 @@ class NativeMqttCommands:
                   + tlv(0xA4, b"\x01\x00") + tlv(0xA6, bytes((1, len(periods))))
                   + tlv(0xA7, b"\x04" + (b"".join(p.to_bytes() for p in periods) or b"\x00")))
         return self._request("0090", fields, milliseconds=True)
+
+    def _require_gen2(self, setting: str) -> None:
+        if self.model not in (Model.C1000_GEN2, Model.C2000_GEN2):
+            raise ValueError(f"{setting} supports C1000 Gen 2 and C2000 Gen 2 only")
 
     def _request(self, command: str, fields: bytes, *, milliseconds: bool) -> NativeMqttRequest:
         now = time.time()
@@ -225,7 +272,11 @@ def decode_mqtt_telemetry(
         return None
     if not isinstance(payload.get("sn"), str) or not isinstance(payload.get("pn"), str):
         raise ValueError("Missing native MQTT device identity")
-    product = {Model.C1000_GEN2: "A1763", Model.C2000_GEN2: "A1783"}[Model(model)]
+    model = Model(model)
+    products = {Model.C1000: "A1761", Model.C1000_GEN2: "A1763", Model.C2000_GEN2: "A1783"}
+    if model not in products:
+        raise ValueError("Unsupported native MQTT telemetry model")
+    product = products[model]
     if payload["pn"] != product or (expected_serial is not None and payload["sn"] != expected_serial):
         return None
     if payload.get("encoding_type", 0) != 0:
@@ -239,11 +290,13 @@ def decode_mqtt_telemetry(
     if packet.pattern != DATA_RESPONSE:
         return None
     body = packet.payload
-    if packet.command == bytes.fromhex("0900"):
+    response_command = "0840" if model == Model.C1000 else "0900"
+    telemetry_command = "0405" if model == Model.C1000 else "0421"
+    if packet.command == bytes.fromhex(response_command):
         if not body or body[0] != 0:
             raise ValueError("Native MQTT status request failed")
         body = body[1:]
-    elif packet.command != bytes.fromhex("0421"):
+    elif packet.command != bytes.fromhex(telemetry_command):
         return None
-    metrics, raw_tlvs = decode_telemetry(body, model=Model(model))
+    metrics, raw_tlvs = decode_telemetry(body, model=model)
     return MqttTelemetry(metrics=metrics, raw_tlvs=raw_tlvs)

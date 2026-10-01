@@ -8,7 +8,7 @@ from pathlib import Path
 import time
 
 from .ap_service_config import APServiceConfig, load_ap_service_profiles
-from .commands import NATIVE_COMMANDS, NATIVE_C1000_COMMANDS, validate_command
+from .commands import native_commands_for_model, validate_command
 from .ap_service import ap_service_request
 from .protocol import Model
 
@@ -34,7 +34,7 @@ class APServiceMonitor:
             latest = status.get("last_seen_timestamp")
             status["connected"] = bool(fresh and status.get("connected"))
             status["available"] = bool(status["connected"] and latest and time.time() - latest < 30)
-            if not status["available"]:
+            if not status["available"] or self.devices[name].model == Model.C1000:
                 status["power_flow"] = "unknown"
             return status
         except (OSError, ValueError):
@@ -45,7 +45,7 @@ class APServiceMonitor:
     def supported_commands(self, name: str) -> list[str]:
         if not self.snapshot(name).get("control_enabled"):
             return []
-        return list(NATIVE_COMMANDS + (NATIVE_C1000_COMMANDS if self.devices[name].model == Model.C1000_GEN2 else ()))
+        return list(native_commands_for_model(self.devices[name].model))
 
     async def command(self, name: str, command: str, **values) -> dict:
         validate_command(command, values)

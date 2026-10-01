@@ -10,9 +10,9 @@ independently reported main **v1.5.1** and radio **v0.1.3.0**.
 See [the chain test](c1000-chain-validation.md) for exact values and limits.
 The C1000X sibling remains untested. Later that day, an official update completed
 and **v1.7.1** was independently confirmed over Prime/AES-GCM Bluetooth.
-Monitoring and restored brightness, charging power and Device Timeout passed
-on that version; all 11 checked settings matched the pre-update baseline.
-Other Prime controls remain unvalidated. See the
+Monitoring and six restored controls passed on that version: charging power,
+Device Timeout, screen timeout, brightness, light and temperature units.
+All 11 protected settings and the complete F8 block matched the baseline. See the
 [isolated update capture](c1000-original-update-network.md).
 
 The default profile uses the legacy P-256/AES-CBC handshake tested on 1.5.1,
@@ -140,22 +140,30 @@ light, with no AC-output API command.
 The complete original-C1000 TCP MQTT/Paho/BLE write and restoration path is now
 verified; station Wi-Fi is unnecessary for the bridge.
 
-The upstream A1761 map includes cloud MQTT commands. Our later
-[isolated trial](c1000-original-wifi-validation.md) verified original-specific
-Wi-Fi provisioning and local endpoint replacement: the station reached the
-MQTT-bootstrap and binding HTTP paths without an Anker account. Direct TLS/MQTT
-authentication remains unverified. Its 16-character serial and radio 0.1.3.0
-must not be treated as the tested Gen 2 credential parser. The packaged native
-AP service currently accepts Gen 2 profiles only.
+The upstream A1761 map includes cloud MQTT commands. The later
+[local native trial](c1000-original-mqtt-followup.md) established isolated
+bootstrap, mutual TLS and six confirmed native controls on main **1.7.1 /
+radio 0.3.3.0**. The AP service supports the original 16-character serial and
+original provisioning layout. This trial used the existing account ID;
+generated-ID setup remains unverified. The earlier main 1.5.1/radio 0.1.3.0
+[Wi-Fi trial](c1000-original-wifi-validation.md) remains historical evidence.
 
+Connected original firmware can suppress setting ACKs and route `0040` status
+through full `0405` reports. The server sends each verified setter once and
+confirms two fresh complete reports, preserving other settings and F8 bytes.
+Network-only `0407` messages cannot satisfy these checks.
 Device Timeout is now exposed through the SDK, CLI, bridge and gateway/HA.
 The [timeout trial](device-timeout-behavior.md) confirmed legacy `4045/A2`
 and D2 readback for 720→0→720 minutes while keeping AC output on. Never
 disables the saved timeout; it cannot guarantee uninterrupted radio access.
 
-Open work includes direct MQTT credential/bootstrap acceptance; output timers; actual fast-charge rate
+Open work includes generated-ID original native setup; output timers; actual fast-charge rate
 and Smart-mode low-load behavior; expansion-battery data;
 charge/discharge limits if supported; and reliable mains/battery-state mapping.
 The reference lists additional commands, but their BLE numbers and physical
 behavior need validation. No reserve or tariff capability has been established
 on the original C1000.
+
+The [charging-producer follow-up](c1000-bypass-firmware-followup.md) found separate
+internal charging/output gates but no supported external command selecting
+battery power while retaining AC output. A zero ceiling is not charge pause.

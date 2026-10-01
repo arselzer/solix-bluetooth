@@ -283,6 +283,8 @@ class SolixMonitor:
 
     async def set_light_mode(self, mode: int) -> dict[str, int | str]:
         """Set C300/original C1000 light mode (0..4), then confirm telemetry."""
+        if self.model == Model.C1000 and self.protocol == "prime":
+            return await self._set_original_configuration("light_mode", mode)
         packet = self._session.light_mode_packet(mode)
         return await self._write_setting(packet, {"light_mode": mode})
 
@@ -370,6 +372,8 @@ class SolixMonitor:
 
     async def set_display_timeout(self, seconds: int) -> dict[str, int | str]:
         """Set display timeout and confirm telemetry (C300/C2000: 30/60 s only)."""
+        if self.model == Model.C1000 and self.protocol == "prime":
+            return await self._set_original_configuration("display_timeout", seconds)
         packet = self._session.display_timeout_packet(seconds)
         return await self._write_setting(packet, {"display_timeout_seconds": seconds})
 

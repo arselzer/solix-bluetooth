@@ -17,21 +17,24 @@ PREFERENCES = (("set-display-brightness", "level", 2, "display_brightness", 1),
                ("set-port-memory", "enabled", False, "port_memory_enabled", 1))
 
 
-def test_original_prime_advertised_brightness_and_timeout_parity():
-    snapshot = station(model="c1000", protocol="prime", controls=["set-charge-power", "set-display-brightness", "set-device-timeout"],
-                       metrics={"display_brightness": 2, "device_timeout_minutes": 720, "ac_charging_power_limit_w": 1000})
+def test_original_prime_verified_setting_parity():
+    snapshot = station(model="c1000", protocol="prime", controls=["set-charge-power", "set-display-brightness", "set-device-timeout",
+                                                                 "set-display-timeout", "set-light", "set-temperature-unit"],
+                       metrics={"display_brightness": 2, "device_timeout_minutes": 720, "ac_charging_power_limit_w": 1000,
+                                "display_timeout_seconds": 30, "light_mode": 0, "temperature_unit_fahrenheit": 0})
     assert api.display_brightness_options(snapshot) == ["low", "medium", "high"]
     assert api.device_timeout_options(snapshot)[0] == "never"
     for payload in ({"command": "set-charge-power", "watts": 900},
                     {"command": "set-display-brightness", "level": 1},
-                    {"command": "set-device-timeout", "minutes": 0}):
+                    {"command": "set-device-timeout", "minutes": 0},
+                    {"command": "set-display-timeout", "seconds": 60},
+                    {"command": "set-light", "mode": 1},
+                    {"command": "set-temperature-unit", "fahrenheit": True}):
         api.validate_command(snapshot, payload)
     snapshot["controls"] = list(api.COMMANDS)  # Extra advertisements must not open unsupported switches.
     for payload in ({"command": "set-fast-charge", "enabled": True},
-                    {"command": "set-temperature-unit", "fahrenheit": True},
                     {"command": "set-ac-power-saving", "enabled": True},
                     {"command": "set-dc-power-saving", "enabled": True},
-                    {"command": "set-display-timeout", "seconds": 60},
                     {"command": "set-port-memory", "enabled": True}):
         with pytest.raises(ValueError):
             api.validate_command(snapshot, payload)

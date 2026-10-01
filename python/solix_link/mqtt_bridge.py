@@ -14,6 +14,7 @@ from typing import Any
 
 from .manager import MonitorService
 from .protocol import Model
+from .c1000_capabilities import original_prime_operation_supported
 
 
 _TOPIC_SEGMENT = re.compile(r"^[A-Za-z0-9_-]+$")
@@ -55,7 +56,7 @@ def _supports_operation(device: Any, operation: str) -> bool:
     if device.protocol != 'prime':
         return False
     if device.model == Model.C1000:
-        return operation in ("ac_charging_power", "device_timeout", "display_brightness")
+        return original_prime_operation_supported(operation)
     if device.model == Model.C1000_GEN2:
         return operation in ('charge_limits', 'ac_charging_power', 'display_timeout', 'fast_charge', 'device_timeout')
     return device.model == Model.C2000_GEN2 and operation in ('charge_cap', 'ac_charging_power', 'display_timeout')

@@ -21,7 +21,7 @@ def station(model="c1000_gen2", protocol="native_mqtt", baseline=0, **changes):
     return result
 
 
-@pytest.mark.parametrize("model,protocol", [("c1000", "legacy"), ("c1000", "prime"), ("c1000_gen2", "prime"), ("c1000_gen2", "native_mqtt")])
+@pytest.mark.parametrize("model,protocol", [("c1000", "legacy"), ("c1000", "prime"), ("c1000", "native_mqtt"), ("c1000_gen2", "prime"), ("c1000_gen2", "native_mqtt")])
 @pytest.mark.parametrize("minutes", [0, 30, 60, 120, 240, 360, 720, 1440])
 def test_timeout_supported_profiles_and_exact_choices(model, protocol, minutes):
     snapshot = api.parse_snapshot(station(model, protocol, baseline=720))
@@ -46,7 +46,7 @@ def test_timeout_requires_exact_valid_baseline_readback(baseline):
 
 @pytest.mark.parametrize("model,protocol", [("c300", "legacy"), ("c2000_gen2", "native_mqtt"),
                                            ("c2000_gen2", "prime"),
-                                           ("c1000_gen2", "legacy"), ("c1000", "native_mqtt")])
+                                           ("c1000_gen2", "legacy")])
 def test_timeout_rejects_unsupported_station_profiles(model, protocol):
     snapshot = station(model, protocol)
     assert api.device_timeout_options(snapshot) == []

@@ -19,6 +19,8 @@ from .config import DeviceConfig, load_config, protocol_choices, save_config
 from .ap_service_config import APServiceConfig, add_ap_service_device, initialize_ap_service, load_ap_service, load_ap_service_profiles, private_write
 from .ap_service import ap_service_request
 from .protocol import Model
+from .c1000_capabilities import original_prime_commands
+from .commands import native_commands_for_model
 
 
 def choose(title: str, options: list[str]) -> int | None:
@@ -103,7 +105,7 @@ def change_protocol(device: DeviceConfig, config_path: Path) -> DeviceConfig:
         raise ValueError("Saved station changed; select it again before changing protocol")
     save_config([updated if entry.name == device.name else entry for entry in saved], config_path)
     if device.model == Model.C1000 and protocol == "prime":
-        print("Original C1000 Prime 1.7.1: monitoring, charging power, brightness and Device Timeout are verified; other controls remain unavailable.")
+        print("Original C1000 Prime 1.7.1 supports the listed verified settings; output switches, fast charge and Smart modes remain unavailable.")
     return updated
 
 
@@ -151,8 +153,8 @@ def wifi_adapters() -> list[tuple[str, str]]:
 
 
 def setup_ap_service(device: DeviceConfig, directory: Path) -> None:
-    if device.model not in (Model.C1000_GEN2, Model.C2000_GEN2) or device.protocol != "prime" or not device.client_id:
-        raise ValueError("AP setup requires a paired C1000 Gen 2 or C2000 Gen 2")
+    if device.model not in (Model.C1000, Model.C1000_GEN2, Model.C2000_GEN2) or device.protocol != "prime" or not device.client_id:
+        raise ValueError("AP setup requires a paired Prime original C1000, C1000 Gen 2 or C2000 Gen 2")
     print("Local MQTT uses a dedicated Wi-Fi adapter, a private API and an AP without an internet route.")
     if (directory / "ap_service.json").exists():
         from dataclasses import replace
@@ -178,7 +180,8 @@ def setup_ap_service(device: DeviceConfig, directory: Path) -> None:
     except Exception as error:
         print(f"Could not read the serial over Bluetooth ({type(error).__name__}).")
         import getpass
-        serial = getpass.getpass("Device serial (17 characters, hidden): ").strip()
+        length = 16 if device.model == Model.C1000 else 17
+        serial = getpass.getpass(f"Device serial ({length} characters, hidden): ").strip()
     import getpass
     account = getpass.getpass("App account ID, or Enter for saved BLE pairing ID (hidden): ").strip() or device.client_id
     config = APServiceConfig(device.name, interface, phy, country, serial, account,
@@ -225,14 +228,12 @@ def preference_menu(device: DeviceConfig | APServiceConfig, config_path: Path, d
     if original:
         commands = ["set-temperature-unit", "set-fast-charge", "set-ac-power-saving", "set-dc-power-saving"]
         labels = ["Temperature display", "Fast charging", "AC power saving (may turn output off)", "DC power saving (may turn output off)"]
-    elif device.model == Model.C1000 and getattr(device, "protocol", None) == "prime":
-        brightness = choose("Display brightness", ["Low (1)", "Medium (2)", "High (3)"])
-        if brightness is None or choose("Apply display brightness?", ["Apply selected brightness"]) is None:
-            return
-        from .cli import _c1000_setting
-        asyncio.run(_c1000_setting(argparse.Namespace(name=device.name, setting="display_brightness",
-                                                     value=brightness + 1, config=config_path)))
-        return
+    elif device.model == Model.C1000 and (directory is not None or getattr(device, "protocol", None) == "prime"):
+        candidates = [("set-display-brightness", "Display brightness"), ("set-display-timeout", "Screen timeout"),
+                      ("set-light", "Light mode"), ("set-temperature-unit", "Temperature display")]
+        supported = native_commands_for_model(device.model) if directory is not None else original_prime_commands()
+        commands = [command for command, _ in candidates if command in supported]
+        labels = [label for command, label in candidates if command in supported]
     elif device.model == Model.C1000_GEN2 and (directory is not None or getattr(device, "protocol", None) == "prime"):
         commands, labels = ["set-fast-charge"], ["Fast charging"]
         if directory is not None:
@@ -241,6 +242,9 @@ def preference_menu(device: DeviceConfig | APServiceConfig, config_path: Path, d
     else:
         print("These preferences are unavailable for this station profile.")
         return
+    if not commands:
+        print("Native preferences are not yet verified for this station profile.")
+        return
     selected = choose("Station preferences", labels)
     if selected is None:
         return
@@ -248,7 +252,9 @@ def preference_menu(device: DeviceConfig | APServiceConfig, config_path: Path, d
     options = {
         "set-temperature-unit": ["Celsius", "Fahrenheit"],
         "set-display-brightness": ["Low", "Medium", "High"],
-        "set-display-timeout": ["Never", "10 seconds", "20 seconds", "30 seconds", "60 seconds", "5 minutes", "30 minutes"],
+        "set-display-timeout": ["20 seconds", "30 seconds", "60 seconds", "5 minutes", "30 minutes"] if device.model == Model.C1000
+                               else ["Never", "10 seconds", "20 seconds", "30 seconds", "60 seconds", "5 minutes", "30 minutes"],
+        "set-light": ["Off", "Low", "Medium", "High", "SOS"],
     }.get(command, ["Off", "On"])
     value = choose(labels[selected], options)
     if value is None:
@@ -263,12 +269,18 @@ def preference_menu(device: DeviceConfig | APServiceConfig, config_path: Path, d
         return
     if directory is not None:
         fields = ({"level": value + 1} if command == "set-display-brightness" else
-                  {"seconds": (0, 10, 20, 30, 60, 300, 1800)[value]} if command == "set-display-timeout" else
+                  {"seconds": ((20, 30, 60, 300, 1800) if device.model == Model.C1000 else (0, 10, 20, 30, 60, 300, 1800))[value]} if command == "set-display-timeout" else
+                  {"mode": value} if command == "set-light" else
+                  {"fahrenheit": value == 1} if command == "set-temperature-unit" else
                   {"enabled": value == 1})
         _show_status(asyncio.run(ap_service_request(directory, command, name=device.name, **fields)))
     else:
         from .cli import _set
-        arguments = {"unit": "fahrenheit" if value else "celsius"} if command == "set-temperature-unit" else {"enabled": "on" if value else "off"}
+        arguments = ({"unit": "fahrenheit" if value else "celsius"} if command == "set-temperature-unit" else
+                     {"level": value + 1} if command == "set-display-brightness" else
+                     {"seconds": (20, 30, 60, 300, 1800)[value]} if command == "set-display-timeout" else
+                     {"mode": ("off", "low", "medium", "high", "sos")[value]} if command == "set-light" else
+                     {"enabled": "on" if value else "off"})
         asyncio.run(_set(argparse.Namespace(command=command, name=device.name, config=config_path, **arguments)))
 
 
@@ -282,8 +294,8 @@ def native_session(directory: Path, config_path: Path, *, provision: bool, allow
             return
         name = names[selected]
     config = profiles[name][0] if name is not None else next(iter(profiles.values()))[0]
-    maximum_power = 1200 if config.model == Model.C1000_GEN2 else 1800
-    minimum_power = 100 if config.model == Model.C1000_GEN2 else 300
+    maximum_power = {Model.C1000: 1000, Model.C1000_GEN2: 1200, Model.C2000_GEN2: 1800}[config.model]
+    minimum_power = 300 if config.model == Model.C2000_GEN2 else 100
     command = [sys.executable, "-m", "solix_link", "ap-service-run", "--directory", str(directory.resolve()),
                "--config", str(config_path.resolve())]
     if provision:
@@ -302,6 +314,36 @@ def native_session(directory: Path, config_path: Path, *, provision: bool, allow
     try:
         print(f"Starting the AP service; logs: {log_path}. Radio reconnection can take several minutes.")
         while process.poll() is None:
+            if config.model == Model.C1000:
+                supported = native_commands_for_model(config.model) if allow_control else ()
+                actions = ["status"]
+                options = ["Show live status"]
+                for action, label in (("set-charge-power", "Set charging-power limit"),
+                                      ("set-device-timeout", "Set Device Timeout (Never / idle shutdown)")):
+                    if action in supported:
+                        actions.append(action)
+                        options.append(label)
+                if any(command in supported for command in ("set-display-brightness", "set-display-timeout", "set-light", "set-temperature-unit")):
+                    actions.append("preferences")
+                    options.append("Display, light and temperature preferences")
+                options.append("Stop this AP session")
+                selected = choose("Original C1000 AP-service session", options)
+                if selected is None or selected == len(options) - 1:
+                    break
+                try:
+                    action = actions[selected]
+                    if action == "status":
+                        _show_status(asyncio.run(ap_service_request(directory, "status", name=config.name)))
+                    elif action == "set-charge-power":
+                        watts = int(prompt(f"Charging-power limit ({minimum_power}–{maximum_power} W in 100 W steps)"))
+                        _show_status(asyncio.run(ap_service_request(directory, action, name=config.name, watts=watts)))
+                    elif action == "set-device-timeout":
+                        device_timeout_menu(config, config_path, directory)
+                    else:
+                        preference_menu(config, config_path, directory)
+                except (ValueError, OSError, RuntimeError, TimeoutError) as error:
+                    print(f"{type(error).__name__}: {error}. Check fresh status before retrying a control write.")
+                continue
             options = ["Show live status", "Read controller readiness",
                                                      "Set charging-power limit" if allow_control else "Charging controls disabled",
                                                      "Set upper charge limit" if allow_control else "Charge-cap controls disabled",
@@ -364,7 +406,7 @@ def native_session(directory: Path, config_path: Path, *, provision: bool, allow
 def mqtt_menu(device: DeviceConfig, config_path: Path, directory: Path) -> None:
     while True:
         choices = ["Publish BLE telemetry to my MQTT broker"]
-        if device.model in (Model.C1000_GEN2, Model.C2000_GEN2):
+        if device.model in (Model.C1000, Model.C1000_GEN2, Model.C2000_GEN2) and device.protocol == "prime":
             choices += ["Create AP-service configuration", "Start saved AP service",
                         "Provision/reconnect to AP service", "Inspect running AP-service status",
                         "Serve native status over HTTP"]
@@ -391,7 +433,10 @@ def mqtt_menu(device: DeviceConfig, config_path: Path, directory: Path) -> None:
                 config = profiles.get(device.name, (None, None))[0]
                 if config is None or config.model != device.model:
                     raise ValueError("AP service belongs to a different selected station")
-                controls = choose("Native control", ["Monitoring only", "Enable explicit charging and tariff commands"])
+                choices = ["Monitoring only"]
+                if native_commands_for_model(config.model):
+                    choices.append("Enable explicit verified native commands")
+                controls = choose("Native control", choices)
                 if controls is not None:
                     native_session(directory, config_path, provision=action == 3, allow_control=controls == 1, name=device.name)
             elif action == 4:
@@ -420,7 +465,7 @@ def run_interactive(config_path: Path, ap_service_directory: Path | None = None)
                          or selected.model == Model.C1000_GEN2 and selected.protocol == "prime"):
             options.append("Set Device Timeout (Never / idle shutdown)")
             options.append("Station preferences (temperature / fast charge / power saving)" if selected.model == Model.C1000 and selected.protocol == "legacy"
-                           else "Station preferences (display brightness)" if selected.model == Model.C1000
+                           else "Station preferences (display / light / temperature)" if selected.model == Model.C1000
                            else "Station preferences (fast charging)")
         protocol_action = None
         if selected and len(protocol_choices(selected.model)) > 1:

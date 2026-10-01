@@ -16,7 +16,7 @@ from .mqtt_intercept import LocalMqttServer
 from .protocol import Model, parse_tlvs, timezone_confer
 from .tou import PowerFlowTimeout, TouPeriod
 from .energy_report import decode_energy_events
-from .commands import validate_command
+from .commands import native_commands_for_model, validate_command
 
 
 def api_response(path: str, request: dict, config: APServiceConfig, credentials: bytes,
@@ -226,6 +226,12 @@ class APService:
             if not isinstance(name, str) or name not in self.stations:
                 raise ValueError("Select a configured station by name")
             mqtt = self.stations[name]
+            if action not in ("status", "readiness") and action not in native_commands_for_model(mqtt.config.model):
+                raise ValueError("This native control is not verified for the selected model")
+            if action == "readiness" and mqtt.config.model == Model.C1000:
+                raise ValueError("Controller readiness is unavailable for original C1000")
+            if action != "status" and mqtt.config.model == Model.C1000:
+                validate_command(action, {key: value for key, value in request.items() if key != "command"})
             async with asyncio.timeout(control_timeout(action, request)):
                 if action == "status":
                     result = mqtt.snapshot()
@@ -238,7 +244,7 @@ class APService:
                     validate_command(action, values)
                     result = await mqtt.set_discharge_floor(values["lower"])
                 elif action in ("set-temperature-unit", "set-off-grid-alert", "set-device-timeout", "set-fast-charge",
-                                "set-display-brightness", "set-display-timeout", "set-port-memory"):
+                                "set-display-brightness", "set-display-timeout", "set-port-memory", "set-light"):
                     values = {key: value for key, value in request.items() if key != "command"}
                     validate_command(action, values)
                     if action == "set-temperature-unit":
@@ -251,6 +257,8 @@ class APService:
                         result = await mqtt.set_display_brightness(values["level"])
                     elif action == "set-display-timeout":
                         result = await mqtt.set_display_timeout(values["seconds"])
+                    elif action == "set-light":
+                        result = await mqtt.set_light_mode(values["mode"])
                     elif action == "set-port-memory":
                         result = await mqtt.set_port_memory(values["enabled"])
                     else:

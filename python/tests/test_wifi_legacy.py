@@ -1,18 +1,19 @@
-"""App-derived A1761 provisioning differs from the tested Prime layout."""
+"""A1761 field layouts are preserved over both negotiated transports."""
 
 import pytest
 
 from solix_link.protocol import DATA_REQUEST, Model, Session, build_packet, parse_packet, parse_tlvs
 
 
-def ready(model=Model.C1000):
-    session = Session(model)
+def ready(model=Model.C1000, *, protocol=None):
+    session = Session(model, protocol=protocol)
     session.ready, session._secret = True, bytes(range(32))
     return session
 
 
-def test_original_wifi_uses_legacy_cbc_untyped_fields_and_country_without_c3():
-    session = ready()
+@pytest.mark.parametrize('protocol', ['legacy', 'prime'])
+def test_original_wifi_uses_untyped_fields_and_country_without_c3(protocol):
+    session = ready(protocol=protocol)
     credentials = parse_packet(session.wifi_credentials_packet('Local-AP', 'examplepass', 'a' * 40))
     assert credentials.pattern == DATA_REQUEST and credentials.command.hex() == '4024'
     fields = parse_tlvs(session._crypt(credentials.payload, False))
@@ -39,7 +40,7 @@ def test_original_country_validation(country):
 
 
 @pytest.mark.parametrize('model,protocol,is_ready', [
-    (Model.C300, 'legacy', True), (Model.C1000, 'prime', True),
+    (Model.C300, 'legacy', True), (Model.C1000, 'prime', False),
     (Model.C1000, 'legacy', False), (Model.C1000_GEN2, 'legacy', True),
 ])
 def test_wifi_requires_the_supported_model_and_negotiated_transport(model, protocol, is_ready):

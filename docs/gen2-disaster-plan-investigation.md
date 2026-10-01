@@ -19,7 +19,7 @@ Two consequences matter before exposing this as a control:
 
 - Active plans temporarily request BMS charge/discharge bounds of **100%/1%**,
   regardless of the saved bounds or the plan's supplied maximum-SOC byte.
-- Disabling the manual plan also invalidates overlapping automatic windows.
+- Disabling the manual plan also invalidates automatic windows covering the current UTC time, even with their switch off.
   A one-bit restore is therefore insufficient when such windows exist.
 
 The initial static suspicion that manual disable was ineffective was disproved
@@ -42,7 +42,7 @@ one-byte settings use type `01`; the plan record uses type `04`.
 | A6 | Automatic-record count, capped at three. Manual storage does **not** require A6=1: the handler consumes A7 when present even if A6 is zero or absent. |
 | A7 | Manual record, or automatic slot zero. |
 | A8/A9 | Automatic slots one and two. |
-| AA | Value `1` cancels the currently active plan and processes overlapping windows. It is not an isolated switch operation. |
+| AA | Value `1` cancels the currently active plan and processes windows covering the current UTC time. It is not an isolated switch operation. |
 
 Each A7–A9 record has **11 value bytes**:
 
@@ -112,14 +112,13 @@ This D9 tail does **not** include all automatic records, their stored maximum
 bytes or the manual maximum byte. It cannot by itself prove that no dormant
 automatic window exists or reconstruct the full stored configuration.
 
-The actual cancellation helper `080093f4` uses a half-open overlap test,
+The actual cancellation helper `080093f4` tests whether a saved window covers the current UTC time,
 `start <= now < end`:
 
-- Manual A5=0 disables manual and replaces every overlapping automatic record
+- Manual A5=0 disables manual and replaces every automatic record covering now, even with its switch off,
   with sentinel `64 ff ff ff ff ff ff ff ff`.
 - AA=1 first replaces the active record with that sentinel. Cancelling an
-  automatic record can also disable overlapping manual and invalidate other
-  overlapping automatic records.
+  automatic record can also disable manual and invalidate other automatic records covering now.
 - A4=2 clears the complete 38-byte record/switch region. It is destructive to
   saved future plans; it is not a generic restoration command.
 
@@ -252,3 +251,7 @@ flash, response transport, timers, memory-copy routines, LCD delivery, battery
 sensors, calendar conversion, descriptor destination and history/event
 boundaries are substituted. No physical safety mechanism, fault producer,
 battery/DSP firmware, radio delivery or real scheduler is reproduced.
+
+The [complete-readback follow-up](gen2-persistent-plan-followup.md) provides
+16 additional replay cases: different saved configurations can have identical
+D9 status. Inactive status alone cannot justify a reversible backup write.

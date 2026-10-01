@@ -9,7 +9,8 @@ or permitting station access to the home LAN. After a failed first update and
 a retry, the user confirmed that the app reports installed **1.7.1**.
 Bluetooth independently confirms main **1.7.1** using Prime/AES-GCM.
 Three fresh samples match all **11 protected pre-update settings**. The
-post-update radio version remains unknown.
+post-update radio version was not captured during this update. A subsequent
+[local MQTT trial](c1000-original-mqtt-followup.md) independently confirmed **0.3.3.0**.
 The C2000 and C1000 Gen 2 are outside this experiment.
 
 This temporary internet-enabled network is separate from the tool's normal
@@ -297,3 +298,11 @@ Do not substitute a different model's image or count encrypted network bytes
 as a verified firmware file. Any later updater must report unsupported formats
 and incomplete transfers explicitly; this experiment does not validate flashing
 the C2000 that supplies production loads.
+
+## October 1 continuation
+
+Additional Prime BLE SDK round trips verified screen timeout **30→60→30 s**,
+light **off→low→off**, and **Celsius→Fahrenheit→Celsius**. Full fresh settings
+and the 21-byte F8 block matched at restoration. The same six-control subset
+(including the three September 30 controls) then passed isolated native MQTT.
+See [native MQTT and route behavior](c1000-original-mqtt-followup.md).

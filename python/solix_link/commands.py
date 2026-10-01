@@ -1,7 +1,8 @@
 """Allowlisted gateway command shapes; protocol clients validate value ranges."""
 
 from .tou import TouPeriod, validate_periods
-from .protocol import validate_device_timeout
+from .protocol import Model, validate_device_timeout
+from .c1000_capabilities import original_native_commands
 
 COMMAND_FIELDS = {
     "set-charge-power": {"watts": int},
@@ -24,6 +25,17 @@ COMMAND_FIELDS = {
 NATIVE_COMMANDS = ("set-charge-power", "set-charge-cap", "set-backup-reserve", "set-tou-plan", "return-grid")
 NATIVE_C1000_COMMANDS = ("set-temperature-unit", "set-off-grid-alert", "set-discharge-floor", "set-device-timeout", "set-fast-charge",
                         "set-display-brightness", "set-display-timeout", "set-port-memory")
+
+
+def native_commands_for_model(model: Model) -> tuple[str, ...]:
+    """Return only controls verified for the configured native MQTT model."""
+    if model == Model.C1000:
+        return original_native_commands()
+    if model == Model.C1000_GEN2:
+        return NATIVE_COMMANDS + NATIVE_C1000_COMMANDS
+    if model == Model.C2000_GEN2:
+        return NATIVE_COMMANDS
+    return ()
 
 
 def validate_command(command: str, values: dict) -> None:

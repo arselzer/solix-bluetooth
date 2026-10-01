@@ -14,10 +14,10 @@ Home Assistant integration for the local gateway.
 - C1000 Gen 2 native MQTT: 100–1200 W charging, fast charge, temperature unit,
   off-grid alert, display brightness/timeout, output-port memory and guarded
   lower discharge limit without silently changing reserve.
-- Original C1000: temperature units, fast charge, AC/DC Smart modes and Device
-  Timeout through Bluetooth, the bridge and gateway interfaces; isolated Wi-Fi setup.
+- Original C1000: local MQTT and Prime Bluetooth charging power, Device Timeout,
+  screen timeout/brightness, light and temperature units; additional legacy BLE controls.
 - Authenticated JSON HTTP, SSE and Prometheus for multiple stations.
-- Up to eight Gen 2 stations on one isolated AP, with separate certificates,
+- Up to eight supported stations on one isolated AP, with separate certificates,
   telemetry and command queues.
 - Web dashboard with device selection, power/battery charts and explicit write
   confirmation. Deployment needs no Node runtime or external assets.
@@ -26,7 +26,7 @@ Home Assistant integration for the local gateway.
 | --- | --- | --- | --- |
 | C1000 Gen 2, A1763 | Monitoring, charge limits/power, display timeout, fast charge | Charging/fast/reserve, tariffs, temperature/alert, display/memory, discharge floor | Main 1.1.4.9 / radio 0.3.3.0; older 1.1.4.3 uses legacy BLE |
 | C2000 Gen 2, A1783 | Monitoring, power/cap, display timeout | Charging/reserve, tariffs and return to grid | Main 2.1.6.4; AC-output writes blocked |
-| Original C1000, A1761 | Monitoring and twelve controls on legacy; Prime brightness/power/device timeout | — | Legacy 1.5.1; Prime 1.7.1 verified with settings restored; other Prime controls unvalidated |
+| Original C1000, A1761 | Twelve legacy controls; six Prime controls | Charging power, device/screen timeout, brightness, light, temperature unit | Legacy 1.5.1; Prime main 1.7.1 / radio 0.3.3.0; settings restored |
 | C300/C300X AC, A1722/A1723 | Monitoring, AC output, light, charging power, display timeout | — | C300X tested; C300 sibling untested; C300 DC unsupported |
 | Solarbank 3 E2700 Pro, A17C5 | Separate Web Bluetooth app | — | Browser telemetry tested; no Python profile |
 
@@ -57,9 +57,8 @@ solix-link set-charge-power --name office --watts 300
 ```
 
 C300 AC and original C1000 firmware 1.5.1 use legacy BLE without a pairing ID.
-Original C1000 firmware 1.7.1 uses explicit Prime selection; monitoring,
-brightness, charging power and Device Timeout were verified with an existing
-app ID. Generated-ID pairing on this model remains unverified. Prime Gen 2
+Original C1000 firmware 1.7.1 uses explicit Prime selection; monitoring and
+six controls were verified over BLE and local MQTT with an existing app ID. Generated-ID pairing on this model remains unverified. Prime Gen 2
 pairing generates a local ID and can require one short **main power button**
 press. Save the ID for reconnects. Generated-identity native MQTT is verified
 on C1000 Gen 2; C2000 native provisioning uses an already working identity.
@@ -118,8 +117,10 @@ web-dashboard guide. Commit Vue sources and compiled Python assets together.
 - [Firmware findings](docs/firmware-findings.md): handlers, readiness, tariffs,
   checksums and update verification.
 - [Firmware inputs](firmware/README.md): recovered vendor images, hashes and provenance.
-- [Original-C1000 preferences](docs/c1000-preferences-validation.md) and
-  [isolated Wi-Fi](docs/c1000-original-wifi-validation.md); direct MQTT remains open.
+- [Original native MQTT](docs/c1000-original-mqtt-followup.md): bootstrap, six
+  controls, deferred status and suppressed ACKs; [charging-path analysis](docs/c1000-bypass-firmware-followup.md).
+- [Gen 2 plan persistence and backup readback](docs/gen2-persistent-plan-followup.md):
+  missing saved records and cancellation side effects.
 - [Charging and reserve validation](docs/c1000-charging-and-reserve-validation.md):
   native fast charge, lower charging power, reserve floor and cached reconnect.
 - [Native display/memory validation](docs/c1000-native-preferences-validation.md):

@@ -75,9 +75,7 @@ def test_pair_saves_original_prime_client_id_without_reflecting_it(monkeypatch, 
 
 
 @pytest.mark.parametrize("command,values", [
-    ("set-display-timeout", {"seconds": 60}),
-    ("set-ac-output", {"enabled": "off"}), ("set-light", {"mode": "low"}),
-    ("set-temperature-unit", {"unit": "fahrenheit"}),
+    ("set-ac-output", {"enabled": "off"}),
     ("set-fast-charge", {"enabled": "on"}), ("set-ac-power-saving", {"enabled": "on"}),
 ])
 def test_original_prime_cli_controls_fail_before_opening_transport(monkeypatch, tmp_path, command, values):
@@ -90,11 +88,11 @@ def test_original_prime_cli_controls_fail_before_opening_transport(monkeypatch, 
 
 def test_original_prime_gateway_and_bridge_expose_only_verified_controls():
     service = MonitorService([original()])
-    assert service.supported_commands("original") == ["set-charge-power", "set-device-timeout", "set-display-brightness"]
-    for operation in ("ac_charging_power", "device_timeout", "display_brightness"):
+    assert service.supported_commands("original") == ["set-charge-power", "set-device-timeout", "set-display-brightness",
+                                                       "set-display-timeout", "set-light", "set-temperature-unit"]
+    for operation in ("ac_charging_power", "device_timeout", "display_brightness", "display_timeout", "light_mode", "temperature_unit"):
         assert _supports_operation(original(), operation)
-    for operation in ("display_timeout", "ac_output", "light_mode", "temperature_unit",
-                      "fast_charge", "ac_power_saving", "dc_power_saving"):
+    for operation in ("ac_output", "fast_charge", "ac_power_saving", "dc_power_saving"):
         assert not _supports_operation(original(), operation)
         with pytest.raises(ValueError, match="not verified for original C1000 Prime"):
             asyncio.run(service.apply_setting("original", operation))
@@ -108,6 +106,9 @@ def test_original_prime_gateway_and_bridge_expose_only_verified_controls():
     ("set-charge-power", {"watts": 900}, ("power", 900)),
     ("set-display-brightness", {"level": 1}, ("display_brightness", 1)),
     ("set-device-timeout", {"minutes": 0}, ("timeout", 0)),
+    ("set-display-timeout", {"seconds": 60}, ("display_timeout", 60)),
+    ("set-light", {"mode": "low"}, ("light", 1)),
+    ("set-temperature-unit", {"unit": "fahrenheit"}, ("temperature", True)),
 ])
 def test_original_prime_cli_routes_verified_controls_with_saved_id(monkeypatch, tmp_path, command, values, expected):
     path = tmp_path / "config.json"
@@ -136,6 +137,18 @@ def test_original_prime_cli_routes_verified_controls_with_saved_id(monkeypatch, 
             calls.append((setting, value))
             return {"display_brightness": value}
 
+        async def set_display_timeout(self, seconds):
+            calls.append(("display_timeout", seconds))
+            return {"display_timeout_seconds": seconds}
+
+        async def set_light_mode(self, mode):
+            calls.append(("light", mode))
+            return {"light_mode": mode}
+
+        async def set_temperature_unit(self, fahrenheit):
+            calls.append(("temperature", fahrenheit))
+            return {"temperature_unit_fahrenheit": int(fahrenheit)}
+
     monkeypatch.setattr(cli, "SolixMonitor", Monitor)
     asyncio.run(cli._set(argparse.Namespace(command=command, name="original", config=path, **values)))
     assert calls == [expected]
@@ -151,7 +164,7 @@ def test_line_menu_can_switch_original_protocol_without_pairing(monkeypatch, tmp
     changed = interactive.change_protocol(legacy, path)
     assert changed == original() and load_config(path) == [changed]
     output = capsys.readouterr().out
-    assert "other controls remain unavailable" in output and legacy.client_id not in output
+    assert "Smart modes remain unavailable" in output and legacy.client_id not in output
 
 
 def test_line_main_protocol_choice_does_not_pair_before_configuration(monkeypatch, tmp_path):
@@ -182,7 +195,8 @@ def test_terminal_backend_protocol_change_disconnects_and_retains_pairing(tmp_pa
         changed = await backend.set_protocol("ble:original", "prime")
         assert backend.target is None and backend.monitor is None and disconnected == [True]
         assert load_config(path) == [original()] and changed.device == original()
-        assert {control.key for control in controls_for(changed)} == {"charge-power", "display-brightness", "device-timeout"}
+        assert {control.key for control in controls_for(changed)} == {"charge-power", "display-brightness", "device-timeout",
+                                                                   "display-timeout", "light", "temperature-unit"}
         assert "prime" in changed.label and legacy.client_id not in changed.label
     asyncio.run(run())
 
@@ -242,8 +256,9 @@ def test_headless_original_protocol_selector_has_cancel_and_save(tmp_path):
             await pilot.click("#protocol-save")
             await pilot.pause()
             assert load_config(path) == [original()]
-            assert {control.key for control in controls_for(backend.targets[0])} == {"charge-power", "display-brightness", "device-timeout"}
-            assert "Other controls remain unavailable" in str(app.query_one("#notice", Static).render())
+            assert {control.key for control in controls_for(backend.targets[0])} == {"charge-power", "display-brightness", "device-timeout",
+                                                                                  "display-timeout", "light", "temperature-unit"}
+            assert "Smart modes remain unavailable" in str(app.query_one("#notice", Static).render())
             assert app.query_one("#apply-setting").disabled
             app.save_screenshot(filename="solix-original-prime-dashboard.svg", path="/tmp")
     asyncio.run(run())

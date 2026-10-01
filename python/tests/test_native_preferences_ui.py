@@ -51,7 +51,9 @@ def test_unix_worker_routes_exact_typed_preferences(command, field, value, metri
     async def run():
         method = {"set-display-brightness": "set_display_brightness", "set-display-timeout": "set_display_timeout",
                   "set-port-memory": "set_port_memory"}[command]
-        mqtt = SimpleNamespace(**{method: AsyncMock(return_value={"metrics": {metric: int(value)}})})
+        config = APServiceConfig("office", "wlan_unused", "phy9", "AT", "A1763SYNTHETIC001", "a" * 40,
+                                 model=Model.C1000_GEN2)
+        mqtt = SimpleNamespace(config=config, **{method: AsyncMock(return_value={"metrics": {metric: int(value)}})})
         worker = object.__new__(APService)
         worker._clients = set()
         worker.stations = {"office": mqtt}
