@@ -36,7 +36,7 @@ const displayTimes = computed(() => nativeC1000.value ? [0, 10, 20, 30, 60, 300,
   : props.station.model === 'c1000' ? [20, 30, 60, 300, 1800] : [30, 60]);
 const originalProfile = computed(() => props.station.model === 'c1000' && props.station.protocol === 'legacy');
 const guardedDcSmart = computed(() => props.station.model === 'c1000' && ['prime', 'native_mqtt'].includes(props.station.protocol ?? ''));
-const guardedAcSmart = computed(() => props.station.model === 'c1000' && props.station.protocol === 'prime');
+const guardedAcSmart = computed(() => props.station.model === 'c1000' && ['prime', 'native_mqtt'].includes(props.station.protocol ?? ''));
 const originalPreferenceProfile = computed(() => props.station.model === 'c1000' && ['prime', 'native_mqtt'].includes(props.station.protocol ?? ''));
 const nativeC1000 = computed(() => props.station.model === 'c1000_gen2' && props.station.protocol === 'native_mqtt');
 const booleanReported = (key: string) => [0, 1].includes(numberMetric(props.station, key) ?? -1);

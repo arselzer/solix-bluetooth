@@ -88,7 +88,7 @@ Original C1000 **legacy** BLE profiles expose `set-temperature-unit`/`fahrenheit
 automatically stop an output at low load; these configuration controls
 do not send an output-switch command. See the [physical trials](c1000-preferences-validation.md).
 
-Original C1000 **Prime/native MQTT 1.7.1** shares these eight controls:
+Original C1000 **Prime/native MQTT 1.7.1** shares these nine controls:
 
 | Command | Exact field | Values |
 | --- | --- | --- |
@@ -100,16 +100,23 @@ Original C1000 **Prime/native MQTT 1.7.1** shares these eight controls:
 | `set-temperature-unit` | boolean `fahrenheit` | `true` / `false` |
 | `set-dc-power-saving` | boolean `enabled` | false Normal / true Smart; requires fresh DC output off |
 | `set-fast-charge` | boolean `enabled` | `true` / `false`; adequate AC supply required |
+| `set-ac-power-saving` | boolean `enabled` | false Normal / true Smart; requires fresh AC output off and inactive countdown |
 
-Prime BLE additionally exposes `set-ac-power-saving` with boolean `enabled`,
-making nine gateway preferences. Both directions require fresh AC output off,
-an exact integer zero AC countdown and valid mode readback. The prototype and
-public SDK each passed four writes/twenty explicit complete fresh snapshots:
+For AC Smart, both transports require fresh AC output off in both directions,
+an exact integer zero AC countdown and valid mode readback. The Prime prototype
+and public SDK each passed four writes/twenty explicit complete fresh snapshots:
 AC off, AC Smart off/on, AC on restoration. All eleven settings/F8 and the
 read-only upstream baseline were restored; only F8 AC mode byte 2 may change
 for this setting. Smart can inherit an inactivity counter and later stop the
-output at low load; enabling does not guarantee a new grace period. Native
-AC Smart remains unsupported, even if an incorrect capability is advertised.
+output at low load; enabling does not guarantee a new grace period.
+Native AC Smart independently passed two prototype writes/23 complete snapshots.
+Its public SDK repeat passed two mode writes/35 explicit complete snapshots
+(23 mode-related, 12 setup/final), with two separate private native `004a`
+output setup/restoration writes. All eleven preferences/F8 and the upstream
+baseline were restored, including original AC on/DC off/AC Smart on. Use
+`ap-service-set-ac-power-saving --directory /private/ap --name original --enabled on|off`.
+See [native AC Smart validation](c1000-native-ac-smart-validation.md).
+Native output switching remains unavailable through public interfaces.
 Direct SDK/CLI/terminal AC output control requires the same inactive countdown
 and complete readback confirmation, giving ten direct Prime controls. HTTP/browser/HA and
 the Prime BLE MQTT bridge do not expose output switching. C2000 AC is blocked.
@@ -127,7 +134,7 @@ load; enabling does not guarantee a new grace period. The native prototype
 passed two writes/fifteen fresh snapshots with all eleven settings and the full
 F8 restored, AC enabled and DC disabled. Its AP CLI is
 `ap-service-set-dc-power-saving --enabled on|off`; include the private
-`--directory` and configured station `--name`. AC Smart and Gen 2 remain excluded.
+`--directory` and configured station `--name`. Gen 2 remains excluded.
 A public SDK repeat also passed two writes/eleven explicit fresh journal
 snapshots, alongside the setter's internal fresh reads, with full restoration.
 
@@ -142,7 +149,7 @@ at 100% SOC, then restored OFF with AC outputs on and complete settings/F8
 baseline preservation. Removing AC input cleared the flag. Use an adequate AC
 supply; no charging-speed or reboot-persistence claim is made. The browser
 requires confirmation, and HA requires advertised capability/fresh binary
-readback. Prime has nine gateway preferences; native has eight. Native `005e` OFF→ON→OFF
+readback. Both transports expose nine gateway preferences. Native `005e` OFF→ON→OFF
 passed two writes/twenty explicit complete fresh snapshots, with four held
 samples over at least twelve seconds, complete eleven-preference/F8 restoration
 and AC on/DC off at 100% SOC. Use

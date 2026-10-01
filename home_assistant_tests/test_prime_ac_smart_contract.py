@@ -21,8 +21,9 @@ def station(**changes):
 
 
 @pytest.mark.parametrize("enabled", [False, True])
-def test_ac_smart_accepts_semantic_boolean_and_preserves_timer_readback(enabled):
-    snapshot = api.parse_snapshot(station())
+@pytest.mark.parametrize("protocol", ["prime", "native_mqtt"])
+def test_ac_smart_accepts_semantic_boolean_and_preserves_timer_readback(enabled, protocol):
+    snapshot = api.parse_snapshot(station(protocol=protocol))
     assert snapshot["metrics"]["ac_output_timer_remaining_seconds"] == 0
     assert api.boolean_setting_supported(snapshot, "set-ac-power-saving")
     api.validate_command(snapshot, {"command": "set-ac-power-saving", "enabled": enabled})
@@ -36,8 +37,9 @@ def test_ac_smart_accepts_semantic_boolean_and_preserves_timer_readback(enabled)
     ("ac_power_saving_mode_enabled", None), ("ac_power_saving_mode_enabled", True),
 ])
 @pytest.mark.parametrize("enabled", [False, True])
-def test_ac_smart_refuses_active_or_unknown_ac_timer_or_mode(metric, bad, enabled):
-    snapshot = station()
+@pytest.mark.parametrize("protocol", ["prime", "native_mqtt"])
+def test_ac_smart_refuses_active_or_unknown_ac_timer_or_mode(metric, bad, enabled, protocol):
+    snapshot = station(protocol=protocol)
     snapshot["metrics"][metric] = bad
     assert not api.boolean_setting_supported(snapshot, "set-ac-power-saving")
     with pytest.raises(ValueError):
@@ -45,11 +47,12 @@ def test_ac_smart_refuses_active_or_unknown_ac_timer_or_mode(metric, bad, enable
 
 
 @pytest.mark.parametrize("changes", [{"controls": []}, {"connected": False}, {"available": False},
-                                     {"last_seen_timestamp": time.time() - 91}, {"protocol": "native_mqtt"},
+                                     {"last_seen_timestamp": time.time() - 91},
                                      {"model": "c1000_gen2"}, {"model": "c2000_gen2"}, {"model": "c300"}])
-def test_ac_smart_requires_fresh_prime_original_capability(changes):
+@pytest.mark.parametrize("protocol", ["prime", "native_mqtt"])
+def test_ac_smart_requires_fresh_original_capability(changes, protocol):
     with pytest.raises(ValueError):
-        api.validate_command(station(**changes), {"command": "set-ac-power-saving", "enabled": False})
+        api.validate_command(station(protocol=protocol, **changes), {"command": "set-ac-power-saving", "enabled": False})
 
 
 def test_gateway_contract_excludes_output_switch_even_when_advertised():

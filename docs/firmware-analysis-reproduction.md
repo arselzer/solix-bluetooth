@@ -23,7 +23,9 @@ and [1,347 original Smart-policy cases](c1000-smart-auto-off-policy.md),
 [50 original Fast current-limit/DSP cases](c1000-fast-current-limits.md), and
 [59 Gen 2 solar-retry-origin cases](gen2-pv-retry-origins.md),
 [78 original SOC/recharge cases](c1000-soc-and-recharge-firmware.md), and
-[140 Gen 2 PV-retry actuation cases](gen2-pv-retry-actuation.md).
+[140 Gen 2 PV-retry actuation cases](gen2-pv-retry-actuation.md),
+[90 original Smart-blocker cases](c1000-smart-blocker-followup.md), and
+[60 Gen 2 DSP-startup continuation cases](gen2-pv-start-continuation.md).
 These have independent commands and manifests; they are not included in the
 1,842-case combined runner. Their individual commands are in the linked records.
 

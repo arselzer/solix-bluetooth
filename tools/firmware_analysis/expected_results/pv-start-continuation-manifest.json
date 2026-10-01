@@ -1,0 +1,56 @@
+{
+  "hardware_access": false,
+  "network_access": false,
+  "case_counts": {
+    "periodic_guards": 8,
+    "counter_boundaries": 15,
+    "fault_reset": 6,
+    "second_fault_word_scope": 4,
+    "priority_events": 6,
+    "start_stop_at_threshold": 8,
+    "periodic_flag_producer": 8,
+    "qualifying_tick_sequences": 5
+  },
+  "firmware": {
+    "dspDCDC-decoded.bin": "7ae2bb915812441b8316d1c3f3efc2379fcb488d4d03e950901cf507c224ceb8"
+  },
+  "runtime": {
+    "python": "3.12.3",
+    "unicorn_import_version": "2.1.4"
+  },
+  "result_sha256": "cb41ac65d93591202486b34905be38088dcfcff54dd9e61847161dc85adbee91",
+  "source_sha256": {
+    "emulate_pv_start_continuation.py": "104b3a8f67401e312cf8a5f7743cb1fb44e682cb3f037bf7b0b3732b9c9b403b",
+    "emulate_pv_retry_actuation.py": "2927f2edd80e0ea1e000e3b99a786aaa6cf506ecfbc41676b05f929a4dbc690c",
+    "emulate_pv_retry_origins.py": "5ed18f3be5527848eeda567c77ecd7ce400c57365947545d956c9371c6804f54",
+    "emulate_general_settings.py": "26ce041976a8fd1ac43feb2851c1717363761cb2f7da69f4d780b3f42b8ef0ba",
+    "emulate_additional_features.py": "baaeb837278e225a117ebaf025e1e463eed10f24d51af8d7f2946783ef12615e",
+    "emulate_clock_semantics.py": "945b649c3b5cec00d816041e783641085ccfbdb5f80efc2ed2c4e15f3bae30f2",
+    "replay_io.py": "731d795a5ec37e2cf12b809b7122eaf7a29d84c21a2ecd43fafa3e2f8d962d30",
+    "extract_dsp.py": "5a82593ea76fd784702e0ee501be2415a4540d2570c3f370d343e8512d2a87e9"
+  },
+  "function_return_substitutions": [],
+  "synthetic_boundaries": [
+    "RAM and MMIO values",
+    "event word after retrieval",
+    "periodic quotient edge",
+    "initial DSP mode1 state"
+  ],
+  "executed": [
+    "087464..0874a1 continuation",
+    "selected-event prefix08744c",
+    "real fault and periodic getters",
+    "cleanup08730a with real callees",
+    "periodic divider tail0894a5..0894b4"
+  ],
+  "excluded": [
+    "UART",
+    "event retrieval and empty-event prologue",
+    "full DSP dispatcher",
+    "real timer ISR/frequency",
+    "fault producers",
+    "peripheral side effects",
+    "mode2 and later regulation",
+    "physical PV/battery power"
+  ]
+}

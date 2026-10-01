@@ -24,13 +24,15 @@ NATIVE_CONTROLS = (
     ("dc_power_saving_mode_enabled", "4076", "0100", "dc_power_saving_mode_enabled", False),
     ("fast_charge_enabled", "405e", "0101", "ac_fast_charge_enabled", True),
     ("fast_charge_enabled", "405e", "0100", "ac_fast_charge_enabled", False),
+    ("ac_power_saving_mode_enabled", "4077", "0100", "ac_power_saving_mode_enabled", False),
+    ("ac_power_saving_mode_enabled", "4077", "0101", "ac_power_saving_mode_enabled", True),
 )
 
 
 def test_native_control_coverage_does_not_follow_ble_only_additions():
     from solix_link.c1000_capabilities import C1000_NATIVE_SETTINGS
     assert {row[0] for row in NATIVE_CONTROLS} == C1000_NATIVE_SETTINGS
-    assert "ac_power_saving_mode_enabled" not in C1000_NATIVE_SETTINGS
+    assert "ac_output_enabled" not in C1000_NATIVE_SETTINGS
 
 
 @pytest.mark.parametrize("setting,ble_command,typed,metric,value", NATIVE_CONTROLS)
@@ -63,6 +65,9 @@ def test_original_tls_settings_send_once_and_confirm_full_status(
         state, captured = BASELINE.copy(), []
         if setting == "fast_charge_enabled":
             state[metric] = int(not value)
+        if setting == "ac_power_saving_mode_enabled":
+            state["ac_output_enabled"] = 0
+            state[metric] = int(not value)
         changed = False
 
         async def publish(command, payload, *, retained=False, serial=None):
@@ -86,7 +91,8 @@ def test_original_tls_settings_send_once_and_confirm_full_status(
                     command = frame.command.hex()
                     captured.append(command)
                     if command == "0040":
-                        flags = FLAGS[:1] + bytes((state["dc_power_saving_mode_enabled"] + 1,)) + FLAGS[2:]
+                        flags = FLAGS[:1] + bytes((state["dc_power_saving_mode_enabled"] + 1,
+                                                  state["ac_power_saving_mode_enabled"] + 1)) + FLAGS[3:]
                         if changed and problem == "flags_changed":
                             flags = flags[:-1] + bytes((flags[-1] ^ 1,))
                         complete = payload_for(state, flags)
@@ -129,12 +135,13 @@ def test_original_tls_settings_send_once_and_confirm_full_status(
                       "light_mode": server.set_light_mode,
                       "temperature_unit_fahrenheit": server.set_temperature_unit,
                       "dc_power_saving_mode_enabled": server.set_dc_power_saving_enabled,
+                      "ac_power_saving_mode_enabled": server.set_ac_power_saving_enabled,
                       "fast_charge_enabled": server.set_fast_charge_enabled}[setting]
             async with asyncio.timeout(3):
                 if problem == "matching":
                     snapshot = await method(value)
                     assert snapshot["metrics"][metric] == int(value)
-                    assert snapshot["metrics"]["ac_output_enabled"] == 1
+                    assert snapshot["metrics"]["ac_output_enabled"] == int(setting != "ac_power_saving_mode_enabled")
                     assert config.device_serial not in json.dumps(snapshot)
                     assert captured.count("0040") >= 4  # poll, baseline, two confirmations
                 else:

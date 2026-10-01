@@ -1,0 +1,2572 @@
+{
+  "periodic_guards": [
+    {
+      "case": "event0_pulse0_fault0",
+      "inputs": {
+        "events": 8,
+        "periodic": 0,
+        "fault1": 0,
+        "counter": 99
+      },
+      "after": {
+        "mode": 1,
+        "previous_mode": 9,
+        "reason": 85,
+        "counter": 99,
+        "run_request": 1,
+        "writes": []
+      }
+    },
+    {
+      "case": "event0_pulse0_fault1",
+      "inputs": {
+        "events": 8,
+        "periodic": 0,
+        "fault1": 1,
+        "counter": 99
+      },
+      "after": {
+        "mode": 1,
+        "previous_mode": 9,
+        "reason": 85,
+        "counter": 99,
+        "run_request": 1,
+        "writes": []
+      }
+    },
+    {
+      "case": "event0_pulse1_fault0",
+      "inputs": {
+        "events": 8,
+        "periodic": 1,
+        "fault1": 0,
+        "counter": 99
+      },
+      "after": {
+        "mode": 1,
+        "previous_mode": 9,
+        "reason": 85,
+        "counter": 99,
+        "run_request": 1,
+        "writes": []
+      }
+    },
+    {
+      "case": "event0_pulse1_fault1",
+      "inputs": {
+        "events": 8,
+        "periodic": 1,
+        "fault1": 1,
+        "counter": 99
+      },
+      "after": {
+        "mode": 1,
+        "previous_mode": 9,
+        "reason": 85,
+        "counter": 99,
+        "run_request": 1,
+        "writes": []
+      }
+    },
+    {
+      "case": "event1_pulse0_fault0",
+      "inputs": {
+        "events": 9,
+        "periodic": 0,
+        "fault1": 0,
+        "counter": 99
+      },
+      "after": {
+        "mode": 1,
+        "previous_mode": 9,
+        "reason": 85,
+        "counter": 99,
+        "run_request": 1,
+        "writes": []
+      }
+    },
+    {
+      "case": "event1_pulse0_fault1",
+      "inputs": {
+        "events": 9,
+        "periodic": 0,
+        "fault1": 1,
+        "counter": 99
+      },
+      "after": {
+        "mode": 1,
+        "previous_mode": 9,
+        "reason": 85,
+        "counter": 99,
+        "run_request": 1,
+        "writes": []
+      }
+    },
+    {
+      "case": "event1_pulse1_fault0",
+      "inputs": {
+        "events": 9,
+        "periodic": 1,
+        "fault1": 0,
+        "counter": 99
+      },
+      "after": {
+        "mode": 2,
+        "previous_mode": 1,
+        "reason": 85,
+        "counter": 0,
+        "run_request": 1,
+        "writes": [
+          {
+            "pc": "087475",
+            "address": "acf3",
+            "value": 100,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08747c",
+            "address": "4097",
+            "value": 4612,
+            "protected_access": true,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087480",
+            "address": "4197",
+            "value": 13317,
+            "protected_access": true,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087486",
+            "address": "acf3",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087487",
+            "address": "acea",
+            "value": 2,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0874a0",
+            "address": "aceb",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "case": "event1_pulse1_fault1",
+      "inputs": {
+        "events": 9,
+        "periodic": 1,
+        "fault1": 1,
+        "counter": 99
+      },
+      "after": {
+        "mode": 4,
+        "previous_mode": 1,
+        "reason": 85,
+        "counter": 0,
+        "run_request": 0,
+        "writes": [
+          {
+            "pc": "08748e",
+            "address": "acf3",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087495",
+            "address": "acea",
+            "value": 4,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08749f",
+            "address": "acf1",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0874a0",
+            "address": "aceb",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    }
+  ],
+  "counter_boundaries": [
+    {
+      "case": "count0_request0",
+      "inputs": {
+        "counter": 0,
+        "request": 0
+      },
+      "after": {
+        "mode": 1,
+        "previous_mode": 9,
+        "reason": 85,
+        "counter": 1,
+        "run_request": 0,
+        "writes": [
+          {
+            "pc": "08748a",
+            "address": "acf3",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "case": "count0_request1",
+      "inputs": {
+        "counter": 0,
+        "request": 1
+      },
+      "after": {
+        "mode": 1,
+        "previous_mode": 9,
+        "reason": 85,
+        "counter": 1,
+        "run_request": 1,
+        "writes": [
+          {
+            "pc": "08748a",
+            "address": "acf3",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "case": "count0_request2",
+      "inputs": {
+        "counter": 0,
+        "request": 2
+      },
+      "after": {
+        "mode": 1,
+        "previous_mode": 9,
+        "reason": 85,
+        "counter": 1,
+        "run_request": 2,
+        "writes": [
+          {
+            "pc": "08748a",
+            "address": "acf3",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "case": "count1_request0",
+      "inputs": {
+        "counter": 1,
+        "request": 0
+      },
+      "after": {
+        "mode": 1,
+        "previous_mode": 9,
+        "reason": 85,
+        "counter": 2,
+        "run_request": 0,
+        "writes": [
+          {
+            "pc": "08748a",
+            "address": "acf3",
+            "value": 2,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "case": "count1_request1",
+      "inputs": {
+        "counter": 1,
+        "request": 1
+      },
+      "after": {
+        "mode": 1,
+        "previous_mode": 9,
+        "reason": 85,
+        "counter": 2,
+        "run_request": 1,
+        "writes": [
+          {
+            "pc": "08748a",
+            "address": "acf3",
+            "value": 2,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "case": "count1_request2",
+      "inputs": {
+        "counter": 1,
+        "request": 2
+      },
+      "after": {
+        "mode": 1,
+        "previous_mode": 9,
+        "reason": 85,
+        "counter": 2,
+        "run_request": 2,
+        "writes": [
+          {
+            "pc": "08748a",
+            "address": "acf3",
+            "value": 2,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "case": "count98_request0",
+      "inputs": {
+        "counter": 98,
+        "request": 0
+      },
+      "after": {
+        "mode": 1,
+        "previous_mode": 9,
+        "reason": 85,
+        "counter": 99,
+        "run_request": 0,
+        "writes": [
+          {
+            "pc": "08748a",
+            "address": "acf3",
+            "value": 99,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "case": "count98_request1",
+      "inputs": {
+        "counter": 98,
+        "request": 1
+      },
+      "after": {
+        "mode": 1,
+        "previous_mode": 9,
+        "reason": 85,
+        "counter": 99,
+        "run_request": 1,
+        "writes": [
+          {
+            "pc": "08748a",
+            "address": "acf3",
+            "value": 99,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "case": "count98_request2",
+      "inputs": {
+        "counter": 98,
+        "request": 2
+      },
+      "after": {
+        "mode": 1,
+        "previous_mode": 9,
+        "reason": 85,
+        "counter": 99,
+        "run_request": 2,
+        "writes": [
+          {
+            "pc": "08748a",
+            "address": "acf3",
+            "value": 99,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "case": "count99_request0",
+      "inputs": {
+        "counter": 99,
+        "request": 0
+      },
+      "after": {
+        "mode": 1,
+        "previous_mode": 9,
+        "reason": 85,
+        "counter": 100,
+        "run_request": 0,
+        "writes": [
+          {
+            "pc": "087475",
+            "address": "acf3",
+            "value": 100,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "case": "count99_request1",
+      "inputs": {
+        "counter": 99,
+        "request": 1
+      },
+      "after": {
+        "mode": 2,
+        "previous_mode": 1,
+        "reason": 85,
+        "counter": 0,
+        "run_request": 1,
+        "writes": [
+          {
+            "pc": "087475",
+            "address": "acf3",
+            "value": 100,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08747c",
+            "address": "4097",
+            "value": 4612,
+            "protected_access": true,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087480",
+            "address": "4197",
+            "value": 13317,
+            "protected_access": true,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087486",
+            "address": "acf3",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087487",
+            "address": "acea",
+            "value": 2,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0874a0",
+            "address": "aceb",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "case": "count99_request2",
+      "inputs": {
+        "counter": 99,
+        "request": 2
+      },
+      "after": {
+        "mode": 1,
+        "previous_mode": 9,
+        "reason": 85,
+        "counter": 100,
+        "run_request": 2,
+        "writes": [
+          {
+            "pc": "087475",
+            "address": "acf3",
+            "value": 100,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "case": "count100_request0",
+      "inputs": {
+        "counter": 100,
+        "request": 0
+      },
+      "after": {
+        "mode": 1,
+        "previous_mode": 9,
+        "reason": 85,
+        "counter": 100,
+        "run_request": 0,
+        "writes": [
+          {
+            "pc": "087475",
+            "address": "acf3",
+            "value": 100,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "case": "count100_request1",
+      "inputs": {
+        "counter": 100,
+        "request": 1
+      },
+      "after": {
+        "mode": 2,
+        "previous_mode": 1,
+        "reason": 85,
+        "counter": 0,
+        "run_request": 1,
+        "writes": [
+          {
+            "pc": "087475",
+            "address": "acf3",
+            "value": 100,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08747c",
+            "address": "4097",
+            "value": 4612,
+            "protected_access": true,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087480",
+            "address": "4197",
+            "value": 13317,
+            "protected_access": true,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087486",
+            "address": "acf3",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087487",
+            "address": "acea",
+            "value": 2,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0874a0",
+            "address": "aceb",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "case": "count100_request2",
+      "inputs": {
+        "counter": 100,
+        "request": 2
+      },
+      "after": {
+        "mode": 1,
+        "previous_mode": 9,
+        "reason": 85,
+        "counter": 100,
+        "run_request": 2,
+        "writes": [
+          {
+            "pc": "087475",
+            "address": "acf3",
+            "value": 100,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    }
+  ],
+  "fault_reset": [
+    {
+      "case": "fault1_count0",
+      "inputs": {
+        "fault1": 1,
+        "counter": 0
+      },
+      "after": {
+        "mode": 4,
+        "previous_mode": 1,
+        "reason": 85,
+        "counter": 0,
+        "run_request": 0,
+        "writes": [
+          {
+            "pc": "08748e",
+            "address": "acf3",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087495",
+            "address": "acea",
+            "value": 4,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08749f",
+            "address": "acf1",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0874a0",
+            "address": "aceb",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "case": "fault1_count99",
+      "inputs": {
+        "fault1": 1,
+        "counter": 99
+      },
+      "after": {
+        "mode": 4,
+        "previous_mode": 1,
+        "reason": 85,
+        "counter": 0,
+        "run_request": 0,
+        "writes": [
+          {
+            "pc": "08748e",
+            "address": "acf3",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087495",
+            "address": "acea",
+            "value": 4,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08749f",
+            "address": "acf1",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0874a0",
+            "address": "aceb",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "case": "fault1_count100",
+      "inputs": {
+        "fault1": 1,
+        "counter": 100
+      },
+      "after": {
+        "mode": 4,
+        "previous_mode": 1,
+        "reason": 85,
+        "counter": 0,
+        "run_request": 0,
+        "writes": [
+          {
+            "pc": "08748e",
+            "address": "acf3",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087495",
+            "address": "acea",
+            "value": 4,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08749f",
+            "address": "acf1",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0874a0",
+            "address": "aceb",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "case": "fault32768_count0",
+      "inputs": {
+        "fault1": 32768,
+        "counter": 0
+      },
+      "after": {
+        "mode": 4,
+        "previous_mode": 1,
+        "reason": 85,
+        "counter": 0,
+        "run_request": 0,
+        "writes": [
+          {
+            "pc": "08748e",
+            "address": "acf3",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087495",
+            "address": "acea",
+            "value": 4,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08749f",
+            "address": "acf1",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0874a0",
+            "address": "aceb",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "case": "fault32768_count99",
+      "inputs": {
+        "fault1": 32768,
+        "counter": 99
+      },
+      "after": {
+        "mode": 4,
+        "previous_mode": 1,
+        "reason": 85,
+        "counter": 0,
+        "run_request": 0,
+        "writes": [
+          {
+            "pc": "08748e",
+            "address": "acf3",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087495",
+            "address": "acea",
+            "value": 4,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08749f",
+            "address": "acf1",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0874a0",
+            "address": "aceb",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "case": "fault32768_count100",
+      "inputs": {
+        "fault1": 32768,
+        "counter": 100
+      },
+      "after": {
+        "mode": 4,
+        "previous_mode": 1,
+        "reason": 85,
+        "counter": 0,
+        "run_request": 0,
+        "writes": [
+          {
+            "pc": "08748e",
+            "address": "acf3",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087495",
+            "address": "acea",
+            "value": 4,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08749f",
+            "address": "acf1",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0874a0",
+            "address": "aceb",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    }
+  ],
+  "second_fault_word_scope": [
+    {
+      "case": "already_latched_request_fault2_2",
+      "inputs": {
+        "fault2": 2,
+        "counter": 99,
+        "request": 1
+      },
+      "after": {
+        "mode": 2,
+        "previous_mode": 1,
+        "reason": 85,
+        "counter": 0,
+        "run_request": 1,
+        "writes": [
+          {
+            "pc": "087475",
+            "address": "acf3",
+            "value": 100,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08747c",
+            "address": "4097",
+            "value": 4612,
+            "protected_access": true,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087480",
+            "address": "4197",
+            "value": 13317,
+            "protected_access": true,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087486",
+            "address": "acf3",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087487",
+            "address": "acea",
+            "value": 2,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0874a0",
+            "address": "aceb",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "case": "already_latched_request_fault2_16",
+      "inputs": {
+        "fault2": 16,
+        "counter": 99,
+        "request": 1
+      },
+      "after": {
+        "mode": 2,
+        "previous_mode": 1,
+        "reason": 85,
+        "counter": 0,
+        "run_request": 1,
+        "writes": [
+          {
+            "pc": "087475",
+            "address": "acf3",
+            "value": 100,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08747c",
+            "address": "4097",
+            "value": 4612,
+            "protected_access": true,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087480",
+            "address": "4197",
+            "value": 13317,
+            "protected_access": true,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087486",
+            "address": "acf3",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087487",
+            "address": "acea",
+            "value": 2,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0874a0",
+            "address": "aceb",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "case": "already_latched_request_fault2_32",
+      "inputs": {
+        "fault2": 32,
+        "counter": 99,
+        "request": 1
+      },
+      "after": {
+        "mode": 2,
+        "previous_mode": 1,
+        "reason": 85,
+        "counter": 0,
+        "run_request": 1,
+        "writes": [
+          {
+            "pc": "087475",
+            "address": "acf3",
+            "value": 100,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08747c",
+            "address": "4097",
+            "value": 4612,
+            "protected_access": true,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087480",
+            "address": "4197",
+            "value": 13317,
+            "protected_access": true,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087486",
+            "address": "acf3",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087487",
+            "address": "acea",
+            "value": 2,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0874a0",
+            "address": "aceb",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "case": "already_latched_request_fault2_65535",
+      "inputs": {
+        "fault2": 65535,
+        "counter": 99,
+        "request": 1
+      },
+      "after": {
+        "mode": 2,
+        "previous_mode": 1,
+        "reason": 85,
+        "counter": 0,
+        "run_request": 1,
+        "writes": [
+          {
+            "pc": "087475",
+            "address": "acf3",
+            "value": 100,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08747c",
+            "address": "4097",
+            "value": 4612,
+            "protected_access": true,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087480",
+            "address": "4197",
+            "value": 13317,
+            "protected_access": true,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087486",
+            "address": "acf3",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087487",
+            "address": "acea",
+            "value": 2,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0874a0",
+            "address": "aceb",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    }
+  ],
+  "priority_events": [
+    {
+      "event_bits": 3,
+      "old_request": 0,
+      "after": {
+        "mode": 4,
+        "previous_mode": 1,
+        "reason": 12,
+        "counter": 99,
+        "run_request": 0,
+        "writes": [
+          {
+            "pc": "08452b",
+            "address": "ab40",
+            "value": 65534,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "086894",
+            "address": "a49e",
+            "value": 65519,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "086897",
+            "address": "a49e",
+            "value": 65519,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089771",
+            "address": "7f05",
+            "value": 4097,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089775",
+            "address": "abbf",
+            "value": 65517,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089779",
+            "address": "7f05",
+            "value": 4099,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "08977d",
+            "address": "abbf",
+            "value": 65508,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "087312",
+            "address": "acf0",
+            "value": 65532,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "087314",
+            "address": "aced",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "087492",
+            "address": "acef",
+            "value": 12,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087495",
+            "address": "acea",
+            "value": 4,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08749f",
+            "address": "acf1",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0874a0",
+            "address": "aceb",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "event_bits": 3,
+      "old_request": 1,
+      "after": {
+        "mode": 4,
+        "previous_mode": 1,
+        "reason": 12,
+        "counter": 99,
+        "run_request": 0,
+        "writes": [
+          {
+            "pc": "08452b",
+            "address": "ab40",
+            "value": 65534,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "086894",
+            "address": "a49e",
+            "value": 65519,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "086897",
+            "address": "a49e",
+            "value": 65519,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089771",
+            "address": "7f05",
+            "value": 4097,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089775",
+            "address": "abbf",
+            "value": 65517,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089779",
+            "address": "7f05",
+            "value": 4099,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "08977d",
+            "address": "abbf",
+            "value": 65508,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "087312",
+            "address": "acf0",
+            "value": 65532,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "087314",
+            "address": "aced",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "087492",
+            "address": "acef",
+            "value": 12,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087495",
+            "address": "acea",
+            "value": 4,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08749f",
+            "address": "acf1",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0874a0",
+            "address": "aceb",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "event_bits": 65,
+      "old_request": 0,
+      "after": {
+        "mode": 6,
+        "previous_mode": 1,
+        "reason": 4,
+        "counter": 99,
+        "run_request": 0,
+        "writes": [
+          {
+            "pc": "08452b",
+            "address": "ab40",
+            "value": 65534,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "086894",
+            "address": "a49e",
+            "value": 65519,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "086897",
+            "address": "a49e",
+            "value": 65519,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089771",
+            "address": "7f05",
+            "value": 4097,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089775",
+            "address": "abbf",
+            "value": 65517,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089779",
+            "address": "7f05",
+            "value": 4099,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "08977d",
+            "address": "abbf",
+            "value": 65508,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "087312",
+            "address": "acf0",
+            "value": 65532,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "087314",
+            "address": "aced",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "08749a",
+            "address": "acef",
+            "value": 4,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08749d",
+            "address": "acea",
+            "value": 6,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08749f",
+            "address": "acf1",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0874a0",
+            "address": "aceb",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "event_bits": 65,
+      "old_request": 1,
+      "after": {
+        "mode": 6,
+        "previous_mode": 1,
+        "reason": 4,
+        "counter": 99,
+        "run_request": 0,
+        "writes": [
+          {
+            "pc": "08452b",
+            "address": "ab40",
+            "value": 65534,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "086894",
+            "address": "a49e",
+            "value": 65519,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "086897",
+            "address": "a49e",
+            "value": 65519,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089771",
+            "address": "7f05",
+            "value": 4097,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089775",
+            "address": "abbf",
+            "value": 65517,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089779",
+            "address": "7f05",
+            "value": 4099,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "08977d",
+            "address": "abbf",
+            "value": 65508,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "087312",
+            "address": "acf0",
+            "value": 65532,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "087314",
+            "address": "aced",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "08749a",
+            "address": "acef",
+            "value": 4,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08749d",
+            "address": "acea",
+            "value": 6,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08749f",
+            "address": "acf1",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0874a0",
+            "address": "aceb",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "event_bits": 67,
+      "old_request": 0,
+      "after": {
+        "mode": 6,
+        "previous_mode": 1,
+        "reason": 4,
+        "counter": 99,
+        "run_request": 0,
+        "writes": [
+          {
+            "pc": "08452b",
+            "address": "ab40",
+            "value": 65534,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "086894",
+            "address": "a49e",
+            "value": 65519,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "086897",
+            "address": "a49e",
+            "value": 65519,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089771",
+            "address": "7f05",
+            "value": 4097,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089775",
+            "address": "abbf",
+            "value": 65517,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089779",
+            "address": "7f05",
+            "value": 4099,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "08977d",
+            "address": "abbf",
+            "value": 65508,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "087312",
+            "address": "acf0",
+            "value": 65532,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "087314",
+            "address": "aced",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "08749a",
+            "address": "acef",
+            "value": 4,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08749d",
+            "address": "acea",
+            "value": 6,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08749f",
+            "address": "acf1",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0874a0",
+            "address": "aceb",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "event_bits": 67,
+      "old_request": 1,
+      "after": {
+        "mode": 6,
+        "previous_mode": 1,
+        "reason": 4,
+        "counter": 99,
+        "run_request": 0,
+        "writes": [
+          {
+            "pc": "08452b",
+            "address": "ab40",
+            "value": 65534,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "086894",
+            "address": "a49e",
+            "value": 65519,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "086897",
+            "address": "a49e",
+            "value": 65519,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089771",
+            "address": "7f05",
+            "value": 4097,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089775",
+            "address": "abbf",
+            "value": 65517,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089779",
+            "address": "7f05",
+            "value": 4099,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "08977d",
+            "address": "abbf",
+            "value": 65508,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "087312",
+            "address": "acf0",
+            "value": 65532,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "087314",
+            "address": "aced",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "08749a",
+            "address": "acef",
+            "value": 4,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08749d",
+            "address": "acea",
+            "value": 6,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08749f",
+            "address": "acf1",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0874a0",
+            "address": "aceb",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    }
+  ],
+  "start_stop_at_threshold": [
+    {
+      "event_bits": 9,
+      "old_request": 0,
+      "after": {
+        "mode": 2,
+        "previous_mode": 1,
+        "reason": 85,
+        "counter": 0,
+        "run_request": 1,
+        "writes": [
+          {
+            "pc": "087458",
+            "address": "acf1",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087475",
+            "address": "acf3",
+            "value": 100,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08747c",
+            "address": "4097",
+            "value": 4612,
+            "protected_access": true,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087480",
+            "address": "4197",
+            "value": 13317,
+            "protected_access": true,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087486",
+            "address": "acf3",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087487",
+            "address": "acea",
+            "value": 2,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0874a0",
+            "address": "aceb",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "event_bits": 9,
+      "old_request": 1,
+      "after": {
+        "mode": 2,
+        "previous_mode": 1,
+        "reason": 85,
+        "counter": 0,
+        "run_request": 1,
+        "writes": [
+          {
+            "pc": "087458",
+            "address": "acf1",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087475",
+            "address": "acf3",
+            "value": 100,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08747c",
+            "address": "4097",
+            "value": 4612,
+            "protected_access": true,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087480",
+            "address": "4197",
+            "value": 13317,
+            "protected_access": true,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087486",
+            "address": "acf3",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087487",
+            "address": "acea",
+            "value": 2,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0874a0",
+            "address": "aceb",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "event_bits": 17,
+      "old_request": 0,
+      "after": {
+        "mode": 1,
+        "previous_mode": 9,
+        "reason": 85,
+        "counter": 100,
+        "run_request": 0,
+        "writes": [
+          {
+            "pc": "08745f",
+            "address": "acf1",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087475",
+            "address": "acf3",
+            "value": 100,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "event_bits": 17,
+      "old_request": 1,
+      "after": {
+        "mode": 1,
+        "previous_mode": 9,
+        "reason": 85,
+        "counter": 100,
+        "run_request": 0,
+        "writes": [
+          {
+            "pc": "08745f",
+            "address": "acf1",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087475",
+            "address": "acf3",
+            "value": 100,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "event_bits": 25,
+      "old_request": 0,
+      "after": {
+        "mode": 1,
+        "previous_mode": 9,
+        "reason": 85,
+        "counter": 100,
+        "run_request": 0,
+        "writes": [
+          {
+            "pc": "087458",
+            "address": "acf1",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08745f",
+            "address": "acf1",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087475",
+            "address": "acf3",
+            "value": 100,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "event_bits": 25,
+      "old_request": 1,
+      "after": {
+        "mode": 1,
+        "previous_mode": 9,
+        "reason": 85,
+        "counter": 100,
+        "run_request": 0,
+        "writes": [
+          {
+            "pc": "087458",
+            "address": "acf1",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08745f",
+            "address": "acf1",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087475",
+            "address": "acf3",
+            "value": 100,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "event_bits": 5,
+      "old_request": 0,
+      "after": {
+        "mode": 1,
+        "previous_mode": 9,
+        "reason": 85,
+        "counter": 100,
+        "run_request": 0,
+        "writes": [
+          {
+            "pc": "08452b",
+            "address": "ab40",
+            "value": 65534,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "086894",
+            "address": "a49e",
+            "value": 65519,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "086897",
+            "address": "a49e",
+            "value": 65519,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089771",
+            "address": "7f05",
+            "value": 4097,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089775",
+            "address": "abbf",
+            "value": 65517,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089779",
+            "address": "7f05",
+            "value": 4099,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "08977d",
+            "address": "abbf",
+            "value": 65508,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "087312",
+            "address": "acf0",
+            "value": 65532,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "087314",
+            "address": "aced",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "087475",
+            "address": "acf3",
+            "value": 100,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    },
+    {
+      "event_bits": 5,
+      "old_request": 1,
+      "after": {
+        "mode": 2,
+        "previous_mode": 1,
+        "reason": 85,
+        "counter": 0,
+        "run_request": 1,
+        "writes": [
+          {
+            "pc": "08452b",
+            "address": "ab40",
+            "value": 65534,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "086894",
+            "address": "a49e",
+            "value": 65519,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "086897",
+            "address": "a49e",
+            "value": 65519,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089771",
+            "address": "7f05",
+            "value": 4097,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089775",
+            "address": "abbf",
+            "value": 65517,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089779",
+            "address": "7f05",
+            "value": 4099,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "08977d",
+            "address": "abbf",
+            "value": 65508,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "087312",
+            "address": "acf0",
+            "value": 65532,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "087314",
+            "address": "aced",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "087475",
+            "address": "acf3",
+            "value": 100,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08747c",
+            "address": "4097",
+            "value": 4612,
+            "protected_access": true,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087480",
+            "address": "4197",
+            "value": 13317,
+            "protected_access": true,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087486",
+            "address": "acf3",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087487",
+            "address": "acea",
+            "value": 2,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0874a0",
+            "address": "aceb",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ]
+      }
+    }
+  ],
+  "periodic_flag_producer": [
+    {
+      "quotient_edge": 0,
+      "old_divider_count": 0,
+      "new_divider_count": 0,
+      "periodic_bit6": false,
+      "writes": [
+        {
+          "pc": "0894a5",
+          "address": "aaae",
+          "value": 65471,
+          "protected_access": false,
+          "interrupt_masked": false
+        }
+      ]
+    },
+    {
+      "quotient_edge": 0,
+      "old_divider_count": 3,
+      "new_divider_count": 3,
+      "periodic_bit6": false,
+      "writes": [
+        {
+          "pc": "0894a5",
+          "address": "aaae",
+          "value": 65471,
+          "protected_access": false,
+          "interrupt_masked": false
+        }
+      ]
+    },
+    {
+      "quotient_edge": 0,
+      "old_divider_count": 4,
+      "new_divider_count": 4,
+      "periodic_bit6": false,
+      "writes": [
+        {
+          "pc": "0894a5",
+          "address": "aaae",
+          "value": 65471,
+          "protected_access": false,
+          "interrupt_masked": false
+        }
+      ]
+    },
+    {
+      "quotient_edge": 0,
+      "old_divider_count": 5,
+      "new_divider_count": 5,
+      "periodic_bit6": false,
+      "writes": [
+        {
+          "pc": "0894a5",
+          "address": "aaae",
+          "value": 65471,
+          "protected_access": false,
+          "interrupt_masked": false
+        }
+      ]
+    },
+    {
+      "quotient_edge": 1,
+      "old_divider_count": 0,
+      "new_divider_count": 1,
+      "periodic_bit6": false,
+      "writes": [
+        {
+          "pc": "0894a5",
+          "address": "aaae",
+          "value": 65471,
+          "protected_access": false,
+          "interrupt_masked": false
+        },
+        {
+          "pc": "0894ae",
+          "address": "aabb",
+          "value": 1,
+          "protected_access": false,
+          "interrupt_masked": false
+        }
+      ]
+    },
+    {
+      "quotient_edge": 1,
+      "old_divider_count": 3,
+      "new_divider_count": 4,
+      "periodic_bit6": false,
+      "writes": [
+        {
+          "pc": "0894a5",
+          "address": "aaae",
+          "value": 65471,
+          "protected_access": false,
+          "interrupt_masked": false
+        },
+        {
+          "pc": "0894ae",
+          "address": "aabb",
+          "value": 4,
+          "protected_access": false,
+          "interrupt_masked": false
+        }
+      ]
+    },
+    {
+      "quotient_edge": 1,
+      "old_divider_count": 4,
+      "new_divider_count": 0,
+      "periodic_bit6": true,
+      "writes": [
+        {
+          "pc": "0894a5",
+          "address": "aaae",
+          "value": 65471,
+          "protected_access": false,
+          "interrupt_masked": false
+        },
+        {
+          "pc": "0894b0",
+          "address": "aabb",
+          "value": 0,
+          "protected_access": false,
+          "interrupt_masked": false
+        },
+        {
+          "pc": "0894b1",
+          "address": "aaae",
+          "value": 65535,
+          "protected_access": false,
+          "interrupt_masked": false
+        }
+      ]
+    },
+    {
+      "quotient_edge": 1,
+      "old_divider_count": 5,
+      "new_divider_count": 0,
+      "periodic_bit6": true,
+      "writes": [
+        {
+          "pc": "0894a5",
+          "address": "aaae",
+          "value": 65471,
+          "protected_access": false,
+          "interrupt_masked": false
+        },
+        {
+          "pc": "0894b0",
+          "address": "aabb",
+          "value": 0,
+          "protected_access": false,
+          "interrupt_masked": false
+        },
+        {
+          "pc": "0894b1",
+          "address": "aaae",
+          "value": 65535,
+          "protected_access": false,
+          "interrupt_masked": false
+        }
+      ]
+    }
+  ],
+  "qualifying_tick_sequences": [
+    {
+      "case": "normal",
+      "stages": [
+        {
+          "invocations": 99,
+          "request": 1,
+          "periodic": 1,
+          "event_bits": 1,
+          "fault1": 0,
+          "mode": 1,
+          "counter": 99
+        },
+        {
+          "invocations": 1,
+          "request": 1,
+          "periodic": 1,
+          "event_bits": 1,
+          "fault1": 0,
+          "mode": 2,
+          "counter": 0
+        }
+      ],
+      "start_write_intents": [
+        {
+          "pc": "08747c",
+          "address": "4097",
+          "value": 4612,
+          "protected_access": true,
+          "interrupt_masked": false
+        },
+        {
+          "pc": "087480",
+          "address": "4197",
+          "value": 13317,
+          "protected_access": true,
+          "interrupt_masked": false
+        }
+      ]
+    },
+    {
+      "case": "wait_for_request",
+      "stages": [
+        {
+          "invocations": 120,
+          "request": 0,
+          "periodic": 1,
+          "event_bits": 1,
+          "fault1": 0,
+          "mode": 1,
+          "counter": 100
+        },
+        {
+          "invocations": 1,
+          "request": 1,
+          "periodic": 1,
+          "event_bits": 1,
+          "fault1": 0,
+          "mode": 2,
+          "counter": 0
+        }
+      ],
+      "start_write_intents": [
+        {
+          "pc": "08747c",
+          "address": "4097",
+          "value": 4612,
+          "protected_access": true,
+          "interrupt_masked": false
+        },
+        {
+          "pc": "087480",
+          "address": "4197",
+          "value": 13317,
+          "protected_access": true,
+          "interrupt_masked": false
+        }
+      ]
+    },
+    {
+      "case": "periodic_paused",
+      "stages": [
+        {
+          "invocations": 50,
+          "request": 1,
+          "periodic": 0,
+          "event_bits": 1,
+          "fault1": 0,
+          "mode": 1,
+          "counter": 0
+        },
+        {
+          "invocations": 99,
+          "request": 1,
+          "periodic": 1,
+          "event_bits": 1,
+          "fault1": 0,
+          "mode": 1,
+          "counter": 99
+        },
+        {
+          "invocations": 1,
+          "request": 1,
+          "periodic": 1,
+          "event_bits": 1,
+          "fault1": 0,
+          "mode": 2,
+          "counter": 0
+        }
+      ],
+      "start_write_intents": [
+        {
+          "pc": "08747c",
+          "address": "4097",
+          "value": 4612,
+          "protected_access": true,
+          "interrupt_masked": false
+        },
+        {
+          "pc": "087480",
+          "address": "4197",
+          "value": 13317,
+          "protected_access": true,
+          "interrupt_masked": false
+        }
+      ]
+    },
+    {
+      "case": "event_paused",
+      "stages": [
+        {
+          "invocations": 50,
+          "request": 1,
+          "periodic": 1,
+          "event_bits": 8,
+          "fault1": 0,
+          "mode": 1,
+          "counter": 0
+        },
+        {
+          "invocations": 99,
+          "request": 1,
+          "periodic": 1,
+          "event_bits": 1,
+          "fault1": 0,
+          "mode": 1,
+          "counter": 99
+        },
+        {
+          "invocations": 1,
+          "request": 1,
+          "periodic": 1,
+          "event_bits": 1,
+          "fault1": 0,
+          "mode": 2,
+          "counter": 0
+        }
+      ],
+      "start_write_intents": [
+        {
+          "pc": "08747c",
+          "address": "4097",
+          "value": 4612,
+          "protected_access": true,
+          "interrupt_masked": false
+        },
+        {
+          "pc": "087480",
+          "address": "4197",
+          "value": 13317,
+          "protected_access": true,
+          "interrupt_masked": false
+        }
+      ]
+    },
+    {
+      "case": "fault_exits_mode1",
+      "stages": [
+        {
+          "invocations": 60,
+          "request": 1,
+          "periodic": 1,
+          "event_bits": 1,
+          "fault1": 0,
+          "mode": 1,
+          "counter": 60
+        },
+        {
+          "invocations": 1,
+          "request": 1,
+          "periodic": 1,
+          "event_bits": 1,
+          "fault1": 1,
+          "mode": 4,
+          "counter": 0
+        }
+      ],
+      "start_write_intents": []
+    }
+  ]
+}

@@ -56,24 +56,24 @@ Authorization header. Treat HA configuration backups as containing credentials.
   Brightness 1/2, screen timeout 30/60 s, Off/Low and Celsius/Fahrenheit passed
   live readback/restoration with AC enabled and DC disabled. Other enum values
   have synthetic/range coverage. The gateway protects all eleven fresh settings
-  and complete `F8` flags. Output switches remain absent from HA; native AC
-  Smart stays unavailable. Generated-ID pairing remains unverified.
+  and complete `F8` flags. Output switches remain absent from HA.
+  Generated-ID pairing remains unverified.
   Original **BLE Prime/native MQTT** adds the DC power-saving configuration switch,
   with fresh DC output OFF required in both directions. Prototype and public
   SDK each passed two writes/nine samples with AC on, DC off and complete
   baseline restoration. Only its F8 mode byte may change. Smart may inherit an
   inactivity counter and later turn DC output off at low load; enabling does
-  not guarantee a new grace period. Prime exposes nine gateway preferences;
-  native MQTT independently exposes eight, including the Fast flag.
+  not guarantee a new grace period. Prime and native MQTT independently expose
+  nine gateway preferences, including the Fast flag and both Smart modes.
   The native DC Smart prototype also passed two writes/fifteen fresh samples
-  with complete settings/F8 restoration, AC on and DC off. Other models and
-  AC Smart remain unsupported by this guarded native route.
+  with complete settings/F8 restoration, AC on and DC off. Other models remain
+  unsupported by this guarded DC route.
   A public SDK repeat passed two writes/eleven explicit fresh snapshots plus
   the setter's internal fresh baseline/confirmation reads, with the same restoration.
-  Native MQTT/radio 0.3.3.0 confirmed all six preferences with 12 writes,
+  Native MQTT/radio 0.3.3.0 initially confirmed six preferences with 12 writes,
   restoration and three matching final samples. Its gateway requires fresh
   telemetry; a packaged AP service/SDK repeat passed 14 writes and restoration.
-  It advertises only those commands. Missing mains, battery activity
+  Only validated commands are advertised. Missing mains, battery activity
   and supply-source fields remain unknown. HA runtime deployment was not tested.
 - Display configuration selects: C1000 Gen 2 native MQTT brightness
   (Low/Medium/High) and screen timeout (Never, 10/20/30/60/300/1800 seconds).
@@ -88,8 +88,9 @@ Authorization header. Treat HA configuration backups as containing credentials.
   MQTT, when advertised with fresh integer readback. Choices are Never and
   30/60/120/240/360/720/1440 minutes. Never disables this timeout; independent
   sleep behavior can still interrupt access. Finite choices may turn the
-  station off when idle. BLE writes/readback passed; the native timeout path
-  has synthetic tests only. See [versioned findings](../../docs/device-timeout-behavior.md).
+  station off when idle. BLE writes/readback passed, as did original C1000's
+  native timeout checks above; Gen 2 native timeout has synthetic tests only.
+  See [versioned findings](../../docs/device-timeout-behavior.md).
 - Disabled diagnostic entities: raw DC/PV input activity/power and controller
   error code for C1000 Gen 2, plus the raw Gen 2 battery compatibility byte.
   That byte is hardcoded 100 on A1763/main 1.1.4.9; it is not measured health.
@@ -117,12 +118,17 @@ Authorization header. Treat HA configuration backups as containing credentials.
   Native MQTT flag change/restoration passed on C1000 Gen 2 firmware 1.1.4.9
   at 100% SOC; actual charging power remains unverified.
 - AC/DC power-saving configuration switches: original C1000 legacy BLE;
-  Prime BLE AC Smart additionally requires fresh AC output off and a strictly
-  zero inactive AC countdown in both directions. Prime DC Smart requires DC
-  output off; native MQTT supports only DC Smart. The Prime AC prototype and
+  Prime BLE/native MQTT AC Smart additionally requires fresh AC output off and
+  a strictly zero inactive AC countdown in both directions. DC Smart requires
+  DC output off on either transport. The Prime AC prototype and
   public SDK each passed four writes/twenty explicit complete fresh snapshots,
   full eleven-setting/F8 restoration and unchanged upstream baseline. Smart
   may inherit an inactivity counter; enabling does not guarantee a grace period.
+  Native AC Smart passed two prototype writes/23 complete snapshots. Its public
+  SDK repeat passed two mode writes/35 explicit complete snapshots, with two
+  separate private `004a` output setup/restoration writes. All eleven original
+  preferences/F8 and the upstream baseline were restored. See
+  [native AC Smart validation](../../docs/c1000-native-ac-smart-validation.md).
   The HTTP/HA integration provides no output-switch API.
   **Power saving may automatically turn the output off at low load.** Review
   connected loads before enabling these switches or using them in automations.

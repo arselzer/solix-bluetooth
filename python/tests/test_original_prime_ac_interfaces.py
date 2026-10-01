@@ -57,8 +57,8 @@ def test_nine_gateway_preferences_and_ten_direct_terminal_controls():
     assert _supports_operation(original(), "ac_power_saving")
     assert not _supports_operation(original(), "ac_output")
     assert decode_setting("ac_power_saving", b'{"enabled":true}') == {"enabled": True}
-    assert len(native_commands_for_model(Model.C1000)) == 8
-    assert "set-ac-power-saving" not in native_commands_for_model(Model.C1000)
+    assert len(native_commands_for_model(Model.C1000)) == 9
+    assert "set-ac-power-saving" in native_commands_for_model(Model.C1000)
     assert "set-ac-output" not in native_commands_for_model(Model.C1000)
     backend = TuiBackend([original()])
     assert len(controls_for(backend.targets[0])) == 10

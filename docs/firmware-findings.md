@@ -44,6 +44,8 @@ the [independent native Fast trial](c1000-native-fast-validation.md) then brings
 native to eight. Actual Fast rate and reboot persistence remain unverified.
 The subsequent [Prime AC/Smart trial](c1000-prime-ac-smart-validation.md)
 brings Prime to ten SDK controls/nine gateway preferences; native remains eight.
+The subsequent [native AC Smart trial](c1000-native-ac-smart-validation.md)
+brings native to nine preferences with AC off and an inactive countdown.
 A plaintext 1.7.1 main image remains unrecovered.
 
 ## Scope and evidence
@@ -388,7 +390,7 @@ C2000 controller support is unknown.
   using event timestamps and measured power, without relabeling raw counters
   as verified Wh.
 - Continue original-C1000 generated-ID setup and remaining Prime controls
-  separately from the verified ten BLE/eight native controls. Recover a verified public
+  separately from the verified ten BLE/nine native controls. Recover a verified public
   1.7.1 image before proposing local OTA.
 - Obtain C2000 firmware evidence before assuming its controller can service
   the Modbus bridge. Keep its AC output enabled throughout any live work.
@@ -551,3 +553,29 @@ over simultaneous start. Status may retain an earlier state before its qualifier
 is set. UART, full converter sequencing, physical PV and actual recovery remain
 unverified. The existing brightness write remains a recovery candidate; no
 automatic recovery API or internal-register control was introduced.
+
+## October 1: native AC Smart and deeper startup/blocker traces
+
+[Native AC Smart](c1000-native-ac-smart-validation.md) passed an independent
+two-write/23-snapshot prototype and two-write/35-snapshot public SDK repeat
+on original main **1.7.1**. Both required AC off and exact fresh zero countdowns;
+whole original settings/F8 and the read-only upstream Gen 2 baseline were
+restored. Native now has nine preferences, matching the Prime gateway. A
+failed BLE restoration after Wi-Fi provisioning was resolved through a bounded
+native output-ON request; private OFF/ON setup in the repeat also passed.
+No public native output-switch route was added. C2000 was not accessed.
+
+[90 original Smart-blocker cases](c1000-smart-blocker-followup.md) trace the
+**1.5.9** qualified DSP flag and independent GPIO. Initial qualification and
+later removal use different predicates. A blocker only present between
+eligible Smart checks can leave an inherited counter intact. Output lifecycle
+reset paths differ from preference changes. Internal F0 is a diagnostic lead;
+its public envelope, physical GPIO meaning and installed 1.7.1 behavior remain
+unverified.
+
+[60 Gen 2 DSP-continuation cases](gen2-pv-start-continuation.md) follow the
+accepted start request into periodic gates, a 100-invocation counter and
+protected peripheral write intents. The counter can accumulate before a
+request. A fault exits to mode 4 and clears the request; fault clearance alone
+does not establish automatic recovery. Actual timing, mode-4 return, converter
+regulation and physical PV recovery remain unverified. No recovery API was added.

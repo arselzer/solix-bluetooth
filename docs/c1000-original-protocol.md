@@ -33,6 +33,11 @@ preferences**, versus eight independently verified native controls. Both new
 Prime controls require fresh inactive AC countdowns; AC Smart additionally
 requires AC output off in either direction. Whole settings/F8 restoration passed.
 
+The later [native AC Smart prototype and SDK repeat](c1000-native-ac-smart-validation.md)
+bring native MQTT to nine preferences. Its AC Smart guard requires AC off and
+an exact fresh zero countdown. Native output switching remains outside the
+public capability list despite experimental setup/restoration observations.
+
 The default profile uses the legacy P-256/AES-CBC handshake tested on 1.5.1,
 without a Prime client ID. The updated test unit requires explicit `prime`
 selection and a persisted 40-character client ID; its status request is still

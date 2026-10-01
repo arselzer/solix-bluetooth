@@ -20,7 +20,7 @@ from .protocol import DATA_RESPONSE, Model, decode_telemetry, parse_packet, pars
 from .tou import PowerFlowTimeout, TouPeriod, periods_from_d9, power_flow, validate_periods
 
 
-def _original_settings(payload: bytes) -> tuple[dict, bytes]:
+def _original_settings(payload: bytes, *, require_inactive_ac_timer: bool = False) -> tuple[dict, bytes]:
     """Require a complete report; cached/partial telemetry cannot guard a write."""
     metrics, raw = decode_telemetry(payload, Model.C1000)
     required = ("ac_output_enabled", "dc_output_enabled", "ac_charging_power_limit_w",
@@ -34,6 +34,8 @@ def _original_settings(payload: bytes) -> tuple[dict, bytes]:
     flags = raw.get(0xF8)
     if not isinstance(flags, bytes) or len(flags) != 21 or flags[0] != 4:
         raise RuntimeError("Missing complete original C1000 F8 flags")
+    if require_inactive_ac_timer and raw.get(0xA2) != b"\x03\x00\x00\x00\x00":
+        raise RuntimeError("Original C1000 native AC Smart requires a fresh inactive AC timer")
     return {key: metrics[key] for key in required}, flags
 
 
@@ -303,27 +305,34 @@ class LocalMqttServer:
         request = self.commands.dc_power_saving(enabled)
         return await self._set_original_setting(request, "dc_power_saving_mode_enabled", int(enabled))
 
-    async def _fresh_original_settings(self, connection) -> tuple[dict, bytes]:
+    async def set_ac_power_saving_enabled(self, enabled: bool) -> dict:
+        """Set original AC Smart with AC off, no timer and complete F8 guarded."""
+        request = self.commands.ac_power_saving(enabled)
+        return await self._set_original_setting(request, "ac_power_saving_mode_enabled", int(enabled))
+
+    async def _fresh_original_settings(self, connection, *, require_inactive_ac_timer: bool = False) -> tuple[dict, bytes]:
         reply = await connection.request(self.commands.status())
         if not reply or reply[0] != 0:
             raise RuntimeError("Original C1000 status request failed")
-        return _original_settings(reply[1:])
+        return _original_settings(reply[1:], require_inactive_ac_timer=require_inactive_ac_timer)
 
     async def _set_original_setting(self, request: NativeMqttRequest, metric: str, value: int) -> dict:
         if self.config.model != Model.C1000 or metric not in (
                 "ac_charging_power_limit_w", "device_timeout_minutes", "display_brightness",
                 "display_timeout_seconds", "light_mode", "temperature_unit_fahrenheit",
-                "dc_power_saving_mode_enabled", "ac_fast_charge_enabled"):
+                "dc_power_saving_mode_enabled", "ac_fast_charge_enabled", "ac_power_saving_mode_enabled"):
             raise ValueError("Unsupported original C1000 native setting")
         async with self._control_lock:
             connection = self._control_connection()
-            before, flags = await self._fresh_original_settings(connection)
+            ac_smart = metric == "ac_power_saving_mode_enabled"
+            before, flags = await self._fresh_original_settings(connection, require_inactive_ac_timer=ac_smart)
             expected_flags = flags
-            if metric == "dc_power_saving_mode_enabled":
-                if before["dc_output_enabled"] != 0:
-                    raise RuntimeError("Original C1000 native DC Smart requires the DC output to be off; no write sent")
+            if metric in ("dc_power_saving_mode_enabled", "ac_power_saving_mode_enabled"):
+                domain = "ac" if ac_smart else "dc"
+                if before[f"{domain}_output_enabled"] != 0:
+                    raise RuntimeError(f"Original C1000 native {domain.upper()} Smart requires the {domain.upper()} output to be off; no write sent")
                 changed_flags = bytearray(flags)
-                changed_flags[1] = value + 1  # Normal 1 / Smart 2 in the status structure.
+                changed_flags[2 if ac_smart else 1] = value + 1  # Normal 1 / Smart 2.
                 expected_flags = bytes(changed_flags)
             expected = {**before, metric: value}
             try:
@@ -331,7 +340,7 @@ class LocalMqttServer:
                 # once, then confirm via two explicit full status requests.
                 await connection.send_original_setting(request)
                 for _ in range(2):
-                    after, after_flags = await self._fresh_original_settings(connection)
+                    after, after_flags = await self._fresh_original_settings(connection, require_inactive_ac_timer=ac_smart)
                     connection.check_original_setting_response()
                     if after != expected or after_flags != expected_flags:
                         raise RuntimeError("Protected original C1000 settings or F8 flags changed")
@@ -731,7 +740,7 @@ class _Connection:
     async def send_original_setting(self, request: NativeMqttRequest) -> None:
         """Send one verified original setter, accepting an optional ACK only."""
         if (self.server.config.model != Model.C1000 or request.response_aliases
-                or request.response_command not in ("0844", "0845", "0846", "084c", "084f", "0850", "085e", "0876")):
+                or request.response_command not in ("0844", "0845", "0846", "084c", "084f", "0850", "085e", "0876", "0877")):
             raise ValueError("Unsupported original C1000 native setting")
         async with self.lock:
             if self.writer.is_closing() or not self.subscribed:

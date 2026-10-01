@@ -173,7 +173,7 @@ def validate_fast_charge(metrics: dict, target: Target, enabled: bool) -> None:
 
 def validate_original_ac_control(metrics: dict, *, smart: bool) -> None:
     if type(metrics.get("ac_output_timer_remaining_seconds")) is not int or metrics["ac_output_timer_remaining_seconds"] != 0:
-        raise ValueError("Original Prime AC control requires a fresh inactive AC countdown")
+        raise ValueError("Original C1000 AC control requires a fresh inactive AC countdown")
     state = metrics.get("ac_output_enabled")
     if type(state) is not int or state not in (0, 1):
         raise ValueError("Fresh AC output telemetry is required")
@@ -485,6 +485,15 @@ class TuiBackend:
                     response = await self._native("set-discharge-floor", lower=int(value))
                 elif action == "device-timeout":
                     response = await self._native("set-device-timeout", minutes=parse_device_timeout(value))
+                elif action == "ac-power-saving":
+                    enabled = parse_enabled(value)
+                    snapshot = self.native_snapshot
+                    seen = snapshot.get("last_seen_timestamp")
+                    if (not snapshot.get("connected") or not snapshot.get("available")
+                            or type(seen) not in (int, float) or not -5 <= time.time() - seen <= 30):
+                        raise ValueError("Fresh native telemetry is required for AC Smart")
+                    validate_original_ac_control(snapshot.get("metrics", {}), smart=True)
+                    response = await self._native("set-ac-power-saving", enabled=enabled)
                 elif action == "dc-power-saving":
                     enabled = parse_enabled(value)
                     snapshot = self.native_snapshot
@@ -934,7 +943,7 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
                         or type(metrics.get("dc_power_saving_mode_enabled")) is not int
                         or metrics["dc_power_saving_mode_enabled"] not in (0, 1)):
                     self.query_one("#apply-setting", Button).disabled = True
-            if (target and target.model == Model.C1000 and target.device and target.device.protocol == "prime"
+            if (target and target.model == Model.C1000 and (target.native or target.device and target.device.protocol == "prime")
                     and self.query_one("#setting", Select).value in ("ac-output", "ac-power-saving")):
                 try:
                     validate_original_ac_control(self.snapshot.get("metrics", {}),
@@ -1098,7 +1107,7 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
                                   "Set the screen timeout; zero means Never." if key == "display-timeout" else
                                   ORIGINAL_FAST_CHARGE_WARNING if key == "fast-charge" else
                                   "This changes power at the AC sockets. Review connected loads before applying. Original Prime requires a fresh inactive AC countdown." if key == "ac-output" else
-                                  ORIGINAL_AC_SMART_WARNING if key == "ac-power-saving" and target.model == Model.C1000 and target.device and target.device.protocol == "prime" else
+                                  ORIGINAL_AC_SMART_WARNING if key == "ac-power-saving" and target.model == Model.C1000 and (target.native or target.device and target.device.protocol == "prime") else
                                   ORIGINAL_DC_SMART_WARNING if key == "dc-power-saving" and target.model == Model.C1000 and (target.native or target.device and target.device.protocol == "prime") else None)
                         shown = str(parsed) if type(parsed) is int else "on" if parsed else "off"
                         self.push_screen(PowerSavingConfirmScreen(label, shown, detail), confirmed)

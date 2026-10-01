@@ -1,0 +1,829 @@
+{
+  "image_sha256": "b295ee8613f5c96e70dcc905896df516621cab4dc590bb580eac6b84519911a6",
+  "unicorn_version": "2.1.4",
+  "scope": "Public original MainMcu 1.5.9; synthetic DSP/GPIO/ticks; no 1.7.1 or hardware validation",
+  "gpio_configuration": [
+    {
+      "before": "87654321",
+      "after": "87654421",
+      "pin2_configuration_nibble": 4,
+      "note": "Numeric configuration proven; no electrical board signal name assigned"
+    }
+  ],
+  "gpio_reader": [
+    {
+      "input_register": 0,
+      "output_register": 0,
+      "reader_result": 0
+    },
+    {
+      "input_register": 0,
+      "output_register": 4,
+      "reader_result": 0
+    },
+    {
+      "input_register": 4,
+      "output_register": 0,
+      "reader_result": 1
+    },
+    {
+      "input_register": 4,
+      "output_register": 4,
+      "reader_result": 1
+    },
+    {
+      "input_register": 4294901760,
+      "output_register": 0,
+      "reader_result": 0
+    },
+    {
+      "input_register": 4294901760,
+      "output_register": 4,
+      "reader_result": 0
+    },
+    {
+      "input_register": 4294967295,
+      "output_register": 0,
+      "reader_result": 1
+    },
+    {
+      "input_register": 4294967295,
+      "output_register": 4,
+      "reader_result": 1
+    }
+  ],
+  "gpio_diagnostic": [
+    {
+      "synthetic_pin": 0,
+      "source": 34,
+      "tag": 240,
+      "length": 1,
+      "payload": "00"
+    },
+    {
+      "synthetic_pin": 1,
+      "source": 34,
+      "tag": 240,
+      "length": 1,
+      "payload": "01"
+    }
+  ],
+  "dsp_predicates": [
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 0,
+      "dsp_byte4": 0,
+      "dsp_byte8": 0,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 0,
+      "dsp_byte4": 0,
+      "dsp_byte8": 1,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 0,
+      "dsp_byte4": 0,
+      "dsp_byte8": 2,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 0,
+      "dsp_byte4": 1,
+      "dsp_byte8": 0,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 0,
+      "dsp_byte4": 1,
+      "dsp_byte8": 1,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 0,
+      "dsp_byte4": 1,
+      "dsp_byte8": 2,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 1,
+      "dsp_byte4": 0,
+      "dsp_byte8": 0,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 1,
+      "dsp_byte4": 0,
+      "dsp_byte8": 1,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 1,
+      "dsp_byte4": 0,
+      "dsp_byte8": 2,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 1,
+      "dsp_byte4": 1,
+      "dsp_byte8": 0,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 1,
+      "dsp_byte4": 1,
+      "dsp_byte8": 1,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 1,
+      "dsp_byte4": 1,
+      "dsp_byte8": 2,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 8192,
+      "dsp_byte4": 0,
+      "dsp_byte8": 0,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 8192,
+      "dsp_byte4": 0,
+      "dsp_byte8": 1,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 8192,
+      "dsp_byte4": 0,
+      "dsp_byte8": 2,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 8192,
+      "dsp_byte4": 1,
+      "dsp_byte8": 0,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 8192,
+      "dsp_byte4": 1,
+      "dsp_byte8": 1,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 8192,
+      "dsp_byte4": 1,
+      "dsp_byte8": 2,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 16384,
+      "dsp_byte4": 0,
+      "dsp_byte8": 0,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 16384,
+      "dsp_byte4": 0,
+      "dsp_byte8": 1,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 16384,
+      "dsp_byte4": 0,
+      "dsp_byte8": 2,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 16384,
+      "dsp_byte4": 1,
+      "dsp_byte8": 0,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 16384,
+      "dsp_byte4": 1,
+      "dsp_byte8": 1,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 16384,
+      "dsp_byte4": 1,
+      "dsp_byte8": 2,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 32768,
+      "dsp_byte4": 0,
+      "dsp_byte8": 0,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 32768,
+      "dsp_byte4": 0,
+      "dsp_byte8": 1,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 32768,
+      "dsp_byte4": 0,
+      "dsp_byte8": 2,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 32768,
+      "dsp_byte4": 1,
+      "dsp_byte8": 0,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 32768,
+      "dsp_byte4": 1,
+      "dsp_byte8": 1,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 0,
+      "dsp_fault_word": 32768,
+      "dsp_byte4": 1,
+      "dsp_byte8": 2,
+      "entry_predicate": 0,
+      "removal_predicate": 1
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 0,
+      "dsp_byte4": 0,
+      "dsp_byte8": 0,
+      "entry_predicate": 1,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 0,
+      "dsp_byte4": 0,
+      "dsp_byte8": 1,
+      "entry_predicate": 0,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 0,
+      "dsp_byte4": 0,
+      "dsp_byte8": 2,
+      "entry_predicate": 1,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 0,
+      "dsp_byte4": 1,
+      "dsp_byte8": 0,
+      "entry_predicate": 0,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 0,
+      "dsp_byte4": 1,
+      "dsp_byte8": 1,
+      "entry_predicate": 0,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 0,
+      "dsp_byte4": 1,
+      "dsp_byte8": 2,
+      "entry_predicate": 0,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 1,
+      "dsp_byte4": 0,
+      "dsp_byte8": 0,
+      "entry_predicate": 0,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 1,
+      "dsp_byte4": 0,
+      "dsp_byte8": 1,
+      "entry_predicate": 0,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 1,
+      "dsp_byte4": 0,
+      "dsp_byte8": 2,
+      "entry_predicate": 0,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 1,
+      "dsp_byte4": 1,
+      "dsp_byte8": 0,
+      "entry_predicate": 0,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 1,
+      "dsp_byte4": 1,
+      "dsp_byte8": 1,
+      "entry_predicate": 0,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 1,
+      "dsp_byte4": 1,
+      "dsp_byte8": 2,
+      "entry_predicate": 0,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 8192,
+      "dsp_byte4": 0,
+      "dsp_byte8": 0,
+      "entry_predicate": 0,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 8192,
+      "dsp_byte4": 0,
+      "dsp_byte8": 1,
+      "entry_predicate": 0,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 8192,
+      "dsp_byte4": 0,
+      "dsp_byte8": 2,
+      "entry_predicate": 0,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 8192,
+      "dsp_byte4": 1,
+      "dsp_byte8": 0,
+      "entry_predicate": 0,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 8192,
+      "dsp_byte4": 1,
+      "dsp_byte8": 1,
+      "entry_predicate": 0,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 8192,
+      "dsp_byte4": 1,
+      "dsp_byte8": 2,
+      "entry_predicate": 0,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 16384,
+      "dsp_byte4": 0,
+      "dsp_byte8": 0,
+      "entry_predicate": 1,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 16384,
+      "dsp_byte4": 0,
+      "dsp_byte8": 1,
+      "entry_predicate": 0,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 16384,
+      "dsp_byte4": 0,
+      "dsp_byte8": 2,
+      "entry_predicate": 1,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 16384,
+      "dsp_byte4": 1,
+      "dsp_byte8": 0,
+      "entry_predicate": 0,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 16384,
+      "dsp_byte4": 1,
+      "dsp_byte8": 1,
+      "entry_predicate": 0,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 16384,
+      "dsp_byte4": 1,
+      "dsp_byte8": 2,
+      "entry_predicate": 0,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 32768,
+      "dsp_byte4": 0,
+      "dsp_byte8": 0,
+      "entry_predicate": 1,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 32768,
+      "dsp_byte4": 0,
+      "dsp_byte8": 1,
+      "entry_predicate": 0,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 32768,
+      "dsp_byte4": 0,
+      "dsp_byte8": 2,
+      "entry_predicate": 1,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 32768,
+      "dsp_byte4": 1,
+      "dsp_byte8": 0,
+      "entry_predicate": 0,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 32768,
+      "dsp_byte4": 1,
+      "dsp_byte8": 1,
+      "entry_predicate": 0,
+      "removal_predicate": 0
+    },
+    {
+      "dsp_status_byte": 1,
+      "dsp_fault_word": 32768,
+      "dsp_byte4": 1,
+      "dsp_byte8": 2,
+      "entry_predicate": 0,
+      "removal_predicate": 0
+    }
+  ],
+  "qualification_sequences": [
+    {
+      "sequence": "fresh_entry",
+      "checkpoints": {
+        "1": {
+          "state": 0,
+          "counter": 1,
+          "global_bit": 0,
+          "events": []
+        },
+        "200": {
+          "state": 0,
+          "counter": 200,
+          "global_bit": 0,
+          "events": []
+        },
+        "201": {
+          "state": 0,
+          "counter": 201,
+          "global_bit": 0,
+          "events": []
+        },
+        "202": {
+          "state": 1,
+          "counter": 0,
+          "global_bit": 1,
+          "events": [
+            [
+              9,
+              0
+            ]
+          ]
+        },
+        "203": {
+          "state": 1,
+          "counter": 0,
+          "global_bit": 1,
+          "events": []
+        }
+      },
+      "unrelated_global_bits_preserved": true
+    },
+    {
+      "sequence": "fault_after_entry",
+      "samples": 300,
+      "final": {
+        "state": 1,
+        "counter": 0,
+        "global_bit": 1,
+        "events": []
+      }
+    },
+    {
+      "sequence": "qualified_removal",
+      "checkpoints": {
+        "1": {
+          "state": 1,
+          "counter": 1,
+          "global_bit": 1,
+          "events": []
+        },
+        "201": {
+          "state": 1,
+          "counter": 201,
+          "global_bit": 1,
+          "events": []
+        },
+        "202": {
+          "state": 0,
+          "counter": 0,
+          "global_bit": 0,
+          "events": [
+            [
+              9,
+              0
+            ]
+          ]
+        },
+        "203": {
+          "state": 0,
+          "counter": 1,
+          "global_bit": 0,
+          "events": []
+        }
+      },
+      "unrelated_global_bits_preserved": true
+    },
+    {
+      "sequence": "blocked_then_good_entry",
+      "initial_blocked_samples": 25,
+      "good_samples_to_entry": 201,
+      "final": {
+        "state": 1,
+        "counter": 0,
+        "global_bit": 1,
+        "events": [
+          [
+            9,
+            0
+          ]
+        ]
+      }
+    }
+  ],
+  "timer_registration": [
+    {
+      "allocated_id": 2,
+      "mode": 1,
+      "period_ticks": 10,
+      "callback": "080208a9",
+      "note": "Actual registration; periodic interrupt/scheduler execution not simulated"
+    }
+  ],
+  "counter_history": [
+    {
+      "sequence": "blocker_only_while_timer_active",
+      "blocker": "global",
+      "skipped": {
+        "counter": 451,
+        "stop_requested": false,
+        "events": []
+      },
+      "next_eligible_sample": {
+        "counter": 0,
+        "stop_requested": true,
+        "events": [
+          [
+            7,
+            0
+          ]
+        ]
+      },
+      "output_dispatch_not_executed": true
+    },
+    {
+      "sequence": "blocker_only_while_timer_active",
+      "blocker": "gpio",
+      "skipped": {
+        "counter": 451,
+        "stop_requested": false,
+        "events": []
+      },
+      "next_eligible_sample": {
+        "counter": 0,
+        "stop_requested": true,
+        "events": [
+          [
+            7,
+            0
+          ]
+        ]
+      },
+      "output_dispatch_not_executed": true
+    },
+    {
+      "sequence": "blocker_only_while_timer_active",
+      "blocker": "countdown",
+      "skipped": {
+        "counter": 451,
+        "stop_requested": false,
+        "events": []
+      },
+      "next_eligible_sample": {
+        "counter": 0,
+        "stop_requested": true,
+        "events": [
+          [
+            7,
+            0
+          ]
+        ]
+      },
+      "output_dispatch_not_executed": true
+    },
+    {
+      "sequence": "blocker_observed_at_eligible_sample",
+      "blocker": "global",
+      "blocked": {
+        "counter": 1,
+        "stop_requested": false,
+        "events": []
+      },
+      "released": {
+        "counter": 2,
+        "stop_requested": false,
+        "events": []
+      }
+    },
+    {
+      "sequence": "blocker_observed_at_eligible_sample",
+      "blocker": "gpio",
+      "blocked": {
+        "counter": 1,
+        "stop_requested": false,
+        "events": []
+      },
+      "released": {
+        "counter": 2,
+        "stop_requested": false,
+        "events": []
+      }
+    },
+    {
+      "sequence": "blocker_observed_at_eligible_sample",
+      "blocker": "countdown",
+      "blocked": {
+        "counter": 1,
+        "stop_requested": false,
+        "events": []
+      },
+      "released": {
+        "counter": 2,
+        "stop_requested": false,
+        "events": []
+      }
+    },
+    {
+      "sequence": "entry_and_policy_order",
+      "policy_before_qualifying_sample_202": true,
+      "gpio_held_high_synthetically": true,
+      "policy": {
+        "counter": 0,
+        "stop_requested": true,
+        "events": [
+          [
+            7,
+            0
+          ]
+        ]
+      }
+    },
+    {
+      "sequence": "entry_and_policy_order",
+      "policy_before_qualifying_sample_202": false,
+      "gpio_held_high_synthetically": true,
+      "policy": {
+        "counter": 1,
+        "stop_requested": false,
+        "events": []
+      }
+    }
+  ],
+  "output_lifecycle": [
+    {
+      "path": "outer_output_off_gate",
+      "counter_before": 1,
+      "counter_after": 0
+    },
+    {
+      "path": "initialization_tail_only",
+      "counter_before": 1,
+      "counter_after": 0
+    },
+    {
+      "path": "outer_output_off_gate",
+      "counter_before": 451,
+      "counter_after": 0
+    },
+    {
+      "path": "initialization_tail_only",
+      "counter_before": 451,
+      "counter_after": 0
+    },
+    {
+      "path": "outer_output_off_gate",
+      "counter_before": 65535,
+      "counter_after": 0
+    },
+    {
+      "path": "initialization_tail_only",
+      "counter_before": 65535,
+      "counter_after": 0
+    }
+  ],
+  "cases": 90,
+  "script_sha256": "0df1caf541f9d99da8fd0f1e19975dd65bbbe9138a642bd50d749eed8e4ae1a8"
+}

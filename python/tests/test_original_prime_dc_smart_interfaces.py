@@ -45,7 +45,7 @@ def test_seventh_capability_remains_original_dc_only():
     assert "set-dc-power-saving" in MonitorService([original()]).supported_commands("original")
     assert _supports_operation(original(), "dc_power_saving")
     assert decode_setting("dc_power_saving", b'{"enabled":true}') == {"enabled": True}
-    assert len(native_commands_for_model(Model.C1000)) == 8
+    assert len(native_commands_for_model(Model.C1000)) == 9
     assert "set-dc-power-saving" in native_commands_for_model(Model.C1000)
     for model in (Model.C1000_GEN2, Model.C2000_GEN2):
         assert "set-dc-power-saving" not in native_commands_for_model(model)

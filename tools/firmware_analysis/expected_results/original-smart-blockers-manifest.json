@@ -1,0 +1,15 @@
+{
+  "firmware_file": "firmware/c1000_original/1.5.9/MainMcu-decoded.bin",
+  "firmware_sha256": "b295ee8613f5c96e70dcc905896df516621cab4dc590bb580eac6b84519911a6",
+  "case_count": 90,
+  "python": "3.12.3",
+  "unicorn": "2.1.4",
+  "sha256": {
+    "tools/firmware_analysis/emulate_original_smart_blockers.py": "0df1caf541f9d99da8fd0f1e19975dd65bbbe9138a642bd50d749eed8e4ae1a8",
+    "tools/firmware_analysis/emulate_c1000_smart_policy.py": "7d4ba9f3bda00e6958728857341bcb79a14acf926dadd681e8ee11098c626197",
+    "tools/firmware_analysis/emulate_c1000_original_commands.py": "598d83e15b6d7e982581439ea8b55fb0d7d3985009a6c1f4722363dff0f8ba5d",
+    "tools/firmware_analysis/requirements.txt": "a8a6028b04ca02c58d43b215db65f3a1ff8d59f9d092d1d373c191af6564e85e",
+    "tools/firmware_analysis/expected_results/original-smart-blockers-results.json": "46d2ff23cd0baad14b153ee0fffb89ebf7c976f6668e183b74fe090468dfddd7"
+  },
+  "scope": "Public original MainMcu 1.5.9 with synthetic DSP/GPIO/timer state; no device, network, physical output or installed1.7.1 validation."
+}

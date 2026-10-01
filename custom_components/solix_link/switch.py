@@ -57,7 +57,7 @@ class SolixSettingSwitch(SolixEntity, SwitchEntity):
                 self._attr_extra_state_attributes.update(
                     enable_requirement="Requires fresh DC output OFF.",
                     inactivity_behavior="Smart may inherit an inactivity counter; enabling does not guarantee a new grace period.")
-            elif self.command == "set-ac-power-saving" and self.snapshot.get("protocol") == "prime":
+            elif self.command == "set-ac-power-saving" and self.snapshot.get("protocol") in ("prime", "native_mqtt"):
                 self._attr_extra_state_attributes.update(
                     enable_requirement="Requires fresh AC output OFF and an inactive AC countdown in both directions.",
                     inactivity_behavior="Smart may inherit an inactivity counter; enabling does not guarantee a new grace period.")

@@ -227,7 +227,7 @@ def boolean_setting_supported(snapshot: dict, command: str) -> bool:
     elif command in ("set-ac-power-saving", "set-dc-power-saving"):
         supported = original or (command == "set-dc-power-saving" and model == "c1000" and protocol in ("prime", "native_mqtt")
                                  and binary_state(snapshot.get("metrics", {}).get("dc_output_enabled")) is False)
-        if command == "set-ac-power-saving" and model == "c1000" and protocol == "prime":
+        if command == "set-ac-power-saving" and model == "c1000" and protocol in ("prime", "native_mqtt"):
             metrics = snapshot.get("metrics", {})
             supported = (binary_state(metrics.get("ac_output_enabled")) is False
                          and type(metrics.get("ac_output_timer_remaining_seconds")) is int

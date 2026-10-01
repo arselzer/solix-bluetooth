@@ -49,7 +49,7 @@ def test_independently_verified_prime_and_native_eighth_capability():
     assert "set-fast-charge" in MonitorService([original()]).supported_commands("original")
     assert _supports_operation(original(), "fast_charge")
     assert decode_setting("fast_charge", b'{"enabled":true}') == {"enabled": True}
-    assert len(native_commands_for_model(Model.C1000)) == 8
+    assert len(native_commands_for_model(Model.C1000)) == 9
     assert "set-fast-charge" in native_commands_for_model(Model.C1000)
 
 

@@ -41,6 +41,10 @@ The gateway exposes **nine preferences**, including AC Smart. Native MQTT
 remains independently limited to eight; this Bluetooth trial does not validate
 native AC Smart or native output switching.
 
+The subsequent [independent native AC Smart trial](c1000-native-ac-smart-validation.md)
+verifies that preference over local MQTT, bringing native to nine. The
+measurements in this document remain Bluetooth evidence.
+
 ```sh
 solix-link set-ac-output --name original --enabled off
 solix-link set-ac-power-saving --name original --enabled off  # Normal

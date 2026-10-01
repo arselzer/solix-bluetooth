@@ -51,7 +51,7 @@ def test_original_native_readonly_monitor_and_terminal(original_ap):
     assert monitor.snapshot(config.name)["power_flow"] == "unknown"
     assert monitor.supported_commands(config.name) == []
     expected = {"set-charge-power", "set-device-timeout", "set-display-brightness",
-                "set-display-timeout", "set-light", "set-temperature-unit", "set-dc-power-saving", "set-fast-charge"}
+                "set-display-timeout", "set-light", "set-temperature-unit", "set-dc-power-saving", "set-fast-charge", "set-ac-power-saving"}
     assert set(native_commands_for_model(Model.C1000)) == expected
     async def run():
         calls = []
@@ -61,7 +61,7 @@ def test_original_native_readonly_monitor_and_terminal(original_ap):
         backend = TuiBackend([], directory, requester=request)
         assert backend.targets[0].model == Model.C1000
         assert {item.key for item in controls_for(backend.targets[0])} == {
-            "charge-power", "device-timeout", "display-brightness", "display-timeout", "light", "temperature-unit", "dc-power-saving", "fast-charge"}
+            "charge-power", "device-timeout", "display-brightness", "display-timeout", "light", "temperature-unit", "dc-power-saving", "fast-charge", "ac-power-saving"}
         await backend.connect("native")
         for action in ("charge-cap", "reserve", "plan", "return-grid", "ac-output", "port-memory"):
             with pytest.raises(ValueError, match="unavailable"):
@@ -92,7 +92,7 @@ def test_private_socket_rejects_every_unverified_original_write(original_ap):
     asyncio.run(run())
 
 
-def test_native_original_socket_routes_only_eight_validated_shapes(original_ap):
+def test_native_original_socket_routes_only_nine_validated_shapes(original_ap):
     config, directory = original_ap
     cases = (("set-charge-power", "set_ac_charging_power", {"watts": 900}),
              ("set-device-timeout", "set_device_timeout", {"minutes": 0}),
@@ -101,7 +101,8 @@ def test_native_original_socket_routes_only_eight_validated_shapes(original_ap):
              ("set-light", "set_light_mode", {"mode": 1}),
              ("set-temperature-unit", "set_temperature_unit", {"fahrenheit": True}),
              ("set-dc-power-saving", "set_dc_power_saving_enabled", {"enabled": False}),
-             ("set-fast-charge", "set_fast_charge_enabled", {"enabled": True}))
+             ("set-fast-charge", "set_fast_charge_enabled", {"enabled": True}),
+             ("set-ac-power-saving", "set_ac_power_saving_enabled", {"enabled": False}))
     async def run():
         service = APService(config, directory, allow_control=True)
         calls = []
@@ -124,7 +125,7 @@ def test_native_original_socket_routes_only_eight_validated_shapes(original_ap):
     asyncio.run(run())
 
 
-def test_terminal_original_native_routes_eight_and_preserves_original_choices(original_ap):
+def test_terminal_original_native_routes_nine_and_preserves_original_choices(original_ap):
     config, directory = original_ap
     async def run():
         calls = []
@@ -132,7 +133,8 @@ def test_terminal_original_native_routes_eight_and_preserves_original_choices(or
                   "last_seen_timestamp": time.time(), "metrics": {
                       "display_brightness": 2, "display_timeout_seconds": 30, "device_timeout_minutes": 720,
                       "light_mode": 0, "temperature_unit_fahrenheit": 0, "ac_charging_power_limit_w": 1000,
-                      "dc_output_enabled": 0, "dc_power_saving_mode_enabled": 1, "ac_fast_charge_enabled": 0}}
+                      "dc_output_enabled": 0, "dc_power_saving_mode_enabled": 1, "ac_fast_charge_enabled": 0,
+                      "ac_output_enabled": 0, "ac_output_timer_remaining_seconds": 0, "ac_power_saving_mode_enabled": 1}}
         async def request(_directory, command, **fields):
             calls.append((command, fields))
             return status
@@ -147,13 +149,14 @@ def test_terminal_original_native_routes_eight_and_preserves_original_choices(or
             ("temperature-unit", "fahrenheit", "set-temperature-unit", {"fahrenheit": True}),
             ("dc-power-saving", "off", "set-dc-power-saving", {"enabled": False}),
             ("fast-charge", "on", "set-fast-charge", {"enabled": True}),
+            ("ac-power-saving", "off", "set-ac-power-saving", {"enabled": False}),
         ):
             await backend.control(action, value)
             assert calls[-1] == (command, fields)
         for value in ("0", "10"):
             with pytest.raises(ValueError, match="supported setting"):
                 await backend.control("display-timeout", value)
-        assert len(calls) == 9
+        assert len(calls) == 10
     asyncio.run(run())
 
 
@@ -164,6 +167,7 @@ def test_terminal_original_native_routes_eight_and_preserves_original_choices(or
     ("4", "2", "set-temperature-unit", {"fahrenheit": True}),
     ("5", "2", "set-dc-power-saving", {"enabled": True}),
     ("6", "2", "set-fast-charge", {"enabled": True}),
+    ("7", "1", "set-ac-power-saving", {"enabled": False}),
 ])
 @pytest.mark.parametrize("confirmation", ["0", "1"])
 def test_line_original_native_preferences_require_confirmation(original_ap, monkeypatch, selection, value,
