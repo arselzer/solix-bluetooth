@@ -14,7 +14,7 @@ from .client import SolixMonitor, discover
 from .config import DEFAULT_CONFIG, DeviceConfig, load_config, save_config
 from .manager import MonitorService
 from .protocol import C1000_PRIME_SETTINGS, Model
-from .c1000_capabilities import original_prime_commands
+from .c1000_capabilities import PRIME_DC_SMART_WARNING, original_prime_commands
 
 
 def parser() -> argparse.ArgumentParser:
@@ -259,6 +259,8 @@ async def _set(args: argparse.Namespace) -> None:
         raise ValueError("Unit must be celsius or fahrenheit")
     if args.command in ("set-ac-power-saving", "set-dc-power-saving"):
         print("Power saving may automatically turn the output off at low load.", file=sys.stderr)
+        if device.protocol == "prime":
+            print(PRIME_DC_SMART_WARNING, file=sys.stderr)
     if args.command == "set-device-timeout":
         if type(args.minutes) is not int or args.minutes not in (0, 30, 60, 120, 240, 360, 720, 1440):
             raise ValueError("Device Timeout must be 0 (Never), 30, 60, 120, 240, 360, 720 or 1440 minutes")

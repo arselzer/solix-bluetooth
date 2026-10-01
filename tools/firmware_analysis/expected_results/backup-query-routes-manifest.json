@@ -1,0 +1,13 @@
+{
+  "firmware_file": "firmware/c1000_gen2/1.1.4.9/MainMcu-decoded.bin",
+  "firmware_sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9",
+  "case_count": 24,
+  "python": "3.12.3",
+  "unicorn": "2.1.4",
+  "dependency_file": "tools/firmware_analysis/requirements.txt",
+  "sha256": {
+    "tools/firmware_analysis/emulate_backup_query_routes.py": "1cb9d35c9ad800804d634e3f5051b54fee1347fd69a37b1feb972900fd6a8995",
+    "tools/firmware_analysis/expected_results/backup-query-routes-results.json": "4978615f94333d2f92a37b6880fc350b05384c4781d4582672b3e699cbd4edd7"
+  },
+  "scope": "Synthetic replay and public firmware only; app excerpts and raw private logs excluded."
+}

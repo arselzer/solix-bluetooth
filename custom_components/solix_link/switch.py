@@ -53,6 +53,10 @@ class SolixSettingSwitch(SolixEntity, SwitchEntity):
         self.command = SETTINGS[description.key]
         if self.command in ("set-ac-power-saving", "set-dc-power-saving"):
             self._attr_extra_state_attributes = {"output_behavior": "Power saving may automatically turn the output off at low load."}
+            if self.command == "set-dc-power-saving" and self.snapshot.get("protocol") == "prime":
+                self._attr_extra_state_attributes.update(
+                    enable_requirement="Requires fresh DC output OFF.",
+                    inactivity_behavior="Smart may inherit an inactivity counter; enabling does not guarantee a new grace period.")
         elif self.command == "set-port-memory":
             self._attr_extra_state_attributes = {"recovery_behavior": "Off clears output-recovery bookkeeping; turning On does not restore that transient state."}
         elif self.command == "set-fast-charge" and self.snapshot.get("model") == "c1000_gen2":

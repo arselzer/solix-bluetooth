@@ -68,6 +68,7 @@ def timezone_confer(timezone_name: str | None) -> tuple[bytes, bytes]:
 C1000_PRIME_SETTINGS = frozenset((
     "display_brightness", "ac_charging_power", "device_timeout", "display_timeout",
     "light_mode", "temperature_unit_fahrenheit",
+    "dc_power_saving_mode_enabled",
 ))
 
 
@@ -257,6 +258,12 @@ def decode_telemetry(payload: bytes, model: Model | None = None) -> tuple[dict[s
 
         metrics.update(decode_clock_screen(values.get(0xDA, b""), model=model))
         metrics.update(decode_disaster_plan(values.get(0xD9, b"")))
+        # A1763 main 1.1.4.9 full-status FE serializer: RTC + stored offset,
+        # uint32 UTC seconds. Incremental reports can retain an earlier value;
+        # this is reported device time, not host freshness or clock accuracy.
+        controller_time = values.get(0xFE, b"")
+        if len(controller_time) == 5 and controller_time[0] == 3:
+            metrics["controller_utc_timestamp_seconds"] = int.from_bytes(controller_time[1:], "little")
         # Exact type/lengths come from A1763 main 1.1.4.9 serializers.
         # A8 incremental updates can retain an old power word, so use A6's
         # power field. Its watt scale still needs a nonzero physical PV check.

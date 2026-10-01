@@ -22,6 +22,7 @@ CONTROLS = (
     ("display_timeout", "4046", "023c00", "display_timeout_seconds", 60),
     ("light_mode", "404f", "0101", "light_mode", 1),
     ("temperature_unit_fahrenheit", "4050", "0101", "temperature_unit_fahrenheit", True),
+    ("dc_power_saving_mode_enabled", "4076", "0100", "dc_power_saving_mode_enabled", False),
 )
 
 
@@ -56,7 +57,7 @@ def test_prime_wire_uses_verified_original_body_and_gcm_timestamp(monkeypatch, s
 @pytest.mark.parametrize("setting,value", [
     ("ac_output_enabled", False), ("dc_output_enabled", True), ("display_enabled", False),
     ("fast_charge_enabled", True),
-    ("ac_power_saving_mode_enabled", False), ("dc_power_saving_mode_enabled", False),
+    ("ac_power_saving_mode_enabled", False),
 ])
 def test_original_prime_unverified_controls_are_rejected(setting, value):
     session = Session(Model.C1000, protocol="prime")
@@ -71,6 +72,7 @@ def test_original_prime_unverified_controls_are_rejected(setting, value):
     ("device_timeout", 90),
     ("display_timeout", True), ("display_timeout", 25), ("light_mode", False),
     ("light_mode", 5), ("temperature_unit_fahrenheit", 1),
+    ("dc_power_saving_mode_enabled", 1),
 ])
 def test_prime_invalid_control_values_fail_before_transport(setting, value):
     monitor = SolixMonitor("AA:BB:CC:DD:EE:04", model=Model.C1000, protocol="prime")
@@ -112,16 +114,17 @@ def test_prime_sdk_requires_fresh_protected_settings_and_complete_flags(
                 elif received == "4040":
                     changed = command in writes
                     status_after_write += int(changed)
-                    flags = FLAGS
+                    flags = FLAGS[:1] + bytes((int(state["dc_power_saving_mode_enabled"]) + 1,)) + FLAGS[2:]
                     if problem == "legacy_flags":
                         flags = b"\x01\x02\x02"
                     elif changed and problem == "unknown_flag_changed":
-                        flags = FLAGS[:-1] + bytes((FLAGS[-1] ^ 1,))
+                        flags = flags[:-1] + bytes((flags[-1] ^ 1,))
                     if changed and problem == "protected_changed":
                         protected = "light_mode" if metric != "light_mode" else "display_brightness"
                         state[protected] = BASELINE[protected] + 1
                     if changed and problem == "reverted_final" and status_after_write >= 2:
                         state[metric] = BASELINE[metric]
+                        flags = FLAGS
                     if problem == "stale_baseline" or (changed and problem == "stale_final" and status_after_write >= 2):
                         plain = tlv(0xC1, b"\x01\x62")
                     else:
@@ -152,12 +155,15 @@ def test_prime_sdk_requires_fresh_protected_settings_and_complete_flags(
             apply = monitor.set_display_timeout(value)
         elif setting == "light_mode":
             apply = monitor.set_light_mode(value)
+        elif setting == "dc_power_saving_mode_enabled":
+            apply = monitor.set_dc_power_saving_enabled(value)
         else:
             apply = monitor.set_temperature_unit(value)
         if problem == "matching":
             result = await apply
             assert all(result[key] == expected for key, expected in {**BASELINE, metric: value}.items())
-            assert monitor.raw_tlvs[0xF8] == FLAGS
+            expected_flags = FLAGS[:1] + bytes((int(result["dc_power_saving_mode_enabled"]) + 1,)) + FLAGS[2:]
+            assert monitor.raw_tlvs[0xF8] == expected_flags
         elif problem in ("unknown_flag_changed", "reverted_final"):
             with pytest.raises(RuntimeError, match="setting may have changed"):
                 await apply
@@ -171,4 +177,31 @@ def test_prime_sdk_requires_fresh_protected_settings_and_complete_flags(
                 assert "setting may have changed" in str(error.value)
         assert writes.count(command) == (0 if problem in ("stale_baseline", "legacy_flags") else 1)
         assert set(writes) <= {"4040", command}  # No output command or write retry.
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("enabled", [False, True])
+def test_prime_dc_smart_refuses_fresh_active_dc_output_despite_cached_off(enabled):
+    async def run():
+        monitor = SolixMonitor("AA:BB:CC:DD:EE:04", model=Model.C1000, protocol="prime")
+        monitor._session.ready, monitor._session._secret = True, bytes(range(32))
+        monitor._ready.set()
+        monitor.metrics = BASELINE.copy()
+        writes = []
+
+        class Client:
+            is_connected = True
+
+            async def write_gatt_char(self, _uuid, packet, **_kwargs):
+                parsed = parse_packet(packet)
+                writes.append(parsed.command.hex())
+                assert writes[-1] == "4040"
+                plain = payload_for({**BASELINE, "dc_output_enabled": 1})
+                encrypted = monitor._session._crypt(plain, True)
+                await monitor._handle(build_packet(DATA_RESPONSE, bytes.fromhex("c840"), b"\x11" + encrypted))
+
+        monitor._client = Client()
+        with pytest.raises(RuntimeError, match="DC output to be off; no write sent"):
+            await monitor.set_dc_power_saving_enabled(enabled)
+        assert writes == ["4040"]
     asyncio.run(run())

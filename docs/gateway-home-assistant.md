@@ -88,7 +88,7 @@ Original C1000 **legacy** BLE profiles expose `set-temperature-unit`/`fahrenheit
 automatically stop an output at low load; these configuration controls
 do not send an output-switch command. See the [physical trials](c1000-preferences-validation.md).
 
-Original C1000 **Prime/native MQTT 1.7.1** advertises only these six controls:
+Original C1000 **Prime/native MQTT 1.7.1** shares these six controls:
 
 | Command | Exact field | Values |
 | --- | --- | --- |
@@ -99,12 +99,24 @@ Original C1000 **Prime/native MQTT 1.7.1** advertises only these six controls:
 | `set-light` | integer `mode` | 0 Off / 1 Low / 2 Medium / 3 High / 4 SOS |
 | `set-temperature-unit` | boolean `fahrenheit` | `true` / `false` |
 
+BLE Prime additionally advertises `set-dc-power-saving` with boolean `enabled`
+(`true` Smart, `false` Normal), making **seven BLE controls and six native**.
+Both directions require fresh DC output off. Prototype and public SDK trials
+each passed two writes/nine fresh samples with AC enabled, DC disabled and
+full baseline restoration. DC Smart changes only F8 byte 1 (Normal `1`, Smart
+`2`), preserving every other flag byte and the other ten settings.
+The browser requires confirmation; HA exposes the configuration switch only
+with the capability and valid readback, disabling it while DC is on or unknown.
+Smart may inherit an inactivity counter and later turn DC output off at low
+load; enabling does not guarantee a new grace period. Native DC Smart remains
+unavailable.
+
 Live restoration covered 900/1000 W, brightness 1/2, Device Timeout 720/0 min,
 screen timeout 30/60 s, light Off/Low and Celsius/Fahrenheit. Every Prime write
 requires all eleven settings and the full 21-byte `F8` flags freshly before and
 afterward; protected fields and unknown flags must remain unchanged. AC was
 enabled and DC disabled throughout the recorded snapshots. Other values have
-synthetic/range coverage. Fast charge, Smart modes and AC/DC switches stay
+synthetic/range coverage. Fast charge, AC Smart and AC/DC switches stay
 unavailable on this Prime profile. The browser and HA expose matching settings,
 including a Light select; the temperature sensor continues reporting Celsius.
 Original native MQTT/radio 0.3.3.0 confirmed these six settings with 12 writes,

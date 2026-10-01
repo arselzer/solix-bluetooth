@@ -13,7 +13,9 @@ and [1,347 original Smart-policy cases](c1000-smart-auto-off-policy.md),
 [60 LCD clock-screen cases](gen2-timer-plan-investigation.md), and
 [762 disaster-plan cases](gen2-disaster-plan-investigation.md),
 [87 original charging-path and 48 ACK cases](c1000-bypass-firmware-followup.md),
-and [16 complete-backup-readback cases](gen2-persistent-plan-followup.md).
+[16 complete-backup-readback cases](gen2-persistent-plan-followup.md),
+[24 non-clearing full-status cases](gen2-backup-query-investigation.md), and
+[73 original timer/Smart/Fast cases](c1000-timer-and-mode-followup.md).
 These have independent commands and manifests; they are not included in the
 1,842-case combined runner. Their individual commands are in the linked records.
 

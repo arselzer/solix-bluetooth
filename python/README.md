@@ -9,7 +9,7 @@ original C1000 and C1000/C2000 Gen 2: `ap-service-init`, `ap-service-run`, `ap-s
 `ap-service-grid` and `ap-service-serve`. It packages the
 local API, NTP and mTLS interception workflow, without an internet route.
 One [shared AP](../docs/multiple-ap-devices.md) supports multiple registered
-stations with terminal/browser/API selection. Original C1000 exposes only its
+stations with terminal/browser/API selection. Native original C1000 exposes only its
 six validated preferences; controller readiness and Gen 2 tariff/charge-cap
 controls are unavailable on that model.
 C1000 Gen 2 uses its generated BLE pairing ID for local MQTT; C2000 generated-ID
@@ -28,7 +28,7 @@ such as `monitor`, `serve` and `ap-service-status` keep their scripted behavior.
 | Model profile | Monitoring | Controls |
 | --- | --- | --- |
 | `c300` — C300/C300X AC | C300X tested live; C300 sibling uses the reference map | AC output, light, charging-power limit, screen timeout verified |
-| `c1000` — original A1761 | Legacy 1.5.1, explicit Prime 1.7.1 and native MQTT/radio 0.3.3.0 tested live | Legacy controls; Prime/native charging power, brightness, device/screen timeout, light and temperature unit |
+| `c1000` — original A1761 | Legacy 1.5.1, explicit Prime 1.7.1 and native MQTT/radio 0.3.3.0 tested live | Legacy controls; Prime/native six preferences; Prime-only DC Smart while DC output is off |
 | `c1000_gen2` — A1763 | BLE and native MQTT tested live | Charge limits/power, display/device timeout, fast charge; native reserve, tariffs/grid return, temperature/alert, brightness/screen timeout, port memory and guarded discharge floor |
 | `c2000_gen2` — A1783 | Tested live | Upper charge cap, charging power, screen timeout; native reserve, all-day Peak and confirmed grid return |
 
@@ -124,7 +124,7 @@ These new controls are native C1000 Gen 2 only, with `--allow-control` required.
 Brightness also requires Standard/no active tariff and an inactive clock screen.
 See [versioned validation and API schemas](../docs/c1000-native-preferences-validation.md).
 
-Original C1000 temperature, fast charge and AC/DC Smart preferences are
+Original C1000 **legacy** temperature, fast charge and AC/DC Smart preferences are
 [physically verified](../docs/c1000-preferences-validation.md) and exposed in
 the terminal/browser/CLI, bridge and gateway/HA. Boolean commands are
 `set-temperature-unit` (`fahrenheit`), `set-fast-charge`,
@@ -226,8 +226,10 @@ solix-link set-temperature-unit --name c1000 --unit fahrenheit
 ```
 
 The default stays legacy; firmware advertisements do not select the transport.
-Prime 1.7.1 exposes six settings: charging power, brightness, Device Timeout,
-screen timeout, light and temperature unit. Live restoration covered 900/1000 W,
+Prime 1.7.1 exposes seven settings: charging power, brightness, Device Timeout,
+screen timeout, light, temperature unit and DC Smart. The first six are also
+verified through native MQTT; DC Smart remains **BLE Prime only**.
+Live restoration covered 900/1000 W,
 brightness 1/2, Device Timeout 720/0 minutes, screen timeout 30/60 seconds,
 light Off/Low and Celsius/Fahrenheit. The three added preferences also passed
 the public SDK without packet overrides. Other enum values have packet/range
@@ -235,8 +237,15 @@ tests rather than live confirmation. Original screen timeout choices are
 20/30/60/300/1800 seconds; the Gen 2 native-only Never/10 s options are excluded.
 The SDK requires all eleven settings and the complete 21-byte `F8` flags freshly
 before and after each write, protecting other settings and unknown flags.
+For DC Smart only, F8 byte 1 changes between Normal `1` and Smart `2`;
+all other bytes remain exact and restoration matches the whole original F8.
+Both directions of `set-dc-power-saving --name original --enabled on|off`
+require fresh **DC output off**. Prototype and public SDK trials each passed
+two writes and nine fresh samples with AC enabled, DC disabled and full
+baseline restoration. Smart may inherit an inactivity counter and later turn
+DC output off at low load; enabling does not guarantee a new grace period.
 Failure after a write can mean the setting changed; inspect fresh status before
-retrying. Original Prime output switches, fast charge and Smart modes remain
+retrying. Original Prime output switches, fast charge and AC Smart remain
 unavailable. CLI, guided menu, TUI, HTTP gateway, MQTT bridge
 and the browser/HA controls use the supported capabilities; no default changes
 or automatic write retries are made.
@@ -255,7 +264,7 @@ local provisioning ID when needed. See [the network trial](../docs/c1000-origina
 On original C1000 main **1.7.1 / radio 0.3.3.0**, explicit Prime provisioning,
 local credential bootstrap, mutual TLS, MQTT subscription and fresh `0405`
 telemetry passed live with the existing app pairing ID. Native validation
-covered all six preferences above: **12 writes with restoration, 18 fresh
+covered the six shared preferences above: **12 writes with restoration, 18 fresh
 snapshots and three matching final samples**, preserving all eleven settings,
 the entire `F8` flags and AC output enabled. The radio suppresses setter ACKs;
 the backend sends each write once and confirms fresh status. This does not

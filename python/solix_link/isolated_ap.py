@@ -8,6 +8,7 @@ from pathlib import Path
 import shutil
 import signal
 import subprocess
+import time
 
 from .ap_service_config import APServiceConfig, private_write
 
@@ -94,13 +95,33 @@ class IsolatedAP:
                         "--leasefile-ro", "--log-dhcp"], "dnsmasq.log")
             if self._run(*self.exec_args(self._ip, "route", "show", "default")).strip():
                 raise RuntimeError("AP service namespace unexpectedly has a default route")
+            self._wait_ready()
         except BaseException:
             self.stop()
             raise
 
+    def _wait_ready(self, timeout: float = 10) -> None:
+        """Wait for hostapd's startup transition before starting consumers.
+
+        hostapd can temporarily bring the interface down after it is spawned.
+        An earlier UP flag alone does not establish that the AP is ready.
+        """
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            self.check()
+            path = self.directory / "hostapd.log"
+            log = path.read_text(errors="replace") if path.exists() else ""
+            if f"{self.config.interface}: AP-ENABLED" in log:
+                links = json.loads(self._run(*self.exec_args(
+                    self._ip, "-j", "link", "show", "dev", self.config.interface)))
+                if links and "UP" in links[0].get("flags", ()):
+                    return
+            time.sleep(0.05)
+        raise RuntimeError("Timed out waiting for hostapd to enable the AP; inspect private logs")
+
     def check(self) -> None:
         if any(process.poll() is not None for process in self.processes):
-            raise RuntimeError("A AP service exited; inspect private logs")
+            raise RuntimeError("An AP service exited; inspect private logs")
         if self._run(*self.exec_args(self._ip, "route", "show", "default")).strip():
             raise RuntimeError("AP service namespace acquired a default route")
 

@@ -12,6 +12,7 @@ C1000_PRIME_OPERATIONS = {
     "display_timeout": "display_timeout",
     "light_mode": "light_mode",
     "temperature_unit": "temperature_unit_fahrenheit",
+    "dc_power_saving": "dc_power_saving_mode_enabled",
 }
 C1000_PRIME_COMMAND_OPERATIONS = {
     "set-charge-power": "ac_charging_power",
@@ -20,12 +21,15 @@ C1000_PRIME_COMMAND_OPERATIONS = {
     "set-display-timeout": "display_timeout",
     "set-light": "light_mode",
     "set-temperature-unit": "temperature_unit",
+    "set-dc-power-saving": "dc_power_saving",
 }
 # Native writes require their own live verification, independent of BLE Prime.
 # The private 2026-10-01 trial confirmed these six with restoration of all
 # protected settings, three final samples and AC output remaining enabled.
 C1000_NATIVE_SETTINGS = frozenset(("ac_charging_power", "device_timeout", "display_brightness",
                                     "display_timeout", "light_mode", "temperature_unit_fahrenheit"))
+PRIME_DC_SMART_WARNING = ("Requires fresh DC output OFF. Smart may inherit an inactivity counter and later "
+                          "turn the DC output off at low load; enabling does not guarantee a new grace period.")
 
 
 def original_prime_operation_supported(operation: str) -> bool:

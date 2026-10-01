@@ -89,10 +89,10 @@ def test_original_prime_cli_controls_fail_before_opening_transport(monkeypatch, 
 def test_original_prime_gateway_and_bridge_expose_only_verified_controls():
     service = MonitorService([original()])
     assert service.supported_commands("original") == ["set-charge-power", "set-device-timeout", "set-display-brightness",
-                                                       "set-display-timeout", "set-light", "set-temperature-unit"]
-    for operation in ("ac_charging_power", "device_timeout", "display_brightness", "display_timeout", "light_mode", "temperature_unit"):
+                                                       "set-display-timeout", "set-light", "set-temperature-unit", "set-dc-power-saving"]
+    for operation in ("ac_charging_power", "device_timeout", "display_brightness", "display_timeout", "light_mode", "temperature_unit", "dc_power_saving"):
         assert _supports_operation(original(), operation)
-    for operation in ("ac_output", "fast_charge", "ac_power_saving", "dc_power_saving"):
+    for operation in ("ac_output", "fast_charge", "ac_power_saving"):
         assert not _supports_operation(original(), operation)
         with pytest.raises(ValueError, match="not verified for original C1000 Prime"):
             asyncio.run(service.apply_setting("original", operation))
@@ -164,7 +164,7 @@ def test_line_menu_can_switch_original_protocol_without_pairing(monkeypatch, tmp
     changed = interactive.change_protocol(legacy, path)
     assert changed == original() and load_config(path) == [changed]
     output = capsys.readouterr().out
-    assert "Smart modes remain unavailable" in output and legacy.client_id not in output
+    assert "AC Smart remain unavailable" in output and "DC Smart requires DC output off" in output and legacy.client_id not in output
 
 
 def test_line_main_protocol_choice_does_not_pair_before_configuration(monkeypatch, tmp_path):
@@ -196,7 +196,7 @@ def test_terminal_backend_protocol_change_disconnects_and_retains_pairing(tmp_pa
         assert backend.target is None and backend.monitor is None and disconnected == [True]
         assert load_config(path) == [original()] and changed.device == original()
         assert {control.key for control in controls_for(changed)} == {"charge-power", "display-brightness", "device-timeout",
-                                                                   "display-timeout", "light", "temperature-unit"}
+                                                                              "display-timeout", "light", "temperature-unit", "dc-power-saving"}
         assert "prime" in changed.label and legacy.client_id not in changed.label
     asyncio.run(run())
 
@@ -257,8 +257,8 @@ def test_headless_original_protocol_selector_has_cancel_and_save(tmp_path):
             await pilot.pause()
             assert load_config(path) == [original()]
             assert {control.key for control in controls_for(backend.targets[0])} == {"charge-power", "display-brightness", "device-timeout",
-                                                                                  "display-timeout", "light", "temperature-unit"}
-            assert "Smart modes remain unavailable" in str(app.query_one("#notice", Static).render())
+                                                                                  "display-timeout", "light", "temperature-unit", "dc-power-saving"}
+            assert "DC Smart requires DC output off" in str(app.query_one("#notice", Static).render())
             assert app.query_one("#apply-setting").disabled
             app.save_screenshot(filename="solix-original-prime-dashboard.svg", path="/tmp")
     asyncio.run(run())

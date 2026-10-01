@@ -411,6 +411,7 @@ class SolixMonitor:
         return await self._set_original_configuration("ac_power_saving_mode_enabled", enabled)
 
     async def set_dc_power_saving_enabled(self, enabled: bool) -> dict[str, int | str]:
+        """Select DC Normal/Smart; Prime trials require the DC output to be off."""
         return await self._set_original_configuration("dc_power_saving_mode_enabled", enabled)
 
     async def _fresh_original_configuration(self, *, after_write: bool = False) -> tuple[dict[str, int], bytes | None]:
@@ -444,6 +445,14 @@ class SolixMonitor:
         packet = self._session.c1000_control_packet(setting, value)
         _command, _body, target = c1000_setting(setting, value)
         before, flags = await self._fresh_original_configuration()
+        expected_flags = flags
+        if self.protocol == "prime" and setting == "dc_power_saving_mode_enabled":
+            if before["dc_output_enabled"] != 0:
+                raise RuntimeError("Original C1000 Prime DC Smart control requires the DC output to be off; no write sent")
+            # Preserve the complete live flags, including the unknown firmware tail.
+            changed_flags = bytearray(flags)
+            changed_flags[1] = int(value) + 1  # Command 0/1 maps to Normal 1 / Smart 2.
+            expected_flags = bytes(changed_flags)
         expected = {**before, **target}
         result = await self._write_setting(packet, expected)
         if self.protocol == "prime":
@@ -451,7 +460,7 @@ class SolixMonitor:
                 after, after_flags = await self._fresh_original_configuration(after_write=True)
             except TimeoutError:
                 raise TimeoutError("Fresh original C1000 post-write telemetry is missing; the setting may have changed") from None
-            if after != expected or after_flags != flags:
+            if after != expected or after_flags != expected_flags:
                 raise RuntimeError("Protected original C1000 settings or F8 flags changed after write; the setting may have changed")
             return self.metrics.copy()
         return result

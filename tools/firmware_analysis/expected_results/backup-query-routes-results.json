@@ -1,0 +1,435 @@
+{
+  "model": "C1000 Gen 2 main 1.1.4.9",
+  "firmware_sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9",
+  "cases": 24,
+  "results": [
+    {
+      "tou_enabled": false,
+      "offset_seconds_west": -7200,
+      "clock_screen_failure_flag": 0,
+      "d9_prefix": "0400000a64010201000c030c18",
+      "fe_utc": 1790726400,
+      "request_fe_utc": 1790812800,
+      "all_saved_settings_preserved": true,
+      "all_38_backup_bytes_preserved": true,
+      "failure_flag_preserved": true,
+      "rtc_and_output_flags_preserved": true
+    },
+    {
+      "tou_enabled": false,
+      "offset_seconds_west": -7200,
+      "clock_screen_failure_flag": 1,
+      "d9_prefix": "0400000a64010201000c030c18",
+      "fe_utc": 1790726400,
+      "request_fe_utc": 1790812800,
+      "all_saved_settings_preserved": true,
+      "all_38_backup_bytes_preserved": true,
+      "failure_flag_preserved": true,
+      "rtc_and_output_flags_preserved": true
+    },
+    {
+      "tou_enabled": false,
+      "offset_seconds_west": -7200,
+      "clock_screen_failure_flag": 2,
+      "d9_prefix": "0400000a64010201000c030c18",
+      "fe_utc": 1790726400,
+      "request_fe_utc": 1790812800,
+      "all_saved_settings_preserved": true,
+      "all_38_backup_bytes_preserved": true,
+      "failure_flag_preserved": true,
+      "rtc_and_output_flags_preserved": true
+    },
+    {
+      "tou_enabled": false,
+      "offset_seconds_west": -7200,
+      "clock_screen_failure_flag": 3,
+      "d9_prefix": "0400000a64010201000c030c18",
+      "fe_utc": 1790726400,
+      "request_fe_utc": 1790812800,
+      "all_saved_settings_preserved": true,
+      "all_38_backup_bytes_preserved": true,
+      "failure_flag_preserved": true,
+      "rtc_and_output_flags_preserved": true
+    },
+    {
+      "tou_enabled": false,
+      "offset_seconds_west": 0,
+      "clock_screen_failure_flag": 0,
+      "d9_prefix": "0400000a64010201000c030c18",
+      "fe_utc": 1790726400,
+      "request_fe_utc": 1790812800,
+      "all_saved_settings_preserved": true,
+      "all_38_backup_bytes_preserved": true,
+      "failure_flag_preserved": true,
+      "rtc_and_output_flags_preserved": true
+    },
+    {
+      "tou_enabled": false,
+      "offset_seconds_west": 0,
+      "clock_screen_failure_flag": 1,
+      "d9_prefix": "0400000a64010201000c030c18",
+      "fe_utc": 1790726400,
+      "request_fe_utc": 1790812800,
+      "all_saved_settings_preserved": true,
+      "all_38_backup_bytes_preserved": true,
+      "failure_flag_preserved": true,
+      "rtc_and_output_flags_preserved": true
+    },
+    {
+      "tou_enabled": false,
+      "offset_seconds_west": 0,
+      "clock_screen_failure_flag": 2,
+      "d9_prefix": "0400000a64010201000c030c18",
+      "fe_utc": 1790726400,
+      "request_fe_utc": 1790812800,
+      "all_saved_settings_preserved": true,
+      "all_38_backup_bytes_preserved": true,
+      "failure_flag_preserved": true,
+      "rtc_and_output_flags_preserved": true
+    },
+    {
+      "tou_enabled": false,
+      "offset_seconds_west": 0,
+      "clock_screen_failure_flag": 3,
+      "d9_prefix": "0400000a64010201000c030c18",
+      "fe_utc": 1790726400,
+      "request_fe_utc": 1790812800,
+      "all_saved_settings_preserved": true,
+      "all_38_backup_bytes_preserved": true,
+      "failure_flag_preserved": true,
+      "rtc_and_output_flags_preserved": true
+    },
+    {
+      "tou_enabled": false,
+      "offset_seconds_west": 19800,
+      "clock_screen_failure_flag": 0,
+      "d9_prefix": "0400000a64010201000c030c18",
+      "fe_utc": 1790726400,
+      "request_fe_utc": 1790812800,
+      "all_saved_settings_preserved": true,
+      "all_38_backup_bytes_preserved": true,
+      "failure_flag_preserved": true,
+      "rtc_and_output_flags_preserved": true
+    },
+    {
+      "tou_enabled": false,
+      "offset_seconds_west": 19800,
+      "clock_screen_failure_flag": 1,
+      "d9_prefix": "0400000a64010201000c030c18",
+      "fe_utc": 1790726400,
+      "request_fe_utc": 1790812800,
+      "all_saved_settings_preserved": true,
+      "all_38_backup_bytes_preserved": true,
+      "failure_flag_preserved": true,
+      "rtc_and_output_flags_preserved": true
+    },
+    {
+      "tou_enabled": false,
+      "offset_seconds_west": 19800,
+      "clock_screen_failure_flag": 2,
+      "d9_prefix": "0400000a64010201000c030c18",
+      "fe_utc": 1790726400,
+      "request_fe_utc": 1790812800,
+      "all_saved_settings_preserved": true,
+      "all_38_backup_bytes_preserved": true,
+      "failure_flag_preserved": true,
+      "rtc_and_output_flags_preserved": true
+    },
+    {
+      "tou_enabled": false,
+      "offset_seconds_west": 19800,
+      "clock_screen_failure_flag": 3,
+      "d9_prefix": "0400000a64010201000c030c18",
+      "fe_utc": 1790726400,
+      "request_fe_utc": 1790812800,
+      "all_saved_settings_preserved": true,
+      "all_38_backup_bytes_preserved": true,
+      "failure_flag_preserved": true,
+      "rtc_and_output_flags_preserved": true
+    },
+    {
+      "tou_enabled": true,
+      "offset_seconds_west": -7200,
+      "clock_screen_failure_flag": 0,
+      "d9_prefix": "0401015564010201000c030c18",
+      "fe_utc": 1790726400,
+      "request_fe_utc": 1790812800,
+      "all_saved_settings_preserved": true,
+      "all_38_backup_bytes_preserved": true,
+      "failure_flag_preserved": true,
+      "rtc_and_output_flags_preserved": true
+    },
+    {
+      "tou_enabled": true,
+      "offset_seconds_west": -7200,
+      "clock_screen_failure_flag": 1,
+      "d9_prefix": "0401015564010201000c030c18",
+      "fe_utc": 1790726400,
+      "request_fe_utc": 1790812800,
+      "all_saved_settings_preserved": true,
+      "all_38_backup_bytes_preserved": true,
+      "failure_flag_preserved": true,
+      "rtc_and_output_flags_preserved": true
+    },
+    {
+      "tou_enabled": true,
+      "offset_seconds_west": -7200,
+      "clock_screen_failure_flag": 2,
+      "d9_prefix": "0401015564010201000c030c18",
+      "fe_utc": 1790726400,
+      "request_fe_utc": 1790812800,
+      "all_saved_settings_preserved": true,
+      "all_38_backup_bytes_preserved": true,
+      "failure_flag_preserved": true,
+      "rtc_and_output_flags_preserved": true
+    },
+    {
+      "tou_enabled": true,
+      "offset_seconds_west": -7200,
+      "clock_screen_failure_flag": 3,
+      "d9_prefix": "0401015564010201000c030c18",
+      "fe_utc": 1790726400,
+      "request_fe_utc": 1790812800,
+      "all_saved_settings_preserved": true,
+      "all_38_backup_bytes_preserved": true,
+      "failure_flag_preserved": true,
+      "rtc_and_output_flags_preserved": true
+    },
+    {
+      "tou_enabled": true,
+      "offset_seconds_west": 0,
+      "clock_screen_failure_flag": 0,
+      "d9_prefix": "0401015564010201000c030c18",
+      "fe_utc": 1790726400,
+      "request_fe_utc": 1790812800,
+      "all_saved_settings_preserved": true,
+      "all_38_backup_bytes_preserved": true,
+      "failure_flag_preserved": true,
+      "rtc_and_output_flags_preserved": true
+    },
+    {
+      "tou_enabled": true,
+      "offset_seconds_west": 0,
+      "clock_screen_failure_flag": 1,
+      "d9_prefix": "0401015564010201000c030c18",
+      "fe_utc": 1790726400,
+      "request_fe_utc": 1790812800,
+      "all_saved_settings_preserved": true,
+      "all_38_backup_bytes_preserved": true,
+      "failure_flag_preserved": true,
+      "rtc_and_output_flags_preserved": true
+    },
+    {
+      "tou_enabled": true,
+      "offset_seconds_west": 0,
+      "clock_screen_failure_flag": 2,
+      "d9_prefix": "0401015564010201000c030c18",
+      "fe_utc": 1790726400,
+      "request_fe_utc": 1790812800,
+      "all_saved_settings_preserved": true,
+      "all_38_backup_bytes_preserved": true,
+      "failure_flag_preserved": true,
+      "rtc_and_output_flags_preserved": true
+    },
+    {
+      "tou_enabled": true,
+      "offset_seconds_west": 0,
+      "clock_screen_failure_flag": 3,
+      "d9_prefix": "0401015564010201000c030c18",
+      "fe_utc": 1790726400,
+      "request_fe_utc": 1790812800,
+      "all_saved_settings_preserved": true,
+      "all_38_backup_bytes_preserved": true,
+      "failure_flag_preserved": true,
+      "rtc_and_output_flags_preserved": true
+    },
+    {
+      "tou_enabled": true,
+      "offset_seconds_west": 19800,
+      "clock_screen_failure_flag": 0,
+      "d9_prefix": "0403015564010201000c030c18",
+      "fe_utc": 1790726400,
+      "request_fe_utc": 1790812800,
+      "all_saved_settings_preserved": true,
+      "all_38_backup_bytes_preserved": true,
+      "failure_flag_preserved": true,
+      "rtc_and_output_flags_preserved": true
+    },
+    {
+      "tou_enabled": true,
+      "offset_seconds_west": 19800,
+      "clock_screen_failure_flag": 1,
+      "d9_prefix": "0403015564010201000c030c18",
+      "fe_utc": 1790726400,
+      "request_fe_utc": 1790812800,
+      "all_saved_settings_preserved": true,
+      "all_38_backup_bytes_preserved": true,
+      "failure_flag_preserved": true,
+      "rtc_and_output_flags_preserved": true
+    },
+    {
+      "tou_enabled": true,
+      "offset_seconds_west": 19800,
+      "clock_screen_failure_flag": 2,
+      "d9_prefix": "0403015564010201000c030c18",
+      "fe_utc": 1790726400,
+      "request_fe_utc": 1790812800,
+      "all_saved_settings_preserved": true,
+      "all_38_backup_bytes_preserved": true,
+      "failure_flag_preserved": true,
+      "rtc_and_output_flags_preserved": true
+    },
+    {
+      "tou_enabled": true,
+      "offset_seconds_west": 19800,
+      "clock_screen_failure_flag": 3,
+      "d9_prefix": "0403015564010201000c030c18",
+      "fe_utc": 1790726400,
+      "request_fe_utc": 1790812800,
+      "all_saved_settings_preserved": true,
+      "all_38_backup_bytes_preserved": true,
+      "failure_flag_preserved": true,
+      "rtc_and_output_flags_preserved": true
+    }
+  ],
+  "direct_record_getter_calls": [
+    "08009420",
+    "08009440",
+    "08009480",
+    "08018afc",
+    "08018b0c",
+    "08018b64",
+    "08018b76",
+    "08018b82",
+    "08018b92",
+    "08018ba2",
+    "08018bb2",
+    "08018bf6",
+    "08018c02",
+    "08018c0c",
+    "08018c26",
+    "08018c3a",
+    "08018c4e",
+    "08019184",
+    "08019192"
+  ],
+  "telemetry_descriptors": [
+    {
+      "tag": "a2",
+      "type": 6,
+      "handler": "080181e0",
+      "executed": false
+    },
+    {
+      "tag": "a3",
+      "type": 4,
+      "handler": "0801a2a8",
+      "executed": false
+    },
+    {
+      "tag": "a4",
+      "type": 4,
+      "handler": "0801a018",
+      "executed": false
+    },
+    {
+      "tag": "a5",
+      "type": 4,
+      "handler": "08019798",
+      "executed": false
+    },
+    {
+      "tag": "a6",
+      "type": 4,
+      "handler": "0801a9f4",
+      "executed": false
+    },
+    {
+      "tag": "a7",
+      "type": 4,
+      "handler": "08017ee0",
+      "executed": false
+    },
+    {
+      "tag": "a8",
+      "type": 4,
+      "handler": "08019e90",
+      "executed": false
+    },
+    {
+      "tag": "aa",
+      "type": 4,
+      "handler": "08019cec",
+      "executed": false
+    },
+    {
+      "tag": "ab",
+      "type": 4,
+      "handler": "08019cec",
+      "executed": false
+    },
+    {
+      "tag": "ac",
+      "type": 4,
+      "handler": "08019cec",
+      "executed": false
+    },
+    {
+      "tag": "ae",
+      "type": 4,
+      "handler": "0801abdc",
+      "executed": false
+    },
+    {
+      "tag": "b2",
+      "type": 4,
+      "handler": "080185c0",
+      "executed": false
+    },
+    {
+      "tag": "d9",
+      "type": 4,
+      "handler": "080190d4",
+      "executed": true
+    },
+    {
+      "tag": "da",
+      "type": 4,
+      "handler": "08018730",
+      "executed": true
+    },
+    {
+      "tag": "dc",
+      "type": 4,
+      "handler": "08019864",
+      "executed": false
+    },
+    {
+      "tag": "f9",
+      "type": 4,
+      "handler": "08018ed8",
+      "executed": false
+    },
+    {
+      "tag": "fa",
+      "type": 4,
+      "handler": "0801af54",
+      "executed": false
+    },
+    {
+      "tag": "fd",
+      "type": 0,
+      "handler": "08018104",
+      "executed": false
+    },
+    {
+      "tag": "fe",
+      "type": 3,
+      "handler": "08018e4c",
+      "executed": true
+    }
+  ],
+  "limits": "Replay C1000 Gen 2 full-status reads without changing saved backup records.\n\nActual 0100/parser/serializer traversal and D9/DA/FE callbacks execute. Other\nmeasurement callbacks emit empty typed values. Allocation, transport, memory\nhelpers, persistence, logging and refresh timers are substituted. Synthetic\nRTC, calendar year and RAM only; no network, device or firmware writes.",
+  "claim_scope": "Preservation proved for these synthetic cases with the declared substitutes. Unrelated measurement callbacks and hardware effects are not verified. No complete backup-record export was added or proved.",
+  "script_sha256": "1cb9d35c9ad800804d634e3f5051b54fee1347fd69a37b1feb972900fd6a8995"
+}

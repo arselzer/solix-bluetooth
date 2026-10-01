@@ -303,7 +303,7 @@ try {
   assert.equal(await page.locator('#display-timeout option[value="10"]').count(), 0);
   assert.equal(await page.locator('#light-mode').inputValue(), '0');
   assert.equal(await page.locator('#temperature-unit').inputValue(), '0');
-  for (const label of ['port-memory', 'fast-charge', 'ac-power-saving', 'dc-power-saving']) {
+  for (const label of ['port-memory', 'fast-charge', 'ac-power-saving']) {
     assert.equal(await page.locator(`#${label}`).count(), 0);
   }
   const beforeOriginalPrime = (await recorded()).length;
@@ -314,11 +314,15 @@ try {
     ['display-timeout', '60', 'set-display-timeout', { seconds: 60 }],
     ['light-mode', '1', 'set-light', { mode: 1 }],
     ['temperature-unit', '1', 'set-temperature-unit', { fahrenheit: true }],
+    ['dc-power-saving', '1', 'set-dc-power-saving', { enabled: true }],
   ]) {
     await page.locator(`#${label}`).selectOption(value);
     await propose(label);
+    if (label === 'dc-power-saving') {
+      assert.match(await page.getByTestId('command-review').textContent(), /DC output OFF.*inactivity counter/s);
+    }
     await page.getByTestId('cancel-command').click();
-    assert.equal((await recorded()).length, beforeOriginalPrime + ['charging-power', 'display-brightness', 'device-timeout', 'display-timeout', 'light-mode', 'temperature-unit'].indexOf(label));
+    assert.equal((await recorded()).length, beforeOriginalPrime + ['charging-power', 'display-brightness', 'device-timeout', 'display-timeout', 'light-mode', 'temperature-unit', 'dc-power-saving'].indexOf(label));
     await propose(label);
     await page.getByTestId('confirm-command').click();
     await page.getByTestId('gateway-notice').filter({ hasText: 'Command confirmed' }).waitFor();
@@ -326,11 +330,20 @@ try {
   }
   await change({ available: false });
   await refresh();
-  for (const label of ['charging-power', 'display-brightness', 'device-timeout', 'display-timeout', 'light-mode', 'temperature-unit']) {
+  for (const label of ['charging-power', 'display-brightness', 'device-timeout', 'display-timeout', 'light-mode', 'temperature-unit', 'dc-power-saving']) {
     assert.equal(await page.locator(`#${label}`).isDisabled(), true);
   }
   await change({ available: true });
   await refresh();
+  const afterOriginalPrime = (await recorded()).length;
+  await change({ dc_output: 1 });
+  await refresh();
+  assert.equal(await page.locator('#dc-power-saving').isDisabled(), true);
+  assert.equal(await page.locator('.setting').filter({ has: page.locator('#dc-power-saving') }).getByRole('button', { name: 'Apply', exact: true }).isDisabled(), true);
+  assert.equal((await recorded()).length, afterOriginalPrime);
+  await change({ dc_output: 0 });
+  await refresh();
+  assert.equal(await page.locator('#dc-power-saving').isDisabled(), false);
   cases++; console.log(`Scenario ${cases} passed`);
 
   await page.getByTestId('station-select').selectOption('Local · C1000');

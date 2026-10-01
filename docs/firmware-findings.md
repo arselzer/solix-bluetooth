@@ -381,7 +381,7 @@ C2000 controller support is unknown.
   using event timestamps and measured power, without relabeling raw counters
   as verified Wh.
 - Continue original-C1000 generated-ID setup and remaining Prime controls
-  separately from the verified six-control subset. Recover a verified public
+  separately from the verified seven BLE/six native controls. Recover a verified public
   1.7.1 image before proposing local OTA.
 - Obtain C2000 firmware evidence before assuming its controller can service
   the Modbus bridge. Keep its AC output enabled throughout any live work.
@@ -409,3 +409,31 @@ Manual disable invalidates automatic windows covering now, even with their
 switch off; future and expired windows survive. Complete record backup is
 required before a reversible backup-mode trial. See
 [persistence and complete readback](gen2-persistent-plan-followup.md).
+
+## October 1: reconnect persistence and additional query/mode paths
+
+A live C1000 Gen 2 **main 1.1.4.9/radio 0.3.3.0** trial retained a nonempty
+all-day Peak plan and 20% reserve across two local-server restarts and a
+same-profile AP restart. The read-only restarted services sent status queries
+without replaying activation. Battery supply resumed with AC enabled and mains
+present. Standard, reserve 10% and all original settings were restored, with
+an independent final Bluetooth check. See [the persistence record](gen2-persistent-plan-followup.md).
+This does not establish whole-device power-cycle persistence.
+
+The [24-case full-query replay](gen2-backup-query-investigation.md) traces
+`0100` through the actual descriptor table and D9/DA/FE callbacks. It preserves
+checked saved settings, complete backup records and the clock-screen failure
+flag. A strict C1000 Gen 2 `controller_utc_timestamp_seconds` metric now exposes
+FE; incremental messages can contain a cached value. Nineteen direct callers
+of the complete internal backup getter still do not establish an external
+full-record export.
+
+The [73-case original-C1000 follow-up](c1000-timer-and-mode-followup.md) executes
+main **1.5.9** timer, complete F8 and Fast paths. Timer expiry toggles the cached
+output request in either direction, and RTC time-of-day jumps affect the
+countdown. Normal charging allowance uses saved watts × 0.91; Fast changes a
+volatile allowance rather than disabling the charging input.
+
+A separate live **main 1.7.1** [DC Smart test](c1000-prime-dc-smart-validation.md)
+confirmed `4076` and full F8 restoration while DC stayed off. It enables only
+BLE Prime DC Smart; native DC Smart and AC Smart remain unverified.

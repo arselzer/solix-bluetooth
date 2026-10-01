@@ -15,6 +15,11 @@ Device Timeout, screen timeout, brightness, light and temperature units.
 All 11 protected settings and the complete F8 block matched the baseline. See the
 [isolated update capture](c1000-original-update-network.md).
 
+On 2026-10-01, a [DC Smart trial and public-SDK repeat](c1000-prime-dc-smart-validation.md)
+added a seventh verified Prime Bluetooth preference. Both directions require
+fresh DC-output-off telemetry; only the intended F8 mode byte may change.
+The separate native MQTT whitelist remains six controls.
+
 The default profile uses the legacy P-256/AES-CBC handshake tested on 1.5.1,
 without a Prime client ID. The updated test unit requires explicit `prime`
 selection and a persisted 40-character client ID; its status request is still

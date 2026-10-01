@@ -12,7 +12,7 @@ from typing import Any, Callable
 from .client import SolixMonitor, discover
 from .config import DEFAULT_CONFIG, DeviceConfig, load_config, protocol_choices, save_config
 from .protocol import Model
-from .c1000_capabilities import original_prime_operation_supported
+from .c1000_capabilities import PRIME_DC_SMART_WARNING, original_prime_operation_supported
 from .commands import native_commands_for_model
 from .tou import TouPeriod, power_flow, validate_periods
 
@@ -86,6 +86,7 @@ def controls_for(target: Target) -> tuple[Control, ...]:
             ("display_timeout", Control("display-timeout", "Display timeout", "20, 30, 60, 300 or 1800 seconds")),
             ("light_mode", Control("light", "Light mode", "0 off · 1 low · 2 medium · 3 high · 4 SOS")),
             ("temperature_unit", Control("temperature-unit", "Temperature display", "celsius or fahrenheit")),
+            ("dc_power_saving", Control("dc-power-saving", "DC Smart mode", "on = Smart, off = Normal. " + PRIME_DC_SMART_WARNING)),
         )
         if target.native:
             commands = native_commands_for_model(target.model)
@@ -520,6 +521,14 @@ class TuiBackend:
                 await self.monitor.set_temperature_unit(value.strip().lower() == "fahrenheit")
             elif action in ("ac-power-saving", "dc-power-saving"):
                 enabled = parse_enabled(value)
+                if target.model == Model.C1000 and target.device and target.device.protocol == "prime":
+                    if not self._ble_snapshot().get("available"):
+                        raise ValueError("Fresh connected telemetry is required for DC Smart")
+                    metrics = self.monitor.metrics
+                    if (type(metrics.get("dc_output_enabled")) is not int or metrics["dc_output_enabled"] != 0
+                            or type(metrics.get("dc_power_saving_mode_enabled")) is not int
+                            or metrics["dc_power_saving_mode_enabled"] not in (0, 1)):
+                        raise ValueError(PRIME_DC_SMART_WARNING)
                 if action == "ac-power-saving":
                     await self.monitor.set_ac_power_saving_enabled(enabled)
                 else:
@@ -633,7 +642,7 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
                 yield Static("Bluetooth protocol", id="protocol-title", markup=False)
                 original = self.target.model == Model.C1000
                 yield Static(
-                    "Original C1000: legacy was verified on 1.5.1; Prime monitoring and the listed settings on 1.7.1. Prime output switches, fast charge and Smart modes remain unavailable."
+                    "Original C1000: legacy was verified on 1.5.1; Prime monitoring and the listed settings on 1.7.1. Prime output switches, fast charge and AC Smart remain unavailable. DC Smart requires DC output off."
                     if original else "C1000 Gen 2: legacy was verified on 1.1.4.3; Prime on 1.1.4.9.", markup=False)
                 yield Select([(choice.title(), choice) for choice in protocol_choices(self.target.model)],
                              value=self.target.device.protocol, allow_blank=False, id="protocol-choice")
@@ -856,7 +865,7 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
             selector.value = options[0].key if options else Select.NULL
             note = "Original C1000 controls were verified on firmware code 151; record settings before testing other versions." if target and target.model == Model.C1000 else ""
             if target and target.device and target.model == Model.C1000 and target.device.protocol == "prime":
-                note = "Original C1000 Prime 1.7.1: the listed settings are verified. Output switches, fast charge and Smart modes remain unavailable."
+                note = "Original C1000 Prime 1.7.1: the listed settings are verified. Output switches, fast charge and AC Smart remain unavailable. DC Smart requires DC output off."
             if target and target.native:
                 note = "Controls require the running AP service to have been started with --allow-control."
                 if target.model == Model.C1000 and not controls_for(target):
@@ -884,6 +893,13 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
             self.query_one("#add-to-ap", Button).disabled = self.busy or not connected or not fresh or backend.directory is None or not target or target.native or not target.saved or target.model not in (Model.C1000, Model.C1000_GEN2, Model.C2000_GEN2) or not target.device or target.device.protocol != "prime" or not target.device.client_id
             self.query_one("#disconnect", Button).disabled = self.busy or not connected
             self.query_one("#apply-setting", Button).disabled = self.busy or not connected or not fresh or not permitted or not (target and controls_for(target))
+            if (target and target.device and target.model == Model.C1000 and target.device.protocol == "prime"
+                    and self.query_one("#setting", Select).value == "dc-power-saving"):
+                metrics = self.snapshot.get("metrics", {})
+                if (type(metrics.get("dc_output_enabled")) is not int or metrics["dc_output_enabled"] != 0
+                        or type(metrics.get("dc_power_saving_mode_enabled")) is not int
+                        or metrics["dc_power_saving_mode_enabled"] not in (0, 1)):
+                    self.query_one("#apply-setting", Button).disabled = True
             for name in ("apply-plan", "return-grid"):
                 self.query_one(f"#{name}", Button).disabled = self.busy or not connected or not fresh or not permitted or not (target and target.native and target.model in (Model.C1000_GEN2, Model.C2000_GEN2))
 
@@ -970,6 +986,7 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
                 spec = next((c for c in controls_for(target) if c.key == event.value), None)
                 self.query_one("#control-hint", Static).update(spec.hint if spec else "Choose a setting")
                 self.query_one("#setting-value", Input).value = ""
+            self.update_buttons()
 
         @on(Button.Pressed)
         def button_pressed(self, event: Any) -> None:
@@ -1035,7 +1052,8 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
                         label = next(item.label for item in controls_for(target) if item.key == key)
                         detail = ("Off clears output-recovery bookkeeping; turning On does not restore that transient state." if key == "port-memory" else
                                   "Set the display brightness. Zero is not a brightness level." if key == "display-brightness" else
-                                  "Set the screen timeout; zero means Never." if key == "display-timeout" else None)
+                                  "Set the screen timeout; zero means Never." if key == "display-timeout" else
+                                  PRIME_DC_SMART_WARNING if key == "dc-power-saving" and target.model == Model.C1000 and target.device and target.device.protocol == "prime" else None)
                         shown = str(parsed) if type(parsed) is int else "on" if parsed else "off"
                         self.push_screen(PowerSavingConfirmScreen(label, shown, detail), confirmed)
                     else:

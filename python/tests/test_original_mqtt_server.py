@@ -10,10 +10,27 @@ import pytest
 from solix_link.ap_service_config import APServiceConfig, initialize_ap_service
 from solix_link.mqtt_intercept import LocalMqttServer, read_mqtt, mqtt_packet
 from solix_link.protocol import DATA_RESPONSE, Model, build_packet, parse_packet, parse_tlvs, tlv
-from test_original_prime_controls import BASELINE, FLAGS, CONTROLS, payload_for
+from test_original_prime_controls import BASELINE, FLAGS, payload_for
 
 
-@pytest.mark.parametrize("setting,ble_command,typed,metric,value", CONTROLS)
+# Native validation is independent of the growing BLE Prime whitelist.
+NATIVE_CONTROLS = (
+    ("display_brightness", "404c", "0101", "display_brightness", 1),
+    ("ac_charging_power", "4044", "028403", "ac_charging_power_limit_w", 900),
+    ("device_timeout", "4045", "020000", "device_timeout_minutes", 0),
+    ("display_timeout", "4046", "023c00", "display_timeout_seconds", 60),
+    ("light_mode", "404f", "0101", "light_mode", 1),
+    ("temperature_unit_fahrenheit", "4050", "0101", "temperature_unit_fahrenheit", True),
+)
+
+
+def test_native_control_coverage_does_not_follow_ble_only_additions():
+    from solix_link.c1000_capabilities import C1000_NATIVE_SETTINGS
+    assert {row[0] for row in NATIVE_CONTROLS} == C1000_NATIVE_SETTINGS
+    assert "dc_power_saving_mode_enabled" not in C1000_NATIVE_SETTINGS
+
+
+@pytest.mark.parametrize("setting,ble_command,typed,metric,value", NATIVE_CONTROLS)
 @pytest.mark.parametrize("problem", ["matching", "ignored", "protected_changed", "flags_changed",
                                     "negative_ack", "negative_then_success"])
 def test_original_tls_settings_send_once_and_confirm_full_status(

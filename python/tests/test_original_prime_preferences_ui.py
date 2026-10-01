@@ -96,7 +96,7 @@ def test_terminal_new_preferences_route_sdk_and_keep_switches_unavailable():
         await backend.control("light", "1")
         await backend.control("temperature-unit", "fahrenheit")
         assert backend.monitor.calls == [("display_timeout", 60), ("light_mode", 1), ("temperature_unit", True)]
-        for action in ("ac-output", "fast-charge", "ac-power-saving", "dc-power-saving"):
+        for action in ("ac-output", "fast-charge", "ac-power-saving"):
             with pytest.raises(ValueError, match="unavailable"):
                 await backend.control(action, "on")
         assert backend.monitor.metrics["ac_output_enabled"] == 1 and backend.monitor.metrics["dc_output_enabled"] == 0

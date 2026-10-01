@@ -56,8 +56,14 @@ Authorization header. Treat HA configuration backups as containing credentials.
   Brightness 1/2, screen timeout 30/60 s, Off/Low and Celsius/Fahrenheit passed
   live readback/restoration with AC enabled and DC disabled. Other enum values
   have synthetic/range coverage. The gateway protects all eleven fresh settings
-  and complete `F8` flags. Fast charge, Smart and output switches remain unavailable
+  and complete `F8` flags. Fast charge, AC Smart and output switches remain unavailable
   on original Prime/native; generated-ID pairing remains unverified.
+  Original **BLE Prime only** adds the DC power-saving configuration switch,
+  with fresh DC output OFF required in both directions. Prototype and public
+  SDK each passed two writes/nine samples with AC on, DC off and complete
+  baseline restoration. Only its F8 mode byte may change. Smart may inherit an
+  inactivity counter and later turn DC output off at low load; enabling does
+  not guarantee a new grace period. Native MQTT remains at six controls.
   Native MQTT/radio 0.3.3.0 confirmed all six preferences with 12 writes,
   restoration and three matching final samples. Its gateway requires fresh
   telemetry; a packaged AP service/SDK repeat passed 14 writes and restoration.

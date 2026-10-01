@@ -18,7 +18,7 @@ COMMANDS = frozenset({"set-charge-power", "set-charge-cap", "set-backup-reserve"
                       "set-display-brightness", "set-display-timeout", "set-port-memory", "set-light"})
 METRICS = frozenset({"battery_percentage", "temperature_c", "output_power_w",
                     "ac_input_power_w", "ac_output_power_w", "dc_output_power_w",
-                    "ac_input_connected", "ac_output_enabled", "battery_status",
+                    "ac_input_connected", "ac_output_enabled", "dc_output_enabled", "battery_status",
                     "ac_charging_power_limit_w", "max_charge_percentage",
                     "min_charge_percentage", "backup_reserve_percentage",
                     "active_tariff", "usage_mode", "tou_schedule_slot_count",
@@ -224,7 +224,8 @@ def boolean_setting_supported(snapshot: dict, command: str) -> bool:
     elif command == "set-fast-charge":
         supported = original or model == "c1000_gen2" and protocol in ("prime", "native_mqtt")
     elif command in ("set-ac-power-saving", "set-dc-power-saving"):
-        supported = original
+        supported = original or (command == "set-dc-power-saving" and model == "c1000" and protocol == "prime"
+                                 and binary_state(snapshot.get("metrics", {}).get("dc_output_enabled")) is False)
     else:
         return False
     return (supported and command in snapshot.get("controls", [])

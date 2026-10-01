@@ -5,6 +5,7 @@ import uvicorn
 from solix_link.server import create_app
 from solix_link.commands import NATIVE_COMMANDS, NATIVE_C1000_COMMANDS, native_commands_for_model
 from solix_link.protocol import Model
+from solix_link.c1000_capabilities import original_prime_commands
 
 class Demo:
     def __init__(self):
@@ -17,13 +18,13 @@ class Demo:
         self.last_seen = None
         self.standard = False
         self.mains = True
+        self.dc_output = 0
     async def start(self): pass
     async def stop(self): pass
     def supported_commands(self, name):
         if self.readonly: return []
         if name.startswith("Local"): return list(native_commands_for_model(Model.C1000))
-        if name.startswith("Updated"): return ["set-charge-power", "set-display-brightness", "set-device-timeout",
-                                                "set-display-timeout", "set-light", "set-temperature-unit"]
+        if name.startswith("Updated"): return original_prime_commands()
         if name.startswith("Spare"): return ["set-charge-power", "set-device-timeout", "set-temperature-unit", "set-fast-charge", "set-ac-power-saving", "set-dc-power-saving"]
         return list(NATIVE_COMMANDS) + (list(NATIVE_C1000_COMMANDS) if name.startswith("Office") else [])
     def snapshot(self, name):
@@ -35,7 +36,7 @@ class Demo:
         metrics = {"battery_percentage": 91 if c1000 else 88, "battery_status": "discharging" if c1000 else "idle",
                    "ac_input_power_w": 120 if c1000 else 490, "ac_output_power_w": 310 if c1000 else 490,
                    "total_input_power_w": 120 if c1000 else 490, "total_output_power_w": 310 if c1000 else 490,
-                   "ac_input_connected": int(self.mains), "ac_output_enabled": 1, "dc_output_enabled": 0,
+                   "ac_input_connected": int(self.mains), "ac_output_enabled": 1, "dc_output_enabled": self.dc_output,
                    "ac_charging_power_limit_w": 800 if original else 1200 if c1000 else 1800, "max_charge_percentage": 100,
                    "min_charge_percentage": 1, "backup_reserve_percentage": 10,
                    "ac_fast_charge_enabled": 0, "temperature_c": 28,

@@ -1,0 +1,810 @@
+{
+  "image_sha256": "b295ee8613f5c96e70dcc905896df516621cab4dc590bb580eac6b84519911a6",
+  "timer_expiry": [
+    {
+      "domain": "ac",
+      "case": "same_second",
+      "initial_output": 0,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 43200,
+      "remaining": 300,
+      "events": [],
+      "typed_readback": [
+        300,
+        0
+      ]
+    },
+    {
+      "domain": "ac",
+      "case": "one_second",
+      "initial_output": 0,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 43201,
+      "remaining": 299,
+      "events": [],
+      "typed_readback": [
+        299,
+        0
+      ]
+    },
+    {
+      "domain": "ac",
+      "case": "delayed_poll",
+      "initial_output": 0,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 43300,
+      "remaining": 200,
+      "events": [],
+      "typed_readback": [
+        200,
+        0
+      ]
+    },
+    {
+      "domain": "ac",
+      "case": "exact_expiry",
+      "initial_output": 0,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 43500,
+      "remaining": 0,
+      "events": [
+        {
+          "domain": "ac",
+          "requested_enabled": 1
+        }
+      ],
+      "typed_readback": [
+        0,
+        0
+      ]
+    },
+    {
+      "domain": "ac",
+      "case": "forward_clock_jump",
+      "initial_output": 0,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 46800,
+      "remaining": 0,
+      "events": [
+        {
+          "domain": "ac",
+          "requested_enabled": 1
+        }
+      ],
+      "typed_readback": [
+        0,
+        0
+      ]
+    },
+    {
+      "domain": "ac",
+      "case": "backward_clock_jump",
+      "initial_output": 0,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 39600,
+      "remaining": 300,
+      "events": [],
+      "typed_readback": [
+        300,
+        0
+      ]
+    },
+    {
+      "domain": "ac",
+      "case": "midnight_exact",
+      "initial_output": 0,
+      "previous_second_of_day": 86399,
+      "new_seconds_from_midnight": 86400,
+      "remaining": 300,
+      "events": [],
+      "typed_readback": [
+        300,
+        0
+      ]
+    },
+    {
+      "domain": "ac",
+      "case": "midnight_skipped",
+      "initial_output": 0,
+      "previous_second_of_day": 86399,
+      "new_seconds_from_midnight": 86405,
+      "remaining": 300,
+      "events": [],
+      "typed_readback": [
+        300,
+        0
+      ]
+    },
+    {
+      "domain": "ac",
+      "case": "same_time_next_day",
+      "initial_output": 0,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 129600,
+      "remaining": 300,
+      "events": [],
+      "typed_readback": [
+        300,
+        0
+      ]
+    },
+    {
+      "domain": "ac",
+      "case": "same_second",
+      "initial_output": 1,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 43200,
+      "remaining": 300,
+      "events": [],
+      "typed_readback": [
+        300,
+        0
+      ]
+    },
+    {
+      "domain": "ac",
+      "case": "one_second",
+      "initial_output": 1,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 43201,
+      "remaining": 299,
+      "events": [],
+      "typed_readback": [
+        299,
+        0
+      ]
+    },
+    {
+      "domain": "ac",
+      "case": "delayed_poll",
+      "initial_output": 1,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 43300,
+      "remaining": 200,
+      "events": [],
+      "typed_readback": [
+        200,
+        0
+      ]
+    },
+    {
+      "domain": "ac",
+      "case": "exact_expiry",
+      "initial_output": 1,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 43500,
+      "remaining": 0,
+      "events": [
+        {
+          "domain": "ac",
+          "requested_enabled": 0
+        }
+      ],
+      "typed_readback": [
+        0,
+        0
+      ]
+    },
+    {
+      "domain": "ac",
+      "case": "forward_clock_jump",
+      "initial_output": 1,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 46800,
+      "remaining": 0,
+      "events": [
+        {
+          "domain": "ac",
+          "requested_enabled": 0
+        }
+      ],
+      "typed_readback": [
+        0,
+        0
+      ]
+    },
+    {
+      "domain": "ac",
+      "case": "backward_clock_jump",
+      "initial_output": 1,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 39600,
+      "remaining": 300,
+      "events": [],
+      "typed_readback": [
+        300,
+        0
+      ]
+    },
+    {
+      "domain": "ac",
+      "case": "midnight_exact",
+      "initial_output": 1,
+      "previous_second_of_day": 86399,
+      "new_seconds_from_midnight": 86400,
+      "remaining": 300,
+      "events": [],
+      "typed_readback": [
+        300,
+        0
+      ]
+    },
+    {
+      "domain": "ac",
+      "case": "midnight_skipped",
+      "initial_output": 1,
+      "previous_second_of_day": 86399,
+      "new_seconds_from_midnight": 86405,
+      "remaining": 300,
+      "events": [],
+      "typed_readback": [
+        300,
+        0
+      ]
+    },
+    {
+      "domain": "ac",
+      "case": "same_time_next_day",
+      "initial_output": 1,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 129600,
+      "remaining": 300,
+      "events": [],
+      "typed_readback": [
+        300,
+        0
+      ]
+    },
+    {
+      "domain": "car_dc",
+      "case": "same_second",
+      "initial_output": 0,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 43200,
+      "remaining": 300,
+      "events": [],
+      "typed_readback": [
+        0,
+        300
+      ]
+    },
+    {
+      "domain": "car_dc",
+      "case": "one_second",
+      "initial_output": 0,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 43201,
+      "remaining": 299,
+      "events": [],
+      "typed_readback": [
+        0,
+        299
+      ]
+    },
+    {
+      "domain": "car_dc",
+      "case": "delayed_poll",
+      "initial_output": 0,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 43300,
+      "remaining": 200,
+      "events": [],
+      "typed_readback": [
+        0,
+        200
+      ]
+    },
+    {
+      "domain": "car_dc",
+      "case": "exact_expiry",
+      "initial_output": 0,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 43500,
+      "remaining": 0,
+      "events": [
+        {
+          "domain": "car_dc",
+          "requested_enabled": 1
+        }
+      ],
+      "typed_readback": [
+        0,
+        0
+      ]
+    },
+    {
+      "domain": "car_dc",
+      "case": "forward_clock_jump",
+      "initial_output": 0,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 46800,
+      "remaining": 0,
+      "events": [
+        {
+          "domain": "car_dc",
+          "requested_enabled": 1
+        }
+      ],
+      "typed_readback": [
+        0,
+        0
+      ]
+    },
+    {
+      "domain": "car_dc",
+      "case": "backward_clock_jump",
+      "initial_output": 0,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 39600,
+      "remaining": 300,
+      "events": [],
+      "typed_readback": [
+        0,
+        300
+      ]
+    },
+    {
+      "domain": "car_dc",
+      "case": "midnight_exact",
+      "initial_output": 0,
+      "previous_second_of_day": 86399,
+      "new_seconds_from_midnight": 86400,
+      "remaining": 300,
+      "events": [],
+      "typed_readback": [
+        0,
+        300
+      ]
+    },
+    {
+      "domain": "car_dc",
+      "case": "midnight_skipped",
+      "initial_output": 0,
+      "previous_second_of_day": 86399,
+      "new_seconds_from_midnight": 86405,
+      "remaining": 300,
+      "events": [],
+      "typed_readback": [
+        0,
+        300
+      ]
+    },
+    {
+      "domain": "car_dc",
+      "case": "same_time_next_day",
+      "initial_output": 0,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 129600,
+      "remaining": 300,
+      "events": [],
+      "typed_readback": [
+        0,
+        300
+      ]
+    },
+    {
+      "domain": "car_dc",
+      "case": "same_second",
+      "initial_output": 1,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 43200,
+      "remaining": 300,
+      "events": [],
+      "typed_readback": [
+        0,
+        300
+      ]
+    },
+    {
+      "domain": "car_dc",
+      "case": "one_second",
+      "initial_output": 1,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 43201,
+      "remaining": 299,
+      "events": [],
+      "typed_readback": [
+        0,
+        299
+      ]
+    },
+    {
+      "domain": "car_dc",
+      "case": "delayed_poll",
+      "initial_output": 1,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 43300,
+      "remaining": 200,
+      "events": [],
+      "typed_readback": [
+        0,
+        200
+      ]
+    },
+    {
+      "domain": "car_dc",
+      "case": "exact_expiry",
+      "initial_output": 1,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 43500,
+      "remaining": 0,
+      "events": [
+        {
+          "domain": "car_dc",
+          "requested_enabled": 0
+        }
+      ],
+      "typed_readback": [
+        0,
+        0
+      ]
+    },
+    {
+      "domain": "car_dc",
+      "case": "forward_clock_jump",
+      "initial_output": 1,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 46800,
+      "remaining": 0,
+      "events": [
+        {
+          "domain": "car_dc",
+          "requested_enabled": 0
+        }
+      ],
+      "typed_readback": [
+        0,
+        0
+      ]
+    },
+    {
+      "domain": "car_dc",
+      "case": "backward_clock_jump",
+      "initial_output": 1,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 39600,
+      "remaining": 300,
+      "events": [],
+      "typed_readback": [
+        0,
+        300
+      ]
+    },
+    {
+      "domain": "car_dc",
+      "case": "midnight_exact",
+      "initial_output": 1,
+      "previous_second_of_day": 86399,
+      "new_seconds_from_midnight": 86400,
+      "remaining": 300,
+      "events": [],
+      "typed_readback": [
+        0,
+        300
+      ]
+    },
+    {
+      "domain": "car_dc",
+      "case": "midnight_skipped",
+      "initial_output": 1,
+      "previous_second_of_day": 86399,
+      "new_seconds_from_midnight": 86405,
+      "remaining": 300,
+      "events": [],
+      "typed_readback": [
+        0,
+        300
+      ]
+    },
+    {
+      "domain": "car_dc",
+      "case": "same_time_next_day",
+      "initial_output": 1,
+      "previous_second_of_day": 43200,
+      "new_seconds_from_midnight": 129600,
+      "remaining": 300,
+      "events": [],
+      "typed_readback": [
+        0,
+        300
+      ]
+    }
+  ],
+  "timer_cancel": [
+    {
+      "domain": "ac",
+      "requested_seconds": 300,
+      "remaining_after_cancel": 0,
+      "unrelated_fast_bit_preserved": true,
+      "previous_checkpoint_retained": 300,
+      "output_dispatches": 0
+    },
+    {
+      "domain": "ac",
+      "requested_seconds": 3600,
+      "remaining_after_cancel": 0,
+      "unrelated_fast_bit_preserved": true,
+      "previous_checkpoint_retained": 3600,
+      "output_dispatches": 0
+    },
+    {
+      "domain": "ac",
+      "requested_seconds": 86400,
+      "remaining_after_cancel": 0,
+      "unrelated_fast_bit_preserved": true,
+      "previous_checkpoint_retained": 86400,
+      "output_dispatches": 0
+    },
+    {
+      "domain": "car_dc",
+      "requested_seconds": 300,
+      "remaining_after_cancel": 0,
+      "unrelated_fast_bit_preserved": true,
+      "previous_checkpoint_retained": 300,
+      "output_dispatches": 0
+    },
+    {
+      "domain": "car_dc",
+      "requested_seconds": 3600,
+      "remaining_after_cancel": 0,
+      "unrelated_fast_bit_preserved": true,
+      "previous_checkpoint_retained": 3600,
+      "output_dispatches": 0
+    },
+    {
+      "domain": "car_dc",
+      "requested_seconds": 86400,
+      "remaining_after_cancel": 0,
+      "unrelated_fast_bit_preserved": true,
+      "previous_checkpoint_retained": 86400,
+      "output_dispatches": 0
+    }
+  ],
+  "f8_mode_roundtrip": [
+    {
+      "target": "dc",
+      "initial_modes": [
+        1,
+        1
+      ],
+      "before": "040101010100000000000000000000000000000000",
+      "changed": "040201010100000000000000000000000000000000",
+      "complete_f8_restored": true,
+      "unrelated_saved_bytes_preserved": true
+    },
+    {
+      "target": "ac",
+      "initial_modes": [
+        1,
+        1
+      ],
+      "before": "040101010100000000000000000000000000000000",
+      "changed": "040102010100000000000000000000000000000000",
+      "complete_f8_restored": true,
+      "unrelated_saved_bytes_preserved": true
+    },
+    {
+      "target": "dc",
+      "initial_modes": [
+        1,
+        2
+      ],
+      "before": "040102010100000000000000000000000000000000",
+      "changed": "040202010100000000000000000000000000000000",
+      "complete_f8_restored": true,
+      "unrelated_saved_bytes_preserved": true
+    },
+    {
+      "target": "ac",
+      "initial_modes": [
+        1,
+        2
+      ],
+      "before": "040102010100000000000000000000000000000000",
+      "changed": "040101010100000000000000000000000000000000",
+      "complete_f8_restored": true,
+      "unrelated_saved_bytes_preserved": true
+    },
+    {
+      "target": "dc",
+      "initial_modes": [
+        2,
+        1
+      ],
+      "before": "040201010100000000000000000000000000000000",
+      "changed": "040101010100000000000000000000000000000000",
+      "complete_f8_restored": true,
+      "unrelated_saved_bytes_preserved": true
+    },
+    {
+      "target": "ac",
+      "initial_modes": [
+        2,
+        1
+      ],
+      "before": "040201010100000000000000000000000000000000",
+      "changed": "040202010100000000000000000000000000000000",
+      "complete_f8_restored": true,
+      "unrelated_saved_bytes_preserved": true
+    },
+    {
+      "target": "dc",
+      "initial_modes": [
+        2,
+        2
+      ],
+      "before": "040202010100000000000000000000000000000000",
+      "changed": "040102010100000000000000000000000000000000",
+      "complete_f8_restored": true,
+      "unrelated_saved_bytes_preserved": true
+    },
+    {
+      "target": "ac",
+      "initial_modes": [
+        2,
+        2
+      ],
+      "before": "040202010100000000000000000000000000000000",
+      "changed": "040201010100000000000000000000000000000000",
+      "complete_f8_restored": true,
+      "unrelated_saved_bytes_preserved": true
+    }
+  ],
+  "fast_power": [
+    {
+      "variant": 0,
+      "fast": false,
+      "saved_watts": 100,
+      "internal_power_allowance": 91,
+      "saved_limit_and_output_bits_preserved": true
+    },
+    {
+      "variant": 0,
+      "fast": false,
+      "saved_watts": 500,
+      "internal_power_allowance": 455,
+      "saved_limit_and_output_bits_preserved": true
+    },
+    {
+      "variant": 0,
+      "fast": false,
+      "saved_watts": 1000,
+      "internal_power_allowance": 910,
+      "saved_limit_and_output_bits_preserved": true
+    },
+    {
+      "variant": 0,
+      "fast": true,
+      "saved_watts": 100,
+      "internal_power_allowance": 1400,
+      "saved_limit_and_output_bits_preserved": true
+    },
+    {
+      "variant": 0,
+      "fast": true,
+      "saved_watts": 500,
+      "internal_power_allowance": 1400,
+      "saved_limit_and_output_bits_preserved": true
+    },
+    {
+      "variant": 0,
+      "fast": true,
+      "saved_watts": 1000,
+      "internal_power_allowance": 1400,
+      "saved_limit_and_output_bits_preserved": true
+    },
+    {
+      "variant": 1,
+      "fast": false,
+      "saved_watts": 100,
+      "internal_power_allowance": 91,
+      "saved_limit_and_output_bits_preserved": true
+    },
+    {
+      "variant": 1,
+      "fast": false,
+      "saved_watts": 500,
+      "internal_power_allowance": 455,
+      "saved_limit_and_output_bits_preserved": true
+    },
+    {
+      "variant": 1,
+      "fast": false,
+      "saved_watts": 1000,
+      "internal_power_allowance": 910,
+      "saved_limit_and_output_bits_preserved": true
+    },
+    {
+      "variant": 1,
+      "fast": true,
+      "saved_watts": 100,
+      "internal_power_allowance": 1000,
+      "saved_limit_and_output_bits_preserved": true
+    },
+    {
+      "variant": 1,
+      "fast": true,
+      "saved_watts": 500,
+      "internal_power_allowance": 1000,
+      "saved_limit_and_output_bits_preserved": true
+    },
+    {
+      "variant": 1,
+      "fast": true,
+      "saved_watts": 1000,
+      "internal_power_allowance": 1000,
+      "saved_limit_and_output_bits_preserved": true
+    },
+    {
+      "variant": 2,
+      "fast": false,
+      "saved_watts": 100,
+      "internal_power_allowance": 91,
+      "saved_limit_and_output_bits_preserved": true
+    },
+    {
+      "variant": 2,
+      "fast": false,
+      "saved_watts": 500,
+      "internal_power_allowance": 455,
+      "saved_limit_and_output_bits_preserved": true
+    },
+    {
+      "variant": 2,
+      "fast": false,
+      "saved_watts": 1000,
+      "internal_power_allowance": 910,
+      "saved_limit_and_output_bits_preserved": true
+    },
+    {
+      "variant": 2,
+      "fast": true,
+      "saved_watts": 100,
+      "internal_power_allowance": 1000,
+      "saved_limit_and_output_bits_preserved": true
+    },
+    {
+      "variant": 2,
+      "fast": true,
+      "saved_watts": 500,
+      "internal_power_allowance": 1000,
+      "saved_limit_and_output_bits_preserved": true
+    },
+    {
+      "variant": 2,
+      "fast": true,
+      "saved_watts": 1000,
+      "internal_power_allowance": 1000,
+      "saved_limit_and_output_bits_preserved": true
+    }
+  ],
+  "fast_clear": [
+    {
+      "input_flags": 0,
+      "fast_after_periodic_gate": false,
+      "countdown_flags_preserved": true
+    },
+    {
+      "input_flags": 1,
+      "fast_after_periodic_gate": true,
+      "countdown_flags_preserved": true
+    },
+    {
+      "input_flags": 2,
+      "fast_after_periodic_gate": false,
+      "countdown_flags_preserved": true
+    },
+    {
+      "input_flags": 3,
+      "fast_after_periodic_gate": true,
+      "countdown_flags_preserved": true
+    },
+    {
+      "case": "portAcOut_removal_event_tail",
+      "fast_after": false
+    }
+  ],
+  "cases": 73,
+  "scope": "Synthetic RTC; actual calendar/timer/serializer/policy instructions; no electrical simulation",
+  "script_sha256": "4a830e88b9ca5c2d0b290d3c5d33ddda9e16e24fb70e43115f1e7c4e22ad0795"
+}
