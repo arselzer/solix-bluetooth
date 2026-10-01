@@ -135,7 +135,10 @@ the query's A2 must not be substituted into that write path by assumption.
 
 ## Transport and implementation prerequisites
 
-Both handlers pass the body to response helper `4204fa68`. The replay replaces
+The subsequent [route audit](radio-status-routing.md) executes both BLE paths;
+a [C1000 Gen 2 live check](c1000-radio-readback-validation.md) records their
+responses with protected settings unchanged. Both handlers pass the body to
+response helper `4204fa68`. This direct-handler replay replaces
 that final transport and supplies an opaque synthetic context. It does not
 execute inbound authentication, routing, encryption, outer framing or response
 correlation. No new SDK/CLI command or Home Assistant sensor is added here.

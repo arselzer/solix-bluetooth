@@ -1,0 +1,9 @@
+{
+  "cases_passed": 144,
+  "firmware_sha256": "e291ec115f013953e825cb51b9e457a8731889547ab55b3058640e599e8cfec8",
+  "fixture_source": "Public firmware and synthetic RAM only; update boundary calls suppressed",
+  "results_sha256": "d44777e5a65f9b5dff6048a52c733acc56125b1a483735109660ad9c9e1c4494",
+  "script": "emulate_radio_update_status.py",
+  "script_sha256": "1d91f0750c08444b99d8f36662b5f432ad3152100c64191c9547dfbb7aa899d1",
+  "unicorn_version": "2.1.4"
+}

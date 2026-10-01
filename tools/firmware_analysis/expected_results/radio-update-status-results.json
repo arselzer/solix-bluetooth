@@ -1,0 +1,2295 @@
+{
+  "cases": [
+    {
+      "case": "getter_0064",
+      "getter_reply": "00a10100",
+      "global_state_preserved": true,
+      "module_status_word": 0,
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "case": "getter_0064",
+      "getter_reply": "00a10100",
+      "global_state_preserved": true,
+      "module_status_word": 0,
+      "response_attempts": 1,
+      "transport_result": 1
+    },
+    {
+      "case": "getter_0064",
+      "getter_reply": "00a10101",
+      "global_state_preserved": true,
+      "module_status_word": 1,
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "case": "getter_0064",
+      "getter_reply": "00a10101",
+      "global_state_preserved": true,
+      "module_status_word": 1,
+      "response_attempts": 1,
+      "transport_result": 1
+    },
+    {
+      "case": "getter_0064",
+      "getter_reply": "00a10102",
+      "global_state_preserved": true,
+      "module_status_word": 2,
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "case": "getter_0064",
+      "getter_reply": "00a10102",
+      "global_state_preserved": true,
+      "module_status_word": 2,
+      "response_attempts": 1,
+      "transport_result": 1
+    },
+    {
+      "case": "getter_0064",
+      "getter_reply": "00a10103",
+      "global_state_preserved": true,
+      "module_status_word": 3,
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "case": "getter_0064",
+      "getter_reply": "00a10103",
+      "global_state_preserved": true,
+      "module_status_word": 3,
+      "response_attempts": 1,
+      "transport_result": 1
+    },
+    {
+      "case": "getter_0064",
+      "getter_reply": "00a10104",
+      "global_state_preserved": true,
+      "module_status_word": 4,
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "case": "getter_0064",
+      "getter_reply": "00a10104",
+      "global_state_preserved": true,
+      "module_status_word": 4,
+      "response_attempts": 1,
+      "transport_result": 1
+    },
+    {
+      "case": "getter_0064",
+      "getter_reply": "00a101ff",
+      "global_state_preserved": true,
+      "module_status_word": 255,
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "case": "getter_0064",
+      "getter_reply": "00a101ff",
+      "global_state_preserved": true,
+      "module_status_word": 255,
+      "response_attempts": 1,
+      "transport_result": 1
+    },
+    {
+      "case": "getter_0064",
+      "getter_reply": "00a10100",
+      "global_state_preserved": true,
+      "module_status_word": 256,
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "case": "getter_0064",
+      "getter_reply": "00a10100",
+      "global_state_preserved": true,
+      "module_status_word": 256,
+      "response_attempts": 1,
+      "transport_result": 1
+    },
+    {
+      "case": "getter_0064",
+      "getter_reply": "00a10178",
+      "global_state_preserved": true,
+      "module_status_word": 305419896,
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "case": "getter_0064",
+      "getter_reply": "00a10178",
+      "global_state_preserved": true,
+      "module_status_word": 305419896,
+      "response_attempts": 1,
+      "transport_result": 1
+    },
+    {
+      "case": "getter_0064",
+      "getter_reply": "00a101ff",
+      "global_state_preserved": true,
+      "module_status_word": 4294967295,
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "case": "getter_0064",
+      "getter_reply": "00a101ff",
+      "global_state_preserved": true,
+      "module_status_word": 4294967295,
+      "response_attempts": 1,
+      "transport_result": 1
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 0,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": true,
+      "ota_type": 0,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 0,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": true,
+      "ota_type": 0,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 0,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": true,
+      "ota_type": 0,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc90678",
+          "pc": "420474e4",
+          "size": 4,
+          "value": 1
+        },
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 1,
+      "getter_reply": "00a10101",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 1,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": [
+        {
+          "address": "4204529a",
+          "arguments": [
+            1,
+            1,
+            0
+          ],
+          "operation": "transfer_start"
+        }
+      ]
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc90678",
+          "pc": "420474e4",
+          "size": 4,
+          "value": 1
+        },
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 1,
+      "getter_reply": "00a10101",
+      "initial_module_status": 0,
+      "mcu_slot_present": true,
+      "ota_type": 1,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": [
+        {
+          "address": "4204529a",
+          "arguments": [
+            1,
+            1,
+            0
+          ],
+          "operation": "transfer_start"
+        }
+      ]
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc90678",
+          "pc": "420474e4",
+          "size": 4,
+          "value": 1
+        },
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 1,
+      "getter_reply": "00a10101",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 1,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": [
+        {
+          "address": "4204529a",
+          "arguments": [
+            1,
+            1,
+            0
+          ],
+          "operation": "transfer_start"
+        }
+      ]
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc90678",
+          "pc": "420474e4",
+          "size": 4,
+          "value": 1
+        },
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 1,
+      "getter_reply": "00a10101",
+      "initial_module_status": 3,
+      "mcu_slot_present": true,
+      "ota_type": 1,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": [
+        {
+          "address": "4204529a",
+          "arguments": [
+            1,
+            1,
+            0
+          ],
+          "operation": "transfer_start"
+        }
+      ]
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc90678",
+          "pc": "420474e4",
+          "size": 4,
+          "value": 1
+        },
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 1,
+      "getter_reply": "00a10101",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 1,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": [
+        {
+          "address": "4204529a",
+          "arguments": [
+            1,
+            1,
+            0
+          ],
+          "operation": "transfer_start"
+        }
+      ]
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc90678",
+          "pc": "420474e4",
+          "size": 4,
+          "value": 1
+        },
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 1,
+      "getter_reply": "00a10101",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": true,
+      "ota_type": 1,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": [
+        {
+          "address": "4204529a",
+          "arguments": [
+            1,
+            1,
+            0
+          ],
+          "operation": "transfer_start"
+        }
+      ]
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 2,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": [
+        {
+          "address": "4204529a",
+          "arguments": [
+            0,
+            1,
+            0
+          ],
+          "operation": "transfer_start"
+        }
+      ]
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": true,
+      "ota_type": 2,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 2,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": [
+        {
+          "address": "4204529a",
+          "arguments": [
+            0,
+            1,
+            0
+          ],
+          "operation": "transfer_start"
+        }
+      ]
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": true,
+      "ota_type": 2,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 2,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": [
+        {
+          "address": "4204529a",
+          "arguments": [
+            0,
+            1,
+            0
+          ],
+          "operation": "transfer_start"
+        }
+      ]
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": true,
+      "ota_type": 2,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 3,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": true,
+      "ota_type": 3,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 3,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": true,
+      "ota_type": 3,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 3,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": true,
+      "ota_type": 3,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 4,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": [
+        {
+          "address": "4204529a",
+          "arguments": [
+            0,
+            1,
+            0
+          ],
+          "operation": "transfer_start"
+        }
+      ]
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": true,
+      "ota_type": 4,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 4,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": [
+        {
+          "address": "4204529a",
+          "arguments": [
+            0,
+            1,
+            0
+          ],
+          "operation": "transfer_start"
+        }
+      ]
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": true,
+      "ota_type": 4,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 4,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": [
+        {
+          "address": "4204529a",
+          "arguments": [
+            0,
+            1,
+            0
+          ],
+          "operation": "transfer_start"
+        }
+      ]
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": true,
+      "ota_type": 4,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 255,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": true,
+      "ota_type": 255,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 255,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": true,
+      "ota_type": 255,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 255,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "420474c4",
+          "size": 1,
+          "value": 1
+        }
+      ],
+      "case": "start_callback",
+      "failure_argument": 1,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": true,
+      "ota_type": 255,
+      "separate_activity_byte": 1,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "42047ffa",
+          "size": 1,
+          "value": 0
+        }
+      ],
+      "case": "stop_callback",
+      "failure_argument": 1,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 0,
+      "separate_activity_byte": 0,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "42047ffa",
+          "size": 1,
+          "value": 0
+        }
+      ],
+      "case": "stop_callback",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 0,
+      "separate_activity_byte": 0,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "42047ffa",
+          "size": 1,
+          "value": 0
+        }
+      ],
+      "case": "stop_callback",
+      "failure_argument": 1,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 0,
+      "separate_activity_byte": 0,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc90678",
+          "pc": "42048036",
+          "size": 4,
+          "value": 2
+        },
+        {
+          "address": "3fc905c4",
+          "pc": "42047ffa",
+          "size": 1,
+          "value": 0
+        }
+      ],
+      "case": "stop_callback",
+      "failure_argument": 1,
+      "final_module_status": 2,
+      "getter_reply": "00a10102",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 1,
+      "separate_activity_byte": 0,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc90678",
+          "pc": "42048036",
+          "size": 4,
+          "value": 2
+        },
+        {
+          "address": "3fc905c4",
+          "pc": "42047ffa",
+          "size": 1,
+          "value": 0
+        }
+      ],
+      "case": "stop_callback",
+      "failure_argument": 1,
+      "final_module_status": 2,
+      "getter_reply": "00a10102",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 1,
+      "separate_activity_byte": 0,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc90678",
+          "pc": "42048036",
+          "size": 4,
+          "value": 2
+        },
+        {
+          "address": "3fc905c4",
+          "pc": "42047ffa",
+          "size": 1,
+          "value": 0
+        }
+      ],
+      "case": "stop_callback",
+      "failure_argument": 1,
+      "final_module_status": 2,
+      "getter_reply": "00a10102",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 1,
+      "separate_activity_byte": 0,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "42047ffa",
+          "size": 1,
+          "value": 0
+        }
+      ],
+      "case": "stop_callback",
+      "failure_argument": 1,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 2,
+      "separate_activity_byte": 0,
+      "substituted_update_boundaries": [
+        {
+          "address": "42047c5a",
+          "arguments": [],
+          "operation": "transfer_stop"
+        }
+      ]
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "42047ffa",
+          "size": 1,
+          "value": 0
+        }
+      ],
+      "case": "stop_callback",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 2,
+      "separate_activity_byte": 0,
+      "substituted_update_boundaries": [
+        {
+          "address": "42047c5a",
+          "arguments": [],
+          "operation": "transfer_stop"
+        }
+      ]
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "42047ffa",
+          "size": 1,
+          "value": 0
+        }
+      ],
+      "case": "stop_callback",
+      "failure_argument": 1,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 2,
+      "separate_activity_byte": 0,
+      "substituted_update_boundaries": [
+        {
+          "address": "42047c5a",
+          "arguments": [],
+          "operation": "transfer_stop"
+        }
+      ]
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "42047ffa",
+          "size": 1,
+          "value": 0
+        }
+      ],
+      "case": "stop_callback",
+      "failure_argument": 1,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 3,
+      "separate_activity_byte": 0,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "42047ffa",
+          "size": 1,
+          "value": 0
+        }
+      ],
+      "case": "stop_callback",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 3,
+      "separate_activity_byte": 0,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "42047ffa",
+          "size": 1,
+          "value": 0
+        }
+      ],
+      "case": "stop_callback",
+      "failure_argument": 1,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 3,
+      "separate_activity_byte": 0,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "42047ffa",
+          "size": 1,
+          "value": 0
+        }
+      ],
+      "case": "stop_callback",
+      "failure_argument": 1,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 4,
+      "separate_activity_byte": 0,
+      "substituted_update_boundaries": [
+        {
+          "address": "42047c5a",
+          "arguments": [],
+          "operation": "transfer_stop"
+        }
+      ]
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "42047ffa",
+          "size": 1,
+          "value": 0
+        }
+      ],
+      "case": "stop_callback",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 4,
+      "separate_activity_byte": 0,
+      "substituted_update_boundaries": [
+        {
+          "address": "42047c5a",
+          "arguments": [],
+          "operation": "transfer_stop"
+        }
+      ]
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "42047ffa",
+          "size": 1,
+          "value": 0
+        }
+      ],
+      "case": "stop_callback",
+      "failure_argument": 1,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 4,
+      "separate_activity_byte": 0,
+      "substituted_update_boundaries": [
+        {
+          "address": "42047c5a",
+          "arguments": [],
+          "operation": "transfer_stop"
+        }
+      ]
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "42047ffa",
+          "size": 1,
+          "value": 0
+        }
+      ],
+      "case": "stop_callback",
+      "failure_argument": 1,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 255,
+      "separate_activity_byte": 0,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "42047ffa",
+          "size": 1,
+          "value": 0
+        }
+      ],
+      "case": "stop_callback",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 255,
+      "separate_activity_byte": 0,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc905c4",
+          "pc": "42047ffa",
+          "size": 1,
+          "value": 0
+        }
+      ],
+      "case": "stop_callback",
+      "failure_argument": 1,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 255,
+      "separate_activity_byte": 0,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "failure_decision_400ac",
+      "failure_argument": 1,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 0,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "failure_decision_400ac",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 0,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "failure_decision_400ac",
+      "failure_argument": 1,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 0,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc90678",
+          "pc": "420400bc",
+          "size": 4,
+          "value": 3
+        }
+      ],
+      "case": "failure_decision_400ac",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 1,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc90678",
+          "pc": "420400bc",
+          "size": 4,
+          "value": 3
+        }
+      ],
+      "case": "failure_decision_400ac",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 1,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc90678",
+          "pc": "420400bc",
+          "size": 4,
+          "value": 3
+        }
+      ],
+      "case": "failure_decision_400ac",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 1,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "failure_decision_400ac",
+      "failure_argument": 1,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 2,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "failure_decision_400ac",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 2,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "failure_decision_400ac",
+      "failure_argument": 1,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 2,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "failure_decision_400ac",
+      "failure_argument": 1,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 3,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "failure_decision_400ac",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 3,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "failure_decision_400ac",
+      "failure_argument": 1,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 3,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "failure_decision_400ac",
+      "failure_argument": 1,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 4,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "failure_decision_400ac",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 4,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "failure_decision_400ac",
+      "failure_argument": 1,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 4,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "failure_decision_400ac",
+      "failure_argument": 1,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 255,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "failure_decision_400ac",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 255,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "failure_decision_400ac",
+      "failure_argument": 1,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 255,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 0,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 0,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 1,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 0,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 2,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 0,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 0,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 0,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 0,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 2,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 0,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 0,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 0,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 1,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 0,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 2,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 0,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 0,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 1,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc90678",
+          "pc": "4204253a",
+          "size": 4,
+          "value": 3
+        }
+      ],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 1,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 2,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 1,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 0,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 1,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc90678",
+          "pc": "4204253a",
+          "size": 4,
+          "value": 3
+        }
+      ],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 1,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 2,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 1,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 0,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 1,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [
+        {
+          "address": "3fc90678",
+          "pc": "4204253a",
+          "size": 4,
+          "value": 3
+        }
+      ],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 1,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 2,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 1,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 0,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 2,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 1,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 2,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 2,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 2,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 0,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 2,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 2,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 2,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 2,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 0,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 2,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 1,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 2,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 2,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 2,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 0,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 3,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 1,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 3,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 2,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 3,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 0,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 3,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 3,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 2,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 3,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 0,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 3,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 1,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 3,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 2,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 3,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 0,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 4,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 1,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 4,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 2,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 4,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 0,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 4,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 4,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 2,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 4,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 0,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 4,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 1,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 4,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 2,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 4,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 0,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 255,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 1,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 255,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 2,
+      "final_module_status": 0,
+      "getter_reply": "00a10100",
+      "initial_module_status": 0,
+      "mcu_slot_present": false,
+      "ota_type": 255,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 0,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 255,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 1,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 255,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 2,
+      "final_module_status": 3,
+      "getter_reply": "00a10103",
+      "initial_module_status": 3,
+      "mcu_slot_present": false,
+      "ota_type": 255,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 0,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 255,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 1,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 255,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    },
+    {
+      "actual_global_writes": [],
+      "case": "conditional_failure_decision_42526",
+      "failure_argument": 2,
+      "final_module_status": 305419896,
+      "getter_reply": "00a10178",
+      "initial_module_status": 305419896,
+      "mcu_slot_present": false,
+      "ota_type": 255,
+      "separate_activity_byte": 90,
+      "substituted_update_boundaries": []
+    }
+  ],
+  "cases_passed": 144,
+  "claim": "0064 reads a cached Wi-Fi-module status byte, not a universal update-busy or installed-firmware-success indicator. External request reachability is unproved.",
+  "firmware_sha256": "e291ec115f013953e825cb51b9e457a8731889547ab55b3058640e599e8cfec8",
+  "limits": "Replay the radio module-update status getter and bounded producer decisions.\n\nPublic A1763 radio 0.3.3.0 only. Actual RISC-V getter, raw TLV serializer,\nOTA-type getter, start/stop callbacks and selected failure-decision blocks run\nagainst synthetic RAM. Transfer start/stop, logging, ROM memcpy and response\ntransport are host substitutes. No update engine, hardware, network, reset,\nflash, credentials or external protocol request runs.",
+  "model": "A1763 C1000 Gen 2 radio 0.3.3.0"
+}

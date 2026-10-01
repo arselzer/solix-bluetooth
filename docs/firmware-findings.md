@@ -36,6 +36,15 @@ limit. The [47-case ingress audit](radio-ingress-failure-audit.md) distinguishes
 decryption error replies from outer-frame rejection and verifies conditional
 session-material byte dumps. No new runtime controls or live probes are added.
 
+The subsequent [42-case BLE clock/status route audit](radio-status-routing.md)
+verifies their separate function-`10` paths and the higher-opcode MQTT bypass.
+[144 module-update cases](radio-update-status.md) identify a cached Wi-Fi-module
+status whose “ready” value does not prove installation success. A guarded
+[C1000 Gen 2 readback](c1000-radio-readback-validation.md) validates six RSSI
+unavailable replies plus clock/status responses, preserving fresh settings
+baselines. The Python API and CLI now expose RSSI explicitly; 2,040 Python/HA
+contract tests pass. No automatic sensor polling or power control is added.
+
 The latest [reconnect, clock and power-gate follow-up](c2000-mqtt-reconnect-and-tariff.md)
 includes additional offline executions and guarded C2000 hardware observations.
 The [parallel power-control analysis](mqtt-power-offline-followup.md) adds

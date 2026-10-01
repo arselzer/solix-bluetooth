@@ -28,6 +28,7 @@ GCM_NONCE = bytes.fromhex("6ba3e3f2f3a60f2971ce5d1f")
 GCM_AAD = bytes.fromhex("3322110077665544bbaa9988ffeeddcc")
 NEGOTIATION = bytes.fromhex("030001")
 DATA_REQUEST = bytes.fromhex("03000f")
+RADIO_REQUEST = bytes.fromhex("030010")
 DATA_RESPONSE = bytes.fromhex("03010f")
 C2000_SUBSCRIBE_EXTRA = bytes.fromhex("a20a040100e3fbfcfe000000")
 DEVICE_TIMEOUT_MINUTES = (0, 30, 60, 120, 240, 360, 720, 1440)
@@ -333,6 +334,7 @@ class ProtocolUpdate:
     response: tuple[str, bytes] | None = None
     ready: bool = False
     pairing_required: bool = False
+    radio_response: tuple[str, bytes] | None = None
 
 
 class Session:
@@ -453,6 +455,14 @@ class Session:
         if self.protocol != "prime" or not self.ready:
             raise RuntimeError("Network diagnostics require a connected Prime session")
         return self._send(DATA_REQUEST, "4020", tlv(0xA1, self._timestamp()))
+
+    def wifi_rssi_packet(self) -> bytes:
+        """Build the separate function-10 RSSI query tested on A1763 Prime."""
+        if self.model != Model.C1000_GEN2 or self.protocol != "prime":
+            raise ValueError("Wi-Fi RSSI requires C1000 Gen 2 Prime")
+        if not self.ready or self._secret is None:
+            raise RuntimeError("Wi-Fi RSSI requires a connected Prime session")
+        return self._send(RADIO_REQUEST, "4022", tlv(0xA1, b"\x21"))
 
     def charge_limits_packet(self, upper: int, lower: int) -> bytes:
         """Build the C1000 4103 charge/discharge limit write verified on 1.1.4.9."""
@@ -647,6 +657,11 @@ class Session:
         packet = parse_packet(data)
         if packet.pattern == NEGOTIATION:
             return self._negotiate(packet)
+        if (packet.pattern == RADIO_REQUEST and packet.command == b"\x48\x22"
+                and self.model == Model.C1000_GEN2 and self.protocol == "prime"
+                and self.ready and self._secret is not None):
+            return ProtocolUpdate(radio_response=(
+                packet.command.hex(), self._crypt(packet.payload, False)))
         # The C1000 app's 4824/4825 Wi-Fi acknowledgements use the request
         # pattern even though they arrive as GATT notifications.
         if packet.pattern == DATA_REQUEST and (packet.command[0] == 0x48 or packet.command.hex() in ("4901", "4903")):

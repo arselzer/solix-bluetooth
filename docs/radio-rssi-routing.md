@@ -9,9 +9,10 @@ builders in **71 synthetic RISC-V replay cases**. No device was queried.
 
 This extends the [ordinary telemetry audit](gen2-normal-feature-audit.md):
 the direct query preserves failure status, unlike the cached A3 quality byte
-that can report 100 after an RSSI failure. It is a candidate for a subsequent
-bounded C1000 Gen 2 read-only validation, not an implemented SDK command or
-evidence for another model with the same radio version text.
+that can report 100 after an RSSI failure. The subsequent
+[C1000 Gen 2 live check](c1000-radio-readback-validation.md) validates its
+unavailable response and adds an explicit Python/CLI getter. This offline
+audit is not evidence for another model with the same radio version text.
 
 ## Exact command namespace
 
@@ -123,8 +124,8 @@ payload: JSON string containing data=<base64 full response frame>, sn, pn
 The embedded frame is function `10` / `0822` for the normal clear native
 request. It is not an ordinary function-`0f` controller telemetry frame; a
 future client needs explicit response correlation and decoding for this shape.
-No runtime RSSI getter was added. The current SDK `Session.feed` does not
-process pattern `030010`; it cannot be reused unchanged for this response.
+The subsequent SDK getter handles `030010` / `4822` separately from controller
+responses; the generic function-`0f` helpers cannot be reused unchanged.
 Neither a broker round trip nor delivery to a real client was tested.
 
 ## Coverage, reproduction and limits

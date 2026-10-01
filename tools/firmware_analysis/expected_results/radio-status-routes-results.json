@@ -1,0 +1,643 @@
+{
+  "cases_passed": 42,
+  "cases": [
+    {
+      "case": "ble_complete_route",
+      "payload_fixture": "empty",
+      "command": "004a",
+      "function": "10",
+      "gcm": false,
+      "response_command": "084a",
+      "response_plain_body": "00a10480a2bd6aa204100e0000",
+      "reply_port": 0,
+      "time_service_calls": 2,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "ble_complete_route",
+      "payload_fixture": "source21",
+      "command": "004a",
+      "function": "10",
+      "gcm": false,
+      "response_command": "084a",
+      "response_plain_body": "00a10480a2bd6aa204100e0000",
+      "reply_port": 0,
+      "time_service_calls": 2,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "ble_complete_route",
+      "payload_fixture": "source22_timestamp",
+      "command": "004a",
+      "function": "10",
+      "gcm": false,
+      "response_command": "084a",
+      "response_plain_body": "00a10480a2bd6aa204100e0000",
+      "reply_port": 0,
+      "time_service_calls": 2,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "ble_complete_route",
+      "payload_fixture": "unused_tag",
+      "command": "004a",
+      "function": "10",
+      "gcm": false,
+      "response_command": "084a",
+      "response_plain_body": "00a10480a2bd6aa204100e0000",
+      "reply_port": 0,
+      "time_service_calls": 2,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "ble_complete_route",
+      "payload_fixture": "empty",
+      "command": "004a",
+      "function": "10",
+      "gcm": true,
+      "response_command": "484a",
+      "response_plain_body": "00a10480a2bd6aa204100e0000",
+      "reply_port": 0,
+      "time_service_calls": 2,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "ble_complete_route",
+      "payload_fixture": "source21",
+      "command": "004a",
+      "function": "10",
+      "gcm": true,
+      "response_command": "484a",
+      "response_plain_body": "00a10480a2bd6aa204100e0000",
+      "reply_port": 0,
+      "time_service_calls": 2,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "ble_complete_route",
+      "payload_fixture": "source22_timestamp",
+      "command": "004a",
+      "function": "10",
+      "gcm": true,
+      "response_command": "484a",
+      "response_plain_body": "00a10480a2bd6aa204100e0000",
+      "reply_port": 0,
+      "time_service_calls": 2,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "ble_complete_route",
+      "payload_fixture": "unused_tag",
+      "command": "004a",
+      "function": "10",
+      "gcm": true,
+      "response_command": "484a",
+      "response_plain_body": "00a10480a2bd6aa204100e0000",
+      "reply_port": 0,
+      "time_service_calls": 2,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "ble_complete_route",
+      "payload_fixture": "empty",
+      "command": "004b",
+      "function": "10",
+      "gcm": false,
+      "response_command": "084b",
+      "response_plain_body": "00a10101a20101a30101",
+      "reply_port": 0,
+      "time_service_calls": 0,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "ble_complete_route",
+      "payload_fixture": "source21",
+      "command": "004b",
+      "function": "10",
+      "gcm": false,
+      "response_command": "084b",
+      "response_plain_body": "00a10101a20101a30101",
+      "reply_port": 0,
+      "time_service_calls": 0,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "ble_complete_route",
+      "payload_fixture": "source22_timestamp",
+      "command": "004b",
+      "function": "10",
+      "gcm": false,
+      "response_command": "084b",
+      "response_plain_body": "00a10101a20101a30101",
+      "reply_port": 0,
+      "time_service_calls": 0,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "ble_complete_route",
+      "payload_fixture": "unused_tag",
+      "command": "004b",
+      "function": "10",
+      "gcm": false,
+      "response_command": "084b",
+      "response_plain_body": "00a10101a20101a30101",
+      "reply_port": 0,
+      "time_service_calls": 0,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "ble_complete_route",
+      "payload_fixture": "empty",
+      "command": "004b",
+      "function": "10",
+      "gcm": true,
+      "response_command": "484b",
+      "response_plain_body": "00a10101a20101a30101",
+      "reply_port": 0,
+      "time_service_calls": 0,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "ble_complete_route",
+      "payload_fixture": "source21",
+      "command": "004b",
+      "function": "10",
+      "gcm": true,
+      "response_command": "484b",
+      "response_plain_body": "00a10101a20101a30101",
+      "reply_port": 0,
+      "time_service_calls": 0,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "ble_complete_route",
+      "payload_fixture": "source22_timestamp",
+      "command": "004b",
+      "function": "10",
+      "gcm": true,
+      "response_command": "484b",
+      "response_plain_body": "00a10101a20101a30101",
+      "reply_port": 0,
+      "time_service_calls": 0,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "ble_complete_route",
+      "payload_fixture": "unused_tag",
+      "command": "004b",
+      "function": "10",
+      "gcm": true,
+      "response_command": "484b",
+      "response_plain_body": "00a10101a20101a30101",
+      "reply_port": 0,
+      "time_service_calls": 0,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "status_observation",
+      "synthetic_bind": 0,
+      "synthetic_ble_state": 2,
+      "synthetic_mqtt_flag": 0,
+      "binding_provider_substituted": false,
+      "command": "004b",
+      "function": "10",
+      "gcm": false,
+      "response_command": "084b",
+      "response_plain_body": "00a10100a20100a30100",
+      "reply_port": 0,
+      "time_service_calls": 0,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "status_observation",
+      "synthetic_bind": 2,
+      "synthetic_ble_state": 3,
+      "synthetic_mqtt_flag": 255,
+      "binding_provider_substituted": true,
+      "command": "004b",
+      "function": "10",
+      "gcm": false,
+      "response_command": "084b",
+      "response_plain_body": "00a10102a20101a301ff",
+      "reply_port": 0,
+      "time_service_calls": 0,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "status_observation",
+      "synthetic_bind": 0,
+      "synthetic_ble_state": 2,
+      "synthetic_mqtt_flag": 0,
+      "binding_provider_substituted": false,
+      "command": "004b",
+      "function": "10",
+      "gcm": true,
+      "response_command": "484b",
+      "response_plain_body": "00a10100a20100a30100",
+      "reply_port": 0,
+      "time_service_calls": 0,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "status_observation",
+      "synthetic_bind": 2,
+      "synthetic_ble_state": 3,
+      "synthetic_mqtt_flag": 255,
+      "binding_provider_substituted": true,
+      "command": "004b",
+      "function": "10",
+      "gcm": true,
+      "response_command": "484b",
+      "response_plain_body": "00a10102a20101a301ff",
+      "reply_port": 0,
+      "time_service_calls": 0,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "clock_observation",
+      "fixture": "gmt_sentinel",
+      "command": "004a",
+      "function": "10",
+      "gcm": false,
+      "response_command": "084a",
+      "response_plain_body": "00a10480a2bd6aa20401000000",
+      "reply_port": 0,
+      "time_service_calls": 1,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "clock_observation",
+      "fixture": "zero_epoch",
+      "command": "004a",
+      "function": "10",
+      "gcm": false,
+      "response_command": "084a",
+      "response_plain_body": "00a10400000000a204100e0000",
+      "reply_port": 0,
+      "time_service_calls": 2,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "clock_observation",
+      "fixture": "invalid_epoch",
+      "command": "004a",
+      "function": "10",
+      "gcm": false,
+      "response_command": "084a",
+      "response_plain_body": "00a104ffffffffa204100e0000",
+      "reply_port": 0,
+      "time_service_calls": 2,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "clock_observation",
+      "fixture": "transition_between_samples",
+      "command": "004a",
+      "function": "10",
+      "gcm": false,
+      "response_command": "084a",
+      "response_plain_body": "00a10463000000a204201c0000",
+      "reply_port": 0,
+      "time_service_calls": 2,
+      "calendar_service_calls": 1,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "clock_observation",
+      "fixture": "stale_year",
+      "command": "004a",
+      "function": "10",
+      "gcm": false,
+      "response_command": "084a",
+      "response_plain_body": "00a10480a2bd6aa204201c0000",
+      "reply_port": 0,
+      "time_service_calls": 2,
+      "calendar_service_calls": 1,
+      "changed_global_addresses": [
+        "3fc8af4c",
+        "3fc8af4d",
+        "3fc8af4e",
+        "3fc8af4f",
+        "3fc8af50",
+        "3fc8af74",
+        "3fc8af75",
+        "3fc8af76",
+        "3fc8af77",
+        "3fc8af78",
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "clock_observation",
+      "fixture": "gmt_sentinel",
+      "command": "004a",
+      "function": "10",
+      "gcm": true,
+      "response_command": "484a",
+      "response_plain_body": "00a10480a2bd6aa20401000000",
+      "reply_port": 0,
+      "time_service_calls": 1,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "clock_observation",
+      "fixture": "zero_epoch",
+      "command": "004a",
+      "function": "10",
+      "gcm": true,
+      "response_command": "484a",
+      "response_plain_body": "00a10400000000a204100e0000",
+      "reply_port": 0,
+      "time_service_calls": 2,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "clock_observation",
+      "fixture": "invalid_epoch",
+      "command": "004a",
+      "function": "10",
+      "gcm": true,
+      "response_command": "484a",
+      "response_plain_body": "00a104ffffffffa204100e0000",
+      "reply_port": 0,
+      "time_service_calls": 2,
+      "calendar_service_calls": 0,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "clock_observation",
+      "fixture": "transition_between_samples",
+      "command": "004a",
+      "function": "10",
+      "gcm": true,
+      "response_command": "484a",
+      "response_plain_body": "00a10463000000a204201c0000",
+      "reply_port": 0,
+      "time_service_calls": 2,
+      "calendar_service_calls": 1,
+      "changed_global_addresses": [
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "clock_observation",
+      "fixture": "stale_year",
+      "command": "004a",
+      "function": "10",
+      "gcm": true,
+      "response_command": "484a",
+      "response_plain_body": "00a10480a2bd6aa204201c0000",
+      "reply_port": 0,
+      "time_service_calls": 2,
+      "calendar_service_calls": 1,
+      "changed_global_addresses": [
+        "3fc8af4c",
+        "3fc8af4d",
+        "3fc8af4e",
+        "3fc8af4f",
+        "3fc8af50",
+        "3fc8af74",
+        "3fc8af75",
+        "3fc8af76",
+        "3fc8af77",
+        "3fc8af78",
+        "3fc905ec"
+      ],
+      "controller_forward_attempts": 0
+    },
+    {
+      "case": "mqtt_high_command_boundary",
+      "command": "004a",
+      "gcm_marker": false,
+      "synthetic_source": 33,
+      "normalized_function": "10",
+      "forward_wrapper_called": true,
+      "payload_unchanged": true,
+      "radio_handler_calls": 0,
+      "gcm_decrypt_calls": 0,
+      "controller_or_uart_executed": false
+    },
+    {
+      "case": "mqtt_high_command_boundary",
+      "command": "004a",
+      "gcm_marker": false,
+      "synthetic_source": 34,
+      "normalized_function": "10",
+      "forward_wrapper_called": true,
+      "payload_unchanged": true,
+      "radio_handler_calls": 0,
+      "gcm_decrypt_calls": 0,
+      "controller_or_uart_executed": false
+    },
+    {
+      "case": "mqtt_high_command_boundary",
+      "command": "004a",
+      "gcm_marker": true,
+      "synthetic_source": 33,
+      "normalized_function": "10",
+      "forward_wrapper_called": true,
+      "payload_unchanged": true,
+      "radio_handler_calls": 0,
+      "gcm_decrypt_calls": 0,
+      "controller_or_uart_executed": false
+    },
+    {
+      "case": "mqtt_high_command_boundary",
+      "command": "004a",
+      "gcm_marker": true,
+      "synthetic_source": 34,
+      "normalized_function": "10",
+      "forward_wrapper_called": true,
+      "payload_unchanged": true,
+      "radio_handler_calls": 0,
+      "gcm_decrypt_calls": 0,
+      "controller_or_uart_executed": false
+    },
+    {
+      "case": "mqtt_high_command_boundary",
+      "command": "004b",
+      "gcm_marker": false,
+      "synthetic_source": 33,
+      "normalized_function": "10",
+      "forward_wrapper_called": true,
+      "payload_unchanged": true,
+      "radio_handler_calls": 0,
+      "gcm_decrypt_calls": 0,
+      "controller_or_uart_executed": false
+    },
+    {
+      "case": "mqtt_high_command_boundary",
+      "command": "004b",
+      "gcm_marker": false,
+      "synthetic_source": 34,
+      "normalized_function": "10",
+      "forward_wrapper_called": true,
+      "payload_unchanged": true,
+      "radio_handler_calls": 0,
+      "gcm_decrypt_calls": 0,
+      "controller_or_uart_executed": false
+    },
+    {
+      "case": "mqtt_high_command_boundary",
+      "command": "004b",
+      "gcm_marker": true,
+      "synthetic_source": 33,
+      "normalized_function": "10",
+      "forward_wrapper_called": true,
+      "payload_unchanged": true,
+      "radio_handler_calls": 0,
+      "gcm_decrypt_calls": 0,
+      "controller_or_uart_executed": false
+    },
+    {
+      "case": "mqtt_high_command_boundary",
+      "command": "004b",
+      "gcm_marker": true,
+      "synthetic_source": 34,
+      "normalized_function": "10",
+      "forward_wrapper_called": true,
+      "payload_unchanged": true,
+      "radio_handler_calls": 0,
+      "gcm_decrypt_calls": 0,
+      "controller_or_uart_executed": false
+    },
+    {
+      "case": "reply_opcode_not_a_query",
+      "command": "084a",
+      "gcm": false,
+      "radio_handler_calls": 0,
+      "response_count": 0
+    },
+    {
+      "case": "reply_opcode_not_a_query",
+      "command": "084a",
+      "gcm": true,
+      "radio_handler_calls": 0,
+      "response_count": 0
+    },
+    {
+      "case": "reply_opcode_not_a_query",
+      "command": "084b",
+      "gcm": false,
+      "radio_handler_calls": 0,
+      "response_count": 0
+    },
+    {
+      "case": "reply_opcode_not_a_query",
+      "command": "084b",
+      "gcm": true,
+      "radio_handler_calls": 0,
+      "response_count": 0
+    }
+  ],
+  "hardware_access": false,
+  "limits": "Offline BLE routes for Gen 2 radio clock004a/status004b, with MQTT cutoff.\n\nRuns actual radio startup registration, BLE receive/parser/dispatch, both\nhandlers/getters, clock selector, response framing and BLE callback selection.\nMQTT raw callback runs only to its controller-forward wrapper entry; that\nboundary is captured and substituted, with no UART or controller execution.\nOS/libc, session keys/GCM, time/year, optional binding provider and BLE send\nare host substitutes. All state and frames are synthetic; no hardware/network."
+}

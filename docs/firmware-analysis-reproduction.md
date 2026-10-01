@@ -38,8 +38,10 @@ and [1,347 original Smart-policy cases](c1000-smart-auto-off-policy.md),
 [23 factory USB transport cases](gen2-usb-factory-transport.md),
 [288 ordinary Wi-Fi/transfer-capacity cases](gen2-normal-feature-audit.md),
 [71 radio RSSI admission/reply cases](radio-rssi-routing.md),
-[106 radio MQTT-state/clock cases](radio-status-features.md), and
-[47 radio ingress/error-reply cases](radio-ingress-failure-audit.md).
+[106 radio MQTT-state/clock cases](radio-status-features.md),
+[47 radio ingress/error-reply cases](radio-ingress-failure-audit.md),
+[42 BLE radio clock/status routing cases](radio-status-routing.md), and
+[144 radio module-update status cases](radio-update-status.md).
 These have independent commands and manifests; they are not included in the
 1,842-case combined runner. Their individual commands are in the linked records.
 The diagnostic cases include malformed-envelope stalls; those synthetic inputs

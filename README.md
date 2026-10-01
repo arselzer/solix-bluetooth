@@ -21,6 +21,8 @@ Home Assistant integration for the local gateway.
 - C1000 Gen 2 solar weak-light-lock diagnostic, traced to firmware; physical
   low-light behavior remains untested. Read-only saved frequency and AC/DC Smart
   settings are also available; [readback semantics](docs/gen2-preference-readback.md).
+- C1000 Gen 2 Prime RSSI queries via `wifi-rssi`, with explicit unavailable
+  results; [radio readbacks](docs/c1000-radio-readback-validation.md).
 - Authenticated JSON HTTP, SSE and Prometheus for multiple stations.
 - Up to eight supported stations on one isolated AP, with separate certificates,
   telemetry and command queues.

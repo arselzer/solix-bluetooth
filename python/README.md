@@ -360,6 +360,14 @@ It changes no power/network settings.
 Preserve the first result: reset codes may become 255 on later reads. Zero
 errors do **not** prove a connection, and these are not battery/inverter faults.
 Run it separately from Wi-Fi provisioning, which shares the response queue.
+
+On **C1000 Gen 2 Prime**, use `await monitor.wifi_rssi()` or
+`solix-link wifi-rssi --name test-station` for a separate radio RSSI observation.
+The API returns a signed integer or `None`; CLI JSON uses `wifi_rssi_dbm: null`
+when the radio reports unavailable. It does not use the cached A3 quality byte
+or start automatic polling. The unavailable reply was tested on hardware;
+signed readings and malformed replies have synthetic tests. Other models and
+Legacy sessions are rejected. [Routing and validation](../docs/radio-rssi-routing.md).
 See [native MQTT findings](../docs/local-mqtt-investigation.md).
 
 For UPS monitoring, `ac_input_connected` is 1 while the mains lead is present

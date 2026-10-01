@@ -5,10 +5,11 @@ from __future__ import annotations
 import asyncio
 from collections.abc import Callable
 import inspect
+import math
 from typing import Any
 
 from .protocol import COMMAND_UUID, TELEMETRY_UUID, Model, Session, decode_telemetry, parse_packet, tlv
-from .diagnostics import decode_network_diagnostics
+from .diagnostics import decode_network_diagnostics, decode_wifi_rssi
 
 UpdateCallback = Callable[[dict[str, int | str]], Any]
 
@@ -66,9 +67,11 @@ class SolixMonitor:
         self._connect_error: Exception | None = None
         self._lock = asyncio.Lock()
         self._diagnostic_lock = asyncio.Lock()
+        self._radio_lock = asyncio.Lock()
         self._callbacks: list[UpdateCallback] = [on_update] if on_update else []
         self._updates: asyncio.Queue[dict[str, int | str]] = asyncio.Queue(maxsize=10)
         self._responses: asyncio.Queue[tuple[str, bytes]] = asyncio.Queue(maxsize=20)
+        self._radio_responses: asyncio.Queue[tuple[str, bytes]] = asyncio.Queue(maxsize=20)
         self._tasks: set[asyncio.Task[None]] = set()
 
     @property
@@ -105,6 +108,8 @@ class SolixMonitor:
         self._connect_error = None
         while not self._responses.empty():
             self._responses.get_nowait()
+        while not self._radio_responses.empty():
+            self._radio_responses.get_nowait()
         for task in tuple(self._tasks):
             task.cancel()
         if self._tasks:
@@ -159,6 +164,28 @@ class SolixMonitor:
             await self._client.write_gatt_char(COMMAND_UUID, packet, response=False)
             payload = await self._wait_for_response("4820", timeout=timeout)
             return decode_network_diagnostics(payload)
+
+    async def wifi_rssi(self, timeout: float = 20) -> int | None:
+        """Query C1000 Gen 2 Prime RSSI; return None when unavailable.
+
+        Uses the radio's own observation, separate from cached A3 quality.
+        No output, charging or network setting is changed. No automatic
+        polling is started, and other models have not been validated.
+        """
+        if not math.isfinite(timeout) or timeout <= 0:
+            raise ValueError("RSSI timeout must be positive")
+        async with self._radio_lock:
+            if not self.connected:
+                raise RuntimeError("Monitor is not connected")
+            packet = self._session.wifi_rssi_packet()
+            while not self._radio_responses.empty():
+                self._radio_responses.get_nowait()
+            await self._client.write_gatt_char(COMMAND_UUID, packet, response=False)
+            async with asyncio.timeout(timeout):
+                while True:
+                    command, payload = await self._radio_responses.get()
+                    if command == "4822":
+                        return decode_wifi_rssi(payload)
 
     async def join_wifi(self, *, ssid: str, passphrase: str, account_id: str) -> str:
         """Send the observed C1000/C2000 Wi-Fi credentials write and return its BLE reply.
@@ -525,3 +552,7 @@ class SolixMonitor:
                 if self._responses.full():
                     self._responses.get_nowait()
                 self._responses.put_nowait(update.response)
+            if update.radio_response is not None:
+                if self._radio_responses.full():
+                    self._radio_responses.get_nowait()
+                self._radio_responses.put_nowait(update.radio_response)

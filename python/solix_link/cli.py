@@ -6,6 +6,7 @@ import argparse
 import asyncio
 import getpass
 import json
+import math
 from pathlib import Path
 import sys
 from importlib.util import find_spec
@@ -54,6 +55,11 @@ def parser() -> argparse.ArgumentParser:
     diagnostics = subcommands.add_parser("network-diagnostics", help="Read radio HTTP, MQTT, Wi-Fi and reset codes")
     diagnostics.add_argument("--name", required=True)
     diagnostics.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
+
+    rssi = subcommands.add_parser("wifi-rssi", help="Read C1000 Gen 2 Prime RSSI; unavailable is null")
+    rssi.add_argument("--name", required=True)
+    rssi.add_argument("--timeout", type=float, default=20)
+    rssi.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
 
     serve = subcommands.add_parser("serve", help="Run HTTP monitoring with optional authenticated setting controls")
     serve.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
@@ -230,6 +236,21 @@ async def _network_diagnostics(args: argparse.Namespace) -> None:
         protocol=device.protocol, timezone_name=device.timezone_name,
     ) as monitor:
         print(json.dumps(await monitor.network_diagnostics()))
+
+
+async def _wifi_rssi(args: argparse.Namespace) -> None:
+    device = next((saved for saved in load_config(args.config) if saved.name == args.name), None)
+    if device is None:
+        raise ValueError(f"Unknown configured device: {args.name}")
+    if device.model != Model.C1000_GEN2 or device.protocol != "prime":
+        raise ValueError("Wi-Fi RSSI requires C1000 Gen 2 Prime")
+    if not math.isfinite(args.timeout) or args.timeout <= 0:
+        raise ValueError("RSSI timeout must be positive")
+    async with SolixMonitor(
+        device.address, model=device.model, owner_user_id=device.client_id,
+        protocol=device.protocol, timezone_name=device.timezone_name,
+    ) as monitor:
+        print(json.dumps({"wifi_rssi_dbm": await monitor.wifi_rssi(timeout=args.timeout)}))
 
 
 async def _set(args: argparse.Namespace) -> None:
@@ -423,6 +444,8 @@ def main(argv: list[str] | None = None) -> int:
             asyncio.run(_monitor(args))
         elif args.command == "network-diagnostics":
             asyncio.run(_network_diagnostics(args))
+        elif args.command == "wifi-rssi":
+            asyncio.run(_wifi_rssi(args))
         elif args.command == "serve":
             from .server import run_server
             run_server(MonitorService(load_config(args.config)), host=args.host, port=args.port,

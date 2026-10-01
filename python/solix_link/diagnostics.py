@@ -10,6 +10,23 @@ FIELDS = {
 }
 
 
+def decode_wifi_rssi(payload: bytes) -> int | None:
+    """Read raw signed RSSI from function 10/4822; status 01 is unavailable.
+
+    The radio supplies a signed byte in a four-byte raw TLV. Reject other
+    statuses, shapes and impossible source widths rather than returning a
+    cached quality byte or interpreting failure as a signal measurement.
+    """
+    if payload == b"\x01":
+        return None
+    if len(payload) != 7 or payload[:3] != b"\x00\xa1\x04":
+        raise ValueError("Invalid radio RSSI response")
+    value = int.from_bytes(payload[3:], "little", signed=True)
+    if not -128 <= value <= 127 or value == 0:
+        raise ValueError("Invalid radio RSSI value")
+    return value
+
+
 def decode_network_diagnostics(payload: bytes) -> dict[str, int]:
     """Decode a successful 0f/4820 reply, rejecting incomplete reports.
 
