@@ -74,12 +74,14 @@ Five actual-handler cases cover valid negative RSSI, zero, and service failure.
 The handler does not parse an input payload. Its exercised calls are the RSSI
 observation, logging, serialization and substituted response transport.
 
-This is evidence for a **radio dispatch entry**, not a ready-to-send BLE or
-MQTT packet. This audit does not execute the inbound authentication/router or
-prove which external frame reaches that table. In particular, do not confuse
-it with the existing Prime **negotiation** command `4022`, which handles time
-and timezone information. A future implementation first needs the precise
-function, routing and response correlation from an established read-only path.
+This audit establishes the **radio dispatch entry**. The later
+[RSSI route audit](radio-rssi-routing.md) executes function **`10`** / command
+`0022` through BLE and native MQTT admission, handler and reply serialization
+using synthetic inputs. It does not add a runtime command or establish live
+behavior on other models. In particular, function `10` / encrypted `4022`
+is distinct from Prime **negotiation** on function **`01`** / `4022`, which
+handles time and timezone information. Native session establishment and the
+physical observation still require separate evidence.
 
 ## A3 bytes 9–10: internal transfer payload capacity
 

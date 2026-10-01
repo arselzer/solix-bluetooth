@@ -1,0 +1,22 @@
+{
+  "case_counts": {
+    "failure_byte_dump": 4,
+    "gcm_failure": 8,
+    "marked_body_lengths": 14,
+    "outer_corruption": 5,
+    "primitive_error_returns": 3,
+    "short_outer_validator": 10,
+    "valid_gcm": 3
+  },
+  "cases_passed": 47,
+  "firmware_name": "c1000-radio-validated.bin",
+  "firmware_sha256": "e291ec115f013953e825cb51b9e457a8731889547ab55b3058640e599e8cfec8",
+  "hardware_access": false,
+  "result_sha256": "f5e6a56611bfc5a36e69e1cedb52c2088a85e82468085217a2a88ae1794ff396",
+  "source_sha256": {
+    "emulate_radio_factory_routes.py": "9ae40bf0a004fd87f3edc52b30d5f48c320d29a39fb20d57d6136d61b3d7401a",
+    "emulate_radio_ingress_failures.py": "9d3bd829fdaf8551a44314e131cf80fe5e9ce93b9d50ad25eec0347eaec47b63"
+  },
+  "substitution_limits": "Offline A1763 radio ingress/error-path audit using synthetic packets.\n\nRuns actual receive validation, queue consumption, payload classification,\nerror reply serialization and checksums. OS/session/logging/AES boundaries are\nsubstituted; immediate replies stop at the port-send wrapper. Short-frame\ncases execute only the receive validator, never the downstream parser. No\nhardware, network, controller, production credentials or live commands.",
+  "unicorn_version": "2.1.4"
+}

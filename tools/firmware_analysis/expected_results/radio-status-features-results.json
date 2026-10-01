@@ -1,0 +1,1652 @@
+{
+  "cases": [
+    {
+      "bind_observation": 0,
+      "binding_callback_substituted": false,
+      "ble_state": 0,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 0,
+      "reply": "00a10100a20100a30100",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 0,
+      "binding_callback_substituted": false,
+      "ble_state": 0,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 1,
+      "reply": "00a10100a20100a30101",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 0,
+      "binding_callback_substituted": false,
+      "ble_state": 0,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 2,
+      "reply": "00a10100a20100a30102",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 0,
+      "binding_callback_substituted": false,
+      "ble_state": 0,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 255,
+      "reply": "00a10100a20100a301ff",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 0,
+      "binding_callback_substituted": false,
+      "ble_state": 1,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 0,
+      "reply": "00a10100a20100a30100",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 0,
+      "binding_callback_substituted": false,
+      "ble_state": 1,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 1,
+      "reply": "00a10100a20100a30101",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 0,
+      "binding_callback_substituted": false,
+      "ble_state": 1,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 2,
+      "reply": "00a10100a20100a30102",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 0,
+      "binding_callback_substituted": false,
+      "ble_state": 1,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 255,
+      "reply": "00a10100a20100a301ff",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 0,
+      "binding_callback_substituted": false,
+      "ble_state": 2,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 0,
+      "reply": "00a10100a20100a30100",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 0,
+      "binding_callback_substituted": false,
+      "ble_state": 2,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 1,
+      "reply": "00a10100a20100a30101",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 0,
+      "binding_callback_substituted": false,
+      "ble_state": 2,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 2,
+      "reply": "00a10100a20100a30102",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 0,
+      "binding_callback_substituted": false,
+      "ble_state": 2,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 255,
+      "reply": "00a10100a20100a301ff",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 0,
+      "binding_callback_substituted": false,
+      "ble_state": 3,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 0,
+      "reply": "00a10100a20101a30100",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 0,
+      "binding_callback_substituted": false,
+      "ble_state": 3,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 1,
+      "reply": "00a10100a20101a30101",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 0,
+      "binding_callback_substituted": false,
+      "ble_state": 3,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 2,
+      "reply": "00a10100a20101a30102",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 0,
+      "binding_callback_substituted": false,
+      "ble_state": 3,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 255,
+      "reply": "00a10100a20101a301ff",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 0,
+      "binding_callback_substituted": false,
+      "ble_state": 4,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 0,
+      "reply": "00a10100a20100a30100",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 0,
+      "binding_callback_substituted": false,
+      "ble_state": 4,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 1,
+      "reply": "00a10100a20100a30101",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 0,
+      "binding_callback_substituted": false,
+      "ble_state": 4,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 2,
+      "reply": "00a10100a20100a30102",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 0,
+      "binding_callback_substituted": false,
+      "ble_state": 4,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 255,
+      "reply": "00a10100a20100a301ff",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 0,
+      "binding_callback_substituted": false,
+      "ble_state": 255,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 0,
+      "reply": "00a10100a20100a30100",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 0,
+      "binding_callback_substituted": false,
+      "ble_state": 255,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 1,
+      "reply": "00a10100a20100a30101",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 0,
+      "binding_callback_substituted": false,
+      "ble_state": 255,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 2,
+      "reply": "00a10100a20100a30102",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 0,
+      "binding_callback_substituted": false,
+      "ble_state": 255,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 255,
+      "reply": "00a10100a20100a301ff",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 0,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 0,
+      "reply": "00a10101a20100a30100",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 0,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 1,
+      "reply": "00a10101a20100a30101",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 0,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 2,
+      "reply": "00a10101a20100a30102",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 0,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 255,
+      "reply": "00a10101a20100a301ff",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 1,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 0,
+      "reply": "00a10101a20100a30100",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 1,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 1,
+      "reply": "00a10101a20100a30101",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 1,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 2,
+      "reply": "00a10101a20100a30102",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 1,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 255,
+      "reply": "00a10101a20100a301ff",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 2,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 0,
+      "reply": "00a10101a20100a30100",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 2,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 1,
+      "reply": "00a10101a20100a30101",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 2,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 2,
+      "reply": "00a10101a20100a30102",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 2,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 255,
+      "reply": "00a10101a20100a301ff",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 3,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 0,
+      "reply": "00a10101a20101a30100",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 3,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 1,
+      "reply": "00a10101a20101a30101",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 3,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 2,
+      "reply": "00a10101a20101a30102",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 3,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 255,
+      "reply": "00a10101a20101a301ff",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 4,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 0,
+      "reply": "00a10101a20100a30100",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 4,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 1,
+      "reply": "00a10101a20100a30101",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 4,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 2,
+      "reply": "00a10101a20100a30102",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 4,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 255,
+      "reply": "00a10101a20100a301ff",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 255,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 0,
+      "reply": "00a10101a20100a30100",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 255,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 1,
+      "reply": "00a10101a20100a30101",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 255,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 2,
+      "reply": "00a10101a20100a30102",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 255,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 255,
+      "reply": "00a10101a20100a301ff",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 255,
+      "binding_callback_substituted": false,
+      "ble_state": 0,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 0,
+      "reply": "00a10101a20100a30100",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 255,
+      "binding_callback_substituted": false,
+      "ble_state": 0,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 1,
+      "reply": "00a10101a20100a30101",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 255,
+      "binding_callback_substituted": false,
+      "ble_state": 0,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 2,
+      "reply": "00a10101a20100a30102",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 255,
+      "binding_callback_substituted": false,
+      "ble_state": 0,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 255,
+      "reply": "00a10101a20100a301ff",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 255,
+      "binding_callback_substituted": false,
+      "ble_state": 1,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 0,
+      "reply": "00a10101a20100a30100",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 255,
+      "binding_callback_substituted": false,
+      "ble_state": 1,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 1,
+      "reply": "00a10101a20100a30101",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 255,
+      "binding_callback_substituted": false,
+      "ble_state": 1,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 2,
+      "reply": "00a10101a20100a30102",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 255,
+      "binding_callback_substituted": false,
+      "ble_state": 1,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 255,
+      "reply": "00a10101a20100a301ff",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 255,
+      "binding_callback_substituted": false,
+      "ble_state": 2,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 0,
+      "reply": "00a10101a20100a30100",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 255,
+      "binding_callback_substituted": false,
+      "ble_state": 2,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 1,
+      "reply": "00a10101a20100a30101",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 255,
+      "binding_callback_substituted": false,
+      "ble_state": 2,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 2,
+      "reply": "00a10101a20100a30102",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 255,
+      "binding_callback_substituted": false,
+      "ble_state": 2,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 255,
+      "reply": "00a10101a20100a301ff",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 255,
+      "binding_callback_substituted": false,
+      "ble_state": 3,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 0,
+      "reply": "00a10101a20101a30100",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 255,
+      "binding_callback_substituted": false,
+      "ble_state": 3,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 1,
+      "reply": "00a10101a20101a30101",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 255,
+      "binding_callback_substituted": false,
+      "ble_state": 3,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 2,
+      "reply": "00a10101a20101a30102",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 255,
+      "binding_callback_substituted": false,
+      "ble_state": 3,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 255,
+      "reply": "00a10101a20101a301ff",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 255,
+      "binding_callback_substituted": false,
+      "ble_state": 4,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 0,
+      "reply": "00a10101a20100a30100",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 255,
+      "binding_callback_substituted": false,
+      "ble_state": 4,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 1,
+      "reply": "00a10101a20100a30101",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 255,
+      "binding_callback_substituted": false,
+      "ble_state": 4,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 2,
+      "reply": "00a10101a20100a30102",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 255,
+      "binding_callback_substituted": false,
+      "ble_state": 4,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 255,
+      "reply": "00a10101a20100a301ff",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 255,
+      "binding_callback_substituted": false,
+      "ble_state": 255,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 0,
+      "reply": "00a10101a20100a30100",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 255,
+      "binding_callback_substituted": false,
+      "ble_state": 255,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 1,
+      "reply": "00a10101a20100a30101",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 255,
+      "binding_callback_substituted": false,
+      "ble_state": 255,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 2,
+      "reply": "00a10101a20100a30102",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 255,
+      "binding_callback_substituted": false,
+      "ble_state": 255,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 255,
+      "reply": "00a10101a20100a301ff",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 0,
+      "binding_callback_substituted": true,
+      "ble_state": 3,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 1,
+      "reply": "00a10100a20101a30101",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": true,
+      "ble_state": 3,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 1,
+      "reply": "00a10101a20101a30101",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 2,
+      "binding_callback_substituted": true,
+      "ble_state": 3,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 1,
+      "reply": "00a10102a20101a30101",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 255,
+      "binding_callback_substituted": true,
+      "ble_state": 3,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 1,
+      "reply": "00a101ffa20101a30101",
+      "response_attempts": 1,
+      "transport_result": 0
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 3,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 1,
+      "reply": "00a10101a20101a30101",
+      "response_attempts": 1,
+      "transport_result": 1
+    },
+    {
+      "bind_observation": 1,
+      "binding_callback_substituted": false,
+      "ble_state": 3,
+      "case": "link_status_004b",
+      "global_state_preserved": true,
+      "mqtt_connected_byte": 1,
+      "reply": "00a10101a20101a30101",
+      "response_attempts": 1,
+      "transport_result": 4294967295
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 0,
+      "case": "clock_004a",
+      "epoch_observation": 0,
+      "expected_reply_offset": 0,
+      "reply": "00a10400000000a20400000000",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        0,
+        0
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        100,
+        200
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 0,
+      "case": "clock_004a",
+      "epoch_observation": 0,
+      "expected_reply_offset": 3600,
+      "reply": "00a10400000000a204100e0000",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        -3600,
+        -3600
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        100,
+        200
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 0,
+      "case": "clock_004a",
+      "epoch_observation": 0,
+      "expected_reply_offset": 7200,
+      "reply": "00a10400000000a204201c0000",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        -7200,
+        -7200
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        100,
+        200
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 0,
+      "case": "clock_004a",
+      "epoch_observation": 0,
+      "expected_reply_offset": -18000,
+      "reply": "00a10400000000a204b0b9ffff",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        18000,
+        18000
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        100,
+        200
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 0,
+      "case": "clock_004a",
+      "epoch_observation": 1790812800,
+      "expected_reply_offset": 0,
+      "reply": "00a10480a2bd6aa20400000000",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        0,
+        0
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        100,
+        200
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 0,
+      "case": "clock_004a",
+      "epoch_observation": 1790812800,
+      "expected_reply_offset": 3600,
+      "reply": "00a10480a2bd6aa204100e0000",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        -3600,
+        -3600
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        100,
+        200
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 0,
+      "case": "clock_004a",
+      "epoch_observation": 1790812800,
+      "expected_reply_offset": 7200,
+      "reply": "00a10480a2bd6aa204201c0000",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        -7200,
+        -7200
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        100,
+        200
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 0,
+      "case": "clock_004a",
+      "epoch_observation": 1790812800,
+      "expected_reply_offset": -18000,
+      "reply": "00a10480a2bd6aa204b0b9ffff",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        18000,
+        18000
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        100,
+        200
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 0,
+      "case": "clock_004a",
+      "epoch_observation": 4294967295,
+      "expected_reply_offset": 0,
+      "reply": "00a104ffffffffa20400000000",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        0,
+        0
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        100,
+        200
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 0,
+      "case": "clock_004a",
+      "epoch_observation": 4294967295,
+      "expected_reply_offset": 3600,
+      "reply": "00a104ffffffffa204100e0000",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        -3600,
+        -3600
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        100,
+        200
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 0,
+      "case": "clock_004a",
+      "epoch_observation": 4294967295,
+      "expected_reply_offset": 7200,
+      "reply": "00a104ffffffffa204201c0000",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        -7200,
+        -7200
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        100,
+        200
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 0,
+      "case": "clock_004a",
+      "epoch_observation": 4294967295,
+      "expected_reply_offset": -18000,
+      "reply": "00a104ffffffffa204b0b9ffff",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        18000,
+        18000
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        100,
+        200
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 0,
+      "case": "clock_004a",
+      "epoch_observation": 1790812800,
+      "expected_reply_offset": 1,
+      "reply": "00a10480a2bd6aa20401000000",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        0,
+        0
+      ],
+      "time_service_calls": 1,
+      "timezone_fixture": "GMT0",
+      "transition_epochs": [
+        100,
+        200
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 1,
+      "case": "clock_004a",
+      "epoch_observation": 99,
+      "expected_reply_offset": 3600,
+      "reply": "00a10463000000a204100e0000",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        -3600,
+        -7200
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        100,
+        200
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 1,
+      "case": "clock_004a",
+      "epoch_observation": 99,
+      "expected_reply_offset": 7200,
+      "reply": "00a10463000000a204201c0000",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        -3600,
+        -7200
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        200,
+        100
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 1,
+      "case": "clock_004a",
+      "epoch_observation": 100,
+      "expected_reply_offset": 7200,
+      "reply": "00a10464000000a204201c0000",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        -3600,
+        -7200
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        100,
+        200
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 1,
+      "case": "clock_004a",
+      "epoch_observation": 100,
+      "expected_reply_offset": 3600,
+      "reply": "00a10464000000a204100e0000",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        -3600,
+        -7200
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        200,
+        100
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 1,
+      "case": "clock_004a",
+      "epoch_observation": 101,
+      "expected_reply_offset": 7200,
+      "reply": "00a10465000000a204201c0000",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        -3600,
+        -7200
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        100,
+        200
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 1,
+      "case": "clock_004a",
+      "epoch_observation": 101,
+      "expected_reply_offset": 3600,
+      "reply": "00a10465000000a204100e0000",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        -3600,
+        -7200
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        200,
+        100
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 1,
+      "case": "clock_004a",
+      "epoch_observation": 199,
+      "expected_reply_offset": 7200,
+      "reply": "00a104c7000000a204201c0000",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        -3600,
+        -7200
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        100,
+        200
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 1,
+      "case": "clock_004a",
+      "epoch_observation": 199,
+      "expected_reply_offset": 3600,
+      "reply": "00a104c7000000a204100e0000",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        -3600,
+        -7200
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        200,
+        100
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 1,
+      "case": "clock_004a",
+      "epoch_observation": 200,
+      "expected_reply_offset": 3600,
+      "reply": "00a104c8000000a204100e0000",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        -3600,
+        -7200
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        100,
+        200
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 1,
+      "case": "clock_004a",
+      "epoch_observation": 200,
+      "expected_reply_offset": 7200,
+      "reply": "00a104c8000000a204201c0000",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        -3600,
+        -7200
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        200,
+        100
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 1,
+      "case": "clock_004a",
+      "epoch_observation": 201,
+      "expected_reply_offset": 3600,
+      "reply": "00a104c9000000a204100e0000",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        -3600,
+        -7200
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        100,
+        200
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 1,
+      "case": "clock_004a",
+      "epoch_observation": 201,
+      "expected_reply_offset": 7200,
+      "reply": "00a104c9000000a204201c0000",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        -3600,
+        -7200
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        200,
+        100
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 1,
+      "case": "clock_004a",
+      "epoch_observation": 99,
+      "expected_reply_offset": 7200,
+      "reply": "00a10463000000a204201c0000",
+      "response_attempts": 1,
+      "second_time_observation": 100,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        -3600,
+        -7200
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        100,
+        200
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": true,
+      "calendar_service_calls": 1,
+      "case": "clock_004a",
+      "epoch_observation": 1790812800,
+      "expected_reply_offset": 7200,
+      "reply": "00a10480a2bd6aa204201c0000",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        -3600,
+        -7200
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        1775782800,
+        1793066400
+      ],
+      "transport_result": 0
+    },
+    {
+      "calendar_cache_refresh": false,
+      "calendar_service_calls": 0,
+      "case": "clock_004a",
+      "epoch_observation": 1790812800,
+      "expected_reply_offset": 3600,
+      "reply": "00a10480a2bd6aa204100e0000",
+      "response_attempts": 1,
+      "second_time_observation": null,
+      "settings_or_connection_writes": 0,
+      "stored_offset_seconds": [
+        -3600,
+        -3600
+      ],
+      "time_service_calls": 2,
+      "timezone_fixture": "SYN0",
+      "transition_epochs": [
+        100,
+        200
+      ],
+      "transport_result": 1
+    }
+  ],
+  "cases_passed": 106,
+  "dispatch_inventory": [
+    {
+      "command": "0003",
+      "handler": "4203cc10"
+    },
+    {
+      "command": "0001",
+      "handler": "4203ce62"
+    },
+    {
+      "command": "0002",
+      "handler": "4203cece"
+    },
+    {
+      "command": "0005",
+      "handler": "4203cfc4"
+    },
+    {
+      "command": "0007",
+      "handler": "42043d5a"
+    },
+    {
+      "command": "000d",
+      "handler": "420419aa"
+    },
+    {
+      "command": "001f",
+      "handler": "4203d1ba"
+    },
+    {
+      "command": "0020",
+      "handler": "42041810"
+    },
+    {
+      "command": "0021",
+      "handler": "4203d404"
+    },
+    {
+      "command": "0022",
+      "handler": "4203cb26"
+    },
+    {
+      "command": "0023",
+      "handler": "420432aa"
+    },
+    {
+      "command": "0024",
+      "handler": "4203d056"
+    },
+    {
+      "command": "0025",
+      "handler": "42043316"
+    },
+    {
+      "command": "000f",
+      "handler": "4203cd6e"
+    },
+    {
+      "command": "0029",
+      "handler": "4203df24"
+    },
+    {
+      "command": "002a",
+      "handler": "4203df9e"
+    },
+    {
+      "command": "0031",
+      "handler": "4203ca9e"
+    },
+    {
+      "command": "0053",
+      "handler": "4203e0ac"
+    },
+    {
+      "command": "0055",
+      "handler": "42043564"
+    },
+    {
+      "command": "0056",
+      "handler": "4203d0ca"
+    },
+    {
+      "command": "080b",
+      "handler": "4204751e"
+    },
+    {
+      "command": "080c",
+      "handler": "42047690"
+    },
+    {
+      "command": "0810",
+      "handler": "4203fd52"
+    },
+    {
+      "command": "0811",
+      "handler": "4203fdba"
+    },
+    {
+      "command": "0863",
+      "handler": "42047b56"
+    },
+    {
+      "command": "0030",
+      "handler": "42047d70"
+    },
+    {
+      "command": "0032",
+      "handler": "4203d56e"
+    },
+    {
+      "command": "0033",
+      "handler": "4203d7ba"
+    },
+    {
+      "command": "0034",
+      "handler": "4203db5e"
+    },
+    {
+      "command": "0036",
+      "handler": "4203db1e"
+    },
+    {
+      "command": "0037",
+      "handler": "4203ddc2"
+    },
+    {
+      "command": "0038",
+      "handler": "42043720"
+    },
+    {
+      "command": "0039",
+      "handler": "4203e846"
+    },
+    {
+      "command": "003b",
+      "handler": "4203ea8c"
+    },
+    {
+      "command": "003c",
+      "handler": "4203ed3c"
+    },
+    {
+      "command": "003d",
+      "handler": "4203f4ee"
+    },
+    {
+      "command": "003f",
+      "handler": "4203fa7a"
+    },
+    {
+      "command": "004a",
+      "handler": "4203fac0"
+    },
+    {
+      "command": "004b",
+      "handler": "4203da2c"
+    },
+    {
+      "command": "0064",
+      "handler": "4203cab8"
+    },
+    {
+      "command": "0066",
+      "handler": "42041128"
+    },
+    {
+      "command": "0867",
+      "handler": "42040f0e"
+    }
+  ],
+  "firmware_sha256": "e291ec115f013953e825cb51b9e457a8731889547ab55b3058640e599e8cfec8",
+  "limits": "Replay radio link/MQTT status and clock getters in public A1763 radio 0.3.3.0.\n\nActual handlers, simple state getters, timezone selector and raw TLV serializer\nexecute. ROM libc, time/calendar observations, optional binding-provider callback,\nlogging and final response transport are explicit host substitutes. No network,\ndevice, output command, credential read, binding change or persistence backend.\nExternal request reachability is not established by these direct-handler cases.",
+  "model": "A1763 C1000 Gen 2 radio 0.3.3.0"
+}

@@ -1,0 +1,437 @@
+{
+  "failure_byte_dump": [
+    {
+      "both_synthetic_key_halves_formatted": false,
+      "byte_dump_calls": 2,
+      "formatted_lines": 0,
+      "log_callback_installed": false,
+      "production_logging_configuration_unverified": true,
+      "synthetic_cipher_selector": 0
+    },
+    {
+      "both_synthetic_key_halves_formatted": true,
+      "byte_dump_calls": 2,
+      "formatted_lines": 2,
+      "log_callback_installed": true,
+      "production_logging_configuration_unverified": true,
+      "synthetic_cipher_selector": 0
+    },
+    {
+      "both_synthetic_key_halves_formatted": false,
+      "byte_dump_calls": 2,
+      "formatted_lines": 0,
+      "log_callback_installed": false,
+      "production_logging_configuration_unverified": true,
+      "synthetic_cipher_selector": 1
+    },
+    {
+      "both_synthetic_key_halves_formatted": true,
+      "byte_dump_calls": 2,
+      "formatted_lines": 2,
+      "log_callback_installed": true,
+      "production_logging_configuration_unverified": true,
+      "synthetic_cipher_selector": 1
+    }
+  ],
+  "gcm_failure": [
+    {
+      "decrypt_calls": [
+        {
+          "cipher": "GCM",
+          "input_length": 19,
+          "return": 1
+        }
+      ],
+      "handler_dispatched": false,
+      "mutation": "ciphertext",
+      "port": 0,
+      "reply_cipher": "GCM",
+      "reply_status": 1
+    },
+    {
+      "decrypt_calls": [
+        {
+          "cipher": "GCM",
+          "input_length": 19,
+          "return": 1
+        }
+      ],
+      "handler_dispatched": false,
+      "mutation": "tag",
+      "port": 0,
+      "reply_cipher": "GCM",
+      "reply_status": 1
+    },
+    {
+      "decrypt_calls": [
+        {
+          "cipher": "GCM",
+          "input_length": 5,
+          "return": 1
+        }
+      ],
+      "handler_dispatched": false,
+      "mutation": "truncated",
+      "port": 0,
+      "reply_cipher": "GCM",
+      "reply_status": 1
+    },
+    {
+      "decrypt_calls": [],
+      "handler_dispatched": false,
+      "mutation": "empty",
+      "port": 0,
+      "reply_cipher": "GCM",
+      "reply_status": 8
+    },
+    {
+      "decrypt_calls": [
+        {
+          "cipher": "GCM",
+          "input_length": 19,
+          "return": 1
+        }
+      ],
+      "handler_dispatched": false,
+      "mutation": "ciphertext",
+      "port": 5,
+      "reply_cipher": "GCM",
+      "reply_status": 1
+    },
+    {
+      "decrypt_calls": [
+        {
+          "cipher": "GCM",
+          "input_length": 19,
+          "return": 1
+        }
+      ],
+      "handler_dispatched": false,
+      "mutation": "tag",
+      "port": 5,
+      "reply_cipher": "GCM",
+      "reply_status": 1
+    },
+    {
+      "decrypt_calls": [
+        {
+          "cipher": "GCM",
+          "input_length": 5,
+          "return": 1
+        }
+      ],
+      "handler_dispatched": false,
+      "mutation": "truncated",
+      "port": 5,
+      "reply_cipher": "GCM",
+      "reply_status": 1
+    },
+    {
+      "decrypt_calls": [],
+      "handler_dispatched": false,
+      "mutation": "empty",
+      "port": 5,
+      "reply_cipher": "GCM",
+      "reply_status": 8
+    }
+  ],
+  "marked_body_lengths": [
+    {
+      "decrypt_calls": [],
+      "handler_dispatched": false,
+      "input_length": 0,
+      "reply_status": 8,
+      "synthetic_cipher_selector": 0
+    },
+    {
+      "decrypt_calls": [],
+      "handler_dispatched": false,
+      "input_length": 1,
+      "reply_status": 8,
+      "synthetic_cipher_selector": 0
+    },
+    {
+      "decrypt_calls": [],
+      "handler_dispatched": false,
+      "input_length": 15,
+      "reply_status": 8,
+      "synthetic_cipher_selector": 0
+    },
+    {
+      "decrypt_calls": [
+        {
+          "cipher": "CBC",
+          "input_length": 16,
+          "return": 3
+        }
+      ],
+      "handler_dispatched": false,
+      "input_length": 16,
+      "reply_status": 1,
+      "synthetic_cipher_selector": 0
+    },
+    {
+      "decrypt_calls": [],
+      "handler_dispatched": false,
+      "input_length": 17,
+      "reply_status": 8,
+      "synthetic_cipher_selector": 0
+    },
+    {
+      "decrypt_calls": [],
+      "handler_dispatched": false,
+      "input_length": 31,
+      "reply_status": 8,
+      "synthetic_cipher_selector": 0
+    },
+    {
+      "decrypt_calls": [
+        {
+          "cipher": "CBC",
+          "input_length": 32,
+          "return": 3
+        }
+      ],
+      "handler_dispatched": false,
+      "input_length": 32,
+      "reply_status": 1,
+      "synthetic_cipher_selector": 0
+    },
+    {
+      "decrypt_calls": [],
+      "handler_dispatched": false,
+      "input_length": 0,
+      "reply_status": 8,
+      "synthetic_cipher_selector": 1
+    },
+    {
+      "decrypt_calls": [
+        {
+          "cipher": "GCM",
+          "input_length": 1,
+          "return": 3
+        }
+      ],
+      "handler_dispatched": false,
+      "input_length": 1,
+      "reply_status": 1,
+      "synthetic_cipher_selector": 1
+    },
+    {
+      "decrypt_calls": [
+        {
+          "cipher": "GCM",
+          "input_length": 15,
+          "return": 3
+        }
+      ],
+      "handler_dispatched": false,
+      "input_length": 15,
+      "reply_status": 1,
+      "synthetic_cipher_selector": 1
+    },
+    {
+      "decrypt_calls": [
+        {
+          "cipher": "GCM",
+          "input_length": 16,
+          "return": 3
+        }
+      ],
+      "handler_dispatched": false,
+      "input_length": 16,
+      "reply_status": 1,
+      "synthetic_cipher_selector": 1
+    },
+    {
+      "decrypt_calls": [
+        {
+          "cipher": "GCM",
+          "input_length": 17,
+          "return": 3
+        }
+      ],
+      "handler_dispatched": false,
+      "input_length": 17,
+      "reply_status": 1,
+      "synthetic_cipher_selector": 1
+    },
+    {
+      "decrypt_calls": [
+        {
+          "cipher": "GCM",
+          "input_length": 31,
+          "return": 3
+        }
+      ],
+      "handler_dispatched": false,
+      "input_length": 31,
+      "reply_status": 1,
+      "synthetic_cipher_selector": 1
+    },
+    {
+      "decrypt_calls": [
+        {
+          "cipher": "GCM",
+          "input_length": 32,
+          "return": 3
+        }
+      ],
+      "handler_dispatched": false,
+      "input_length": 32,
+      "reply_status": 1,
+      "synthetic_cipher_selector": 1
+    }
+  ],
+  "outer_corruption": [
+    {
+      "mutation": "sync",
+      "queued": false
+    },
+    {
+      "mutation": "length_low",
+      "queued": false
+    },
+    {
+      "mutation": "length_high",
+      "queued": false
+    },
+    {
+      "mutation": "checksum",
+      "queued": false
+    },
+    {
+      "mutation": "concatenated",
+      "queued": false
+    }
+  ],
+  "primitive_error_returns": [
+    {
+      "byte_dump_calls": 2,
+      "handler_dispatched": false,
+      "reply_status": 1,
+      "synthetic_return": 1
+    },
+    {
+      "byte_dump_calls": 2,
+      "handler_dispatched": false,
+      "reply_status": 1,
+      "synthetic_return": 3
+    },
+    {
+      "byte_dump_calls": 2,
+      "handler_dispatched": false,
+      "reply_status": 1,
+      "synthetic_return": 4294967295
+    }
+  ],
+  "short_outer_validator": [
+    {
+      "downstream_parser_executed": false,
+      "past_input_reads": [],
+      "queued": false,
+      "stated_length": 0
+    },
+    {
+      "downstream_parser_executed": false,
+      "past_input_reads": [
+        {
+          "offset": 1,
+          "pc": "4204d19a",
+          "size": 1
+        },
+        {
+          "offset": 3,
+          "pc": "4204d1b4",
+          "size": 1
+        },
+        {
+          "offset": 2,
+          "pc": "4204d1b8",
+          "size": 1
+        }
+      ],
+      "queued": false,
+      "stated_length": 1
+    },
+    {
+      "downstream_parser_executed": false,
+      "past_input_reads": [
+        {
+          "offset": 3,
+          "pc": "4204d1b4",
+          "size": 1
+        },
+        {
+          "offset": 2,
+          "pc": "4204d1b8",
+          "size": 1
+        }
+      ],
+      "queued": false,
+      "stated_length": 2
+    },
+    {
+      "downstream_parser_executed": false,
+      "past_input_reads": [
+        {
+          "offset": 3,
+          "pc": "4204d1b4",
+          "size": 1
+        }
+      ],
+      "queued": false,
+      "stated_length": 3
+    },
+    {
+      "downstream_parser_executed": false,
+      "past_input_reads": [],
+      "queued": false,
+      "stated_length": 4
+    },
+    {
+      "downstream_parser_executed": false,
+      "past_input_reads": [],
+      "queued": true,
+      "stated_length": 5
+    },
+    {
+      "downstream_parser_executed": false,
+      "past_input_reads": [],
+      "queued": true,
+      "stated_length": 6
+    },
+    {
+      "downstream_parser_executed": false,
+      "past_input_reads": [],
+      "queued": true,
+      "stated_length": 7
+    },
+    {
+      "downstream_parser_executed": false,
+      "past_input_reads": [],
+      "queued": true,
+      "stated_length": 8
+    },
+    {
+      "downstream_parser_executed": false,
+      "past_input_reads": [],
+      "queued": true,
+      "stated_length": 9
+    }
+  ],
+  "valid_gcm": [
+    {
+      "factory_body_preserved": true,
+      "plaintext_length": 0
+    },
+    {
+      "factory_body_preserved": true,
+      "plaintext_length": 3
+    },
+    {
+      "factory_body_preserved": true,
+      "plaintext_length": 11
+    }
+  ]
+}

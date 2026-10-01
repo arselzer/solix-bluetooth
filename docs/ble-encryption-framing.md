@@ -30,6 +30,13 @@ This rejects the known inconsistent header. It does **not** validate an arbitrar
 command, diagnostic body, length, device version, routing destination or physical
 side effect. There is no new F0 or arbitrary-register API.
 
+The later [radio ingress failure audit](radio-ingress-failure-audit.md) executes
+selected GCM/CBC rejection branches and error replies with synthetic sessions.
+It also documents short outer envelopes accepted by the firmware receiver,
+and conditional session-material byte dumps on decryption failure. These
+findings do not replace the SDK's stricter frame validation or establish
+hardware authentication behavior.
+
 ## Verification
 
 ```sh

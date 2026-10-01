@@ -26,7 +26,15 @@ complete software request/reply path, with concatenation and overflow limits;
 physical service-port access remains unverified. The
 [288-case ordinary-field audit](gen2-normal-feature-audit.md) shows why A3's
 Wi-Fi quality byte can report 100 after an RSSI failure. A separate radio RSSI
-handler preserves failure status, but its external request route is unproved.
+handler preserves failure status. The later
+[71-case RSSI routing audit](radio-rssi-routing.md) executes its function-`10`
+BLE and native MQTT admission/reply paths with synthetic identities and sessions;
+physical observations and cross-model equivalence remain untested.
+[106 radio-status cases](radio-status-features.md) identify a cached MQTT flag
+and radio clock/offset quirks, while documenting the higher-opcode MQTT routing
+limit. The [47-case ingress audit](radio-ingress-failure-audit.md) distinguishes
+decryption error replies from outer-frame rejection and verifies conditional
+session-material byte dumps. No new runtime controls or live probes are added.
 
 The latest [reconnect, clock and power-gate follow-up](c2000-mqtt-reconnect-and-tariff.md)
 includes additional offline executions and guarded C2000 hardware observations.

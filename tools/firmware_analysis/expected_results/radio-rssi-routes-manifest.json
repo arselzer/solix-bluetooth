@@ -1,0 +1,20 @@
+{
+  "firmware": {
+    "filename": "c1000-radio-validated.bin",
+    "sha256": "e291ec115f013953e825cb51b9e457a8731889547ab55b3058640e599e8cfec8",
+    "bytes": 1482800
+  },
+  "cases_passed": 71,
+  "hardware_access": false,
+  "runtime": {
+    "python": "3.12.3",
+    "unicorn": "2.1.4",
+    "cryptography": "41.0.7"
+  },
+  "source_sha256": {
+    "emulate_radio_rssi_routes.py": "de2665279a85c1b6f91d9eb41311938d5a09c2d45291c740ec03b8958ee3080b",
+    "emulate_radio_factory_routes.py": "9ae40bf0a004fd87f3edc52b30d5f48c320d29a39fb20d57d6136d61b3d7401a"
+  },
+  "result_sha256": "a64748708923df6b2a9ddbb1b32c2ee1a65bae5da5fc289480a637da340a9096",
+  "substitution_limits": "Offline C1000 Gen 2 radio RSSI BLE/native MQTT route replay.\n\nActual RISC-V receive, parser, dispatch, identity/header checks, RSSI wrapper,\nresponse framing, transport registration/selection and MQTT JSON/topic builders\nexecute. OS queues/allocation, cJSON/libc/base64, GCM primitives, established\nsession keys, AP-info, identity-refresh providers, time, BLE TX and final MQTT\npublish are substitutes. No TLS, pairing, Wi-Fi, controller, device or network."
+}

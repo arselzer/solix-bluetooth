@@ -1,0 +1,1191 @@
+{
+  "cases_passed": 71,
+  "cases": [
+    {
+      "case": "complete_route",
+      "transport": "ble",
+      "incoming_gcm": false,
+      "body_kind": "empty",
+      "synthetic_rssi": -70,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 0,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 0,
+      "response_command": "0822",
+      "response_body_hex": "00a104baffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": null,
+      "mqtt_topic_suffix": null
+    },
+    {
+      "case": "complete_route",
+      "transport": "ble",
+      "incoming_gcm": false,
+      "body_kind": "source21",
+      "synthetic_rssi": -70,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 0,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 0,
+      "response_command": "0822",
+      "response_body_hex": "00a104baffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": null,
+      "mqtt_topic_suffix": null
+    },
+    {
+      "case": "complete_route",
+      "transport": "ble",
+      "incoming_gcm": false,
+      "body_kind": "source22_timestamp",
+      "synthetic_rssi": -70,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 0,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 0,
+      "response_command": "0822",
+      "response_body_hex": "00a104baffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": null,
+      "mqtt_topic_suffix": null
+    },
+    {
+      "case": "complete_route",
+      "transport": "ble",
+      "incoming_gcm": false,
+      "body_kind": "empty",
+      "synthetic_rssi": -100,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 0,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 0,
+      "response_command": "0822",
+      "response_body_hex": "00a1049cffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": null,
+      "mqtt_topic_suffix": null
+    },
+    {
+      "case": "complete_route",
+      "transport": "ble",
+      "incoming_gcm": false,
+      "body_kind": "source21",
+      "synthetic_rssi": -100,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 0,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 0,
+      "response_command": "0822",
+      "response_body_hex": "00a1049cffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": null,
+      "mqtt_topic_suffix": null
+    },
+    {
+      "case": "complete_route",
+      "transport": "ble",
+      "incoming_gcm": false,
+      "body_kind": "source22_timestamp",
+      "synthetic_rssi": -100,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 0,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 0,
+      "response_command": "0822",
+      "response_body_hex": "00a1049cffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": null,
+      "mqtt_topic_suffix": null
+    },
+    {
+      "case": "complete_route",
+      "transport": "ble",
+      "incoming_gcm": false,
+      "body_kind": "empty",
+      "synthetic_rssi": 0,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 0,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 0,
+      "response_command": "0822",
+      "response_body_hex": "01",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": null,
+      "mqtt_topic_suffix": null
+    },
+    {
+      "case": "complete_route",
+      "transport": "ble",
+      "incoming_gcm": false,
+      "body_kind": "source21",
+      "synthetic_rssi": 0,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 0,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 0,
+      "response_command": "0822",
+      "response_body_hex": "01",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": null,
+      "mqtt_topic_suffix": null
+    },
+    {
+      "case": "complete_route",
+      "transport": "ble",
+      "incoming_gcm": false,
+      "body_kind": "source22_timestamp",
+      "synthetic_rssi": 0,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 0,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 0,
+      "response_command": "0822",
+      "response_body_hex": "01",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": null,
+      "mqtt_topic_suffix": null
+    },
+    {
+      "case": "complete_route",
+      "transport": "ble",
+      "incoming_gcm": false,
+      "body_kind": "empty",
+      "synthetic_rssi": -70,
+      "ap_info_error": 1,
+      "parser_reply_context": {
+        "port": 0,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 0,
+      "response_command": "0822",
+      "response_body_hex": "01",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": null,
+      "mqtt_topic_suffix": null
+    },
+    {
+      "case": "complete_route",
+      "transport": "ble",
+      "incoming_gcm": false,
+      "body_kind": "source21",
+      "synthetic_rssi": -70,
+      "ap_info_error": 1,
+      "parser_reply_context": {
+        "port": 0,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 0,
+      "response_command": "0822",
+      "response_body_hex": "01",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": null,
+      "mqtt_topic_suffix": null
+    },
+    {
+      "case": "complete_route",
+      "transport": "ble",
+      "incoming_gcm": false,
+      "body_kind": "source22_timestamp",
+      "synthetic_rssi": -70,
+      "ap_info_error": 1,
+      "parser_reply_context": {
+        "port": 0,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 0,
+      "response_command": "0822",
+      "response_body_hex": "01",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": null,
+      "mqtt_topic_suffix": null
+    },
+    {
+      "case": "complete_route",
+      "transport": "ble",
+      "incoming_gcm": true,
+      "body_kind": "empty",
+      "synthetic_rssi": -70,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 0,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 0,
+      "response_command": "4822",
+      "response_body_hex": "00a104baffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": null,
+      "mqtt_topic_suffix": null
+    },
+    {
+      "case": "complete_route",
+      "transport": "ble",
+      "incoming_gcm": true,
+      "body_kind": "source21",
+      "synthetic_rssi": -70,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 0,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 0,
+      "response_command": "4822",
+      "response_body_hex": "00a104baffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": null,
+      "mqtt_topic_suffix": null
+    },
+    {
+      "case": "complete_route",
+      "transport": "ble",
+      "incoming_gcm": true,
+      "body_kind": "source22_timestamp",
+      "synthetic_rssi": -70,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 0,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 0,
+      "response_command": "4822",
+      "response_body_hex": "00a104baffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": null,
+      "mqtt_topic_suffix": null
+    },
+    {
+      "case": "complete_route",
+      "transport": "ble",
+      "incoming_gcm": true,
+      "body_kind": "empty",
+      "synthetic_rssi": -100,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 0,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 0,
+      "response_command": "4822",
+      "response_body_hex": "00a1049cffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": null,
+      "mqtt_topic_suffix": null
+    },
+    {
+      "case": "complete_route",
+      "transport": "ble",
+      "incoming_gcm": true,
+      "body_kind": "source21",
+      "synthetic_rssi": -100,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 0,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 0,
+      "response_command": "4822",
+      "response_body_hex": "00a1049cffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": null,
+      "mqtt_topic_suffix": null
+    },
+    {
+      "case": "complete_route",
+      "transport": "ble",
+      "incoming_gcm": true,
+      "body_kind": "source22_timestamp",
+      "synthetic_rssi": -100,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 0,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 0,
+      "response_command": "4822",
+      "response_body_hex": "00a1049cffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": null,
+      "mqtt_topic_suffix": null
+    },
+    {
+      "case": "complete_route",
+      "transport": "ble",
+      "incoming_gcm": true,
+      "body_kind": "empty",
+      "synthetic_rssi": 0,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 0,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 0,
+      "response_command": "4822",
+      "response_body_hex": "01",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": null,
+      "mqtt_topic_suffix": null
+    },
+    {
+      "case": "complete_route",
+      "transport": "ble",
+      "incoming_gcm": true,
+      "body_kind": "source21",
+      "synthetic_rssi": 0,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 0,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 0,
+      "response_command": "4822",
+      "response_body_hex": "01",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": null,
+      "mqtt_topic_suffix": null
+    },
+    {
+      "case": "complete_route",
+      "transport": "ble",
+      "incoming_gcm": true,
+      "body_kind": "source22_timestamp",
+      "synthetic_rssi": 0,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 0,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 0,
+      "response_command": "4822",
+      "response_body_hex": "01",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": null,
+      "mqtt_topic_suffix": null
+    },
+    {
+      "case": "complete_route",
+      "transport": "ble",
+      "incoming_gcm": true,
+      "body_kind": "empty",
+      "synthetic_rssi": -70,
+      "ap_info_error": 1,
+      "parser_reply_context": {
+        "port": 0,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 0,
+      "response_command": "4822",
+      "response_body_hex": "01",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": null,
+      "mqtt_topic_suffix": null
+    },
+    {
+      "case": "complete_route",
+      "transport": "ble",
+      "incoming_gcm": true,
+      "body_kind": "source21",
+      "synthetic_rssi": -70,
+      "ap_info_error": 1,
+      "parser_reply_context": {
+        "port": 0,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 0,
+      "response_command": "4822",
+      "response_body_hex": "01",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": null,
+      "mqtt_topic_suffix": null
+    },
+    {
+      "case": "complete_route",
+      "transport": "ble",
+      "incoming_gcm": true,
+      "body_kind": "source22_timestamp",
+      "synthetic_rssi": -70,
+      "ap_info_error": 1,
+      "parser_reply_context": {
+        "port": 0,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 0,
+      "response_command": "4822",
+      "response_body_hex": "01",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": null,
+      "mqtt_topic_suffix": null
+    },
+    {
+      "case": "complete_route",
+      "transport": "mqtt",
+      "incoming_gcm": false,
+      "body_kind": "empty",
+      "synthetic_rssi": -70,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 5,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 5,
+      "response_command": "0822",
+      "response_body_hex": "00a104baffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "complete_route",
+      "transport": "mqtt",
+      "incoming_gcm": false,
+      "body_kind": "source21",
+      "synthetic_rssi": -70,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 5,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 5,
+      "response_command": "0822",
+      "response_body_hex": "00a104baffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "complete_route",
+      "transport": "mqtt",
+      "incoming_gcm": false,
+      "body_kind": "source22_timestamp",
+      "synthetic_rssi": -70,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 5,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 5,
+      "response_command": "0822",
+      "response_body_hex": "00a104baffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "complete_route",
+      "transport": "mqtt",
+      "incoming_gcm": false,
+      "body_kind": "empty",
+      "synthetic_rssi": -100,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 5,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 5,
+      "response_command": "0822",
+      "response_body_hex": "00a1049cffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "complete_route",
+      "transport": "mqtt",
+      "incoming_gcm": false,
+      "body_kind": "source21",
+      "synthetic_rssi": -100,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 5,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 5,
+      "response_command": "0822",
+      "response_body_hex": "00a1049cffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "complete_route",
+      "transport": "mqtt",
+      "incoming_gcm": false,
+      "body_kind": "source22_timestamp",
+      "synthetic_rssi": -100,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 5,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 5,
+      "response_command": "0822",
+      "response_body_hex": "00a1049cffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "complete_route",
+      "transport": "mqtt",
+      "incoming_gcm": false,
+      "body_kind": "empty",
+      "synthetic_rssi": 0,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 5,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 5,
+      "response_command": "0822",
+      "response_body_hex": "01",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "complete_route",
+      "transport": "mqtt",
+      "incoming_gcm": false,
+      "body_kind": "source21",
+      "synthetic_rssi": 0,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 5,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 5,
+      "response_command": "0822",
+      "response_body_hex": "01",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "complete_route",
+      "transport": "mqtt",
+      "incoming_gcm": false,
+      "body_kind": "source22_timestamp",
+      "synthetic_rssi": 0,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 5,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 5,
+      "response_command": "0822",
+      "response_body_hex": "01",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "complete_route",
+      "transport": "mqtt",
+      "incoming_gcm": false,
+      "body_kind": "empty",
+      "synthetic_rssi": -70,
+      "ap_info_error": 1,
+      "parser_reply_context": {
+        "port": 5,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 5,
+      "response_command": "0822",
+      "response_body_hex": "01",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "complete_route",
+      "transport": "mqtt",
+      "incoming_gcm": false,
+      "body_kind": "source21",
+      "synthetic_rssi": -70,
+      "ap_info_error": 1,
+      "parser_reply_context": {
+        "port": 5,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 5,
+      "response_command": "0822",
+      "response_body_hex": "01",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "complete_route",
+      "transport": "mqtt",
+      "incoming_gcm": false,
+      "body_kind": "source22_timestamp",
+      "synthetic_rssi": -70,
+      "ap_info_error": 1,
+      "parser_reply_context": {
+        "port": 5,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 5,
+      "response_command": "0822",
+      "response_body_hex": "01",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "complete_route",
+      "transport": "mqtt",
+      "incoming_gcm": true,
+      "body_kind": "empty",
+      "synthetic_rssi": -70,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 5,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 5,
+      "response_command": "4822",
+      "response_body_hex": "00a104baffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "complete_route",
+      "transport": "mqtt",
+      "incoming_gcm": true,
+      "body_kind": "source21",
+      "synthetic_rssi": -70,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 5,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 5,
+      "response_command": "4822",
+      "response_body_hex": "00a104baffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "complete_route",
+      "transport": "mqtt",
+      "incoming_gcm": true,
+      "body_kind": "source22_timestamp",
+      "synthetic_rssi": -70,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 5,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 5,
+      "response_command": "4822",
+      "response_body_hex": "00a104baffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "complete_route",
+      "transport": "mqtt",
+      "incoming_gcm": true,
+      "body_kind": "empty",
+      "synthetic_rssi": -100,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 5,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 5,
+      "response_command": "4822",
+      "response_body_hex": "00a1049cffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "complete_route",
+      "transport": "mqtt",
+      "incoming_gcm": true,
+      "body_kind": "source21",
+      "synthetic_rssi": -100,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 5,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 5,
+      "response_command": "4822",
+      "response_body_hex": "00a1049cffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "complete_route",
+      "transport": "mqtt",
+      "incoming_gcm": true,
+      "body_kind": "source22_timestamp",
+      "synthetic_rssi": -100,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 5,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 5,
+      "response_command": "4822",
+      "response_body_hex": "00a1049cffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "complete_route",
+      "transport": "mqtt",
+      "incoming_gcm": true,
+      "body_kind": "empty",
+      "synthetic_rssi": 0,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 5,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 5,
+      "response_command": "4822",
+      "response_body_hex": "01",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "complete_route",
+      "transport": "mqtt",
+      "incoming_gcm": true,
+      "body_kind": "source21",
+      "synthetic_rssi": 0,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 5,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 5,
+      "response_command": "4822",
+      "response_body_hex": "01",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "complete_route",
+      "transport": "mqtt",
+      "incoming_gcm": true,
+      "body_kind": "source22_timestamp",
+      "synthetic_rssi": 0,
+      "ap_info_error": 0,
+      "parser_reply_context": {
+        "port": 5,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 5,
+      "response_command": "4822",
+      "response_body_hex": "01",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "complete_route",
+      "transport": "mqtt",
+      "incoming_gcm": true,
+      "body_kind": "empty",
+      "synthetic_rssi": -70,
+      "ap_info_error": 1,
+      "parser_reply_context": {
+        "port": 5,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 5,
+      "response_command": "4822",
+      "response_body_hex": "01",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "complete_route",
+      "transport": "mqtt",
+      "incoming_gcm": true,
+      "body_kind": "source21",
+      "synthetic_rssi": -70,
+      "ap_info_error": 1,
+      "parser_reply_context": {
+        "port": 5,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 5,
+      "response_command": "4822",
+      "response_body_hex": "01",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "complete_route",
+      "transport": "mqtt",
+      "incoming_gcm": true,
+      "body_kind": "source22_timestamp",
+      "synthetic_rssi": -70,
+      "ap_info_error": 1,
+      "parser_reply_context": {
+        "port": 5,
+        "route_kind": 0,
+        "route_detail": 0
+      },
+      "reply_port": 5,
+      "response_command": "4822",
+      "response_body_hex": "01",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "native_admission",
+      "mutation": "missing_account",
+      "rssi_observations": 0,
+      "reply_count": 0,
+      "substituted_identity_refresh_calls": []
+    },
+    {
+      "case": "native_admission",
+      "mutation": "missing_serial",
+      "rssi_observations": 0,
+      "reply_count": 0,
+      "substituted_identity_refresh_calls": []
+    },
+    {
+      "case": "native_admission",
+      "mutation": "wrong_account",
+      "rssi_observations": 0,
+      "reply_count": 0,
+      "substituted_identity_refresh_calls": [
+        "420115e8",
+        "4201263c",
+        "420122f4"
+      ]
+    },
+    {
+      "case": "native_admission",
+      "mutation": "wrong_serial",
+      "rssi_observations": 0,
+      "reply_count": 0,
+      "substituted_identity_refresh_calls": []
+    },
+    {
+      "case": "native_admission",
+      "mutation": "account_prefix",
+      "rssi_observations": 0,
+      "reply_count": 0,
+      "substituted_identity_refresh_calls": [
+        "420115e8",
+        "4201263c",
+        "420122f4"
+      ]
+    },
+    {
+      "case": "native_admission",
+      "mutation": "serial_prefix",
+      "rssi_observations": 0,
+      "reply_count": 0,
+      "substituted_identity_refresh_calls": []
+    },
+    {
+      "case": "native_admission",
+      "mutation": "missing_sess_id",
+      "rssi_observations": 0,
+      "reply_count": 0,
+      "substituted_identity_refresh_calls": []
+    },
+    {
+      "case": "native_admission",
+      "mutation": "missing_client_id",
+      "rssi_observations": 0,
+      "reply_count": 0,
+      "substituted_identity_refresh_calls": []
+    },
+    {
+      "case": "native_admission",
+      "mutation": "missing_msg_seq",
+      "rssi_observations": 0,
+      "reply_count": 0,
+      "substituted_identity_refresh_calls": []
+    },
+    {
+      "case": "native_admission",
+      "mutation": "missing_cmd",
+      "rssi_observations": 0,
+      "reply_count": 0,
+      "substituted_identity_refresh_calls": []
+    },
+    {
+      "case": "native_admission",
+      "mutation": "missing_cmd_status",
+      "rssi_observations": 0,
+      "reply_count": 0,
+      "substituted_identity_refresh_calls": []
+    },
+    {
+      "case": "native_admission",
+      "mutation": "missing_timestamp",
+      "rssi_observations": 0,
+      "reply_count": 0,
+      "substituted_identity_refresh_calls": []
+    },
+    {
+      "case": "native_admission",
+      "mutation": "missing_version",
+      "rssi_observations": 0,
+      "reply_count": 0,
+      "substituted_identity_refresh_calls": []
+    },
+    {
+      "case": "native_admission",
+      "mutation": "cmd_status_zero",
+      "rssi_observations": 0,
+      "reply_count": 0,
+      "substituted_identity_refresh_calls": []
+    },
+    {
+      "case": "native_admission",
+      "mutation": "cmd_status_three",
+      "rssi_observations": 0,
+      "reply_count": 0,
+      "substituted_identity_refresh_calls": []
+    },
+    {
+      "case": "native_metadata",
+      "mutation": "no_sign_code",
+      "last_request_timestamp": 17,
+      "reply_port": 5,
+      "response_command": "0822",
+      "response_body_hex": "00a104baffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "native_metadata",
+      "mutation": "changed_sign_code",
+      "last_request_timestamp": 17,
+      "reply_port": 5,
+      "response_command": "0822",
+      "response_body_hex": "00a104baffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "native_metadata",
+      "mutation": "different_client_id",
+      "last_request_timestamp": 17,
+      "reply_port": 5,
+      "response_command": "0822",
+      "response_body_hex": "00a104baffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "native_metadata",
+      "mutation": "irrelevant_head_identity",
+      "last_request_timestamp": 17,
+      "reply_port": 5,
+      "response_command": "0822",
+      "response_body_hex": "00a104baffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "native_metadata",
+      "mutation": "older_timestamp",
+      "last_request_timestamp": 17,
+      "reply_port": 5,
+      "response_command": "0822",
+      "response_body_hex": "00a104baffffff",
+      "reply_function": 16,
+      "no_controller_forward": true,
+      "mqtt_reply_command": 16,
+      "mqtt_topic_suffix": "param_info"
+    },
+    {
+      "case": "repeated_observations",
+      "transport": "ble",
+      "synthetic_rssi_sequence": [
+        -80,
+        -70,
+        -50
+      ],
+      "ap_info_calls": 3,
+      "reply_count": 3,
+      "repeat_does_not_return_cached_rssi": true
+    },
+    {
+      "case": "repeated_observations",
+      "transport": "mqtt",
+      "synthetic_rssi_sequence": [
+        -80,
+        -70,
+        -50
+      ],
+      "ap_info_calls": 3,
+      "reply_count": 3,
+      "repeat_does_not_return_cached_rssi": true
+    },
+    {
+      "case": "mqtt_uninitialized",
+      "rssi_observations": 0,
+      "reply_count": 0
+    }
+  ],
+  "hardware_access": false,
+  "registrations": {
+    "01": [
+      "4203c90a"
+    ],
+    "0c": [
+      "42043aec"
+    ],
+    "0f": [
+      "42045792"
+    ],
+    "10": [
+      "4203c9e0"
+    ],
+    "11": [
+      "42045792"
+    ]
+  },
+  "transport_callbacks": {
+    "0": "4203fcf0",
+    "5": "4203c98a"
+  },
+  "native_raw_callback": "42043a18",
+  "limitations": "Offline C1000 Gen 2 radio RSSI BLE/native MQTT route replay.\n\nActual RISC-V receive, parser, dispatch, identity/header checks, RSSI wrapper,\nresponse framing, transport registration/selection and MQTT JSON/topic builders\nexecute. OS queues/allocation, cJSON/libc/base64, GCM primitives, established\nsession keys, AP-info, identity-refresh providers, time, BLE TX and final MQTT\npublish are substitutes. No TLS, pairing, Wi-Fi, controller, device or network."
+}

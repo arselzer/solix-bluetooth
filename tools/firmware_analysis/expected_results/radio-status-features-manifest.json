@@ -1,0 +1,9 @@
+{
+  "cases_passed": 106,
+  "firmware_sha256": "e291ec115f013953e825cb51b9e457a8731889547ab55b3058640e599e8cfec8",
+  "fixture_source": "Public firmware and synthetic state/time observations only",
+  "results_sha256": "4d7364d2a7963ce55ad59ce194f753e54b6619f1aabc850e123f4f9db9f30077",
+  "script": "emulate_radio_status_features.py",
+  "script_sha256": "5156662a2ab3cc90631c1e3fa294039c6b717024e26f3e31b67d00f3b0c73714",
+  "unicorn_version": "2.1.4"
+}

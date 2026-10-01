@@ -92,6 +92,12 @@ command before generic parsing:
 The replay begins at this raw-data callback, after native JSON/base64
 extraction. It does not emulate the MQTT connection or JSON envelope.
 
+The later [RSSI routing audit](radio-rssi-routing.md) executes a different,
+ordinary function-`10` radio getter, including its native JSON admission and
+reply path. Its low command `0022` fits this generic-parser branch. The
+[radio status candidates](radio-status-features.md) `004a`/`004b` exceed the
+threshold and cannot inherit that native raw route by assumption.
+
 ## Reply, body and checksum behavior
 
 Wrapper `0x42043aa8` supplies the original body pointer and length to
