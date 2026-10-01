@@ -68,3 +68,7 @@ Before another probe, establish original-radio routing and encryption handling,
 validate the installed firmware's tunnel, and bound malformed lengths before
 they reach a device. The GPIO's physical meaning is also still unknown. The
 current result is a documented transport limit, not a verified GPIO sensor.
+
+The subsequent [BLE framing guard](ble-encryption-framing.md) rejects this
+inconsistent encrypted header in the Python library and Web Bluetooth app.
+It does not establish diagnostic support or make a corrected F0 request safe.

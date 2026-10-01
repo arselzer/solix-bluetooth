@@ -5,7 +5,7 @@ import {
   PATTERN_ENCRYPTED, PATTERN_NEGOTIATION, getParamMap,
 } from './constants';
 import { generateECDHKeyPair, deriveSharedSecret, decryptAesCbc, encryptAesCbc, type SessionKeys } from './crypto';
-import { buildPacket, parsePacket, isNegotiationPacket, isEncryptedPacket } from './packet';
+import { buildPacket, parsePacket, isNegotiationPacket, isEncryptedPacket, requireEncryptedCommand } from './packet';
 import { parseTelemetryDetailed, parseC1000Gen2Telemetry } from './telemetry';
 import { PrimeSession } from './prime';
 import { toHex, fromHex, concatBytes, xorChecksum, writeUint32LE } from './utils';
@@ -650,6 +650,7 @@ export class SolixConnection {
       return;
     }
 
+    requireEncryptedCommand(commandCode);
     const plaintext = this.isC1000Gen2
       ? concatBytes(payload, tlv(0xfe, concatBytes(fromHex('03'), writeUint32LE(Math.floor(Date.now() / 1000)))))
       : payload;

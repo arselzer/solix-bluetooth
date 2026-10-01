@@ -1,0 +1,2052 @@
+{
+  "cases": {
+    "timer_and_feedback": [
+      {
+        "running_feedback_held_constant": false,
+        "synthetic_ticks": 0,
+        "actual_instructions": {
+          "configuration_queued_latch": 1,
+          "stop_needed_latch": 1,
+          "sample_counter": 0,
+          "timer_state": 2,
+          "timer_started_tick": 0,
+          "module_running_bit4": 0,
+          "queued": [],
+          "saved_settings_and_output_flags_preserved": true
+        }
+      },
+      {
+        "running_feedback_held_constant": false,
+        "synthetic_ticks": 999,
+        "actual_instructions": {
+          "configuration_queued_latch": 1,
+          "stop_needed_latch": 1,
+          "sample_counter": 0,
+          "timer_state": 2,
+          "timer_started_tick": 0,
+          "module_running_bit4": 0,
+          "queued": [],
+          "saved_settings_and_output_flags_preserved": true
+        }
+      },
+      {
+        "running_feedback_held_constant": false,
+        "synthetic_ticks": 1000,
+        "actual_instructions": {
+          "configuration_queued_latch": 1,
+          "stop_needed_latch": 1,
+          "sample_counter": 1,
+          "timer_state": 2,
+          "timer_started_tick": 1000,
+          "module_running_bit4": 0,
+          "queued": [
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            }
+          ],
+          "saved_settings_and_output_flags_preserved": true
+        }
+      },
+      {
+        "running_feedback_held_constant": false,
+        "synthetic_ticks": 10000,
+        "actual_instructions": {
+          "configuration_queued_latch": 1,
+          "stop_needed_latch": 1,
+          "sample_counter": 10,
+          "timer_state": 2,
+          "timer_started_tick": 10000,
+          "module_running_bit4": 0,
+          "queued": [
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            }
+          ],
+          "saved_settings_and_output_flags_preserved": true
+        }
+      },
+      {
+        "running_feedback_held_constant": false,
+        "synthetic_ticks": 10999,
+        "actual_instructions": {
+          "configuration_queued_latch": 1,
+          "stop_needed_latch": 1,
+          "sample_counter": 10,
+          "timer_state": 2,
+          "timer_started_tick": 10000,
+          "module_running_bit4": 0,
+          "queued": [
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            }
+          ],
+          "saved_settings_and_output_flags_preserved": true
+        }
+      },
+      {
+        "running_feedback_held_constant": false,
+        "synthetic_ticks": 11000,
+        "actual_instructions": {
+          "configuration_queued_latch": 0,
+          "stop_needed_latch": 1,
+          "sample_counter": 0,
+          "timer_state": 2,
+          "timer_started_tick": 11000,
+          "module_running_bit4": 0,
+          "queued": [
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            }
+          ],
+          "saved_settings_and_output_flags_preserved": true
+        }
+      },
+      {
+        "running_feedback_held_constant": false,
+        "synthetic_ticks": 11999,
+        "actual_instructions": {
+          "configuration_queued_latch": 1,
+          "stop_needed_latch": 1,
+          "sample_counter": 0,
+          "timer_state": 2,
+          "timer_started_tick": 11000,
+          "module_running_bit4": 0,
+          "queued": [
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 1,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000ec0e78054402a00ff00a",
+              "callback": "0801649d",
+              "accepted_by_substitute": true
+            }
+          ],
+          "saved_settings_and_output_flags_preserved": true
+        }
+      },
+      {
+        "running_feedback_held_constant": false,
+        "synthetic_ticks": 12000,
+        "actual_instructions": {
+          "configuration_queued_latch": 1,
+          "stop_needed_latch": 1,
+          "sample_counter": 1,
+          "timer_state": 2,
+          "timer_started_tick": 12000,
+          "module_running_bit4": 0,
+          "queued": [
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 1,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000ec0e78054402a00ff00a",
+              "callback": "0801649d",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            }
+          ],
+          "saved_settings_and_output_flags_preserved": true
+        }
+      },
+      {
+        "running_feedback_held_constant": true,
+        "synthetic_ticks": 0,
+        "actual_instructions": {
+          "configuration_queued_latch": 1,
+          "stop_needed_latch": 1,
+          "sample_counter": 0,
+          "timer_state": 2,
+          "timer_started_tick": 0,
+          "module_running_bit4": 1,
+          "queued": [],
+          "saved_settings_and_output_flags_preserved": true
+        }
+      },
+      {
+        "running_feedback_held_constant": true,
+        "synthetic_ticks": 999,
+        "actual_instructions": {
+          "configuration_queued_latch": 1,
+          "stop_needed_latch": 1,
+          "sample_counter": 0,
+          "timer_state": 2,
+          "timer_started_tick": 0,
+          "module_running_bit4": 1,
+          "queued": [],
+          "saved_settings_and_output_flags_preserved": true
+        }
+      },
+      {
+        "running_feedback_held_constant": true,
+        "synthetic_ticks": 1000,
+        "actual_instructions": {
+          "configuration_queued_latch": 1,
+          "stop_needed_latch": 1,
+          "sample_counter": 1,
+          "timer_state": 2,
+          "timer_started_tick": 1000,
+          "module_running_bit4": 1,
+          "queued": [
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            }
+          ],
+          "saved_settings_and_output_flags_preserved": true
+        }
+      },
+      {
+        "running_feedback_held_constant": true,
+        "synthetic_ticks": 10000,
+        "actual_instructions": {
+          "configuration_queued_latch": 1,
+          "stop_needed_latch": 1,
+          "sample_counter": 10,
+          "timer_state": 2,
+          "timer_started_tick": 10000,
+          "module_running_bit4": 1,
+          "queued": [
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            }
+          ],
+          "saved_settings_and_output_flags_preserved": true
+        }
+      },
+      {
+        "running_feedback_held_constant": true,
+        "synthetic_ticks": 10999,
+        "actual_instructions": {
+          "configuration_queued_latch": 1,
+          "stop_needed_latch": 1,
+          "sample_counter": 10,
+          "timer_state": 2,
+          "timer_started_tick": 10000,
+          "module_running_bit4": 1,
+          "queued": [
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            }
+          ],
+          "saved_settings_and_output_flags_preserved": true
+        }
+      },
+      {
+        "running_feedback_held_constant": true,
+        "synthetic_ticks": 11000,
+        "actual_instructions": {
+          "configuration_queued_latch": 1,
+          "stop_needed_latch": 1,
+          "sample_counter": 30,
+          "timer_state": 2,
+          "timer_started_tick": 11000,
+          "module_running_bit4": 1,
+          "queued": [
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            }
+          ],
+          "saved_settings_and_output_flags_preserved": true
+        }
+      },
+      {
+        "running_feedback_held_constant": true,
+        "synthetic_ticks": 11999,
+        "actual_instructions": {
+          "configuration_queued_latch": 1,
+          "stop_needed_latch": 1,
+          "sample_counter": 30,
+          "timer_state": 2,
+          "timer_started_tick": 11000,
+          "module_running_bit4": 1,
+          "queued": [
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            }
+          ],
+          "saved_settings_and_output_flags_preserved": true
+        }
+      },
+      {
+        "running_feedback_held_constant": true,
+        "synthetic_ticks": 12000,
+        "actual_instructions": {
+          "configuration_queued_latch": 1,
+          "stop_needed_latch": 1,
+          "sample_counter": 30,
+          "timer_state": 2,
+          "timer_started_tick": 12000,
+          "module_running_bit4": 1,
+          "queued": [
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            }
+          ],
+          "saved_settings_and_output_flags_preserved": true
+        }
+      }
+    ],
+    "queue_and_completion": [
+      {
+        "failure": "allocation",
+        "first": {
+          "configuration_queued_latch": 0,
+          "stop_needed_latch": 1,
+          "sample_counter": 0,
+          "timer_state": 2,
+          "timer_started_tick": 0,
+          "module_running_bit4": 0,
+          "queued": [],
+          "saved_settings_and_output_flags_preserved": true
+        },
+        "after_recovery_path": {
+          "configuration_queued_latch": 1,
+          "stop_needed_latch": 1,
+          "sample_counter": 0,
+          "timer_state": 2,
+          "timer_started_tick": 0,
+          "module_running_bit4": 0,
+          "queued": [
+            {
+              "priority": 1,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000ec0e78054402a00ff00a",
+              "callback": "0801649d",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 1,
+              "selector": 1,
+              "register": 21,
+              "payload_hex": "5700",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            }
+          ],
+          "saved_settings_and_output_flags_preserved": true
+        },
+        "freed_allocations": 0
+      },
+      {
+        "failure": "queue",
+        "first": {
+          "configuration_queued_latch": 0,
+          "stop_needed_latch": 1,
+          "sample_counter": 0,
+          "timer_state": 2,
+          "timer_started_tick": 0,
+          "module_running_bit4": 0,
+          "queued": [
+            {
+              "priority": 1,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000ec0e78054402a00ff00a",
+              "callback": "0801649d",
+              "accepted_by_substitute": false
+            }
+          ],
+          "saved_settings_and_output_flags_preserved": true
+        },
+        "after_recovery_path": {
+          "configuration_queued_latch": 1,
+          "stop_needed_latch": 1,
+          "sample_counter": 0,
+          "timer_state": 2,
+          "timer_started_tick": 0,
+          "module_running_bit4": 0,
+          "queued": [
+            {
+              "priority": 1,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000ec0e78054402a00ff00a",
+              "callback": "0801649d",
+              "accepted_by_substitute": false
+            },
+            {
+              "priority": 1,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000ec0e78054402a00ff00a",
+              "callback": "0801649d",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 1,
+              "selector": 1,
+              "register": 21,
+              "payload_hex": "5700",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            }
+          ],
+          "saved_settings_and_output_flags_preserved": true
+        },
+        "freed_allocations": 1
+      },
+      {
+        "failure": "completion",
+        "first": {
+          "configuration_queued_latch": 1,
+          "stop_needed_latch": 1,
+          "sample_counter": 0,
+          "timer_state": 2,
+          "timer_started_tick": 0,
+          "module_running_bit4": 0,
+          "queued": [
+            {
+              "priority": 1,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000ec0e78054402a00ff00a",
+              "callback": "0801649d",
+              "accepted_by_substitute": true
+            }
+          ],
+          "saved_settings_and_output_flags_preserved": true
+        },
+        "after_recovery_path": {
+          "configuration_queued_latch": 1,
+          "stop_needed_latch": 1,
+          "sample_counter": 0,
+          "timer_state": 2,
+          "timer_started_tick": 11000,
+          "module_running_bit4": 0,
+          "queued": [
+            {
+              "priority": 1,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000ec0e78054402a00ff00a",
+              "callback": "0801649d",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 1,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000ec0e78054402a00ff00a",
+              "callback": "0801649d",
+              "accepted_by_substitute": true
+            }
+          ],
+          "saved_settings_and_output_flags_preserved": true
+        },
+        "freed_allocations": 0
+      },
+      {
+        "failure": "lost_completion",
+        "first": {
+          "configuration_queued_latch": 1,
+          "stop_needed_latch": 1,
+          "sample_counter": 0,
+          "timer_state": 2,
+          "timer_started_tick": 0,
+          "module_running_bit4": 0,
+          "queued": [
+            {
+              "priority": 1,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000ec0e78054402a00ff00a",
+              "callback": "0801649d",
+              "accepted_by_substitute": true
+            }
+          ],
+          "saved_settings_and_output_flags_preserved": true
+        },
+        "after_recovery_path": {
+          "configuration_queued_latch": 1,
+          "stop_needed_latch": 1,
+          "sample_counter": 0,
+          "timer_state": 2,
+          "timer_started_tick": 11000,
+          "module_running_bit4": 0,
+          "queued": [
+            {
+              "priority": 1,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000ec0e78054402a00ff00a",
+              "callback": "0801649d",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 1,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000ec0e78054402a00ff00a",
+              "callback": "0801649d",
+              "accepted_by_substitute": true
+            }
+          ],
+          "saved_settings_and_output_flags_preserved": true
+        },
+        "freed_allocations": 0
+      },
+      {
+        "failure": "start_queue",
+        "first": {
+          "configuration_queued_latch": 1,
+          "stop_needed_latch": 1,
+          "sample_counter": 0,
+          "timer_state": 2,
+          "timer_started_tick": 0,
+          "module_running_bit4": 0,
+          "queued": [
+            {
+              "priority": 1,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000ec0e78054402a00ff00a",
+              "callback": "0801649d",
+              "accepted_by_substitute": true
+            }
+          ],
+          "saved_settings_and_output_flags_preserved": true
+        },
+        "after_recovery_path": {
+          "configuration_queued_latch": 1,
+          "stop_needed_latch": 1,
+          "sample_counter": 0,
+          "timer_state": 2,
+          "timer_started_tick": 11000,
+          "module_running_bit4": 0,
+          "queued": [
+            {
+              "priority": 1,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000ec0e78054402a00ff00a",
+              "callback": "0801649d",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 1,
+              "selector": 1,
+              "register": 21,
+              "payload_hex": "5700",
+              "callback": "00000000",
+              "accepted_by_substitute": false
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 0,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000",
+              "callback": "00000000",
+              "accepted_by_substitute": true
+            },
+            {
+              "priority": 1,
+              "selector": 1,
+              "register": 22,
+              "payload_hex": "0000ec0e78054402a00ff00a",
+              "callback": "0801649d",
+              "accepted_by_substitute": true
+            }
+          ],
+          "saved_settings_and_output_flags_preserved": true
+        },
+        "freed_allocations": 1
+      }
+    ],
+    "status_failure_callback": [
+      {
+        "successful_initial_completion": false,
+        "subsequent_failed_completions": 0,
+        "entire_cache_cleared": false,
+        "comm_failure_flag": 0,
+        "completion_counter": 0,
+        "has_received_status": 0,
+        "error_codes_requested": [],
+        "refresh_requests": [],
+        "saved_settings_and_output_flags_preserved": true
+      },
+      {
+        "successful_initial_completion": false,
+        "subsequent_failed_completions": 1,
+        "entire_cache_cleared": false,
+        "comm_failure_flag": 0,
+        "completion_counter": 1,
+        "has_received_status": 0,
+        "error_codes_requested": [
+          25
+        ],
+        "refresh_requests": [],
+        "saved_settings_and_output_flags_preserved": true
+      },
+      {
+        "successful_initial_completion": false,
+        "subsequent_failed_completions": 5,
+        "entire_cache_cleared": false,
+        "comm_failure_flag": 0,
+        "completion_counter": 1,
+        "has_received_status": 0,
+        "error_codes_requested": [
+          25,
+          25,
+          25,
+          25,
+          25
+        ],
+        "refresh_requests": [],
+        "saved_settings_and_output_flags_preserved": true
+      },
+      {
+        "successful_initial_completion": false,
+        "subsequent_failed_completions": 6,
+        "entire_cache_cleared": false,
+        "comm_failure_flag": 0,
+        "completion_counter": 1,
+        "has_received_status": 0,
+        "error_codes_requested": [
+          25,
+          25,
+          25,
+          25,
+          25,
+          25
+        ],
+        "refresh_requests": [],
+        "saved_settings_and_output_flags_preserved": true
+      },
+      {
+        "successful_initial_completion": false,
+        "subsequent_failed_completions": 7,
+        "entire_cache_cleared": false,
+        "comm_failure_flag": 0,
+        "completion_counter": 1,
+        "has_received_status": 0,
+        "error_codes_requested": [
+          25,
+          25,
+          25,
+          25,
+          25,
+          25,
+          25
+        ],
+        "refresh_requests": [],
+        "saved_settings_and_output_flags_preserved": true
+      },
+      {
+        "successful_initial_completion": false,
+        "subsequent_failed_completions": 12,
+        "entire_cache_cleared": false,
+        "comm_failure_flag": 0,
+        "completion_counter": 1,
+        "has_received_status": 0,
+        "error_codes_requested": [
+          25,
+          25,
+          25,
+          25,
+          25,
+          25,
+          25,
+          25,
+          25,
+          25,
+          25,
+          25
+        ],
+        "refresh_requests": [],
+        "saved_settings_and_output_flags_preserved": true
+      },
+      {
+        "successful_initial_completion": true,
+        "subsequent_failed_completions": 0,
+        "entire_cache_cleared": false,
+        "comm_failure_flag": 0,
+        "completion_counter": 1,
+        "has_received_status": 1,
+        "error_codes_requested": [],
+        "refresh_requests": [],
+        "saved_settings_and_output_flags_preserved": true
+      },
+      {
+        "successful_initial_completion": true,
+        "subsequent_failed_completions": 1,
+        "entire_cache_cleared": false,
+        "comm_failure_flag": 0,
+        "completion_counter": 2,
+        "has_received_status": 1,
+        "error_codes_requested": [],
+        "refresh_requests": [],
+        "saved_settings_and_output_flags_preserved": true
+      },
+      {
+        "successful_initial_completion": true,
+        "subsequent_failed_completions": 5,
+        "entire_cache_cleared": false,
+        "comm_failure_flag": 0,
+        "completion_counter": 6,
+        "has_received_status": 1,
+        "error_codes_requested": [],
+        "refresh_requests": [],
+        "saved_settings_and_output_flags_preserved": true
+      },
+      {
+        "successful_initial_completion": true,
+        "subsequent_failed_completions": 6,
+        "entire_cache_cleared": true,
+        "comm_failure_flag": 1,
+        "completion_counter": 0,
+        "has_received_status": 0,
+        "error_codes_requested": [
+          25
+        ],
+        "refresh_requests": [
+          10
+        ],
+        "saved_settings_and_output_flags_preserved": true
+      },
+      {
+        "successful_initial_completion": true,
+        "subsequent_failed_completions": 7,
+        "entire_cache_cleared": true,
+        "comm_failure_flag": 1,
+        "completion_counter": 1,
+        "has_received_status": 0,
+        "error_codes_requested": [
+          25,
+          25
+        ],
+        "refresh_requests": [
+          10
+        ],
+        "saved_settings_and_output_flags_preserved": true
+      },
+      {
+        "successful_initial_completion": true,
+        "subsequent_failed_completions": 12,
+        "entire_cache_cleared": true,
+        "comm_failure_flag": 1,
+        "completion_counter": 1,
+        "has_received_status": 0,
+        "error_codes_requested": [
+          25,
+          25,
+          25,
+          25,
+          25,
+          25,
+          25
+        ],
+        "refresh_requests": [
+          10
+        ],
+        "saved_settings_and_output_flags_preserved": true
+      }
+    ],
+    "parameter_callback": [
+      {
+        "initial_counter": 0,
+        "accepted": false,
+        "counter_after": 0,
+        "update_dirty_after": 1,
+        "saved_settings_and_output_flags_preserved": true
+      },
+      {
+        "initial_counter": 0,
+        "accepted": true,
+        "counter_after": 0,
+        "update_dirty_after": 0,
+        "saved_settings_and_output_flags_preserved": true
+      },
+      {
+        "initial_counter": 1,
+        "accepted": false,
+        "counter_after": 0,
+        "update_dirty_after": 1,
+        "saved_settings_and_output_flags_preserved": true
+      },
+      {
+        "initial_counter": 1,
+        "accepted": true,
+        "counter_after": 0,
+        "update_dirty_after": 0,
+        "saved_settings_and_output_flags_preserved": true
+      },
+      {
+        "initial_counter": 8,
+        "accepted": false,
+        "counter_after": 0,
+        "update_dirty_after": 1,
+        "saved_settings_and_output_flags_preserved": true
+      },
+      {
+        "initial_counter": 8,
+        "accepted": true,
+        "counter_after": 0,
+        "update_dirty_after": 0,
+        "saved_settings_and_output_flags_preserved": true
+      },
+      {
+        "initial_counter": 9,
+        "accepted": false,
+        "counter_after": 10,
+        "update_dirty_after": 0,
+        "saved_settings_and_output_flags_preserved": true
+      },
+      {
+        "initial_counter": 9,
+        "accepted": true,
+        "counter_after": 0,
+        "update_dirty_after": 0,
+        "saved_settings_and_output_flags_preserved": true
+      },
+      {
+        "initial_counter": 10,
+        "accepted": false,
+        "counter_after": 11,
+        "update_dirty_after": 0,
+        "saved_settings_and_output_flags_preserved": true
+      },
+      {
+        "initial_counter": 10,
+        "accepted": true,
+        "counter_after": 0,
+        "update_dirty_after": 0,
+        "saved_settings_and_output_flags_preserved": true
+      },
+      {
+        "initial_counter": 254,
+        "accepted": false,
+        "counter_after": 255,
+        "update_dirty_after": 0,
+        "saved_settings_and_output_flags_preserved": true
+      },
+      {
+        "initial_counter": 254,
+        "accepted": true,
+        "counter_after": 0,
+        "update_dirty_after": 0,
+        "saved_settings_and_output_flags_preserved": true
+      },
+      {
+        "initial_counter": 255,
+        "accepted": false,
+        "counter_after": 0,
+        "update_dirty_after": 1,
+        "saved_settings_and_output_flags_preserved": true
+      },
+      {
+        "initial_counter": 255,
+        "accepted": true,
+        "counter_after": 0,
+        "update_dirty_after": 0,
+        "saved_settings_and_output_flags_preserved": true
+      }
+    ]
+  },
+  "static_queue_audit": {
+    "direct_queue_calls": [
+      {
+        "address": "08016630",
+        "reviewed_descriptor_register": "0100"
+      },
+      {
+        "address": "0801666e",
+        "reviewed_descriptor_register": "0126"
+      },
+      {
+        "address": "0802838c",
+        "reviewed_descriptor_register": "0102"
+      },
+      {
+        "address": "080292b4",
+        "reviewed_descriptor_register": "0004"
+      },
+      {
+        "address": "08029318",
+        "reviewed_descriptor_register": "0016"
+      },
+      {
+        "address": "0802943c",
+        "reviewed_descriptor_register": "f000"
+      },
+      {
+        "address": "0802947c",
+        "reviewed_descriptor_register": "(argument << 12) & ffff"
+      },
+      {
+        "address": "080294c0",
+        "reviewed_descriptor_register": "f00d"
+      },
+      {
+        "address": "0802952e",
+        "reviewed_descriptor_register": "f012"
+      },
+      {
+        "address": "08029588",
+        "reviewed_descriptor_register": "f015"
+      },
+      {
+        "address": "080295f4",
+        "reviewed_descriptor_register": "f000"
+      },
+      {
+        "address": "0802a574",
+        "reviewed_descriptor_register": "0000"
+      },
+      {
+        "address": "0802a5f2",
+        "reviewed_descriptor_register": "0000"
+      },
+      {
+        "address": "0802a648",
+        "reviewed_descriptor_register": "0015"
+      },
+      {
+        "address": "0802a6d6",
+        "reviewed_descriptor_register": "0004"
+      },
+      {
+        "address": "0802a73a",
+        "reviewed_descriptor_register": "0016"
+      },
+      {
+        "address": "0802a7e8",
+        "reviewed_descriptor_register": "0000"
+      },
+      {
+        "address": "0802a840",
+        "reviewed_descriptor_register": "0022"
+      },
+      {
+        "address": "0802a8d0",
+        "reviewed_descriptor_register": "0001"
+      },
+      {
+        "address": "0802a928",
+        "reviewed_descriptor_register": "0023"
+      },
+      {
+        "address": "0802a994",
+        "reviewed_descriptor_register": "000d"
+      },
+      {
+        "address": "0802c820",
+        "reviewed_descriptor_register": "f006"
+      },
+      {
+        "address": "0802c87c",
+        "reviewed_descriptor_register": "f007"
+      }
+    ],
+    "literal_thumb_pointer_occurrences": 0,
+    "only_direct_0015_builder": "0802a590",
+    "dsp_event_writer_low_word_occurrences": 62,
+    "all_low_word_occurrences_are_direct_long_call_operands": true,
+    "dsp_indirect_limit": "No other literal98dc materialization found. Computed addresses, nonliteral dispatch, aliases and direct event-bank stores are not excluded; bank0bit6 origin remains unproven.",
+    "scope": "Aligned direct BL and exact pointer-literal search; not a complete call graph, alias analysis, diagnostic-table or radio forwarding proof."
+  }
+}

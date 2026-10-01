@@ -154,6 +154,12 @@ replay. If ciphertext were forwarded without decryption, arbitrary bytes at
 offsets 4–5 would be interpreted as the tunnel length. That is a concrete
 failure hypothesis, not proof of the cause of any physical incident.
 
+The subsequent [Gen 2 radio replay](radio-factory-routing.md) executes this
+classification and its function-`0c` routing in 96 synthetic cases. It also
+establishes that native MQTT port 5 is rejected by that image's factory handler.
+Neither result proves original A1761 radio equivalence or installed-main-1.7.1
+diagnostic behavior.
+
 ## Remaining uncertainty
 
 - The bit's electrical meaning is still unknown. Do not label it “mains

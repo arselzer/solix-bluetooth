@@ -2,6 +2,13 @@ import { HEADER, PATTERN_NEGOTIATION, PATTERN_ENCRYPTED } from './constants';
 import { xorChecksum, concatBytes, toHex } from './utils';
 import type { SolixPacket } from './types';
 
+export function requireEncryptedCommand(command: Uint8Array): void {
+  if (command.length !== 2) throw new Error('BLE commands must contain exactly two bytes');
+  if ((command[0] & 0x40) === 0) {
+    throw new Error('Encrypted BLE commands require the 0x4000 encryption flag');
+  }
+}
+
 export function buildPacket(pattern: Uint8Array, command: Uint8Array, payload: Uint8Array): Uint8Array {
   // Total length = 2(header) + 2(length) + 3(pattern) + 2(command) + payload.length + 1(checksum)
   // Length = total packet size including header, length field, pattern, cmd, payload, checksum

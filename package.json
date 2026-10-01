@@ -9,6 +9,7 @@
     "dev:dashboard": "vite --config dashboard/vite.config.ts",
     "build:dashboard": "vue-tsc --project dashboard/tsconfig.json --noEmit && vite build --config dashboard/vite.config.ts",
     "preview": "vite preview",
+    "test:protocol": "node --import tsx --test tests/protocol-encryption.test.ts",
     "test:dashboard": "node dashboard/tests/browser.mjs"
   },
   "dependencies": {

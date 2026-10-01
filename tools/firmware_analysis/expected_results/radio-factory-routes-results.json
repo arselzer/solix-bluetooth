@@ -1,0 +1,767 @@
+{
+  "cases": [
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 2,
+      "incoming_encrypted": false,
+      "port": 0,
+      "source": "00"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 2,
+      "incoming_encrypted": false,
+      "port": 0,
+      "source": "00"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 2,
+      "incoming_encrypted": true,
+      "port": 0,
+      "source": "00"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 2,
+      "incoming_encrypted": true,
+      "port": 0,
+      "source": "00"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": false,
+      "port": 1,
+      "source": "00"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": false,
+      "port": 1,
+      "source": "00"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": true,
+      "port": 1,
+      "source": "00"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": true,
+      "port": 1,
+      "source": "00"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 0,
+      "incoming_encrypted": false,
+      "port": 2,
+      "source": "00"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 0,
+      "incoming_encrypted": false,
+      "port": 2,
+      "source": "00"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 0,
+      "incoming_encrypted": true,
+      "port": 2,
+      "source": "00"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 0,
+      "incoming_encrypted": true,
+      "port": 2,
+      "source": "00"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": false,
+      "port": 5,
+      "source": "00"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": false,
+      "port": 5,
+      "source": "00"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": true,
+      "port": 5,
+      "source": "00"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": true,
+      "port": 5,
+      "source": "00"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 2,
+      "incoming_encrypted": false,
+      "port": 0,
+      "source": "20"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 2,
+      "incoming_encrypted": false,
+      "port": 0,
+      "source": "20"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 2,
+      "incoming_encrypted": true,
+      "port": 0,
+      "source": "20"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 2,
+      "incoming_encrypted": true,
+      "port": 0,
+      "source": "20"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": false,
+      "port": 1,
+      "source": "20"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": false,
+      "port": 1,
+      "source": "20"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": true,
+      "port": 1,
+      "source": "20"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": true,
+      "port": 1,
+      "source": "20"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 0,
+      "incoming_encrypted": false,
+      "port": 2,
+      "source": "20"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 0,
+      "incoming_encrypted": false,
+      "port": 2,
+      "source": "20"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 0,
+      "incoming_encrypted": true,
+      "port": 2,
+      "source": "20"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 0,
+      "incoming_encrypted": true,
+      "port": 2,
+      "source": "20"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": false,
+      "port": 5,
+      "source": "20"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": false,
+      "port": 5,
+      "source": "20"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": true,
+      "port": 5,
+      "source": "20"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": true,
+      "port": 5,
+      "source": "20"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 2,
+      "incoming_encrypted": false,
+      "port": 0,
+      "source": "21"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 2,
+      "incoming_encrypted": false,
+      "port": 0,
+      "source": "21"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 2,
+      "incoming_encrypted": true,
+      "port": 0,
+      "source": "21"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 2,
+      "incoming_encrypted": true,
+      "port": 0,
+      "source": "21"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": false,
+      "port": 1,
+      "source": "21"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": false,
+      "port": 1,
+      "source": "21"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": true,
+      "port": 1,
+      "source": "21"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": true,
+      "port": 1,
+      "source": "21"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 0,
+      "incoming_encrypted": false,
+      "port": 2,
+      "source": "21"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 0,
+      "incoming_encrypted": false,
+      "port": 2,
+      "source": "21"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 0,
+      "incoming_encrypted": true,
+      "port": 2,
+      "source": "21"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 0,
+      "incoming_encrypted": true,
+      "port": 2,
+      "source": "21"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": false,
+      "port": 5,
+      "source": "21"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": false,
+      "port": 5,
+      "source": "21"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": true,
+      "port": 5,
+      "source": "21"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": true,
+      "port": 5,
+      "source": "21"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 2,
+      "incoming_encrypted": false,
+      "port": 0,
+      "source": "22"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 2,
+      "incoming_encrypted": false,
+      "port": 0,
+      "source": "22"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 2,
+      "incoming_encrypted": true,
+      "port": 0,
+      "source": "22"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 2,
+      "incoming_encrypted": true,
+      "port": 0,
+      "source": "22"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": false,
+      "port": 1,
+      "source": "22"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": false,
+      "port": 1,
+      "source": "22"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": true,
+      "port": 1,
+      "source": "22"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": true,
+      "port": 1,
+      "source": "22"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 0,
+      "incoming_encrypted": false,
+      "port": 2,
+      "source": "22"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 0,
+      "incoming_encrypted": false,
+      "port": 2,
+      "source": "22"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 0,
+      "incoming_encrypted": true,
+      "port": 2,
+      "source": "22"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": true,
+      "case": "port_source_encryption",
+      "destination_port": 0,
+      "incoming_encrypted": true,
+      "port": 2,
+      "source": "22"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": false,
+      "port": 5,
+      "source": "22"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": false,
+      "port": 5,
+      "source": "22"
+    },
+    {
+      "ble_reply_encrypted": false,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": true,
+      "port": 5,
+      "source": "22"
+    },
+    {
+      "ble_reply_encrypted": true,
+      "body_preserved": null,
+      "case": "port_source_encryption",
+      "destination_port": null,
+      "incoming_encrypted": true,
+      "port": 5,
+      "source": "22"
+    },
+    {
+      "case": "nonzero_opcode_rejected",
+      "command": "0001"
+    },
+    {
+      "case": "nonzero_opcode_rejected",
+      "command": "003f"
+    },
+    {
+      "case": "nonzero_opcode_rejected",
+      "command": "0040"
+    },
+    {
+      "case": "nonzero_opcode_rejected",
+      "command": "0800"
+    },
+    {
+      "case": "nonzero_opcode_rejected",
+      "command": "4001"
+    },
+    {
+      "case": "nonzero_opcode_rejected",
+      "command": "4800"
+    },
+    {
+      "case": "mqtt_raw_callback",
+      "command": "0000",
+      "destination_port": null,
+      "factory_handler": true
+    },
+    {
+      "case": "mqtt_raw_callback",
+      "command": "0001",
+      "destination_port": null,
+      "factory_handler": true
+    },
+    {
+      "case": "mqtt_raw_callback",
+      "command": "003f",
+      "destination_port": null,
+      "factory_handler": true
+    },
+    {
+      "case": "mqtt_raw_callback",
+      "command": "0040",
+      "destination_port": 2,
+      "factory_handler": false
+    },
+    {
+      "case": "mqtt_raw_callback",
+      "command": "4000",
+      "destination_port": null,
+      "factory_handler": true
+    },
+    {
+      "case": "mqtt_raw_callback",
+      "command": "4040",
+      "destination_port": 2,
+      "factory_handler": false
+    },
+    {
+      "case": "outer_validation",
+      "corruption": "header",
+      "rejected": true
+    },
+    {
+      "case": "outer_validation",
+      "corruption": "length",
+      "rejected": true
+    },
+    {
+      "case": "outer_validation",
+      "corruption": "checksum",
+      "rejected": true
+    },
+    {
+      "case": "unregistered_function",
+      "function": "00"
+    },
+    {
+      "case": "unregistered_function",
+      "function": "02"
+    },
+    {
+      "case": "unregistered_function",
+      "function": "0b"
+    },
+    {
+      "case": "unregistered_function",
+      "function": "0d"
+    },
+    {
+      "case": "unregistered_function",
+      "function": "12"
+    },
+    {
+      "case": "unregistered_function",
+      "function": "17"
+    },
+    {
+      "case": "unregistered_function",
+      "function": "18"
+    },
+    {
+      "case": "unregistered_function",
+      "function": "ff"
+    },
+    {
+      "body": "a10121a20b00ee00080000f000da00fc55",
+      "body_preserved": true,
+      "case": "opaque_clear_body",
+      "inner_crc_checked": false
+    },
+    {
+      "body": "a10121a20001",
+      "body_preserved": true,
+      "case": "opaque_clear_body",
+      "inner_crc_checked": false
+    },
+    {
+      "body": "652f220d044f58ef1fdd5d05c7fd4ec26f0a6ae616de534fff1ce844be4cc61a52",
+      "body_preserved": true,
+      "case": "opaque_clear_body",
+      "inner_crc_checked": false
+    },
+    {
+      "body": "01020304",
+      "body_preserved": true,
+      "case": "opaque_clear_body",
+      "inner_crc_checked": false
+    },
+    {
+      "body": "",
+      "body_preserved": true,
+      "case": "opaque_clear_body",
+      "inner_crc_checked": false
+    },
+    {
+      "case": "header_destination",
+      "incoming_destination": 0,
+      "outgoing_destination": 1
+    },
+    {
+      "case": "header_destination",
+      "incoming_destination": 1,
+      "outgoing_destination": 1
+    },
+    {
+      "case": "header_destination",
+      "incoming_destination": 2,
+      "outgoing_destination": 1
+    },
+    {
+      "case": "header_destination",
+      "incoming_destination": 255,
+      "outgoing_destination": 1
+    }
+  ],
+  "cases_passed": 96,
+  "firmware": {
+    "product": "C1000 Gen 2 A1763",
+    "radio_version": "0.3.3.0",
+    "sha256": "e291ec115f013953e825cb51b9e457a8731889547ab55b3058640e599e8cfec8"
+  },
+  "limitations": [
+    "Original A1761 radio not replayed; equal version text is not equivalence.",
+    "OS queues/allocation/session state and AES-GCM are substituted.",
+    "Outgoing queue boundary captured; physical BLE/UART TX not executed.",
+    "No controller firmware or device executed; this is not a safe-probe approval."
+  ],
+  "registrations_from_application_startup": {
+    "01": [
+      "4203c90a"
+    ],
+    "0c": [
+      "42043aec"
+    ],
+    "0f": [
+      "42045792"
+    ],
+    "10": [
+      "4203c9e0"
+    ],
+    "11": [
+      "42045792"
+    ]
+  },
+  "schema": 1
+}

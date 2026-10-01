@@ -375,7 +375,14 @@ class Session:
         return unpadder.update(padded) + unpadder.finalize()
 
     def _send(self, pattern: bytes, command: str, plaintext: bytes) -> bytes:
-        return build_packet(pattern, bytes.fromhex(command), self._crypt(plaintext, True))
+        command_bytes = bytes.fromhex(command)
+        if len(command_bytes) != 2:
+            raise ValueError("BLE commands must contain exactly two bytes")
+        # The radio uses this bit to choose decryption versus direct forwarding.
+        # Reject an inconsistent header before constructing an encrypted body.
+        if (self.protocol == "prime" or self._secret is not None) and not command_bytes[0] & 0x40:
+            raise ValueError("Encrypted BLE commands require the 0x4000 encryption flag")
+        return build_packet(pattern, command_bytes, self._crypt(plaintext, True))
 
     def start(self) -> bytes:
         if self.protocol == "prime":

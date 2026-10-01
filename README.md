@@ -108,6 +108,7 @@ npm run dev                       # Web Bluetooth application
 npm run build
 npm run build:dashboard            # Vue check + bundled gateway assets
 PYTHONPATH=python python3 -m pytest python/tests home_assistant_tests -q
+npm run test:protocol              # synthetic BLE encryption checks
 npm run test:dashboard             # synthetic browser fixture only
 ```
 

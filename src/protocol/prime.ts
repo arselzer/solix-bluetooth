@@ -1,6 +1,6 @@
 import { GCM_AUTH_DATA, PATTERN_NEGOTIATION } from './constants';
 import { deriveSharedSecret, decryptAesGcm, encryptAesGcm, generateFreshECDHKeyPair, type SessionKeys } from './crypto';
-import { buildPacket } from './packet';
+import { buildPacket, requireEncryptedCommand } from './packet';
 import { parseC1000Gen2Telemetry, parseTelemetryDetailed } from './telemetry';
 import { concatBytes, fromHex, toHex, writeUint32LE } from './utils';
 import type { SolixPacket, TelemetryData } from './types';
@@ -80,10 +80,12 @@ export class PrimeSession {
   }
 
   private async send(pattern: Uint8Array, command: string, plaintext: Uint8Array): Promise<void> {
+    const commandBytes = fromHex(command);
+    requireEncryptedCommand(commandBytes);
     const key = this.sessionKeys?.aesKey ?? NEGOTIATION_KEY;
     const nonce = this.sessionKeys?.iv.slice(0, 12) ?? NEGOTIATION_NONCE;
     const encrypted = await encryptAesGcm(plaintext, key, nonce, GCM_AUTH_DATA);
-    const packet = buildPacket(pattern, fromHex(command), encrypted);
+    const packet = buildPacket(pattern, commandBytes, encrypted);
     this.hooks.log(`Prime TX ${command} (${packet.length}B)`);
     await this.hooks.send(packet);
   }

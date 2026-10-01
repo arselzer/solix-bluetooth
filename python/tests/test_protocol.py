@@ -130,6 +130,42 @@ def test_model_names_and_packet_validation():
     assert metrics["temperature_c"] == -2
 
 
+@pytest.mark.parametrize("model", [Model.C1000, Model.C1000_GEN2, Model.C2000_GEN2])
+@pytest.mark.parametrize("with_session_key", [False, True])
+@pytest.mark.parametrize("pattern, command", [
+    (DATA_REQUEST, "0040"), (bytes.fromhex("03000c"), "0000"),
+])
+def test_prime_rejects_ciphertext_without_encryption_flag(model, with_session_key, pattern, command, monkeypatch):
+    session = Session(model, protocol="prime")
+    if with_session_key:
+        session._secret = bytes(range(32))
+
+    def unexpected_crypto(*_args):
+        pytest.fail("An inconsistent transport header must fail before encryption")
+
+    monkeypatch.setattr(session, "_crypt", unexpected_crypto)
+    with pytest.raises(ValueError, match="0x4000 encryption flag"):
+        session._send(pattern, command, b"synthetic plaintext")
+
+
+@pytest.mark.parametrize("model", [Model.C300, Model.C1000, Model.C1000_GEN2])
+def test_legacy_encryption_flag_changes_after_key_exchange(model):
+    session = Session(model, protocol="legacy")
+    assert parse_packet(session.start()).command.hex() == "0001"
+    session._secret = bytes(range(32))
+    with pytest.raises(ValueError, match="0x4000 encryption flag"):
+        session._send(DATA_REQUEST, "0040", b"synthetic plaintext")
+    packet = parse_packet(session._send(DATA_REQUEST, "4040", b"synthetic plaintext"))
+    assert packet.command.hex() == "4040"
+    assert session._crypt(packet.payload, False) == b"synthetic plaintext"
+
+
+@pytest.mark.parametrize("command", ["", "40", "400100"])
+def test_ble_builder_rejects_incomplete_or_oversized_command(command):
+    with pytest.raises(ValueError, match="exactly two bytes"):
+        Session(Model.C1000_GEN2)._send(DATA_REQUEST, command, b"synthetic plaintext")
+
+
 def test_c1000_prime_setting_packets_match_observed_app_shapes():
     session = Session(Model.C1000_GEN2, owner_user_id="a" * 40)
     session._secret = bytes(range(32))

@@ -1,0 +1,61 @@
+{
+  "hardware_access": false,
+  "case_counts": {
+    "timer_and_feedback": 16,
+    "queue_and_completion": 5,
+    "status_failure_callback": 12,
+    "parameter_callback": 14
+  },
+  "firmware": [
+    {
+      "filename": "MainMcu-decoded.bin",
+      "sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9"
+    },
+    {
+      "filename": "dspDCDC-decoded.bin",
+      "sha256": "7ae2bb915812441b8316d1c3f3efc2379fcb488d4d03e950901cf507c224ceb8"
+    }
+  ],
+  "runtime": {
+    "python": "3.12.3",
+    "unicorn": "2.1.4"
+  },
+  "source_sha256": {
+    "emulate_pv_bridge_restart.py": "c88f4977320fc1ae279b0900a60fcd6e70505bc33991384808c2090da3519086",
+    "emulate_pv_retry_actuation.py": "2927f2edd80e0ea1e000e3b99a786aaa6cf506ecfbc41676b05f929a4dbc690c",
+    "emulate_pv_retry_origins.py": "5ed18f3be5527848eeda567c77ecd7ce400c57365947545d956c9371c6804f54",
+    "emulate_general_settings.py": "26ce041976a8fd1ac43feb2851c1717363761cb2f7da69f4d780b3f42b8ef0ba",
+    "emulate_additional_features.py": "baaeb837278e225a117ebaf025e1e463eed10f24d51af8d7f2946783ef12615e",
+    "emulate_clock_semantics.py": "945b649c3b5cec00d816041e783641085ccfbdb5f80efc2ed2c4e15f3bae30f2",
+    "extract_dsp.py": "5a82593ea76fd784702e0ee501be2415a4540d2570c3f370d343e8512d2a87e9",
+    "replay_io.py": "731d795a5ec37e2cf12b809b7122eaf7a29d84c21a2ecd43fafa3e2f8d962d30"
+  },
+  "result_sha256": "2de944f000e6b92c03aec61a1b31a8f2acfbca4053d582916439bfbcfc2123bf",
+  "substitutions": [
+    "allocation/free",
+    "internal queue acceptance and delivery",
+    "logging",
+    "MPPT diagnostic collection",
+    "error/display notification",
+    "XT60i auxiliary configuration",
+    "memcpy/memset",
+    "inherited unused LCD/persistence/backup-register boundaries"
+  ],
+  "executed": [
+    "MPPT task08025140",
+    "configuration/start builders",
+    "software timer service0801089c",
+    "timer query/start/restart",
+    "tick RAM getter08010eb0",
+    "status callback0801b2d4",
+    "parameter completion08016570"
+  ],
+  "not_executed": [
+    "UART queue worker and receive parser",
+    "public diagnostic tunnel",
+    "physical DSP/PV/BMS",
+    "hardware timer interrupt",
+    "wall-clock time",
+    "main event-policy reaction to cleared cache"
+  ]
+}

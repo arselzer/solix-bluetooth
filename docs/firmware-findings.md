@@ -610,3 +610,30 @@ calls. Only words `0057`/`0058`/`0059` generate start/stop/stored-fault-clear
 events through that consumer. The normal main-controller helper can emit
 only start/stop; no public fault-clear opcode or bank-0 bit-6 producer was
 established. No internal-register or fault-bypass control was introduced.
+
+## October 1: radio forwarding and main-controller retry
+
+[96 radio-routing cases](radio-factory-routing.md) execute the **A1763 radio
+0.3.3.0** function registry, receiver, encryption classification, dispatcher
+and outer framing. Function `0c`/normalized command zero forwards between
+BLE port 0 and controller port 2; native MQTT port 5 is rejected. The body
+and inner CRC are passed unchanged. Missing the `4000` marker forwards
+ciphertext without decryption. This does not establish original-radio
+equivalence or a safe diagnostic request.
+
+The [BLE framing guard](ble-encryption-framing.md) now rejects inconsistent
+encrypted headers in the Python library and Web Bluetooth app. Eighteen new
+Python regression cases and two browser tests verify rejected headers produce
+no packet/send and preserve supported negotiation, GCM and CBC framing. The
+complete Python/HA suite passes **1,977 tests**. No diagnostic API was added.
+
+[47 main-controller retry cases](gen2-pv-bridge-and-restart.md) trace real
+task/timer/callback instructions in **main 1.1.4.9**. Absent cached DCDC
+running feedback can reset the configuration latch after eleven sampling
+periods and permit configuration plus a fresh start request. Allocation and
+queue failures can retry earlier. Six failed bulk-status completions after
+a success clear the 146-byte DSP cache and request error 25/display refresh;
+this is not proof of mains loss or physical output interruption. Actual
+transport cadence, fault clearing and charging recovery remain unverified.
+The direct queue-call audit still establishes no public stored-fault-clear
+route. This follow-up sent no device commands.
