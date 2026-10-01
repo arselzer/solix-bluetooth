@@ -45,6 +45,14 @@ unavailable replies plus clock/status responses, preserving fresh settings
 baselines. The Python API and CLI now expose RSSI explicitly; 2,040 Python/HA
 contract tests pass. No automatic sensor polling or power control is added.
 
+Further offline work adds [96 original charging-source cases](c1000-charge-source-provenance.md):
+BC follows internal gate priority, while AF aggregates ten input-cache members;
+neither establishes main 1.7.1's physical supply source. [635 Gen 2 output-policy
+cases](gen2-output-policy-followup.md) trace two-second countdowns and Smart
+counter history, including the real report paths. [29 local-identity cases](account-free-local-setup.md)
+carry a generated ID to the radio configuration setter and verify exact native
+identity comparisons. These add no live control or model-equivalence claim.
+
 The latest [reconnect, clock and power-gate follow-up](c2000-mqtt-reconnect-and-tariff.md)
 includes additional offline executions and guarded C2000 hardware observations.
 The [parallel power-control analysis](mqtt-power-offline-followup.md) adds

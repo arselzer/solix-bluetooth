@@ -1,0 +1,22 @@
+{
+  "firmware": {
+    "filename": "c1000-radio-validated.bin",
+    "sha256": "e291ec115f013953e825cb51b9e457a8731889547ab55b3058640e599e8cfec8",
+    "bytes": 1482800
+  },
+  "cases_passed": 29,
+  "hardware_access": false,
+  "cloud_access": false,
+  "runtime": {
+    "python": "3.12.3",
+    "unicorn": "2.1.4",
+    "cryptography": "41.0.7"
+  },
+  "source_sha256": {
+    "emulate_radio_local_identity.py": "2b96d05caae3b9eb3878866aeca0045a29ad42b1316867aa8e442a4306d03f84",
+    "emulate_radio_rssi_routes.py": "de2665279a85c1b6f91d9eb41311938d5a09c2d45291c740ec03b8958ee3080b",
+    "emulate_radio_factory_routes.py": "9ae40bf0a004fd87f3edc52b30d5f48c320d29a39fb20d57d6136d61b3d7401a"
+  },
+  "result_sha256": "744b558fa45c092d71e7a4b98a84aed378b0fb8951337f3e6fe2af4a735bed1e",
+  "substitution_limits": "Replay local activation identities and native admission in A1763 radio 0.3.3.0.\n\nActual RISC-V activation TLV parsing, activation copying, business callback and\nnative JSON admission execute. Activation stops at the persistent configuration\nsetter entry; it does not execute persistence, binding, Wi-Fi or MQTT startup.\nOS/libc/allocation, cJSON, session keys, identity/check-code providers, refresh\nproviders, RSSI, GCM, BLE TX and final MQTT publish are host substitutes inherited\nfrom the route replay. Synthetic data only; no network or device access.\nOriginal A1761/C2000 binary equivalence and generated-ID onboarding are unproved."
+}

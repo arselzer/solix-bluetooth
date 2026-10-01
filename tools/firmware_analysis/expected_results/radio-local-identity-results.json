@@ -1,0 +1,226 @@
+{
+  "cases_passed": 29,
+  "cases": [
+    {
+      "case": "activation_identity",
+      "identity_shape": "generated_shape_lowercase",
+      "identity_bytes": 40,
+      "account_unchanged_at_store_entry": true,
+      "persistence_executed": false
+    },
+    {
+      "case": "activation_identity",
+      "identity_shape": "generated_shape_uppercase",
+      "identity_bytes": 40,
+      "account_unchanged_at_store_entry": true,
+      "persistence_executed": false
+    },
+    {
+      "case": "activation_identity",
+      "identity_shape": "zero_hex",
+      "identity_bytes": 40,
+      "account_unchanged_at_store_entry": true,
+      "persistence_executed": false
+    },
+    {
+      "case": "activation_identity",
+      "identity_shape": "different_local_hex",
+      "identity_bytes": 40,
+      "account_unchanged_at_store_entry": true,
+      "persistence_executed": false
+    },
+    {
+      "case": "activation_identity",
+      "identity_shape": "opaque_short",
+      "identity_bytes": 10,
+      "account_unchanged_at_store_entry": true,
+      "persistence_executed": false
+    },
+    {
+      "case": "activation_identity",
+      "identity_shape": "nonhex_40",
+      "identity_bytes": 40,
+      "account_unchanged_at_store_entry": true,
+      "persistence_executed": false
+    },
+    {
+      "case": "activation_identity",
+      "identity_shape": "maximum_stored_127",
+      "identity_bytes": 127,
+      "account_unchanged_at_store_entry": true,
+      "persistence_executed": false
+    },
+    {
+      "case": "missing_required_activation_field",
+      "tag": "a2",
+      "rejection_status": 4,
+      "configuration_setter_reached": false
+    },
+    {
+      "case": "missing_required_activation_field",
+      "tag": "a3",
+      "rejection_status": 4,
+      "configuration_setter_reached": false
+    },
+    {
+      "case": "missing_required_activation_field",
+      "tag": "a4",
+      "rejection_status": 4,
+      "configuration_setter_reached": false
+    },
+    {
+      "case": "country_field_inserted",
+      "account_unchanged_at_store_entry": true,
+      "app_id": "anker_power",
+      "persistence_executed": false
+    },
+    {
+      "case": "early_c3_hides_service",
+      "account_unchanged_at_store_entry": true,
+      "app_id": "",
+      "persistence_executed": false
+    },
+    {
+      "case": "empty_account_present",
+      "account_bytes": 0,
+      "configuration_setter_reached": true,
+      "persistence_executed": false
+    },
+    {
+      "case": "native_identity_admission",
+      "mutation": "matching_lowercase",
+      "accepted": true,
+      "radio_observations": 1,
+      "substituted_identity_refresh_calls": []
+    },
+    {
+      "case": "native_identity_admission",
+      "mutation": "matching_uppercase",
+      "accepted": true,
+      "radio_observations": 1,
+      "substituted_identity_refresh_calls": []
+    },
+    {
+      "case": "native_identity_admission",
+      "mutation": "case_mismatch",
+      "accepted": false,
+      "radio_observations": 0,
+      "substituted_identity_refresh_calls": [
+        "420115e8",
+        "4201263c",
+        "420122f4"
+      ]
+    },
+    {
+      "case": "native_identity_admission",
+      "mutation": "different_prior_identity",
+      "accepted": false,
+      "radio_observations": 0,
+      "substituted_identity_refresh_calls": [
+        "420115e8",
+        "4201263c",
+        "420122f4"
+      ]
+    },
+    {
+      "case": "native_identity_admission",
+      "mutation": "last_hex_changed",
+      "accepted": false,
+      "radio_observations": 0,
+      "substituted_identity_refresh_calls": [
+        "420115e8",
+        "4201263c",
+        "420122f4"
+      ]
+    },
+    {
+      "case": "native_identity_admission",
+      "mutation": "account_prefix",
+      "accepted": false,
+      "radio_observations": 0,
+      "substituted_identity_refresh_calls": [
+        "420115e8",
+        "4201263c",
+        "420122f4"
+      ]
+    },
+    {
+      "case": "native_identity_admission",
+      "mutation": "account_suffix",
+      "accepted": false,
+      "radio_observations": 0,
+      "substituted_identity_refresh_calls": [
+        "420115e8",
+        "4201263c",
+        "420122f4"
+      ]
+    },
+    {
+      "case": "native_identity_admission",
+      "mutation": "missing_account",
+      "accepted": false,
+      "radio_observations": 0,
+      "substituted_identity_refresh_calls": []
+    },
+    {
+      "case": "native_identity_admission",
+      "mutation": "missing_serial",
+      "accepted": false,
+      "radio_observations": 0,
+      "substituted_identity_refresh_calls": []
+    },
+    {
+      "case": "native_identity_admission",
+      "mutation": "different_serial",
+      "accepted": false,
+      "radio_observations": 0,
+      "substituted_identity_refresh_calls": []
+    },
+    {
+      "case": "native_identity_admission",
+      "mutation": "head_account_irrelevant",
+      "accepted": true,
+      "radio_observations": 1,
+      "substituted_identity_refresh_calls": []
+    },
+    {
+      "case": "native_identity_admission",
+      "mutation": "sign_code_absent",
+      "accepted": true,
+      "radio_observations": 1,
+      "substituted_identity_refresh_calls": []
+    },
+    {
+      "case": "native_identity_admission",
+      "mutation": "matching_zero_hex",
+      "accepted": true,
+      "radio_observations": 1,
+      "substituted_identity_refresh_calls": []
+    },
+    {
+      "case": "native_identity_admission",
+      "mutation": "matching_empty",
+      "accepted": true,
+      "radio_observations": 1,
+      "substituted_identity_refresh_calls": []
+    },
+    {
+      "case": "native_identity_admission",
+      "mutation": "matching_nonhex_40",
+      "accepted": true,
+      "radio_observations": 1,
+      "substituted_identity_refresh_calls": []
+    },
+    {
+      "case": "native_identity_admission",
+      "mutation": "matching_opaque_short",
+      "accepted": true,
+      "radio_observations": 1,
+      "substituted_identity_refresh_calls": []
+    }
+  ],
+  "hardware_access": false,
+  "cloud_access": false,
+  "firmware_model": "A1763",
+  "limitations": "Replay local activation identities and native admission in A1763 radio 0.3.3.0.\n\nActual RISC-V activation TLV parsing, activation copying, business callback and\nnative JSON admission execute. Activation stops at the persistent configuration\nsetter entry; it does not execute persistence, binding, Wi-Fi or MQTT startup.\nOS/libc/allocation, cJSON, session keys, identity/check-code providers, refresh\nproviders, RSSI, GCM, BLE TX and final MQTT publish are host substitutes inherited\nfrom the route replay. Synthetic data only; no network or device access.\nOriginal A1761/C2000 binary equivalence and generated-ID onboarding are unproved."
+}
