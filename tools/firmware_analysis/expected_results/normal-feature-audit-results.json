@@ -1,0 +1,1260 @@
+{
+  "radio_to_main": [
+    {
+      "synthetic_rssi_dbm": -100,
+      "ap_info_error": 0,
+      "cached_signed_byte": -100,
+      "a3_quality_byte": 0,
+      "response_status_still_zero": true,
+      "settings_persistence_calls": 0
+    },
+    {
+      "synthetic_rssi_dbm": -99,
+      "ap_info_error": 0,
+      "cached_signed_byte": -99,
+      "a3_quality_byte": 2,
+      "response_status_still_zero": true,
+      "settings_persistence_calls": 0
+    },
+    {
+      "synthetic_rssi_dbm": -80,
+      "ap_info_error": 0,
+      "cached_signed_byte": -80,
+      "a3_quality_byte": 40,
+      "response_status_still_zero": true,
+      "settings_persistence_calls": 0
+    },
+    {
+      "synthetic_rssi_dbm": -70,
+      "ap_info_error": 0,
+      "cached_signed_byte": -70,
+      "a3_quality_byte": 60,
+      "response_status_still_zero": true,
+      "settings_persistence_calls": 0
+    },
+    {
+      "synthetic_rssi_dbm": -51,
+      "ap_info_error": 0,
+      "cached_signed_byte": -51,
+      "a3_quality_byte": 98,
+      "response_status_still_zero": true,
+      "settings_persistence_calls": 0
+    },
+    {
+      "synthetic_rssi_dbm": -50,
+      "ap_info_error": 0,
+      "cached_signed_byte": -50,
+      "a3_quality_byte": 100,
+      "response_status_still_zero": true,
+      "settings_persistence_calls": 0
+    },
+    {
+      "synthetic_rssi_dbm": -30,
+      "ap_info_error": 0,
+      "cached_signed_byte": -30,
+      "a3_quality_byte": 100,
+      "response_status_still_zero": true,
+      "settings_persistence_calls": 0
+    },
+    {
+      "synthetic_rssi_dbm": 0,
+      "ap_info_error": 0,
+      "cached_signed_byte": 0,
+      "a3_quality_byte": 100,
+      "response_status_still_zero": true,
+      "settings_persistence_calls": 0
+    },
+    {
+      "synthetic_rssi_dbm": -70,
+      "ap_info_error": 1,
+      "cached_signed_byte": 0,
+      "a3_quality_byte": 100,
+      "response_status_still_zero": true,
+      "settings_persistence_calls": 0
+    },
+    {
+      "synthetic_rssi_dbm": -70,
+      "ap_info_error": 12289,
+      "cached_signed_byte": 0,
+      "a3_quality_byte": 100,
+      "response_status_still_zero": true,
+      "settings_persistence_calls": 0
+    }
+  ],
+  "direct_radio_rssi": [
+    {
+      "synthetic_rssi_dbm": -100,
+      "ap_info_error": 0,
+      "response_status": 0,
+      "signed_rssi_reply": -100,
+      "external_transport_not_replayed": true
+    },
+    {
+      "synthetic_rssi_dbm": -70,
+      "ap_info_error": 0,
+      "response_status": 0,
+      "signed_rssi_reply": -70,
+      "external_transport_not_replayed": true
+    },
+    {
+      "synthetic_rssi_dbm": -30,
+      "ap_info_error": 0,
+      "response_status": 0,
+      "signed_rssi_reply": -30,
+      "external_transport_not_replayed": true
+    },
+    {
+      "synthetic_rssi_dbm": 0,
+      "ap_info_error": 0,
+      "response_status": 1,
+      "signed_rssi_reply": null,
+      "external_transport_not_replayed": true
+    },
+    {
+      "synthetic_rssi_dbm": -70,
+      "ap_info_error": 1,
+      "response_status": 1,
+      "signed_rssi_reply": null,
+      "external_transport_not_replayed": true
+    }
+  ],
+  "all_signed_cached_values": [
+    {
+      "cached_signed_byte": -128,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -127,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -126,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -125,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -124,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -123,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -122,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -121,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -120,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -119,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -118,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -117,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -116,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -115,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -114,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -113,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -112,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -111,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -110,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -109,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -108,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -107,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -106,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -105,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -104,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -103,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -102,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -101,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -100,
+      "a3_quality_byte": 0
+    },
+    {
+      "cached_signed_byte": -99,
+      "a3_quality_byte": 2
+    },
+    {
+      "cached_signed_byte": -98,
+      "a3_quality_byte": 4
+    },
+    {
+      "cached_signed_byte": -97,
+      "a3_quality_byte": 6
+    },
+    {
+      "cached_signed_byte": -96,
+      "a3_quality_byte": 8
+    },
+    {
+      "cached_signed_byte": -95,
+      "a3_quality_byte": 10
+    },
+    {
+      "cached_signed_byte": -94,
+      "a3_quality_byte": 12
+    },
+    {
+      "cached_signed_byte": -93,
+      "a3_quality_byte": 14
+    },
+    {
+      "cached_signed_byte": -92,
+      "a3_quality_byte": 16
+    },
+    {
+      "cached_signed_byte": -91,
+      "a3_quality_byte": 18
+    },
+    {
+      "cached_signed_byte": -90,
+      "a3_quality_byte": 20
+    },
+    {
+      "cached_signed_byte": -89,
+      "a3_quality_byte": 22
+    },
+    {
+      "cached_signed_byte": -88,
+      "a3_quality_byte": 24
+    },
+    {
+      "cached_signed_byte": -87,
+      "a3_quality_byte": 26
+    },
+    {
+      "cached_signed_byte": -86,
+      "a3_quality_byte": 28
+    },
+    {
+      "cached_signed_byte": -85,
+      "a3_quality_byte": 30
+    },
+    {
+      "cached_signed_byte": -84,
+      "a3_quality_byte": 32
+    },
+    {
+      "cached_signed_byte": -83,
+      "a3_quality_byte": 34
+    },
+    {
+      "cached_signed_byte": -82,
+      "a3_quality_byte": 36
+    },
+    {
+      "cached_signed_byte": -81,
+      "a3_quality_byte": 38
+    },
+    {
+      "cached_signed_byte": -80,
+      "a3_quality_byte": 40
+    },
+    {
+      "cached_signed_byte": -79,
+      "a3_quality_byte": 42
+    },
+    {
+      "cached_signed_byte": -78,
+      "a3_quality_byte": 44
+    },
+    {
+      "cached_signed_byte": -77,
+      "a3_quality_byte": 46
+    },
+    {
+      "cached_signed_byte": -76,
+      "a3_quality_byte": 48
+    },
+    {
+      "cached_signed_byte": -75,
+      "a3_quality_byte": 50
+    },
+    {
+      "cached_signed_byte": -74,
+      "a3_quality_byte": 52
+    },
+    {
+      "cached_signed_byte": -73,
+      "a3_quality_byte": 54
+    },
+    {
+      "cached_signed_byte": -72,
+      "a3_quality_byte": 56
+    },
+    {
+      "cached_signed_byte": -71,
+      "a3_quality_byte": 58
+    },
+    {
+      "cached_signed_byte": -70,
+      "a3_quality_byte": 60
+    },
+    {
+      "cached_signed_byte": -69,
+      "a3_quality_byte": 62
+    },
+    {
+      "cached_signed_byte": -68,
+      "a3_quality_byte": 64
+    },
+    {
+      "cached_signed_byte": -67,
+      "a3_quality_byte": 66
+    },
+    {
+      "cached_signed_byte": -66,
+      "a3_quality_byte": 68
+    },
+    {
+      "cached_signed_byte": -65,
+      "a3_quality_byte": 70
+    },
+    {
+      "cached_signed_byte": -64,
+      "a3_quality_byte": 72
+    },
+    {
+      "cached_signed_byte": -63,
+      "a3_quality_byte": 74
+    },
+    {
+      "cached_signed_byte": -62,
+      "a3_quality_byte": 76
+    },
+    {
+      "cached_signed_byte": -61,
+      "a3_quality_byte": 78
+    },
+    {
+      "cached_signed_byte": -60,
+      "a3_quality_byte": 80
+    },
+    {
+      "cached_signed_byte": -59,
+      "a3_quality_byte": 82
+    },
+    {
+      "cached_signed_byte": -58,
+      "a3_quality_byte": 84
+    },
+    {
+      "cached_signed_byte": -57,
+      "a3_quality_byte": 86
+    },
+    {
+      "cached_signed_byte": -56,
+      "a3_quality_byte": 88
+    },
+    {
+      "cached_signed_byte": -55,
+      "a3_quality_byte": 90
+    },
+    {
+      "cached_signed_byte": -54,
+      "a3_quality_byte": 92
+    },
+    {
+      "cached_signed_byte": -53,
+      "a3_quality_byte": 94
+    },
+    {
+      "cached_signed_byte": -52,
+      "a3_quality_byte": 96
+    },
+    {
+      "cached_signed_byte": -51,
+      "a3_quality_byte": 98
+    },
+    {
+      "cached_signed_byte": -50,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -49,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -48,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -47,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -46,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -45,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -44,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -43,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -42,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -41,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -40,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -39,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -38,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -37,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -36,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -35,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -34,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -33,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -32,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -31,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -30,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -29,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -28,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -27,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -26,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -25,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -24,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -23,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -22,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -21,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -20,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -19,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -18,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -17,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -16,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -15,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -14,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -13,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -12,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -11,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -10,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -9,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -8,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -7,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -6,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -5,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -4,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -3,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -2,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": -1,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 0,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 1,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 2,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 3,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 4,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 5,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 6,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 7,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 8,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 9,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 10,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 11,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 12,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 13,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 14,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 15,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 16,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 17,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 18,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 19,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 20,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 21,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 22,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 23,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 24,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 25,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 26,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 27,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 28,
+      "a3_quality_byte": 0
+    },
+    {
+      "cached_signed_byte": 29,
+      "a3_quality_byte": 2
+    },
+    {
+      "cached_signed_byte": 30,
+      "a3_quality_byte": 4
+    },
+    {
+      "cached_signed_byte": 31,
+      "a3_quality_byte": 6
+    },
+    {
+      "cached_signed_byte": 32,
+      "a3_quality_byte": 8
+    },
+    {
+      "cached_signed_byte": 33,
+      "a3_quality_byte": 10
+    },
+    {
+      "cached_signed_byte": 34,
+      "a3_quality_byte": 12
+    },
+    {
+      "cached_signed_byte": 35,
+      "a3_quality_byte": 14
+    },
+    {
+      "cached_signed_byte": 36,
+      "a3_quality_byte": 16
+    },
+    {
+      "cached_signed_byte": 37,
+      "a3_quality_byte": 18
+    },
+    {
+      "cached_signed_byte": 38,
+      "a3_quality_byte": 20
+    },
+    {
+      "cached_signed_byte": 39,
+      "a3_quality_byte": 22
+    },
+    {
+      "cached_signed_byte": 40,
+      "a3_quality_byte": 24
+    },
+    {
+      "cached_signed_byte": 41,
+      "a3_quality_byte": 26
+    },
+    {
+      "cached_signed_byte": 42,
+      "a3_quality_byte": 28
+    },
+    {
+      "cached_signed_byte": 43,
+      "a3_quality_byte": 30
+    },
+    {
+      "cached_signed_byte": 44,
+      "a3_quality_byte": 32
+    },
+    {
+      "cached_signed_byte": 45,
+      "a3_quality_byte": 34
+    },
+    {
+      "cached_signed_byte": 46,
+      "a3_quality_byte": 36
+    },
+    {
+      "cached_signed_byte": 47,
+      "a3_quality_byte": 38
+    },
+    {
+      "cached_signed_byte": 48,
+      "a3_quality_byte": 40
+    },
+    {
+      "cached_signed_byte": 49,
+      "a3_quality_byte": 42
+    },
+    {
+      "cached_signed_byte": 50,
+      "a3_quality_byte": 44
+    },
+    {
+      "cached_signed_byte": 51,
+      "a3_quality_byte": 46
+    },
+    {
+      "cached_signed_byte": 52,
+      "a3_quality_byte": 48
+    },
+    {
+      "cached_signed_byte": 53,
+      "a3_quality_byte": 50
+    },
+    {
+      "cached_signed_byte": 54,
+      "a3_quality_byte": 52
+    },
+    {
+      "cached_signed_byte": 55,
+      "a3_quality_byte": 54
+    },
+    {
+      "cached_signed_byte": 56,
+      "a3_quality_byte": 56
+    },
+    {
+      "cached_signed_byte": 57,
+      "a3_quality_byte": 58
+    },
+    {
+      "cached_signed_byte": 58,
+      "a3_quality_byte": 60
+    },
+    {
+      "cached_signed_byte": 59,
+      "a3_quality_byte": 62
+    },
+    {
+      "cached_signed_byte": 60,
+      "a3_quality_byte": 64
+    },
+    {
+      "cached_signed_byte": 61,
+      "a3_quality_byte": 66
+    },
+    {
+      "cached_signed_byte": 62,
+      "a3_quality_byte": 68
+    },
+    {
+      "cached_signed_byte": 63,
+      "a3_quality_byte": 70
+    },
+    {
+      "cached_signed_byte": 64,
+      "a3_quality_byte": 72
+    },
+    {
+      "cached_signed_byte": 65,
+      "a3_quality_byte": 74
+    },
+    {
+      "cached_signed_byte": 66,
+      "a3_quality_byte": 76
+    },
+    {
+      "cached_signed_byte": 67,
+      "a3_quality_byte": 78
+    },
+    {
+      "cached_signed_byte": 68,
+      "a3_quality_byte": 80
+    },
+    {
+      "cached_signed_byte": 69,
+      "a3_quality_byte": 82
+    },
+    {
+      "cached_signed_byte": 70,
+      "a3_quality_byte": 84
+    },
+    {
+      "cached_signed_byte": 71,
+      "a3_quality_byte": 86
+    },
+    {
+      "cached_signed_byte": 72,
+      "a3_quality_byte": 88
+    },
+    {
+      "cached_signed_byte": 73,
+      "a3_quality_byte": 90
+    },
+    {
+      "cached_signed_byte": 74,
+      "a3_quality_byte": 92
+    },
+    {
+      "cached_signed_byte": 75,
+      "a3_quality_byte": 94
+    },
+    {
+      "cached_signed_byte": 76,
+      "a3_quality_byte": 96
+    },
+    {
+      "cached_signed_byte": 77,
+      "a3_quality_byte": 98
+    },
+    {
+      "cached_signed_byte": 78,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 79,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 80,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 81,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 82,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 83,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 84,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 85,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 86,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 87,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 88,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 89,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 90,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 91,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 92,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 93,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 94,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 95,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 96,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 97,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 98,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 99,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 100,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 101,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 102,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 103,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 104,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 105,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 106,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 107,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 108,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 109,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 110,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 111,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 112,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 113,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 114,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 115,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 116,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 117,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 118,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 119,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 120,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 121,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 122,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 123,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 124,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 125,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 126,
+      "a3_quality_byte": 100
+    },
+    {
+      "cached_signed_byte": 127,
+      "a3_quality_byte": 100
+    }
+  ],
+  "incremental_retention": [
+    {
+      "prior_quality_byte": 0,
+      "current_cached_rssi_dbm": -70,
+      "a3_quality_byte": 0,
+      "mode": 3
+    },
+    {
+      "prior_quality_byte": 42,
+      "current_cached_rssi_dbm": -70,
+      "a3_quality_byte": 42,
+      "mode": 3
+    },
+    {
+      "prior_quality_byte": 100,
+      "current_cached_rssi_dbm": -70,
+      "a3_quality_byte": 100,
+      "mode": 3
+    },
+    {
+      "prior_quality_byte": 255,
+      "current_cached_rssi_dbm": -70,
+      "a3_quality_byte": 255,
+      "mode": 3
+    }
+  ],
+  "missing_or_rejected_response": [
+    {
+      "accepted": false,
+      "rssi_tag_present": true,
+      "cached_value_preserved": true,
+      "a3_quality_byte": 60
+    },
+    {
+      "accepted": true,
+      "rssi_tag_present": false,
+      "cached_value_preserved": true,
+      "a3_quality_byte": 60
+    }
+  ],
+  "mtu_capacity": [
+    {
+      "synthetic_reported_mtu": 0,
+      "a3_capacity_bytes": 65488,
+      "acknowledgement_status": 0,
+      "underflow_domain": true
+    },
+    {
+      "synthetic_reported_mtu": 23,
+      "a3_capacity_bytes": 65512,
+      "acknowledgement_status": 0,
+      "underflow_domain": true
+    },
+    {
+      "synthetic_reported_mtu": 46,
+      "a3_capacity_bytes": 0,
+      "acknowledgement_status": 0,
+      "underflow_domain": false
+    },
+    {
+      "synthetic_reported_mtu": 47,
+      "a3_capacity_bytes": 0,
+      "acknowledgement_status": 0,
+      "underflow_domain": false
+    },
+    {
+      "synthetic_reported_mtu": 64,
+      "a3_capacity_bytes": 16,
+      "acknowledgement_status": 0,
+      "underflow_domain": false
+    },
+    {
+      "synthetic_reported_mtu": 128,
+      "a3_capacity_bytes": 80,
+      "acknowledgement_status": 0,
+      "underflow_domain": false
+    },
+    {
+      "synthetic_reported_mtu": 247,
+      "a3_capacity_bytes": 200,
+      "acknowledgement_status": 0,
+      "underflow_domain": false
+    },
+    {
+      "synthetic_reported_mtu": 256,
+      "a3_capacity_bytes": 208,
+      "acknowledgement_status": 0,
+      "underflow_domain": false
+    },
+    {
+      "synthetic_reported_mtu": 517,
+      "a3_capacity_bytes": 468,
+      "acknowledgement_status": 0,
+      "underflow_domain": false
+    },
+    {
+      "synthetic_reported_mtu": 65535,
+      "a3_capacity_bytes": 65488,
+      "acknowledgement_status": 0,
+      "underflow_domain": false
+    }
+  ],
+  "request_registration": [
+    {
+      "main_callback": "0801ae44",
+      "main_builder": "08012ebc",
+      "internal_function": 16,
+      "internal_command": 3,
+      "radio_handler": "4203cc10",
+      "different_mqtt_state_command": 75,
+      "mtu_report_internal_command": 78
+    }
+  ]
+}

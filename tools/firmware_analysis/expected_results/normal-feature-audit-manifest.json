@@ -1,0 +1,35 @@
+{
+  "hardware_access": false,
+  "case_counts": {
+    "radio_to_main": 10,
+    "direct_radio_rssi": 5,
+    "all_signed_cached_values": 256,
+    "incremental_retention": 4,
+    "missing_or_rejected_response": 2,
+    "mtu_capacity": 10,
+    "request_registration": 1
+  },
+  "firmware": [
+    {
+      "filename": "MainMcu-decoded.bin",
+      "sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9"
+    },
+    {
+      "filename": "c1000-radio-validated.bin",
+      "sha256": "e291ec115f013953e825cb51b9e457a8731889547ab55b3058640e599e8cfec8"
+    }
+  ],
+  "runtime": {
+    "python": "3.12.3",
+    "unicorn": "2.1.4"
+  },
+  "result_sha256": "3d24632e2355d80f1ddb785eb39eac97885265e35e72a420ab712a6b58f72989",
+  "source_sha256": {
+    "emulate_normal_feature_audit.py": "001043383c02713193ac225156b3482dbe94099d15d8a901c664bad0c21e49ed",
+    "emulate_additional_features.py": "baaeb837278e225a117ebaf025e1e463eed10f24d51af8d7f2946783ef12615e",
+    "emulate_clock_semantics.py": "945b649c3b5cec00d816041e783641085ccfbdb5f80efc2ed2c4e15f3bae30f2",
+    "emulate_radio_config_candidates.py": "79020d2d44b663ce84154b37391c93efa7e1b10f2f70506bebf9740fc9eb54f3",
+    "replay_io.py": "731d795a5ec37e2cf12b809b7122eaf7a29d84c21a2ecd43fafa3e2f8d962d30"
+  },
+  "substitution_limits": "Offline radio RSSI -> controller A3 audit; synthetic inputs, no hardware.\n\nExecutes C1000 Gen 2 main 1.1.4.9 ARM and radio 0.3.3.0 RISC-V instructions.\nESP AP-info, optional network-string/state providers, logging, libc, queue and\ntransport boundaries are substituted. Main TLV parsing, callback, cached RSSI\ngetter, A3 serializer and MTU handler execute. No actual RF, UART, BLE, scheduler,\nsubscription or sensor behavior is simulated."
+}

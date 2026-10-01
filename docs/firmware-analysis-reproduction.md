@@ -33,7 +33,10 @@ and [1,347 original Smart-policy cases](c1000-smart-auto-off-policy.md),
 [47 main-controller PV retry/status-failure cases](gen2-pv-bridge-and-restart.md),
 [45 UART worker/completion cases](gen2-uart-request-worker.md),
 [109 diagnostic-getter/exposure cases](gen2-diagnostic-getter-audit.md), and
-[24 normal preference-readback cases](gen2-preference-readback.md).
+[24 normal preference-readback cases](gen2-preference-readback.md),
+[22 diagnostic-table ownership cases](gen2-diagnostic-table-ownership.md),
+[23 factory USB transport cases](gen2-usb-factory-transport.md), and
+[288 ordinary Wi-Fi/transfer-capacity cases](gen2-normal-feature-audit.md).
 These have independent commands and manifests; they are not included in the
 1,842-case combined runner. Their individual commands are in the linked records.
 The diagnostic cases include malformed-envelope stalls; those synthetic inputs

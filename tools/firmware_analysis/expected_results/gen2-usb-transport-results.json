@@ -1,0 +1,255 @@
+{
+  "model": "A1763 main 1.1.4.9",
+  "firmware_sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9",
+  "cases": 23,
+  "hardware_access": false,
+  "results": [
+    {
+      "case": "initialized_usb_descriptors",
+      "class_callbacks": [
+        "08014c31",
+        "08014c03",
+        "08014cad",
+        "00000000",
+        "08014b39",
+        "08014b71",
+        "08014bc9"
+      ],
+      "device_descriptor_hex": "1201000202000040e9288a01000101020301",
+      "vendor_id": "28e9",
+      "product_id": "018a",
+      "usb_class": 2,
+      "physical_enumeration_tested": false
+    },
+    {
+      "case": "fragmented_getter",
+      "property": 1,
+      "fragment_size": 1,
+      "upgrade_timer_allocated": false,
+      "reply_hex": "ee00180000010041313736330000000000000000000000dfaafc55",
+      "out_endpoint": 3,
+      "in_endpoint": 129,
+      "rearms": 11,
+      "settings_and_outputs_preserved": true
+    },
+    {
+      "case": "fragmented_getter",
+      "property": 1,
+      "fragment_size": 1,
+      "upgrade_timer_allocated": true,
+      "reply_hex": "ee00180000010041313736330000000000000000000000dfaafc55",
+      "out_endpoint": 3,
+      "in_endpoint": 129,
+      "rearms": 11,
+      "settings_and_outputs_preserved": true
+    },
+    {
+      "case": "fragmented_getter",
+      "property": 1,
+      "fragment_size": 7,
+      "upgrade_timer_allocated": false,
+      "reply_hex": "ee00180000010041313736330000000000000000000000dfaafc55",
+      "out_endpoint": 3,
+      "in_endpoint": 129,
+      "rearms": 2,
+      "settings_and_outputs_preserved": true
+    },
+    {
+      "case": "fragmented_getter",
+      "property": 1,
+      "fragment_size": 7,
+      "upgrade_timer_allocated": true,
+      "reply_hex": "ee00180000010041313736330000000000000000000000dfaafc55",
+      "out_endpoint": 3,
+      "in_endpoint": 129,
+      "rearms": 2,
+      "settings_and_outputs_preserved": true
+    },
+    {
+      "case": "fragmented_getter",
+      "property": 1,
+      "fragment_size": 64,
+      "upgrade_timer_allocated": false,
+      "reply_hex": "ee00180000010041313736330000000000000000000000dfaafc55",
+      "out_endpoint": 3,
+      "in_endpoint": 129,
+      "rearms": 1,
+      "settings_and_outputs_preserved": true
+    },
+    {
+      "case": "fragmented_getter",
+      "property": 1,
+      "fragment_size": 64,
+      "upgrade_timer_allocated": true,
+      "reply_hex": "ee00180000010041313736330000000000000000000000dfaafc55",
+      "out_endpoint": 3,
+      "in_endpoint": 129,
+      "rearms": 1,
+      "settings_and_outputs_preserved": true
+    },
+    {
+      "case": "fragmented_getter",
+      "property": 2,
+      "fragment_size": 1,
+      "upgrade_timer_allocated": false,
+      "reply_hex": "ee001800000200312e312e342e390000000000000000009abdfc55",
+      "out_endpoint": 3,
+      "in_endpoint": 129,
+      "rearms": 11,
+      "settings_and_outputs_preserved": true
+    },
+    {
+      "case": "fragmented_getter",
+      "property": 2,
+      "fragment_size": 1,
+      "upgrade_timer_allocated": true,
+      "reply_hex": "ee001800000200312e312e342e390000000000000000009abdfc55",
+      "out_endpoint": 3,
+      "in_endpoint": 129,
+      "rearms": 11,
+      "settings_and_outputs_preserved": true
+    },
+    {
+      "case": "fragmented_getter",
+      "property": 2,
+      "fragment_size": 7,
+      "upgrade_timer_allocated": false,
+      "reply_hex": "ee001800000200312e312e342e390000000000000000009abdfc55",
+      "out_endpoint": 3,
+      "in_endpoint": 129,
+      "rearms": 2,
+      "settings_and_outputs_preserved": true
+    },
+    {
+      "case": "fragmented_getter",
+      "property": 2,
+      "fragment_size": 7,
+      "upgrade_timer_allocated": true,
+      "reply_hex": "ee001800000200312e312e342e390000000000000000009abdfc55",
+      "out_endpoint": 3,
+      "in_endpoint": 129,
+      "rearms": 2,
+      "settings_and_outputs_preserved": true
+    },
+    {
+      "case": "fragmented_getter",
+      "property": 2,
+      "fragment_size": 64,
+      "upgrade_timer_allocated": false,
+      "reply_hex": "ee001800000200312e312e342e390000000000000000009abdfc55",
+      "out_endpoint": 3,
+      "in_endpoint": 129,
+      "rearms": 1,
+      "settings_and_outputs_preserved": true
+    },
+    {
+      "case": "fragmented_getter",
+      "property": 2,
+      "fragment_size": 64,
+      "upgrade_timer_allocated": true,
+      "reply_hex": "ee001800000200312e312e342e390000000000000000009abdfc55",
+      "out_endpoint": 3,
+      "in_endpoint": 129,
+      "rearms": 1,
+      "settings_and_outputs_preserved": true
+    },
+    {
+      "case": "other_out_endpoint",
+      "endpoint": 1,
+      "diagnostic_bytes_received": 0
+    },
+    {
+      "case": "other_out_endpoint",
+      "endpoint": 2,
+      "diagnostic_bytes_received": 0
+    },
+    {
+      "case": "leading_junk",
+      "discarded_prefix_bytes": 4,
+      "getter_reply_correct": true
+    },
+    {
+      "case": "concatenated_requests",
+      "received_frames": 2,
+      "reply_frames": 1,
+      "remaining_rx_bytes": 0,
+      "second_request_discarded": true
+    },
+    {
+      "case": "serialized_requests",
+      "reply_frames": 2,
+      "reply_stream_bytes": 54
+    },
+    {
+      "case": "tx_overflow",
+      "usb_send_boundary_result": 0,
+      "generated_reply_bytes": 405,
+      "retained_reply_bytes": 355,
+      "complete_frames_retained": 13,
+      "partial_frame_bytes": 4,
+      "usb_packet_lengths": [
+        64,
+        0,
+        64,
+        0,
+        64,
+        0,
+        64,
+        0,
+        64,
+        0,
+        35
+      ],
+      "serializer_checks_fifo_return": false,
+      "settings_and_outputs_preserved": true
+    },
+    {
+      "case": "tx_overflow",
+      "usb_send_boundary_result": 1,
+      "generated_reply_bytes": 405,
+      "retained_reply_bytes": 355,
+      "complete_frames_retained": 13,
+      "partial_frame_bytes": 4,
+      "usb_packet_lengths": [
+        64,
+        0,
+        64,
+        0,
+        64,
+        0,
+        64,
+        0,
+        64,
+        0,
+        35
+      ],
+      "serializer_checks_fifo_return": false,
+      "settings_and_outputs_preserved": true
+    },
+    {
+      "case": "nonzero_send_return_without_completion",
+      "usb_send_result": 1,
+      "subsequent_pump_calls": 10,
+      "send_boundary_calls": 1,
+      "busy_flag_retained": true,
+      "next_reply_bytes_waiting": 27,
+      "physical_send_success_not_inferred": true
+    },
+    {
+      "case": "incomplete_input_stops_growing",
+      "bytes": 9,
+      "polls_until_discard": 5,
+      "getter_called": false,
+      "wall_clock_time_not_measured": true
+    },
+    {
+      "case": "rx_overflow",
+      "received_bytes": 1152,
+      "retained_bytes": 1123,
+      "receive_rearmed_count": 18,
+      "rx_enqueue_return_ignored": true,
+      "parser_executed": false
+    }
+  ],
+  "limits": "Offline A1763 factory USB stream, real FIFOs/parser and packetization.\n\nOnly synthetic USB completions and reviewed model/version getters are supplied.\nReal USB peripheral, interrupts, enumeration and physical sockets are excluded.\nThe inherited getter harness substitutes memory primitives and logging; USB\nprepare-receive/send boundaries and parser timer installation are recorded."
+}

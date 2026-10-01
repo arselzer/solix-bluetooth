@@ -18,6 +18,16 @@ command table also leaves BLE/MQTT getter reachability unproved. Normal
 read-only metrics and 24 serializer cases; C2000's unproven frequency byte is
 now labeled raw. No diagnostic or frequency control is exposed.
 
+The next offline continuation adds [22 table-ownership cases](gen2-diagnostic-table-ownership.md):
+reviewed software initialization installs the app table and function callbacks
+while preserving the diagnostic descriptor. The
+[23-case factory USB transport replay](gen2-usb-factory-transport.md) supplies a
+complete software request/reply path, with concatenation and overflow limits;
+physical service-port access remains unverified. The
+[288-case ordinary-field audit](gen2-normal-feature-audit.md) shows why A3's
+Wi-Fi quality byte can report 100 after an RSSI failure. A separate radio RSSI
+handler preserves failure status, but its external request route is unproved.
+
 The latest [reconnect, clock and power-gate follow-up](c2000-mqtt-reconnect-and-tariff.md)
 includes additional offline executions and guarded C2000 hardware observations.
 The [parallel power-control analysis](mqtt-power-offline-followup.md) adds

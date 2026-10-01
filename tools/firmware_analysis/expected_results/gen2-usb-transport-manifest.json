@@ -1,0 +1,11 @@
+{
+  "cases": 23,
+  "firmware_sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9",
+  "result_sha256": "44d8c2f0c38fabef419750ee8191d693df49251726ea3801e859bef680efac01",
+  "unicorn_version": "2.1.4",
+  "hardware_access": false,
+  "source_sha256": {
+    "emulate_gen2_usb_transport.py": "c3250e7214b0197d7381b715d9a47f67076887f2fc0291c401444e614ae9550e",
+    "emulate_gen2_diagnostic_getters.py": "e87006b13ab1f35fb86c1e03e529e5c2fdd310058eef403648d95216230d7575"
+  }
+}

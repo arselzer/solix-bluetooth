@@ -1,0 +1,10 @@
+{
+  "capstone_version": "5.0.7",
+  "cases_passed": 22,
+  "firmware_sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9",
+  "fixture_source": "Public firmware and synthetic RAM only",
+  "results_sha256": "efee5c374330b8ea6be07ec1384fd64fc5effa2c776a5bec5899153711fa2ee0",
+  "script": "audit_gen2_diagnostic_table.py",
+  "script_sha256": "03c258f0dfc1667d664072202b7978246d40da6f5009c913b57c4e7ab1eaaf48",
+  "unicorn_version": "2.1.4"
+}

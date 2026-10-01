@@ -28,7 +28,7 @@ Input: `firmware/c1000_gen2/1.1.4.9/MainMcu-decoded.bin`, load address
 | Radio command wrapper | `08017704` | Logs the command, then looks it up in the RAM table pointer/count at `20000760` / `20000764` |
 | Startup RAM initializer | `08005a8c..08005aa2` | Initializes that eight-byte table descriptor to zero |
 | Inner RX feeder | `08014bc8` → `08011608` | USB receive callback feeds diagnostic RX ring when endpoint equals 3 |
-| Parser scheduler | `08011640` | Starts callback `0802f6ac` on a 10-tick timer |
+| Parser scheduler | `08011640` | Starts callback `0802f6ac` with timer period argument 10 |
 
 Eight replay cases execute the actual startup RAM initializer, protocol
 registration, wrapper and its byte-dump logging loop. With the startup table
@@ -43,6 +43,12 @@ not initialize the diagnostic descriptor. This is a bounded static search
 and isolated startup-state replay, **not a complete hardware boot** or proof
 that no later path can install a table. USB feed/dispatch is established;
 BLE-to-inner-parser and response routing on this controller remain unproved.
+
+The later [table-ownership audit](gen2-diagnostic-table-ownership.md) executes
+the reviewed software initialization tree and a bounded computed-address search,
+without establishing an installer. The separate
+[USB transport replay](gen2-usb-factory-transport.md) connects factory requests
+to replies in software; physical USB access remains unverified.
 
 Do not transplant the original C1000 diagnostic envelope into Gen 2, or
 treat the radio's function whitelist as proof of controller support.
