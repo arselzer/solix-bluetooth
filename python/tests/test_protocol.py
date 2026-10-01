@@ -232,6 +232,7 @@ def test_c2000_readonly_version_and_expansion_fields():
         + bytes((1, 0, 0, 0)) + bytes((0, 0, 3, 3)) + b"\x00"
     )
     settings = bytearray(34)
+    settings[0] = 4
     settings[5:7] = (1800).to_bytes(2, "little")
     settings[7] = 50
     settings[16:18] = (30).to_bytes(2, 'little')
@@ -246,7 +247,9 @@ def test_c2000_readonly_version_and_expansion_fields():
     assert metrics["software_version_bms"] == "9.3.3.0"
     assert metrics["software_version_module"] == "3.3.0.0"
     assert metrics["ac_charging_power_limit_w"] == 1800
-    assert metrics["ac_input_frequency_hz"] == 50
+    assert metrics["ac_frequency_raw"] == 50
+    assert "ac_input_frequency_hz" not in metrics
+    assert "ac_output_frequency_setting_hz" not in metrics
     assert metrics["display_timeout_seconds"] == 30
     assert metrics["expansion_battery_count"] == 0
     assert metrics["usage_mode"] == "time_of_use"

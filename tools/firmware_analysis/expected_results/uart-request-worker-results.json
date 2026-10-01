@@ -1,0 +1,1377 @@
+{
+  "send_timeout": [
+    {
+      "write": false,
+      "requested_bytes": 0,
+      "substituted_send_return": 0,
+      "timeout_invocation": 13,
+      "first": {
+        "busy": 1,
+        "remaining_worker_invocations": 12,
+        "descriptor_register": 256,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "final": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "payload_freed_count": 0
+    },
+    {
+      "write": false,
+      "requested_bytes": 0,
+      "substituted_send_return": 1,
+      "timeout_invocation": 13,
+      "first": {
+        "busy": 1,
+        "remaining_worker_invocations": 12,
+        "descriptor_register": 256,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "final": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "payload_freed_count": 0
+    },
+    {
+      "write": false,
+      "requested_bytes": 2,
+      "substituted_send_return": 0,
+      "timeout_invocation": 13,
+      "first": {
+        "busy": 1,
+        "remaining_worker_invocations": 12,
+        "descriptor_register": 256,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "final": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "payload_freed_count": 0
+    },
+    {
+      "write": false,
+      "requested_bytes": 2,
+      "substituted_send_return": 1,
+      "timeout_invocation": 13,
+      "first": {
+        "busy": 1,
+        "remaining_worker_invocations": 12,
+        "descriptor_register": 256,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "final": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "payload_freed_count": 0
+    },
+    {
+      "write": false,
+      "requested_bytes": 12,
+      "substituted_send_return": 0,
+      "timeout_invocation": 13,
+      "first": {
+        "busy": 1,
+        "remaining_worker_invocations": 12,
+        "descriptor_register": 256,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "final": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "payload_freed_count": 0
+    },
+    {
+      "write": false,
+      "requested_bytes": 12,
+      "substituted_send_return": 1,
+      "timeout_invocation": 13,
+      "first": {
+        "busy": 1,
+        "remaining_worker_invocations": 12,
+        "descriptor_register": 256,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "final": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "payload_freed_count": 0
+    },
+    {
+      "write": false,
+      "requested_bytes": 50,
+      "substituted_send_return": 0,
+      "timeout_invocation": 16,
+      "first": {
+        "busy": 1,
+        "remaining_worker_invocations": 15,
+        "descriptor_register": 256,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "final": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "payload_freed_count": 0
+    },
+    {
+      "write": false,
+      "requested_bytes": 50,
+      "substituted_send_return": 1,
+      "timeout_invocation": 16,
+      "first": {
+        "busy": 1,
+        "remaining_worker_invocations": 15,
+        "descriptor_register": 256,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "final": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "payload_freed_count": 0
+    },
+    {
+      "write": false,
+      "requested_bytes": 146,
+      "substituted_send_return": 0,
+      "timeout_invocation": 21,
+      "first": {
+        "busy": 1,
+        "remaining_worker_invocations": 20,
+        "descriptor_register": 256,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "final": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "payload_freed_count": 0
+    },
+    {
+      "write": false,
+      "requested_bytes": 146,
+      "substituted_send_return": 1,
+      "timeout_invocation": 21,
+      "first": {
+        "busy": 1,
+        "remaining_worker_invocations": 20,
+        "descriptor_register": 256,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "final": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "payload_freed_count": 0
+    },
+    {
+      "write": true,
+      "requested_bytes": 0,
+      "substituted_send_return": 0,
+      "timeout_invocation": 13,
+      "first": {
+        "busy": 1,
+        "remaining_worker_invocations": 12,
+        "descriptor_register": 22,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "final": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "payload_freed_count": 1
+    },
+    {
+      "write": true,
+      "requested_bytes": 0,
+      "substituted_send_return": 1,
+      "timeout_invocation": 13,
+      "first": {
+        "busy": 1,
+        "remaining_worker_invocations": 12,
+        "descriptor_register": 22,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "final": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "payload_freed_count": 1
+    },
+    {
+      "write": true,
+      "requested_bytes": 2,
+      "substituted_send_return": 0,
+      "timeout_invocation": 13,
+      "first": {
+        "busy": 1,
+        "remaining_worker_invocations": 12,
+        "descriptor_register": 22,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "final": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "payload_freed_count": 1
+    },
+    {
+      "write": true,
+      "requested_bytes": 2,
+      "substituted_send_return": 1,
+      "timeout_invocation": 13,
+      "first": {
+        "busy": 1,
+        "remaining_worker_invocations": 12,
+        "descriptor_register": 22,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "final": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "payload_freed_count": 1
+    },
+    {
+      "write": true,
+      "requested_bytes": 12,
+      "substituted_send_return": 0,
+      "timeout_invocation": 13,
+      "first": {
+        "busy": 1,
+        "remaining_worker_invocations": 12,
+        "descriptor_register": 22,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "final": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "payload_freed_count": 1
+    },
+    {
+      "write": true,
+      "requested_bytes": 12,
+      "substituted_send_return": 1,
+      "timeout_invocation": 13,
+      "first": {
+        "busy": 1,
+        "remaining_worker_invocations": 12,
+        "descriptor_register": 22,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "final": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "payload_freed_count": 1
+    },
+    {
+      "write": true,
+      "requested_bytes": 50,
+      "substituted_send_return": 0,
+      "timeout_invocation": 16,
+      "first": {
+        "busy": 1,
+        "remaining_worker_invocations": 15,
+        "descriptor_register": 22,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "final": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "payload_freed_count": 1
+    },
+    {
+      "write": true,
+      "requested_bytes": 50,
+      "substituted_send_return": 1,
+      "timeout_invocation": 16,
+      "first": {
+        "busy": 1,
+        "remaining_worker_invocations": 15,
+        "descriptor_register": 22,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "final": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "payload_freed_count": 1
+    },
+    {
+      "write": true,
+      "requested_bytes": 51,
+      "substituted_send_return": 0,
+      "timeout_invocation": 16,
+      "first": {
+        "busy": 1,
+        "remaining_worker_invocations": 15,
+        "descriptor_register": 22,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 0,
+        "transmissions": 0,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "final": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 0,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "payload_freed_count": 1
+    },
+    {
+      "write": true,
+      "requested_bytes": 51,
+      "substituted_send_return": 1,
+      "timeout_invocation": 16,
+      "first": {
+        "busy": 1,
+        "remaining_worker_invocations": 15,
+        "descriptor_register": 22,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 0,
+        "transmissions": 0,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "final": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 0,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "payload_freed_count": 1
+    }
+  ],
+  "response_correlation": [
+    {
+      "scenario": "read_match",
+      "synthetic_frame_hex": "6d61696e10000100080001100001020030001105",
+      "after_receive": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 1,
+            "payload_hex": "3000",
+            "length": 2
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "after_25_worker_calls": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 1,
+            "payload_hex": "3000",
+            "length": 2
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "cache_changed": true
+    },
+    {
+      "scenario": "read_other_selector",
+      "synthetic_frame_hex": "6d61696e10000400080001100001020030001d09",
+      "after_receive": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 1,
+            "payload_hex": "3000",
+            "length": 2
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "after_25_worker_calls": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 1,
+            "payload_hex": "3000",
+            "length": 2
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "cache_changed": false
+    },
+    {
+      "scenario": "read_other_register",
+      "synthetic_frame_hex": "6d61696e10000100080001102601020030001603",
+      "after_receive": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "after_25_worker_calls": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "cache_changed": true
+    },
+    {
+      "scenario": "write_success",
+      "synthetic_frame_hex": "6d61696e100001000800021016000200aaee84ca",
+      "after_receive": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 1,
+            "payload_hex": "aaee",
+            "length": 2
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "after_25_worker_calls": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 1,
+            "payload_hex": "aaee",
+            "length": 2
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "cache_changed": false
+    },
+    {
+      "scenario": "write_rejected",
+      "synthetic_frame_hex": "6d61696e100001000800021016000200aa000486",
+      "after_receive": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 0,
+            "payload_hex": "aa00",
+            "length": 2
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "after_25_worker_calls": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 0,
+            "payload_hex": "aa00",
+            "length": 2
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "cache_changed": false
+    },
+    {
+      "scenario": "write_other_selector",
+      "synthetic_frame_hex": "6d61696e100004000800021016000200aaee88c6",
+      "after_receive": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 1,
+            "payload_hex": "aaee",
+            "length": 2
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "after_25_worker_calls": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 1,
+            "payload_hex": "aaee",
+            "length": 2
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "cache_changed": false
+    },
+    {
+      "scenario": "write_other_register",
+      "synthetic_frame_hex": "6d61696e100001000800021015000200aaee84f9",
+      "after_receive": {
+        "busy": 0,
+        "remaining_worker_invocations": 12,
+        "descriptor_register": 22,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "after_25_worker_calls": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "cache_changed": false
+    },
+    {
+      "scenario": "read_response_to_write",
+      "synthetic_frame_hex": "6d61696e10000100080001101600020030002e33",
+      "after_receive": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 1,
+            "payload_hex": "3000",
+            "length": 2
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "after_25_worker_calls": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 1,
+            "payload_hex": "3000",
+            "length": 2
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "cache_changed": false
+    },
+    {
+      "scenario": "write_response_to_read",
+      "synthetic_frame_hex": "6d61696e100001000800021000010200aaeebbfc",
+      "after_receive": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 1,
+            "payload_hex": "aaee",
+            "length": 2
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "after_25_worker_calls": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 1,
+            "payload_hex": "aaee",
+            "length": 2
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "cache_changed": false
+    },
+    {
+      "scenario": "unknown_operation",
+      "synthetic_frame_hex": "6d61696e100001000800031000010200300090dc",
+      "after_receive": {
+        "busy": 0,
+        "remaining_worker_invocations": 20,
+        "descriptor_register": 256,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "after_25_worker_calls": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "cache_changed": false
+    },
+    {
+      "scenario": "bad_crc",
+      "synthetic_frame_hex": "6d61696e10000100080001100001020030001104",
+      "after_receive": {
+        "busy": 0,
+        "remaining_worker_invocations": 20,
+        "descriptor_register": 256,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "after_25_worker_calls": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "cache_changed": false
+    },
+    {
+      "scenario": "partial_header",
+      "synthetic_frame_hex": "6d61696e10000100080001100001020030",
+      "after_receive": {
+        "busy": 1,
+        "remaining_worker_invocations": 20,
+        "descriptor_register": 256,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 17,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "after_25_worker_calls": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "cache_changed": false
+    },
+    {
+      "scenario": "partial_body",
+      "synthetic_frame_hex": "6d61696e100001001a0001100001140000000000",
+      "after_receive": {
+        "busy": 1,
+        "remaining_worker_invocations": 20,
+        "descriptor_register": 256,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 20,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "after_25_worker_calls": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "cache_changed": false
+    },
+    {
+      "scenario": "no_magic",
+      "synthetic_frame_hex": "0000000000000000000000000000000000000000",
+      "after_receive": {
+        "busy": 1,
+        "remaining_worker_invocations": 20,
+        "descriptor_register": 256,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 20,
+        "transmissions": 1,
+        "completions": [],
+        "settings_and_output_flags_preserved": true
+      },
+      "after_25_worker_calls": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "cache_changed": false
+    },
+    {
+      "scenario": "read_short_payload",
+      "synthetic_frame_hex": "6d61696e10000100070001100001010030bde1",
+      "after_receive": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 1,
+            "payload_hex": "30",
+            "length": 1
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "after_25_worker_calls": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "08005010",
+            "accepted": 1,
+            "payload_hex": "30",
+            "length": 1
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "cache_changed": true
+    }
+  ],
+  "queue_order": [
+    {
+      "priority": 0,
+      "insertion": 0,
+      "usable_slots": 19,
+      "full_queue_accepts": 0,
+      "first_remaining_register": 0,
+      "eviction_invokes_callback_or_free": false
+    },
+    {
+      "priority": 0,
+      "insertion": 1,
+      "usable_slots": 19,
+      "full_queue_accepts": 0,
+      "first_remaining_register": 0,
+      "eviction_invokes_callback_or_free": false
+    },
+    {
+      "priority": 0,
+      "insertion": 2,
+      "usable_slots": 19,
+      "full_queue_accepts": 1,
+      "first_remaining_register": 1,
+      "eviction_invokes_callback_or_free": false
+    },
+    {
+      "priority": 1,
+      "insertion": 0,
+      "usable_slots": 19,
+      "full_queue_accepts": 0,
+      "first_remaining_register": 0,
+      "eviction_invokes_callback_or_free": false
+    },
+    {
+      "priority": 1,
+      "insertion": 1,
+      "usable_slots": 19,
+      "full_queue_accepts": 0,
+      "first_remaining_register": 0,
+      "eviction_invokes_callback_or_free": false
+    },
+    {
+      "priority": 1,
+      "insertion": 2,
+      "usable_slots": 19,
+      "full_queue_accepts": 1,
+      "first_remaining_register": 1,
+      "eviction_invokes_callback_or_free": false
+    },
+    {
+      "mixed_priority_prepend_pop_order": [
+        258,
+        257,
+        256
+      ]
+    }
+  ],
+  "real_callbacks": [
+    {
+      "name": "status_mismatch_vs_timeout",
+      "after_six_mismatches": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 7,
+        "completions": [
+          {
+            "callback": "0801b2d4",
+            "accepted": 1,
+            "payload_hex": "a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+            "length": 146
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "after_six_timeouts": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 13,
+        "completions": [
+          {
+            "callback": "0801b2d4",
+            "accepted": 1,
+            "payload_hex": "a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5",
+            "length": 146
+          },
+          {
+            "callback": "0801b2d4",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          },
+          {
+            "callback": "0801b2d4",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          },
+          {
+            "callback": "0801b2d4",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          },
+          {
+            "callback": "0801b2d4",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          },
+          {
+            "callback": "0801b2d4",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          },
+          {
+            "callback": "0801b2d4",
+            "accepted": 0,
+            "payload_hex": null,
+            "length": 0
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      },
+      "cache_cleared_after_timeouts": true,
+      "error_requests": [
+        25
+      ],
+      "refresh_requests": [
+        10
+      ]
+    },
+    {
+      "name": "configuration_completion",
+      "write_ack_accepted": false,
+      "start_queued_after_ack": false,
+      "state": {
+        "busy": 0,
+        "remaining_worker_invocations": 0,
+        "descriptor_register": 0,
+        "descriptor_cleared": true,
+        "rx_stored_bytes": 0,
+        "transmissions": 1,
+        "completions": [
+          {
+            "callback": "0801649c",
+            "accepted": 0,
+            "payload_hex": "0000",
+            "length": 2
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      }
+    },
+    {
+      "name": "configuration_completion",
+      "write_ack_accepted": true,
+      "start_queued_after_ack": true,
+      "state": {
+        "busy": 1,
+        "remaining_worker_invocations": 12,
+        "descriptor_register": 21,
+        "descriptor_cleared": false,
+        "rx_stored_bytes": 0,
+        "transmissions": 2,
+        "completions": [
+          {
+            "callback": "0801649c",
+            "accepted": 1,
+            "payload_hex": "aaee",
+            "length": 2
+          }
+        ],
+        "settings_and_output_flags_preserved": true
+      }
+    }
+  ]
+}

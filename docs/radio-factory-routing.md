@@ -14,6 +14,10 @@ ports are BLE (`0`) and the controller UART (`2`). The handler neither
 validates the embedded diagnostic message nor chooses its destination from
 the embedded `A1` source byte.
 
+The later [main-controller exposure audit](gen2-diagnostic-getter-audit.md)
+finds an initially empty radio-facing command table. Radio forwarding alone
+therefore does not establish reachability of the Gen 2 inner getters.
+
 **This is not proof that a diagnostic request is safe on an original C1000.**
 The original A1761 radio image has not been replayed. A matching radio version
 string does not establish identical instructions, routing or controller

@@ -30,7 +30,10 @@ and [1,347 original Smart-policy cases](c1000-smart-auto-off-policy.md),
 [73 Gen 2 fault-recovery cases](gen2-pv-mode4-recovery.md), and an
 [exhaustive 65,536-value internal recovery-command check](gen2-pv-recovery-event-origins.md),
 [96 Gen 2 radio-routing cases](radio-factory-routing.md), and
-[47 main-controller PV retry/status-failure cases](gen2-pv-bridge-and-restart.md).
+[47 main-controller PV retry/status-failure cases](gen2-pv-bridge-and-restart.md),
+[45 UART worker/completion cases](gen2-uart-request-worker.md),
+[109 diagnostic-getter/exposure cases](gen2-diagnostic-getter-audit.md), and
+[24 normal preference-readback cases](gen2-preference-readback.md).
 These have independent commands and manifests; they are not included in the
 1,842-case combined runner. Their individual commands are in the linked records.
 The diagnostic cases include malformed-envelope stalls; those synthetic inputs

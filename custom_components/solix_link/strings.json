@@ -45,7 +45,9 @@
       "mains_present": {"name": "Mains present"},
       "ac_output_enabled": {"name": "AC output enabled"},
       "dc_input_active": {"name": "DC/PV input active"},
-      "pv_weak_light_locked": {"name": "PV weak-light lock"}
+      "pv_weak_light_locked": {"name": "PV weak-light lock"},
+      "ac_power_saving_mode_enabled": {"name": "AC Smart mode enabled"},
+      "dc_power_saving_mode_enabled": {"name": "DC Smart mode enabled"}
     },
     "sensor": {
       "battery": {"name": "Battery"},
@@ -60,7 +62,9 @@
       "power_flow": {"name": "AC power source", "state": {"grid": "Grid", "battery": "Battery", "transitioning": "Transitioning", "unknown": "Unknown"}},
       "dc_input_power_raw": {"name": "DC/PV input power (raw)"},
       "controller_error_code": {"name": "Controller error code (raw)"},
-      "battery_health_raw": {"name": "Battery compatibility byte (raw)"}
+      "battery_health_raw": {"name": "Battery compatibility byte (raw)"},
+      "ac_output_frequency_setting_hz": {"name": "AC output frequency setting"},
+      "ac_frequency_raw": {"name": "AC frequency byte (raw)"}
     },
     "number": {
       "charging_power": {"name": "AC charging power limit"},

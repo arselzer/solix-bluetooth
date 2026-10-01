@@ -157,6 +157,12 @@ async def main():
 asyncio.run(main())
 ```
 
+Read-only C1000 Gen 2 settings now include `ac_output_frequency_setting_hz`
+(saved 50/60 Hz configuration) and AC/DC `*_power_saving_mode_enabled` flags.
+These do not measure frequency or establish output state. C2000's unproven
+frequency byte is `ac_frequency_raw`, replacing `ac_input_frequency_hz`.
+See [the readback audit](../docs/gen2-preference-readback.md); no new setters are exposed.
+
 For a Home Assistant integration, reuse the discovered `BLEDevice` and register
 an update callback:
 
@@ -364,8 +370,8 @@ to full or empty while charging or discharging, and 0 while idle. Check
 availability before using these values for alerts. The C1000 input field was
 confirmed by a live unplug/replug test; the C2000 field was checked read-only
 while connected, but its outage transition was not tested. C2000 telemetry also
-includes the main/controller/inverter/BMS/wireless software versions, AC input
-frequency, configured AC charging-power limit, and expansion-battery count when
+includes the main/controller/inverter/BMS/wireless software versions, a raw
+frequency byte, configured AC charging-power limit, and expansion-battery count when
 their corresponding raw blocks are present. These were decoded from six live
 read-only C2000 samples; no alarm or fault code has been identified. The C2000
 also reports AC/DC output timer countdowns, AC/DC power-saving flags, device

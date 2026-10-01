@@ -53,6 +53,22 @@ def test_firmware_diagnostics_are_kept_raw_without_health_or_power_inferences():
     assert "battery_health" not in metrics and "named_controller_fault" not in metrics
 
 
+def test_gen2_settings_remain_read_only_and_frequency_is_not_a_mains_measurement():
+    raw = status(model="c1000_gen2")
+    raw["metrics"].update(ac_output_frequency_setting_hz=50, ac_power_saving_mode_enabled=1,
+                          dc_power_saving_mode_enabled=0, ac_input_frequency_hz=50)
+    metrics = api.parse_snapshot(raw)["metrics"]
+    assert metrics["ac_output_frequency_setting_hz"] == 50
+    assert metrics["ac_power_saving_mode_enabled"] == 1
+    assert "ac_input_frequency_hz" not in metrics
+    for command in ("set-ac-power-saving", "set-dc-power-saving"):
+        with pytest.raises(ValueError):
+            api.validate_command(raw, {"command": command, "enabled": False})
+    for command in ("set-ac-frequency", "set-ac-output-frequency"):
+        with pytest.raises(ValueError):
+            api.validate_command(raw, {"command": command, "hz": 60})
+
+
 @pytest.mark.parametrize("url", ["ftp://gateway", "http://user:secret@gateway", "http://gateway/?token=secret",
                                  "http://gateway/#fragment", "http://gateway:99999", "http://gateway\n"])
 def test_url_rejects_credentials_parameters_and_invalid_values(url):

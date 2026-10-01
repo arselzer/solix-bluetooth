@@ -19,7 +19,8 @@ Home Assistant integration for the local gateway.
   with the corresponding output off and Fast charging over both transports;
   additional legacy BLE controls. Prime also adds direct AC output control.
 - C1000 Gen 2 solar weak-light-lock diagnostic, traced to firmware; physical
-  low-light behavior remains untested.
+  low-light behavior remains untested. Read-only saved frequency and AC/DC Smart
+  settings are also available; [readback semantics](docs/gen2-preference-readback.md).
 - Authenticated JSON HTTP, SSE and Prometheus for multiple stations.
 - Up to eight supported stations on one isolated AP, with separate certificates,
   telemetry and command queues.

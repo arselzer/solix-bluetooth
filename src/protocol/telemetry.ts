@@ -44,6 +44,13 @@ export function parseC1000Gen2Telemetry(payload: Uint8Array, model: 'c1000' | 'c
   put('ac_power_in', 0xa6, 3, 5);
   put('ac_charging_power_limit_w', 0xa4, 5, 7);
   if (model === 'c1000') {
+    const settings = values.get(0xa4);
+    if (settings?.length === 34 && settings[0] === 4) {
+      // A1763 saved configuration; neither frequency measurement nor output state.
+      data.ac_output_frequency_setting_hz = [50, 60].includes(settings[7]) ? settings[7] : 'unknown';
+      data.ac_power_saving_mode_enabled = settings[8] <= 1 ? settings[8] : 'unknown';
+      data.dc_power_saving_mode_enabled = settings[13] <= 1 ? settings[13] : 'unknown';
+    }
     const pv = values.get(0xa8);
     if (pv?.length === 4 && pv[0] === 4 && (pv[1] === 0 || pv[1] === 1)) {
       data.dc_input_active = pv[1];
@@ -59,7 +66,8 @@ export function parseC1000Gen2Telemetry(payload: Uint8Array, model: 'c1000' | 'c
     }
   }
   if (model === 'c2000') {
-    put('ac_input_frequency_hz', 0xa4, 7, 8);
+    const settings = values.get(0xa4);
+    if (settings?.length === 34 && settings[0] === 4) data.ac_frequency_raw = settings[7];
     const versions = values.get(0xf9);
     if (versions) {
       for (const [name, slot] of [
@@ -358,7 +366,10 @@ export const PARAM_LABELS: Record<string, string> = {
   // C1000/C300X Power Station
   ac_power_in: 'AC Input (W)',
   ac_input_connected: 'AC Input Connected',
-  ac_input_frequency_hz: 'AC Input Frequency (Hz)',
+  ac_frequency_raw: 'AC Frequency Byte (Raw)',
+  ac_output_frequency_setting_hz: 'AC Output Frequency Setting (Hz)',
+  ac_power_saving_mode_enabled: 'AC Smart Mode Enabled',
+  dc_power_saving_mode_enabled: 'DC Smart Mode Enabled',
   ac_charging_power_limit_w: 'AC Charging Limit (W)',
   expansion_battery_count: 'Expansion Batteries',
   ac_power_out: 'AC Output (W)',
@@ -399,7 +410,7 @@ export const PARAM_GROUPS: Record<string, string[]> = {
   'Solar': ['solar_power_total', 'solar_input_1', 'solar_input_2', 'solar_pv1_power', 'solar_pv2_power', 'solar_pv3_power', 'solar_pv4_power', 'total_pv_power', 'third_party_pv_power', 'pv_yield_total', 'pv_yield', 'inverter_power'],
   'Battery': ['battery_percentage', 'battery_percentage_aggregate', 'battery_health', 'charge_power', 'battery_charge_current', 'battery_power', 'battery_capacity', 'battery_voltage', 'battery_cycles', 'battery_resistance', 'battery_temperature', 'charging_state', 'battery_soc_raw', 'battery_status', 'battery_discharging', 'time_remaining_minutes'],
   'Output': ['output_power', 'house_demand', 'house_consumption', 'power_out', 'power_out_status', 'total_output_power', 'ac_power_in', 'ac_power_out', 'dc_power_out', 'type_c_power_out', 'usb_power_out'],
-  'Grid': ['grid_power', 'grid_power_limit', 'grid_import_power', 'grid_import_limit', 'grid_export_current', 'grid_export_power', 'grid_to_home_power', 'grid_connection', 'grid_status', 'feed_in_limit', 'ac_input_connected', 'ac_input_frequency_hz'],
+  'Grid': ['grid_power', 'grid_power_limit', 'grid_import_power', 'grid_import_limit', 'grid_export_current', 'grid_export_power', 'grid_to_home_power', 'grid_connection', 'grid_status', 'feed_in_limit', 'ac_input_connected', 'ac_frequency_raw'],
   'Settings': ['output_limit_setting', 'home_load_setting', 'max_output_power', 'max_charge_power', 'capacity_wh', 'max_ac_input_w', 'min_soc_pct', 'max_charge_soc', 'max_discharge_soc', 'charge_speed', 'display_timeout_s', 'idle_timeout_min', 'ups_mode', 'ups_reserve_pct', 'light_mode', 'led_mode', 'system_mode', 'ac_charging_power_limit_w'],
   'Counters': ['cumulative_discharge_kwh', 'cumulative_demand_kwh', 'cumulative_consumption_kwh', 'cumulative_grid_kwh', 'energy_today', 'daily_pv_counter', 'charged_energy', 'discharged_energy', 'charge_sessions', 'discharge_sessions'],
   'Switches': ['ac_switch', 'dc_switch', 'ac_enabled', 'dc_enabled', 'ac_output_active', 'dc_output_active'],

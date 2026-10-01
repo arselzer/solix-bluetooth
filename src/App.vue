@@ -86,6 +86,7 @@ function restoreLogsFromStorage() {
       deviceName.value = savedDevice || null;
     }
     if (isGen2.value || 'battery_health_raw' in telemetry) delete telemetry.battery_health;
+    if (isGen2.value) delete telemetry.ac_input_frequency_hz;
   } catch { /* Parse error */ }
 }
 

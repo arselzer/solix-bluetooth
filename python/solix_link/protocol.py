@@ -228,7 +228,11 @@ def decode_telemetry(payload: bytes, model: Model | None = None) -> tuple[dict[s
             if count <= 6 and len(mode) >= 26 + 3 * count:
                 metrics["tou_schedule_slot_count"] = count
     if model == Model.C2000_GEN2:
-        number("ac_input_frequency_hz", 0xA4, 7, 8)
+        # Observed C2000 byte only: A1763 uses this offset for a saved output
+        # setting. C2000 semantics are unproved; do not label it input Hz.
+        settings = values.get(0xA4, b"")
+        if len(settings) == 34 and settings[0] == 4:
+            metrics["ac_frequency_raw"] = settings[7]
         # C2000 A4 settings layout follows the public Gen 2 field map. These
         # values were also checked against a live read-only 34-byte A4 block.
         number("ac_output_timer_remaining_seconds", 0xA4, 1, 5)
@@ -300,6 +304,13 @@ def decode_telemetry(payload: bytes, model: Model | None = None) -> tuple[dict[s
         number("display_enabled", 0xA4, 22, 23)
         number("port_memory_enabled", 0xA4, 23, 24)
         settings = values.get(0xA4, b"")
+        if len(settings) == 34 and settings[0] == 4:
+            # A1763/main 1.1.4.9 saved getters 0801a580/5ac/5dc.
+            # These are configuration readbacks, not measured frequency or
+            # promises that an output will stay on under the Smart policy.
+            metrics["ac_output_frequency_setting_hz"] = settings[7] if settings[7] in (50, 60) else "unknown"
+            for name, offset in (("ac_power_saving_mode_enabled", 8), ("dc_power_saving_mode_enabled", 13)):
+                metrics[name] = settings[offset] if settings[offset] in (0, 1) else "unknown"
         if len(settings) >= 33 and settings[0] == 4:
             # Recovered C1000 controller: alert getter -> A4[32], bit 1.
             metrics["ac_off_grid_alert_enabled"] = (settings[32] >> 1) & 1

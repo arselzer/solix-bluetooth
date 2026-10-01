@@ -104,7 +104,7 @@ completion increments it. When it exceeds 6, the callback:
 3. Requests error code 25 and display refresh argument 10.
 
 An error request is not a guarantee that public telemetry will report
-`raw_controller_error_code=25`: other alarms and priority selection may
+`controller_error_code=25`: other alarms and priority selection may
 determine the reported code. A cleared cache is likewise **not proof of
 physical mains loss, AC-output interruption, fault clearing, or an energy
 transfer**. These cases preserve the main input/output word; actual physical
@@ -116,11 +116,13 @@ success, each failed callback resets the count before incrementing; it also
 clears cache word `013b.bit7`. That branch does not reach the bulk clear.
 
 The replay calls this exact callback but substitutes error/display delivery.
-It does not execute the UART worker's timeout/retry policy, status parser,
-or main event policy reacting to the zeroed cache. Completion count cannot
-be converted to missed packets or elapsed time from these tests. Still, it
-shows that this failure path does not retain a previously successful DSP
-status forever, and why a zero status can mean communication loss.
+It does not execute the UART worker or status parser. The later
+[45-case worker audit](gen2-uart-request-worker.md) shows that unrelated or
+rejected replies can discard a pending request **without invoking its callback**.
+Matching short or different-selector replies can invoke success without a
+complete DSP-cache refresh. Six failures here therefore means six delivered
+failure callbacks, not six missed packets or a bound on cache age. Physical
+UART timing and main event policy reacting to the zeroed cache remain untested.
 
 ## A separate parameter-update retry detail
 

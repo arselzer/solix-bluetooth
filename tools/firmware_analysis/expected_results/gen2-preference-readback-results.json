@@ -1,0 +1,320 @@
+{
+  "firmware": "MainMcu-decoded.bin",
+  "sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9",
+  "cases": 24,
+  "hardware_access": false,
+  "results": [
+    {
+      "frequency_raw": 0,
+      "frequency_supported_by_loader": false,
+      "ac_saving": 0,
+      "dc_saving": 0,
+      "a4_offsets": [
+        7,
+        8,
+        13
+      ],
+      "settings_and_output_flags_preserved": true,
+      "command_or_output_policy_executed": false
+    },
+    {
+      "frequency_raw": 0,
+      "frequency_supported_by_loader": false,
+      "ac_saving": 0,
+      "dc_saving": 1,
+      "a4_offsets": [
+        7,
+        8,
+        13
+      ],
+      "settings_and_output_flags_preserved": true,
+      "command_or_output_policy_executed": false
+    },
+    {
+      "frequency_raw": 0,
+      "frequency_supported_by_loader": false,
+      "ac_saving": 1,
+      "dc_saving": 0,
+      "a4_offsets": [
+        7,
+        8,
+        13
+      ],
+      "settings_and_output_flags_preserved": true,
+      "command_or_output_policy_executed": false
+    },
+    {
+      "frequency_raw": 0,
+      "frequency_supported_by_loader": false,
+      "ac_saving": 1,
+      "dc_saving": 1,
+      "a4_offsets": [
+        7,
+        8,
+        13
+      ],
+      "settings_and_output_flags_preserved": true,
+      "command_or_output_policy_executed": false
+    },
+    {
+      "frequency_raw": 49,
+      "frequency_supported_by_loader": false,
+      "ac_saving": 0,
+      "dc_saving": 0,
+      "a4_offsets": [
+        7,
+        8,
+        13
+      ],
+      "settings_and_output_flags_preserved": true,
+      "command_or_output_policy_executed": false
+    },
+    {
+      "frequency_raw": 49,
+      "frequency_supported_by_loader": false,
+      "ac_saving": 0,
+      "dc_saving": 1,
+      "a4_offsets": [
+        7,
+        8,
+        13
+      ],
+      "settings_and_output_flags_preserved": true,
+      "command_or_output_policy_executed": false
+    },
+    {
+      "frequency_raw": 49,
+      "frequency_supported_by_loader": false,
+      "ac_saving": 1,
+      "dc_saving": 0,
+      "a4_offsets": [
+        7,
+        8,
+        13
+      ],
+      "settings_and_output_flags_preserved": true,
+      "command_or_output_policy_executed": false
+    },
+    {
+      "frequency_raw": 49,
+      "frequency_supported_by_loader": false,
+      "ac_saving": 1,
+      "dc_saving": 1,
+      "a4_offsets": [
+        7,
+        8,
+        13
+      ],
+      "settings_and_output_flags_preserved": true,
+      "command_or_output_policy_executed": false
+    },
+    {
+      "frequency_raw": 50,
+      "frequency_supported_by_loader": true,
+      "ac_saving": 0,
+      "dc_saving": 0,
+      "a4_offsets": [
+        7,
+        8,
+        13
+      ],
+      "settings_and_output_flags_preserved": true,
+      "command_or_output_policy_executed": false
+    },
+    {
+      "frequency_raw": 50,
+      "frequency_supported_by_loader": true,
+      "ac_saving": 0,
+      "dc_saving": 1,
+      "a4_offsets": [
+        7,
+        8,
+        13
+      ],
+      "settings_and_output_flags_preserved": true,
+      "command_or_output_policy_executed": false
+    },
+    {
+      "frequency_raw": 50,
+      "frequency_supported_by_loader": true,
+      "ac_saving": 1,
+      "dc_saving": 0,
+      "a4_offsets": [
+        7,
+        8,
+        13
+      ],
+      "settings_and_output_flags_preserved": true,
+      "command_or_output_policy_executed": false
+    },
+    {
+      "frequency_raw": 50,
+      "frequency_supported_by_loader": true,
+      "ac_saving": 1,
+      "dc_saving": 1,
+      "a4_offsets": [
+        7,
+        8,
+        13
+      ],
+      "settings_and_output_flags_preserved": true,
+      "command_or_output_policy_executed": false
+    },
+    {
+      "frequency_raw": 60,
+      "frequency_supported_by_loader": true,
+      "ac_saving": 0,
+      "dc_saving": 0,
+      "a4_offsets": [
+        7,
+        8,
+        13
+      ],
+      "settings_and_output_flags_preserved": true,
+      "command_or_output_policy_executed": false
+    },
+    {
+      "frequency_raw": 60,
+      "frequency_supported_by_loader": true,
+      "ac_saving": 0,
+      "dc_saving": 1,
+      "a4_offsets": [
+        7,
+        8,
+        13
+      ],
+      "settings_and_output_flags_preserved": true,
+      "command_or_output_policy_executed": false
+    },
+    {
+      "frequency_raw": 60,
+      "frequency_supported_by_loader": true,
+      "ac_saving": 1,
+      "dc_saving": 0,
+      "a4_offsets": [
+        7,
+        8,
+        13
+      ],
+      "settings_and_output_flags_preserved": true,
+      "command_or_output_policy_executed": false
+    },
+    {
+      "frequency_raw": 60,
+      "frequency_supported_by_loader": true,
+      "ac_saving": 1,
+      "dc_saving": 1,
+      "a4_offsets": [
+        7,
+        8,
+        13
+      ],
+      "settings_and_output_flags_preserved": true,
+      "command_or_output_policy_executed": false
+    },
+    {
+      "frequency_raw": 61,
+      "frequency_supported_by_loader": false,
+      "ac_saving": 0,
+      "dc_saving": 0,
+      "a4_offsets": [
+        7,
+        8,
+        13
+      ],
+      "settings_and_output_flags_preserved": true,
+      "command_or_output_policy_executed": false
+    },
+    {
+      "frequency_raw": 61,
+      "frequency_supported_by_loader": false,
+      "ac_saving": 0,
+      "dc_saving": 1,
+      "a4_offsets": [
+        7,
+        8,
+        13
+      ],
+      "settings_and_output_flags_preserved": true,
+      "command_or_output_policy_executed": false
+    },
+    {
+      "frequency_raw": 61,
+      "frequency_supported_by_loader": false,
+      "ac_saving": 1,
+      "dc_saving": 0,
+      "a4_offsets": [
+        7,
+        8,
+        13
+      ],
+      "settings_and_output_flags_preserved": true,
+      "command_or_output_policy_executed": false
+    },
+    {
+      "frequency_raw": 61,
+      "frequency_supported_by_loader": false,
+      "ac_saving": 1,
+      "dc_saving": 1,
+      "a4_offsets": [
+        7,
+        8,
+        13
+      ],
+      "settings_and_output_flags_preserved": true,
+      "command_or_output_policy_executed": false
+    },
+    {
+      "frequency_raw": 255,
+      "frequency_supported_by_loader": false,
+      "ac_saving": 0,
+      "dc_saving": 0,
+      "a4_offsets": [
+        7,
+        8,
+        13
+      ],
+      "settings_and_output_flags_preserved": true,
+      "command_or_output_policy_executed": false
+    },
+    {
+      "frequency_raw": 255,
+      "frequency_supported_by_loader": false,
+      "ac_saving": 0,
+      "dc_saving": 1,
+      "a4_offsets": [
+        7,
+        8,
+        13
+      ],
+      "settings_and_output_flags_preserved": true,
+      "command_or_output_policy_executed": false
+    },
+    {
+      "frequency_raw": 255,
+      "frequency_supported_by_loader": false,
+      "ac_saving": 1,
+      "dc_saving": 0,
+      "a4_offsets": [
+        7,
+        8,
+        13
+      ],
+      "settings_and_output_flags_preserved": true,
+      "command_or_output_policy_executed": false
+    },
+    {
+      "frequency_raw": 255,
+      "frequency_supported_by_loader": false,
+      "ac_saving": 1,
+      "dc_saving": 1,
+      "a4_offsets": [
+        7,
+        8,
+        13
+      ],
+      "settings_and_output_flags_preserved": true,
+      "command_or_output_policy_executed": false
+    }
+  ]
+}

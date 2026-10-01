@@ -6,6 +6,18 @@ on main 1.1.4.9/radio 0.3.3.0, including generated local-ID authentication.
 The [energy lifecycle follow-up](energy-report-lifecycle.md) adds reporting
 switch, retry and persistence replays plus actual C2000 report reception.
 
+The October 1 [UART worker audit](gen2-uart-request-worker.md) adds 45 cases:
+some rejected or unrelated replies discard requests without callbacks, and
+matching-register success need not refresh the complete DSP cache. It qualifies
+the earlier [six-failure cache-clear interpretation](gen2-pv-bridge-and-restart.md).
+The [109-case diagnostic-getter audit](gen2-diagnostic-getter-audit.md) finds no
+complete disaster-plan backup among 23 reviewed getters and confirms a shared
+upgrade-reset-timer cancellation side effect. Its initially empty controller
+command table also leaves BLE/MQTT getter reachability unproved. Normal
+[frequency/Smart readbacks](gen2-preference-readback.md) add three C1000 Gen 2
+read-only metrics and 24 serializer cases; C2000's unproven frequency byte is
+now labeled raw. No diagnostic or frequency control is exposed.
+
 The latest [reconnect, clock and power-gate follow-up](c2000-mqtt-reconnect-and-tariff.md)
 includes additional offline executions and guarded C2000 hardware observations.
 The [parallel power-control analysis](mqtt-power-offline-followup.md) adds

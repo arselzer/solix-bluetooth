@@ -1,0 +1,12 @@
+{
+  "firmware_sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9",
+  "cases": 24,
+  "hardware_access": false,
+  "source_sha256": {
+    "emulate_gen2_preference_readback.py": "511da4ca8f152ce2cb2aece2b40bcdf4f35699f3db1c8ecbd6af01bbe83e32e7",
+    "emulate_general_settings.py": "26ce041976a8fd1ac43feb2851c1717363761cb2f7da69f4d780b3f42b8ef0ba",
+    "emulate_clock_semantics.py": "945b649c3b5cec00d816041e783641085ccfbdb5f80efc2ed2c4e15f3bae30f2",
+    "replay_io.py": "731d795a5ec37e2cf12b809b7122eaf7a29d84c21a2ecd43fafa3e2f8d962d30"
+  },
+  "result_sha256": "9a022f09f38ee497d8163d9fd4b1bfbf30bdbf13d9826f9c2abaa6399faaae31"
+}

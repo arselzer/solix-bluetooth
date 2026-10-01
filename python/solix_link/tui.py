@@ -26,6 +26,8 @@ METRIC_LABELS = {
     "ac_input_power_w": "AC input (W)",
     "ac_output_power_w": "AC output (W)",
     "ac_input_connected": "AC input connected",
+    "ac_output_frequency_setting_hz": "AC output frequency setting (Hz)",
+    "ac_frequency_raw": "AC frequency byte (raw)",
     "ac_output_enabled": "AC output enabled",
     "ac_output_timer_remaining_seconds": "AC countdown remaining (seconds)",
     "dc_output_enabled": "DC output enabled",

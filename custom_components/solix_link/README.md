@@ -97,6 +97,10 @@ Authorization header. Treat HA configuration backups as containing credentials.
   PV power units remain unverified, so no power class/statistics are assigned.
   C1000 Gen 2 also exposes a disabled PV weak-light-lock binary diagnostic
   from the strict firmware-derived A3 flag. Its physical PV behavior is untested.
+  Additional read-only diagnostics show C1000 Gen 2's saved AC output frequency
+  (50/60 Hz), Gen 2 AC/DC Smart flags and C2000's unproven raw frequency byte.
+  These expose no frequency or Gen 2 Smart controls and do not measure frequency
+  or predict output state. See [the readback audit](../../docs/gen2-preference-readback.md).
 - Configuration switch: C1000 Gen 2 native MQTT off-grid alert preference.
   Setting storage and readback were verified; actual alert delivery is untested.
 - Fast-charging configuration switch: original C1000 legacy/Prime BLE/native MQTT, or C1000 Gen 2

@@ -1,0 +1,50 @@
+{
+  "hardware_access": false,
+  "case_counts": {
+    "send_timeout": 20,
+    "response_correlation": 15,
+    "queue_order": 7,
+    "real_callbacks": 3
+  },
+  "firmware": {
+    "filename": "MainMcu-decoded.bin",
+    "sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9"
+  },
+  "runtime": {
+    "python": "3.12.3",
+    "unicorn": "2.1.4"
+  },
+  "source_sha256": {
+    "emulate_uart_request_worker.py": "499234889687fcced89b4a0d2d998717cf423024de7e8e7058c8771f0575da12",
+    "emulate_clock_semantics.py": "945b649c3b5cec00d816041e783641085ccfbdb5f80efc2ed2c4e15f3bae30f2",
+    "replay_io.py": "731d795a5ec37e2cf12b809b7122eaf7a29d84c21a2ecd43fafa3e2f8d962d30"
+  },
+  "result_sha256": "5b084d5780e7176b5b62f2e63bb98e91281e5124750dae64d3c1dc2c8c405b8d",
+  "substitutions": [
+    "UART port2 send and return value",
+    "allocation/free",
+    "timer registration/start",
+    "logging",
+    "memcpy/memset/memcmp",
+    "alarm/display delivery",
+    "synthetic RX buffer and worker invocation schedule"
+  ],
+  "executed": [
+    "queue init/push/prepend/pop/overflow replacement",
+    "request worker and countdown",
+    "read/write serializers and CRC16",
+    "receive parser and correlation",
+    "bulk status and configuration callbacks",
+    "configuration/start builders",
+    "communication counters"
+  ],
+  "not_executed": [
+    "UART ISR/DMA/framing arrival",
+    "physical peripheral or DSP",
+    "timer ISR/scheduler",
+    "wall-clock timing",
+    "higher policy retry task",
+    "public app/radio transport",
+    "concurrent interrupt interleavings"
+  ]
+}

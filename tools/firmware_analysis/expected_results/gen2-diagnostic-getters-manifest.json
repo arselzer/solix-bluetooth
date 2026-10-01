@@ -1,0 +1,9 @@
+{
+  "cases_passed": 109,
+  "firmware_sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9",
+  "fixture_source": "Synthetic RAM, GPIO and inner requests; public firmware constants",
+  "results_sha256": "a4aab5a1d1219de7d2c2006114ea0bcd78205228ddf64654f15f35501bfb928d",
+  "script": "emulate_gen2_diagnostic_getters.py",
+  "script_sha256": "e87006b13ab1f35fb86c1e03e529e5c2fdd310058eef403648d95216230d7575",
+  "unicorn_version": "2.1.4"
+}

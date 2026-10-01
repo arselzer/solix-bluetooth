@@ -25,9 +25,13 @@ DESCRIPTIONS = (
                             options=["standard", "time_of_use", "self_consumption", "custom", "unknown"]),
     SensorEntityDescription(key="power_flow", translation_key="power_flow", device_class=SensorDeviceClass.ENUM,
                             options=["grid", "battery", "transitioning", "unknown"]),
+    # Saved configuration, deliberately without measurement state class.
+    SensorEntityDescription(key="ac_output_frequency_setting_hz", translation_key="ac_output_frequency_setting_hz",
+                            native_unit_of_measurement="Hz", entity_category=EntityCategory.DIAGNOSTIC,
+                            entity_registry_enabled_default=False),
     *(SensorEntityDescription(key=key, translation_key=key, entity_category=EntityCategory.DIAGNOSTIC,
                              entity_registry_enabled_default=False)
-      for key in ("dc_input_power_raw", "controller_error_code", "battery_health_raw")),
+      for key in ("dc_input_power_raw", "controller_error_code", "battery_health_raw", "ac_frequency_raw")),
 )
 
 
@@ -41,6 +45,10 @@ async def async_setup_entry(hass, entry: SolixConfigEntry, async_add_entities) -
         for name, snapshot in (coordinator.data or {}).items():
             for description in DESCRIPTIONS:
                 key = description.key
+                if key == "ac_output_frequency_setting_hz" and snapshot.get("model") != "c1000_gen2":
+                    continue
+                if key == "ac_frequency_raw" and snapshot.get("model") != "c2000_gen2":
+                    continue
                 present = key in (snapshot if key == "power_flow" else snapshot["metrics"])
                 if present and (name, key) not in added:
                     added.add((name, key))
@@ -67,6 +75,8 @@ class SolixSensor(SolixEntity, SensorEntity):
         if key == "battery_percentage" and value is not None and not 0 <= value <= 100:
             return None
         if key.endswith("_power_w") and value is not None and value < 0:
+            return None
+        if key == "ac_output_frequency_setting_hz" and value not in (50, 60):
             return None
         return value
 

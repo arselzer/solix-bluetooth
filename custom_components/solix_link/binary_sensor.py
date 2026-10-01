@@ -20,6 +20,9 @@ DESCRIPTIONS = (
     BinarySensorEntityDescription(key="pv_weak_light_locked", translation_key="pv_weak_light_locked",
                                   entity_category=EntityCategory.DIAGNOSTIC,
                                   entity_registry_enabled_default=False),
+    *(BinarySensorEntityDescription(key=key, translation_key=key, entity_category=EntityCategory.DIAGNOSTIC,
+                                   entity_registry_enabled_default=False)
+      for key in ("ac_power_saving_mode_enabled", "dc_power_saving_mode_enabled")),
 )
 
 
@@ -34,6 +37,9 @@ async def async_setup_entry(hass, entry: SolixConfigEntry, async_add_entities) -
             for description in DESCRIPTIONS:
                 key = description.key
                 if key == "pv_weak_light_locked" and snapshot.get("model") != "c1000_gen2":
+                    continue
+                # Original C1000 already has supported switches for these.
+                if key in ("ac_power_saving_mode_enabled", "dc_power_saving_mode_enabled") and snapshot.get("model") not in ("c1000_gen2", "c2000_gen2"):
                     continue
                 if key in snapshot["metrics"] and (name, key) not in added:
                     added.add((name, key))
