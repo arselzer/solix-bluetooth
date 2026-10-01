@@ -1048,7 +1048,7 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
                     value = self.query_one("#setting-value", Input).value
                     if key in ("ac-power-saving", "dc-power-saving", "port-memory") or (
                             key == "fast-charge" and backend.target and backend.target.model == Model.C1000
-                            and backend.target.device and backend.target.device.protocol == "prime") or (
+                            and (backend.target.native or backend.target.device and backend.target.device.protocol == "prime")) or (
                             backend.target and backend.target.native and key in ("display-brightness", "display-timeout")):
                         try:
                             parsed = parse_enabled(value) if key in ("ac-power-saving", "dc-power-saving", "port-memory", "fast-charge") else int(value)

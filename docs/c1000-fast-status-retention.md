@@ -6,7 +6,8 @@ its main image is unavailable here. These instruction addresses and synthetic
 results do not validate Fast over that station's Prime or native transport.
 The subsequent [Prime hardware trial](c1000-prime-fast-validation.md) independently
 validated Bluetooth retention, restoration and input-loss clearing on 1.7.1;
-native Fast remains unverified.
+the [separate native trial](c1000-native-fast-validation.md) subsequently
+validated native MQTT retention and restoration at full SOC.
 The instruction replay accessed no device, network, cloud, output or
 persistent storage. A separate retained-capture comparison is described below.
 
@@ -139,8 +140,10 @@ one different 1.7.1 control; it does not validate Fast. No Gen 2 or C2000
 control follows from this original-model analysis.
 The later [Prime Fast validation](c1000-prime-fast-validation.md) follows these
 fresh-baseline and restoration requirements, confirming the flag at full SOC
-and automatic clearing after input loss. Actual Fast charging rate and native
-MQTT Fast still require separate evidence.
+and automatic clearing after input loss. The subsequent native trial supplies
+its independent transport evidence. Actual Fast charging rate remains unverified;
+the [current-limit follow-up](c1000-fast-current-limits.md) explains additional
+temperature, voltage-history and DSP constraints in the older image.
 
 ## Reproduce
 

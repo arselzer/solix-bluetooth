@@ -1,0 +1,1168 @@
+{
+  "image_sha256": "b295ee8613f5c96e70dcc905896df516621cab4dc590bb580eac6b84519911a6",
+  "unicorn_version": "2.1.4",
+  "scope": "Synthetic main1.5.9 requests only; no DSP, electrical or main1.7.1 validation",
+  "fast_table": [
+    {
+      "segment": 0,
+      "temperature_c": 9,
+      "raw_current_limit": 600
+    },
+    {
+      "segment": 0,
+      "temperature_c": 10,
+      "raw_current_limit": 1500
+    },
+    {
+      "segment": 0,
+      "temperature_c": 15,
+      "raw_current_limit": 3000
+    },
+    {
+      "segment": 0,
+      "temperature_c": 20,
+      "raw_current_limit": 3210
+    },
+    {
+      "segment": 0,
+      "temperature_c": 50,
+      "raw_current_limit": 1500
+    },
+    {
+      "segment": 1,
+      "temperature_c": 9,
+      "raw_current_limit": 600
+    },
+    {
+      "segment": 1,
+      "temperature_c": 10,
+      "raw_current_limit": 1500
+    },
+    {
+      "segment": 1,
+      "temperature_c": 15,
+      "raw_current_limit": 2400
+    },
+    {
+      "segment": 1,
+      "temperature_c": 20,
+      "raw_current_limit": 3090
+    },
+    {
+      "segment": 1,
+      "temperature_c": 50,
+      "raw_current_limit": 1500
+    },
+    {
+      "segment": 2,
+      "temperature_c": 9,
+      "raw_current_limit": 600
+    },
+    {
+      "segment": 2,
+      "temperature_c": 10,
+      "raw_current_limit": 1200
+    },
+    {
+      "segment": 2,
+      "temperature_c": 15,
+      "raw_current_limit": 1800
+    },
+    {
+      "segment": 2,
+      "temperature_c": 20,
+      "raw_current_limit": 2400
+    },
+    {
+      "segment": 2,
+      "temperature_c": 50,
+      "raw_current_limit": 1500
+    },
+    {
+      "segment": 3,
+      "temperature_c": 9,
+      "raw_current_limit": 600
+    },
+    {
+      "segment": 3,
+      "temperature_c": 10,
+      "raw_current_limit": 1200
+    },
+    {
+      "segment": 3,
+      "temperature_c": 15,
+      "raw_current_limit": 1200
+    },
+    {
+      "segment": 3,
+      "temperature_c": 20,
+      "raw_current_limit": 1500
+    },
+    {
+      "segment": 3,
+      "temperature_c": 50,
+      "raw_current_limit": 1500
+    },
+    {
+      "segment": 4,
+      "temperature_c": 9,
+      "raw_current_limit": 600
+    },
+    {
+      "segment": 4,
+      "temperature_c": 10,
+      "raw_current_limit": 1200
+    },
+    {
+      "segment": 4,
+      "temperature_c": 15,
+      "raw_current_limit": 1200
+    },
+    {
+      "segment": 4,
+      "temperature_c": 20,
+      "raw_current_limit": 1500
+    },
+    {
+      "segment": 4,
+      "temperature_c": 50,
+      "raw_current_limit": 1500
+    }
+  ],
+  "policy_to_dsp": [
+    {
+      "soc": 50,
+      "fast": false,
+      "variant_byte": 0,
+      "temperature_c": 25,
+      "saved_d1_watts": 1000,
+      "e5": "0100",
+      "segment": 0,
+      "descriptor": [
+        910,
+        392,
+        2340
+      ],
+      "new_register4_words": [
+        380,
+        392,
+        234,
+        910,
+        0,
+        280
+      ],
+      "new_diagnostic": {
+        "ChgVot": 39200,
+        "ChgCurr": 23400,
+        "AcChgPower": 910
+      },
+      "saved_settings_and_outputs_unchanged": true
+    },
+    {
+      "soc": 50,
+      "fast": false,
+      "variant_byte": 1,
+      "temperature_c": 25,
+      "saved_d1_watts": 1000,
+      "e5": "0100",
+      "segment": 0,
+      "descriptor": [
+        910,
+        568,
+        1170
+      ],
+      "new_register4_words": [
+        380,
+        568,
+        117,
+        910,
+        0,
+        280
+      ],
+      "new_diagnostic": {
+        "ChgVot": 56800,
+        "ChgCurr": 11700,
+        "AcChgPower": 910
+      },
+      "saved_settings_and_outputs_unchanged": true
+    },
+    {
+      "soc": 50,
+      "fast": true,
+      "variant_byte": 0,
+      "temperature_c": 25,
+      "saved_d1_watts": 1000,
+      "e5": "0101",
+      "segment": 0,
+      "descriptor": [
+        1400,
+        392,
+        3210
+      ],
+      "new_register4_words": [
+        380,
+        392,
+        321,
+        1400,
+        0,
+        280
+      ],
+      "new_diagnostic": {
+        "ChgVot": 39200,
+        "ChgCurr": 32100,
+        "AcChgPower": 1400
+      },
+      "saved_settings_and_outputs_unchanged": true
+    },
+    {
+      "soc": 50,
+      "fast": true,
+      "variant_byte": 1,
+      "temperature_c": 25,
+      "saved_d1_watts": 1000,
+      "e5": "0101",
+      "segment": 0,
+      "descriptor": [
+        1000,
+        568,
+        3210
+      ],
+      "new_register4_words": [
+        380,
+        568,
+        321,
+        1000,
+        0,
+        280
+      ],
+      "new_diagnostic": {
+        "ChgVot": 56800,
+        "ChgCurr": 32100,
+        "AcChgPower": 1000
+      },
+      "saved_settings_and_outputs_unchanged": true
+    },
+    {
+      "soc": 85,
+      "fast": false,
+      "variant_byte": 0,
+      "temperature_c": 25,
+      "saved_d1_watts": 1000,
+      "e5": "0100",
+      "segment": 1,
+      "descriptor": [
+        910,
+        392,
+        2340
+      ],
+      "new_register4_words": [
+        380,
+        392,
+        234,
+        910,
+        0,
+        280
+      ],
+      "new_diagnostic": {
+        "ChgVot": 39200,
+        "ChgCurr": 23400,
+        "AcChgPower": 910
+      },
+      "saved_settings_and_outputs_unchanged": true
+    },
+    {
+      "soc": 85,
+      "fast": false,
+      "variant_byte": 1,
+      "temperature_c": 25,
+      "saved_d1_watts": 1000,
+      "e5": "0100",
+      "segment": 1,
+      "descriptor": [
+        910,
+        568,
+        1170
+      ],
+      "new_register4_words": [
+        380,
+        568,
+        117,
+        910,
+        0,
+        280
+      ],
+      "new_diagnostic": {
+        "ChgVot": 56800,
+        "ChgCurr": 11700,
+        "AcChgPower": 910
+      },
+      "saved_settings_and_outputs_unchanged": true
+    },
+    {
+      "soc": 85,
+      "fast": true,
+      "variant_byte": 0,
+      "temperature_c": 25,
+      "saved_d1_watts": 1000,
+      "e5": "0101",
+      "segment": 1,
+      "descriptor": [
+        1400,
+        392,
+        3090
+      ],
+      "new_register4_words": [
+        380,
+        392,
+        309,
+        1400,
+        0,
+        280
+      ],
+      "new_diagnostic": {
+        "ChgVot": 39200,
+        "ChgCurr": 30900,
+        "AcChgPower": 1400
+      },
+      "saved_settings_and_outputs_unchanged": true
+    },
+    {
+      "soc": 85,
+      "fast": true,
+      "variant_byte": 1,
+      "temperature_c": 25,
+      "saved_d1_watts": 1000,
+      "e5": "0101",
+      "segment": 1,
+      "descriptor": [
+        1000,
+        568,
+        3090
+      ],
+      "new_register4_words": [
+        380,
+        568,
+        309,
+        1000,
+        0,
+        280
+      ],
+      "new_diagnostic": {
+        "ChgVot": 56800,
+        "ChgCurr": 30900,
+        "AcChgPower": 1000
+      },
+      "saved_settings_and_outputs_unchanged": true
+    },
+    {
+      "soc": 92,
+      "fast": false,
+      "variant_byte": 0,
+      "temperature_c": 25,
+      "saved_d1_watts": 1000,
+      "e5": "0100",
+      "segment": 2,
+      "descriptor": [
+        910,
+        392,
+        2340
+      ],
+      "new_register4_words": [
+        380,
+        392,
+        234,
+        910,
+        0,
+        280
+      ],
+      "new_diagnostic": {
+        "ChgVot": 39200,
+        "ChgCurr": 23400,
+        "AcChgPower": 910
+      },
+      "saved_settings_and_outputs_unchanged": true
+    },
+    {
+      "soc": 92,
+      "fast": false,
+      "variant_byte": 1,
+      "temperature_c": 25,
+      "saved_d1_watts": 1000,
+      "e5": "0100",
+      "segment": 2,
+      "descriptor": [
+        910,
+        568,
+        1170
+      ],
+      "new_register4_words": [
+        380,
+        568,
+        117,
+        910,
+        0,
+        280
+      ],
+      "new_diagnostic": {
+        "ChgVot": 56800,
+        "ChgCurr": 11700,
+        "AcChgPower": 910
+      },
+      "saved_settings_and_outputs_unchanged": true
+    },
+    {
+      "soc": 92,
+      "fast": true,
+      "variant_byte": 0,
+      "temperature_c": 25,
+      "saved_d1_watts": 1000,
+      "e5": "0101",
+      "segment": 2,
+      "descriptor": [
+        1400,
+        392,
+        2400
+      ],
+      "new_register4_words": [
+        380,
+        392,
+        240,
+        1400,
+        0,
+        280
+      ],
+      "new_diagnostic": {
+        "ChgVot": 39200,
+        "ChgCurr": 24000,
+        "AcChgPower": 1400
+      },
+      "saved_settings_and_outputs_unchanged": true
+    },
+    {
+      "soc": 92,
+      "fast": true,
+      "variant_byte": 1,
+      "temperature_c": 25,
+      "saved_d1_watts": 1000,
+      "e5": "0101",
+      "segment": 2,
+      "descriptor": [
+        1000,
+        568,
+        2400
+      ],
+      "new_register4_words": [
+        380,
+        568,
+        240,
+        1000,
+        0,
+        280
+      ],
+      "new_diagnostic": {
+        "ChgVot": 56800,
+        "ChgCurr": 24000,
+        "AcChgPower": 1000
+      },
+      "saved_settings_and_outputs_unchanged": true
+    },
+    {
+      "soc": 97,
+      "fast": false,
+      "variant_byte": 0,
+      "temperature_c": 25,
+      "saved_d1_watts": 1000,
+      "e5": "0100",
+      "segment": 3,
+      "descriptor": [
+        910,
+        392,
+        2340
+      ],
+      "new_register4_words": [
+        380,
+        392,
+        234,
+        910,
+        0,
+        280
+      ],
+      "new_diagnostic": {
+        "ChgVot": 39200,
+        "ChgCurr": 23400,
+        "AcChgPower": 910
+      },
+      "saved_settings_and_outputs_unchanged": true
+    },
+    {
+      "soc": 97,
+      "fast": false,
+      "variant_byte": 1,
+      "temperature_c": 25,
+      "saved_d1_watts": 1000,
+      "e5": "0100",
+      "segment": 3,
+      "descriptor": [
+        910,
+        568,
+        1170
+      ],
+      "new_register4_words": [
+        380,
+        568,
+        117,
+        910,
+        0,
+        280
+      ],
+      "new_diagnostic": {
+        "ChgVot": 56800,
+        "ChgCurr": 11700,
+        "AcChgPower": 910
+      },
+      "saved_settings_and_outputs_unchanged": true
+    },
+    {
+      "soc": 97,
+      "fast": true,
+      "variant_byte": 0,
+      "temperature_c": 25,
+      "saved_d1_watts": 1000,
+      "e5": "0101",
+      "segment": 3,
+      "descriptor": [
+        1400,
+        392,
+        1500
+      ],
+      "new_register4_words": [
+        380,
+        392,
+        150,
+        1400,
+        0,
+        280
+      ],
+      "new_diagnostic": {
+        "ChgVot": 39200,
+        "ChgCurr": 15000,
+        "AcChgPower": 1400
+      },
+      "saved_settings_and_outputs_unchanged": true
+    },
+    {
+      "soc": 97,
+      "fast": true,
+      "variant_byte": 1,
+      "temperature_c": 25,
+      "saved_d1_watts": 1000,
+      "e5": "0101",
+      "segment": 3,
+      "descriptor": [
+        1000,
+        568,
+        1500
+      ],
+      "new_register4_words": [
+        380,
+        568,
+        150,
+        1000,
+        0,
+        280
+      ],
+      "new_diagnostic": {
+        "ChgVot": 56800,
+        "ChgCurr": 15000,
+        "AcChgPower": 1000
+      },
+      "saved_settings_and_outputs_unchanged": true
+    },
+    {
+      "soc": 99,
+      "fast": false,
+      "variant_byte": 0,
+      "temperature_c": 25,
+      "saved_d1_watts": 1000,
+      "e5": "0100",
+      "segment": 4,
+      "descriptor": [
+        910,
+        392,
+        2340
+      ],
+      "new_register4_words": [
+        380,
+        392,
+        234,
+        910,
+        0,
+        280
+      ],
+      "new_diagnostic": {
+        "ChgVot": 39200,
+        "ChgCurr": 23400,
+        "AcChgPower": 910
+      },
+      "saved_settings_and_outputs_unchanged": true
+    },
+    {
+      "soc": 99,
+      "fast": false,
+      "variant_byte": 1,
+      "temperature_c": 25,
+      "saved_d1_watts": 1000,
+      "e5": "0100",
+      "segment": 4,
+      "descriptor": [
+        910,
+        568,
+        1170
+      ],
+      "new_register4_words": [
+        380,
+        568,
+        117,
+        910,
+        0,
+        280
+      ],
+      "new_diagnostic": {
+        "ChgVot": 56800,
+        "ChgCurr": 11700,
+        "AcChgPower": 910
+      },
+      "saved_settings_and_outputs_unchanged": true
+    },
+    {
+      "soc": 99,
+      "fast": true,
+      "variant_byte": 0,
+      "temperature_c": 25,
+      "saved_d1_watts": 1000,
+      "e5": "0101",
+      "segment": 4,
+      "descriptor": [
+        1400,
+        392,
+        1500
+      ],
+      "new_register4_words": [
+        380,
+        392,
+        150,
+        1400,
+        0,
+        280
+      ],
+      "new_diagnostic": {
+        "ChgVot": 39200,
+        "ChgCurr": 15000,
+        "AcChgPower": 1400
+      },
+      "saved_settings_and_outputs_unchanged": true
+    },
+    {
+      "soc": 99,
+      "fast": true,
+      "variant_byte": 1,
+      "temperature_c": 25,
+      "saved_d1_watts": 1000,
+      "e5": "0101",
+      "segment": 4,
+      "descriptor": [
+        1000,
+        568,
+        1500
+      ],
+      "new_register4_words": [
+        380,
+        568,
+        150,
+        1000,
+        0,
+        280
+      ],
+      "new_diagnostic": {
+        "ChgVot": 56800,
+        "ChgCurr": 15000,
+        "AcChgPower": 1000
+      },
+      "saved_settings_and_outputs_unchanged": true
+    }
+  ],
+  "thermal_hysteresis": [
+    {
+      "fast": false,
+      "traces": [
+        {
+          "temperature_c": 25,
+          "saved_d1_watts": 1000,
+          "e5": "0100",
+          "segment": 0,
+          "descriptor": [
+            910,
+            392,
+            2340
+          ],
+          "new_register4_words": [
+            380,
+            392,
+            234,
+            910,
+            0,
+            280
+          ],
+          "new_diagnostic": {
+            "ChgVot": 39200,
+            "ChgCurr": 23400,
+            "AcChgPower": 910
+          }
+        },
+        {
+          "temperature_c": 24,
+          "saved_d1_watts": 1000,
+          "e5": "0100",
+          "segment": 0,
+          "descriptor": [
+            910,
+            392,
+            2340
+          ],
+          "new_register4_words": null,
+          "new_diagnostic": null
+        },
+        {
+          "temperature_c": 23,
+          "saved_d1_watts": 1000,
+          "e5": "0100",
+          "segment": 0,
+          "descriptor": [
+            910,
+            392,
+            1500
+          ],
+          "new_register4_words": [
+            380,
+            392,
+            150,
+            910,
+            0,
+            280
+          ],
+          "new_diagnostic": {
+            "ChgVot": 39200,
+            "ChgCurr": 15000,
+            "AcChgPower": 910
+          }
+        }
+      ],
+      "note": "One-degree downward boundary crossing can retain previous current limit"
+    },
+    {
+      "fast": true,
+      "traces": [
+        {
+          "temperature_c": 20,
+          "saved_d1_watts": 1000,
+          "e5": "0101",
+          "segment": 0,
+          "descriptor": [
+            1400,
+            392,
+            3210
+          ],
+          "new_register4_words": [
+            380,
+            392,
+            321,
+            1400,
+            0,
+            280
+          ],
+          "new_diagnostic": {
+            "ChgVot": 39200,
+            "ChgCurr": 32100,
+            "AcChgPower": 1400
+          }
+        },
+        {
+          "temperature_c": 19,
+          "saved_d1_watts": 1000,
+          "e5": "0101",
+          "segment": 0,
+          "descriptor": [
+            1400,
+            392,
+            3210
+          ],
+          "new_register4_words": null,
+          "new_diagnostic": null
+        },
+        {
+          "temperature_c": 18,
+          "saved_d1_watts": 1000,
+          "e5": "0101",
+          "segment": 0,
+          "descriptor": [
+            1400,
+            392,
+            3000
+          ],
+          "new_register4_words": [
+            380,
+            392,
+            300,
+            1400,
+            0,
+            280
+          ],
+          "new_diagnostic": {
+            "ChgVot": 39200,
+            "ChgCurr": 30000,
+            "AcChgPower": 1400
+          }
+        }
+      ],
+      "note": "One-degree downward boundary crossing can retain previous current limit"
+    }
+  ],
+  "voltage_segment_advance": [
+    {
+      "soc_held_constant": 50,
+      "pack_voltage_mv": 39199,
+      "max_cell_mv": 3565,
+      "traces": [
+        {
+          "saved_d1_watts": 1000,
+          "e5": "0101",
+          "segment": 0,
+          "descriptor": [
+            1400,
+            392,
+            3210
+          ],
+          "new_register4_words": [
+            391,
+            392,
+            321,
+            1400,
+            0,
+            280
+          ],
+          "new_diagnostic": {
+            "ChgVot": 39200,
+            "ChgCurr": 32100,
+            "AcChgPower": 1400
+          }
+        },
+        {
+          "saved_d1_watts": 1000,
+          "e5": "0101",
+          "segment": 0,
+          "descriptor": [
+            1400,
+            392,
+            3210
+          ],
+          "new_register4_words": null,
+          "new_diagnostic": null
+        },
+        {
+          "saved_d1_watts": 1000,
+          "e5": "0101",
+          "segment": 0,
+          "descriptor": [
+            1400,
+            392,
+            3210
+          ],
+          "new_register4_words": null,
+          "new_diagnostic": null
+        },
+        {
+          "saved_d1_watts": 1000,
+          "e5": "0101",
+          "segment": 0,
+          "descriptor": [
+            1400,
+            392,
+            3210
+          ],
+          "new_register4_words": null,
+          "new_diagnostic": null
+        },
+        {
+          "saved_d1_watts": 1000,
+          "e5": "0101",
+          "segment": 0,
+          "descriptor": [
+            1400,
+            392,
+            3210
+          ],
+          "new_register4_words": null,
+          "new_diagnostic": null
+        },
+        {
+          "saved_d1_watts": 1000,
+          "e5": "0101",
+          "segment": 0,
+          "descriptor": [
+            1400,
+            392,
+            3210
+          ],
+          "new_register4_words": null,
+          "new_diagnostic": null
+        },
+        {
+          "saved_d1_watts": 1000,
+          "e5": "0101",
+          "segment": 0,
+          "descriptor": [
+            1400,
+            392,
+            3210
+          ],
+          "new_register4_words": null,
+          "new_diagnostic": null
+        }
+      ],
+      "clock_frequency_not_assumed": true
+    },
+    {
+      "soc_held_constant": 50,
+      "pack_voltage_mv": 39200,
+      "max_cell_mv": 3565,
+      "traces": [
+        {
+          "saved_d1_watts": 1000,
+          "e5": "0101",
+          "segment": 0,
+          "descriptor": [
+            1400,
+            392,
+            3210
+          ],
+          "new_register4_words": [
+            392,
+            392,
+            321,
+            1400,
+            0,
+            280
+          ],
+          "new_diagnostic": {
+            "ChgVot": 39200,
+            "ChgCurr": 32100,
+            "AcChgPower": 1400
+          }
+        },
+        {
+          "saved_d1_watts": 1000,
+          "e5": "0101",
+          "segment": 0,
+          "descriptor": [
+            1400,
+            392,
+            3210
+          ],
+          "new_register4_words": null,
+          "new_diagnostic": null
+        },
+        {
+          "saved_d1_watts": 1000,
+          "e5": "0101",
+          "segment": 0,
+          "descriptor": [
+            1400,
+            392,
+            3210
+          ],
+          "new_register4_words": null,
+          "new_diagnostic": null
+        },
+        {
+          "saved_d1_watts": 1000,
+          "e5": "0101",
+          "segment": 0,
+          "descriptor": [
+            1400,
+            392,
+            3210
+          ],
+          "new_register4_words": null,
+          "new_diagnostic": null
+        },
+        {
+          "saved_d1_watts": 1000,
+          "e5": "0101",
+          "segment": 0,
+          "descriptor": [
+            1400,
+            392,
+            3210
+          ],
+          "new_register4_words": null,
+          "new_diagnostic": null
+        },
+        {
+          "saved_d1_watts": 1000,
+          "e5": "0101",
+          "segment": 1,
+          "descriptor": [
+            1400,
+            392,
+            3210
+          ],
+          "new_register4_words": null,
+          "new_diagnostic": null
+        },
+        {
+          "saved_d1_watts": 1000,
+          "e5": "0101",
+          "segment": 1,
+          "descriptor": [
+            1400,
+            392,
+            3090
+          ],
+          "new_register4_words": [
+            392,
+            392,
+            309,
+            1400,
+            0,
+            280
+          ],
+          "new_diagnostic": {
+            "ChgVot": 39200,
+            "ChgCurr": 30900,
+            "AcChgPower": 1400
+          }
+        }
+      ],
+      "clock_frequency_not_assumed": true
+    }
+  ],
+  "ceiling_during_fast": [
+    {
+      "traces": [
+        {
+          "step": "baseline",
+          "saved_d1_watts": 1000,
+          "e5": "0100",
+          "segment": 0,
+          "descriptor": [
+            910,
+            392,
+            2340
+          ],
+          "new_register4_words": [
+            380,
+            392,
+            234,
+            910,
+            0,
+            280
+          ],
+          "new_diagnostic": {
+            "ChgVot": 39200,
+            "ChgCurr": 23400,
+            "AcChgPower": 910
+          }
+        },
+        {
+          "step": "fast_on",
+          "saved_d1_watts": 1000,
+          "e5": "0101",
+          "segment": 0,
+          "descriptor": [
+            1400,
+            392,
+            3210
+          ],
+          "new_register4_words": [
+            380,
+            392,
+            321,
+            1400,
+            0,
+            280
+          ],
+          "new_diagnostic": {
+            "ChgVot": 39200,
+            "ChgCurr": 32100,
+            "AcChgPower": 1400
+          }
+        },
+        {
+          "step": "saved_ceiling_300_while_fast",
+          "saved_d1_watts": 300,
+          "e5": "0101",
+          "segment": 0,
+          "descriptor": [
+            1400,
+            392,
+            3210
+          ],
+          "new_register4_words": null,
+          "new_diagnostic": null
+        },
+        {
+          "step": "fast_off_uses_new_saved_ceiling",
+          "saved_d1_watts": 300,
+          "e5": "0100",
+          "segment": 0,
+          "descriptor": [
+            273,
+            392,
+            2340
+          ],
+          "new_register4_words": [
+            380,
+            392,
+            234,
+            273,
+            0,
+            280
+          ],
+          "new_diagnostic": {
+            "ChgVot": 39200,
+            "ChgCurr": 23400,
+            "AcChgPower": 273
+          }
+        },
+        {
+          "step": "restore_saved_ceiling",
+          "saved_d1_watts": 1000,
+          "e5": "0100",
+          "segment": 0,
+          "descriptor": [
+            910,
+            392,
+            2340
+          ],
+          "new_register4_words": [
+            380,
+            392,
+            234,
+            910,
+            0,
+            280
+          ],
+          "new_diagnostic": {
+            "ChgVot": 39200,
+            "ChgCurr": 23400,
+            "AcChgPower": 910
+          }
+        }
+      ],
+      "entire_original_protected_snapshot_restored": true,
+      "same_descriptor_does_not_enqueue_a_new_update": true
+    }
+  ],
+  "cases": 50,
+  "script_sha256": "10511d666a81ae6e042bbe404ec55cf50c161e486ef7d575321aa11321231a02"
+}

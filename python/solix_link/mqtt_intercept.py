@@ -277,6 +277,8 @@ class LocalMqttServer:
 
     async def set_fast_charge_enabled(self, enabled: bool) -> dict:
         request = self.commands.fast_charge(enabled)
+        if self.config.model == Model.C1000:
+            return await self._set_original_setting(request, "ac_fast_charge_enabled", int(enabled))
         return await self._set_c1000_setting(request, "ac_fast_charge_enabled", int(enabled))
 
     async def set_display_brightness(self, level: int) -> dict:
@@ -311,7 +313,7 @@ class LocalMqttServer:
         if self.config.model != Model.C1000 or metric not in (
                 "ac_charging_power_limit_w", "device_timeout_minutes", "display_brightness",
                 "display_timeout_seconds", "light_mode", "temperature_unit_fahrenheit",
-                "dc_power_saving_mode_enabled"):
+                "dc_power_saving_mode_enabled", "ac_fast_charge_enabled"):
             raise ValueError("Unsupported original C1000 native setting")
         async with self._control_lock:
             connection = self._control_connection()
@@ -729,7 +731,7 @@ class _Connection:
     async def send_original_setting(self, request: NativeMqttRequest) -> None:
         """Send one verified original setter, accepting an optional ACK only."""
         if (self.server.config.model != Model.C1000 or request.response_aliases
-                or request.response_command not in ("0844", "0845", "0846", "084c", "084f", "0850", "0876")):
+                or request.response_command not in ("0844", "0845", "0846", "084c", "084f", "0850", "085e", "0876")):
             raise ValueError("Unsupported original C1000 native setting")
         async with self.lock:
             if self.writer.is_closing() or not self.subscribed:

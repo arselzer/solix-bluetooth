@@ -45,7 +45,7 @@ const displayValid = computed(() => /^\d+$/.test(props.draft.seconds) && display
   && (!(nativeC1000.value || originalPreferenceProfile.value) || displayTimes.value.includes(numberMetric(props.station, 'display_timeout_seconds') ?? -1)));
 const portMemoryValid = computed(() => booleanReported('port_memory_enabled') && ['0', '1'].includes(props.draft.portMemory));
 const fastAvailable = computed(() => allowed('set-fast-charge') && (originalProfile.value
-  || props.station.model === 'c1000' && props.station.protocol === 'prime'
+  || props.station.model === 'c1000' && ['prime', 'native_mqtt'].includes(props.station.protocol ?? '')
   || props.station.model === 'c1000_gen2' && ['prime', 'native_mqtt'].includes(props.station.protocol ?? '')));
 const fastCaution = computed(() => props.station.model === 'c1000'
   ? 'Use an adequate AC supply. The flag may clear when AC input is removed; stored readback does not establish charging speed or reboot persistence.'

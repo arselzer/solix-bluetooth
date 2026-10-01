@@ -107,8 +107,7 @@ def test_original_native_interface_routes_only_advertised_preferences():
                     {"command": "set-temperature-unit", "fahrenheit": True}):
         api.validate_command(snapshot, payload)
     snapshot["controls"] = list(api.COMMANDS)
-    for payload in ({"command": "set-fast-charge", "enabled": True},
-                    {"command": "set-ac-power-saving", "enabled": True},
+    for payload in ({"command": "set-ac-power-saving", "enabled": True},
                     {"command": "set-dc-power-saving", "enabled": True},
                     {"command": "set-port-memory", "enabled": True},
                     {"command": "set-charge-cap", "upper": 90},

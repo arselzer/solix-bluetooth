@@ -44,13 +44,13 @@ class Monitor:
         return self.metrics.copy()
 
 
-def test_prime_eighth_capability_does_not_enable_native_fast():
+def test_independently_verified_prime_and_native_eighth_capability():
     assert len(original_prime_commands()) == 8
     assert "set-fast-charge" in MonitorService([original()]).supported_commands("original")
     assert _supports_operation(original(), "fast_charge")
     assert decode_setting("fast_charge", b'{"enabled":true}') == {"enabled": True}
-    assert len(native_commands_for_model(Model.C1000)) == 7
-    assert "set-fast-charge" not in native_commands_for_model(Model.C1000)
+    assert len(native_commands_for_model(Model.C1000)) == 8
+    assert "set-fast-charge" in native_commands_for_model(Model.C1000)
 
 
 @pytest.mark.parametrize("enabled", [False, True])

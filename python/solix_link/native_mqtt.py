@@ -183,8 +183,10 @@ class NativeMqttCommands:
 
     def fast_charge(self, enabled: bool) -> NativeMqttRequest:
         """Set C1000 fast charge; callers must confirm retention and protect tariffs."""
+        if self.model == Model.C1000:
+            return self._original_setting("fast_charge_enabled", enabled)
         if self.model != Model.C1000_GEN2:
-            raise ValueError("Fast charge supports C1000 Gen 2 only")
+            raise ValueError("Fast charge supports original C1000 and C1000 Gen 2 only")
         if type(enabled) is not bool:
             raise ValueError("enabled must be a boolean")
         return self._request("0101", tlv(0xA7, bytes((1, int(enabled)))), milliseconds=True)

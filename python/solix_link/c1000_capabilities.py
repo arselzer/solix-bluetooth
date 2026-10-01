@@ -26,10 +26,11 @@ C1000_PRIME_COMMAND_OPERATIONS = {
     "set-fast-charge": "fast_charge",
 }
 # Native writes require their own live verification, independent of BLE Prime.
-# Independent 2026-10-01 native trials confirmed these seven with restoration;
+# Independent 2026-10-01 native trials confirmed these eight with restoration;
 # DC Smart additionally requires fresh DC output OFF and protects the F8 tail.
 C1000_NATIVE_SETTINGS = frozenset(("ac_charging_power", "device_timeout", "display_brightness",
-                                    "display_timeout", "light_mode", "temperature_unit_fahrenheit", "dc_power_saving_mode_enabled"))
+                                    "display_timeout", "light_mode", "temperature_unit_fahrenheit", "dc_power_saving_mode_enabled",
+                                    "fast_charge_enabled"))
 ORIGINAL_DC_SMART_WARNING = ("Requires fresh DC output OFF. Smart may inherit an inactivity counter and later "
                           "turn the DC output off at low load; enabling does not guarantee a new grace period.")
 ORIGINAL_FAST_CHARGE_WARNING = ("Use an adequate AC supply. The fast-charge flag may clear when AC input is removed; "

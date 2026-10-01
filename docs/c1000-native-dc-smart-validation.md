@@ -35,9 +35,11 @@ allows exactly the expected F8 mode-byte change. It publishes once, checks
 any negative ACK, and confirms two complete fresh reports. Confirmation
 failure can leave a changed setting; automatic setting retries are excluded.
 
-The original model now has **seven independently verified native controls**,
+This trial brought the original model to **seven independently verified native controls**,
 including DC Smart. AP service, CLI, terminal, browser and HA expose the same
 boolean command; Gen 2 and original AC Smart remain excluded.
+The [subsequent native Fast trial](c1000-native-fast-validation.md) brings
+the independently verified native whitelist to eight.
 
 ```sh
 solix-link ap-service-set-dc-power-saving \

@@ -130,3 +130,9 @@ The useful next physical check is passive collection while an already connected
 PV source naturally transitions through low light. Compare complete A3/A6/A8
 status with the app or a meter; preserve raw reports. No induced fault, reset,
 output toggle or lock-clearing experiment is needed to validate this metric.
+
+The [external retry-origin follow-up](gen2-pv-retry-origins.md) adds 59 cases
+tracing the existing brightness command into user-action, timer and input-retry
+paths. A same-value nonzero brightness write is a candidate for a later physical
+trial in a naturally locked state; low-SOC side effects and physical timing
+remain unresolved. This supplies no automatic recovery API.

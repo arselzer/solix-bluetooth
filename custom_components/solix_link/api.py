@@ -222,7 +222,7 @@ def boolean_setting_supported(snapshot: dict, command: str) -> bool:
     if command in ("set-off-grid-alert", "set-port-memory"):
         supported = model == "c1000_gen2" and native_gen2(snapshot)
     elif command == "set-fast-charge":
-        supported = (model == "c1000" and protocol in ("legacy", "prime")
+        supported = (model == "c1000" and protocol in ("legacy", "prime", "native_mqtt")
                      or model == "c1000_gen2" and protocol in ("prime", "native_mqtt"))
     elif command in ("set-ac-power-saving", "set-dc-power-saving"):
         supported = original or (command == "set-dc-power-saving" and model == "c1000" and protocol in ("prime", "native_mqtt")

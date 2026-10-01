@@ -2,7 +2,9 @@
 
 Later on 2026-10-01, an [independent native DC Smart trial](c1000-native-dc-smart-validation.md)
 and public SDK repeat added a seventh control, with DC off and full F8
-restoration. The six-control measurements below describe the earlier trial.
+restoration. A subsequent [native Fast trial and public SDK repeat](c1000-native-fast-validation.md)
+added an eighth control, with independent final Bluetooth confirmation.
+The six-control measurements below describe the earlier trial.
 
 ## What the local trial established
 

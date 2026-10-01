@@ -63,8 +63,8 @@ Authorization header. Treat HA configuration backups as containing credentials.
   SDK each passed two writes/nine samples with AC on, DC off and complete
   baseline restoration. Only its F8 mode byte may change. Smart may inherit an
   inactivity counter and later turn DC output off at low load; enabling does
-  not guarantee a new grace period. Prime exposes eight controls; native MQTT
-  exposes seven, excluding Fast charging.
+  not guarantee a new grace period. Prime and native MQTT expose eight
+  independently validated controls, including the Fast flag.
   The native DC Smart prototype also passed two writes/fifteen fresh samples
   with complete settings/F8 restoration, AC on and DC off. Other models and
   AC Smart remain unsupported by this guarded native route.
@@ -98,7 +98,7 @@ Authorization header. Treat HA configuration backups as containing credentials.
   from the strict firmware-derived A3 flag. Its physical PV behavior is untested.
 - Configuration switch: C1000 Gen 2 native MQTT off-grid alert preference.
   Setting storage and readback were verified; actual alert delivery is untested.
-- Fast-charging configuration switch: original C1000 legacy/Prime BLE, or C1000 Gen 2
+- Fast-charging configuration switch: original C1000 legacy/Prime BLE/native MQTT, or C1000 Gen 2
   Prime BLE/native MQTT. Enabling on Gen 2 requires reported Standard mode with
   no active tariff; native MQTT also requires connected mains. Turning it off
   remains possible while a tariff is active. The gateway confirms the stored
@@ -106,7 +106,14 @@ Authorization header. Treat HA configuration backups as containing credentials.
   Original main 1.7.1 Prime OFF→ON, at least twelve seconds of flag retention,
   OFF restoration and all protected settings/F8 passed at 100% SOC with AC on.
   Input removal cleared its flag. Use adequate AC supply; charging speed and
-  reboot persistence remain unverified. Original native MQTT Fast is blocked.
+  reboot persistence remain unverified. Original native `005e` OFF→ON→OFF
+  independently passed two writes/twenty explicit fresh snapshots, including
+  four held samples over at least twelve seconds at 100% SOC; AC on/DC off and
+  all eleven protected preferences/F8 were restored. Original native Fast
+  does not require unavailable Gen 2 mains/mode/tariff telemetry.
+  Its public SDK repeat passed two writes/sixteen explicit full fresh snapshots,
+  plus internal baseline/confirmation reads, with the same restoration.
+  See [native Fast validation](../../docs/c1000-native-fast-validation.md).
   Native MQTT flag change/restoration passed on C1000 Gen 2 firmware 1.1.4.9
   at 100% SOC; actual charging power remains unverified.
 - AC/DC power-saving configuration switches: original C1000 legacy BLE only.

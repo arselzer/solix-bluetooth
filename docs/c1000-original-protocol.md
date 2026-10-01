@@ -22,8 +22,10 @@ The [subsequent independent native DC Smart trial](c1000-native-dc-smart-validat
 also passed, bringing native MQTT to seven controls with the same DC-off guard.
 The later [Prime Fast validation and public-SDK repeat](c1000-prime-fast-validation.md)
 added an eighth Bluetooth control on main 1.7.1. Fast retained its flag at
-100% SOC and cleared after input loss while original AC stayed on. Native
-Fast remains unverified; charging-rate and reboot-persistence claims are excluded.
+100% SOC and cleared after input loss while original AC stayed on. The independent
+[native Fast trial and public-SDK repeat](c1000-native-fast-validation.md)
+also passed, bringing native MQTT to eight controls. Actual Fast charging rate
+and reboot persistence remain unverified.
 
 The default profile uses the legacy P-256/AES-CBC handshake tested on 1.5.1,
 without a Prime client ID. The updated test unit requires explicit `prime`
@@ -154,7 +156,8 @@ verified; station Wi-Fi is unnecessary for the bridge.
 The upstream A1761 map includes cloud MQTT commands. The later
 [local native trial](c1000-original-mqtt-followup.md) established isolated
 bootstrap, mutual TLS and six confirmed native controls on main **1.7.1 /
-radio 0.3.3.0**; [DC Smart later added a seventh](c1000-native-dc-smart-validation.md).
+radio 0.3.3.0**; [DC Smart later added a seventh](c1000-native-dc-smart-validation.md)
+and [Fast an eighth](c1000-native-fast-validation.md).
 The AP service supports the original 16-character serial and
 original provisioning layout. This trial used the existing account ID;
 generated-ID setup remains unverified. The earlier main 1.5.1/radio 0.1.3.0
@@ -172,6 +175,9 @@ disables the saved timeout; it cannot guarantee uninterrupted radio access.
 Open work includes generated-ID original native setup; output timers; actual fast-charge rate
 and Smart-mode low-load behavior; expansion-battery data;
 charge/discharge limits if supported; and reliable mains/battery-state mapping.
+The [updated-firmware charging-rate trial](c1000-charging-rate-validation.md)
+restored all settings but remained inconclusive at near-full SOC; a low saved
+charging ceiling did not establish forced battery operation with mains present.
 The reference lists additional commands, but their BLE numbers and physical
 behavior need validation. No reserve or tariff capability has been established
 on the original C1000.

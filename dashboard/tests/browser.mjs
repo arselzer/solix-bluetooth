@@ -357,7 +357,7 @@ try {
   assert.equal(await page.locator('#charging-power option').first().getAttribute('value'), '100');
   assert.equal(await page.locator('#charging-power option').last().getAttribute('value'), '1000');
   assert.deepEqual(await page.locator('#display-timeout option').evaluateAll((options) => options.map((option) => option.value)), ['20', '30', '60', '300', '1800']);
-  for (const label of ['charge-cap', 'backup-reserve', 'discharge-floor', 'port-memory', 'fast-charge', 'ac-power-saving', 'off-grid-alert']) {
+  for (const label of ['charge-cap', 'backup-reserve', 'discharge-floor', 'port-memory', 'ac-power-saving', 'off-grid-alert']) {
     assert.equal(await page.locator(`#${label}`).count(), 0);
   }
   const beforeNativeOriginal = (await recorded()).length;
@@ -369,10 +369,12 @@ try {
     ['light-mode', '1', 'set-light', { mode: 1 }],
     ['temperature-unit', '1', 'set-temperature-unit', { fahrenheit: true }],
     ['dc-power-saving', '0', 'set-dc-power-saving', { enabled: false }],
+    ['fast-charge', '1', 'set-fast-charge', { enabled: true }],
   ].entries()) {
     await page.locator(`#${label}`).selectOption(value);
     await propose(label);
     if (label === 'dc-power-saving') assert.match(await page.getByTestId('command-review').textContent(), /DC output OFF.*inactivity counter/s);
+    if (label === 'fast-charge') assert.match(await page.getByTestId('command-review').textContent(), /adequate AC supply.*reboot persistence/s);
     await page.getByTestId('cancel-command').click();
     assert.equal((await recorded()).length, beforeNativeOriginal + index);
     await propose(label);
@@ -390,7 +392,7 @@ try {
   assert.equal(await page.getByTestId('supply-reading').locator('.source-value').textContent(), 'Unknown');
   await change({ readonly: false, available: false });
   await refresh();
-  for (const label of ['charging-power', 'display-brightness', 'device-timeout', 'display-timeout', 'light-mode', 'temperature-unit', 'dc-power-saving']) {
+  for (const label of ['charging-power', 'display-brightness', 'device-timeout', 'display-timeout', 'light-mode', 'temperature-unit', 'dc-power-saving', 'fast-charge']) {
     assert.equal(await page.locator(`#${label}`).isDisabled(), true);
   }
   await change({ available: true });

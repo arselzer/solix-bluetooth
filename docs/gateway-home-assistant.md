@@ -88,7 +88,7 @@ Original C1000 **legacy** BLE profiles expose `set-temperature-unit`/`fahrenheit
 automatically stop an output at low load; these configuration controls
 do not send an output-switch command. See the [physical trials](c1000-preferences-validation.md).
 
-Original C1000 **Prime/native MQTT 1.7.1** shares these seven controls:
+Original C1000 **Prime/native MQTT 1.7.1** shares these eight controls:
 
 | Command | Exact field | Values |
 | --- | --- | --- |
@@ -99,6 +99,7 @@ Original C1000 **Prime/native MQTT 1.7.1** shares these seven controls:
 | `set-light` | integer `mode` | 0 Off / 1 Low / 2 Medium / 3 High / 4 SOS |
 | `set-temperature-unit` | boolean `fahrenheit` | `true` / `false` |
 | `set-dc-power-saving` | boolean `enabled` | false Normal / true Smart; requires fresh DC output off |
+| `set-fast-charge` | boolean `enabled` | `true` / `false`; adequate AC supply required |
 
 Both directions of DC Smart require fresh DC output off. The BLE prototype
 and public SDK each passed two writes/nine fresh samples. Native prototype
@@ -123,13 +124,22 @@ requires all eleven settings and the full 21-byte `F8` flags freshly before and
 afterward; protected fields and unknown flags must remain unchanged. AC was
 enabled and DC disabled throughout the recorded snapshots. Other values have
 synthetic/range coverage. AC Smart and AC/DC switches remain unavailable on
-both profiles. Prime additionally exposes `set-fast-charge`
+both profiles. Both independently expose `set-fast-charge`
 with boolean `enabled`. Its 1.7.1 OFF→ON flag held for at least twelve seconds
 at 100% SOC, then restored OFF with AC outputs on and complete settings/F8
 baseline preservation. Removing AC input cleared the flag. Use an adequate AC
 supply; no charging-speed or reboot-persistence claim is made. The browser
 requires confirmation, and HA requires advertised capability/fresh binary
-readback. Prime has eight controls; native remains seven. The browser and HA expose matching settings,
+readback. Prime and native have eight controls. Native `005e` OFF→ON→OFF
+passed two writes/twenty explicit complete fresh snapshots, with four held
+samples over at least twelve seconds, complete eleven-preference/F8 restoration
+and AC on/DC off at 100% SOC. Use
+`ap-service-set-fast-charge --directory /private/ap --name original --enabled on|off`.
+The [native public SDK repeat](c1000-native-fast-validation.md) passed two writes
+and sixteen explicit full fresh snapshots plus internal baseline/confirmation
+reads, with identical protected-preference/F8 restoration.
+No Gen 2 mains/mode/tariff fields are assumed for original Fast.
+The browser and HA expose matching settings,
 including a Light select; the temperature sensor continues reporting Celsius.
 The [independent Fast public-SDK repeat](c1000-prime-fast-validation.md)
 also passed two writes with baseline restoration after read-only recharge settling.
@@ -137,7 +147,7 @@ Original native MQTT/radio 0.3.3.0 confirmed these six settings with 12 writes,
 restoration, 18 fresh snapshots and three matching final samples. Every native
 write is sent once and confirmed through fresh original status, preserving all
 eleven settings and the complete `F8` flags. No Gen 2 charging caps, reserve,
-tariffs, port memory, off-grid alert or fast-charge controls are offered on it.
+tariffs, port memory or off-grid alert controls are offered on it.
 The packaged AP service/public SDK subsequently passed all six roundtrips
 (14 writes with restoration). A 30-second Never check and local server restart
 also passed, reconnecting in about 2.26 seconds without BLE reprovisioning;

@@ -17,7 +17,11 @@ and [1,347 original Smart-policy cases](c1000-smart-auto-off-policy.md),
 [24 non-clearing full-status cases](gen2-backup-query-investigation.md), and
 [73 original timer/Smart/Fast cases](c1000-timer-and-mode-followup.md), and
 [93 original Fast-retention/BMS cases](c1000-fast-status-retention.md), and
-[27 radio/diagnostic export-candidate cases](gen2-backup-export-radio-app.md).
+[27 radio/diagnostic export-candidate cases](gen2-backup-export-radio-app.md),
+[59 original BMS-phase cases](c1000-battery-phase-firmware.md),
+[73 Gen 2 weak-light cases](gen2-weak-light-observability.md),
+[50 original Fast current-limit/DSP cases](c1000-fast-current-limits.md), and
+[59 Gen 2 solar-retry-origin cases](gen2-pv-retry-origins.md).
 These have independent commands and manifests; they are not included in the
 1,842-case combined runner. Their individual commands are in the linked records.
 

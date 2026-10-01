@@ -10,7 +10,7 @@ original C1000 and C1000/C2000 Gen 2: `ap-service-init`, `ap-service-run`, `ap-s
 local API, NTP and mTLS interception workflow, without an internet route.
 One [shared AP](../docs/multiple-ap-devices.md) supports multiple registered
 stations with terminal/browser/API selection. Native original C1000 exposes its
-seven validated preferences; controller readiness and Gen 2 tariff/charge-cap
+eight validated preferences; controller readiness and Gen 2 tariff/charge-cap
 controls are unavailable on that model.
 C1000 Gen 2 uses its generated BLE pairing ID for local MQTT; C2000 generated-ID
 MQTT remains unverified. See [C1000 findings](../docs/c1000-local-mqtt.md).
@@ -28,7 +28,7 @@ such as `monitor`, `serve` and `ap-service-status` keep their scripted behavior.
 | Model profile | Monitoring | Controls |
 | --- | --- | --- |
 | `c300` — C300/C300X AC | C300X tested live; C300 sibling uses the reference map | AC output, light, charging-power limit, screen timeout verified |
-| `c1000` — original A1761 | Legacy 1.5.1, explicit Prime 1.7.1 and native MQTT/radio 0.3.3.0 tested live | Legacy controls; Prime eight/native seven preferences, including DC Smart only while DC output is off; Prime adds Fast flag |
+| `c1000` — original A1761 | Legacy 1.5.1, explicit Prime 1.7.1 and native MQTT/radio 0.3.3.0 tested live | Legacy controls; Prime/native eight preferences, including Fast flag and DC Smart only while DC output is off |
 | `c1000_gen2` — A1763 | BLE and native MQTT tested live | Charge limits/power, display/device timeout, fast charge; native reserve, tariffs/grid return, temperature/alert, brightness/screen timeout, port memory and guarded discharge floor |
 | `c2000_gen2` — A1783 | Tested live | Upper charge cap, charging power, screen timeout; native reserve, all-day Peak and confirmed grid return |
 
@@ -227,9 +227,8 @@ solix-link set-temperature-unit --name c1000 --unit fahrenheit
 
 The default stays legacy; firmware advertisements do not select the transport.
 Prime 1.7.1 exposes eight settings: charging power, brightness, Device Timeout,
-screen timeout, light, temperature unit, DC Smart and Fast charging. The first
-seven are also verified through native MQTT on radio 0.3.3.0; native Fast is
-not supported.
+screen timeout, light, temperature unit, DC Smart and Fast charging. All eight
+are independently verified through native MQTT on radio 0.3.3.0.
 Live restoration covered 900/1000 W,
 brightness 1/2, Device Timeout 720/0 minutes, screen timeout 30/60 seconds,
 light Off/Low and Celsius/Fahrenheit. The three added preferences also passed
@@ -263,7 +262,16 @@ An independent public-SDK repeat passed both writes, four held samples and
 three restored checks after read-only recharge settling; see the
 [versioned Fast validation](../docs/c1000-prime-fast-validation.md).
 Use an adequate AC supply; these trials do not establish charging speed or
-reboot persistence. Native MQTT Fast remains unsupported.
+reboot persistence. Native Fast independently passed OFF→ON→OFF via `005e`,
+with two writes, twenty explicit complete fresh snapshots and four held samples
+over at least twelve seconds at 100% SOC. AC stayed on, DC off; all eleven
+protected preferences and the entire 21-byte F8 matched the restored baseline.
+The public SDK repeat passed two writes and sixteen explicit complete snapshots,
+plus each setter's fresh baseline and two confirmation reads, with the same
+full restoration. See [native Fast validation](../docs/c1000-native-fast-validation.md).
+Use `ap-service-set-fast-charge --directory /private/ap --name original --enabled on|off`.
+The same supply/persistence/rate caveats apply; original telemetry does not
+invent Gen 2 mains, mode or tariff fields.
 CLI, guided menu, TUI, HTTP gateway, MQTT bridge
 and the browser/HA controls use the supported capabilities; no default changes
 or automatic write retries are made.
@@ -299,7 +307,7 @@ its serial file must contain **16** characters (Gen 2 uses 17).
 the tested `AT`, to model-specific Wi-Fi provisioning. Use
 `ap-service-set-light --directory /private/ap --name original --mode low`
 for the original-only light control. The HTTP/browser/HA gateway exposes the
-same seven commands when enabled. Supply source, mains connection and battery
+same eight commands when enabled. Supply source, mains connection and battery
 activity remain unknown when their telemetry fields are absent.
 
 ### Gen 2 telemetry and diagnostics

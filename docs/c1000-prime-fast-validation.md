@@ -40,7 +40,8 @@ The SDK method is `await monitor.set_fast_charge_enabled(True)`. It uses the
 fresh original configuration guard and post-write readback. CLI, Bluetooth
 HTTP gateway, BLE-to-MQTT bridge, terminal and browser controls, and the gateway
 Home Assistant switch share that verified capability. **Prime has eight
-controls; original native MQTT remains independently limited to seven.**
+controls.** The subsequent [independent native Fast trial](c1000-native-fast-validation.md)
+also brought native MQTT to eight; the measurements here describe Bluetooth.
 
 An independent public-SDK repeat then passed the same off/on/off round trip,
 four held samples and three restored checks, without packet overrides. Its
@@ -91,7 +92,8 @@ This supplies versioned transitions without making BF a bypass indicator.
 The successful Fast flag trial verifies stored preference, fresh readback and
 restoration at full SOC. It does **not** establish accelerated charging watts,
 reboot persistence, operation without sufficient AC supply, generated-identity
-original pairing, native MQTT Fast, or C1000X behavior. Input removal can clear
+original pairing or C1000X behavior. Native MQTT Fast has its own
+[subsequent validation](c1000-native-fast-validation.md). Input removal can clear
 the flag. A timeout after transmission can mean the setting changed; inspect
 fresh status before retrying. Do not automatically re-enable a cleared flag.
 

@@ -16,7 +16,7 @@ from .ap_service_config import APServiceConfig, add_ap_service_device, initializ
 from .ap_service import ap_service_request
 from .protocol import DEVICE_TIMEOUT_MINUTES, Model, timezone_confer
 from .tou import TouPeriod
-from .c1000_capabilities import ORIGINAL_DC_SMART_WARNING
+from .c1000_capabilities import ORIGINAL_DC_SMART_WARNING, ORIGINAL_FAST_CHARGE_WARNING
 
 
 def add_commands(subcommands) -> None:
@@ -56,7 +56,7 @@ def add_commands(subcommands) -> None:
                                ("ap-service-set-temperature-unit", "Set and confirm original/Gen 2 C1000 temperature units"),
                                ("ap-service-set-off-grid-alert", "Set and confirm C1000 Gen 2 off-grid notification"),
                                ("ap-service-set-device-timeout", "Set original/Gen 2 C1000 device timeout; 0 = Never"),
-                               ("ap-service-set-fast-charge", "Set C1000 Gen 2 fast charge with fresh retained readback"),
+                               ("ap-service-set-fast-charge", "Set original/Gen 2 C1000 fast charge with fresh retained readback"),
                                ("ap-service-set-display-brightness", "Set original/Gen 2 C1000 native MQTT display brightness"),
                                ("ap-service-set-display-timeout", "Set original/Gen 2 C1000 native MQTT screen timeout"),
                                ("ap-service-set-light", "Set and confirm original C1000 native MQTT light mode"),
@@ -255,6 +255,13 @@ def dispatch(args) -> None:
             fields = {"enabled": args.state == "on"}
         elif args.command == "ap-service-set-fast-charge":
             fields = {"enabled": args.enabled == "on"}
+            config_path = args.directory / "ap_service.json"
+            if config_path.exists():
+                config = load_ap_service(config_path)
+                profiles = load_ap_service_profiles(args.directory, config)
+                name = args.name or (config.name if len(profiles) == 1 else None)
+                if name in profiles and profiles[name][0].model == Model.C1000:
+                    print(ORIGINAL_FAST_CHARGE_WARNING, file=sys.stderr)
         elif args.command == "ap-service-set-display-brightness":
             fields = {"level": args.level}
         elif args.command == "ap-service-set-display-timeout":

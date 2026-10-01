@@ -1,0 +1,43 @@
+{
+  "hardware_access": false,
+  "case_counts": {
+    "same_brightness_command": 36,
+    "display_switch": 8,
+    "unrelated_commands": 4,
+    "low_soc_boundary": 3,
+    "retry_consumer": 8
+  },
+  "firmware": {
+    "filename": "MainMcu-decoded.bin",
+    "sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9"
+  },
+  "runtime": {
+    "python": "3.12.3",
+    "unicorn": "2.1.4"
+  },
+  "source_sha256": {
+    "emulate_pv_retry_origins.py": "5ed18f3be5527848eeda567c77ecd7ce400c57365947545d956c9371c6804f54",
+    "emulate_general_settings.py": "26ce041976a8fd1ac43feb2851c1717363761cb2f7da69f4d780b3f42b8ef0ba",
+    "emulate_additional_features.py": "baaeb837278e225a117ebaf025e1e463eed10f24d51af8d7f2946783ef12615e",
+    "emulate_clock_semantics.py": "945b649c3b5cec00d816041e783641085ccfbdb5f80efc2ed2c4e15f3bae30f2",
+    "replay_io.py": "731d795a5ec37e2cf12b809b7122eaf7a29d84c21a2ecd43fafa3e2f8d962d30"
+  },
+  "result_sha256": "fc7d2930659966ce6c29dbab2e3ae6912c9a3627340b156dbb203f0b0c2b3f37",
+  "substitutions": [
+    "LCD delivery/off callback",
+    "settings persistence",
+    "command ACK",
+    "telemetry refresh queue",
+    "backup registers",
+    "timer registration/start",
+    "logging",
+    "memcpy/memset",
+    "five unrelated debounce records"
+  ],
+  "not_executed": [
+    "physical MPPT/DSP producer",
+    "charging actuator",
+    "PV hardware",
+    "app/radio transport"
+  ]
+}

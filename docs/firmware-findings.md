@@ -40,7 +40,8 @@ confirmed main 1.7.1/radio 0.3.3.0 and the same six controls locally.
 A subsequent [DC Smart transport trial](c1000-native-dc-smart-validation.md)
 brings both updated-version whitelists to seven controls.
 A later [Prime Fast trial](c1000-prime-fast-validation.md) brings BLE to eight;
-the independent native whitelist remains seven.
+the [independent native Fast trial](c1000-native-fast-validation.md) then brings
+native to eight. Actual Fast rate and reboot persistence remain unverified.
 A plaintext 1.7.1 main image remains unrecovered.
 
 ## Scope and evidence
@@ -376,7 +377,7 @@ C2000 controller support is unknown.
   return to grid before clearing Standard. Investigate persistent scheduling
   and reserve floors. C1000 Gen 2 now has its own
   [native MQTT validation](c1000-local-mqtt.md); the updated original C1000
-  now has [native MQTT and seven controls](c1000-original-mqtt-followup.md). Do not substitute the different `4038` layout.
+  now has [native MQTT and eight controls](c1000-original-mqtt-followup.md). Do not substitute the different `4038` layout.
 - Follow the [preference](gen2-preference-candidates.md),
   [LCD schedule](gen2-timer-plan-investigation.md) and
   [disaster-plan](gen2-disaster-plan-investigation.md) prerequisites before
@@ -385,7 +386,7 @@ C2000 controller support is unknown.
   using event timestamps and measured power, without relabeling raw counters
   as verified Wh.
 - Continue original-C1000 generated-ID setup and remaining Prime controls
-  separately from the verified eight BLE/seven native controls. Recover a verified public
+  separately from the verified eight BLE/eight native controls. Recover a verified public
   1.7.1 image before proposing local OTA.
 - Obtain C2000 firmware evidence before assuming its controller can service
   the Modbus bridge. Keep its AC output enabled throughout any live work.
@@ -448,9 +449,9 @@ AC Smart remains unverified on the updated version.
 An [independent original C1000 native DC Smart trial](c1000-native-dc-smart-validation.md)
 now confirms `0076` on **main 1.7.1/radio 0.3.3.0**, followed by a public SDK
 repeat and independent final Bluetooth check. The original native whitelist
-is seven controls. DC must be off in both directions; all protected settings
-and the full F8 are confirmed. Original AC Smart and native Fast remain
-unverified; the subsequent BLE Fast validation follows below.
+reached seven controls at that stage. DC must be off in both directions; all
+protected settings and the full F8 are confirmed. Original AC Smart remains
+unverified; the subsequent independent BLE and native Fast trials follow below.
 
 The [93-case original Fast/BMS replay](c1000-fast-status-retention.md) executes
 8,192 full charging callbacks in main **1.5.9**. Fresh E5 reports the runtime
@@ -492,3 +493,33 @@ monitoring, the browser/TUI and a disabled HA binary diagnostic. An elapsed
 RTC difference greater than 600 sets a retry flag without clearing this lock;
 the fixed 600 in A3 is not a countdown. Physical solar behavior remains
 unvalidated, and no new recovery command is exposed.
+
+## October 1: native Fast, current ceilings and solar retry origins
+
+An [independent original native Fast trial](c1000-native-fast-validation.md)
+verified `005e` on **main 1.7.1 / radio 0.3.3.0**, followed by the public SDK
+and an independent Bluetooth audit. Both native and Prime now expose eight
+verified controls. The native stages made four setting writes in total,
+confirmed fresh full readbacks and restored every protected setting and F8 byte.
+AC output stayed on; actual Fast rate and reboot persistence remain unverified.
+Separate [normal charging-rate trials](c1000-charging-rate-validation.md)
+retained 125 complete snapshots, thirteen restored setting writes and no
+original AC-output toggle. Full-SOC reporting prevented a stable comparison;
+100 W below the load did not establish forced battery operation with mains.
+
+[50 new original current-limit cases](c1000-fast-current-limits.md) execute
+the separate Fast temperature/segment tables, complete charging policy and
+DSP register-4 queue construction in **main 1.5.9**. SOC initializes a cached
+segment; voltage and temperature history affect later requests. Near-full
+Fast can request less current than Normal despite its higher power allowance.
+Changing the saved charging ceiling while Fast is active need not lower the
+request; disabling Fast uses the then-current saved ceiling. These are synthetic
+controller requests, with no DSP enforcement or installed-1.7.1 rate measurement.
+
+[59 new Gen 2 solar-retry cases](gen2-pv-retry-origins.md) execute the existing
+`0103` brightness handler through the user-action flag, weak-light timer and
+input-debounce consumer in **main 1.1.4.9**. Writing the saved nonzero brightness
+can mark a locked MPPT state for retry without changing outputs. The SOC ≤1
+branch has additional timer/peripheral effects. Physical recovery and timing
+remain unverified; a naturally locked, adequately charged PV trial is required
+before exposing any automatic recovery behavior. No recovery API was added.

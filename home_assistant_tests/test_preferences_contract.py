@@ -31,7 +31,7 @@ def test_temperature_display_supported_profiles_and_semantic_bool(model, protoco
     api.validate_command(snapshot, {"command": "set-temperature-unit", "fahrenheit": fahrenheit})
 
 
-@pytest.mark.parametrize("model,protocol", [("c1000", "legacy"), ("c1000", "prime"), ("c1000_gen2", "prime"), ("c1000_gen2", "native_mqtt")])
+@pytest.mark.parametrize("model,protocol", [("c1000", "legacy"), ("c1000", "prime"), ("c1000", "native_mqtt"), ("c1000_gen2", "prime"), ("c1000_gen2", "native_mqtt")])
 @pytest.mark.parametrize("enabled", [False, True])
 def test_fast_charge_allowed_supported_profiles(model, protocol, enabled):
     snapshot = api.parse_snapshot(station(model, protocol))
@@ -40,31 +40,26 @@ def test_fast_charge_allowed_supported_profiles(model, protocol, enabled):
 
 
 @pytest.mark.parametrize("enabled", [False, True])
-def test_original_prime_fast_without_fabricated_mains_or_tariffs(enabled):
-    snapshot = station("c1000", "prime")
+@pytest.mark.parametrize("protocol", ["prime", "native_mqtt"])
+def test_original_fast_without_fabricated_mains_or_tariffs(enabled, protocol):
+    snapshot = station("c1000", protocol)
     for key in ("ac_input_connected", "usage_mode", "active_tariff"):
         snapshot["metrics"].pop(key)
     api.validate_command(snapshot, {"command": "set-fast-charge", "enabled": enabled})
 
 
-@pytest.mark.parametrize("enabled", [False, True])
-def test_original_native_fast_rejects_even_advertised_capability(enabled):
-    snapshot = station("c1000", "native_mqtt")
-    assert not api.boolean_setting_supported(snapshot, "set-fast-charge")
-    with pytest.raises(ValueError):
-        api.validate_command(snapshot, {"command": "set-fast-charge", "enabled": enabled})
-
-
 @pytest.mark.parametrize("changes", [{"controls": []}, {"connected": False}, {"available": False},
                                      {"last_seen_timestamp": time.time() - 91}])
-def test_original_prime_fast_requires_capability_and_fresh_telemetry(changes):
+@pytest.mark.parametrize("protocol", ["prime", "native_mqtt"])
+def test_original_fast_requires_capability_and_fresh_telemetry(changes, protocol):
     with pytest.raises(ValueError):
-        api.validate_command(station("c1000", "prime", **changes), {"command": "set-fast-charge", "enabled": True})
+        api.validate_command(station("c1000", protocol, **changes), {"command": "set-fast-charge", "enabled": True})
 
 
 @pytest.mark.parametrize("bad", [None, True, 2, 0.0, "0"])
-def test_original_prime_fast_requires_exact_binary_readback(bad):
-    snapshot = station("c1000", "prime")
+@pytest.mark.parametrize("protocol", ["prime", "native_mqtt"])
+def test_original_fast_requires_exact_binary_readback(bad, protocol):
+    snapshot = station("c1000", protocol)
     snapshot["metrics"]["ac_fast_charge_enabled"] = bad
     with pytest.raises(ValueError):
         api.validate_command(snapshot, {"command": "set-fast-charge", "enabled": False})

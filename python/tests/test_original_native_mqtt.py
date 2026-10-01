@@ -131,13 +131,41 @@ def test_dc_smart_native_builder_does_not_enable_other_models(model, enabled):
 @pytest.mark.parametrize("method,args,kwargs", [
     ("readiness", (), {}), ("charge_cap", (90,), {}),
     ("discharge_floor", (5,), {}), ("off_grid_alert", (True,), {}),
-    ("port_memory", (True,), {}), ("fast_charge", (True,), {}),
+    ("port_memory", (True,), {}),
     ("backup_reserve", (85,), {}), ("tou_plan", ((),), {"enabled": False}),
 ])
 def test_original_cannot_fall_through_to_gen2_controls(method, args, kwargs):
     commands = NativeMqttCommands(SERIAL, ACCOUNT, model=Model.C1000)
     with pytest.raises(ValueError, match="Gen 2"):
         getattr(commands, method)(*args, **kwargs)
+    assert commands._sequence == 0
+
+
+@pytest.mark.parametrize("enabled", [False, True])
+def test_original_fast_request_is_model_specific_and_has_no_status_alias(enabled):
+    commands = NativeMqttCommands(SERIAL, ACCOUNT, model=Model.C1000)
+    request = commands.fast_charge(enabled)
+    _, _, packet = unpack(request)
+    assert packet.command.hex() == "005e" and request.response_command == "085e"
+    assert request.response_aliases == ()
+    fields = parse_tlvs(packet.payload)
+    assert set(fields) == {0xA1, 0xA2, 0xFE}
+    assert fields[0xA1] == b"\x22" and fields[0xA2] == bytes((1, int(enabled)))
+    assert len(fields[0xFE]) == 5 and fields[0xFE][0] == 3
+
+
+@pytest.mark.parametrize("enabled", [0, 1, None, "on", 0.0])
+def test_original_fast_rejects_non_boolean_without_constructing_request(enabled):
+    commands = NativeMqttCommands(SERIAL, ACCOUNT, model=Model.C1000)
+    with pytest.raises(ValueError):
+        commands.fast_charge(enabled)
+    assert commands._sequence == 0
+
+
+def test_original_fast_support_does_not_allow_c2000_output_or_fast_writes():
+    commands = NativeMqttCommands(SERIAL, ACCOUNT, model=Model.C2000_GEN2)
+    with pytest.raises(ValueError, match="original C1000 and C1000 Gen 2"):
+        commands.fast_charge(True)
     assert commands._sequence == 0
 
 

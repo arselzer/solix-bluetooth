@@ -22,6 +22,8 @@ NATIVE_CONTROLS = (
     ("light_mode", "404f", "0101", "light_mode", 1),
     ("temperature_unit_fahrenheit", "4050", "0101", "temperature_unit_fahrenheit", True),
     ("dc_power_saving_mode_enabled", "4076", "0100", "dc_power_saving_mode_enabled", False),
+    ("fast_charge_enabled", "405e", "0101", "ac_fast_charge_enabled", True),
+    ("fast_charge_enabled", "405e", "0100", "ac_fast_charge_enabled", False),
 )
 
 
@@ -59,6 +61,8 @@ def test_original_tls_settings_send_once_and_confirm_full_status(
         await writer.drain()
         assert await read_mqtt(reader) == (0x90, b"\x00\x01\x00")
         state, captured = BASELINE.copy(), []
+        if setting == "fast_charge_enabled":
+            state[metric] = int(not value)
         changed = False
 
         async def publish(command, payload, *, retained=False, serial=None):
@@ -124,7 +128,8 @@ def test_original_tls_settings_send_once_and_confirm_full_status(
                       "display_timeout": server.set_display_timeout,
                       "light_mode": server.set_light_mode,
                       "temperature_unit_fahrenheit": server.set_temperature_unit,
-                      "dc_power_saving_mode_enabled": server.set_dc_power_saving_enabled}[setting]
+                      "dc_power_saving_mode_enabled": server.set_dc_power_saving_enabled,
+                      "fast_charge_enabled": server.set_fast_charge_enabled}[setting]
             async with asyncio.timeout(3):
                 if problem == "matching":
                     snapshot = await method(value)
