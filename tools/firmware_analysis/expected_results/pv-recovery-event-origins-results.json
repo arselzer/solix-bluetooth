@@ -1,0 +1,751 @@
+{
+  "register0015_complete_domain": {
+    "values_executed": 65536,
+    "outcome_counts": {
+      "0": 65533,
+      "8": 1,
+      "16": 1,
+      "32": 1
+    },
+    "recognized": [
+      {
+        "register0015_word": 87,
+        "bank0_bits": 8
+      },
+      {
+        "register0015_word": 88,
+        "bank0_bits": 16
+      },
+      {
+        "register0015_word": 89,
+        "bank0_bits": 32
+      }
+    ],
+    "bank0_bit6_produced": false,
+    "entry_assumes_register_pending_bit_selected": true,
+    "uart_receiver_executed": false,
+    "function_return_substitutions": []
+  },
+  "direct_event_writer_audit": [
+    {
+      "call_word_address": "08463b",
+      "bank_setup_address": "084639",
+      "bank_literal": 0,
+      "scope": "local direct-call setup only",
+      "established_event_bits": [
+        1
+      ]
+    },
+    {
+      "call_word_address": "0863de",
+      "bank_setup_address": "0863dc",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "0864d8",
+      "bank_setup_address": "0864d6",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "0864de",
+      "bank_setup_address": "0864db",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "08652b",
+      "bank_setup_address": "086529",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "086537",
+      "bank_setup_address": "086536",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "08664f",
+      "bank_setup_address": "08664d",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "086669",
+      "bank_setup_address": "086667",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "086683",
+      "bank_setup_address": "086681",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "0866ce",
+      "bank_setup_address": "0866cd",
+      "bank_literal": 0,
+      "scope": "local direct-call setup only",
+      "established_event_bits": [
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "call_word_address": "08676a",
+      "bank_setup_address": "086769",
+      "bank_literal": 4,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "086860",
+      "bank_setup_address": "08685e",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "0868fe",
+      "bank_setup_address": "0868fc",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "08690b",
+      "bank_setup_address": "086909",
+      "bank_literal": 0,
+      "scope": "local direct-call setup only",
+      "established_event_bits": [
+        2
+      ]
+    },
+    {
+      "call_word_address": "086918",
+      "bank_setup_address": "086916",
+      "bank_literal": 4,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "086a46",
+      "bank_setup_address": "086a45",
+      "bank_literal": 3,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "0871fc",
+      "bank_setup_address": "0871fb",
+      "bank_literal": 0,
+      "scope": "local direct-call setup only",
+      "established_event_bits": [
+        3,
+        4
+      ]
+    },
+    {
+      "call_word_address": "087b76",
+      "bank_setup_address": "087b74",
+      "bank_literal": 0,
+      "scope": "local direct-call setup only",
+      "established_event_bits": [
+        2
+      ]
+    },
+    {
+      "call_word_address": "087bab",
+      "bank_setup_address": "087ba9",
+      "bank_literal": 0,
+      "scope": "local direct-call setup only",
+      "established_event_bits": [
+        9
+      ]
+    },
+    {
+      "call_word_address": "087bdd",
+      "bank_setup_address": "087bdb",
+      "bank_literal": 0,
+      "scope": "local direct-call setup only",
+      "established_event_bits": [
+        2
+      ]
+    },
+    {
+      "call_word_address": "087c2a",
+      "bank_setup_address": "087c28",
+      "bank_literal": 0,
+      "scope": "local direct-call setup only",
+      "established_event_bits": [
+        1
+      ]
+    },
+    {
+      "call_word_address": "087c56",
+      "bank_setup_address": "087c54",
+      "bank_literal": 0,
+      "scope": "local direct-call setup only",
+      "established_event_bits": [
+        1
+      ]
+    },
+    {
+      "call_word_address": "087cba",
+      "bank_setup_address": "087cb8",
+      "bank_literal": 0,
+      "scope": "local direct-call setup only",
+      "established_event_bits": [
+        1
+      ]
+    },
+    {
+      "call_word_address": "087ce3",
+      "bank_setup_address": "087ce1",
+      "bank_literal": 0,
+      "scope": "local direct-call setup only",
+      "established_event_bits": [
+        1
+      ]
+    },
+    {
+      "call_word_address": "087d15",
+      "bank_setup_address": "087d13",
+      "bank_literal": 0,
+      "scope": "local direct-call setup only",
+      "established_event_bits": [
+        1
+      ]
+    },
+    {
+      "call_word_address": "087d49",
+      "bank_setup_address": "087d47",
+      "bank_literal": 0,
+      "scope": "local direct-call setup only",
+      "established_event_bits": [
+        1
+      ]
+    },
+    {
+      "call_word_address": "087d8c",
+      "bank_setup_address": "087d8a",
+      "bank_literal": 0,
+      "scope": "local direct-call setup only",
+      "established_event_bits": [
+        1
+      ]
+    },
+    {
+      "call_word_address": "087dc6",
+      "bank_setup_address": "087dc4",
+      "bank_literal": 0,
+      "scope": "local direct-call setup only",
+      "established_event_bits": [
+        1
+      ]
+    },
+    {
+      "call_word_address": "087e08",
+      "bank_setup_address": "087e06",
+      "bank_literal": 0,
+      "scope": "local direct-call setup only",
+      "established_event_bits": [
+        1
+      ]
+    },
+    {
+      "call_word_address": "08819d",
+      "bank_setup_address": "08819b",
+      "bank_literal": 0,
+      "scope": "local direct-call setup only",
+      "established_event_bits": [
+        1
+      ]
+    },
+    {
+      "call_word_address": "088267",
+      "bank_setup_address": "088265",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "0882c0",
+      "bank_setup_address": "0882be",
+      "bank_literal": 4,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "088ba6",
+      "bank_setup_address": "088ba4",
+      "bank_literal": 4,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "088bdd",
+      "bank_setup_address": "088bdb",
+      "bank_literal": 4,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "088c07",
+      "bank_setup_address": "088c05",
+      "bank_literal": 4,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "088c3d",
+      "bank_setup_address": "088c3b",
+      "bank_literal": 4,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "088c72",
+      "bank_setup_address": "088c70",
+      "bank_literal": 4,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "088ca4",
+      "bank_setup_address": "088ca2",
+      "bank_literal": 4,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "088cdb",
+      "bank_setup_address": "088cd9",
+      "bank_literal": 4,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "088d11",
+      "bank_setup_address": "088d0f",
+      "bank_literal": 4,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "088d63",
+      "bank_setup_address": "088d62",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "088d85",
+      "bank_setup_address": "088d83",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "088d95",
+      "bank_setup_address": "088d93",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "088da5",
+      "bank_setup_address": "088da3",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "088db5",
+      "bank_setup_address": "088db3",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "088dc5",
+      "bank_setup_address": "088dc3",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "088dd5",
+      "bank_setup_address": "088dd3",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "088de5",
+      "bank_setup_address": "088de3",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "088df5",
+      "bank_setup_address": "088df3",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "088e05",
+      "bank_setup_address": "088e03",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "088e15",
+      "bank_setup_address": "088e13",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "088e25",
+      "bank_setup_address": "088e23",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "088e35",
+      "bank_setup_address": "088e33",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "088e45",
+      "bank_setup_address": "088e43",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "088e55",
+      "bank_setup_address": "088e53",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "08903e",
+      "bank_setup_address": "08903c",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "08906f",
+      "bank_setup_address": "08906d",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "0890a1",
+      "bank_setup_address": "08909f",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "0890ca",
+      "bank_setup_address": "0890c8",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "089139",
+      "bank_setup_address": "089137",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "089146",
+      "bank_setup_address": "089144",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    },
+    {
+      "call_word_address": "08962c",
+      "bank_setup_address": "08962a",
+      "bank_literal": 1,
+      "scope": "local direct-call setup only"
+    }
+  ],
+  "main_start_stop_builder": [
+    {
+      "internal_helper_selector": 2,
+      "enable_argument": 0,
+      "queued": {
+        "selector": 1,
+        "register": 21,
+        "payload_hex": "5800",
+        "callback": "00000000",
+        "accepted_by_substitute": true
+      },
+      "raw_register_argument": false,
+      "queue_is_substituted": true
+    },
+    {
+      "internal_helper_selector": 2,
+      "enable_argument": 1,
+      "queued": {
+        "selector": 1,
+        "register": 21,
+        "payload_hex": "5700",
+        "callback": "00000000",
+        "accepted_by_substitute": true
+      },
+      "raw_register_argument": false,
+      "queue_is_substituted": true
+    },
+    {
+      "internal_helper_selector": 2,
+      "enable_argument": 2,
+      "queued": {
+        "selector": 1,
+        "register": 21,
+        "payload_hex": "5700",
+        "callback": "00000000",
+        "accepted_by_substitute": true
+      },
+      "raw_register_argument": false,
+      "queue_is_substituted": true
+    },
+    {
+      "internal_helper_selector": 2,
+      "enable_argument": 89,
+      "queued": {
+        "selector": 1,
+        "register": 21,
+        "payload_hex": "5700",
+        "callback": "00000000",
+        "accepted_by_substitute": true
+      },
+      "raw_register_argument": false,
+      "queue_is_substituted": true
+    },
+    {
+      "internal_helper_selector": 2,
+      "enable_argument": 65535,
+      "queued": {
+        "selector": 1,
+        "register": 21,
+        "payload_hex": "5700",
+        "callback": "00000000",
+        "accepted_by_substitute": true
+      },
+      "raw_register_argument": false,
+      "queue_is_substituted": true
+    },
+    {
+      "internal_helper_selector": 2,
+      "enable_argument": 4294967295,
+      "queued": {
+        "selector": 1,
+        "register": 21,
+        "payload_hex": "5700",
+        "callback": "00000000",
+        "accepted_by_substitute": true
+      },
+      "raw_register_argument": false,
+      "queue_is_substituted": true
+    }
+  ],
+  "invalid_main_selectors": [
+    {
+      "selector": 0,
+      "rejected": true
+    },
+    {
+      "selector": 3,
+      "rejected": true
+    }
+  ],
+  "command_to_recovery_effect": [
+    {
+      "internal_word": 89,
+      "changed_mode_initialization": false,
+      "after": {
+        "mode": 4,
+        "previous_mode": 9,
+        "reason": 85,
+        "counter": 0,
+        "run_request": 0,
+        "writes": [
+          {
+            "pc": "0898fa",
+            "address": "ad0c",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0898fa",
+            "address": "ad0d",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "089235",
+            "address": "ad17",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087384",
+            "address": "acf7",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ],
+        "last_dispatched_mode": 4,
+        "healthy_counter": 0,
+        "retry_counter": 11,
+        "fault1": 0,
+        "fault2": 0,
+        "pending_events": 1
+      },
+      "public_opcode_established": false
+    },
+    {
+      "internal_word": 89,
+      "changed_mode_initialization": true,
+      "after": {
+        "mode": 4,
+        "previous_mode": 9,
+        "reason": 9,
+        "counter": 0,
+        "run_request": 0,
+        "writes": [
+          {
+            "pc": "0874e7",
+            "address": "acec",
+            "value": 4,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "089913",
+            "address": "ad0c",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "089913",
+            "address": "ad0d",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0898fa",
+            "address": "ad0c",
+            "value": 1,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "0898fa",
+            "address": "ad0d",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087374",
+            "address": "acf7",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087375",
+            "address": "acf8",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "087376",
+            "address": "acf1",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": false
+          },
+          {
+            "pc": "08452b",
+            "address": "ab40",
+            "value": 65534,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "086894",
+            "address": "a49e",
+            "value": 65519,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "086897",
+            "address": "a49e",
+            "value": 65519,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089771",
+            "address": "7f05",
+            "value": 4097,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089775",
+            "address": "abbf",
+            "value": 65517,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "089779",
+            "address": "7f05",
+            "value": 4099,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "08977d",
+            "address": "abbf",
+            "value": 65508,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "087312",
+            "address": "acf0",
+            "value": 65532,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "087314",
+            "address": "aced",
+            "value": 0,
+            "protected_access": false,
+            "interrupt_masked": true
+          },
+          {
+            "pc": "087379",
+            "address": "acef",
+            "value": 9,
+            "protected_access": false,
+            "interrupt_masked": false
+          }
+        ],
+        "last_dispatched_mode": 4,
+        "healthy_counter": 0,
+        "retry_counter": 0,
+        "fault1": 32,
+        "fault2": 0,
+        "pending_events": 1
+      },
+      "public_opcode_established": false
+    }
+  ],
+  "other_bank_bit6": [
+    {
+      "entry": "086531",
+      "bank1_bits": 64,
+      "bank0_bits": 0,
+      "function_return_substitutions": []
+    }
+  ]
+}

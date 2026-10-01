@@ -1,0 +1,58 @@
+{
+  "hardware_access": false,
+  "network_access": false,
+  "case_counts": {
+    "dispatcher_entry": 16,
+    "healthy_threshold": 16,
+    "periodic_event_gates": 4,
+    "timed_fault_clear": 16,
+    "event_priority": 10,
+    "second_fault_word_eligibility": 6,
+    "recovery_sequences": 5
+  },
+  "firmware": {
+    "dspDCDC-decoded.bin": "7ae2bb915812441b8316d1c3f3efc2379fcb488d4d03e950901cf507c224ceb8"
+  },
+  "function_return_substitutions": [],
+  "runtime": {
+    "python": "3.12.3",
+    "unicorn_import_version": "2.1.4"
+  },
+  "result_sha256": "08fa71bdc2d3a08f7bd451ebc97dde6d905bbfdd3fea91acfb5b04bd31fd327e",
+  "source_sha256": {
+    "emulate_pv_mode4_recovery.py": "526e2d37f71768c264b1619d10026ae87dedf8a143d496adfb842b7cce2f239e",
+    "emulate_pv_start_continuation.py": "104b3a8f67401e312cf8a5f7743cb1fb44e682cb3f037bf7b0b3732b9c9b403b",
+    "emulate_pv_retry_actuation.py": "2927f2edd80e0ea1e000e3b99a786aaa6cf506ecfbc41676b05f929a4dbc690c",
+    "emulate_pv_retry_origins.py": "5ed18f3be5527848eeda567c77ecd7ce400c57365947545d956c9371c6804f54",
+    "emulate_general_settings.py": "26ce041976a8fd1ac43feb2851c1717363761cb2f7da69f4d780b3f42b8ef0ba",
+    "emulate_additional_features.py": "baaeb837278e225a117ebaf025e1e463eed10f24d51af8d7f2946783ef12615e",
+    "emulate_clock_semantics.py": "945b649c3b5cec00d816041e783641085ccfbdb5f80efc2ed2c4e15f3bae30f2",
+    "replay_io.py": "731d795a5ec37e2cf12b809b7122eaf7a29d84c21a2ecd43fafa3e2f8d962d30",
+    "extract_dsp.py": "5a82593ea76fd784702e0ee501be2415a4540d2570c3f370d343e8512d2a87e9"
+  },
+  "executed": [
+    "mode dispatcher0874d5",
+    "mode4/6 handler08736b",
+    "event-bank read/clear0898ed/089909",
+    "fault clear089233",
+    "real fault and periodic getters",
+    "mode1 entry/continuation087439",
+    "cleanup08730a and real callees"
+  ],
+  "synthetic_boundaries": [
+    "RAM and MMIO values",
+    "event injection",
+    "periodic flag observations",
+    "fault producer state changes",
+    "abstract register-save/call stacks"
+  ],
+  "excluded": [
+    "UART",
+    "main MCU policy",
+    "full physical fault producers",
+    "real time",
+    "interrupt or peripheral effects",
+    "mode2 regulation",
+    "physical charging"
+  ]
+}

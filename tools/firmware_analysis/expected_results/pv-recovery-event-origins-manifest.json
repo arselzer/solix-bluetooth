@@ -1,0 +1,53 @@
+{
+  "hardware_access": false,
+  "network_access": false,
+  "case_counts": {
+    "register_word_values": 65536,
+    "direct_calls_audited": 62,
+    "fixed_bank0_setup_replays": 15,
+    "main_builder": 6,
+    "invalid_selectors": 2,
+    "command_to_effect": 2,
+    "other_bank_bit6": 1
+  },
+  "firmware": {
+    "MainMcu-decoded.bin": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9",
+    "dspDCDC-decoded.bin": "7ae2bb915812441b8316d1c3f3efc2379fcb488d4d03e950901cf507c224ceb8"
+  },
+  "runtime": {
+    "python": "3.12.3",
+    "unicorn": "2.1.4"
+  },
+  "result_sha256": "edab5fbd69628e6c9b10095e4177392846657d3eb55f56dac097886c1ba40f9c",
+  "source_sha256": {
+    "emulate_pv_recovery_event_origins.py": "f1c23d27609756827df419477e3c54e44bb067f25ef8e928a048d7fd21788b4f",
+    "emulate_pv_mode4_recovery.py": "526e2d37f71768c264b1619d10026ae87dedf8a143d496adfb842b7cce2f239e",
+    "emulate_pv_start_continuation.py": "104b3a8f67401e312cf8a5f7743cb1fb44e682cb3f037bf7b0b3732b9c9b403b",
+    "emulate_pv_retry_actuation.py": "2927f2edd80e0ea1e000e3b99a786aaa6cf506ecfbc41676b05f929a4dbc690c",
+    "emulate_pv_retry_origins.py": "5ed18f3be5527848eeda567c77ecd7ce400c57365947545d956c9371c6804f54",
+    "emulate_general_settings.py": "26ce041976a8fd1ac43feb2851c1717363761cb2f7da69f4d780b3f42b8ef0ba",
+    "emulate_additional_features.py": "baaeb837278e225a117ebaf025e1e463eed10f24d51af8d7f2946783ef12615e",
+    "emulate_clock_semantics.py": "945b649c3b5cec00d816041e783641085ccfbdb5f80efc2ed2c4e15f3bae30f2",
+    "replay_io.py": "731d795a5ec37e2cf12b809b7122eaf7a29d84c21a2ecd43fafa3e2f8d962d30",
+    "extract_dsp.py": "5a82593ea76fd784702e0ee501be2415a4540d2570c3f370d343e8512d2a87e9"
+  },
+  "dsp_function_return_substitutions": [],
+  "arm_substitutions": [
+    "allocation/free",
+    "internal command queue",
+    "memcpy/memset",
+    "inherited inactive LCD/logging/persistence/timer boundaries"
+  ],
+  "excluded": [
+    "UART",
+    "radio/BLE/MQTT authentication and routing",
+    "public opcode provenance",
+    "indirect DSP call graph",
+    "aliased event-bank writes",
+    "physical fault producers",
+    "concurrent scheduling",
+    "peripheral behavior",
+    "physical charging"
+  ],
+  "conclusion": "No public fault-clear command or bank0 bit6 producer established by this bounded audit"
+}

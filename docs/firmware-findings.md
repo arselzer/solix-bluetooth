@@ -569,13 +569,44 @@ No public native output-switch route was added. C2000 was not accessed.
 **1.5.9** qualified DSP flag and independent GPIO. Initial qualification and
 later removal use different predicates. A blocker only present between
 eligible Smart checks can leave an inherited counter intact. Output lifecycle
-reset paths differ from preference changes. Internal F0 is a diagnostic lead;
-its public envelope, physical GPIO meaning and installed 1.7.1 behavior remain
-unverified.
+reset paths differ from preference changes. Internal F0 led to the subsequent
+[diagnostic-tunnel replay](c1000-f0-diagnostic-tunnel.md); its physical GPIO
+meaning and installed 1.7.1 behavior remain unverified.
 
 [60 Gen 2 DSP-continuation cases](gen2-pv-start-continuation.md) follow the
 accepted start request into periodic gates, a 100-invocation counter and
 protected peripheral write intents. The counter can accumulate before a
 request. A fault exits to mode 4 and clears the request; fault clearance alone
-does not establish automatic recovery. Actual timing, mode-4 return, converter
-regulation and physical PV recovery remain unverified. No recovery API was added.
+does not establish automatic recovery. The subsequent
+[mode-4 replay](gen2-pv-mode4-recovery.md) establishes an internal return path;
+actual timing, converter regulation and physical PV recovery remain unverified.
+No recovery API was added.
+
+## October 1: diagnostic transport limits and DSP fault recovery
+
+[94 original F0 cases](c1000-f0-diagnostic-tunnel.md) establish the exact
+**main 1.5.9** diagnostic envelope, CRC, asynchronous reply and GPIO getter.
+Correctly decoded requests preserve settings/outputs but cancel an existing
+upgrade-mode reset timer. Malformed embedded lengths above 255 trap its
+8-bit copy loop; these are offline cases only.
+
+The [separate installed-1.7.1 attempt](c1000-f0-live-transport-limit.md) used
+an encrypted BLE body without the established `4000` encryption marker. It
+returned no diagnostic reply, and a reconnect showed the original AC off.
+One validated SDK AC-on command restored the complete original baseline;
+three paired snapshots confirmed it and unchanged upstream Gen 2 settings.
+The precise cause is unproved. No diagnostic runtime API was added, and
+C2000 was not accessed.
+
+[73 Gen 2 recovery cases](gen2-pv-mode4-recovery.md) execute the real DSP
+dispatcher and mode-4/6 handler: 200 qualifying healthy observations return
+to mode 1; 300 consecutive qualifying nonblocking-fault observations clear
+the stored fault. A fresh start must arrive after mode entry. These counts
+are not measured durations or proof of physical recovery.
+
+The [recovery-event origin audit](gen2-pv-recovery-event-origins.md) executes
+all 65,536 internal register-`0015` values and audits 62 direct event-writer
+calls. Only words `0057`/`0058`/`0059` generate start/stop/stored-fault-clear
+events through that consumer. The normal main-controller helper can emit
+only start/stop; no public fault-clear opcode or bank-0 bit-6 producer was
+established. No internal-register or fault-bypass control was introduced.

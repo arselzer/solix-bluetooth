@@ -25,9 +25,15 @@ and [1,347 original Smart-policy cases](c1000-smart-auto-off-policy.md),
 [78 original SOC/recharge cases](c1000-soc-and-recharge-firmware.md), and
 [140 Gen 2 PV-retry actuation cases](gen2-pv-retry-actuation.md),
 [90 original Smart-blocker cases](c1000-smart-blocker-followup.md), and
-[60 Gen 2 DSP-startup continuation cases](gen2-pv-start-continuation.md).
+[60 Gen 2 DSP-startup continuation cases](gen2-pv-start-continuation.md),
+[94 original diagnostic-tunnel cases](c1000-f0-diagnostic-tunnel.md),
+[73 Gen 2 fault-recovery cases](gen2-pv-mode4-recovery.md), and an
+[exhaustive 65,536-value internal recovery-command check](gen2-pv-recovery-event-origins.md).
 These have independent commands and manifests; they are not included in the
 1,842-case combined runner. Their individual commands are in the linked records.
+The diagnostic cases include malformed-envelope stalls; those synthetic inputs
+must not be transmitted. The separate [installed-version transport attempt](c1000-f0-live-transport-limit.md)
+did not validate a diagnostic sensor and required restoring the test station's AC output.
 
 | Suite | Cases | Evidence |
 | --- | ---: | --- |
