@@ -65,6 +65,36 @@ Six additional samples confirmed all three were available and their report
 timestamps advanced. These recovery times exclude service-command execution
 and are not guaranteed outage durations.
 
+## Passive report continuity
+
+Owner-only copies of the three MQTT logs were decoded locally at **08:40 UTC
+on 2026-10-02**, without restarting a service or sending an additional station
+command. The latest sessions began during the deliberate AP recovery trial.
+
+| Station | Reports in latest session | Observed session | Median report gap |
+| --- | ---: | ---: | ---: |
+| C2000 Gen 2 | 615 | 53.50 minutes | 5.235 seconds |
+| Original C1000 | 594 | 53.42 minutes | 5.400 seconds |
+| C1000 Gen 2 | 609 | 53.23 minutes | 5.234 seconds |
+
+No further TLS connection appeared in those sessions. All decoded protected
+settings stayed constant, including enabled AC outputs and inactive countdowns.
+The original retained its **720-minute** device timeout; both Gen 2 stations
+reported **Never**. This observation does not prove behavior at the original's
+12-hour idle boundary.
+
+The C1000 Gen 2's largest gap, **15.069 seconds**, separated its initial status
+publication from the first requested status. Request timestamps match the
+gateway's intentional 15-second startup grace after subscription; this is not
+evidence of a later reconnect. The other maximum gaps were 5.241 seconds
+(C2000) and 6.667 seconds (original). MQTT envelope identities and packet
+checksums were validated before decoding; no malformed record was encountered.
+
+The HP test switch was disconnected by this point. The original reported
+100% SOC and 0 W input/output, so these logs provide no below-full charging-rate
+test. Report continuity and logical output states do not measure relay timing,
+electrical continuity, long-term availability or durable energy totals.
+
 ## Deployment and remaining checks
 
 An allowlisted diagnostics platform was then installed. HA was restarted to

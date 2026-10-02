@@ -1,0 +1,28 @@
+{
+  "firmware_sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9",
+  "cases": 28,
+  "hardware_access": false,
+  "source_sha256": {
+    "emulate_gen2_syspara_backup.py": "5fcad918fd8ee74bcfe86bfccafee00f1b99907567e3efad4ea42a2b12a6ae11",
+    "emulate_charging_followup.py": "47f845935c526ac13a9a9de119b8b442297d06039817e507ee3a6fb6e7591854",
+    "emulate_general_settings.py": "26ce041976a8fd1ac43feb2851c1717363761cb2f7da69f4d780b3f42b8ef0ba",
+    "emulate_clock_semantics.py": "945b649c3b5cec00d816041e783641085ccfbdb5f80efc2ed2c4e15f3bae30f2",
+    "replay_io.py": "731d795a5ec37e2cf12b809b7122eaf7a29d84c21a2ecd43fafa3e2f8d962d30"
+  },
+  "result_sha256": "fb74eb335ea64c70821e07ee5c6ec7230581a456fd981029fdb7b354d05f623d",
+  "substitutes": [
+    "in-memory synthetic file open/read/write/rewind/sync/close",
+    "memcmp/libc",
+    "logging",
+    "persistence scheduling",
+    "product-default option"
+  ],
+  "excluded": [
+    "real files or flash",
+    "external file-export protocol",
+    "indirect-reference completeness",
+    "radio/app execution",
+    "hardware",
+    "actual clocks and outputs"
+  ]
+}

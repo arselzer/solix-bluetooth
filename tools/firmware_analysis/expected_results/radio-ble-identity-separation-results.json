@@ -1,0 +1,339 @@
+{
+  "cases_passed": 32,
+  "cases": [
+    {
+      "case": "actual_ble_account_checker",
+      "security_mode": 1,
+      "identity_shape": "retained_prime",
+      "accepted": true,
+      "complete_allowlist_unchanged": true,
+      "ble_flash_write_count": 0
+    },
+    {
+      "case": "actual_ble_account_checker",
+      "security_mode": 1,
+      "identity_shape": "second_retained_prime",
+      "accepted": true,
+      "complete_allowlist_unchanged": true,
+      "ble_flash_write_count": 0
+    },
+    {
+      "case": "actual_ble_account_checker",
+      "security_mode": 1,
+      "identity_shape": "generated_native_only",
+      "accepted": false,
+      "complete_allowlist_unchanged": true,
+      "ble_flash_write_count": 0
+    },
+    {
+      "case": "actual_ble_account_checker",
+      "security_mode": 1,
+      "identity_shape": "case_mismatch",
+      "accepted": false,
+      "complete_allowlist_unchanged": true,
+      "ble_flash_write_count": 0
+    },
+    {
+      "case": "actual_ble_account_checker",
+      "security_mode": 1,
+      "identity_shape": "prefix",
+      "accepted": false,
+      "complete_allowlist_unchanged": true,
+      "ble_flash_write_count": 0
+    },
+    {
+      "case": "actual_ble_account_checker",
+      "security_mode": 1,
+      "identity_shape": "empty",
+      "accepted": false,
+      "complete_allowlist_unchanged": true,
+      "ble_flash_write_count": 0
+    },
+    {
+      "case": "actual_ble_account_checker",
+      "security_mode": 1,
+      "identity_shape": "null",
+      "accepted": false,
+      "complete_allowlist_unchanged": true,
+      "ble_flash_write_count": 0
+    },
+    {
+      "case": "actual_ble_account_checker",
+      "security_mode": 2,
+      "identity_shape": "retained_prime",
+      "accepted": true,
+      "complete_allowlist_unchanged": true,
+      "ble_flash_write_count": 0
+    },
+    {
+      "case": "actual_ble_account_checker",
+      "security_mode": 2,
+      "identity_shape": "second_retained_prime",
+      "accepted": true,
+      "complete_allowlist_unchanged": true,
+      "ble_flash_write_count": 0
+    },
+    {
+      "case": "actual_ble_account_checker",
+      "security_mode": 2,
+      "identity_shape": "generated_native_only",
+      "accepted": false,
+      "complete_allowlist_unchanged": true,
+      "ble_flash_write_count": 0
+    },
+    {
+      "case": "actual_ble_account_checker",
+      "security_mode": 2,
+      "identity_shape": "case_mismatch",
+      "accepted": false,
+      "complete_allowlist_unchanged": true,
+      "ble_flash_write_count": 0
+    },
+    {
+      "case": "actual_ble_account_checker",
+      "security_mode": 2,
+      "identity_shape": "prefix",
+      "accepted": false,
+      "complete_allowlist_unchanged": true,
+      "ble_flash_write_count": 0
+    },
+    {
+      "case": "actual_ble_account_checker",
+      "security_mode": 2,
+      "identity_shape": "empty",
+      "accepted": false,
+      "complete_allowlist_unchanged": true,
+      "ble_flash_write_count": 0
+    },
+    {
+      "case": "actual_ble_account_checker",
+      "security_mode": 2,
+      "identity_shape": "null",
+      "accepted": false,
+      "complete_allowlist_unchanged": true,
+      "ble_flash_write_count": 0
+    },
+    {
+      "case": "actual_prime_registration",
+      "security_mode": 1,
+      "identity_shape": "retained_prime",
+      "reply_status": 0,
+      "port_authorization_recorded": true,
+      "physical_prompt_substituted": false,
+      "complete_allowlist_unchanged": true
+    },
+    {
+      "case": "actual_prime_registration",
+      "security_mode": 1,
+      "identity_shape": "generated_native_only",
+      "reply_status": 1,
+      "port_authorization_recorded": false,
+      "physical_prompt_substituted": false,
+      "complete_allowlist_unchanged": true
+    },
+    {
+      "case": "actual_prime_registration",
+      "security_mode": 2,
+      "identity_shape": "retained_prime",
+      "reply_status": 0,
+      "port_authorization_recorded": true,
+      "physical_prompt_substituted": false,
+      "complete_allowlist_unchanged": true
+    },
+    {
+      "case": "actual_prime_registration",
+      "security_mode": 2,
+      "identity_shape": "generated_native_only",
+      "reply_status": 9,
+      "port_authorization_recorded": false,
+      "physical_prompt_substituted": true,
+      "complete_allowlist_unchanged": true
+    },
+    {
+      "case": "unencrypted_registration_rejected",
+      "security_mode": 1,
+      "reply_status": 1,
+      "allowlist_check_executed": false
+    },
+    {
+      "case": "unencrypted_registration_rejected",
+      "security_mode": 2,
+      "reply_status": 1,
+      "allowlist_check_executed": false
+    },
+    {
+      "case": "reversible_native_identity_cycle",
+      "route": "configuration_setter",
+      "phases": [
+        {
+          "phase": "baseline",
+          "native_provider_is_generated": false,
+          "retained_prime_registration_status": 0,
+          "generated_registration_status": 9,
+          "complete_ble_allowlist_unchanged": true
+        },
+        {
+          "phase": "after_native_account_change",
+          "native_provider_is_generated": true,
+          "retained_prime_registration_status": 0,
+          "generated_registration_status": 9,
+          "complete_ble_allowlist_unchanged": true
+        },
+        {
+          "phase": "after_native_parameter_reload",
+          "native_provider_is_generated": true,
+          "retained_prime_registration_status": 0,
+          "generated_registration_status": 9,
+          "complete_ble_allowlist_unchanged": true
+        },
+        {
+          "phase": "after_native_account_restore",
+          "native_provider_is_generated": false,
+          "retained_prime_registration_status": 0,
+          "generated_registration_status": 9,
+          "complete_ble_allowlist_unchanged": true
+        },
+        {
+          "phase": "after_native_parameter_restore",
+          "native_provider_is_generated": false,
+          "retained_prime_registration_status": 0,
+          "generated_registration_status": 9,
+          "complete_ble_allowlist_unchanged": true
+        }
+      ],
+      "native_account_restored": true,
+      "configuration_flash_writes": 2,
+      "ble_flash_write_count": 0,
+      "later_activation_effects_executed": false
+    },
+    {
+      "case": "reversible_native_identity_cycle",
+      "route": "normal_activation_prefix",
+      "phases": [
+        {
+          "phase": "baseline",
+          "native_provider_is_generated": false,
+          "retained_prime_registration_status": 0,
+          "generated_registration_status": 9,
+          "complete_ble_allowlist_unchanged": true
+        },
+        {
+          "phase": "after_native_account_change",
+          "native_provider_is_generated": true,
+          "retained_prime_registration_status": 0,
+          "generated_registration_status": 9,
+          "complete_ble_allowlist_unchanged": true
+        },
+        {
+          "phase": "after_native_parameter_reload",
+          "native_provider_is_generated": true,
+          "retained_prime_registration_status": 0,
+          "generated_registration_status": 9,
+          "complete_ble_allowlist_unchanged": true
+        },
+        {
+          "phase": "after_native_account_restore",
+          "native_provider_is_generated": false,
+          "retained_prime_registration_status": 0,
+          "generated_registration_status": 9,
+          "complete_ble_allowlist_unchanged": true
+        },
+        {
+          "phase": "after_native_parameter_restore",
+          "native_provider_is_generated": false,
+          "retained_prime_registration_status": 0,
+          "generated_registration_status": 9,
+          "complete_ble_allowlist_unchanged": true
+        }
+      ],
+      "native_account_restored": true,
+      "configuration_flash_writes": 2,
+      "ble_flash_write_count": 0,
+      "later_activation_effects_executed": false
+    },
+    {
+      "case": "normal_wlan_credentials_prefix",
+      "application_callback_executed": false,
+      "parsed_credentials_copied": true,
+      "complete_allowlist_unchanged": true
+    },
+    {
+      "case": "explicit_save_auth_callback",
+      "security_mode": 1,
+      "old_accounts_preserved": true,
+      "new_prime_account_added": true,
+      "native_account_unchanged": true,
+      "ble_flash_write_count": 1,
+      "callback_invoked_directly": true
+    },
+    {
+      "case": "explicit_save_auth_callback",
+      "security_mode": 2,
+      "old_accounts_preserved": true,
+      "new_prime_account_added": true,
+      "native_account_unchanged": true,
+      "ble_flash_write_count": 1,
+      "callback_invoked_directly": true
+    },
+    {
+      "case": "explicit_save_auth_callback",
+      "security_mode": 3,
+      "old_accounts_preserved": false,
+      "new_prime_account_added": true,
+      "native_account_unchanged": true,
+      "ble_flash_write_count": 2,
+      "callback_invoked_directly": true
+    },
+    {
+      "case": "explicit_save_auth_callback",
+      "security_mode": 4,
+      "old_accounts_preserved": false,
+      "new_prime_account_added": true,
+      "native_account_unchanged": true,
+      "ble_flash_write_count": 2,
+      "callback_invoked_directly": true
+    },
+    {
+      "case": "empty_save_auth_callback",
+      "security_mode": 2,
+      "account_pointer_null": true,
+      "reply_return": 1,
+      "complete_allowlist_unchanged": true
+    },
+    {
+      "case": "empty_save_auth_callback",
+      "security_mode": 2,
+      "account_pointer_null": false,
+      "reply_return": 1,
+      "complete_allowlist_unchanged": true
+    },
+    {
+      "case": "empty_save_auth_callback",
+      "security_mode": 3,
+      "account_pointer_null": true,
+      "reply_return": 1,
+      "complete_allowlist_unchanged": true
+    },
+    {
+      "case": "empty_save_auth_callback",
+      "security_mode": 3,
+      "account_pointer_null": false,
+      "reply_return": 1,
+      "complete_allowlist_unchanged": true
+    },
+    {
+      "case": "full_allowlist_explicit_save",
+      "security_mode": 2,
+      "entry_count": 16,
+      "oldest_prime_evicted": true,
+      "other_15_preserved": true,
+      "new_prime_added": true,
+      "native_account_unchanged": true,
+      "callback_invoked_directly": true
+    }
+  ],
+  "hardware_access": false,
+  "cloud_access": false,
+  "firmware_model": "A1763",
+  "limitations": "Replay separate BLE allowlist and native identity paths in A1763 radio 0.3.3.0.\n\nActual BLE allowlist lookup/add/clear, application authorization/security getter,\nPrime registration handler, native activation parsing/copy and configuration\nsetter execute. Activation stops immediately after its configuration setter;\nWLAN credential parsing/copy stops at its application callback entry. Their\nasynchronous networking, later activation effects, physical confirmation and\nnonvolatile writes are not executed. Core registration callback pointers are\nreconstructed from the actual application startup instructions.\nOS mutex/state effects, logging, MAC/status providers, session-ready predicate,\nauthorization-port writes, registration reply and flash writes are recording or\nsuccess stubs. ROM strcmp/strncpy are host substitutes; inherited substitutes\nare documented in the storage/native-route harnesses. Synthetic identities and\ncredentials only, no networking or device access. This A1763 binary does not\nestablish original-C1000 or C2000 binary equivalence or hardware rollback."
+}

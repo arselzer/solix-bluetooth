@@ -163,6 +163,30 @@ The helper dependency chain is `ClockMachine → SocMachine → TouMachine → D
 
 Consequently, results establish the reported code path for this exact C1000 image under the stated inputs. They do not establish asynchronous side effects beyond recorded boundaries, actual power flow, end-to-end alert delivery, unsupported setting safety, or C2000 behavior. Live evidence remains separately documented in the device/protocol research notes.
 
+## Complete file-load follow-ups
+
+Later standalone suites execute the file/checksum/default paths excluded by
+the original combined runner's post-read substitute:
+
+| Suite | Cases | Version and scope |
+| --- | ---: | --- |
+| [Original saved charging settings](c1000-saved-charge-validation.md) | 108 | A1761 main 1.5.9; actual header, CRC, settings validation and defaults with synthetic file I/O |
+| [Complete Gen 2 backup file](gen2-syspara-backup-format.md) | 28 | A1763 main 1.1.4.9; 415-byte `sysPara` save/load, all backup records/switches and destructive invalid-file defaults |
+
+Use each linked reproduction command and compare its complete expected JSON.
+Independent replays matched both result and manifest files on Python **3.12.3**,
+Unicorn **2.1.4** and Capstone **5.0.7**. These are separate suites, not additions
+to the combined runner's 1,842 count. Neither operates real storage or reboots a
+station. The original's installed **1.7.1** behavior and Gen 2 external backup
+export remain unverified.
+
+The separate [BLE/native identity replay](ble-native-identity-separation.md)
+adds **32 cases** for A1763 radio **0.3.3.0**, including retained-ID authorization,
+native-only account changes and explicit allowlist saves. Independent complete
+results and manifest matched. Its defined provisioning prefixes stop before
+later activation effects; it is not an end-to-end recovery or original/C2000
+firmware proof. Use its own command, exact image hash and substitution list.
+
 ## Additional image integrity tools
 
 These checks use the bundled vendor images and perform no emulation or device I/O:

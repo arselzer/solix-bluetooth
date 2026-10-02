@@ -63,6 +63,20 @@ Each continuation retains explicit version and physical-validation limits.
 Separately, the [three-station HA runtime trial](ha-runtime-validation.md)
 confirms actual discovery, a restored control and shared-service recovery.
 
+The next [108 original saved-settings cases](c1000-saved-charge-validation.md)
+show why main **1.5.9** accepting a 100 W write does not imply reload retention:
+its valid-file loader rejects that value and restores broader defaults. Installed
+**1.7.1** remains a separate, unverified restart boundary. The
+[28 complete-file cases](gen2-syspara-backup-format.md) identify Gen 2's exact
+415-byte `sysPara` artifact, preserving every saved backup record and switch;
+invalid-file recovery erases that block. An external complete export is still
+missing, so no backup setter is unlocked.
+The [32 BLE/native identity cases](ble-native-identity-separation.md) identify
+separate native-account storage and a 16-entry BLE allowlist on the A1763 radio.
+Retained BLE IDs survive the executed account-change prefixes; explicit
+registration can erase or evict them. Later activation effects and rollback on
+the original/C2000 hardware remain unverified.
+
 The latest [reconnect, clock and power-gate follow-up](c2000-mqtt-reconnect-and-tariff.md)
 includes additional offline executions and guarded C2000 hardware observations.
 The [parallel power-control analysis](mqtt-power-offline-followup.md) adds

@@ -75,6 +75,10 @@ is now the smaller first test: retain its working Prime BLE ID, change only the
 native provisioning account, and verify reconnect plus rollback. The sequence
 below additionally tests generated BLE pairing and needs physical confirmation
 available; success of either experiment does not establish the other.
+The [BLE/native separation replay](ble-native-identity-separation.md) supports
+preserving the retained Prime ID in the executed A1763 paths, while documenting
+the unexecuted activation effects and model-specific recovery limits. Establish
+independent working BLE recovery before changing an identity used by HA.
 
 1. Save the working BLE/native profile, private certificates and radio network
    readback. Record fresh versions, power readings, protected settings and F8.

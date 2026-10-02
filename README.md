@@ -35,7 +35,7 @@ Home Assistant integration for the local gateway.
 | --- | --- | --- | --- |
 | C1000 Gen 2, A1763 | Monitoring, charge limits/power, display timeout, fast charge | Charging/fast/reserve, tariffs, temperature/alert, display/memory, discharge floor | Main 1.1.4.9 / radio 0.3.3.0; older 1.1.4.3 uses legacy BLE |
 | C2000 Gen 2, A1783 | Monitoring, power/cap, display timeout | Charging/reserve, tariffs and return to grid | Main 2.1.6.4; AC-output writes blocked |
-| Original C1000, A1761 | Twelve legacy controls; ten Prime controls | Nine preferences: charging power, device/screen timeout, brightness, light, temperature unit, AC/DC Smart, Fast | Legacy 1.5.1; Prime/native main 1.7.1 / radio 0.3.3.0; Smart requires its output off; AC Smart/Prime AC output require no active AC timer; Fast rate/persistence unverified |
+| Original C1000, A1761 | Twelve legacy controls; ten Prime controls | Nine preferences: charging power, device/screen timeout, brightness, light, temperature unit, AC/DC Smart, Fast | Legacy 1.5.1; Prime/native main 1.7.1 / radio 0.3.3.0; Smart requires its output off; AC Smart/Prime AC output require no active AC timer; charging rates/reboot retention unverified |
 | C300/C300X AC, A1722/A1723 | Monitoring, AC output, light, charging power, display timeout | — | C300X tested; C300 sibling untested; C300 DC unsupported |
 | Solarbank 3 E2700 Pro, A17C5 | Separate Web Bluetooth app | — | Browser telemetry tested; no Python profile |
 
@@ -163,6 +163,8 @@ web-dashboard guide. Commit Vue sources and compiled Python assets together.
   effects, mirrored limits and why 0 W is unavailable as charge pause.
 - [Original charging gates](docs/c1000-charge-gate-rules.md): input-event
   priority and the second charging channel; no external bypass selector found.
+  [Saved-limit validation](docs/c1000-saved-charge-validation.md) distinguishes
+  older firmware's write/readback from its configuration-reload defaults.
 - [Countdown stop worker](docs/gen2-output-stop-worker.md): late cancellation
   and why reported output state is not an independent physical measurement.
 - [Local identity storage](docs/radio-identity-storage.md): cache transitions,

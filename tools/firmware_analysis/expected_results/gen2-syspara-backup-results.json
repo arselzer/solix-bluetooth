@@ -1,0 +1,1515 @@
+{
+  "firmware": "MainMcu-decoded.bin",
+  "sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9",
+  "cases": 28,
+  "hardware_access": false,
+  "references": {
+    "direct_getter_branches": [
+      {
+        "address": "08009420",
+        "kind": "bl",
+        "target": "0801a608"
+      },
+      {
+        "address": "08009440",
+        "kind": "bl",
+        "target": "0801a608"
+      },
+      {
+        "address": "08009480",
+        "kind": "bl",
+        "target": "0801a608"
+      },
+      {
+        "address": "08018afc",
+        "kind": "bl",
+        "target": "0801a608"
+      },
+      {
+        "address": "08018b0c",
+        "kind": "bl",
+        "target": "0801a608"
+      },
+      {
+        "address": "08018b32",
+        "kind": "bl",
+        "target": "0801a61c"
+      },
+      {
+        "address": "08018b56",
+        "kind": "bl",
+        "target": "0801a61c"
+      },
+      {
+        "address": "08018b64",
+        "kind": "bl",
+        "target": "0801a608"
+      },
+      {
+        "address": "08018b76",
+        "kind": "bl",
+        "target": "0801a608"
+      },
+      {
+        "address": "08018b82",
+        "kind": "bl",
+        "target": "0801a608"
+      },
+      {
+        "address": "08018b92",
+        "kind": "bl",
+        "target": "0801a608"
+      },
+      {
+        "address": "08018ba2",
+        "kind": "bl",
+        "target": "0801a608"
+      },
+      {
+        "address": "08018bb2",
+        "kind": "bl",
+        "target": "0801a608"
+      },
+      {
+        "address": "08018bee",
+        "kind": "bl",
+        "target": "0801a61c"
+      },
+      {
+        "address": "08018bf6",
+        "kind": "bl",
+        "target": "0801a608"
+      },
+      {
+        "address": "08018c02",
+        "kind": "bl",
+        "target": "0801a608"
+      },
+      {
+        "address": "08018c0c",
+        "kind": "bl",
+        "target": "0801a608"
+      },
+      {
+        "address": "08018c26",
+        "kind": "bl",
+        "target": "0801a608"
+      },
+      {
+        "address": "08018c3a",
+        "kind": "bl",
+        "target": "0801a608"
+      },
+      {
+        "address": "08018c4e",
+        "kind": "bl",
+        "target": "0801a608"
+      },
+      {
+        "address": "08019170",
+        "kind": "bl",
+        "target": "0801a61c"
+      },
+      {
+        "address": "0801917a",
+        "kind": "bl",
+        "target": "0801a61c"
+      },
+      {
+        "address": "08019184",
+        "kind": "bl",
+        "target": "0801a608"
+      },
+      {
+        "address": "08019192",
+        "kind": "bl",
+        "target": "0801a608"
+      }
+    ],
+    "literal_reference_candidates": [
+      {
+        "address": "080093e0",
+        "literal": "080093f0",
+        "value": "20001ea9",
+        "instruction": "r0, [pc, #0xc]"
+      },
+      {
+        "address": "080094cc",
+        "literal": "080094f8",
+        "value": "20001d48",
+        "instruction": "r2, [pc, #0x28]"
+      },
+      {
+        "address": "080094e8",
+        "literal": "080094fc",
+        "value": "20001ec4",
+        "instruction": "r0, [pc, #0x10]"
+      },
+      {
+        "address": "0800ab2c",
+        "literal": "0800ab34",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #4]"
+      },
+      {
+        "address": "0800fcb4",
+        "literal": "0800fcbc",
+        "value": "20001d48",
+        "instruction": "r1, [pc, #4]"
+      },
+      {
+        "address": "080155a2",
+        "literal": "080155bc",
+        "value": "20001d48",
+        "instruction": "r1, [pc, #0x18]"
+      },
+      {
+        "address": "080155aa",
+        "literal": "080155bc",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #0x10]"
+      },
+      {
+        "address": "08018d9c",
+        "literal": "08018da4",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #4]"
+      },
+      {
+        "address": "0801a55c",
+        "literal": "0801a56c",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #0xc]"
+      },
+      {
+        "address": "0801a574",
+        "literal": "0801a57c",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #4]"
+      },
+      {
+        "address": "0801a580",
+        "literal": "0801a588",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #4]"
+      },
+      {
+        "address": "0801a58c",
+        "literal": "0801a594",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #4]"
+      },
+      {
+        "address": "0801a5a0",
+        "literal": "0801a5a8",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #4]"
+      },
+      {
+        "address": "0801a5ac",
+        "literal": "0801a5b4",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #4]"
+      },
+      {
+        "address": "0801a5b8",
+        "literal": "0801a5c0",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #4]"
+      },
+      {
+        "address": "0801a5c4",
+        "literal": "0801a5cc",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #4]"
+      },
+      {
+        "address": "0801a5d0",
+        "literal": "0801a5d8",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #4]"
+      },
+      {
+        "address": "0801a5dc",
+        "literal": "0801a5e4",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #4]"
+      },
+      {
+        "address": "0801a5f0",
+        "literal": "0801a5f8",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #4]"
+      },
+      {
+        "address": "0801a5fc",
+        "literal": "0801a604",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #4]"
+      },
+      {
+        "address": "0801a60c",
+        "literal": "0801a618",
+        "value": "20001ec4",
+        "instruction": "r0, [pc, #8]"
+      },
+      {
+        "address": "0801a610",
+        "literal": "0801a618",
+        "value": "20001ec4",
+        "instruction": "r0, [pc, #4]"
+      },
+      {
+        "address": "0801a61c",
+        "literal": "0801a644",
+        "value": "20001d48",
+        "instruction": "r1, [pc, #0x24]"
+      },
+      {
+        "address": "0801a648",
+        "literal": "0801a650",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #4]"
+      },
+      {
+        "address": "0801a654",
+        "literal": "0801a65c",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #4]"
+      },
+      {
+        "address": "0801a660",
+        "literal": "0801a668",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #4]"
+      },
+      {
+        "address": "0801a66c",
+        "literal": "0801a674",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #4]"
+      },
+      {
+        "address": "0801a678",
+        "literal": "0801a680",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #4]"
+      },
+      {
+        "address": "0801a684",
+        "literal": "0801a694",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #0xc]"
+      },
+      {
+        "address": "0801a698",
+        "literal": "0801a6a0",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #4]"
+      },
+      {
+        "address": "0801a6a4",
+        "literal": "0801a6ac",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #4]"
+      },
+      {
+        "address": "0801a6b0",
+        "literal": "0801a6b8",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #4]"
+      },
+      {
+        "address": "0801a6bc",
+        "literal": "0801a6c4",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #4]"
+      },
+      {
+        "address": "0801a6d0",
+        "literal": "0801a6d8",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #4]"
+      },
+      {
+        "address": "0801a6dc",
+        "literal": "0801a6e4",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #4]"
+      },
+      {
+        "address": "080288f0",
+        "literal": "0802897c",
+        "value": "20001d48",
+        "instruction": "r2, [pc, #0x88]"
+      },
+      {
+        "address": "0802891e",
+        "literal": "0802897c",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #0x5c]"
+      },
+      {
+        "address": "08028926",
+        "literal": "0802897c",
+        "value": "20001d48",
+        "instruction": "r4, [pc, #0x54]"
+      },
+      {
+        "address": "08029aa6",
+        "literal": "08029b70",
+        "value": "20001d48",
+        "instruction": "r4, [pc, #0xc8]"
+      },
+      {
+        "address": "0802a298",
+        "literal": "0802a2cc",
+        "value": "20001d48",
+        "instruction": "r5, [pc, #0x30]"
+      },
+      {
+        "address": "0802b278",
+        "literal": "0802b2b8",
+        "value": "20001d48",
+        "instruction": "r5, [pc, #0x3c]"
+      },
+      {
+        "address": "0802b2d8",
+        "literal": "0802b2e4",
+        "value": "20001d48",
+        "instruction": "r1, [pc, #8]"
+      },
+      {
+        "address": "0802b2ee",
+        "literal": "0802b2f8",
+        "value": "20001d48",
+        "instruction": "r1, [pc, #8]"
+      },
+      {
+        "address": "0802b2fc",
+        "literal": "0802b308",
+        "value": "20001d48",
+        "instruction": "r1, [pc, #8]"
+      },
+      {
+        "address": "0802b30c",
+        "literal": "0802b314",
+        "value": "20001d48",
+        "instruction": "r1, [pc, #4]"
+      },
+      {
+        "address": "0802b322",
+        "literal": "0802b32c",
+        "value": "20001d48",
+        "instruction": "r1, [pc, #8]"
+      },
+      {
+        "address": "0802b332",
+        "literal": "0802b344",
+        "value": "20001d48",
+        "instruction": "r1, [pc, #0x10]"
+      },
+      {
+        "address": "0802b34e",
+        "literal": "0802b358",
+        "value": "20001d48",
+        "instruction": "r1, [pc, #8]"
+      },
+      {
+        "address": "0802b35c",
+        "literal": "0802b368",
+        "value": "20001d48",
+        "instruction": "r1, [pc, #8]"
+      },
+      {
+        "address": "0802b40a",
+        "literal": "0802b41c",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #0x10]"
+      },
+      {
+        "address": "0802b420",
+        "literal": "0802b42c",
+        "value": "20001d48",
+        "instruction": "r1, [pc, #8]"
+      },
+      {
+        "address": "0802b43e",
+        "literal": "0802b474",
+        "value": "20001ea9",
+        "instruction": "r0, [pc, #0x34]"
+      },
+      {
+        "address": "0802b460",
+        "literal": "0802b474",
+        "value": "20001ea9",
+        "instruction": "r0, [pc, #0x10]"
+      },
+      {
+        "address": "0802b478",
+        "literal": "0802b48c",
+        "value": "20001d48",
+        "instruction": "r2, [pc, #0x10]"
+      },
+      {
+        "address": "0802b494",
+        "literal": "0802b4d4",
+        "value": "20001d48",
+        "instruction": "r5, [pc, #0x3c]"
+      },
+      {
+        "address": "0802b4f4",
+        "literal": "0802b500",
+        "value": "20001d48",
+        "instruction": "r1, [pc, #8]"
+      },
+      {
+        "address": "0802b504",
+        "literal": "0802b514",
+        "value": "20001d48",
+        "instruction": "r1, [pc, #0xc]"
+      },
+      {
+        "address": "0802b518",
+        "literal": "0802b524",
+        "value": "20001d48",
+        "instruction": "r1, [pc, #8]"
+      },
+      {
+        "address": "0802b528",
+        "literal": "0802b53c",
+        "value": "20001d48",
+        "instruction": "r1, [pc, #0x10]"
+      },
+      {
+        "address": "0802b540",
+        "literal": "0802b54c",
+        "value": "20001d48",
+        "instruction": "r1, [pc, #8]"
+      },
+      {
+        "address": "0802b550",
+        "literal": "0802b558",
+        "value": "20001d48",
+        "instruction": "r1, [pc, #4]"
+      },
+      {
+        "address": "0802b55c",
+        "literal": "0802b568",
+        "value": "20001d48",
+        "instruction": "r1, [pc, #8]"
+      },
+      {
+        "address": "0802b56e",
+        "literal": "0802b580",
+        "value": "20001d48",
+        "instruction": "r1, [pc, #0x10]"
+      },
+      {
+        "address": "0802b586",
+        "literal": "0802b598",
+        "value": "20001d48",
+        "instruction": "r1, [pc, #0x10]"
+      },
+      {
+        "address": "0802b59e",
+        "literal": "0802b5b0",
+        "value": "20001d48",
+        "instruction": "r1, [pc, #0x10]"
+      },
+      {
+        "address": "0802b5cc",
+        "literal": "0802b5d4",
+        "value": "20001d48",
+        "instruction": "r1, [pc, #4]"
+      },
+      {
+        "address": "0802b5d8",
+        "literal": "0802b5e4",
+        "value": "20001d48",
+        "instruction": "r1, [pc, #8]"
+      },
+      {
+        "address": "0802c99a",
+        "literal": "0802ca38",
+        "value": "20001d48",
+        "instruction": "r4, [pc, #0x9c]"
+      },
+      {
+        "address": "0802c9e4",
+        "literal": "0802ca38",
+        "value": "20001d48",
+        "instruction": "r2, [pc, #0x50]"
+      },
+      {
+        "address": "0802ca16",
+        "literal": "0802ca38",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #0x20]"
+      },
+      {
+        "address": "0802da66",
+        "literal": "0802db04",
+        "value": "20001ec8",
+        "instruction": "r0, [pc, #0x9c]"
+      },
+      {
+        "address": "0802da78",
+        "literal": "0802db04",
+        "value": "20001ec8",
+        "instruction": "r5, [pc, #0x88]"
+      },
+      {
+        "address": "0802daac",
+        "literal": "0802db04",
+        "value": "20001ec8",
+        "instruction": "r2, [pc, #0x54]"
+      },
+      {
+        "address": "0802dae2",
+        "literal": "0802db18",
+        "value": "20001d48",
+        "instruction": "r0, [pc, #0x34]"
+      }
+    ],
+    "thumb_pointer_occurrences": {
+      "0801a608": [],
+      "0801a61c": []
+    },
+    "indirect_computed_aliases_and_code_data_distinction_not_exhaustive": true
+  },
+  "results": [
+    {
+      "group": "full_file_save",
+      "seed": 0,
+      "switches_raw": [
+        0,
+        0
+      ],
+      "filename": "sysPara",
+      "file_bytes": 415,
+      "file_sha256": "18c6da81ac47f71e15ed1f22405c347c4e6e3866dedaa5e944e5fddfdd063541",
+      "backup_hex": "4700d2496be8d5496b48d0d9496bb8dd496b49a0e1496b88e5496b4a70e9496b58ed496b0000",
+      "all_backup_bytes_read": true,
+      "backup_unchanged": true,
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 259
+        },
+        {
+          "kind": "rewind"
+        },
+        {
+          "kind": "write",
+          "bytes": 415
+        },
+        {
+          "kind": "sync"
+        },
+        {
+          "kind": "rewind"
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ]
+    },
+    {
+      "group": "full_file_load",
+      "seed": 0,
+      "switches_raw": [
+        0,
+        0
+      ],
+      "file_bytes": 415,
+      "backup_hex": "4700d2496be8d5496b48d0d9496bb8dd496b49a0e1496b88e5496b4a70e9496b58ed496b0000",
+      "whole_file_loaded_exactly": true,
+      "defaults_called": 0,
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 1
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ],
+      "external_export_protocol_proved": false
+    },
+    {
+      "group": "full_file_save",
+      "seed": 0,
+      "switches_raw": [
+        1,
+        0
+      ],
+      "filename": "sysPara",
+      "file_bytes": 415,
+      "file_sha256": "b5ae69236509fd96c9bb93ec6b340ccfb8d2462f8f7640e6ff232de47ca9960e",
+      "backup_hex": "4700d2496be8d5496b48d0d9496bb8dd496b49a0e1496b88e5496b4a70e9496b58ed496b0100",
+      "all_backup_bytes_read": true,
+      "backup_unchanged": true,
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 259
+        },
+        {
+          "kind": "rewind"
+        },
+        {
+          "kind": "write",
+          "bytes": 415
+        },
+        {
+          "kind": "sync"
+        },
+        {
+          "kind": "rewind"
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ]
+    },
+    {
+      "group": "full_file_load",
+      "seed": 0,
+      "switches_raw": [
+        1,
+        0
+      ],
+      "file_bytes": 415,
+      "backup_hex": "4700d2496be8d5496b48d0d9496bb8dd496b49a0e1496b88e5496b4a70e9496b58ed496b0100",
+      "whole_file_loaded_exactly": true,
+      "defaults_called": 0,
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 1
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ],
+      "external_export_protocol_proved": false
+    },
+    {
+      "group": "full_file_save",
+      "seed": 0,
+      "switches_raw": [
+        0,
+        1
+      ],
+      "filename": "sysPara",
+      "file_bytes": 415,
+      "file_sha256": "c660ee5e05879875d3e1adbac612bfb88badb19760250bffe54ae1bab680f3f3",
+      "backup_hex": "4700d2496be8d5496b48d0d9496bb8dd496b49a0e1496b88e5496b4a70e9496b58ed496b0001",
+      "all_backup_bytes_read": true,
+      "backup_unchanged": true,
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 259
+        },
+        {
+          "kind": "rewind"
+        },
+        {
+          "kind": "write",
+          "bytes": 415
+        },
+        {
+          "kind": "sync"
+        },
+        {
+          "kind": "rewind"
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ]
+    },
+    {
+      "group": "full_file_load",
+      "seed": 0,
+      "switches_raw": [
+        0,
+        1
+      ],
+      "file_bytes": 415,
+      "backup_hex": "4700d2496be8d5496b48d0d9496bb8dd496b49a0e1496b88e5496b4a70e9496b58ed496b0001",
+      "whole_file_loaded_exactly": true,
+      "defaults_called": 0,
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 1
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ],
+      "external_export_protocol_proved": false
+    },
+    {
+      "group": "full_file_save",
+      "seed": 0,
+      "switches_raw": [
+        1,
+        1
+      ],
+      "filename": "sysPara",
+      "file_bytes": 415,
+      "file_sha256": "a11de4a25a165c3067c559b3d91357eb6325946719a60ef06f7f04033392bf70",
+      "backup_hex": "4700d2496be8d5496b48d0d9496bb8dd496b49a0e1496b88e5496b4a70e9496b58ed496b0101",
+      "all_backup_bytes_read": true,
+      "backup_unchanged": true,
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 259
+        },
+        {
+          "kind": "rewind"
+        },
+        {
+          "kind": "write",
+          "bytes": 415
+        },
+        {
+          "kind": "sync"
+        },
+        {
+          "kind": "rewind"
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ]
+    },
+    {
+      "group": "full_file_load",
+      "seed": 0,
+      "switches_raw": [
+        1,
+        1
+      ],
+      "file_bytes": 415,
+      "backup_hex": "4700d2496be8d5496b48d0d9496bb8dd496b49a0e1496b88e5496b4a70e9496b58ed496b0101",
+      "whole_file_loaded_exactly": true,
+      "defaults_called": 0,
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 1
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ],
+      "external_export_protocol_proved": false
+    },
+    {
+      "group": "full_file_save",
+      "seed": 0,
+      "switches_raw": [
+        2,
+        255
+      ],
+      "filename": "sysPara",
+      "file_bytes": 415,
+      "file_sha256": "71571f241ef72d9d14c10f6789b53bac422210b860f1e9fe22a55dcebf7f7848",
+      "backup_hex": "4700d2496be8d5496b48d0d9496bb8dd496b49a0e1496b88e5496b4a70e9496b58ed496b02ff",
+      "all_backup_bytes_read": true,
+      "backup_unchanged": true,
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 259
+        },
+        {
+          "kind": "rewind"
+        },
+        {
+          "kind": "write",
+          "bytes": 415
+        },
+        {
+          "kind": "sync"
+        },
+        {
+          "kind": "rewind"
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ]
+    },
+    {
+      "group": "full_file_load",
+      "seed": 0,
+      "switches_raw": [
+        2,
+        255
+      ],
+      "file_bytes": 415,
+      "backup_hex": "4700d2496be8d5496b48d0d9496bb8dd496b49a0e1496b88e5496b4a70e9496b58ed496b02ff",
+      "whole_file_loaded_exactly": true,
+      "defaults_called": 0,
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 1
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ],
+      "external_export_protocol_proved": false
+    },
+    {
+      "group": "full_file_save",
+      "seed": 0,
+      "switches_raw": [
+        255,
+        2
+      ],
+      "filename": "sysPara",
+      "file_bytes": 415,
+      "file_sha256": "0e981d13865fa9502caa2c53b8f5926b57b0200dcf731cd82496fd1c0d8bce4d",
+      "backup_hex": "4700d2496be8d5496b48d0d9496bb8dd496b49a0e1496b88e5496b4a70e9496b58ed496bff02",
+      "all_backup_bytes_read": true,
+      "backup_unchanged": true,
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 259
+        },
+        {
+          "kind": "rewind"
+        },
+        {
+          "kind": "write",
+          "bytes": 415
+        },
+        {
+          "kind": "sync"
+        },
+        {
+          "kind": "rewind"
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ]
+    },
+    {
+      "group": "full_file_load",
+      "seed": 0,
+      "switches_raw": [
+        255,
+        2
+      ],
+      "file_bytes": 415,
+      "backup_hex": "4700d2496be8d5496b48d0d9496bb8dd496b49a0e1496b88e5496b4a70e9496b58ed496bff02",
+      "whole_file_loaded_exactly": true,
+      "defaults_called": 0,
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 1
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ],
+      "external_export_protocol_proved": false
+    },
+    {
+      "group": "full_file_save",
+      "seed": 1,
+      "switches_raw": [
+        0,
+        0
+      ],
+      "filename": "sysPara",
+      "file_bytes": 415,
+      "file_sha256": "bfa253d254b233871bd1dc427a6f844221f189fb950f0ca50ed815da24a8f58d",
+      "backup_hex": "4810f9496bf8fc496b49e0004a6bc8044a6b4ab0084a6b980c4a6b4b80104a6b68144a6b0000",
+      "all_backup_bytes_read": true,
+      "backup_unchanged": true,
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 259
+        },
+        {
+          "kind": "rewind"
+        },
+        {
+          "kind": "write",
+          "bytes": 415
+        },
+        {
+          "kind": "sync"
+        },
+        {
+          "kind": "rewind"
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ]
+    },
+    {
+      "group": "full_file_load",
+      "seed": 1,
+      "switches_raw": [
+        0,
+        0
+      ],
+      "file_bytes": 415,
+      "backup_hex": "4810f9496bf8fc496b49e0004a6bc8044a6b4ab0084a6b980c4a6b4b80104a6b68144a6b0000",
+      "whole_file_loaded_exactly": true,
+      "defaults_called": 0,
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 1
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ],
+      "external_export_protocol_proved": false
+    },
+    {
+      "group": "full_file_save",
+      "seed": 1,
+      "switches_raw": [
+        1,
+        0
+      ],
+      "filename": "sysPara",
+      "file_bytes": 415,
+      "file_sha256": "34201f16fcb0e6ba03871aaf14693eacfcb0f959d820a068deb884a42037cb81",
+      "backup_hex": "4810f9496bf8fc496b49e0004a6bc8044a6b4ab0084a6b980c4a6b4b80104a6b68144a6b0100",
+      "all_backup_bytes_read": true,
+      "backup_unchanged": true,
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 259
+        },
+        {
+          "kind": "rewind"
+        },
+        {
+          "kind": "write",
+          "bytes": 415
+        },
+        {
+          "kind": "sync"
+        },
+        {
+          "kind": "rewind"
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ]
+    },
+    {
+      "group": "full_file_load",
+      "seed": 1,
+      "switches_raw": [
+        1,
+        0
+      ],
+      "file_bytes": 415,
+      "backup_hex": "4810f9496bf8fc496b49e0004a6bc8044a6b4ab0084a6b980c4a6b4b80104a6b68144a6b0100",
+      "whole_file_loaded_exactly": true,
+      "defaults_called": 0,
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 1
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ],
+      "external_export_protocol_proved": false
+    },
+    {
+      "group": "full_file_save",
+      "seed": 1,
+      "switches_raw": [
+        0,
+        1
+      ],
+      "filename": "sysPara",
+      "file_bytes": 415,
+      "file_sha256": "bd7efbd4eed88906a11172d00691a88ee0196955aaebef3befe0dd564991fcbd",
+      "backup_hex": "4810f9496bf8fc496b49e0004a6bc8044a6b4ab0084a6b980c4a6b4b80104a6b68144a6b0001",
+      "all_backup_bytes_read": true,
+      "backup_unchanged": true,
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 259
+        },
+        {
+          "kind": "rewind"
+        },
+        {
+          "kind": "write",
+          "bytes": 415
+        },
+        {
+          "kind": "sync"
+        },
+        {
+          "kind": "rewind"
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ]
+    },
+    {
+      "group": "full_file_load",
+      "seed": 1,
+      "switches_raw": [
+        0,
+        1
+      ],
+      "file_bytes": 415,
+      "backup_hex": "4810f9496bf8fc496b49e0004a6bc8044a6b4ab0084a6b980c4a6b4b80104a6b68144a6b0001",
+      "whole_file_loaded_exactly": true,
+      "defaults_called": 0,
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 1
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ],
+      "external_export_protocol_proved": false
+    },
+    {
+      "group": "full_file_save",
+      "seed": 1,
+      "switches_raw": [
+        1,
+        1
+      ],
+      "filename": "sysPara",
+      "file_bytes": 415,
+      "file_sha256": "c82ff8016965d3a6d1342047e083cb837e2807392d3d867893155cd2d7f987d0",
+      "backup_hex": "4810f9496bf8fc496b49e0004a6bc8044a6b4ab0084a6b980c4a6b4b80104a6b68144a6b0101",
+      "all_backup_bytes_read": true,
+      "backup_unchanged": true,
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 259
+        },
+        {
+          "kind": "rewind"
+        },
+        {
+          "kind": "write",
+          "bytes": 415
+        },
+        {
+          "kind": "sync"
+        },
+        {
+          "kind": "rewind"
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ]
+    },
+    {
+      "group": "full_file_load",
+      "seed": 1,
+      "switches_raw": [
+        1,
+        1
+      ],
+      "file_bytes": 415,
+      "backup_hex": "4810f9496bf8fc496b49e0004a6bc8044a6b4ab0084a6b980c4a6b4b80104a6b68144a6b0101",
+      "whole_file_loaded_exactly": true,
+      "defaults_called": 0,
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 1
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ],
+      "external_export_protocol_proved": false
+    },
+    {
+      "group": "full_file_save",
+      "seed": 1,
+      "switches_raw": [
+        2,
+        255
+      ],
+      "filename": "sysPara",
+      "file_bytes": 415,
+      "file_sha256": "a231085199cc7b3db81b8392ae619e55ca005db4bd370ce1677f0bfdb07fe5c4",
+      "backup_hex": "4810f9496bf8fc496b49e0004a6bc8044a6b4ab0084a6b980c4a6b4b80104a6b68144a6b02ff",
+      "all_backup_bytes_read": true,
+      "backup_unchanged": true,
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 259
+        },
+        {
+          "kind": "rewind"
+        },
+        {
+          "kind": "write",
+          "bytes": 415
+        },
+        {
+          "kind": "sync"
+        },
+        {
+          "kind": "rewind"
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ]
+    },
+    {
+      "group": "full_file_load",
+      "seed": 1,
+      "switches_raw": [
+        2,
+        255
+      ],
+      "file_bytes": 415,
+      "backup_hex": "4810f9496bf8fc496b49e0004a6bc8044a6b4ab0084a6b980c4a6b4b80104a6b68144a6b02ff",
+      "whole_file_loaded_exactly": true,
+      "defaults_called": 0,
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 1
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ],
+      "external_export_protocol_proved": false
+    },
+    {
+      "group": "full_file_save",
+      "seed": 1,
+      "switches_raw": [
+        255,
+        2
+      ],
+      "filename": "sysPara",
+      "file_bytes": 415,
+      "file_sha256": "b50f8af6d5217df10626aca88b7e76f299a9c63fa0f9a265bba2300cfdac47e1",
+      "backup_hex": "4810f9496bf8fc496b49e0004a6bc8044a6b4ab0084a6b980c4a6b4b80104a6b68144a6bff02",
+      "all_backup_bytes_read": true,
+      "backup_unchanged": true,
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 259
+        },
+        {
+          "kind": "rewind"
+        },
+        {
+          "kind": "write",
+          "bytes": 415
+        },
+        {
+          "kind": "sync"
+        },
+        {
+          "kind": "rewind"
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ]
+    },
+    {
+      "group": "full_file_load",
+      "seed": 1,
+      "switches_raw": [
+        255,
+        2
+      ],
+      "file_bytes": 415,
+      "backup_hex": "4810f9496bf8fc496b49e0004a6bc8044a6b4ab0084a6b980c4a6b4b80104a6b68144a6bff02",
+      "whole_file_loaded_exactly": true,
+      "defaults_called": 0,
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 1
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ],
+      "external_export_protocol_proved": false
+    },
+    {
+      "group": "invalid_file_load",
+      "defect": "short",
+      "defaults_called": 1,
+      "saved_backup_replaced": true,
+      "backup_after_hex": "0000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 1
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 414
+        },
+        {
+          "kind": "close"
+        }
+      ],
+      "physical_storage_not_accessed": true
+    },
+    {
+      "group": "invalid_file_load",
+      "defect": "magic",
+      "defaults_called": 1,
+      "saved_backup_replaced": true,
+      "backup_after_hex": "0000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 1
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ],
+      "physical_storage_not_accessed": true
+    },
+    {
+      "group": "invalid_file_load",
+      "defect": "checksum",
+      "defaults_called": 1,
+      "saved_backup_replaced": true,
+      "backup_after_hex": "0000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 1
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ],
+      "physical_storage_not_accessed": true
+    },
+    {
+      "group": "invalid_file_load",
+      "defect": "zero_charge_power",
+      "defaults_called": 1,
+      "saved_backup_replaced": true,
+      "backup_after_hex": "0000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "file_calls": [
+        {
+          "kind": "open",
+          "name": "sysPara",
+          "flags": 1
+        },
+        {
+          "kind": "read",
+          "requested": 415,
+          "returned": 415
+        },
+        {
+          "kind": "close"
+        }
+      ],
+      "physical_storage_not_accessed": true
+    }
+  ]
+}

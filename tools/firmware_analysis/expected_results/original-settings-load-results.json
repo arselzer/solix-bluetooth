@@ -1,0 +1,3111 @@
+{
+  "firmware_sha256": "b295ee8613f5c96e70dcc905896df516621cab4dc590bb580eac6b84519911a6",
+  "scope": "Original A1761 main1.5.9; synthetic files/RAM, no installed1.7.1 validation",
+  "validator": [
+    {
+      "synthetic_variant": 0,
+      "saved_watts": 0,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 0,
+      "saved_watts": 1,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 0,
+      "saved_watts": 99,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 0,
+      "saved_watts": 100,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 0,
+      "saved_watts": 199,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 0,
+      "saved_watts": 200,
+      "invalid": false,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 0,
+      "saved_watts": 201,
+      "invalid": false,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 0,
+      "saved_watts": 749,
+      "invalid": false,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 0,
+      "saved_watts": 750,
+      "invalid": false,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 0,
+      "saved_watts": 751,
+      "invalid": false,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 0,
+      "saved_watts": 999,
+      "invalid": false,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 0,
+      "saved_watts": 1000,
+      "invalid": false,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 0,
+      "saved_watts": 1001,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 0,
+      "saved_watts": 1200,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 0,
+      "saved_watts": 65535,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 1,
+      "saved_watts": 0,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 1,
+      "saved_watts": 1,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 1,
+      "saved_watts": 99,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 1,
+      "saved_watts": 100,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 1,
+      "saved_watts": 199,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 1,
+      "saved_watts": 200,
+      "invalid": false,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 1,
+      "saved_watts": 201,
+      "invalid": false,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 1,
+      "saved_watts": 749,
+      "invalid": false,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 1,
+      "saved_watts": 750,
+      "invalid": false,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 1,
+      "saved_watts": 751,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 1,
+      "saved_watts": 999,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 1,
+      "saved_watts": 1000,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 1,
+      "saved_watts": 1001,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 1,
+      "saved_watts": 1200,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 1,
+      "saved_watts": 65535,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 2,
+      "saved_watts": 0,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 2,
+      "saved_watts": 1,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 2,
+      "saved_watts": 99,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 2,
+      "saved_watts": 100,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 2,
+      "saved_watts": 199,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 2,
+      "saved_watts": 200,
+      "invalid": false,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 2,
+      "saved_watts": 201,
+      "invalid": false,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 2,
+      "saved_watts": 749,
+      "invalid": false,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 2,
+      "saved_watts": 750,
+      "invalid": false,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 2,
+      "saved_watts": 751,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 2,
+      "saved_watts": 999,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 2,
+      "saved_watts": 1000,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 2,
+      "saved_watts": 1001,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 2,
+      "saved_watts": 1200,
+      "invalid": true,
+      "no_ram_changes": true
+    },
+    {
+      "synthetic_variant": 2,
+      "saved_watts": 65535,
+      "invalid": true,
+      "no_ram_changes": true
+    }
+  ],
+  "valid_file_load": [
+    {
+      "synthetic_variant": 0,
+      "before": {
+        "saved_watts": 0,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 1000,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 0,
+      "before": {
+        "saved_watts": 1,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 1000,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 0,
+      "before": {
+        "saved_watts": 99,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 1000,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 0,
+      "before": {
+        "saved_watts": 100,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 1000,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 0,
+      "before": {
+        "saved_watts": 199,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 1000,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 0,
+      "before": {
+        "saved_watts": 200,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 200,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": false,
+      "decisions": [
+        "settings_validation_reached"
+      ],
+      "events": [],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 0,
+      "before": {
+        "saved_watts": 201,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 201,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": false,
+      "decisions": [
+        "settings_validation_reached"
+      ],
+      "events": [],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 0,
+      "before": {
+        "saved_watts": 749,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 749,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": false,
+      "decisions": [
+        "settings_validation_reached"
+      ],
+      "events": [],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 0,
+      "before": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": false,
+      "decisions": [
+        "settings_validation_reached"
+      ],
+      "events": [],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 0,
+      "before": {
+        "saved_watts": 751,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 751,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": false,
+      "decisions": [
+        "settings_validation_reached"
+      ],
+      "events": [],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 0,
+      "before": {
+        "saved_watts": 999,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 999,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": false,
+      "decisions": [
+        "settings_validation_reached"
+      ],
+      "events": [],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 0,
+      "before": {
+        "saved_watts": 1000,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 1000,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": false,
+      "decisions": [
+        "settings_validation_reached"
+      ],
+      "events": [],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 0,
+      "before": {
+        "saved_watts": 1001,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 1000,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 0,
+      "before": {
+        "saved_watts": 1200,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 1000,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 0,
+      "before": {
+        "saved_watts": 65535,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 1000,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 1,
+      "before": {
+        "saved_watts": 0,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 1,
+      "before": {
+        "saved_watts": 1,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 1,
+      "before": {
+        "saved_watts": 99,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 1,
+      "before": {
+        "saved_watts": 100,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 1,
+      "before": {
+        "saved_watts": 199,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 1,
+      "before": {
+        "saved_watts": 200,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 200,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": false,
+      "decisions": [
+        "settings_validation_reached"
+      ],
+      "events": [],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 1,
+      "before": {
+        "saved_watts": 201,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 201,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": false,
+      "decisions": [
+        "settings_validation_reached"
+      ],
+      "events": [],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 1,
+      "before": {
+        "saved_watts": 749,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 749,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": false,
+      "decisions": [
+        "settings_validation_reached"
+      ],
+      "events": [],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 1,
+      "before": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": false,
+      "decisions": [
+        "settings_validation_reached"
+      ],
+      "events": [],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 1,
+      "before": {
+        "saved_watts": 751,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 1,
+      "before": {
+        "saved_watts": 999,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 1,
+      "before": {
+        "saved_watts": 1000,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 1,
+      "before": {
+        "saved_watts": 1001,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 1,
+      "before": {
+        "saved_watts": 1200,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 1,
+      "before": {
+        "saved_watts": 65535,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 2,
+      "before": {
+        "saved_watts": 0,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 2,
+      "before": {
+        "saved_watts": 1,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 2,
+      "before": {
+        "saved_watts": 99,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 2,
+      "before": {
+        "saved_watts": 100,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 2,
+      "before": {
+        "saved_watts": 199,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 2,
+      "before": {
+        "saved_watts": 200,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 200,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": false,
+      "decisions": [
+        "settings_validation_reached"
+      ],
+      "events": [],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 2,
+      "before": {
+        "saved_watts": 201,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 201,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": false,
+      "decisions": [
+        "settings_validation_reached"
+      ],
+      "events": [],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 2,
+      "before": {
+        "saved_watts": 749,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 749,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": false,
+      "decisions": [
+        "settings_validation_reached"
+      ],
+      "events": [],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 2,
+      "before": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": false,
+      "decisions": [
+        "settings_validation_reached"
+      ],
+      "events": [],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 2,
+      "before": {
+        "saved_watts": 751,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 2,
+      "before": {
+        "saved_watts": 999,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 2,
+      "before": {
+        "saved_watts": 1000,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 2,
+      "before": {
+        "saved_watts": 1001,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 2,
+      "before": {
+        "saved_watts": 1200,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 2,
+      "before": {
+        "saved_watts": 65535,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    }
+  ],
+  "bad_checksum": [
+    {
+      "synthetic_variant": 0,
+      "before": {
+        "saved_watts": 100,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 1000,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "header_or_checksum_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 0,
+      "before": {
+        "saved_watts": 200,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 1000,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "header_or_checksum_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 0,
+      "before": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 1000,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "header_or_checksum_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 1,
+      "before": {
+        "saved_watts": 100,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "header_or_checksum_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 1,
+      "before": {
+        "saved_watts": 200,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "header_or_checksum_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 1,
+      "before": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "header_or_checksum_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 2,
+      "before": {
+        "saved_watts": 100,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "header_or_checksum_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 2,
+      "before": {
+        "saved_watts": 200,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "header_or_checksum_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 2,
+      "before": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "header_or_checksum_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    }
+  ],
+  "bad_header": [
+    {
+      "synthetic_variant": 0,
+      "before": {
+        "saved_watts": 200,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 1000,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "header_or_checksum_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 1,
+      "before": {
+        "saved_watts": 200,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "header_or_checksum_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 2,
+      "before": {
+        "saved_watts": 200,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "header_or_checksum_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    }
+  ],
+  "handler_then_load": [
+    {
+      "synthetic_variant": 0,
+      "app_handler_accepted_watts": 100,
+      "raw_getter_matched_write": true,
+      "before": {
+        "saved_watts": 100,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 1000,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 0,
+      "app_handler_accepted_watts": 200,
+      "raw_getter_matched_write": true,
+      "before": {
+        "saved_watts": 200,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 200,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": false,
+      "decisions": [
+        "settings_validation_reached"
+      ],
+      "events": [],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 1,
+      "app_handler_accepted_watts": 100,
+      "raw_getter_matched_write": true,
+      "before": {
+        "saved_watts": 100,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 1,
+      "app_handler_accepted_watts": 200,
+      "raw_getter_matched_write": true,
+      "before": {
+        "saved_watts": 200,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 200,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": false,
+      "decisions": [
+        "settings_validation_reached"
+      ],
+      "events": [],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 2,
+      "app_handler_accepted_watts": 100,
+      "raw_getter_matched_write": true,
+      "before": {
+        "saved_watts": 100,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 750,
+        "device_timeout_minutes": 720,
+        "brightness": 2,
+        "fast_flag_byte": 161,
+        "smart_modes": [
+          2,
+          2
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": true,
+      "decisions": [
+        "settings_validation_reached",
+        "settings_or_marker_rejected",
+        "default_initializer_reached"
+      ],
+      "events": [
+        {
+          "event_id": 0,
+          "argument": 0
+        }
+      ],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close",
+        "smart_mode_file_persistence",
+        "smart_mode_file_persistence",
+        "deferred_configuration_persistence",
+        "logger"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    },
+    {
+      "synthetic_variant": 2,
+      "app_handler_accepted_watts": 200,
+      "raw_getter_matched_write": true,
+      "before": {
+        "saved_watts": 200,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "after": {
+        "saved_watts": 200,
+        "device_timeout_minutes": 0,
+        "brightness": 3,
+        "fast_flag_byte": 165,
+        "smart_modes": [
+          1,
+          1
+        ],
+        "power_flags": "12340032"
+      },
+      "defaulted": false,
+      "decisions": [
+        "settings_validation_reached"
+      ],
+      "events": [],
+      "captured_calls": [
+        "synthetic_file_open",
+        "synthetic_file_read",
+        "synthetic_file_close"
+      ],
+      "all_low_ram_writes_match_expected": true,
+      "synchronous_power_flags_unchanged": true
+    }
+  ],
+  "cases": 108
+}

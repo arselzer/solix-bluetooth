@@ -1,0 +1,30 @@
+{
+  "firmware_sha256": "b295ee8613f5c96e70dcc905896df516621cab4dc590bb580eac6b84519911a6",
+  "cases": 108,
+  "python": "3.12.3",
+  "unicorn": "2.1.4",
+  "sha256": {
+    "emulate_original_settings_load.py": "a9d502d57c320870a38d395b5d8a2a0da15fafb2856f114bbe0bbc3fc6946592",
+    "emulate_c1000_original_commands.py": "598d83e15b6d7e982581439ea8b55fb0d7d3985009a6c1f4722363dff0f8ba5d",
+    "requirements.txt": "898079ea36b03630f08a4cacda94f6b23d995ec3edd29bd4c181371b8cd29fef"
+  },
+  "result_sha256": "5783045381bda24e18a89065ad7d5f9cea2bce94b8c43dbf8c677d7726c8a573",
+  "substitutes": [
+    "synthetic file open/read/close",
+    "persistence scheduling",
+    "configuration and Smart file persistence",
+    "event delivery",
+    "logger",
+    "ACK helper only in handler-to-load cases"
+  ],
+  "not_executed": [
+    "radio",
+    "BLE",
+    "MQTT",
+    "physical inputs or outputs",
+    "DSP",
+    "flash",
+    "whole boot/event loop",
+    "installed main1.7.1"
+  ]
+}

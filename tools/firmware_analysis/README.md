@@ -43,8 +43,8 @@ tool flashes a station. Vendor images have separate [notices](../../firmware/REA
 
 ## Original C1000 v1.5.9
 
-The separate A1761 input is publicly downloaded vendor firmware, not the
-tested station's installed 1.5.1 image. Run its extractor and actual ARM
+The separate A1761 input is publicly downloaded vendor firmware, older than the
+tested station's current main 1.7.1 image. Run its extractor and actual ARM
 handler replay independently:
 
 ```sh
@@ -75,8 +75,9 @@ python3 tools/firmware_analysis/emulate_c1000_network_state.py \
 ```
 
 Its main-1.5.9 evidence does not decode the installed radio's HTTP/MQTT parser
-or establish a safe remote reconnect command. The installed main remains
-1.5.1; the newly offered 1.7.1 update has not been installed in this record.
+or establish a safe remote reconnect command. The installed main was 1.5.1
+during that study; the later [official update](../../docs/c1000-original-update-network.md)
+and local controls were verified on 1.7.1. Its controller image remains unavailable.
 The [app OTA capture audit](../../docs/c1000-app-ota-capture-investigation.md)
 keeps app inputs, capture data and its separate two framing cases private.
 
@@ -131,3 +132,41 @@ These suites require the hash-checked C1000 Gen 2 main 1.1.4.9 image. Their
 results and source hashes are independent of `verified-run.json`; use their
 documented commands and substitution limits rather than adding their counts
 to the combined runner's reported total.
+
+## Complete configuration files
+
+Two separate suites execute full synthetic file loading rather than starting
+after file validation:
+
+```sh
+python3 tools/firmware_analysis/emulate_original_settings_load.py \
+  --output /tmp/original-settings-load.json \
+  --manifest /tmp/original-settings-load-manifest.json
+SOLIX_ANALYSIS_OUTPUT=/tmp/gen2-syspara-backup \
+  python3 tools/firmware_analysis/emulate_gen2_syspara_backup.py
+```
+
+- [Original saved settings](../../docs/c1000-saved-charge-validation.md):
+  **108 cases**, main 1.5.9. Command acceptance differs from saved-limit
+  validation; defaults affect timeout, Fast and Smart preferences too.
+- [Gen 2 complete backup file](../../docs/gen2-syspara-backup-format.md):
+  **28 cases**, main 1.1.4.9. The 415-byte `sysPara` roundtrip preserves all
+  four records and raw switches; malformed or invalid files cause defaults.
+
+Expected results and manifests are in `expected_results/`. File I/O is a
+synthetic in-memory service; no physical storage, reboot, external export or
+hardware output is exercised. These counts are separate from the combined runner.
+
+## BLE and native identity separation
+
+```sh
+python3 tools/firmware_analysis/emulate_radio_ble_identity_separation.py \
+  --output /tmp/solix-ble-identity-separation
+```
+
+[32 A1763 radio 0.3.3.0 cases](../../docs/ble-native-identity-separation.md)
+execute BLE allowlist lookup, Prime registration, native account changes and
+explicit list saves. The normal provisioning replay stops at stated boundaries;
+physical confirmation, asynchronous activation and durable recovery are untested.
+Original/C2000 firmware equivalence is unproved. Result/manifest fixtures are
+synthetic, separate from the combined runner and contain no operational identity.
