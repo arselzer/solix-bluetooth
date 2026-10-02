@@ -798,3 +798,35 @@ App Fast/charging-limit gates establish no original charging pause or forced
 discharge control. Equal `0003` values in the original app refer to a different
 capability-negotiation namespace, so original/C2000 wireless queries remain
 unverified. Raw captures and app extracts stay private.
+
+## October 2: network-state producers and SDK action limits
+
+The [31-case radio producer replay](radio-network-state-producers.md) separates
+got-IP state from MQTT connection state and traces the cached IPv4 formatter.
+Station STOP and the disconnect helper can leave old IP text; the disconnect
+event clears it. Application Wi-Fi state requires both IP and MQTT conditions
+on the examined normal callback. These fields do not establish cloud binding,
+BLE availability or asynchronous recovery.
+
+One [native RSSI trial](c1000-gen2-native-rssi-validation.md) returned **−42
+dBm** with unchanged fresh protected settings and zero setting writes across
+the fleet. The private CLI exposes `ap-service-wifi-rssi`; exact failure
+status becomes null, and radio responses cannot refresh controller telemetry.
+
+The [direct AC-input-disable app audit](gen2-ac-input-disable-app-audit.md)
+finds a real SDK action and capability gate, but no verified native setter or
+readback mapping. `acInputStatus` maps to AC output status in the app's
+transaction rules; substituting that parameter would target the wrong function.
+Optimistic UI state and SDK completion are insufficient confirmation.
+
+[39 original negotiation cases](c1000-power-method-and-negotiation-audit.md)
+show main 1.5.9 function `01/0003` marks session state and can continue after
+some errors. It is not a read-only charging-feature query. The inherited
+port-memory `0079` builder remains a newer-model/version lead, absent from all
+recovered old tables; no original pause/battery-only control was added.
+
+The [static Android SDK inventory](android-sdk-native-boundaries.md) locates
+clear loader bytecode and exported native primitives. It records digest-table
+selectors but recovers no OTA envelope or action-to-frame dispatcher. App APKs,
+crypto material and operational evidence stay private; only sanitized metadata
+and independently reproducible synthetic/static results are public.

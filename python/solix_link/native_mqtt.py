@@ -15,6 +15,7 @@ from .tou import TouPeriod, validate_periods
 from .c1000 import c1000_setting
 
 RADIO_NATIVE_PATTERN = bytes.fromhex("030010")
+RADIO_QUERY_RESPONSES = frozenset(("0803", "0822"))
 
 
 def decode_native_wireless_state(reply: bytes) -> dict[str, int]:
@@ -106,6 +107,14 @@ class NativeMqttCommands:
         if self.model != Model.C1000_GEN2:
             raise ValueError("Radio wireless state supports C1000 Gen 2 only")
         command = "0003"
+        frame = build_packet(RADIO_NATIVE_PATTERN, bytes.fromhex(command), b"")
+        return self._framed_request(command, frame, time.time(), response_pattern=RADIO_NATIVE_PATTERN)
+
+    def wifi_rssi(self) -> NativeMqttRequest:
+        """Query the A1763 radio's AP-info RSSI; failure is not cached quality."""
+        if self.model != Model.C1000_GEN2:
+            raise ValueError("Radio Wi-Fi RSSI supports C1000 Gen 2 only")
+        command = "0022"
         frame = build_packet(RADIO_NATIVE_PATTERN, bytes.fromhex(command), b"")
         return self._framed_request(command, frame, time.time(), response_pattern=RADIO_NATIVE_PATTERN)
 

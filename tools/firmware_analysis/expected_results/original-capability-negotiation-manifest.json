@@ -1,0 +1,11 @@
+{
+  "firmware_sha256": "b295ee8613f5c96e70dcc905896df516621cab4dc590bb580eac6b84519911a6",
+  "python_version": "3.12.3",
+  "results_sha256": "23721bb5bfeed60bffb216599a260861ff9cd6db53ac6e8936a2702adfc7b971",
+  "schema_version": 1,
+  "sources_sha256": {
+    "emulate_c1000_original_commands.py": "598d83e15b6d7e982581439ea8b55fb0d7d3985009a6c1f4722363dff0f8ba5d",
+    "emulate_original_capability_negotiation.py": "680efe15fb1f0e4f06a2f4bda98f69762c4184db48eb3bc7b8fb6979f44b74cc"
+  },
+  "unicorn_version": "2.1.4"
+}

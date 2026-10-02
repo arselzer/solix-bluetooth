@@ -1,0 +1,355 @@
+{
+  "cases": {
+    "malformed_shape": 4,
+    "provider_failure": 2,
+    "synthetic_missing_provider": 1,
+    "total": 39,
+    "valid_capacity": 32
+  },
+  "execution": {
+    "function_01_dispatcher": "0801dfac",
+    "handler": "08017fa0",
+    "lookup": "0801df26",
+    "parser": "0801df4c",
+    "peripheral_mapping": false,
+    "response_serializers": [
+      "08026294",
+      "0801dee8",
+      "08023a5e"
+    ],
+    "substitutes": {
+      "08005030": "capacity provider; writes u16 and returns result",
+      "080225c4": "response body capture"
+    }
+  },
+  "input_sha256": "b295ee8613f5c96e70dcc905896df516621cab4dc590bb580eac6b84519911a6",
+  "limits": [
+    "Installed main1.7.1 image remains missing",
+    "No hardware, native-radio forwarding, authentication or complete-session validation",
+    "Negotiation marks a per-source library session byte; it is not read-only feature enumeration",
+    "No charging settings, output gates or physical charging behavior tested",
+    "Malformed inputs and missing-provider state are synthetic boundaries, not supported requests",
+    "Unmapped-pointer malformed paths are not executed or proposed for live testing"
+  ],
+  "main_version": "1.5.9",
+  "model": "A1761 original C1000",
+  "rows": [
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 128,
+      "reply_hex": "00a10100a2020000",
+      "requested": 0,
+      "source": 0
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 128,
+      "reply_hex": "00a10100a2020100",
+      "requested": 1,
+      "source": 0
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 128,
+      "reply_hex": "00a10100a2027f00",
+      "requested": 127,
+      "source": 0
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 128,
+      "reply_hex": "00a10100a2028000",
+      "requested": 128,
+      "source": 0
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 128,
+      "reply_hex": "00a10100a2028000",
+      "requested": 250,
+      "source": 0
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 128,
+      "reply_hex": "00a10100a2028000",
+      "requested": 251,
+      "source": 0
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 128,
+      "reply_hex": "00a10100a2028000",
+      "requested": 512,
+      "source": 0
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 128,
+      "reply_hex": "00a10100a2028000",
+      "requested": 65535,
+      "source": 0
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 256,
+      "reply_hex": "00a10100a2020000",
+      "requested": 0,
+      "source": 0
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 256,
+      "reply_hex": "00a10100a2020100",
+      "requested": 1,
+      "source": 0
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 256,
+      "reply_hex": "00a10100a2027f00",
+      "requested": 127,
+      "source": 0
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 256,
+      "reply_hex": "00a10100a2028000",
+      "requested": 128,
+      "source": 0
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 256,
+      "reply_hex": "00a10100a202fa00",
+      "requested": 250,
+      "source": 0
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 256,
+      "reply_hex": "00a10100a202fb00",
+      "requested": 251,
+      "source": 0
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 256,
+      "reply_hex": "00a10100a2020001",
+      "requested": 512,
+      "source": 0
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 256,
+      "reply_hex": "00a10100a2020001",
+      "requested": 65535,
+      "source": 0
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 128,
+      "reply_hex": "00a10100a2020000",
+      "requested": 0,
+      "source": 1
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 128,
+      "reply_hex": "00a10100a2020100",
+      "requested": 1,
+      "source": 1
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 128,
+      "reply_hex": "00a10100a2027f00",
+      "requested": 127,
+      "source": 1
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 128,
+      "reply_hex": "00a10100a2028000",
+      "requested": 128,
+      "source": 1
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 128,
+      "reply_hex": "00a10100a2028000",
+      "requested": 250,
+      "source": 1
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 128,
+      "reply_hex": "00a10100a2028000",
+      "requested": 251,
+      "source": 1
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 128,
+      "reply_hex": "00a10100a2028000",
+      "requested": 512,
+      "source": 1
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 128,
+      "reply_hex": "00a10100a2028000",
+      "requested": 65535,
+      "source": 1
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 256,
+      "reply_hex": "00a10100a2020000",
+      "requested": 0,
+      "source": 1
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 256,
+      "reply_hex": "00a10100a2020100",
+      "requested": 1,
+      "source": 1
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 256,
+      "reply_hex": "00a10100a2027f00",
+      "requested": 127,
+      "source": 1
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 256,
+      "reply_hex": "00a10100a2028000",
+      "requested": 128,
+      "source": 1
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 256,
+      "reply_hex": "00a10100a202fa00",
+      "requested": 250,
+      "source": 1
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 256,
+      "reply_hex": "00a10100a202fb00",
+      "requested": 251,
+      "source": 1
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 256,
+      "reply_hex": "00a10100a2020001",
+      "requested": 512,
+      "source": 1
+    },
+    {
+      "case": "negotiated_capacity",
+      "changed_session_byte": 1,
+      "provider": 256,
+      "reply_hex": "00a10100a2020001",
+      "requested": 65535,
+      "source": 1
+    },
+    {
+      "case": "missing_A3",
+      "changed_session_byte": 1,
+      "reply_hex": [
+        "04",
+        "00a10100a2027b00"
+      ],
+      "scope": "synthetic parser slots/backing bytes, not a supported request"
+    },
+    {
+      "case": "missing_A4",
+      "changed_session_byte": 1,
+      "reply_hex": [
+        "04",
+        "00a10100a2024d00"
+      ],
+      "scope": "synthetic parser slots/backing bytes, not a supported request"
+    },
+    {
+      "case": "A4_length_one",
+      "changed_session_byte": 1,
+      "reply_hex": [
+        "00a10100a2020001"
+      ],
+      "scope": "synthetic parser slots/backing bytes, not a supported request"
+    },
+    {
+      "case": "A4_length_zero",
+      "changed_session_byte": 1,
+      "reply_hex": [
+        "00a10100a2027b00"
+      ],
+      "scope": "synthetic parser slots/backing bytes, not a supported request"
+    },
+    {
+      "case": "provider_failure",
+      "changed_session_byte": 1,
+      "reply_hex": [
+        "01",
+        "00a10100a2027f00"
+      ],
+      "requested": 127
+    },
+    {
+      "case": "provider_failure",
+      "changed_session_byte": 1,
+      "reply_hex": [
+        "01",
+        "00a10100a2020001"
+      ],
+      "requested": 512
+    },
+    {
+      "case": "synthetic_missing_provider",
+      "changed_session_byte": 1,
+      "reply_hex": [
+        "00a10100a2027b00"
+      ],
+      "scope": "not an initialized live application",
+      "stack_seed": 123
+    }
+  ]
+}

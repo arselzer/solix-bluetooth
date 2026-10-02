@@ -1,0 +1,9 @@
+{
+  "inputs_sha256": {
+    "arm64": "373aefb48f1384b6065000cfab7ab4b25c9969b441d2547788f8e1807bbed601",
+    "base": "27986f94a992f3aac1189be746d310553e99909ed81dfbb1abd5880f71662110"
+  },
+  "results_sha256": "4ae7d0d8e4a3963742597143d0f9ff9d9559c08b54ccd56aa87691056b266a84",
+  "scope": "Static metadata and selected instruction-call inventory; no emulation cases",
+  "source_sha256": "13e35e26aeab17fbb3b9400d1180714fa86e2d018b3972fe12c0eaa5421d698b"
+}

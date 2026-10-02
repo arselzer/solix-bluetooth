@@ -51,6 +51,7 @@ def add_commands(subcommands) -> None:
     for command, help_text in (("ap-service-status", "Query live native MQTT status"),
                                ("ap-service-readiness", "Read native controller readiness without writing settings"),
                                ("ap-service-wireless-state", "Read C1000 Gen 2 radio application flags without changing Bluetooth or Wi-Fi"),
+                               ("ap-service-wifi-rssi", "Query C1000 Gen 2 native radio RSSI; unavailable is null"),
                                ("ap-service-set-charge-power", "Set and confirm supported native MQTT charging power"),
                                ("ap-service-set-charge-cap", "Set and confirm the Gen 2 native MQTT upper charge limit"),
                                ("ap-service-set-discharge-floor", "Set C1000 Gen 2 lower discharge limit without adjusting reserve"),
@@ -248,6 +249,7 @@ def dispatch(args) -> None:
     else:
         command = {"ap-service-status": "status", "ap-service-readiness": "readiness", "ap-service-set-charge-power": "set-charge-power",
                    "ap-service-wireless-state": "wireless-state",
+                   "ap-service-wifi-rssi": "wifi-rssi",
                    "ap-service-set-charge-cap": "set-charge-cap", "ap-service-set-reserve": "set-backup-reserve",
                    "ap-service-set-discharge-floor": "set-discharge-floor",
                    "ap-service-set-temperature-unit": "set-temperature-unit",

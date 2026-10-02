@@ -1,0 +1,784 @@
+{
+  "model": "A1763 C1000 Gen 2",
+  "main_version": "1.1.4.9",
+  "radio_version": "0.3.3.0",
+  "firmware_sha256": "e291ec115f013953e825cb51b9e457a8731889547ab55b3058640e599e8cfec8",
+  "direct_call_census": {
+    "4202d20c": [
+      "42019b1e",
+      "42019e74",
+      "4201a3c4",
+      "4201a522",
+      "4201a65e"
+    ],
+    "4202d1ec": [
+      "4201984e",
+      "4201a08a",
+      "4201a2a8"
+    ],
+    "42031410": [
+      "420264f4",
+      "4202d0de"
+    ]
+  },
+  "case_count": 31,
+  "cases": [
+    {
+      "case": "application_eth_selector",
+      "synthetic_value": 0,
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 0,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 0,
+        "a8_cached_ipv4": "192.0.2.37"
+      },
+      "no_status_emission": true
+    },
+    {
+      "case": "application_eth_selector",
+      "synthetic_value": 1,
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 0,
+        "a5_eth": 1,
+        "a6_got_ip_boolean": 0,
+        "a8_cached_ipv4": "192.0.2.37"
+      },
+      "no_status_emission": true
+    },
+    {
+      "case": "application_eth_selector",
+      "synthetic_value": 255,
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 0,
+        "a5_eth": 255,
+        "a6_got_ip_boolean": 0,
+        "a8_cached_ipv4": "192.0.2.37"
+      },
+      "no_status_emission": true
+    },
+    {
+      "case": "actual_got_ip_getter_boolean",
+      "raw_byte": 0,
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 0,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 0,
+        "a8_cached_ipv4": "192.0.2.37"
+      }
+    },
+    {
+      "case": "actual_got_ip_getter_boolean",
+      "raw_byte": 1,
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 0,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 1,
+        "a8_cached_ipv4": "192.0.2.37"
+      }
+    },
+    {
+      "case": "actual_got_ip_getter_boolean",
+      "raw_byte": 255,
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 0,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 1,
+        "a8_cached_ipv4": "192.0.2.37"
+      }
+    },
+    {
+      "case": "actual_cached_ipv4_producer",
+      "synthetic_ip_octets": [
+        192,
+        0,
+        2,
+        37
+      ],
+      "format_arguments": [
+        [
+          192,
+          0,
+          2,
+          37
+        ]
+      ],
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 0,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 0,
+        "a8_cached_ipv4": "192.0.2.37"
+      }
+    },
+    {
+      "case": "actual_cached_ipv4_producer",
+      "synthetic_ip_octets": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "format_arguments": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 0,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 0,
+        "a8_cached_ipv4": "0.0.0.0"
+      }
+    },
+    {
+      "case": "actual_station_got_ip_event",
+      "synthetic_mqtt_connected": 0,
+      "synthetic_ip_octets": [
+        192,
+        0,
+        2,
+        37
+      ],
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 0,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 1,
+        "a8_cached_ipv4": "192.0.2.37"
+      },
+      "boundaries": [
+        {
+          "entry": "4203afc0",
+          "argument0": 10
+        },
+        {
+          "entry": "42012ebc",
+          "argument0": 0
+        }
+      ],
+      "notifications": [
+        {
+          "callback": "420440f2",
+          "mqtt_connected_at_entry": 0,
+          "got_ip_at_entry": 1
+        }
+      ],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_station_got_ip_event",
+      "synthetic_mqtt_connected": 0,
+      "synthetic_ip_octets": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 0,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 1,
+        "a8_cached_ipv4": "0.0.0.0"
+      },
+      "boundaries": [
+        {
+          "entry": "4203afc0",
+          "argument0": 7
+        },
+        {
+          "entry": "42012ebc",
+          "argument0": 0
+        }
+      ],
+      "notifications": [
+        {
+          "callback": "420440f2",
+          "mqtt_connected_at_entry": 0,
+          "got_ip_at_entry": 1
+        }
+      ],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_station_got_ip_event",
+      "synthetic_mqtt_connected": 1,
+      "synthetic_ip_octets": [
+        192,
+        0,
+        2,
+        37
+      ],
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 1,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 1,
+        "a8_cached_ipv4": "192.0.2.37"
+      },
+      "boundaries": [
+        {
+          "entry": "4203afc0",
+          "argument0": 10
+        },
+        {
+          "entry": "42012ebc",
+          "argument0": 0
+        },
+        {
+          "entry": "42026e66",
+          "argument0": 63
+        },
+        {
+          "entry": "42042c82",
+          "argument0": 1070657180
+        },
+        {
+          "entry": "4202df9c",
+          "argument0": 1000
+        },
+        {
+          "entry": "4202c24e",
+          "argument0": 1
+        },
+        {
+          "entry": "4202013e",
+          "argument0": 0
+        }
+      ],
+      "notifications": [
+        {
+          "callback": "420440f2",
+          "mqtt_connected_at_entry": 1,
+          "got_ip_at_entry": 1
+        }
+      ],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_station_got_ip_event",
+      "synthetic_mqtt_connected": 1,
+      "synthetic_ip_octets": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 1,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 1,
+        "a8_cached_ipv4": "0.0.0.0"
+      },
+      "boundaries": [
+        {
+          "entry": "4203afc0",
+          "argument0": 7
+        },
+        {
+          "entry": "42012ebc",
+          "argument0": 0
+        },
+        {
+          "entry": "42026e66",
+          "argument0": 63
+        },
+        {
+          "entry": "42042c82",
+          "argument0": 1070657180
+        },
+        {
+          "entry": "4202df9c",
+          "argument0": 1000
+        },
+        {
+          "entry": "4202c24e",
+          "argument0": 1
+        },
+        {
+          "entry": "4202013e",
+          "argument0": 0
+        }
+      ],
+      "notifications": [
+        {
+          "callback": "420440f2",
+          "mqtt_connected_at_entry": 1,
+          "got_ip_at_entry": 1
+        }
+      ],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_wlan_loss_event",
+      "event": "station_stop",
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 1,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 0,
+        "a8_cached_ipv4": "192.0.2.37"
+      },
+      "disconnect_prefix_stop_before_reconnect": false,
+      "notifications": [],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_wlan_loss_event",
+      "event": "station_disconnect",
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 0,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 0,
+        "a8_cached_ipv4": ""
+      },
+      "disconnect_prefix_stop_before_reconnect": true,
+      "notifications": [
+        {
+          "callback": "4204429c",
+          "mqtt_connected_at_entry": 1,
+          "got_ip_at_entry": 0
+        }
+      ],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "disconnect_helper_before_async_event",
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 1,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 0,
+        "a8_cached_ipv4": "192.0.2.37"
+      },
+      "boundaries": [
+        {
+          "entry": "420eb504",
+          "argument0": 0
+        }
+      ],
+      "cached_ip_not_cleared_by_helper": true
+    },
+    {
+      "case": "actual_mqtt_notification_dispatcher",
+      "event": "disconnect",
+      "callbacks": "fallback",
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 0,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 1,
+        "a8_cached_ipv4": "192.0.2.37"
+      },
+      "notifications": [
+        {
+          "callback": "4204429c",
+          "mqtt_connected_at_entry": 1,
+          "got_ip_at_entry": 1
+        }
+      ],
+      "boundaries": [],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_mqtt_notification_dispatcher",
+      "event": "disconnect",
+      "callbacks": "primary",
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 1,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 1,
+        "a8_cached_ipv4": "192.0.2.37"
+      },
+      "notifications": [
+        {
+          "callback": "synthetic_primary_disconnect",
+          "argument0": 65535
+        }
+      ],
+      "boundaries": [],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_mqtt_notification_dispatcher",
+      "event": "disconnect",
+      "callbacks": "none",
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 1,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 1,
+        "a8_cached_ipv4": "192.0.2.37"
+      },
+      "notifications": [],
+      "boundaries": [],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_mqtt_notification_dispatcher",
+      "event": "connect",
+      "callbacks": "fallback",
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 1,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 1,
+        "a8_cached_ipv4": "192.0.2.37"
+      },
+      "notifications": [
+        {
+          "callback": "420440f2",
+          "mqtt_connected_at_entry": 1,
+          "got_ip_at_entry": 1
+        }
+      ],
+      "boundaries": [
+        {
+          "entry": "42026e66",
+          "argument0": 63
+        },
+        {
+          "entry": "42042c82",
+          "argument0": 1070657516
+        },
+        {
+          "entry": "4202df9c",
+          "argument0": 1000
+        },
+        {
+          "entry": "4202c24e",
+          "argument0": 1
+        },
+        {
+          "entry": "4202013e",
+          "argument0": 0
+        }
+      ],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_mqtt_notification_dispatcher",
+      "event": "connect",
+      "callbacks": "primary",
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 0,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 1,
+        "a8_cached_ipv4": "192.0.2.37"
+      },
+      "notifications": [
+        {
+          "callback": "synthetic_primary_connect",
+          "argument0": 0
+        }
+      ],
+      "boundaries": [],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_mqtt_notification_dispatcher",
+      "event": "connect",
+      "callbacks": "none",
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 0,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 1,
+        "a8_cached_ipv4": "192.0.2.37"
+      },
+      "notifications": [],
+      "boundaries": [],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_normal_connect_callback_gates",
+      "mqtt_connected": 0,
+      "got_ip": 0,
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 0,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 0,
+        "a8_cached_ipv4": "192.0.2.37"
+      },
+      "boundaries": []
+    },
+    {
+      "case": "actual_normal_connect_callback_gates",
+      "mqtt_connected": 0,
+      "got_ip": 1,
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 0,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 1,
+        "a8_cached_ipv4": "192.0.2.37"
+      },
+      "boundaries": []
+    },
+    {
+      "case": "actual_normal_connect_callback_gates",
+      "mqtt_connected": 1,
+      "got_ip": 0,
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 0,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 0,
+        "a8_cached_ipv4": "192.0.2.37"
+      },
+      "boundaries": []
+    },
+    {
+      "case": "actual_normal_connect_callback_gates",
+      "mqtt_connected": 1,
+      "got_ip": 1,
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 1,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 1,
+        "a8_cached_ipv4": "192.0.2.37"
+      },
+      "boundaries": [
+        {
+          "entry": "42026e66",
+          "argument0": 63
+        },
+        {
+          "entry": "42042c82",
+          "argument0": 1070657516
+        },
+        {
+          "entry": "4202df9c",
+          "argument0": 1000
+        },
+        {
+          "entry": "4202c24e",
+          "argument0": 1
+        },
+        {
+          "entry": "4202013e",
+          "argument0": 0
+        }
+      ]
+    },
+    {
+      "case": "actual_mqtt_daemon_success_tail",
+      "synthetic_got_ip": 0,
+      "callbacks": "fallback",
+      "synthetic_caller_register_frame": true,
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 0,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 0,
+        "a8_cached_ipv4": "192.0.2.37"
+      },
+      "notifications": [
+        {
+          "callback": "420440f2",
+          "mqtt_connected_at_entry": 1,
+          "got_ip_at_entry": 0
+        }
+      ],
+      "boundaries": [
+        {
+          "entry": "420188b4",
+          "argument0": 0
+        }
+      ],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_mqtt_daemon_success_tail",
+      "synthetic_got_ip": 0,
+      "callbacks": "primary",
+      "synthetic_caller_register_frame": true,
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 0,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 0,
+        "a8_cached_ipv4": "192.0.2.37"
+      },
+      "notifications": [
+        {
+          "callback": "synthetic_primary_connect",
+          "argument0": 0
+        }
+      ],
+      "boundaries": [
+        {
+          "entry": "420188b4",
+          "argument0": 0
+        }
+      ],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_mqtt_daemon_success_tail",
+      "synthetic_got_ip": 1,
+      "callbacks": "fallback",
+      "synthetic_caller_register_frame": true,
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 1,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 1,
+        "a8_cached_ipv4": "192.0.2.37"
+      },
+      "notifications": [
+        {
+          "callback": "420440f2",
+          "mqtt_connected_at_entry": 1,
+          "got_ip_at_entry": 1
+        }
+      ],
+      "boundaries": [
+        {
+          "entry": "420188b4",
+          "argument0": 0
+        },
+        {
+          "entry": "42026e66",
+          "argument0": 63
+        },
+        {
+          "entry": "42042c82",
+          "argument0": 1070657516
+        },
+        {
+          "entry": "4202df9c",
+          "argument0": 1000
+        },
+        {
+          "entry": "4202c24e",
+          "argument0": 1
+        },
+        {
+          "entry": "4202013e",
+          "argument0": 0
+        }
+      ],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_mqtt_daemon_success_tail",
+      "synthetic_got_ip": 1,
+      "callbacks": "primary",
+      "synthetic_caller_register_frame": true,
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 0,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 1,
+        "a8_cached_ipv4": "192.0.2.37"
+      },
+      "notifications": [
+        {
+          "callback": "synthetic_primary_connect",
+          "argument0": 0
+        }
+      ],
+      "boundaries": [
+        {
+          "entry": "420188b4",
+          "argument0": 0
+        }
+      ],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_mqtt_disconnect_routine",
+      "synthetic_got_ip": 0,
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 0,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 0,
+        "a8_cached_ipv4": "192.0.2.37"
+      },
+      "notifications": [
+        {
+          "callback": "4204429c",
+          "mqtt_connected_at_entry": 1,
+          "got_ip_at_entry": 0
+        }
+      ],
+      "boundaries": [
+        {
+          "entry": "42033da0",
+          "argument0": 536870944
+        },
+        {
+          "entry": "4201890c",
+          "argument0": 0
+        },
+        {
+          "entry": "420180d4",
+          "argument0": 0
+        }
+      ],
+      "mqtt_flag_cleared_after_application_notification": true,
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_mqtt_disconnect_routine",
+      "synthetic_got_ip": 1,
+      "fields": {
+        "a1_ble": 0,
+        "a2_wifi": 0,
+        "a5_eth": 0,
+        "a6_got_ip_boolean": 1,
+        "a8_cached_ipv4": "192.0.2.37"
+      },
+      "notifications": [
+        {
+          "callback": "4204429c",
+          "mqtt_connected_at_entry": 1,
+          "got_ip_at_entry": 1
+        }
+      ],
+      "boundaries": [
+        {
+          "entry": "42033da0",
+          "argument0": 536870944
+        },
+        {
+          "entry": "4201890c",
+          "argument0": 0
+        },
+        {
+          "entry": "420180d4",
+          "argument0": 0
+        }
+      ],
+      "mqtt_flag_cleared_after_application_notification": true,
+      "protected_identity_regions_unchanged": true
+    }
+  ],
+  "limits": [
+    "Exact selected radio instructions with synthetic event/provider/caller state only.",
+    "No Wi-Fi/MQTT transport, cloud/binding success, physical controller or hardware recovery proof.",
+    "Primary notification callbacks are synthetic; full activation/network functions are substituted.",
+    "WLAN disconnect stops before config retrieval and reconnect policy; session buffers are absent.",
+    "IPv4 strings have no demonstrated TTL, validation or freshness guarantee.",
+    "Direct-call census is not a whole-program or indirect-producer proof.",
+    "Original C1000 and C2000 radio binary equivalence remains unproven."
+  ]
+}

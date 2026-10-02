@@ -277,3 +277,28 @@ upgrades, including this upgrade at +20.75 seconds. The sole nonempty settings
 change remains the planned countdown trial. This snapshot shows no observed
 spontaneous settings changes; it is still a partial observation, not the
 completed 13-hour run.
+
+## Native RSSI runtime update
+
+On 2026-10-02 the existing runtime received the explicit C1000 Gen 2 native
+RSSI query, wheel SHA-256
+`79e867b086964173a82f3fce0324b6df8a3623b174d57b1f05b531a2e0a9c9c1`.
+The previous package was backed up, static profiles/certificates matched
+their saved hashes, and the AP/gateway restart was recorded as an intervention.
+No HA component/configuration reload or station provisioning was performed.
+
+The [one-query trial](c1000-gen2-native-rssi-validation.md) returned −42 dBm.
+Full protected records and later fleet samples matched; a private wire audit
+found one `0022` query and zero setting writes across all three stations.
+Original/C2000 received status requests only. HA registrations remain
+**16 / 37 / 22** and native capability counts **9 / 16 / 5** for original /
+Gen 2 / C2000. The solar policy is disabled and arming/latch helpers are off.
+The full gate passed **2,451 Python/HA tests**. Browser/component code did not
+change; the ongoing observation is still incomplete.
+
+The latest immutable snapshot contains **461 samples over 3.83 hours**, with
+zero HTTP request errors. The same three sampled empty-cache gaps align with
+earlier planned upgrades; the sole nonempty settings change is the prior
+countdown trial. No additional anomaly was sampled during this RSSI deployment
+or query. This does not measure the exact outage duration or complete the
+planned 13-hour observation.

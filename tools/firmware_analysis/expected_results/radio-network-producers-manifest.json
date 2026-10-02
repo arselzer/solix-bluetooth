@@ -1,0 +1,20 @@
+{
+  "source": "emulate_radio_network_producers.py",
+  "source_sha256": "e9f82336759854231ade0977c593256f81370322d82021b92e2c3c80e0d6d8e9",
+  "dependency_sha256": {
+    "emulate_radio_ble_activation.py": "b43eb013e796c3117b869402a9e3a379d37192f731b0e31093cfc80ec196a785",
+    "emulate_radio_ble_advertising.py": "f15a66c20154fdd0c36cf1c3c9c31a86e3bd70621ffa91cb14e3c2eff10dab3d",
+    "emulate_radio_ble_identity_separation.py": "b8610828b020038f6e90d2f16a81fe469548bf30c902c3638cbcdb1c81227efc",
+    "emulate_radio_identity_storage.py": "e99c1e5cb8c7f699a6d1aa404f3fde052369d1cef62a98501fa63420a80f4fa1",
+    "emulate_radio_local_identity.py": "2b96d05caae3b9eb3878866aeca0045a29ad42b1316867aa8e442a4306d03f84",
+    "emulate_radio_rssi_routes.py": "de2665279a85c1b6f91d9eb41311938d5a09c2d45291c740ec03b8958ee3080b",
+    "emulate_radio_factory_routes.py": "9ae40bf0a004fd87f3edc52b30d5f48c320d29a39fb20d57d6136d61b3d7401a"
+  },
+  "firmware_sha256": "e291ec115f013953e825cb51b9e457a8731889547ab55b3058640e599e8cfec8",
+  "results_sha256": "133f36fd8df604e500986e952146069a6c8ea4fd3ba3c4a4734c6937b515bea6",
+  "case_count": 31,
+  "python": "3.12.3",
+  "unicorn": "2.1.4",
+  "cryptography": "41.0.7",
+  "capstone": "5.0.7"
+}

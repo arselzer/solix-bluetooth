@@ -261,3 +261,29 @@ trial and remain separate from the combined runner.
 
 The [static app HTTP-wrapper note](../../docs/c1000-ota-http-wrapper.md)
 documents the OTA business-response capture point; it adds no emulation cases.
+
+## Network-state producers and original protocol negotiation
+
+```sh
+PYTHONPATH=/tmp/solix-analysis-tools:tools/firmware_analysis \
+  python3 tools/firmware_analysis/emulate_radio_network_producers.py \
+  --image firmware/c1000_gen2/1.1.4.9/c1000-radio-validated.bin \
+  --output-dir /tmp/radio-network-producers
+python3 tools/firmware_analysis/emulate_original_capability_negotiation.py \
+  --output /tmp/original-capability-negotiation-results.json \
+  --manifest /tmp/original-capability-negotiation-manifest.json
+```
+
+[31 A1763 radio cases](../../docs/radio-network-state-producers.md) resolve
+got-IP, cached IPv4 text and normal MQTT callbacks. [39 original main-1.5.9
+cases](../../docs/c1000-power-method-and-negotiation-audit.md) show protocol-limit
+negotiation changes session state, including selected error continuations.
+Compare full results/manifests with `expected_results/`. Physical callbacks and
+installed original 1.7.1 remain outside scope; counts are separate from the
+combined runner.
+
+`inspect_android_sdk_boundary.py` accepts the exact externally retained base
+and ARM64 APKs; see [SDK inventory](../../docs/android-sdk-native-boundaries.md)
+for its command. It checks input hashes and produces sanitized static metadata,
+without executing app code or exporting assets. Its deterministic fixture pair
+adds no emulation count or cloud/action protocol implementation.

@@ -1,3 +1,4 @@
 unicorn==2.1.4
 capstone==5.0.7
 cryptography>=41
+pyelftools==0.33

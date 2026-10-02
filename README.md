@@ -27,8 +27,9 @@ Home Assistant integration for the local gateway.
   settings are also available; [readback semantics](docs/gen2-preference-readback.md).
 - C1000 Gen 2 Prime RSSI queries via `wifi-rssi`, with explicit unavailable
   results; [radio readbacks](docs/c1000-radio-readback-validation.md).
-- C1000 Gen 2 private operator CLI: [read-only native radio flags](docs/c1000-gen2-native-wireless-state-validation.md)
-  via `ap-service-wireless-state`; these do not report physical advertising.
+- C1000 Gen 2 private operator CLI: [native RSSI](docs/c1000-gen2-native-rssi-validation.md)
+  via `ap-service-wifi-rssi` and [radio flags](docs/c1000-gen2-native-wireless-state-validation.md)
+  via `ap-service-wireless-state`; flags do not report physical advertising.
 - Authenticated JSON HTTP, SSE and Prometheus for multiple stations.
 - Opt-in Home Assistant price/solar charging blueprint with telemetry freshness,
   reserve protection and a failure latch; installed automations start disabled.

@@ -148,25 +148,29 @@ def test_private_countdown_requires_gen2_c1000_target_and_exact_shape(fleet):
     asyncio.run(run())
 
 
-def test_radio_query_requires_selected_gen2_model_and_accepts_no_write_fields(fleet):
+@pytest.mark.parametrize("command,method,result_key", [
+    ("wireless-state", "wireless_state", "wireless_state"),
+    ("wifi-rssi", "wifi_rssi", "wifi_rssi_dbm"),
+])
+def test_radio_query_requires_selected_gen2_model_and_accepts_no_write_fields(fleet, command, method, result_key):
     primary, second, directory = fleet
     async def run():
         service = APService(primary, directory, allow_control=False)
         calls = []
         async def query():
             calls.append(second.name)
-            return {"wireless_state": {"bluetooth_application_state": 0, "wifi_application_state": 1}}
-        service.stations[second.name].wireless_state = query
+            return {result_key: 1}
+        setattr(service.stations[second.name], method, query)
         listener = await asyncio.start_unix_server(service._control, path=directory / "control.sock")
         try:
             for values in ({}, {"name": "servers"}, {"name": "unknown"},
                            {"name": "office", "enabled": True}, {"name": "office", "seconds": 0}):
                 with pytest.raises(ValueError):
-                    await ap_service_request(directory, "wireless-state", **values)
+                    await ap_service_request(directory, command, **values)
             assert calls == []
-            result = await ap_service_request(directory, "wireless-state", name="office")
-            assert result["wireless_state"]["wifi_application_state"] == 1 and calls == ["office"]
-            assert "wireless-state" not in APServiceMonitor(primary, directory).supported_commands("office")
+            result = await ap_service_request(directory, command, name="office")
+            assert result[result_key] == 1 and calls == ["office"]
+            assert command not in APServiceMonitor(primary, directory).supported_commands("office")
         finally:
             listener.close(); await listener.wait_closed()
     asyncio.run(run())

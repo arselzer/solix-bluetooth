@@ -13,6 +13,9 @@ that can report 100 after an RSSI failure. The subsequent
 [C1000 Gen 2 live check](c1000-radio-readback-validation.md) validates its
 unavailable response and adds an explicit Python/CLI getter. This offline
 audit is not evidence for another model with the same radio version text.
+The later [native MQTT trial](c1000-gen2-native-rssi-validation.md) confirms
+one `030010/0022` round trip at −42 dBm with fresh protected settings unchanged.
+The private operator CLI exposes that explicit read-only query.
 
 ## Exact command namespace
 
@@ -126,7 +129,8 @@ request. It is not an ordinary function-`0f` controller telemetry frame; a
 future client needs explicit response correlation and decoding for this shape.
 The subsequent SDK getter handles `030010` / `4822` separately from controller
 responses; the generic function-`0f` helpers cannot be reused unchanged.
-Neither a broker round trip nor delivery to a real client was tested.
+Neither a broker round trip nor delivery to a real client was tested by this
+offline replay; the linked later hardware trial covers one native request.
 
 ## Coverage, reproduction and limits
 

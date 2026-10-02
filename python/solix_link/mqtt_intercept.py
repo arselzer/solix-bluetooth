@@ -16,7 +16,8 @@ import time
 from typing import Callable
 
 from .ap_service_config import APServiceConfig, private_write
-from .native_mqtt import (RADIO_NATIVE_PATTERN, NativeMqttCommands, NativeMqttRequest,
+from .diagnostics import decode_wifi_rssi
+from .native_mqtt import (RADIO_NATIVE_PATTERN, RADIO_QUERY_RESPONSES, NativeMqttCommands, NativeMqttRequest,
                           decode_mqtt_telemetry, decode_native_wireless_state)
 from .protocol import DATA_RESPONSE, Model, decode_telemetry, parse_packet, parse_tlvs, timezone_confer
 from .tou import PowerFlowTimeout, TouPeriod, periods_from_d9, power_flow, validate_periods
@@ -104,7 +105,7 @@ def native_response(message: bytes, config: APServiceConfig, *, radio_query: boo
         if frame.pattern == DATA_RESPONSE:
             return frame
         if (radio_query and config.model == Model.C1000_GEN2
-                and frame.pattern == RADIO_NATIVE_PATTERN and frame.command == bytes.fromhex("0803")):
+                and frame.pattern == RADIO_NATIVE_PATTERN and frame.command.hex() in RADIO_QUERY_RESPONSES):
             return frame
         return None
     except (ValueError, KeyError, TypeError, UnicodeError):
@@ -486,6 +487,22 @@ class LocalMqttServer:
     async def wireless_state(self) -> dict:
         """Read radio application flags; this neither enables nor pairs BLE."""
         request = self.commands.wireless_state()  # Model guard before device I/O.
+        result = await self._radio_query(request, lambda reply: {
+            "wireless_state": decode_native_wireless_state(reply)})
+        result["scope"] = "Radio application state; physical advertising is not reported"
+        return result
+
+    async def wifi_rssi(self) -> dict:
+        """Query radio AP-info; an unavailable observation returns null."""
+        request = self.commands.wifi_rssi()  # Model guard before device I/O.
+        result = await self._radio_query(request, lambda reply: {
+            "wifi_rssi_dbm": decode_wifi_rssi(reply)})
+        result["rssi_available"] = result["wifi_rssi_dbm"] is not None
+        result["scope"] = "Radio AP-info query; unavailable RSSI is null"
+        return result
+
+    async def _radio_query(self, request: NativeMqttRequest,
+                           decode: Callable[[bytes], dict]) -> dict:
         async with self._control_lock:
             connection = self.connection
             if connection is None:
@@ -494,7 +511,7 @@ class LocalMqttServer:
             if (before.get("software_version") != "1.1.4.9"
                     or before.get("software_version_module") != "0.3.3.0"):
                 raise ValueError("Radio query requires main 1.1.4.9 / radio 0.3.3.0; no radio request sent")
-            flags = decode_native_wireless_state(await connection.request(request))
+            observation = decode(await connection.request(request))
             a4, d9, metrics = await self._fresh_c1000_settings(connection)
             expected = bytearray(before_a4)
             for key, offset in (("ac_output_timeout_seconds", 1), ("dc_output_timeout_seconds", 9)):
@@ -507,9 +524,7 @@ class LocalMqttServer:
                            ("ac_output_enabled", "dc_output_enabled", "ac_input_connected"))):
                 raise RuntimeError("Protected setting or output changed during radio query")
             return {"model": self.config.model.value, "radio_version": "0.3.3.0",
-                    "wireless_state": flags, "settings_unchanged": True,
-                    "observed_at": time.time(),
-                    "scope": "Radio application state; physical advertising is not reported"}
+                    **observation, "settings_unchanged": True, "observed_at": time.time()}
 
     def _c1000_settings_report(self, reply: bytes) -> tuple[bytes, bytes, dict, dict[int, bytes]]:
         if self.config.model != Model.C1000_GEN2:
@@ -876,9 +891,9 @@ class _Connection:
         if request.response_pattern not in (DATA_RESPONSE, RADIO_NATIVE_PATTERN):
             raise ValueError("Unsupported native response namespace")
         if request.response_pattern == RADIO_NATIVE_PATTERN and (
-                self.server.config.model != Model.C1000_GEN2 or request.response_command != "0803"
+                self.server.config.model != Model.C1000_GEN2 or request.response_command not in RADIO_QUERY_RESPONSES
                 or request.response_aliases):
-            raise ValueError("Only the C1000 Gen 2 wireless-state radio query is supported")
+            raise ValueError("Only verified C1000 Gen 2 radio queries are supported")
         async with self.lock:
             if self.writer.is_closing() or not self.subscribed:
                 raise ConnectionError("Station command subscription is unavailable")
@@ -1021,7 +1036,7 @@ class _Connection:
                 message = body[pos:]
                 try:
                     frame = native_response(message, self.server.config,
-                        radio_query=bool(self.pending and self.pending[0] == "0803"
+                        radio_query=bool(self.pending and self.pending[0] in RADIO_QUERY_RESPONSES
                                          and self._response_pattern == RADIO_NATIVE_PATTERN))
                     if frame is None:
                         continue

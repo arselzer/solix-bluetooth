@@ -290,6 +290,34 @@ The [app HTTP-wrapper audit](c1000-ota-http-wrapper.md) is static instruction
 analysis with no additional emulation-case count. It identifies a plaintext
 OTA capture boundary; original main 1.7.1 acquisition remains pending.
 
+## Radio network producers and original negotiation
+
+```sh
+PYTHONPATH=/tmp/solix-analysis-tools:tools/firmware_analysis \
+  python3 tools/firmware_analysis/emulate_radio_network_producers.py \
+  --image firmware/c1000_gen2/1.1.4.9/c1000-radio-validated.bin \
+  --output-dir /tmp/radio-network-producers
+python3 tools/firmware_analysis/emulate_original_capability_negotiation.py \
+  --output /tmp/original-capability-negotiation-results.json \
+  --manifest /tmp/original-capability-negotiation-manifest.json
+```
+
+[31 radio producer cases](radio-network-state-producers.md) trace got-IP,
+cached IPv4 and normal MQTT application callbacks on A1763 radio 0.3.3.0.
+[39 original cases](c1000-power-method-and-negotiation-audit.md) execute
+main-1.5.9 protocol-limit/session negotiation and bounded error branches.
+Compare both complete result/manifest pairs with the corresponding
+`expected_results/` fixtures. These 70 cases remain outside the combined
+1,842-case runner; physical/asynchronous behavior and original main 1.7.1
+are not established.
+
+The [Android SDK inventory](android-sdk-native-boundaries.md) supplies a
+separate tool accepting the exact externally retained APK pair. It produces
+`android-sdk-boundary-{results,manifest}.json`, with no APK contents or secrets.
+Its two identical static runs are not additional emulation cases. The
+[AC-input-disable app audit](gen2-ac-input-disable-app-audit.md) is also static
+instruction/object-pool analysis and adds no emulation count.
+
 ## Additional image integrity tools
 
 These checks use the bundled vendor images and perform no emulation or device I/O:

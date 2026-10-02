@@ -1,0 +1,788 @@
+{
+  "apk_sha256": {
+    "arm64": "373aefb48f1384b6065000cfab7ab4b25c9969b441d2547788f8e1807bbed601",
+    "base": "27986f94a992f3aac1189be746d310553e99909ed81dfbb1abd5880f71662110"
+  },
+  "clear_dex_entries": [
+    "classes.dex"
+  ],
+  "cloud_envelope_or_action_frame_recovered": false,
+  "code_executed": false,
+  "hardware_or_network_access": false,
+  "loader_dex": {
+    "action_literal_presence": {
+      "acInputDisableSwitch": false,
+      "action_set_ac_params": false,
+      "akiot.cloud_api": false,
+      "akiot.device.invoke_action": false
+    },
+    "loader_anchor_presence": {
+      "com.anker.charging.AnkerApplication": true,
+      "com.ijm.dataencryption.DETool": true,
+      "instantiateClassLoader": true,
+      "loadLibrary": true,
+      "supportInstantiateClassLoader": true
+    },
+    "scope": "Literal presence in retained clear loader DEX only",
+    "sha256": "4cad866cff3e2bb7fa7a15045fee51101a49c3c98d3deebbc25aaed8ec814460",
+    "size": 13892,
+    "string_count": 193
+  },
+  "native_libraries": {
+    "libcrypto-security.so": {
+      "hkdf_digest_choices": [
+        {
+          "digest_bytes": 20,
+          "md_info_symbol": "mbedtls_sha1_info",
+          "selector": 0
+        },
+        {
+          "digest_bytes": 28,
+          "md_info_symbol": "mbedtls_sha224_info",
+          "selector": 1
+        },
+        {
+          "digest_bytes": 32,
+          "md_info_symbol": "mbedtls_sha256_info",
+          "selector": 2
+        }
+      ],
+      "jni_exports": [
+        {
+          "address": "0015ced0",
+          "direct_calls": [
+            {
+              "at": "0015cf34",
+              "symbol": "compute_ecdh",
+              "target": "00267480"
+            }
+          ],
+          "name": "Java_com_anker_esiotkit_support_crypto_Cryptography_computeEcdh",
+          "size": 220
+        },
+        {
+          "address": "0015cae0",
+          "direct_calls": [
+            {
+              "at": "0015cb08",
+              "symbol": "malloc",
+              "target": "002672f0"
+            },
+            {
+              "at": "0015cb14",
+              "symbol": "malloc",
+              "target": "002672f0"
+            },
+            {
+              "at": "0015cb3c",
+              "symbol": "memset",
+              "target": "00267300"
+            },
+            {
+              "at": "0015cb4c",
+              "symbol": "memset",
+              "target": "00267300"
+            },
+            {
+              "at": "0015cb5c",
+              "symbol": "rsa_generate_key",
+              "target": "00267340"
+            },
+            {
+              "at": "0015cc04",
+              "symbol": "free",
+              "target": "00267330"
+            },
+            {
+              "at": "0015cc0c",
+              "symbol": "free",
+              "target": "00267330"
+            }
+          ],
+          "name": "Java_com_anker_esiotkit_support_crypto_Cryptography_rsaGenerateKey",
+          "size": 328
+        },
+        {
+          "address": "0015d0d8",
+          "direct_calls": [
+            {
+              "at": "0015d1c4",
+              "symbol": "malloc",
+              "target": "002672f0"
+            },
+            {
+              "at": "0015d1fc",
+              "symbol": "crypto_hkdf",
+              "target": "002675c0"
+            },
+            {
+              "at": "0015d260",
+              "symbol": "free",
+              "target": "00267330"
+            },
+            {
+              "at": "0015d30c",
+              "symbol": "free",
+              "target": "00267330"
+            },
+            {
+              "at": "0015d348",
+              "symbol": "__stack_chk_fail",
+              "target": "00267260"
+            }
+          ],
+          "name": "Java_com_anker_esiotkit_support_crypto_Cryptography_cryptoHkdf",
+          "size": 628
+        },
+        {
+          "address": "0015cfac",
+          "direct_calls": [
+            {
+              "at": "0015cfc8",
+              "symbol": "malloc",
+              "target": "002672f0"
+            },
+            {
+              "at": "0015cfd4",
+              "symbol": "malloc",
+              "target": "002672f0"
+            },
+            {
+              "at": "0015cff0",
+              "symbol": "memset",
+              "target": "00267300"
+            },
+            {
+              "at": "0015d000",
+              "symbol": "memset",
+              "target": "00267300"
+            },
+            {
+              "at": "0015d00c",
+              "symbol": "ecdh_gen",
+              "target": "00267440"
+            },
+            {
+              "at": "0015d0ac",
+              "symbol": "free",
+              "target": "00267330"
+            },
+            {
+              "at": "0015d0b4",
+              "symbol": "free",
+              "target": "00267330"
+            }
+          ],
+          "name": "Java_com_anker_esiotkit_support_crypto_Cryptography_genEcdhKey",
+          "size": 300
+        },
+        {
+          "address": "0015cc28",
+          "direct_calls": [
+            {
+              "at": "0015ccc0",
+              "symbol": "rsa_decrypt",
+              "target": "002673d0"
+            },
+            {
+              "at": "0015cd74",
+              "symbol": "__stack_chk_fail",
+              "target": "00267260"
+            }
+          ],
+          "name": "Java_com_anker_esiotkit_support_crypto_Cryptography_rsaDecrypt",
+          "size": 336
+        },
+        {
+          "address": "0015cd78",
+          "direct_calls": [
+            {
+              "at": "0015ce18",
+              "symbol": "rsa_encrypt",
+              "target": "00267400"
+            },
+            {
+              "at": "0015cecc",
+              "symbol": "__stack_chk_fail",
+              "target": "00267260"
+            }
+          ],
+          "name": "Java_com_anker_esiotkit_support_crypto_Cryptography_rsaEncrypt",
+          "size": 344
+        },
+        {
+          "address": "0015c888",
+          "direct_calls": [
+            {
+              "at": "0015c910",
+              "symbol": "aes_decrypt",
+              "target": "002672e0"
+            }
+          ],
+          "name": "Java_com_anker_esiotkit_support_crypto_Cryptography_aesDecrypt",
+          "size": 264
+        },
+        {
+          "address": "0015c990",
+          "direct_calls": [
+            {
+              "at": "0015ca2c",
+              "symbol": "strlen",
+              "target": "00267230"
+            },
+            {
+              "at": "0015ca44",
+              "symbol": "gen_pic_code_v1",
+              "target": "002695e0"
+            },
+            {
+              "at": "0015cadc",
+              "symbol": "__stack_chk_fail",
+              "target": "00267260"
+            }
+          ],
+          "name": "Java_com_anker_esiotkit_support_crypto_Cryptography_genCheckCode",
+          "size": 336
+        }
+      ],
+      "selected_primitives": [
+        {
+          "address": "00105218",
+          "direct_calls": [
+            {
+              "at": "00105264",
+              "symbol": "malloc",
+              "target": "002672f0"
+            },
+            {
+              "at": "00105278",
+              "symbol": "memset",
+              "target": "00267300"
+            },
+            {
+              "at": "0010527c",
+              "symbol": "aes_new",
+              "target": "00267270"
+            },
+            {
+              "at": "00105290",
+              "symbol": "aes_set_key",
+              "target": "00267290"
+            },
+            {
+              "at": "001052b4",
+              "symbol": "AES_ecb_encrypt",
+              "target": "00267310"
+            },
+            {
+              "at": "001052d4",
+              "symbol": "memcpy",
+              "target": "00267320"
+            },
+            {
+              "at": "001052dc",
+              "symbol": "free",
+              "target": "00267330"
+            },
+            {
+              "at": "001052e4",
+              "symbol": "free",
+              "target": "00267330"
+            },
+            {
+              "at": "001052f4",
+              "symbol": "free",
+              "target": "00267330"
+            },
+            {
+              "at": "001052fc",
+              "symbol": "free",
+              "target": "00267330"
+            }
+          ],
+          "name": "aes_decrypt",
+          "size": 260
+        },
+        {
+          "address": "00105c78",
+          "direct_calls": [
+            {
+              "at": "00105d7c",
+              "symbol": "__memset_chk",
+              "target": "002675d0"
+            },
+            {
+              "at": "00105d98",
+              "symbol": "mbedtls_md_hmac",
+              "target": "002675e0"
+            },
+            {
+              "at": "00105dcc",
+              "symbol": "mbedtls_md_init",
+              "target": "002675f0"
+            },
+            {
+              "at": "00105ddc",
+              "symbol": "mbedtls_md_setup",
+              "target": "00267600"
+            },
+            {
+              "at": "00105de8",
+              "symbol": "mbedtls_md_free",
+              "target": "00267610"
+            },
+            {
+              "at": "00105e14",
+              "symbol": "mbedtls_md_hmac_starts",
+              "target": "00267620"
+            },
+            {
+              "at": "00105e24",
+              "symbol": "mbedtls_md_hmac_update",
+              "target": "00267630"
+            },
+            {
+              "at": "00105e34",
+              "symbol": "mbedtls_md_hmac_update",
+              "target": "00267630"
+            },
+            {
+              "at": "00105e44",
+              "symbol": "mbedtls_md_hmac_update",
+              "target": "00267630"
+            },
+            {
+              "at": "00105e50",
+              "symbol": "mbedtls_md_hmac_finish",
+              "target": "00267640"
+            },
+            {
+              "at": "00105e58",
+              "symbol": "mbedtls_md_free",
+              "target": "00267610"
+            },
+            {
+              "at": "00105e7c",
+              "symbol": "memcpy",
+              "target": "00267320"
+            },
+            {
+              "at": "00105e90",
+              "symbol": "memcpy",
+              "target": "00267320"
+            },
+            {
+              "at": "00105ea0",
+              "symbol": "mbedtls_md_init",
+              "target": "002675f0"
+            },
+            {
+              "at": "00105eb0",
+              "symbol": "mbedtls_md_setup",
+              "target": "00267600"
+            },
+            {
+              "at": "00105ec4",
+              "symbol": "mbedtls_md_hmac_starts",
+              "target": "00267620"
+            },
+            {
+              "at": "00105ed4",
+              "symbol": "mbedtls_md_hmac_update",
+              "target": "00267630"
+            },
+            {
+              "at": "00105ee4",
+              "symbol": "mbedtls_md_hmac_update",
+              "target": "00267630"
+            },
+            {
+              "at": "00105ef4",
+              "symbol": "mbedtls_md_hmac_update",
+              "target": "00267630"
+            },
+            {
+              "at": "00105f00",
+              "symbol": "mbedtls_md_hmac_finish",
+              "target": "00267640"
+            },
+            {
+              "at": "00105f08",
+              "symbol": "mbedtls_md_free",
+              "target": "00267610"
+            },
+            {
+              "at": "00105f28",
+              "symbol": "memcpy",
+              "target": "00267320"
+            },
+            {
+              "at": "00105f44",
+              "symbol": "__stack_chk_fail",
+              "target": "00267260"
+            }
+          ],
+          "name": "crypto_hkdf",
+          "size": 720
+        },
+        {
+          "address": "00105754",
+          "direct_calls": [
+            {
+              "at": "00105794",
+              "symbol": "EC_GROUP_new_by_curve_name",
+              "target": "00267490"
+            },
+            {
+              "at": "001057a4",
+              "symbol": "EC_POINT_new",
+              "target": "002674a0"
+            },
+            {
+              "at": "001057c0",
+              "symbol": "EC_POINT_hex2point",
+              "target": "002674b0"
+            },
+            {
+              "at": "001057d0",
+              "symbol": "BN_hex2bn",
+              "target": "00267410"
+            },
+            {
+              "at": "001057d8",
+              "symbol": "EC_KEY_new",
+              "target": "002674c0"
+            },
+            {
+              "at": "001057ec",
+              "symbol": "EC_KEY_set_group",
+              "target": "002674d0"
+            },
+            {
+              "at": "001057fc",
+              "symbol": "EC_KEY_set_private_key",
+              "target": "002674e0"
+            },
+            {
+              "at": "00105808",
+              "symbol": "malloc",
+              "target": "002672f0"
+            },
+            {
+              "at": "00105824",
+              "symbol": "ECDH_compute_key",
+              "target": "002674f0"
+            },
+            {
+              "at": "00105834",
+              "symbol": "malloc",
+              "target": "002672f0"
+            },
+            {
+              "at": "00105854",
+              "symbol": "local",
+              "target": "001058f8"
+            },
+            {
+              "at": "00105890",
+              "symbol": "EC_POINT_free",
+              "target": "00267500"
+            },
+            {
+              "at": "0010589c",
+              "symbol": "BN_free",
+              "target": "002673c0"
+            },
+            {
+              "at": "001058a8",
+              "symbol": "EC_KEY_free",
+              "target": "00267470"
+            },
+            {
+              "at": "001058b0",
+              "symbol": "EC_GROUP_free",
+              "target": "00267510"
+            },
+            {
+              "at": "001058ec",
+              "symbol": "free",
+              "target": "00267330"
+            },
+            {
+              "at": "001058f4",
+              "symbol": "__stack_chk_fail",
+              "target": "00267260"
+            }
+          ],
+          "name": "compute_ecdh",
+          "size": 420
+        },
+        {
+          "address": "0010568c",
+          "direct_calls": [
+            {
+              "at": "001056b4",
+              "symbol": "create_ecdh_key",
+              "target": "00267450"
+            },
+            {
+              "at": "001056c4",
+              "symbol": "ec_key_to_hex",
+              "target": "00267460"
+            },
+            {
+              "at": "001056d4",
+              "symbol": "ec_key_to_hex",
+              "target": "00267460"
+            },
+            {
+              "at": "001056e8",
+              "symbol": "strlen",
+              "target": "00267230"
+            },
+            {
+              "at": "001056f8",
+              "symbol": "memcpy",
+              "target": "00267320"
+            },
+            {
+              "at": "00105700",
+              "symbol": "strlen",
+              "target": "00267230"
+            },
+            {
+              "at": "00105710",
+              "symbol": "memcpy",
+              "target": "00267320"
+            },
+            {
+              "at": "00105718",
+              "symbol": "EC_KEY_free",
+              "target": "00267470"
+            },
+            {
+              "at": "00105720",
+              "symbol": "free",
+              "target": "00267330"
+            },
+            {
+              "at": "00105728",
+              "symbol": "free",
+              "target": "00267330"
+            },
+            {
+              "at": "00105738",
+              "symbol": "EC_KEY_free",
+              "target": "00267470"
+            }
+          ],
+          "name": "ecdh_gen",
+          "size": 200
+        },
+        {
+          "address": "00265710",
+          "direct_calls": [
+            {
+              "at": "0026575c",
+              "symbol": "strlen",
+              "target": "00267230"
+            },
+            {
+              "at": "0026576c",
+              "symbol": "strlen",
+              "target": "00267230"
+            },
+            {
+              "at": "00265794",
+              "symbol": "gen_pic_base_code",
+              "target": "00272330"
+            },
+            {
+              "at": "002657b0",
+              "symbol": "gen_rand_seed",
+              "target": "002723b0"
+            },
+            {
+              "at": "002657c0",
+              "symbol": "gen_check_code_v1",
+              "target": "00272320"
+            },
+            {
+              "at": "002657d0",
+              "symbol": "printf",
+              "target": "00267760"
+            },
+            {
+              "at": "002657e0",
+              "symbol": "printf",
+              "target": "00267760"
+            },
+            {
+              "at": "002657f4",
+              "symbol": "puts",
+              "target": "00267770"
+            },
+            {
+              "at": "00265824",
+              "symbol": "__stack_chk_fail",
+              "target": "00267260"
+            }
+          ],
+          "name": "gen_pic_code_v1",
+          "size": 280
+        }
+      ],
+      "sha256": "ad6e86ebe54341673a6180f9d2d124b47a401262e66d3148f059596854ec0ba3",
+      "size": 2774184
+    },
+    "libecc-encryption.so": {
+      "jni_exports": [
+        {
+          "address": "00025150",
+          "direct_calls": [
+            {
+              "at": "00025180",
+              "symbol": "GenerateKeyForECC",
+              "target": "00046160"
+            },
+            {
+              "at": "00025248",
+              "symbol": "_ZN7_JNIEnv9NewObjectEP7_jclassP10_jmethodIDz",
+              "target": "000462c0"
+            },
+            {
+              "at": "00025274",
+              "symbol": "__stack_chk_fail",
+              "target": "00046150"
+            }
+          ],
+          "name": "Java_com_anker_esiotkit_support_crypto_EccEncryption_generateEccKey",
+          "size": 296
+        },
+        {
+          "address": "00024d58",
+          "direct_calls": [
+            {
+              "at": "00024dd4",
+              "symbol": "_Znam",
+              "target": "000462b0"
+            },
+            {
+              "at": "00024de4",
+              "symbol": "memset",
+              "target": "000461c0"
+            },
+            {
+              "at": "00024df8",
+              "symbol": "memcpy",
+              "target": "00046130"
+            },
+            {
+              "at": "00024e60",
+              "symbol": "_Znam",
+              "target": "000462b0"
+            },
+            {
+              "at": "00024e70",
+              "symbol": "memset",
+              "target": "000461c0"
+            },
+            {
+              "at": "00024e84",
+              "symbol": "memcpy",
+              "target": "00046130"
+            },
+            {
+              "at": "00024eac",
+              "symbol": "malloc",
+              "target": "000460f0"
+            },
+            {
+              "at": "00024ec8",
+              "symbol": "DecryptECC",
+              "target": "000461e0"
+            },
+            {
+              "at": "00024f18",
+              "symbol": "free",
+              "target": "00046140"
+            },
+            {
+              "at": "00024f50",
+              "symbol": "__stack_chk_fail",
+              "target": "00046150"
+            }
+          ],
+          "name": "Java_com_anker_esiotkit_support_crypto_EccEncryption_eccDecrypt",
+          "size": 508
+        },
+        {
+          "address": "00024f54",
+          "direct_calls": [
+            {
+              "at": "00024fd0",
+              "symbol": "_Znam",
+              "target": "000462b0"
+            },
+            {
+              "at": "00024fe0",
+              "symbol": "memset",
+              "target": "000461c0"
+            },
+            {
+              "at": "00024ff4",
+              "symbol": "memcpy",
+              "target": "00046130"
+            },
+            {
+              "at": "0002505c",
+              "symbol": "_Znam",
+              "target": "000462b0"
+            },
+            {
+              "at": "0002506c",
+              "symbol": "memset",
+              "target": "000461c0"
+            },
+            {
+              "at": "00025080",
+              "symbol": "memcpy",
+              "target": "00046130"
+            },
+            {
+              "at": "000250a8",
+              "symbol": "malloc",
+              "target": "000460f0"
+            },
+            {
+              "at": "000250c4",
+              "symbol": "EncryptECC",
+              "target": "00046190"
+            },
+            {
+              "at": "00025114",
+              "symbol": "free",
+              "target": "00046140"
+            },
+            {
+              "at": "0002514c",
+              "symbol": "__stack_chk_fail",
+              "target": "00046150"
+            }
+          ],
+          "name": "Java_com_anker_esiotkit_support_crypto_EccEncryption_eccEncrypt",
+          "size": 508
+        }
+      ],
+      "sha256": "20fba95954b6a6c24142a182b00b7d127c6b1677ee16c71dd8b5c4322ca74aea",
+      "size": 307120
+    }
+  },
+  "protected_asset_sizes": {
+    "assets/IJMDal.Data": 32016,
+    "assets/InteGration_4.6.7.ttf": 4,
+    "assets/ijm_lib/arm64-v8a/libexec.so": 791584,
+    "assets/ijm_lib/arm64-v8a/libexecmain.so": 35880,
+    "assets/libijmDataEncryption_arm64.so": 450720
+  }
+}

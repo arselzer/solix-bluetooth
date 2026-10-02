@@ -126,6 +126,10 @@ A8 uses a raw string length reduced to one byte. This audit tests short
 synthetic text only; it does not establish safety for corrupt/unbounded strings.
 The small A6 and diagnostic-bitmap getters execute actual read instructions;
 the diagnostic bitmap only controls logging here, not an extra response tag.
+The later [31-case producer audit](radio-network-state-producers.md) resolves
+A5's firmware `eth` label, A6 got-IP state and A8 cached IPv4 text. It also
+qualifies when that text survives network transitions. Those producers were
+outside this query-provider replay; the public query still omits private text.
 
 For synthetic −70 dBm, `0003` returns A3=`ba` with status `00`, while `0022`
 returns A1=`ba ff ff ff` with status `00`. Dedicated `0022` returns status `01`

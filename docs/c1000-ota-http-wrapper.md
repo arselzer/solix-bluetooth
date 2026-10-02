@@ -30,6 +30,9 @@ The Flutter method channel is **`ak_iot_kit_flutter`**, method **`handle`**
 wire processing. Its actual signing, encryption, session authentication and
 accepted cloud request format are not established by this retained Dart image.
 The envelope is an internal SDK argument, not a documented cloud HTTP body.
+The [retained APK/native-library inventory](android-sdk-native-boundaries.md)
+locates a protected clear-bytecode boundary and selected crypto primitives;
+it still does not recover this SDK dispatcher or OTA wire format.
 
 If the SDK conditions fail, `04869700` calls `HttpRequestImpl.request`
 (`0486cee4`) through Dart/Dio. In this examined branch, request data reaches

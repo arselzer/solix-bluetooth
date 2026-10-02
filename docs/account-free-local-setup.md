@@ -97,6 +97,9 @@ do not prove rollback or retained BLE recovery. The original app's examined
 `0003` caller is capability negotiation on function `01`, with a nonempty
 timestamp/user-ID body; it does not establish function `10/0003` support.
 Do not infer transport equivalence from matching opcodes or version labels.
+The [original negotiation replay](c1000-power-method-and-negotiation-audit.md)
+also shows that function `01/0003` changes per-source session state on main
+1.5.9. It is not a read-only charging-feature enumeration request.
 
 1. Save the working BLE/native profile, private certificates and radio network
    readback. Record fresh versions, power readings, protected settings and F8.
