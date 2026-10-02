@@ -1,0 +1,1022 @@
+{
+  "model": "A1763 C1000 Gen 2",
+  "main_version": "1.1.4.9",
+  "radio_version": "0.3.3.0",
+  "image_sha256": "e291ec115f013953e825cb51b9e457a8731889547ab55b3058640e599e8cfec8",
+  "case_count": 50,
+  "cases": [
+    {
+      "case": "native_radio_pattern",
+      "destination": 0,
+      "response_command": "0824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_radio_pattern",
+      "destination": 1,
+      "response_command": "0824",
+      "request_pattern": "030110",
+      "response_pattern": "030110",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_radio_pattern",
+      "destination": 2,
+      "response_command": "0824",
+      "request_pattern": "030210",
+      "response_pattern": "030210",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_radio_pattern",
+      "destination": 3,
+      "response_command": "0824",
+      "request_pattern": "030310",
+      "response_pattern": "030310",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_ble_enable",
+      "gcm_input": false,
+      "synthetic_pal_state": 0,
+      "synthetic_advertising_active": false,
+      "final_pal_state": 0,
+      "advertisement_start_boundaries": 0,
+      "effects": [
+        {
+          "effect": "advertisement_info_boundary"
+        },
+        {
+          "effect": "os_timer_start",
+          "timer": "3fc8a1b8"
+        }
+      ],
+      "fast_timer_limit": 180,
+      "application_wireless_flags_unchanged": true,
+      "protected_identity_regions_unchanged": true,
+      "controller_forwards": 0,
+      "response_command": "0824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_ble_enable",
+      "gcm_input": false,
+      "synthetic_pal_state": 0,
+      "synthetic_advertising_active": true,
+      "final_pal_state": 0,
+      "advertisement_start_boundaries": 0,
+      "effects": [
+        {
+          "effect": "advertisement_info_boundary"
+        },
+        {
+          "effect": "os_timer_start",
+          "timer": "3fc8a1b8"
+        }
+      ],
+      "fast_timer_limit": 180,
+      "application_wireless_flags_unchanged": true,
+      "protected_identity_regions_unchanged": true,
+      "controller_forwards": 0,
+      "response_command": "0824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_ble_enable",
+      "gcm_input": false,
+      "synthetic_pal_state": 1,
+      "synthetic_advertising_active": false,
+      "final_pal_state": 2,
+      "advertisement_start_boundaries": 1,
+      "effects": [
+        {
+          "effect": "advertisement_info_boundary"
+        },
+        {
+          "effect": "advertisement_start_boundary"
+        },
+        {
+          "effect": "os_timer_start",
+          "timer": "3fc8a1b8"
+        }
+      ],
+      "fast_timer_limit": 180,
+      "application_wireless_flags_unchanged": true,
+      "protected_identity_regions_unchanged": true,
+      "controller_forwards": 0,
+      "response_command": "0824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_ble_enable",
+      "gcm_input": false,
+      "synthetic_pal_state": 1,
+      "synthetic_advertising_active": true,
+      "final_pal_state": 2,
+      "advertisement_start_boundaries": 1,
+      "effects": [
+        {
+          "effect": "advertisement_info_boundary"
+        },
+        {
+          "effect": "advertisement_start_boundary"
+        },
+        {
+          "effect": "os_timer_start",
+          "timer": "3fc8a1b8"
+        }
+      ],
+      "fast_timer_limit": 180,
+      "application_wireless_flags_unchanged": true,
+      "protected_identity_regions_unchanged": true,
+      "controller_forwards": 0,
+      "response_command": "0824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_ble_enable",
+      "gcm_input": false,
+      "synthetic_pal_state": 2,
+      "synthetic_advertising_active": false,
+      "final_pal_state": 2,
+      "advertisement_start_boundaries": 1,
+      "effects": [
+        {
+          "effect": "advertisement_info_boundary"
+        },
+        {
+          "effect": "advertisement_active_provider",
+          "synthetic_value": false
+        },
+        {
+          "effect": "advertisement_start_boundary"
+        },
+        {
+          "effect": "os_timer_start",
+          "timer": "3fc8a1b8"
+        }
+      ],
+      "fast_timer_limit": 180,
+      "application_wireless_flags_unchanged": true,
+      "protected_identity_regions_unchanged": true,
+      "controller_forwards": 0,
+      "response_command": "0824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_ble_enable",
+      "gcm_input": false,
+      "synthetic_pal_state": 2,
+      "synthetic_advertising_active": true,
+      "final_pal_state": 2,
+      "advertisement_start_boundaries": 0,
+      "effects": [
+        {
+          "effect": "advertisement_info_boundary"
+        },
+        {
+          "effect": "advertisement_active_provider",
+          "synthetic_value": true
+        },
+        {
+          "effect": "os_timer_start",
+          "timer": "3fc8a1b8"
+        }
+      ],
+      "fast_timer_limit": 180,
+      "application_wireless_flags_unchanged": true,
+      "protected_identity_regions_unchanged": true,
+      "controller_forwards": 0,
+      "response_command": "0824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_ble_enable",
+      "gcm_input": false,
+      "synthetic_pal_state": 3,
+      "synthetic_advertising_active": false,
+      "final_pal_state": 3,
+      "advertisement_start_boundaries": 0,
+      "effects": [
+        {
+          "effect": "advertisement_info_boundary"
+        },
+        {
+          "effect": "pal_lock"
+        },
+        {
+          "effect": "disconnect_boundary",
+          "reason": 19
+        },
+        {
+          "effect": "pal_unlock"
+        },
+        {
+          "effect": "os_timer_start",
+          "timer": "3fc8a1b8"
+        }
+      ],
+      "fast_timer_limit": 180,
+      "application_wireless_flags_unchanged": true,
+      "protected_identity_regions_unchanged": true,
+      "controller_forwards": 0,
+      "response_command": "0824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_ble_enable",
+      "gcm_input": false,
+      "synthetic_pal_state": 3,
+      "synthetic_advertising_active": true,
+      "final_pal_state": 3,
+      "advertisement_start_boundaries": 0,
+      "effects": [
+        {
+          "effect": "advertisement_info_boundary"
+        },
+        {
+          "effect": "pal_lock"
+        },
+        {
+          "effect": "disconnect_boundary",
+          "reason": 19
+        },
+        {
+          "effect": "pal_unlock"
+        },
+        {
+          "effect": "os_timer_start",
+          "timer": "3fc8a1b8"
+        }
+      ],
+      "fast_timer_limit": 180,
+      "application_wireless_flags_unchanged": true,
+      "protected_identity_regions_unchanged": true,
+      "controller_forwards": 0,
+      "response_command": "0824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_ble_enable",
+      "gcm_input": true,
+      "synthetic_pal_state": 0,
+      "synthetic_advertising_active": false,
+      "final_pal_state": 0,
+      "advertisement_start_boundaries": 0,
+      "effects": [
+        {
+          "effect": "advertisement_info_boundary"
+        },
+        {
+          "effect": "os_timer_start",
+          "timer": "3fc8a1b8"
+        }
+      ],
+      "fast_timer_limit": 180,
+      "application_wireless_flags_unchanged": true,
+      "protected_identity_regions_unchanged": true,
+      "controller_forwards": 0,
+      "response_command": "4824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_ble_enable",
+      "gcm_input": true,
+      "synthetic_pal_state": 0,
+      "synthetic_advertising_active": true,
+      "final_pal_state": 0,
+      "advertisement_start_boundaries": 0,
+      "effects": [
+        {
+          "effect": "advertisement_info_boundary"
+        },
+        {
+          "effect": "os_timer_start",
+          "timer": "3fc8a1b8"
+        }
+      ],
+      "fast_timer_limit": 180,
+      "application_wireless_flags_unchanged": true,
+      "protected_identity_regions_unchanged": true,
+      "controller_forwards": 0,
+      "response_command": "4824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_ble_enable",
+      "gcm_input": true,
+      "synthetic_pal_state": 1,
+      "synthetic_advertising_active": false,
+      "final_pal_state": 2,
+      "advertisement_start_boundaries": 1,
+      "effects": [
+        {
+          "effect": "advertisement_info_boundary"
+        },
+        {
+          "effect": "advertisement_start_boundary"
+        },
+        {
+          "effect": "os_timer_start",
+          "timer": "3fc8a1b8"
+        }
+      ],
+      "fast_timer_limit": 180,
+      "application_wireless_flags_unchanged": true,
+      "protected_identity_regions_unchanged": true,
+      "controller_forwards": 0,
+      "response_command": "4824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_ble_enable",
+      "gcm_input": true,
+      "synthetic_pal_state": 1,
+      "synthetic_advertising_active": true,
+      "final_pal_state": 2,
+      "advertisement_start_boundaries": 1,
+      "effects": [
+        {
+          "effect": "advertisement_info_boundary"
+        },
+        {
+          "effect": "advertisement_start_boundary"
+        },
+        {
+          "effect": "os_timer_start",
+          "timer": "3fc8a1b8"
+        }
+      ],
+      "fast_timer_limit": 180,
+      "application_wireless_flags_unchanged": true,
+      "protected_identity_regions_unchanged": true,
+      "controller_forwards": 0,
+      "response_command": "4824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_ble_enable",
+      "gcm_input": true,
+      "synthetic_pal_state": 2,
+      "synthetic_advertising_active": false,
+      "final_pal_state": 2,
+      "advertisement_start_boundaries": 1,
+      "effects": [
+        {
+          "effect": "advertisement_info_boundary"
+        },
+        {
+          "effect": "advertisement_active_provider",
+          "synthetic_value": false
+        },
+        {
+          "effect": "advertisement_start_boundary"
+        },
+        {
+          "effect": "os_timer_start",
+          "timer": "3fc8a1b8"
+        }
+      ],
+      "fast_timer_limit": 180,
+      "application_wireless_flags_unchanged": true,
+      "protected_identity_regions_unchanged": true,
+      "controller_forwards": 0,
+      "response_command": "4824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_ble_enable",
+      "gcm_input": true,
+      "synthetic_pal_state": 2,
+      "synthetic_advertising_active": true,
+      "final_pal_state": 2,
+      "advertisement_start_boundaries": 0,
+      "effects": [
+        {
+          "effect": "advertisement_info_boundary"
+        },
+        {
+          "effect": "advertisement_active_provider",
+          "synthetic_value": true
+        },
+        {
+          "effect": "os_timer_start",
+          "timer": "3fc8a1b8"
+        }
+      ],
+      "fast_timer_limit": 180,
+      "application_wireless_flags_unchanged": true,
+      "protected_identity_regions_unchanged": true,
+      "controller_forwards": 0,
+      "response_command": "4824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_ble_enable",
+      "gcm_input": true,
+      "synthetic_pal_state": 3,
+      "synthetic_advertising_active": false,
+      "final_pal_state": 3,
+      "advertisement_start_boundaries": 0,
+      "effects": [
+        {
+          "effect": "advertisement_info_boundary"
+        },
+        {
+          "effect": "pal_lock"
+        },
+        {
+          "effect": "disconnect_boundary",
+          "reason": 19
+        },
+        {
+          "effect": "pal_unlock"
+        },
+        {
+          "effect": "os_timer_start",
+          "timer": "3fc8a1b8"
+        }
+      ],
+      "fast_timer_limit": 180,
+      "application_wireless_flags_unchanged": true,
+      "protected_identity_regions_unchanged": true,
+      "controller_forwards": 0,
+      "response_command": "4824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_ble_enable",
+      "gcm_input": true,
+      "synthetic_pal_state": 3,
+      "synthetic_advertising_active": true,
+      "final_pal_state": 3,
+      "advertisement_start_boundaries": 0,
+      "effects": [
+        {
+          "effect": "advertisement_info_boundary"
+        },
+        {
+          "effect": "pal_lock"
+        },
+        {
+          "effect": "disconnect_boundary",
+          "reason": 19
+        },
+        {
+          "effect": "pal_unlock"
+        },
+        {
+          "effect": "os_timer_start",
+          "timer": "3fc8a1b8"
+        }
+      ],
+      "fast_timer_limit": 180,
+      "application_wireless_flags_unchanged": true,
+      "protected_identity_regions_unchanged": true,
+      "controller_forwards": 0,
+      "response_command": "4824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "missing_enable_tag",
+      "gcm_input": false,
+      "request_body_hex": "",
+      "effects": [],
+      "response_command": "0824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "01",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "missing_enable_tag",
+      "gcm_input": false,
+      "request_body_hex": "a20101",
+      "effects": [],
+      "response_command": "0824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "01",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "missing_enable_tag",
+      "gcm_input": true,
+      "request_body_hex": "",
+      "effects": [],
+      "response_command": "4824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "01",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "missing_enable_tag",
+      "gcm_input": true,
+      "request_body_hex": "a20101",
+      "effects": [],
+      "response_command": "4824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "01",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "enable_value_semantics",
+      "value": 0,
+      "branch": "disable_helper_boundary",
+      "disable_helper_substituted": true,
+      "effects": [
+        {
+          "effect": "ble_disable_helper_boundary"
+        }
+      ],
+      "response_command": "0824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "enable_value_semantics",
+      "value": 2,
+      "branch": "enable_nonzero",
+      "disable_helper_substituted": false,
+      "effects": [
+        {
+          "effect": "advertisement_info_boundary"
+        },
+        {
+          "effect": "advertisement_start_boundary"
+        },
+        {
+          "effect": "os_timer_start",
+          "timer": "3fc8a1b8"
+        }
+      ],
+      "response_command": "0824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "enable_value_semantics",
+      "value": 255,
+      "branch": "enable_nonzero",
+      "disable_helper_substituted": false,
+      "effects": [
+        {
+          "effect": "advertisement_info_boundary"
+        },
+        {
+          "effect": "advertisement_start_boundary"
+        },
+        {
+          "effect": "os_timer_start",
+          "timer": "3fc8a1b8"
+        }
+      ],
+      "response_command": "0824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "zero_length_enable_tlv",
+      "unsafe_missing_length_guard": true,
+      "read_value": 108,
+      "effects": [
+        {
+          "effect": "advertisement_info_boundary"
+        },
+        {
+          "effect": "advertisement_start_boundary"
+        },
+        {
+          "effect": "os_timer_start",
+          "timer": "3fc8a1b8"
+        }
+      ],
+      "response_command": "0824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "identity_admission_rejection",
+      "field": "account_id",
+      "handler_calls": 0,
+      "effects": [],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "identity_admission_rejection",
+      "field": "device_sn",
+      "handler_calls": 0,
+      "effects": [],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "repeated_enable_resets_fast_timer",
+      "reset_counter": 0,
+      "fast_timer_limit": 180,
+      "application_ble_flag": 0,
+      "protected_identity_regions_unchanged": true,
+      "response_command": "0824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_wireless_query",
+      "synthetic_pal_state": 1,
+      "application_ble_flag": 0,
+      "application_wifi_flag": 0,
+      "does_not_report_physical_advertising": true,
+      "effects": [],
+      "response_command": "0803",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00a10100a20100a301baa406020000000001a50100a60100",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_wireless_query",
+      "synthetic_pal_state": 1,
+      "application_ble_flag": 0,
+      "application_wifi_flag": 1,
+      "does_not_report_physical_advertising": true,
+      "effects": [],
+      "response_command": "0803",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00a10100a20101a301baa406020000000001a50100a60100",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_wireless_query",
+      "synthetic_pal_state": 1,
+      "application_ble_flag": 1,
+      "application_wifi_flag": 0,
+      "does_not_report_physical_advertising": true,
+      "effects": [],
+      "response_command": "0803",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00a10101a20100a301baa406020000000001a50100a60100",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_wireless_query",
+      "synthetic_pal_state": 1,
+      "application_ble_flag": 1,
+      "application_wifi_flag": 1,
+      "does_not_report_physical_advertising": true,
+      "effects": [],
+      "response_command": "0803",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00a10101a20101a301baa406020000000001a50100a60100",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_wireless_query",
+      "synthetic_pal_state": 2,
+      "application_ble_flag": 0,
+      "application_wifi_flag": 0,
+      "does_not_report_physical_advertising": true,
+      "effects": [],
+      "response_command": "0803",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00a10100a20100a301baa406020000000001a50100a60100",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_wireless_query",
+      "synthetic_pal_state": 2,
+      "application_ble_flag": 0,
+      "application_wifi_flag": 1,
+      "does_not_report_physical_advertising": true,
+      "effects": [],
+      "response_command": "0803",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00a10100a20101a301baa406020000000001a50100a60100",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_wireless_query",
+      "synthetic_pal_state": 2,
+      "application_ble_flag": 1,
+      "application_wifi_flag": 0,
+      "does_not_report_physical_advertising": true,
+      "effects": [],
+      "response_command": "0803",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00a10101a20100a301baa406020000000001a50100a60100",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_wireless_query",
+      "synthetic_pal_state": 2,
+      "application_ble_flag": 1,
+      "application_wifi_flag": 1,
+      "does_not_report_physical_advertising": true,
+      "effects": [],
+      "response_command": "0803",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00a10101a20101a301baa406020000000001a50100a60100",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_wireless_query",
+      "synthetic_pal_state": 3,
+      "application_ble_flag": 0,
+      "application_wifi_flag": 0,
+      "does_not_report_physical_advertising": true,
+      "effects": [],
+      "response_command": "0803",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00a10100a20100a301baa406020000000001a50100a60100",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_wireless_query",
+      "synthetic_pal_state": 3,
+      "application_ble_flag": 0,
+      "application_wifi_flag": 1,
+      "does_not_report_physical_advertising": true,
+      "effects": [],
+      "response_command": "0803",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00a10100a20101a301baa406020000000001a50100a60100",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_wireless_query",
+      "synthetic_pal_state": 3,
+      "application_ble_flag": 1,
+      "application_wifi_flag": 0,
+      "does_not_report_physical_advertising": true,
+      "effects": [],
+      "response_command": "0803",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00a10101a20100a301baa406020000000001a50100a60100",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_wireless_query",
+      "synthetic_pal_state": 3,
+      "application_ble_flag": 1,
+      "application_wifi_flag": 1,
+      "does_not_report_physical_advertising": true,
+      "effects": [],
+      "response_command": "0803",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00a10101a20101a301baa406020000000001a50100a60100",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "high_opcode_namespace_boundary",
+      "command": "004a",
+      "controller_forward_boundaries": 1,
+      "local_handler_calls": 0
+    },
+    {
+      "case": "high_opcode_namespace_boundary",
+      "command": "004b",
+      "controller_forward_boundaries": 1,
+      "local_handler_calls": 0
+    },
+    {
+      "case": "high_opcode_namespace_boundary",
+      "command": "0064",
+      "controller_forward_boundaries": 1,
+      "local_handler_calls": 0
+    },
+    {
+      "case": "fast_advertisement_timer",
+      "starting_counter": 179,
+      "ending_timer_hex": "0100b400b400",
+      "effects": [],
+      "physical_advertising_disabled": false
+    },
+    {
+      "case": "fast_advertisement_timer",
+      "starting_counter": 180,
+      "ending_timer_hex": "0100b500b400",
+      "effects": [],
+      "physical_advertising_disabled": false
+    },
+    {
+      "case": "fast_advertisement_timer",
+      "starting_counter": 181,
+      "ending_timer_hex": "000000000000",
+      "effects": [
+        {
+          "effect": "advertisement_interval_boundary",
+          "interval": 500
+        },
+        {
+          "effect": "os_timer_stop",
+          "timer": "3fc8a1b8"
+        }
+      ],
+      "physical_advertising_disabled": false
+    },
+    {
+      "case": "fast_advertisement_timer",
+      "starting_counter": 182,
+      "ending_timer_hex": "000000000000",
+      "effects": [
+        {
+          "effect": "advertisement_interval_boundary",
+          "interval": 500
+        },
+        {
+          "effect": "os_timer_stop",
+          "timer": "3fc8a1b8"
+        }
+      ],
+      "physical_advertising_disabled": false
+    }
+  ],
+  "native_request_contract": {
+    "function": "10",
+    "request_pattern": "030010",
+    "enable_command": "0024",
+    "enable_body_hex": "a10101",
+    "enable_wire_hex": "ff090d000300100024a101016d",
+    "query_command": "0003",
+    "query_body_hex": "",
+    "head_cmd": 17,
+    "head_cmd_status": 2,
+    "head_sign_code": 1,
+    "payload": "JSON string containing synthetic account_id/device_sn and base64 data"
+  },
+  "native_response_contract": {
+    "response_pattern": "030010",
+    "enable_command": "0824",
+    "enable_body_hex": "00",
+    "enable_wire_hex": "ff090b00030010082400c2",
+    "head_cmd": 16,
+    "head_cmd_status": 1,
+    "head_sign_code": 0,
+    "head_seed": "null",
+    "topic_suffix": "param_info"
+  },
+  "limits": [
+    "Actual bounded radio instructions; synthetic initialized BLE/native state.",
+    "Physical NimBLE, OS timer/mutex, advertisement configuration and providers substituted.",
+    "No flash persistence, async callbacks, MCU, Wi-Fi, TLS or physical advertising proof.",
+    "Query03 reports application flags, not physical advertising status.",
+    "No equivalence to unrecovered original C1000 or C2000 radio image."
+  ]
+}

@@ -176,7 +176,8 @@ web-dashboard guide. Commit Vue sources and compiled Python assets together.
 - [Countdown stop worker](docs/gen2-output-stop-worker.md): late cancellation
   and why reported output state is not an independent physical measurement.
 - [Local identity storage](docs/radio-identity-storage.md): cache transitions,
-  reconnect requirements and a smaller account-free test sequence.
+  reconnect requirements and a smaller account-free test sequence;
+  [MQTT-assisted BLE recovery candidate](docs/radio-ble-advertising-recovery.md).
 - [Energy accounting](docs/gen2-energy-counter-investigation.md): sampling,
   scheduler gaps and nominal Wh arithmetic; calibrated units remain unverified.
 - [Smart auto-off policy](docs/c1000-smart-auto-off-policy.md) and

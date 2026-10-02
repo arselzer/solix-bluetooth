@@ -241,6 +241,24 @@ charging-rate behavior. Independent complete result/manifest pairs matched
 `expected_results/` byte for byte; these counts remain outside the combined runner.
 Use each linked note for exact filenames, image hashes and substitutes.
 
+## Radio-local BLE-enable continuation
+
+The [50-case radio suite](radio-ble-advertising-recovery.md) traces the normal
+MQTT admission/dispatch/reply path and initialized A1763 BLE helper:
+
+```sh
+python3 tools/firmware_analysis/emulate_radio_ble_advertising.py \
+  --image firmware/c1000_gen2/1.1.4.9/c1000-radio-validated.bin \
+  --output-dir /tmp/radio-ble-advertising
+```
+
+Complete result/manifest pairs match `expected_results/radio-ble-advertising-*`.
+Wrong image size/hash and optimized execution fail before emulation. The
+manifest includes both inherited replay dependencies. This adds no station
+command or completed physical recovery trial. ACK is insufficient to establish
+advertising; application flags do not expose the PAL state. Original/C2000
+equivalence is unproved, and counts remain outside the combined runner.
+
 ## Additional image integrity tools
 
 These checks use the bundled vendor images and perform no emulation or device I/O:

@@ -757,3 +757,13 @@ precharge action has a device-class gate excluding the retained original C1000
 class. No cloud request or supported pause/discharge control follows from this
 source audit. These findings can guide future firmware acquisition; they do not
 implement a local updater.
+
+The [50-case radio-local MQTT replay](radio-ble-advertising-recovery.md) traces
+A1763 radio 0.3.3.0 admission through BLE enable `10/0024`. The initialized path
+preserves protected native/allowlist identity regions and forwards no MCU
+output command, but ACK can succeed without physical advertising. Query `0003`
+reports application flags; `0023/0025` can mutate network/binding and are excluded.
+Radio response pattern `030010` differs from current controller handling, so
+the controller builder must not be reused. Physical callbacks, initialization
+and other-model equivalence remain unproved; no runtime recovery API or station
+trial was added. Physical IoT-button fallback remains a live-trial prerequisite.

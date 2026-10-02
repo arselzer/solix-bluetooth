@@ -221,3 +221,20 @@ selected DCDC validity boundaries. Complete results/manifests independently
 matched `expected_results/`. Both suites use synthetic inputs, omit physical
 outputs and remain separate from the combined runner. Installed original
 1.7.1 equivalence and a user-selectable charging-source command are unproved.
+
+## Radio-local MQTT BLE-enable candidate
+
+```sh
+python3 tools/firmware_analysis/emulate_radio_ble_advertising.py \
+  --image firmware/c1000_gen2/1.1.4.9/c1000-radio-validated.bin \
+  --output-dir /tmp/radio-ble-advertising
+```
+
+[50 A1763 radio-0.3.3.0 cases](../../docs/radio-ble-advertising-recovery.md)
+execute native admission, local opcode `0024`, wireless query `0003`, reply
+framing and initialized BLE/timer paths. An ACK can occur without advertising.
+Protected identity regions remain unchanged in the executed initialized path;
+physical callbacks and first initialization are excluded. Complete results and
+manifest independently match `expected_results/`. Optimized Python, wrong-size
+and wrong-hash images are rejected. No runtime recovery API, station trial or
+other-model equivalence is claimed; counts are separate from the combined runner.

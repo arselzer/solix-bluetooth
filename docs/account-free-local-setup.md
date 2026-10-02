@@ -80,6 +80,15 @@ preserving the retained Prime ID in the executed A1763 paths, while documenting
 the unexecuted activation effects and model-specific recovery limits. Establish
 independent working BLE recovery before changing an identity used by HA.
 
+An [A1763-only radio replay](radio-ble-advertising-recovery.md) now establishes
+a normal MQTT route to BLE enable (`10/0024`). Its ACK does not prove physical
+advertising, and its wireless query reads application flags only. The current
+controller adapter cannot receive its distinct radio response pattern. A
+bounded recovery trial needs that separate adapter, independent BLE scanning,
+a retained working identity and physical IoT-button fallback. This candidate
+does not establish original/C2000 equivalence or account-free registration;
+their identity trials remain deferred.
+
 1. Save the working BLE/native profile, private certificates and radio network
    readback. Record fresh versions, power readings, protected settings and F8.
 2. Pair a distinct generated Prime ID using the normal pairing workflow. If

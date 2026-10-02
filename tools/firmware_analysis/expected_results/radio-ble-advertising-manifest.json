@@ -1,0 +1,14 @@
+{
+  "source": "emulate_radio_ble_advertising.py",
+  "source_sha256": "f15a66c20154fdd0c36cf1c3c9c31a86e3bd70621ffa91cb14e3c2eff10dab3d",
+  "dependency_sha256": {
+    "emulate_radio_rssi_routes.py": "de2665279a85c1b6f91d9eb41311938d5a09c2d45291c740ec03b8958ee3080b",
+    "emulate_radio_factory_routes.py": "9ae40bf0a004fd87f3edc52b30d5f48c320d29a39fb20d57d6136d61b3d7401a"
+  },
+  "firmware_sha256": "e291ec115f013953e825cb51b9e457a8731889547ab55b3058640e599e8cfec8",
+  "results_sha256": "454f0a2776730cbaf45c91c630015d2e82cfe37e33101086aba7964d3d636520",
+  "case_count": 50,
+  "python": "3.12.3",
+  "unicorn": "2.1.4",
+  "cryptography": "41.0.7"
+}
