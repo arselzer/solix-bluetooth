@@ -1,0 +1,24 @@
+{
+  "cases_passed": 48,
+  "firmware": {
+    "main_sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9",
+    "main_version": "1.1.4.9",
+    "radio_sha256": "e291ec115f013953e825cb51b9e457a8731889547ab55b3058640e599e8cfec8",
+    "radio_version": "0.3.3.0"
+  },
+  "image_sizes": {
+    "MainMcu-decoded.bin": 198656,
+    "c1000-radio-validated.bin": 1482800
+  },
+  "runtime": {
+    "cryptography": "41.0.7",
+    "python": "3.12.3",
+    "unicorn": "2.1.4"
+  },
+  "schema": 1,
+  "sources": {
+    "audit_gen2_iot_action_boundary.py": "8b3f90bc0e5183e3822a8f3ec44fbab11b2c340dab3aa7a5c18259cf9150a497",
+    "emulate_radio_factory_routes.py": "9ae40bf0a004fd87f3edc52b30d5f48c320d29a39fb20d57d6136d61b3d7401a",
+    "emulate_radio_rssi_routes.py": "de2665279a85c1b6f91d9eb41311938d5a09c2d45291c740ec03b8958ee3080b"
+  }
+}

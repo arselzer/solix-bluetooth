@@ -13,6 +13,10 @@ remain unresolved. There is no newly established local input-disable control
 to implement or send alongside the existing verified Time-of-Use controls.
 The [retained Android SDK inspection](android-sdk-native-boundaries.md)
 identifies the protected-bytecode boundary preventing a native mapping here.
+Follow-up audits now resolve the actual
+[Dart interceptor registration](gen2-dart-action-interceptors.md) and recover
+[readable native loader instructions](android-loader-carriers.md); the SDK
+action encoder and device readback remain missing.
 
 This is static analysis of the exact retained `libapp.so`, SHA256
 `8537b4f8a4da327f9bf298d99e90ad969b89f52ae7d6d68c454e5bf0ec25c070`,
@@ -32,7 +36,7 @@ only for navigation. No firmware-version equivalence follows from this app.
 | `AKIoTKitManagerImpl.handle` | `021c3a94` | Handles action/transaction dispatch, then calls the Flutter SDK wrapper |
 | `AkIotKitFlutter.handle` | `021c3d8c` | Platform-channel boundary; native implementation not recovered here |
 
-The selected action arguments are structurally:
+The selected Dart action arguments, before platform-channel wrapping, are:
 
 ```text
 method: akiot.device.invoke_action
@@ -52,7 +56,9 @@ are inside the unavailable SDK dispatcher. Sending these property names to
 the local broker is not an established protocol route.
 
 The manager's `_processParams` (`0221aef0`) folds configured parameter
-interceptors; their full registry is outside this audit. The final examined
+interceptors; the [follow-up audit](gen2-dart-action-interceptors.md) identifies
+the registered transaction-lock interceptor and unchanged switch argument.
+The final examined
 handoff uses channel `ak_iot_kit_flutter`, method `handle`, with `identifier`
 and `param` map entries. No actual frame encoder was recovered on this path.
 

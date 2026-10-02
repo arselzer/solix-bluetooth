@@ -318,6 +318,35 @@ Its two identical static runs are not additional emulation cases. The
 [AC-input-disable app audit](gen2-ac-input-disable-app-audit.md) is also static
 instruction/object-pool analysis and adds no emulation count.
 
+## Named action boundary and protected Android loaders
+
+```sh
+python3 tools/firmware_analysis/audit_gen2_iot_action_boundary.py \
+  --output-dir /tmp/gen2-iot-action-boundary
+python3 tools/firmware_analysis/inspect_android_loader_carriers.py \
+  --base-apk /private/path/base.apk \
+  --output-dir /tmp/android-loader-carriers
+```
+
+[48 action-boundary cases](gen2-iot-action-firmware-boundary.md) use the exact
+bundled A1763 images, synthetic action/property shapes and a substituted
+controller forwarder. Main firmware is inspected as data, with no setter
+execution. Compare the full `gen2-iot-action-boundary-*.json` pair with
+`expected_results/`; wrong images and optimized execution are rejected.
+
+The [loader tool](android-loader-carriers.md) requires the exact privately
+retained APK. It executes **3 bounded UPX stubs plus 256 pure protector byte
+mapping cases**, with guest memory-only system-call substitutes and no Android,
+JNI, host-call forwarding, station or network access. Complete result and
+manifest pairs independently match `android-loader-carriers-*.json` fixtures.
+Default output contains selected metadata only. Optional virtual-memory images
+must remain in private local storage and are not rebuilt ELF/SDK files.
+
+These 48/3/256 cases are separate from the combined 1,842-case runner.
+The [Dart interceptor](gen2-dart-action-interceptors.md) and
+[readable asset](android-readable-sdk-assets.md) audits are static evidence,
+with no additional emulation count. No new charging setter follows from them.
+
 ## Additional image integrity tools
 
 These checks use the bundled vendor images and perform no emulation or device I/O:

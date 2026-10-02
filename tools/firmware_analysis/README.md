@@ -287,3 +287,27 @@ and ARM64 APKs; see [SDK inventory](../../docs/android-sdk-native-boundaries.md)
 for its command. It checks input hashes and produces sanitized static metadata,
 without executing app code or exporting assets. Its deterministic fixture pair
 adds no emulation count or cloud/action protocol implementation.
+
+## SDK action admission and protected Android loaders
+
+```sh
+python3 tools/firmware_analysis/audit_gen2_iot_action_boundary.py \
+  --output-dir /tmp/gen2-iot-action-boundary
+python3 tools/firmware_analysis/inspect_android_loader_carriers.py \
+  --base-apk /private/path/base.apk \
+  --output-dir /tmp/android-loader-carriers
+```
+
+[48 Gen 2 boundary cases](../../docs/gen2-iot-action-firmware-boundary.md)
+execute numeric head selection and binary head-17 admission with a substituted
+controller forwarder. Named SDK arguments are not a station MQTT payload;
+arbitrary base64 action JSON can select an accidental forwarding opcode.
+
+[3 loader replays plus 256 protector cases](../../docs/android-loader-carriers.md)
+recover readable native loader instructions from the exact external APK, using
+only emulated memory and pinned execution regions. No Android/JNI code or guest
+host-call forwarding occurs. Default output is selected metadata; optional
+recovered virtual images must stay private. Protector opcodes are not station
+commands. Full results/manifests independently match the corresponding
+`expected_results/` pairs. These cases are outside the combined firmware runner;
+the linked Dart/asset audits are static and add no CPU-case count.

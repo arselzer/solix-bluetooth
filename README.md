@@ -172,6 +172,9 @@ web-dashboard guide. Commit Vue sources and compiled Python assets together.
   original instruction execution with synthetic inputs and explicit substitutions.
 - [Charging follow-up](docs/c1000-charging-control-followup.md): reserve side
   effects, mirrored limits and why 0 W is unavailable as charge pause.
+- [Charging action mapping](docs/gen2-iot-action-firmware-boundary.md): binary
+  MQTT admission, [Dart interceptors](docs/gen2-dart-action-interceptors.md)
+  and [protected SDK loader recovery](docs/android-loader-carriers.md).
 - [Original charging gates](docs/c1000-charge-gate-rules.md): input-event
   priority and the second charging channel; no external bypass selector found.
   [Saved-limit validation](docs/c1000-saved-charge-validation.md) distinguishes

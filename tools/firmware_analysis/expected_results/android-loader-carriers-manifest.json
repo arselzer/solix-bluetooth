@@ -1,0 +1,11 @@
+{
+  "input_sha256": "27986f94a992f3aac1189be746d310553e99909ed81dfbb1abd5880f71662110",
+  "results_sha256": "8fb929ff16e2df731ce7f77c55e77f94ff6f8a979cd3a16f0f5879026e077261",
+  "runtime": {
+    "capstone": "5.0.7",
+    "python": "3.12.3",
+    "unicorn": "2.1.4"
+  },
+  "scope": "3 UPX-only replays and 256 pure protector byte-mapping cases",
+  "source_sha256": "040926a17b4c6e9a45b4c6dc7dafbf38d4a98f447e8bb559a7daa47474078a6e"
+}

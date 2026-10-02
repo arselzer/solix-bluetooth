@@ -1,0 +1,999 @@
+{
+  "cases": [
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": false,
+      "head_command": 0,
+      "no_action_success_return": false,
+      "selected_branch": "42026f92",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": false,
+      "head_command": 1,
+      "no_action_success_return": false,
+      "selected_branch": "42026f92",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": true,
+      "head_command": 2,
+      "no_action_success_return": false,
+      "selected_branch": "42027182",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": true,
+      "head_command": 3,
+      "no_action_success_return": false,
+      "selected_branch": "42027242",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": true,
+      "head_command": 4,
+      "no_action_success_return": false,
+      "selected_branch": "42027270",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": true,
+      "head_command": 5,
+      "no_action_success_return": false,
+      "selected_branch": "4202748a",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": true,
+      "head_command": 6,
+      "no_action_success_return": false,
+      "selected_branch": "42026fa6",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": false,
+      "head_command": 7,
+      "no_action_success_return": false,
+      "selected_branch": "42026f92",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": false,
+      "head_command": 8,
+      "no_action_success_return": false,
+      "selected_branch": "42026f92",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": true,
+      "head_command": 9,
+      "no_action_success_return": false,
+      "selected_branch": "42027282",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": false,
+      "head_command": 10,
+      "no_action_success_return": true,
+      "selected_branch": "4202724e",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": false,
+      "head_command": 11,
+      "no_action_success_return": true,
+      "selected_branch": "4202724e",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": true,
+      "head_command": 12,
+      "no_action_success_return": false,
+      "selected_branch": "42027406",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": false,
+      "head_command": 13,
+      "no_action_success_return": false,
+      "selected_branch": "42026f92",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": false,
+      "head_command": 14,
+      "no_action_success_return": false,
+      "selected_branch": "42026f92",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": true,
+      "head_command": 15,
+      "no_action_success_return": false,
+      "selected_branch": "42027042",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": false,
+      "head_command": 16,
+      "no_action_success_return": false,
+      "selected_branch": "42026f92",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": true,
+      "head_command": 17,
+      "no_action_success_return": false,
+      "selected_branch": "42027364",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": false,
+      "head_command": 18,
+      "no_action_success_return": false,
+      "selected_branch": "42026f92",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": false,
+      "head_command": 19,
+      "no_action_success_return": false,
+      "selected_branch": "42026f92",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": false,
+      "head_command": 20,
+      "no_action_success_return": false,
+      "selected_branch": "42026f92",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": false,
+      "head_command": 21,
+      "no_action_success_return": false,
+      "selected_branch": "42026f92",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": false,
+      "head_command": 22,
+      "no_action_success_return": false,
+      "selected_branch": "42026f92",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": false,
+      "head_command": 23,
+      "no_action_success_return": false,
+      "selected_branch": "42026f92",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": false,
+      "head_command": 24,
+      "no_action_success_return": false,
+      "selected_branch": "42026f92",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": true,
+      "head_command": 25,
+      "no_action_success_return": false,
+      "selected_branch": "42027524",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": true,
+      "head_command": 26,
+      "no_action_success_return": false,
+      "selected_branch": "42027534",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": true,
+      "head_command": 27,
+      "no_action_success_return": false,
+      "selected_branch": "420270fc",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": true,
+      "head_command": 28,
+      "no_action_success_return": false,
+      "selected_branch": "420278a0",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": false,
+      "head_command": 29,
+      "no_action_success_return": false,
+      "selected_branch": "42026f92",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": false,
+      "head_command": 30,
+      "no_action_success_return": false,
+      "selected_branch": "42026f92",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": true,
+      "head_command": 31,
+      "no_action_success_return": false,
+      "selected_branch": "4202791a",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": false,
+      "head_command": 32,
+      "no_action_success_return": false,
+      "selected_branch": "42026f92",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": false,
+      "head_command": 255,
+      "no_action_success_return": false,
+      "selected_branch": "42026f92",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "numeric_head_selection",
+      "handled_in_selector": false,
+      "head_command": 65535,
+      "no_action_success_return": false,
+      "selected_branch": "42026f92",
+      "stopped_before_branch": true
+    },
+    {
+      "case": "rssi_reference",
+      "controller_builder_not_executed": true,
+      "controller_forwarding_boundary": [],
+      "expected_boundary": "rssi",
+      "head_command": 17,
+      "json_keys_requested": [
+        "account_id",
+        "client_id",
+        "cmd",
+        "cmd_status",
+        "data",
+        "device_sn",
+        "head",
+        "msg_seq",
+        "payload",
+        "res_topic",
+        "sess_id",
+        "timestamp",
+        "version"
+      ],
+      "protected_regions_unchanged": true,
+      "raw_callback_calls": 1,
+      "reply_frames": [
+        "ff091100030010082200a104baffffff3e"
+      ],
+      "rssi_observations": 1
+    },
+    {
+      "case": "named_disable_zero_with_rssi",
+      "controller_builder_not_executed": true,
+      "controller_forwarding_boundary": [],
+      "expected_boundary": "rssi",
+      "head_command": 17,
+      "json_keys_requested": [
+        "account_id",
+        "client_id",
+        "cmd",
+        "cmd_status",
+        "data",
+        "device_sn",
+        "head",
+        "msg_seq",
+        "payload",
+        "res_topic",
+        "sess_id",
+        "timestamp",
+        "version"
+      ],
+      "protected_regions_unchanged": true,
+      "raw_callback_calls": 1,
+      "reply_frames": [
+        "ff091100030010082200a104baffffff3e"
+      ],
+      "rssi_observations": 1
+    },
+    {
+      "case": "named_disable_one_with_rssi",
+      "controller_builder_not_executed": true,
+      "controller_forwarding_boundary": [],
+      "expected_boundary": "rssi",
+      "head_command": 17,
+      "json_keys_requested": [
+        "account_id",
+        "client_id",
+        "cmd",
+        "cmd_status",
+        "data",
+        "device_sn",
+        "head",
+        "msg_seq",
+        "payload",
+        "res_topic",
+        "sess_id",
+        "timestamp",
+        "version"
+      ],
+      "protected_regions_unchanged": true,
+      "raw_callback_calls": 1,
+      "reply_frames": [
+        "ff091100030010082200a104baffffff3e"
+      ],
+      "rssi_observations": 1
+    },
+    {
+      "case": "flat_capability_with_rssi",
+      "controller_builder_not_executed": true,
+      "controller_forwarding_boundary": [],
+      "expected_boundary": "rssi",
+      "head_command": 17,
+      "json_keys_requested": [
+        "account_id",
+        "client_id",
+        "cmd",
+        "cmd_status",
+        "data",
+        "device_sn",
+        "head",
+        "msg_seq",
+        "payload",
+        "res_topic",
+        "sess_id",
+        "timestamp",
+        "version"
+      ],
+      "protected_regions_unchanged": true,
+      "raw_callback_calls": 1,
+      "reply_frames": [
+        "ff091100030010082200a104baffffff3e"
+      ],
+      "rssi_observations": 1
+    },
+    {
+      "case": "named_action_without_data",
+      "controller_builder_not_executed": true,
+      "controller_forwarding_boundary": [],
+      "expected_boundary": "rejected",
+      "head_command": 17,
+      "json_keys_requested": [
+        "account_id",
+        "client_id",
+        "cmd",
+        "cmd_status",
+        "data",
+        "device_sn",
+        "head",
+        "msg_seq",
+        "payload",
+        "res_topic",
+        "sess_id",
+        "timestamp",
+        "version"
+      ],
+      "protected_regions_unchanged": true,
+      "raw_callback_calls": 0,
+      "reply_frames": [],
+      "rssi_observations": 0
+    },
+    {
+      "case": "flat_property_without_data",
+      "controller_builder_not_executed": true,
+      "controller_forwarding_boundary": [],
+      "expected_boundary": "rejected",
+      "head_command": 17,
+      "json_keys_requested": [
+        "account_id",
+        "client_id",
+        "cmd",
+        "cmd_status",
+        "data",
+        "device_sn",
+        "head",
+        "msg_seq",
+        "payload",
+        "res_topic",
+        "sess_id",
+        "timestamp",
+        "version"
+      ],
+      "protected_regions_unchanged": true,
+      "raw_callback_calls": 0,
+      "reply_frames": [],
+      "rssi_observations": 0
+    },
+    {
+      "case": "sdk_arguments_without_data",
+      "controller_builder_not_executed": true,
+      "controller_forwarding_boundary": [],
+      "expected_boundary": "rejected",
+      "head_command": 17,
+      "json_keys_requested": [
+        "account_id",
+        "client_id",
+        "cmd",
+        "cmd_status",
+        "data",
+        "device_sn",
+        "head",
+        "msg_seq",
+        "payload",
+        "res_topic",
+        "sess_id",
+        "timestamp",
+        "version"
+      ],
+      "protected_regions_unchanged": true,
+      "raw_callback_calls": 0,
+      "reply_frames": [],
+      "rssi_observations": 0
+    },
+    {
+      "case": "nonstring_data",
+      "controller_builder_not_executed": true,
+      "controller_forwarding_boundary": [],
+      "expected_boundary": "rejected",
+      "head_command": 17,
+      "json_keys_requested": [
+        "account_id",
+        "client_id",
+        "cmd",
+        "cmd_status",
+        "data",
+        "device_sn",
+        "head",
+        "msg_seq",
+        "payload",
+        "res_topic",
+        "sess_id",
+        "timestamp",
+        "version"
+      ],
+      "protected_regions_unchanged": true,
+      "raw_callback_calls": 0,
+      "reply_frames": [],
+      "rssi_observations": 0
+    },
+    {
+      "case": "sdk_json_encoded_as_data",
+      "controller_builder_not_executed": true,
+      "controller_forwarding_boundary": [
+        {
+          "available_source_body_bytes": 59,
+          "body_prefix_hex": "6374696f6e5f7365745f61635f706172616d73222c2022706172616d223a207b",
+          "claimed_body_length": 25695,
+          "command": "0261",
+          "function": 32,
+          "source_length": 68
+        }
+      ],
+      "expected_boundary": "malformed_forward_boundary",
+      "head_command": 17,
+      "json_keys_requested": [
+        "account_id",
+        "client_id",
+        "cmd",
+        "cmd_status",
+        "data",
+        "device_sn",
+        "head",
+        "msg_seq",
+        "payload",
+        "res_topic",
+        "sess_id",
+        "timestamp",
+        "version"
+      ],
+      "protected_regions_unchanged": true,
+      "raw_callback_calls": 1,
+      "reply_frames": [],
+      "rssi_observations": 0
+    },
+    {
+      "case": "controller_query_reference",
+      "controller_builder_not_executed": true,
+      "controller_forwarding_boundary": [
+        {
+          "available_source_body_bytes": 4,
+          "body_prefix_hex": "a10122",
+          "claimed_body_length": 3,
+          "command": "0100",
+          "function": 15,
+          "source_length": 13
+        }
+      ],
+      "expected_boundary": "forward_boundary",
+      "head_command": 17,
+      "json_keys_requested": [
+        "account_id",
+        "client_id",
+        "cmd",
+        "cmd_status",
+        "data",
+        "device_sn",
+        "head",
+        "msg_seq",
+        "payload",
+        "res_topic",
+        "sess_id",
+        "timestamp",
+        "version"
+      ],
+      "protected_regions_unchanged": true,
+      "raw_callback_calls": 1,
+      "reply_frames": [],
+      "rssi_observations": 0
+    },
+    {
+      "case": "named_disable_zero_with_controller_query",
+      "controller_builder_not_executed": true,
+      "controller_forwarding_boundary": [
+        {
+          "available_source_body_bytes": 4,
+          "body_prefix_hex": "a10122",
+          "claimed_body_length": 3,
+          "command": "0100",
+          "function": 15,
+          "source_length": 13
+        }
+      ],
+      "expected_boundary": "forward_boundary",
+      "head_command": 17,
+      "json_keys_requested": [
+        "account_id",
+        "client_id",
+        "cmd",
+        "cmd_status",
+        "data",
+        "device_sn",
+        "head",
+        "msg_seq",
+        "payload",
+        "res_topic",
+        "sess_id",
+        "timestamp",
+        "version"
+      ],
+      "protected_regions_unchanged": true,
+      "raw_callback_calls": 1,
+      "reply_frames": [],
+      "rssi_observations": 0
+    },
+    {
+      "case": "named_disable_one_with_controller_query",
+      "controller_builder_not_executed": true,
+      "controller_forwarding_boundary": [
+        {
+          "available_source_body_bytes": 4,
+          "body_prefix_hex": "a10122",
+          "claimed_body_length": 3,
+          "command": "0100",
+          "function": 15,
+          "source_length": 13
+        }
+      ],
+      "expected_boundary": "forward_boundary",
+      "head_command": 17,
+      "json_keys_requested": [
+        "account_id",
+        "client_id",
+        "cmd",
+        "cmd_status",
+        "data",
+        "device_sn",
+        "head",
+        "msg_seq",
+        "payload",
+        "res_topic",
+        "sess_id",
+        "timestamp",
+        "version"
+      ],
+      "protected_regions_unchanged": true,
+      "raw_callback_calls": 1,
+      "reply_frames": [],
+      "rssi_observations": 0
+    },
+    {
+      "case": "unresolved_action_with_controller_query",
+      "controller_builder_not_executed": true,
+      "controller_forwarding_boundary": [
+        {
+          "available_source_body_bytes": 4,
+          "body_prefix_hex": "a10122",
+          "claimed_body_length": 3,
+          "command": "0100",
+          "function": 15,
+          "source_length": 13
+        }
+      ],
+      "expected_boundary": "forward_boundary",
+      "head_command": 17,
+      "json_keys_requested": [
+        "account_id",
+        "client_id",
+        "cmd",
+        "cmd_status",
+        "data",
+        "device_sn",
+        "head",
+        "msg_seq",
+        "payload",
+        "res_topic",
+        "sess_id",
+        "timestamp",
+        "version"
+      ],
+      "protected_regions_unchanged": true,
+      "raw_callback_calls": 1,
+      "reply_frames": [],
+      "rssi_observations": 0
+    }
+  ],
+  "cases_passed": 48,
+  "firmware": {
+    "main_sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9",
+    "main_version": "1.1.4.9",
+    "radio_sha256": "e291ec115f013953e825cb51b9e457a8731889547ab55b3058640e599e8cfec8",
+    "radio_version": "0.3.3.0"
+  },
+  "inventory": {
+    "exact_ascii_name_counts": {
+      "MainMcu-decoded.bin": {
+        "acInputDisableSwitch": 0,
+        "action_set_ac_params": 0,
+        "supportAcInputDisable": 0
+      },
+      "c1000-radio-validated.bin": {
+        "acInputDisableSwitch": 0,
+        "action_set_ac_params": 0,
+        "supportAcInputDisable": 0
+      }
+    },
+    "ordinary_main_function": "0f",
+    "ordinary_main_table": {
+      "address": "08032e60",
+      "count": 17,
+      "entries": [
+        {
+          "command": "0100",
+          "thumb_handler": "0800b57d"
+        },
+        {
+          "command": "0101",
+          "thumb_handler": "0800bd1d"
+        },
+        {
+          "command": "0102",
+          "thumb_handler": "0800bf95"
+        },
+        {
+          "command": "0103",
+          "thumb_handler": "0800c531"
+        },
+        {
+          "command": "0051",
+          "thumb_handler": "0800c2ed"
+        },
+        {
+          "command": "0057",
+          "thumb_handler": "0800b97d"
+        },
+        {
+          "command": "0059",
+          "thumb_handler": "0800b3e5"
+        },
+        {
+          "command": "005e",
+          "thumb_handler": "0800c0a9"
+        },
+        {
+          "command": "0063",
+          "thumb_handler": "0800cb3d"
+        },
+        {
+          "command": "0064",
+          "thumb_handler": "0800baad"
+        },
+        {
+          "command": "0065",
+          "thumb_handler": "0800ca05"
+        },
+        {
+          "command": "0066",
+          "thumb_handler": "0800bacd"
+        },
+        {
+          "command": "0072",
+          "thumb_handler": "0800b56d"
+        },
+        {
+          "command": "0089",
+          "thumb_handler": "0800b42d"
+        },
+        {
+          "command": "0090",
+          "thumb_handler": "0800c7c5"
+        },
+        {
+          "command": "0091",
+          "thumb_handler": "0800c315"
+        },
+        {
+          "command": "0092",
+          "thumb_handler": "0800b645"
+        }
+      ]
+    },
+    "radio_function": "10",
+    "radio_table": {
+      "address": "3c147be4",
+      "count": 42,
+      "entries": [
+        {
+          "command": "0003",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "4203cc10"
+        },
+        {
+          "command": "0001",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "4203ce62"
+        },
+        {
+          "command": "0002",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "4203cece"
+        },
+        {
+          "command": "0005",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "4203cfc4"
+        },
+        {
+          "command": "0007",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "42043d5a"
+        },
+        {
+          "command": "000d",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "420419aa"
+        },
+        {
+          "command": "001f",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "4203d1ba"
+        },
+        {
+          "command": "0020",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "42041810"
+        },
+        {
+          "command": "0021",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "4203d404"
+        },
+        {
+          "command": "0022",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "4203cb26"
+        },
+        {
+          "command": "0023",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "420432aa"
+        },
+        {
+          "command": "0024",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "4203d056"
+        },
+        {
+          "command": "0025",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "42043316"
+        },
+        {
+          "command": "000f",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "4203cd6e"
+        },
+        {
+          "command": "0029",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "4203df24"
+        },
+        {
+          "command": "002a",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "4203df9e"
+        },
+        {
+          "command": "0031",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "4203ca9e"
+        },
+        {
+          "command": "0053",
+          "native_raw_radio_parser_route": false,
+          "riscv_handler": "4203e0ac"
+        },
+        {
+          "command": "0055",
+          "native_raw_radio_parser_route": false,
+          "riscv_handler": "42043564"
+        },
+        {
+          "command": "0056",
+          "native_raw_radio_parser_route": false,
+          "riscv_handler": "4203d0ca"
+        },
+        {
+          "command": "080b",
+          "native_raw_radio_parser_route": false,
+          "riscv_handler": "4204751e"
+        },
+        {
+          "command": "080c",
+          "native_raw_radio_parser_route": false,
+          "riscv_handler": "42047690"
+        },
+        {
+          "command": "0810",
+          "native_raw_radio_parser_route": false,
+          "riscv_handler": "4203fd52"
+        },
+        {
+          "command": "0811",
+          "native_raw_radio_parser_route": false,
+          "riscv_handler": "4203fdba"
+        },
+        {
+          "command": "0863",
+          "native_raw_radio_parser_route": false,
+          "riscv_handler": "42047b56"
+        },
+        {
+          "command": "0030",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "42047d70"
+        },
+        {
+          "command": "0032",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "4203d56e"
+        },
+        {
+          "command": "0033",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "4203d7ba"
+        },
+        {
+          "command": "0034",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "4203db5e"
+        },
+        {
+          "command": "0036",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "4203db1e"
+        },
+        {
+          "command": "0037",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "4203ddc2"
+        },
+        {
+          "command": "0038",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "42043720"
+        },
+        {
+          "command": "0039",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "4203e846"
+        },
+        {
+          "command": "003b",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "4203ea8c"
+        },
+        {
+          "command": "003c",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "4203ed3c"
+        },
+        {
+          "command": "003d",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "4203f4ee"
+        },
+        {
+          "command": "003f",
+          "native_raw_radio_parser_route": true,
+          "riscv_handler": "4203fa7a"
+        },
+        {
+          "command": "004a",
+          "native_raw_radio_parser_route": false,
+          "riscv_handler": "4203fac0"
+        },
+        {
+          "command": "004b",
+          "native_raw_radio_parser_route": false,
+          "riscv_handler": "4203da2c"
+        },
+        {
+          "command": "0064",
+          "native_raw_radio_parser_route": false,
+          "riscv_handler": "4203cab8"
+        },
+        {
+          "command": "0066",
+          "native_raw_radio_parser_route": false,
+          "riscv_handler": "42041128"
+        },
+        {
+          "command": "0867",
+          "native_raw_radio_parser_route": false,
+          "riscv_handler": "42040f0e"
+        }
+      ]
+    }
+  },
+  "limits": "Audit the named SDK action boundary in exact A1763 main/radio images.\n\nActual RISC-V numeric-head selection and native head-17 JSON admission, data\ndecoding, raw routing, and the existing RSSI query execute. Every other head\nstops before its selected branch; the controller-forwarding wrapper is a\nrecording substitute. cJSON/libc/base64, synthetic identities/session state,\nAP-info, crypto, OS allocation/queue and final transports are substitutes.\nMain firmware is inspected only for its fixed ordinary command table. No\ncontroller setter, device, cloud, SDK implementation or persistent backend.",
+  "product": "C1000 Gen 2 A1763",
+  "schema": 1,
+  "unresolved": [
+    "Flutter action-to-wire transformation inside AnkerIoT SDK is not replayed.",
+    "No numeric charging-pause or AC-input-disable field is inferred from name absence.",
+    "Main table inspection does not enumerate every protocol namespace or later installer.",
+    "Other head command branches stop before their body and can have disruptive effects.",
+    "Controller forwarding is captured before its wrapper executes; no main handler runs.",
+    "Original C1000 and C2000 radio firmware have not been recovered or replayed."
+  ]
+}

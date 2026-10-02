@@ -1,0 +1,272 @@
+{
+  "apk_sha256": "27986f94a992f3aac1189be746d310553e99909ed81dfbb1abd5880f71662110",
+  "carriers": {
+    "assets/IJMDal.Data": {
+      "action_literal_presence": {
+        "acInputDisableSwitch": false,
+        "action_set_ac_params": false,
+        "akiot.cloud_api": false,
+        "akiot.device.invoke_action": false,
+        "supportAcInputDisable": false
+      },
+      "dex_magic_count": 0,
+      "entropy_bits_per_byte": 7.9951,
+      "sha256": "358ac3092eaa68058739c497ff6cbb27d2cc54e3e92bddb1599fa57e96f5fa31",
+      "size": 32016,
+      "zip_local_header_count": 0
+    },
+    "assets/ijiami.ajm": {
+      "action_literal_presence": {
+        "acInputDisableSwitch": false,
+        "action_set_ac_params": false,
+        "akiot.cloud_api": false,
+        "akiot.device.invoke_action": false,
+        "supportAcInputDisable": false
+      },
+      "dex_magic_count": 0,
+      "entropy_bits_per_byte": 7.9938,
+      "sha256": "ea68ea4fa5981f12e89651f50d637f5d4c80e24fe1700b41c11c2a02cc055960",
+      "size": 7176288,
+      "zip_local_header_count": 0
+    },
+    "assets/ijiami.dat": {
+      "action_literal_presence": {
+        "acInputDisableSwitch": false,
+        "action_set_ac_params": false,
+        "akiot.cloud_api": false,
+        "akiot.device.invoke_action": false,
+        "supportAcInputDisable": false
+      },
+      "dex_magic_count": 0,
+      "entropy_bits_per_byte": 7.9837,
+      "sha256": "56cb2bd0d8c6eea2aeced1b274c006be6b852309b5e267daa53a50641e43eb1c",
+      "size": 8847278,
+      "zip_local_header_count": 0
+    }
+  },
+  "hardware_or_network_access": false,
+  "libraries": {
+    "assets/ijm_lib/arm64-v8a/libexec.so": {
+      "android_or_jni_code_executed": false,
+      "blocks": 4820066,
+      "embedded_empty_dex": {
+        "adler32_valid": true,
+        "file_offset": 723854,
+        "sha1_valid": true,
+        "sha256": "6a67b5f701670ee9ca45a6e38de68cccbe645bbca46679c11d24bcfb7517d1f8",
+        "size": 156,
+        "strings_types_prototypes_fields_methods_classes_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "entry": "000985a0",
+      "guest_syscalls": [
+        {
+          "heap_offset": "00000000",
+          "length": 276680,
+          "number": 222
+        },
+        {
+          "length": 276680,
+          "number": 226
+        },
+        {
+          "length": 720880,
+          "library_offset": "00040000",
+          "number": 222
+        },
+        {
+          "length": 720880,
+          "number": 226
+        },
+        {
+          "length": 276680,
+          "number": 215
+        }
+      ],
+      "handoff": "00072d80",
+      "host_syscalls": 0,
+      "input_sha256": "4fd13d12d64e6d451f5b567c173917225c1b1e2deb97abdeca10110b8dc4f379",
+      "input_size": 791584,
+      "memory_image_sha256": "b4c434ffec580a371ece4f7ddc2f410f40d49ce73c3c2e09158194e1bd15dd57",
+      "memory_image_size": 1160588,
+      "native_metadata": {
+        "action_literal_presence": {
+          "acInputDisableSwitch": false,
+          "action_set_ac_params": false,
+          "akiot.cloud_api": false,
+          "akiot.device.invoke_action": false,
+          "supportAcInputDisable": false
+        },
+        "selected_data_symbols": [
+          {
+            "address": "0011b588",
+            "name": "ijm_vmp",
+            "size": 4
+          }
+        ],
+        "selected_exports": [
+          {
+            "address": "00072e74",
+            "decoded_bytes": 120,
+            "direct_call_targets": [
+              "0xe2d48",
+              "0xe2e10",
+              "0xe2e10",
+              "0xe2e00",
+              "0xe7fa0"
+            ],
+            "name": "JNI_OnLoad",
+            "size": 120
+          }
+        ]
+      },
+      "recovered_library_code_executed_by_unpacker": false,
+      "stop": "before_recovered_library_code",
+      "stub_end": "00098c84"
+    },
+    "assets/ijm_lib/arm64-v8a/libexecmain.so": {
+      "android_or_jni_code_executed": false,
+      "blocks": 204711,
+      "entry": "00003f80",
+      "guest_syscalls": [
+        {
+          "heap_offset": "00000000",
+          "length": 15560,
+          "number": 222
+        },
+        {
+          "length": 15560,
+          "number": 226
+        },
+        {
+          "length": 81904,
+          "library_offset": "00000000",
+          "number": 222
+        },
+        {
+          "length": 81904,
+          "number": 226
+        },
+        {
+          "length": 15560,
+          "number": 215
+        }
+      ],
+      "handoff": "0000ef38",
+      "host_syscalls": 0,
+      "input_sha256": "82d35cb6e2e5f1918e5ef53aae83590f7257cbec29f60357155060eb883eafd9",
+      "input_size": 35880,
+      "memory_image_sha256": "44810a5ac1a0e787d6f722442ef72fc0b19bca36c1bf1fcc56d52a24bfcdf4f5",
+      "memory_image_size": 100784,
+      "native_metadata": {
+        "action_literal_presence": {
+          "acInputDisableSwitch": false,
+          "action_set_ac_params": false,
+          "akiot.cloud_api": false,
+          "akiot.device.invoke_action": false,
+          "supportAcInputDisable": false
+        },
+        "selected_data_symbols": [],
+        "selected_exports": [
+          {
+            "address": "00001f5c",
+            "decoded_bytes": 4240,
+            "direct_call_targets": [],
+            "name": "getOpCode",
+            "size": 4240
+          }
+        ]
+      },
+      "protector_opcode_mapping": {
+        "cases": 256,
+        "host_or_guest_syscalls": 0,
+        "output_distinct_bytes": 256,
+        "output_sha256": "de4520c22fedb26d19ce80c61621bc202fe18f68a76b20957e7ec939ef28b436",
+        "scope": "Protector VM byte remapping; not Anker station command opcodes"
+      },
+      "recovered_library_code_executed_by_unpacker": false,
+      "stop": "before_recovered_library_code",
+      "stub_end": "0000462c"
+    },
+    "assets/libijmDataEncryption_arm64.so": {
+      "android_or_jni_code_executed": false,
+      "blocks": 4285271,
+      "entry": "00062b68",
+      "guest_syscalls": [
+        {
+          "heap_offset": "00000000",
+          "length": 264292,
+          "number": 222
+        },
+        {
+          "length": 264292,
+          "number": 226
+        },
+        {
+          "length": 589808,
+          "library_offset": "0001c000",
+          "number": 222
+        },
+        {
+          "length": 589808,
+          "number": 226
+        },
+        {
+          "length": 264292,
+          "number": 215
+        }
+      ],
+      "handoff": "0001de74",
+      "host_syscalls": 0,
+      "input_sha256": "3dd7349af2d0ca697e7ab30a673231fa9ec4fd0b1cf13c3ef577cd7355c05032",
+      "input_size": 450720,
+      "memory_image_sha256": "72ab38e97a6f5eaaada32eb82b82ec5224a5da90532f9d5f4c67988c46d00c3e",
+      "memory_image_size": 1171816,
+      "native_metadata": {
+        "action_literal_presence": {
+          "acInputDisableSwitch": false,
+          "action_set_ac_params": false,
+          "akiot.cloud_api": false,
+          "akiot.device.invoke_action": false,
+          "supportAcInputDisable": false
+        },
+        "selected_data_symbols": [],
+        "selected_exports": [
+          {
+            "address": "0001de7c",
+            "decoded_bytes": 1936,
+            "direct_call_targets": [
+              "0x1d980",
+              "0x3a5ec",
+              "0x1d840",
+              "0x1d970",
+              "0x1d840",
+              "0x1d970",
+              "0x1d490"
+            ],
+            "name": "JNI_OnLoad",
+            "size": 1936
+          },
+          {
+            "address": "0001e60c",
+            "decoded_bytes": 4,
+            "direct_call_targets": [],
+            "name": "JNI_OnUnload",
+            "size": 4
+          }
+        ]
+      },
+      "recovered_library_code_executed_by_unpacker": false,
+      "stop": "before_recovered_library_code",
+      "stub_end": "0006324c"
+    }
+  },
+  "sdk_action_frame_recovered": false,
+  "unpacker_cases": 3
+}

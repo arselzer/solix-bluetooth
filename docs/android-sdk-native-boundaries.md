@@ -5,6 +5,12 @@ Static inspection dated **2026-10-02** extends the
 action investigation. No APK/native code, phone connection, cloud request or
 device command was executed. APKs and extracted libraries remain private.
 
+A subsequent [protected-loader investigation](android-loader-carriers.md)
+replays three UPX stubs and a pure protector byte mapper in emulated memory.
+That separate tool recovers readable loader instructions, while SDK classes,
+OTA envelopes and the charging action encoder remain unresolved. The static
+inventory described here does not execute those instructions.
+
 ## The clear APK does not contain the action implementation
 
 | Retained input | SHA-256 |

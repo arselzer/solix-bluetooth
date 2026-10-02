@@ -830,3 +830,38 @@ clear loader bytecode and exported native primitives. It records digest-table
 selectors but recovers no OTA envelope or action-to-frame dispatcher. App APKs,
 crypto material and operational evidence stay private; only sanitized metadata
 and independently reproducible synthetic/static results are public.
+
+## October 2: native SDK mapper and protected loader continuation
+
+The [Dart interceptor audit](gen2-dart-action-interceptors.md) proves actual
+Gen 2 registration and parameter handling. Transaction aliases populate a
+separate app-property lock; `acInputDisableSwitch` crosses Flutter IPC unchanged,
+with optional cached `ownerUid`. Its pure-switch action has no transaction ID,
+and the examined result path does not guarantee rollback or physical readback.
+
+[48 radio action-boundary cases](gen2-iot-action-firmware-boundary.md) establish
+numeric-head selection and head-17 binary admission. Extra action names beside
+valid data do not change the binary command. Encoding arbitrary action JSON
+inside `data` can select an accidental forwarding opcode and an excessive
+declared length before generic frame validation; the replay substitutes the
+forwarding wrapper before transmission. No blind SDK-JSON experiment is justified.
+
+The [readable Android asset audit](android-readable-sdk-assets.md) finds charger
+and power-bank React Native pages delegating directly to their native bridge.
+Asset manifests, resource strings and apparent Unity/property candidates expose
+no station action serializer; these bounded negative results leave protected
+and runtime-generated mappings open.
+
+The [protected-loader recovery](android-loader-carriers.md) replays **3 exact
+UPX stubs**, stopping before original loader code, and **256 pure protector byte
+mapping cases**. Readable native JNI instructions are now available offline,
+but a custom interpreter and protected containers remain. The embedded valid
+156-byte DEX is empty. Protector opcodes are unrelated to station commands.
+Complete sanitized result/manifest pairs independently match; recovered app
+images remain private. These counts are separate from the 1,842-case runner.
+
+A read-only gateway snapshot during this work found all three stations fresh
+with AC enabled and unchanged registered control counts. No station command,
+runtime deployment, identity edit or charging-automation change was performed.
+The remaining charging lead is recovering the native encoder, capability guard
+and independent readback mapping.
