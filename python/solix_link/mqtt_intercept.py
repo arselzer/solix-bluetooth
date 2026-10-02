@@ -301,8 +301,10 @@ class LocalMqttServer:
         return await self._set_original_setting(request, "light_mode", mode)
 
     async def set_dc_power_saving_enabled(self, enabled: bool) -> dict:
-        """Set original DC Smart with DC off and the complete F8 protected."""
+        """Set C1000 DC Smart with DC off and fresh configuration protected."""
         request = self.commands.dc_power_saving(enabled)
+        if self.config.model == Model.C1000_GEN2:
+            return await self._set_c1000_setting(request, "dc_power_saving_mode_enabled", int(enabled))
         return await self._set_original_setting(request, "dc_power_saving_mode_enabled", int(enabled))
 
     async def set_ac_power_saving_enabled(self, enabled: bool) -> dict:
@@ -434,12 +436,20 @@ class LocalMqttServer:
         """
         if metric not in ("temperature_unit_fahrenheit", "ac_off_grid_alert_enabled", "device_timeout_minutes",
                           "ac_fast_charge_enabled", "ac_charging_power_limit_w", "display_brightness",
-                          "display_timeout_seconds", "port_memory_enabled"):
+                          "display_timeout_seconds", "port_memory_enabled", "dc_power_saving_mode_enabled"):
             raise ValueError("Unsupported C1000 setting")
 
         async with self._control_lock:
             connection = self._control_connection()
             before_a4, before_d9, before = await self._fresh_c1000_settings(connection)
+            if metric == "dc_power_saving_mode_enabled" and (
+                    before.get("software_version") != "1.1.4.9"
+                    or before["dc_output_enabled"] != 0
+                    or type(before.get("dc_power_saving_mode_enabled")) is not int
+                    or before.get("dc_power_saving_mode_enabled") not in (0, 1)
+                    or before["ac_output_timeout_seconds"] != 0
+                    or before["dc_output_timeout_seconds"] != 0):
+                raise ValueError("C1000 Gen 2 DC Smart requires main 1.1.4.9, DC output off and inactive AC/DC countdowns; no write sent")
             if metric == "display_brightness" and (
                     before["usage_mode"] != "standard" or before["active_tariff"] != "none"
                     or before.get("clock_screen_enabled") != 0
@@ -466,17 +476,19 @@ class LocalMqttServer:
                 expected[16:18] = value.to_bytes(2, "little")
             elif metric == "port_memory_enabled":
                 expected[23] = value
+            elif metric == "dc_power_saving_mode_enabled":
+                expected[13] = value
             else:
                 expected[32] = (expected[32] & ~2) | (int(value) << 1)
-            for sample in range(2 if metric == "ac_fast_charge_enabled" else 1):
+            for sample in range(2 if metric in ("ac_fast_charge_enabled", "dc_power_saving_mode_enabled") else 1):
                 if sample:
-                    # The controller can clear fast charge after acknowledging it.
+                    # Observe a second fresh report after asynchronous policy work.
                     await asyncio.sleep(1)
                 a4, d9, metrics = await self._fresh_c1000_settings(connection)
                 if metrics[metric] != int(value):
                     raise RuntimeError("Setting not confirmed by telemetry; settings may have changed")
                 if metric in ("ac_fast_charge_enabled", "ac_charging_power_limit_w", "display_brightness",
-                              "display_timeout_seconds", "port_memory_enabled"):
+                              "display_timeout_seconds", "port_memory_enabled", "dc_power_saving_mode_enabled"):
                     # A4[22] is runtime display-timer activity. Fast-charge
                     # charge-power and display events wake it; expiry may clear
                     # it. The saved preferences remain protected independently.

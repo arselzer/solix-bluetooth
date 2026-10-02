@@ -14,6 +14,9 @@ configuration flow and one shared HTTP coordinator.
 | C1000 Gen 2, A1763 | 1.1.4.9 | 13 | 32 / 23 |
 | C2000 Gen 2, A1783 | 2.1.6.4 | 5 | 20 / 15 |
 
+These are initial-deployment counts. The later freshness/DC Smart update below
+adds entities without replacing the existing integration entry or station profiles.
+
 All three stations simultaneously connected to one isolated **2.4 GHz** AP,
 with separate client certificates, telemetry and command queues. Disabled
 diagnostics and unavailable derived values account for the remaining entities;
@@ -125,3 +128,47 @@ Private deployment scripts, baselines, authentication/config backups, native
 logs and complete runtime results remain owner-only in ignored local evidence
 and the node's restricted runtime directory. Public documentation contains
 no account identifiers, station serials, certificates or bearer tokens.
+
+## Freshness, DC Smart and charging blueprint update
+
+A separately built wheel, SHA-256
+`1aee184878e4d163d30259afd4d5ad1fa526ce78f9979eb9fc07e0a6d33716ed`,
+was installed with no dependency changes. Runtime and component backups were
+retained first. One AP/gateway restart recovered all three fresh snapshots
+in **22.04 seconds after the recovery check began**, preserving every recorded
+output, timer, charging and preference baseline. No station was reprovisioned.
+
+After restarting HA to load the component update:
+
+| Station | Native controls | Registered / available HA entities |
+| --- | ---: | ---: |
+| Original C1000 | 9 | 16 / 15 |
+| C1000 Gen 2 | 14 | 34 / 25 |
+| C2000 Gen 2 | 5 | 22 / 17 |
+
+All three enabled **Last telemetry** timestamp sensors were fresh. The C2000's
+new read-only **Fast charging enabled** binary sensor reported off. The actual
+Gen 2 DC Smart HA switch passed **OFF→ON→OFF**, with native two-report confirmation,
+all sampled AC outputs enabled and complete protected-settings restoration.
+See [command guards and limits](c1000-gen2-native-dc-smart-validation.md).
+
+The optional [opportunistic charging blueprint](home-assistant-charging-automation.md)
+passed the installed HA **2026.7.4** blueprint schema, input substitution and
+expanded automation trigger/condition/action validation. It is copied into HA's
+blueprint directory, with no automation instance or helper created and no policy
+activated. Fifty synthetic cases cover policy gates, hysteresis and failed-write
+latching. The complete Python/HA contract suite passed **2,214 tests**, and
+**19 browser scenarios** passed against synthetic station data.
+
+No station advertised over BLE during the recovery scan, and the user was away.
+The original/C2000 generated-native-ID trial is therefore deferred: an independent
+working BLE recovery path must be demonstrated before changing a live identity.
+The original remains at its recorded **720-minute** timeout; both Gen 2 stations
+retain **Never**. No new charging-rate claim follows from these idle/full-SOC tests.
+
+A bounded **13-hour read-only observation** now samples the authenticated gateway
+every 30 seconds. It records report ages, availability and protected-setting
+changes in restricted node-local JSONL, with an updated summary. It sends no
+commands, performs no recovery and stops after its deadline. The result is
+pending; these API samples cannot prove electrical continuity or continuous
+availability between samples. Existing full MQTT logs remain retained separately.

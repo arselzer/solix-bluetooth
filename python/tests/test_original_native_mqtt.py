@@ -119,9 +119,9 @@ def test_original_dc_smart_rejects_non_boolean_without_constructing_request(enab
     assert commands._sequence == 0
 
 
-@pytest.mark.parametrize("model", [Model.C1000_GEN2, Model.C2000_GEN2])
+@pytest.mark.parametrize("model", [Model.C2000_GEN2])
 @pytest.mark.parametrize("enabled", [False, True])
-def test_dc_smart_native_builder_does_not_enable_other_models(model, enabled):
+def test_dc_smart_native_builder_excludes_c2000(model, enabled):
     commands = NativeMqttCommands(SERIAL, ACCOUNT, model=model)
     with pytest.raises(ValueError, match="original C1000 only"):
         commands.dc_power_saving(enabled)

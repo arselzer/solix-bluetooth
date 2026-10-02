@@ -13,7 +13,8 @@ Home Assistant integration for the local gateway.
   with mains connected, and confirmed return to grid.
 - C1000 Gen 2 native MQTT: 100–1200 W charging, fast charge, temperature unit,
   off-grid alert, display brightness/timeout, output-port memory and guarded
-  lower discharge limit without silently changing reserve.
+  lower discharge limit without silently changing reserve; DC Smart with DC off
+  and inactive output countdowns on main 1.1.4.9.
 - Original C1000: local MQTT and Prime Bluetooth charging power, Device Timeout,
   screen timeout/brightness, light and temperature units; guarded AC/DC Smart
   with the corresponding output off and Fast charging over both transports;
@@ -24,6 +25,8 @@ Home Assistant integration for the local gateway.
 - C1000 Gen 2 Prime RSSI queries via `wifi-rssi`, with explicit unavailable
   results; [radio readbacks](docs/c1000-radio-readback-validation.md).
 - Authenticated JSON HTTP, SSE and Prometheus for multiple stations.
+- Opt-in Home Assistant price/solar charging blueprint with telemetry freshness,
+  reserve protection and a failure latch; installed automations start disabled.
 - Home Assistant diagnostics downloads with model/firmware, freshness and
   supported settings; the integration report omits credentials and identities.
 - Up to eight supported stations on one isolated AP, with separate certificates,
@@ -33,7 +36,7 @@ Home Assistant integration for the local gateway.
 
 | Device | Python Bluetooth | Native local MQTT | Tested / limitations |
 | --- | --- | --- | --- |
-| C1000 Gen 2, A1763 | Monitoring, charge limits/power, display timeout, fast charge | Charging/fast/reserve, tariffs, temperature/alert, display/memory, discharge floor | Main 1.1.4.9 / radio 0.3.3.0; older 1.1.4.3 uses legacy BLE |
+| C1000 Gen 2, A1763 | Monitoring, charge limits/power, display timeout, fast charge | Charging/fast/reserve, tariffs, temperature/alert, display/memory, discharge floor, guarded DC Smart | Main 1.1.4.9 / radio 0.3.3.0; DC Smart requires DC off and inactive countdowns; older 1.1.4.3 uses legacy BLE |
 | C2000 Gen 2, A1783 | Monitoring, power/cap, display timeout | Charging/reserve, tariffs and return to grid | Main 2.1.6.4; AC-output writes blocked |
 | Original C1000, A1761 | Twelve legacy controls; ten Prime controls | Nine preferences: charging power, device/screen timeout, brightness, light, temperature unit, AC/DC Smart, Fast | Legacy 1.5.1; Prime/native main 1.7.1 / radio 0.3.3.0; Smart requires its output off; AC Smart/Prime AC output require no active AC timer; charging rates/reboot retention unverified |
 | C300/C300X AC, A1722/A1723 | Monitoring, AC output, light, charging power, display timeout | — | C300X tested; C300 sibling untested; C300 DC unsupported |
@@ -97,6 +100,8 @@ the AP worker must separately allow controls. CLI/private socket writes use
 - [Gateway API](docs/gateway-home-assistant.md): JSON commands, SSE, metrics and deployment.
 - [Home Assistant component](custom_components/solix_link/README.md): sensors,
   charging controls, selectors, alert switch and tariff actions.
+- [HA charging blueprint](docs/home-assistant-charging-automation.md): price/solar
+  policy, prerequisites, explicit activation and failure review.
 
 HA 2026.7.4 passed live setup, three-device discovery, a restored configuration
 control and integration reload. Other releases and long-term operation still
@@ -120,8 +125,8 @@ npm run test:protocol              # synthetic BLE encryption checks
 npm run test:dashboard             # synthetic browser fixture only
 ```
 
-Install the Python `server` extra plus `pytest`, `httpx` and `aiohttp` for
-server/HA tests. Browser checks need Playwright Chromium; setup is in the
+Install the Python `server` extra plus `pytest`, `httpx`, `aiohttp`, `PyYAML`
+and `Jinja2` for server/HA tests. Browser checks need Playwright Chromium; setup is in the
 web-dashboard guide. Commit Vue sources and compiled Python assets together.
 
 ## Protocol research and firmware

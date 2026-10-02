@@ -60,7 +60,7 @@ def add_commands(subcommands) -> None:
                                ("ap-service-set-display-brightness", "Set original/Gen 2 C1000 native MQTT display brightness"),
                                ("ap-service-set-display-timeout", "Set original/Gen 2 C1000 native MQTT screen timeout"),
                                ("ap-service-set-light", "Set and confirm original C1000 native MQTT light mode"),
-                               ("ap-service-set-dc-power-saving", "Set original C1000 native DC Smart; requires DC output OFF"),
+                               ("ap-service-set-dc-power-saving", "Set original/Gen 2 C1000 native DC Smart; requires DC output OFF"),
                                ("ap-service-set-ac-power-saving", "Set original C1000 native AC Smart; requires AC OFF and inactive countdown"),
                                ("ap-service-set-port-memory", "Set C1000 Gen 2 native MQTT output-port memory"),
                                ("ap-service-set-reserve", "Set and confirm backup reserve without changing outputs"),

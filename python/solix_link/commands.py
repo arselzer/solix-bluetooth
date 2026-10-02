@@ -24,7 +24,7 @@ COMMAND_FIELDS = {
 }
 NATIVE_COMMANDS = ("set-charge-power", "set-charge-cap", "set-backup-reserve", "set-tou-plan", "return-grid")
 NATIVE_C1000_COMMANDS = ("set-temperature-unit", "set-off-grid-alert", "set-discharge-floor", "set-device-timeout", "set-fast-charge",
-                        "set-display-brightness", "set-display-timeout", "set-port-memory")
+                        "set-display-brightness", "set-display-timeout", "set-port-memory", "set-dc-power-saving")
 
 
 def native_commands_for_model(model: Model) -> tuple[str, ...]:

@@ -1,0 +1,29 @@
+{
+  "firmware_sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9",
+  "cases": 121,
+  "hardware_access": false,
+  "source_sha256": {
+    "emulate_gen2_clock_screen_preservation.py": "2458e8b7f104fecdeaa147c9ab295a627ce9c99af3f0daa5d36a66a7a1038c5a",
+    "emulate_timer_plan.py": "4418ce209adc19ca4bd6553699df331fae6549c46c63053dbb233fbd42e36260",
+    "emulate_soc_cap_handler.py": "fbac6e75825cb096190779f583ade26ea4d5e4cd9f5a76781185d39d33280c71",
+    "emulate_clock_semantics.py": "945b649c3b5cec00d816041e783641085ccfbdb5f80efc2ed2c4e15f3bae30f2",
+    "emulate_tou_controller_encoding.py": "9d65518d92649f47b67c86562b7edd29f0775d778b02c25eca72b0acd55a0e22",
+    "replay_io.py": "731d795a5ec37e2cf12b809b7122eaf7a29d84c21a2ecd43fafa3e2f8d962d30"
+  },
+  "result_sha256": "4ad30c39774521291ccc746799301373d7eb0da9d1c0c723ed7e12df45bffa70",
+  "substitutes": [
+    "ACK/logging/persistence",
+    "software timers and normal-display timer query",
+    "allocation",
+    "asset-transfer startup",
+    "synthetic RTC/readiness/power gate"
+  ],
+  "excluded": [
+    "device/display rendering",
+    "actual asset transfer",
+    "radio/app/cloud",
+    "real timer/task scheduling",
+    "flash",
+    "electrical outputs and protections"
+  ]
+}

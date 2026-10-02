@@ -35,7 +35,8 @@ const floorValid = computed(() => {
 const displayTimes = computed(() => nativeC1000.value ? [0, 10, 20, 30, 60, 300, 1800]
   : props.station.model === 'c1000' ? [20, 30, 60, 300, 1800] : [30, 60]);
 const originalProfile = computed(() => props.station.model === 'c1000' && props.station.protocol === 'legacy');
-const guardedDcSmart = computed(() => props.station.model === 'c1000' && ['prime', 'native_mqtt'].includes(props.station.protocol ?? ''));
+const guardedDcSmart = computed(() => props.station.model === 'c1000' && ['prime', 'native_mqtt'].includes(props.station.protocol ?? '')
+  || props.station.model === 'c1000_gen2' && props.station.protocol === 'native_mqtt');
 const guardedAcSmart = computed(() => props.station.model === 'c1000' && ['prime', 'native_mqtt'].includes(props.station.protocol ?? ''));
 const originalPreferenceProfile = computed(() => props.station.model === 'c1000' && ['prime', 'native_mqtt'].includes(props.station.protocol ?? ''));
 const nativeC1000 = computed(() => props.station.model === 'c1000_gen2' && props.station.protocol === 'native_mqtt');
@@ -59,7 +60,10 @@ const temperatureAvailable = computed(() => allowed('set-temperature-unit') && (
 const savingPorts = ['ac', 'dc'] as const;
 const savingProfile = (port: 'ac' | 'dc') => originalProfile.value
   || guardedDcSmart.value && port === 'dc' || guardedAcSmart.value && port === 'ac';
-const dcSmartReady = computed(() => numberMetric(props.station, 'dc_output_enabled') === 0);
+const dcSmartReady = computed(() => numberMetric(props.station, 'dc_output_enabled') === 0
+  && (!nativeC1000.value || props.station.metrics.software_version === '1.1.4.9'
+    && numberMetric(props.station, 'ac_output_timeout_seconds') === 0
+    && numberMetric(props.station, 'dc_output_timeout_seconds') === 0));
 const acSmartReady = computed(() => numberMetric(props.station, 'ac_output_enabled') === 0
   && numberMetric(props.station, 'ac_output_timer_remaining_seconds') === 0);
 const guardedSaving = (port: 'ac' | 'dc') => port === 'dc' ? guardedDcSmart.value : guardedAcSmart.value;
@@ -72,7 +76,7 @@ function powerSaving(port: 'ac' | 'dc') {
   const enabled = props.draft[port === 'ac' ? 'acSaving' : 'dcSaving'] === '1';
   const guarded = guardedDcSmart.value && port === 'dc' || guardedAcSmart.value && port === 'ac';
   propose({ command: `set-${port}-power-saving`, enabled }, guarded ? `Change ${port.toUpperCase()} Smart mode?` : `Change ${port.toUpperCase()} power saving?`,
-    guarded ? `Requires fresh ${port.toUpperCase()} output OFF${port === 'ac' ? ' and an inactive AC countdown' : ''}. Smart may inherit an inactivity counter and later turn ${port.toUpperCase()} output off at low load; enabling does not guarantee a new grace period.`
+    guarded ? `Requires fresh ${port.toUpperCase()} output OFF${port === 'ac' ? ' and an inactive AC countdown' : nativeC1000.value ? ', main 1.1.4.9 and inactive AC/DC countdowns' : ''}. Smart may inherit an inactivity counter and later turn ${port.toUpperCase()} output off at low load; enabling does not guarantee a new grace period.`
       : 'Power saving may automatically turn the output off at low load.',
     [guarded ? enabled ? 'Smart' : 'Normal' : enabled ? 'On' : 'Off', `Applies to the ${port.toUpperCase()} output`]);
 }

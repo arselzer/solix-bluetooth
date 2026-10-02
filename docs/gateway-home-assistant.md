@@ -73,6 +73,7 @@ Native C1000 Gen 2 also advertises the following
 | `set-display-brightness` | integer `level` | 1 Low / 2 Medium / 3 High; zero refused |
 | `set-display-timeout` | integer `seconds` | 0 Never, 10, 20, 30, 60, 300, 1800 |
 | `set-port-memory` | boolean `enabled` | `true` / `false` |
+| `set-dc-power-saving` | boolean `enabled` | main 1.1.4.9, DC off, both output countdowns zero |
 
 Port-memory Off clears output-recovery bookkeeping; turning On does not restore
 that transient state. Only brightness 1/2/3, screen timeout 30/60 s and port
@@ -81,6 +82,11 @@ native capabilities are not exposed on C2000 or other models. Fresh telemetry
 and the selected station's advertised capability remain required. The native
 brightness setter also requires Standard/no active tariff and an inactive
 clock screen with no transfer in progress.
+
+Gen 2 DC Smart changes only A4 byte 13, with two fresh confirmation reports
+and complete protected A4/D9 readback. Both directions require DC off and
+inactive AC/DC countdowns; C2000 is excluded. The actual HA switch passed a
+restored native trial; see [versioned evidence](c1000-gen2-native-dc-smart-validation.md).
 
 Original C1000 **legacy** BLE profiles expose `set-temperature-unit`/`fahrenheit`,
 `set-fast-charge`/`enabled`, `set-ac-power-saving`/`enabled`, and
@@ -195,7 +201,9 @@ The component is installed on the development HA node. The
 [HA 2026.7.4 runtime trial](ha-runtime-validation.md) passed normal config-flow
 setup, three physical stations, automatic entity discovery, a restored screen
 timeout control, integration reload and shared-service recovery. Other HA
-releases, long-term behavior and charging automations need separate validation.
+releases and long-term behavior need separate validation. An optional
+[charging blueprint](home-assistant-charging-automation.md) passed actual HA
+2026.7.4 schema validation and synthetic policy tests; it remains inactive.
 HTTP/SSE/Prometheus remain available independently of HA.
 
 ## Persistent settings

@@ -170,7 +170,11 @@ class NativeMqttCommands:
         return self._original_setting("light_mode", mode)
 
     def dc_power_saving(self, enabled: bool) -> NativeMqttRequest:
-        """Set original C1000 DC Normal/Smart; callers must require DC off."""
+        """Set C1000 DC Normal/Smart; callers must require DC off."""
+        if self.model == Model.C1000_GEN2:
+            if type(enabled) is not bool:
+                raise ValueError("enabled must be a boolean")
+            return self._request("0102", tlv(0xA4, bytes((1, int(enabled)))), milliseconds=True)
         return self._original_setting("dc_power_saving_mode_enabled", enabled)
 
     def ac_power_saving(self, enabled: bool) -> NativeMqttRequest:

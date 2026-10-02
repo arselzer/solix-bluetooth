@@ -19,6 +19,7 @@ COMMANDS = frozenset({"set-charge-power", "set-charge-cap", "set-backup-reserve"
 METRICS = frozenset({"battery_percentage", "temperature_c", "output_power_w",
                     "ac_input_power_w", "ac_output_power_w", "dc_output_power_w",
                     "ac_input_connected", "ac_output_enabled", "ac_output_timer_remaining_seconds", "dc_output_enabled", "battery_status",
+                    "ac_output_timeout_seconds", "dc_output_timeout_seconds",
                     "ac_charging_power_limit_w", "max_charge_percentage",
                     "min_charge_percentage", "backup_reserve_percentage",
                     "active_tariff", "usage_mode", "tou_schedule_slot_count",
@@ -233,6 +234,12 @@ def boolean_setting_supported(snapshot: dict, command: str) -> bool:
             supported = (binary_state(metrics.get("ac_output_enabled")) is False
                          and type(metrics.get("ac_output_timer_remaining_seconds")) is int
                          and metrics["ac_output_timer_remaining_seconds"] == 0)
+        elif command == "set-dc-power-saving" and model == "c1000_gen2" and protocol == "native_mqtt":
+            metrics = snapshot.get("metrics", {})
+            supported = (metrics.get("software_version") == "1.1.4.9"
+                         and binary_state(metrics.get("dc_output_enabled")) is False
+                         and all(type(metrics.get(key)) is int and metrics[key] == 0 for key in
+                                 ("ac_output_timeout_seconds", "dc_output_timeout_seconds")))
     else:
         return False
     return (supported and command in snapshot.get("controls", [])

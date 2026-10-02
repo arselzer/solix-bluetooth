@@ -117,6 +117,7 @@ def controls_for(target: Target) -> tuple[Control, ...]:
                 Control("display-brightness", "Display brightness", "1 low, 2 medium, 3 high; zero is not a brightness level"),
                 Control("display-timeout", "Display timeout", "0 = Never; 10, 20, 30, 60, 300 or 1800 seconds"),
                 Control("port-memory", "Output port memory", "on or off; Off clears output-recovery bookkeeping; turning On does not restore it"),
+                Control("dc-power-saving", "DC Smart mode", "on = Smart, off = Normal; main 1.1.4.9, DC off and inactive AC/DC countdowns required"),
             )
         return items
     limits = {
@@ -508,6 +509,11 @@ class TuiBackend:
                             or type(metrics.get("dc_power_saving_mode_enabled")) is not int
                             or metrics["dc_power_saving_mode_enabled"] not in (0, 1)):
                         raise ValueError(ORIGINAL_DC_SMART_WARNING)
+                    if target.model == Model.C1000_GEN2 and (
+                            metrics.get("software_version") != "1.1.4.9"
+                            or any(type(metrics.get(key)) is not int or metrics[key] != 0 for key in
+                                   ("ac_output_timeout_seconds", "dc_output_timeout_seconds"))):
+                        raise ValueError("Gen 2 DC Smart requires main 1.1.4.9 and inactive AC/DC countdowns")
                     response = await self._native("set-dc-power-saving", enabled=enabled)
                 elif action == "light":
                     mode = int(value)
@@ -938,12 +944,18 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
             self.query_one("#add-to-ap", Button).disabled = self.busy or not connected or not fresh or backend.directory is None or not target or target.native or not target.saved or target.model not in (Model.C1000, Model.C1000_GEN2, Model.C2000_GEN2) or not target.device or target.device.protocol != "prime" or not target.device.client_id
             self.query_one("#disconnect", Button).disabled = self.busy or not connected
             self.query_one("#apply-setting", Button).disabled = self.busy or not connected or not fresh or not permitted or not (target and controls_for(target))
-            if (target and target.model == Model.C1000 and (target.native or target.device and target.device.protocol == "prime")
+            if (target and (target.model == Model.C1000 and (target.native or target.device and target.device.protocol == "prime")
+                           or target.model == Model.C1000_GEN2 and target.native)
                     and self.query_one("#setting", Select).value == "dc-power-saving"):
                 metrics = self.snapshot.get("metrics", {})
                 if (type(metrics.get("dc_output_enabled")) is not int or metrics["dc_output_enabled"] != 0
                         or type(metrics.get("dc_power_saving_mode_enabled")) is not int
                         or metrics["dc_power_saving_mode_enabled"] not in (0, 1)):
+                    self.query_one("#apply-setting", Button).disabled = True
+                if target.model == Model.C1000_GEN2 and (
+                        metrics.get("software_version") != "1.1.4.9"
+                        or any(type(metrics.get(key)) is not int or metrics[key] != 0 for key in
+                               ("ac_output_timeout_seconds", "dc_output_timeout_seconds"))):
                     self.query_one("#apply-setting", Button).disabled = True
             if (target and target.model == Model.C1000 and (target.native or target.device and target.device.protocol == "prime")
                     and self.query_one("#setting", Select).value in ("ac-output", "ac-power-saving")):

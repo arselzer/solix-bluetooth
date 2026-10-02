@@ -66,8 +66,10 @@ Authorization header. Treat HA configuration backups as containing credentials.
   not guarantee a new grace period. Prime and native MQTT independently expose
   nine gateway preferences, including the Fast flag and both Smart modes.
   The native DC Smart prototype also passed two writes/fifteen fresh samples
-  with complete settings/F8 restoration, AC on and DC off. Other models remain
-  unsupported by this guarded DC route.
+  with complete settings/F8 restoration, AC on and DC off. C1000 Gen 2 native
+  MQTT has a separate main-1.1.4.9 guard requiring DC off and both countdowns
+  inactive; its actual HA switch passed OFF→ON→OFF with complete restoration.
+  C2000 DC Smart remains unsupported.
   A public SDK repeat passed two writes/eleven explicit fresh snapshots plus
   the setter's internal fresh baseline/confirmation reads, with the same restoration.
   Native MQTT/radio 0.3.3.0 initially confirmed six preferences with 12 writes,
@@ -101,10 +103,18 @@ Authorization header. Treat HA configuration backups as containing credentials.
   from the strict firmware-derived A3 flag. Its physical PV behavior is untested.
   Additional read-only diagnostics show C1000 Gen 2's saved AC output frequency
   (50/60 Hz), Gen 2 AC/DC Smart flags and C2000's unproven raw frequency byte.
-  These expose no frequency or Gen 2 Smart controls and do not measure frequency
+  These expose no frequency or Gen 2 AC Smart controls and do not measure frequency
   or predict output state. See [the readback audit](../../docs/gen2-preference-readback.md).
 - Configuration switch: C1000 Gen 2 native MQTT off-grid alert preference.
   Setting storage and readback were verified; actual alert delivery is untested.
+- Enabled diagnostic **Last telemetry** timestamp on every station uses the
+  gateway report time, rather than HA state-change time. C2000 native MQTT also
+  provides a read-only **Fast charging enabled** flag. See
+  [freshness and recovery](../../docs/ha-recovery-contract.md).
+- Optional [price/solar charging blueprint](../../docs/home-assistant-charging-automation.md)
+  requires those freshness/Fast entities and starts disabled. It changes saved
+  watts and may raise reserve; it does not pause charging or enforce an AC input
+  budget. The blueprint passed actual HA 2026.7.4 schema validation.
 - Fast-charging configuration switch: original C1000 legacy/Prime BLE/native MQTT, or C1000 Gen 2
   Prime BLE/native MQTT. Enabling on Gen 2 requires reported Standard mode with
   no active tariff; native MQTT also requires connected mains. Turning it off
@@ -203,7 +213,7 @@ gateway. New stations/capabilities are discovered during polling.
 Contract tests use synthetic data and an ephemeral loopback HTTP server:
 
 ```sh
-python3 -m pip install pytest aiohttp
+python3 -m pip install pytest aiohttp PyYAML Jinja2
 python3 -m pytest home_assistant_tests -q
 python3 -m compileall -q custom_components/solix_link
 ```

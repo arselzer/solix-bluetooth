@@ -187,6 +187,22 @@ results and manifest matched. Its defined provisioning prefixes stop before
 later activation effects; it is not an end-to-end recovery or original/C2000
 firmware proof. Use its own command, exact image hash and substitution list.
 
+## Clock-screen preservation
+
+The independent [clock-screen preservation suite](gen2-clock-screen-preservation.md)
+adds **121 cases** against A1763 main **1.1.4.9**:
+
+```sh
+SOLIX_ANALYSIS_OUTPUT=/tmp/gen2-clock-screen-preservation \
+  python3 tools/firmware_analysis/emulate_gen2_clock_screen_preservation.py
+```
+
+Complete results and manifest reproduced byte for byte. The suite covers a
+reachable hidden-enable restoration mismatch, pending-stage overwrite and
+lossless scalar fields. Its 280/415-byte opaque buffers are synthetic; physical
+storage, display and output hardware are excluded. These cases remain separate
+from the combined runner's count.
+
 ## Additional image integrity tools
 
 These checks use the bundled vendor images and perform no emulation or device I/O:

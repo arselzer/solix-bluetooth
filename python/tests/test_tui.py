@@ -97,7 +97,7 @@ def test_native_target_uses_initialized_profile_model_and_limits(tmp_path, model
     expected = {"charge-power", "charge-cap", "reserve"}
     if model == Model.C1000_GEN2:
         expected |= {"temperature-unit", "off-grid-alert", "discharge-floor", "device-timeout", "fast-charge",
-                     "display-brightness", "display-timeout", "port-memory"}
+                     "display-brightness", "display-timeout", "port-memory", "dc-power-saving"}
     assert {control.key for control in controls} == expected
     assert config.account_id not in target.label and config.device_serial not in target.label
 

@@ -1,0 +1,390 @@
+blueprint:
+  name: SOLIX Link - opportunistic Gen 2 charging
+  description: >-
+    Opt-in saved charging-power policy for C1000 Gen 2 and C2000 Gen 2.
+    Use a low-price window, positive solar export in watts, or either.
+    Requires fresh station telemetry, connected mains, enabled AC output,
+    Fast off and Standard mode. Preserves the charge cap and only raises the
+    backup reserve. Does not pause charging, force battery use, change TOU
+    or switch an output. A failure leaves the command latch on until reviewed.
+    Importing this blueprint does not enable it; the resulting automation
+    starts disabled, including after Home Assistant restarts.
+  domain: automation
+  homeassistant:
+    min_version: 2026.7.4
+  input:
+    station:
+      name: Gen 2 SOLIX Link device
+      selector:
+        device:
+          filter:
+            - integration: solix_link
+              model: c1000_gen2
+            - integration: solix_link
+              model: c2000_gen2
+    armed:
+      name: Policy enabled helper
+      description: Create a dedicated Toggle helper and leave it off initially.
+      selector:
+        entity:
+          filter:
+            - domain: input_boolean
+    command_latch:
+      name: Command latch helper
+      description: >-
+        A second, distinct Toggle helper. On means a command is running or
+        its result needs review. Never clear it automatically after failure.
+      selector:
+        entity:
+          filter:
+            - domain: input_boolean
+    telemetry:
+      name: Last telemetry
+      description: Select the station's SOLIX Link Last telemetry timestamp.
+      selector:
+        entity:
+          filter:
+            - domain: sensor
+              integration: solix_link
+              device_class: timestamp
+    mains:
+      name: Mains present
+      selector:
+        entity:
+          filter:
+            - domain: binary_sensor
+              integration: solix_link
+    ac_enabled:
+      name: AC output enabled
+      selector:
+        entity:
+          filter:
+            - domain: binary_sensor
+              integration: solix_link
+    fast:
+      name: Fast charging enabled
+      description: C1000 Gen 2 switch, or C2000 Gen 2 read-only binary sensor.
+      selector:
+        entity:
+          filter:
+            - domain: [switch, binary_sensor]
+              integration: solix_link
+    battery:
+      name: Battery percentage
+      selector:
+        entity:
+          filter:
+            - domain: sensor
+              integration: solix_link
+              device_class: battery
+    power:
+      name: AC charging power limit
+      selector:
+        entity:
+          filter:
+            - domain: number
+              integration: solix_link
+              device_class: power
+    reserve:
+      name: Backup reserve
+      selector:
+        entity:
+          filter:
+            - domain: number
+              integration: solix_link
+    charge_cap:
+      name: Charge cap
+      selector:
+        entity:
+          filter:
+            - domain: number
+              integration: solix_link
+    usage_mode:
+      name: Usage mode
+      selector:
+        entity:
+          filter:
+            - domain: sensor
+              integration: solix_link
+    tariff:
+      name: Active tariff
+      selector:
+        entity:
+          filter:
+            - domain: sensor
+              integration: solix_link
+    signal_mode:
+      name: Charging opportunity
+      default: price
+      selector:
+        select:
+          options: [price, export, either]
+    price_sensor:
+      name: Price sensor (required for price/either)
+      description: Thresholds below use this sensor's own units, without conversion.
+      default: []
+      selector:
+        entity:
+          filter:
+            - domain: sensor
+    price_start:
+      name: Start charging at or below this price
+      default: 0
+      selector:
+        number:
+          min: -1000
+          max: 1000
+          step: 0.001
+          mode: box
+    price_stop:
+      name: Keep charging until price exceeds this value
+      default: 0.05
+      selector:
+        number:
+          min: -1000
+          max: 1000
+          step: 0.001
+          mode: box
+    price_max_age:
+      name: Maximum age of price reports (seconds)
+      default: 7200
+      selector:
+        number:
+          min: 30
+          max: 86400
+          step: 1
+          mode: box
+    export_sensor:
+      name: Positive solar export sensor (required for export/either)
+      description: >-
+        Must report W, with positive values meaning export. Do not select kW,
+        cumulative energy, or a grid sensor whose positive sign means import.
+      default: []
+      selector:
+        entity:
+          filter:
+            - domain: sensor
+              device_class: power
+    export_start:
+      name: Start charging when export reaches (W)
+      default: 600
+      selector:
+        number:
+          min: 0
+          max: 20000
+          step: 10
+          mode: box
+    export_stop:
+      name: Keep charging until export drops below (W)
+      default: 300
+      selector:
+        number:
+          min: 0
+          max: 20000
+          step: 10
+          mode: box
+    export_max_age:
+      name: Maximum age of export reports (seconds)
+      default: 30
+      selector:
+        number:
+          min: 5
+          max: 300
+          step: 1
+          mode: box
+    charging_watts:
+      name: Opportunity/emergency charging limit (W)
+      description: Use 100 W steps; maximum 1200 W for C1000 or 1800 W for C2000.
+      default: 1000
+      selector:
+        number:
+          min: 100
+          max: 1800
+          step: 100
+          mode: box
+    idle_watts:
+      name: Other-times charging limit (W)
+      description: >-
+        Still permits charging. Minimum 100 W for C1000 Gen 2, 300 W for
+        C2000 Gen 2. This is not an AC input or whole-house power budget.
+      default: 300
+      selector:
+        number:
+          min: 100
+          max: 1800
+          step: 100
+          mode: box
+    minimum_reserve:
+      name: Minimum backup reserve (%)
+      description: >-
+        Only raises the stored reserve, never lowers it. Below the actual
+        reserve, request the opportunity charging limit regardless of price.
+      default: 20
+      selector:
+        number:
+          min: 5
+          max: 100
+          step: 5
+          mode: box
+    cooldown:
+      name: Minimum time between command sequences (seconds)
+      default: 180
+      selector:
+        number:
+          min: 60
+          max: 3600
+          step: 1
+          mode: box
+
+initial_state: false
+mode: single
+max_exceeded: silent
+triggers:
+  - trigger: time_pattern
+    minutes: /1
+  - trigger: state
+    entity_id: !input armed
+    to: "on"
+variables:
+  station: !input station
+  armed: !input armed
+  command_latch: !input command_latch
+  telemetry: !input telemetry
+  mains: !input mains
+  ac_enabled: !input ac_enabled
+  fast: !input fast
+  battery: !input battery
+  power: !input power
+  reserve: !input reserve
+  charge_cap: !input charge_cap
+  usage_mode: !input usage_mode
+  tariff: !input tariff
+  signal_mode: !input signal_mode
+  price_sensor: !input price_sensor
+  price_start: !input price_start
+  price_stop: !input price_stop
+  price_max_age: !input price_max_age
+  export_sensor: !input export_sensor
+  export_start: !input export_start
+  export_stop: !input export_stop
+  export_max_age: !input export_max_age
+  charging_watts: !input charging_watts
+  idle_watts: !input idle_watts
+  minimum_reserve: !input minimum_reserve
+  cooldown: !input cooldown
+conditions:
+  - condition: template
+    value_template: >-
+      {{ armed != command_latch and is_state(armed, 'on')
+         and is_state(command_latch, 'off') }}
+  - condition: template
+    value_template: &station_safety >-
+      {% set ns = namespace(ok=true) %}
+      {% for entity in [telemetry, mains, ac_enabled, fast, battery, power,
+                        reserve, charge_cap, usage_mode, tariff] %}
+        {% if entity not in device_entities(station) or not has_value(entity) %}
+          {% set ns.ok = false %}
+        {% endif %}
+      {% endfor %}
+      {% set seen = as_timestamp(states(telemetry), none) %}
+      {% set age = as_timestamp(now()) - seen if seen is not none else 999999 %}
+      {{ ns.ok and armed != command_latch and is_state(armed, 'on')
+         and [telemetry, mains, ac_enabled, fast, battery, power, reserve,
+              charge_cap, usage_mode, tariff]|unique|list|count == 10
+         and device_attr(station, 'model') in ['c1000_gen2', 'c2000_gen2']
+         and -5 <= age <= 30 and is_state(mains, 'on')
+         and is_state(ac_enabled, 'on') and is_state(fast, 'off')
+         and is_state(usage_mode, 'standard') and is_state(tariff, 'none')
+         and is_number(states(battery)) and 0 <= states(battery)|float <= 100
+         and is_number(states(power)) and is_number(states(reserve))
+         and is_number(states(charge_cap))
+         and state_attr(power, 'unit_of_measurement') == 'W'
+         and state_attr(reserve, 'unit_of_measurement') == '%'
+         and state_attr(charge_cap, 'unit_of_measurement') == '%'
+         and state_attr(battery, 'unit_of_measurement') == '%' }}
+  - condition: template
+    value_template: &signal_safety >-
+      {% set ns = namespace(ok=signal_mode in ['price', 'export', 'either']) %}
+      {% if signal_mode in ['price', 'either'] %}
+        {% set s = states[price_sensor] if price_sensor is string else none %}
+        {% set age = as_timestamp(now()) - as_timestamp(s.last_reported)
+                     if s is not none else 999999 %}
+        {% if s is none or not is_number(s.state) or not -5 <= age <= price_max_age %}
+          {% set ns.ok = false %}
+        {% endif %}
+      {% endif %}
+      {% if signal_mode in ['export', 'either'] %}
+        {% set s = states[export_sensor] if export_sensor is string else none %}
+        {% set age = as_timestamp(now()) - as_timestamp(s.last_reported)
+                     if s is not none else 999999 %}
+        {% if s is none or not is_number(s.state) or not -5 <= age <= export_max_age
+              or s.attributes.get('unit_of_measurement') != 'W' %}
+          {% set ns.ok = false %}
+        {% endif %}
+      {% endif %}
+      {{ ns.ok and price_start < price_stop and 0 <= export_stop < export_start }}
+  - condition: template
+    value_template: >-
+      {% set minimum = 300 if device_attr(station, 'model') == 'c2000_gen2' else 100 %}
+      {% set maximum = 1800 if device_attr(station, 'model') == 'c2000_gen2' else 1200 %}
+      {{ minimum <= idle_watts <= charging_watts <= maximum
+         and idle_watts % 100 == 0 and charging_watts % 100 == 0
+         and minimum <= states(power)|float <= maximum
+         and states(power)|float % 100 == 0
+         and states(charge_cap)|float in [80, 85, 90, 95, 100]
+         and 5 <= states(reserve)|float <= states(charge_cap)|float
+         and states(reserve)|float % 5 == 0
+         and minimum_reserve % 5 == 0
+         and is_number(state_attr(reserve, 'min'))
+         and state_attr(reserve, 'min') <= minimum_reserve <= states(charge_cap)|float
+         and 5 <= minimum_reserve <= 100
+         and as_timestamp(now()) - as_timestamp(states[command_latch].last_changed) >= cooldown }}
+actions:
+  - condition: template
+    value_template: >-
+      {{ armed != command_latch and is_state(armed, 'on')
+         and is_state(command_latch, 'off') }}
+  - variables:
+      desired_watts: >-
+        {% set active = states(power)|float > idle_watts %}
+        {% set cheap = signal_mode in ['price', 'either']
+                       and states(price_sensor)|float <= (price_stop if active else price_start) %}
+        {% set surplus = signal_mode in ['export', 'either']
+                         and states(export_sensor)|float >= (export_stop if active else export_start) %}
+        {% set emergency = states(battery)|float < [minimum_reserve, states(reserve)|float]|max %}
+        {{ charging_watts|int if cheap or surplus or emergency else idle_watts|int }}
+  - condition: template
+    value_template: >-
+      {{ states(reserve)|float < minimum_reserve or states(power)|float != desired_watts|float }}
+  - action: input_boolean.turn_on
+    target:
+      entity_id: !input command_latch
+  - condition: template
+    value_template: *station_safety
+  - condition: template
+    value_template: *signal_safety
+  - if:
+      - condition: template
+        value_template: "{{ states(reserve)|float < minimum_reserve }}"
+    then:
+      - action: number.set_value
+        target:
+          entity_id: !input reserve
+        data:
+          value: !input minimum_reserve
+  - condition: template
+    value_template: *station_safety
+  - condition: template
+    value_template: *signal_safety
+  - if:
+      - condition: template
+        value_template: "{{ states(power)|float != desired_watts|float }}"
+    then:
+      - action: number.set_value
+        target:
+          entity_id: !input power
+        data:
+          value: "{{ desired_watts|int }}"
+  - action: input_boolean.turn_off
+    target:
+      entity_id: !input command_latch

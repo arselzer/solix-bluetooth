@@ -48,7 +48,8 @@ class Demo:
                    "tou_schedule_slot_count": 2 if c1000 else 0, "device_timeout_minutes": 0,
                    "software_version": "code 151" if original else "1.1.4.9" if c1000 else "2.1.6.4", "software_version_module": "0.3.3.0"}
         if c1000:
-            metrics.update(display_brightness=1, display_timeout_seconds=30, port_memory_enabled=1, pv_weak_light_locked=0)
+            metrics.update(display_brightness=1, display_timeout_seconds=30, port_memory_enabled=1, pv_weak_light_locked=0,
+                           ac_output_timeout_seconds=0, dc_output_timeout_seconds=0)
         if original:
             metrics.update(display_brightness=2, display_timeout_seconds=30, light_mode=0,
                            device_timeout_minutes=720 if updated else 0, ac_output_timer_remaining_seconds=self.ac_countdown)

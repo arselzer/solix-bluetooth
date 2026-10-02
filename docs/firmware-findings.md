@@ -77,6 +77,14 @@ Retained BLE IDs survive the executed account-change prefixes; explicit
 registration can erase or evict them. Later activation effects and rollback on
 the original/C2000 hardware remain unverified.
 
+[121 clock-screen preservation cases](gen2-clock-screen-preservation.md) establish
+a reachable hidden-enable mismatch after A2 toggle/restore, despite identical
+DA readback. Any `0091` can also overwrite pending asset staging. Scalar brightness
+and individual endpoint writes preserve the complete synthetic 280-byte block
+when the clock is disabled and transfer state is zero; physical trials remain
+pending. The separate [Gen 2 native DC Smart trial](c1000-gen2-native-dc-smart-validation.md)
+validated the guarded HA/SDK route with complete restoration and AC enabled.
+
 The latest [reconnect, clock and power-gate follow-up](c2000-mqtt-reconnect-and-tariff.md)
 includes additional offline executions and guarded C2000 hardware observations.
 The [parallel power-control analysis](mqtt-power-offline-followup.md) adds

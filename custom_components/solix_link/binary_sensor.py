@@ -14,6 +14,9 @@ DESCRIPTIONS = (
                                   device_class=BinarySensorDeviceClass.POWER),
     BinarySensorEntityDescription(key="ac_output_enabled", translation_key="ac_output_enabled",
                                   device_class=BinarySensorDeviceClass.POWER),
+    BinarySensorEntityDescription(key="ac_fast_charge_enabled", translation_key="ac_fast_charge_enabled",
+                                  entity_category=EntityCategory.DIAGNOSTIC,
+                                  entity_registry_enabled_default=True),
     BinarySensorEntityDescription(key="dc_input_active", translation_key="dc_input_active",
                                   entity_category=EntityCategory.DIAGNOSTIC,
                                   entity_registry_enabled_default=False),
@@ -37,6 +40,9 @@ async def async_setup_entry(hass, entry: SolixConfigEntry, async_add_entities) -
             for description in DESCRIPTIONS:
                 key = description.key
                 if key == "pv_weak_light_locked" and snapshot.get("model") != "c1000_gen2":
+                    continue
+                if key == "ac_fast_charge_enabled" and (snapshot.get("model") != "c2000_gen2"
+                                                         or snapshot.get("protocol") != "native_mqtt"):
                     continue
                 # Original C1000 already has supported switches for these.
                 if key in ("ac_power_saving_mode_enabled", "dc_power_saving_mode_enabled") and snapshot.get("model") not in ("c1000_gen2", "c2000_gen2"):
@@ -64,4 +70,7 @@ class SolixBinarySensor(SolixEntity, BinarySensorEntity):
 
     @property
     def available(self) -> bool:
+        if self.entity_description.key == "ac_fast_charge_enabled" and (self.snapshot.get("model") != "c2000_gen2"
+                                                                       or self.snapshot.get("protocol") != "native_mqtt"):
+            return False
         return super().available and self.is_on is not None

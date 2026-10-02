@@ -40,15 +40,15 @@ class Monitor:
         return self.metrics.copy()
 
 
-def test_seventh_capability_remains_original_dc_only():
+def test_dc_smart_capabilities_include_gen2_native_and_exclude_c2000():
     assert len(original_prime_commands()) == 9
     assert "set-dc-power-saving" in MonitorService([original()]).supported_commands("original")
     assert _supports_operation(original(), "dc_power_saving")
     assert decode_setting("dc_power_saving", b'{"enabled":true}') == {"enabled": True}
     assert len(native_commands_for_model(Model.C1000)) == 9
     assert "set-dc-power-saving" in native_commands_for_model(Model.C1000)
-    for model in (Model.C1000_GEN2, Model.C2000_GEN2):
-        assert "set-dc-power-saving" not in native_commands_for_model(model)
+    assert "set-dc-power-saving" in native_commands_for_model(Model.C1000_GEN2)
+    assert "set-dc-power-saving" not in native_commands_for_model(Model.C2000_GEN2)
     assert "set-ac-power-saving" in original_prime_commands()
 
 

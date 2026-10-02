@@ -1,5 +1,8 @@
 """Sensors backed by the gateway's reported values."""
 
+from datetime import datetime, UTC
+import time
+
 from homeassistant.components.sensor import SensorDeviceClass, SensorEntity, SensorEntityDescription, SensorStateClass
 from homeassistant.const import EntityCategory, PERCENTAGE, UnitOfPower, UnitOfTemperature
 from homeassistant.core import callback
@@ -25,6 +28,9 @@ DESCRIPTIONS = (
                             options=["standard", "time_of_use", "self_consumption", "custom", "unknown"]),
     SensorEntityDescription(key="power_flow", translation_key="power_flow", device_class=SensorDeviceClass.ENUM,
                             options=["grid", "battery", "transitioning", "unknown"]),
+    SensorEntityDescription(key="last_seen_timestamp", translation_key="last_seen_timestamp",
+                            device_class=SensorDeviceClass.TIMESTAMP, entity_category=EntityCategory.DIAGNOSTIC,
+                            entity_registry_enabled_default=True),
     # Saved configuration, deliberately without measurement state class.
     SensorEntityDescription(key="ac_output_frequency_setting_hz", translation_key="ac_output_frequency_setting_hz",
                             native_unit_of_measurement="Hz", entity_category=EntityCategory.DIAGNOSTIC,
@@ -49,7 +55,7 @@ async def async_setup_entry(hass, entry: SolixConfigEntry, async_add_entities) -
                     continue
                 if key == "ac_frequency_raw" and snapshot.get("model") != "c2000_gen2":
                     continue
-                present = key in (snapshot if key == "power_flow" else snapshot["metrics"])
+                present = key in (snapshot if key in ("power_flow", "last_seen_timestamp") else snapshot["metrics"])
                 if present and (name, key) not in added:
                     added.add((name, key))
                     entities.append(SolixSensor(coordinator, name, description))
@@ -68,6 +74,14 @@ class SolixSensor(SolixEntity, SensorEntity):
     @property
     def native_value(self):
         key = self.entity_description.key
+        if key == "last_seen_timestamp":
+            try:
+                value = numeric(self.snapshot.get(key))
+                if value is None or value > time.time() + 5:
+                    return None
+                return datetime.fromtimestamp(value, UTC)
+            except (OverflowError, OSError, ValueError):
+                return None
         value = self.snapshot.get("power_flow") if key == "power_flow" else self.snapshot.get("metrics", {}).get(key)
         if self.entity_description.options is not None:
             return value if value in self.entity_description.options else None
@@ -82,4 +96,4 @@ class SolixSensor(SolixEntity, SensorEntity):
 
     @property
     def available(self) -> bool:
-        return super().available and self.native_value is not None
+        return self.native_value is not None and super().available

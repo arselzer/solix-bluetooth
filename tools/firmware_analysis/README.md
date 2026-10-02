@@ -170,3 +170,16 @@ explicit list saves. The normal provisioning replay stops at stated boundaries;
 physical confirmation, asynchronous activation and durable recovery are untested.
 Original/C2000 firmware equivalence is unproved. Result/manifest fixtures are
 synthetic, separate from the combined runner and contain no operational identity.
+
+## Clock-screen preservation
+
+```sh
+SOLIX_ANALYSIS_OUTPUT=/tmp/gen2-clock-screen-preservation \
+  python3 tools/firmware_analysis/emulate_gen2_clock_screen_preservation.py
+```
+
+[121 main-1.1.4.9 cases](../../docs/gen2-clock-screen-preservation.md) show a
+reachable hidden-enable mismatch after A2 toggle/restore, identify pending asset
+staging overwrite, and verify complete scalar-field preservation. Expected
+results and manifest are in `expected_results/`; independent runs matched both
+byte for byte. No physical storage/display/output or asset download is exercised.

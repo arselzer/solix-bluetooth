@@ -181,7 +181,7 @@ try {
 
   await page.getByTestId('station-select').selectOption('Office · C1000 Gen 2');
   assert.equal(await page.locator('#ac-power-saving').count(), 0);
-  assert.equal(await page.locator('#dc-power-saving').count(), 0);
+  assert.equal(await page.locator('#dc-power-saving').count(), 1);
   await page.locator('#fast-charge').selectOption('1');
   const fastApply = page.locator('.setting').filter({ has: page.locator('label[for="fast-charge"]') }).getByRole('button', { name: 'Apply', exact: true });
   assert.equal(await fastApply.isDisabled(), true);
@@ -462,6 +462,25 @@ try {
   await change({ ac_output: 1, ac_countdown: 0 });
   await refresh();
   assert.equal(await page.locator('#ac-power-saving').isDisabled(), true);
+  cases++; console.log(`Scenario ${cases} passed`);
+
+  await page.getByTestId('station-select').selectOption('Office · C1000 Gen 2');
+  const beforeGen2DcSmart = (await recorded()).length;
+  for (const value of ['1', '0']) {
+    await page.locator('#dc-power-saving').selectOption(value);
+    await propose('dc-power-saving');
+    assert.match(await page.getByTestId('command-review').textContent(), /inactive AC\/DC countdowns/);
+    await page.getByTestId('confirm-command').click();
+    await page.getByTestId('gateway-notice').filter({ hasText: 'Command confirmed' }).waitFor();
+  }
+  assert.equal((await recorded()).length, beforeGen2DcSmart + 2);
+  await change({ dc_output: 1 });
+  await refresh();
+  assert.equal(await page.locator('#dc-power-saving').isDisabled(), true);
+  await change({ dc_output: 0 });
+  await refresh();
+  assert.equal(await page.locator('#dc-power-saving').isDisabled(), false);
+  assert.equal(await page.locator('#ac-power-saving').count(), 0);
   cases++; console.log(`Scenario ${cases} passed`);
 
   // Controlled browser clock and synthetic read-only responses produce a chart
