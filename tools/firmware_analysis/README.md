@@ -311,3 +311,18 @@ recovered virtual images must stay private. Protector opcodes are not station
 commands. Full results/manifests independently match the corresponding
 `expected_results/` pairs. These cases are outside the combined firmware runner;
 the linked Dart/asset audits are static and add no CPU-case count.
+
+The [68-case string follow-up](../../docs/android-loader-string-initializers.md)
+requires the prior unpacker's exact restricted virtual-image directory:
+
+```sh
+python3 tools/firmware_analysis/inspect_android_loader_strings.py \
+  --base-apk /private/path/base.apk \
+  --images-dir /private/path/recovered-virtual-images \
+  --output-dir /tmp/android-loader-strings
+```
+
+It regenerates init-array/FDE selection and replays only bounded pure routines,
+with read/write/import-slot guards and reset guest state. JNI/Android methods
+remain excluded. Complete metadata results/manifests independently match the
+fixture pair; recovered code and arbitrary decoded strings stay private.

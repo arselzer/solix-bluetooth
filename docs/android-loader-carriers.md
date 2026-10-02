@@ -126,3 +126,8 @@ asset decoder to protected SDK classes. An actual action encoder must still
 identify function, opcode, field type, capability guard and independent readback
 before input-disable control can be implemented or tested. No new charging
 setter, recovery action or account-free claim follows from unpacking alone.
+
+A [pure string-initializer follow-up](android-loader-string-initializers.md)
+now decodes selected protected asset names, class-loader signatures and the
+static `DETool.dowork` registration through 68 bounded routines. JNI methods,
+actual DEX buffers and the SDK action encoder remain unrecovered.

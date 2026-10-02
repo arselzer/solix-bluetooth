@@ -347,6 +347,23 @@ The [Dart interceptor](gen2-dart-action-interceptors.md) and
 [readable asset](android-readable-sdk-assets.md) audits are static evidence,
 with no additional emulation count. No new charging setter follows from them.
 
+The [pure string-initializer follow-up](android-loader-string-initializers.md)
+uses the previous tool's private virtual images, verifies their exact hashes,
+and regenerates function selection from relocation and exception metadata:
+
+```sh
+python3 tools/firmware_analysis/inspect_android_loader_strings.py \
+  --base-apk /private/path/base.apk \
+  --images-dir /private/path/recovered-virtual-images \
+  --output-dir /tmp/android-loader-strings
+```
+
+Compare complete `android-loader-strings-*.json` outputs with `expected_results/`.
+It adds **68 bounded pure native routines**, with memory guards, reset guest
+state and no JNI/Android/system/device callbacks. Default output is selected
+metadata only; it does not export decoded images or SDK code. These cases
+remain separate from every earlier suite.
+
 ## Additional image integrity tools
 
 These checks use the bundled vendor images and perform no emulation or device I/O:

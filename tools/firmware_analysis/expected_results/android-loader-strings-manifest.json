@@ -1,0 +1,19 @@
+{
+  "apk_sha256": "27986f94a992f3aac1189be746d310553e99909ed81dfbb1abd5880f71662110",
+  "dependency_sha256": {
+    "inspect_android_loader_carriers.py": "040926a17b4c6e9a45b4c6dc7dafbf38d4a98f447e8bb559a7daa47474078a6e"
+  },
+  "recovered_image_sha256": {
+    "libexec.so": "b4c434ffec580a371ece4f7ddc2f410f40d49ce73c3c2e09158194e1bd15dd57",
+    "libijmDataEncryption_arm64.so": "72ab38e97a6f5eaaada32eb82b82ec5224a5da90532f9d5f4c67988c46d00c3e"
+  },
+  "results_sha256": "b64e63f3ca945088ecc665a30ef35a3486e41c168f9d27a3c6437abbbd9e71b6",
+  "runtime": {
+    "capstone": "5.0.7",
+    "python": "3.12.3",
+    "unicorn": "2.1.4"
+  },
+  "schema_version": 1,
+  "scope": "68 selected pure native string initializers; no Java/JNI/Android callbacks",
+  "source_sha256": "37a4ad759373a9f0945e0d3f3dd5734311f6506f0139e3496a1757c63e261f2b"
+}

@@ -865,3 +865,13 @@ with AC enabled and unchanged registered control counts. No station command,
 runtime deployment, identity edit or charging-automation change was performed.
 The remaining charging lead is recovering the native encoder, capability guard
 and independent readback mapping.
+
+The [68-case pure loader-string replay](android-loader-string-initializers.md)
+then resolves protected container names, in-memory class-loader signatures and
+the static JNI registration of `DETool.dowork` at `000234b8`. Each selected
+routine has exact FDE/code bounds, memory access checks and reset guest state;
+other initializers, JNI methods and Android callbacks are excluded. The named
+method's larger body is inspected only as data. Static references do not prove
+the running app's loading choice, recover plaintext DEX buffers or establish
+the charging encoder. Raw decoded images/strings remain private; these 68 cases
+are separate from the UPX, protector-byte and firmware suites.
