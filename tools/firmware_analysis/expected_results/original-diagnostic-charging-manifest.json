@@ -1,0 +1,11 @@
+{
+  "firmware_sha256": "b295ee8613f5c96e70dcc905896df516621cab4dc590bb580eac6b84519911a6",
+  "sources": {
+    "audit_original_diagnostic_charging_paths.py": "312acf3d261ac678531eabf351dd457f4d6e27afe97b63c8b166f06c0a9e7242",
+    "emulate_original_f0_tunnel.py": "02ca28c75ef3f46ac1626a5cccb7b7371d1b3701eaee76381865741a04f069f9",
+    "emulate_c1000_smart_policy.py": "7d4ba9f3bda00e6958728857341bcb79a14acf926dadd681e8ee11098c626197",
+    "emulate_c1000_original_commands.py": "598d83e15b6d7e982581439ea8b55fb0d7d3985009a6c1f4722363dff0f8ba5d"
+  },
+  "output_sha256": "7fb26a170ba51a0b583826b1d4aaa5d2c258cfbcf16efb5f0ae8abb5b8aac3b6",
+  "cases": 131
+}

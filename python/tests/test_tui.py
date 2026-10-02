@@ -97,7 +97,8 @@ def test_native_target_uses_initialized_profile_model_and_limits(tmp_path, model
     expected = {"charge-power", "charge-cap", "reserve"}
     if model == Model.C1000_GEN2:
         expected |= {"temperature-unit", "off-grid-alert", "discharge-floor", "device-timeout", "fast-charge",
-                     "display-brightness", "display-timeout", "port-memory", "dc-power-saving"}
+                     "display-brightness", "display-timeout", "port-memory", "dc-power-saving", "ac-power-saving",
+                     "clock-first-brightness", "clock-second-brightness"}
     assert {control.key for control in controls} == expected
     assert config.account_id not in target.label and config.device_serial not in target.label
 
@@ -215,6 +216,42 @@ def test_c1000_native_boolean_controls_parse_explicit_choices(tmp_path):
                 await backend.control(action, bad)
         assert len(calls) == 5
         assert "temperature-unit" not in {c.key for c in controls_for(Target("ble", "test", Model.C1000_GEN2))}
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("action,expected", [
+    ("ac-power-saving", {"command": "set-ac-power-saving"}),
+    ("clock-first-brightness", {"command": "set-clock-brightness", "window": 1}),
+    ("clock-second-brightness", {"command": "set-clock-brightness", "window": 2}),
+])
+@pytest.mark.parametrize("choice", ["on", "off"])
+def test_gen2_native_clock_and_ac_smart_tui_dispatch(tmp_path, action, expected, choice):
+    config = APServiceConfig("ups", "wlan_unused", "phy9", "AT", "A1763SYNTHETIC001", "a" * 40,
+                             model=Model.C1000_GEN2)
+    private_write(tmp_path / "ap_service.json", json.dumps(asdict(config)))
+    async def run():
+        calls = []
+        async def request(_directory, command, **fields):
+            calls.append((command, fields))
+            return {"control_enabled": True, "connected": True, "available": True,
+                    "last_seen_timestamp": time.time(), "metrics": {
+                        "software_version": "1.1.4.9", "ac_output_enabled": 0,
+                        "ac_power_saving_mode_enabled": 0, "usage_mode": "standard", "active_tariff": "none",
+                        "clock_screen_enabled": 0, "clock_screen_transfer_status_raw": 0,
+                        "clock_screen_first_brightness_flag_raw": 0, "clock_screen_second_brightness_flag_raw": 0,
+                        "ac_output_timeout_seconds": 0, "dc_output_timeout_seconds": 0}}
+        backend = TuiBackend([], tmp_path, requester=request)
+        await backend.connect("native")
+        await backend.control(action, choice)
+        fields = {k: v for k, v in expected.items() if k != "command"}
+        fields["enabled" if action == "ac-power-saving" else "high"] = choice == "on"
+        assert calls == [("status", {}), (expected["command"], fields)]
+        unsafe = "ac_output_enabled" if action == "ac-power-saving" else "clock_screen_transfer_status_raw"
+        backend.native_snapshot["metrics"][unsafe] = 1
+        with pytest.raises(ValueError):
+            await backend.control(action, choice)
+        assert len(calls) == 2
+        await backend.disconnect()
     asyncio.run(run())
 
 

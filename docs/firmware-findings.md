@@ -81,9 +81,25 @@ the original/C2000 hardware remain unverified.
 a reachable hidden-enable mismatch after A2 toggle/restore, despite identical
 DA readback. Any `0091` can also overwrite pending asset staging. Scalar brightness
 and individual endpoint writes preserve the complete synthetic 280-byte block
-when the clock is disabled and transfer state is zero; physical trials remain
-pending. The separate [Gen 2 native DC Smart trial](c1000-gen2-native-dc-smart-validation.md)
+when the clock is disabled and transfer state is zero. A later
+[native clock-brightness trial](c1000-gen2-clock-ac-smart-validation.md) confirmed
+both saved window flags and restoration, without enabling the clock or proving
+visible brightness. The separate [Gen 2 native DC Smart trial](c1000-gen2-native-dc-smart-validation.md)
 validated the guarded HA/SDK route with complete restoration and AC enabled.
+
+[92 native output-readiness cases](gen2-native-output-readiness.md) extend the
+AC/DC off-task branches: positive timers are cleared while the output is off,
+and a DC initial-duration cache survives zero cancellation. They also prove
+synthetic 415-byte saved-setting preservation for native AC Smart. The subsequent
+C1000 Gen 2 AC-off Smart trial confirmed storage/restoration; C2000 remains excluded.
+
+[131 original diagnostic-path cases](c1000-diagnostic-charging-audit.md) traverse
+both diagnostic tables and selected radio-staging handlers. Neither charging
+gate is directly registered, and the executed prefixes change no protected
+power RAM. They establish no new discharge control or safe diagnostic request.
+The [below-full charging test plan](c1000-native-charging-test-plan.md) remains
+deferred until an expendable load is attached; installed main 1.7.1 differs
+from the analyzed 1.5.9 image. These suites are separate from the 1,842-case runner.
 
 The latest [reconnect, clock and power-gate follow-up](c2000-mqtt-reconnect-and-tariff.md)
 includes additional offline executions and guarded C2000 hardware observations.

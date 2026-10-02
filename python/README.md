@@ -124,17 +124,37 @@ These new controls are native C1000 Gen 2 only, with `--allow-control` required.
 Brightness also requires Standard/no active tariff and an inactive clock screen.
 See [versioned validation and API schemas](../docs/c1000-native-preferences-validation.md).
 
-Native C1000 Gen 2 main **1.1.4.9** also supports guarded DC Smart:
+Native C1000 Gen 2 main **1.1.4.9** also supports guarded AC/DC Smart:
 
 ```sh
 solix-link ap-service-set-dc-power-saving --directory /path/to/private-ap --name office --enabled on
+solix-link ap-service-set-ac-power-saving --directory /path/to/private-ap --name office --enabled on
 ```
 
-Fresh DC output must be off and both output countdowns inactive. The setter
+The corresponding output must be freshly off and both countdowns inactive. The setter
 protects complete A4/D9 configuration and output states, confirms two fresh
 reports and never retries a failed write. It is available in the terminal,
 browser, HTTP API and HA switch; C2000 and Gen 2 BLE are excluded.
 See [live validation](../docs/c1000-gen2-native-dc-smart-validation.md).
+
+Two native saved clock-window brightness controls are also available:
+
+```sh
+solix-link ap-service-set-clock-brightness --directory /path/to/private-ap --name office --window 1 --high on
+solix-link ap-service-set-clock-brightness --directory /path/to/private-ap --name office --window 2 --high off
+```
+
+They require main 1.1.4.9, Standard/no active tariff, clock disabled, idle asset
+transfer and inactive AC/DC countdowns. Normal/High means the saved 0/1 flag;
+visible brightness is unverified while the clock is disabled. Both windows
+passed fresh changes/restoration. They are exposed in both terminal modes,
+browser and HTTP; HA configuration selects are disabled by default.
+See [clock/AC Smart hardware evidence](../docs/c1000-gen2-clock-ac-smart-validation.md).
+
+For noncritical C1000 Gen 2 loads only, the private operator CLI
+`ap-service-set-ac-output --enabled on|off` requires the same main version and
+inactive countdowns. It is excluded from HTTP/HA and from C2000. Use fresh
+status before restoring an uncertain output command; no automatic retry is sent.
 
 Original C1000 **legacy** temperature, fast charge and AC/DC Smart preferences are
 [physically verified](../docs/c1000-preferences-validation.md) and exposed in
@@ -147,8 +167,9 @@ The original model uses command 0=Normal/1=Smart and status 1=Normal/2=Smart.
 For multiple clients, run one [authenticated HTTP gateway](../docs/gateway-home-assistant.md)
 with optional controls. The [prepared Home Assistant custom integration](../custom_components/solix_link/README.md)
 adds UI setup, shared-coordinator sensors, charging numbers, Return-to-grid
-and a TOU-plan action. It has contract tests; HA runtime installation remains
-unverified. Native Wi-Fi services run separately from HA with no internet route.
+and a TOU-plan action. Three stations passed actual HA 2026.7.4 deployment,
+configuration changes/restoration and shared-service recovery.
+Native Wi-Fi services run separately from HA with no internet route.
 
 Pair a Prime station once as described below, then find a nearby unit and
 print updates using its saved client ID:
@@ -173,8 +194,8 @@ Read-only C1000 Gen 2 settings now include `ac_output_frequency_setting_hz`
 (saved 50/60 Hz configuration) and AC/DC `*_power_saving_mode_enabled` flags.
 These do not measure frequency or establish output state. C2000's unproven
 frequency byte is `ac_frequency_raw`, replacing `ac_input_frequency_hz`.
-See [the readback audit](../docs/gen2-preference-readback.md). AC Smart remains
-read-only; native Gen 2 DC Smart uses the guarded route described above.
+See [the readback audit](../docs/gen2-preference-readback.md). Native C1000 Gen 2
+AC/DC Smart uses the guarded routes above; C2000 Smart remains read-only.
 
 For a Home Assistant integration, reuse the discovered `BLEDevice` and register
 an update callback:

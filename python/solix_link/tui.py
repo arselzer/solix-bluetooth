@@ -118,6 +118,9 @@ def controls_for(target: Target) -> tuple[Control, ...]:
                 Control("display-timeout", "Display timeout", "0 = Never; 10, 20, 30, 60, 300 or 1800 seconds"),
                 Control("port-memory", "Output port memory", "on or off; Off clears output-recovery bookkeeping; turning On does not restore it"),
                 Control("dc-power-saving", "DC Smart mode", "on = Smart, off = Normal; main 1.1.4.9, DC off and inactive AC/DC countdowns required"),
+                Control("ac-power-saving", "AC Smart mode", "on = Smart, off = Normal; main 1.1.4.9, AC off and inactive AC/DC countdowns required"),
+                Control("clock-first-brightness", "Clock first-window High", "on = High, off = Normal; disabled clock, no transfer and no countdowns required"),
+                Control("clock-second-brightness", "Clock second-window High", "on = High, off = Normal; saved selector only, does not enable the clock"),
             )
         return items
     limits = {
@@ -495,8 +498,31 @@ class TuiBackend:
                     if (not snapshot.get("connected") or not snapshot.get("available")
                             or type(seen) not in (int, float) or not -5 <= time.time() - seen <= 30):
                         raise ValueError("Fresh native telemetry is required for AC Smart")
-                    validate_original_ac_control(snapshot.get("metrics", {}), smart=True)
+                    metrics = snapshot.get("metrics", {})
+                    if target.model == Model.C1000:
+                        validate_original_ac_control(metrics, smart=True)
+                    elif (metrics.get("software_version") != "1.1.4.9"
+                          or type(metrics.get("ac_output_enabled")) is not int or metrics["ac_output_enabled"] != 0
+                          or type(metrics.get("ac_power_saving_mode_enabled")) is not int or metrics["ac_power_saving_mode_enabled"] not in (0, 1)
+                          or any(type(metrics.get(k)) is not int or metrics[k] != 0 for k in
+                                 ("ac_output_timeout_seconds", "dc_output_timeout_seconds"))):
+                        raise ValueError("Gen 2 AC Smart requires main 1.1.4.9, AC off and inactive countdowns")
                     response = await self._native("set-ac-power-saving", enabled=enabled)
+                elif action in ("clock-first-brightness", "clock-second-brightness"):
+                    enabled = parse_enabled(value)
+                    snapshot = self.native_snapshot
+                    metrics = snapshot.get("metrics", {})
+                    seen = snapshot.get("last_seen_timestamp")
+                    if (not snapshot.get("connected") or not snapshot.get("available")
+                            or type(seen) not in (int, float) or not -5 <= time.time() - seen <= 30
+                            or metrics.get("software_version") != "1.1.4.9"
+                            or metrics.get("usage_mode") != "standard" or metrics.get("active_tariff") != "none"
+                            or any(type(metrics.get(k)) is not int or metrics[k] != 0 for k in
+                                   ("clock_screen_enabled", "clock_screen_transfer_status_raw", "ac_output_timeout_seconds", "dc_output_timeout_seconds"))
+                            or any(type(metrics.get(k)) is not int or metrics[k] not in (0, 1) for k in
+                                   ("clock_screen_first_brightness_flag_raw", "clock_screen_second_brightness_flag_raw"))):
+                        raise ValueError("Fresh inactive native clock settings are required")
+                    response = await self._native("set-clock-brightness", window=1 if action == "clock-first-brightness" else 2, high=enabled)
                 elif action == "dc-power-saving":
                     enabled = parse_enabled(value)
                     snapshot = self.native_snapshot
@@ -964,6 +990,24 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
                                                  smart=self.query_one("#setting", Select).value == "ac-power-saving")
                 except ValueError:
                     self.query_one("#apply-setting", Button).disabled = True
+            if target and target.native and target.model == Model.C1000_GEN2:
+                key = self.query_one("#setting", Select).value
+                metrics = self.snapshot.get("metrics", {})
+                if key == "ac-power-saving" and (
+                        metrics.get("software_version") != "1.1.4.9"
+                        or type(metrics.get("ac_output_enabled")) is not int or metrics["ac_output_enabled"] != 0
+                        or type(metrics.get("ac_power_saving_mode_enabled")) is not int or metrics["ac_power_saving_mode_enabled"] not in (0, 1)
+                        or any(type(metrics.get(k)) is not int or metrics[k] != 0 for k in
+                               ("ac_output_timeout_seconds", "dc_output_timeout_seconds"))):
+                    self.query_one("#apply-setting", Button).disabled = True
+                if key in ("clock-first-brightness", "clock-second-brightness") and (
+                        metrics.get("software_version") != "1.1.4.9"
+                        or metrics.get("usage_mode") != "standard" or metrics.get("active_tariff") != "none"
+                        or any(type(metrics.get(k)) is not int or metrics[k] != 0 for k in
+                               ("clock_screen_enabled", "clock_screen_transfer_status_raw", "ac_output_timeout_seconds", "dc_output_timeout_seconds"))
+                        or any(type(metrics.get(k)) is not int or metrics[k] not in (0, 1) for k in
+                               ("clock_screen_first_brightness_flag_raw", "clock_screen_second_brightness_flag_raw"))):
+                    self.query_one("#apply-setting", Button).disabled = True
             for name in ("apply-plan", "return-grid"):
                 self.query_one(f"#{name}", Button).disabled = self.busy or not connected or not fresh or not permitted or not (target and target.native and target.model in (Model.C1000_GEN2, Model.C2000_GEN2))
 
@@ -1098,9 +1142,9 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
                     if key in ("ac-power-saving", "dc-power-saving", "port-memory", "ac-output") or (
                             key == "fast-charge" and backend.target and backend.target.model == Model.C1000
                             and (backend.target.native or backend.target.device and backend.target.device.protocol == "prime")) or (
-                            backend.target and backend.target.native and key in ("display-brightness", "display-timeout")):
+                            backend.target and backend.target.native and key in ("display-brightness", "display-timeout", "clock-first-brightness", "clock-second-brightness")):
                         try:
-                            parsed = parse_enabled(value) if key in ("ac-power-saving", "dc-power-saving", "port-memory", "fast-charge", "ac-output") else int(value)
+                            parsed = parse_enabled(value) if key in ("ac-power-saving", "dc-power-saving", "port-memory", "fast-charge", "ac-output", "clock-first-brightness", "clock-second-brightness") else int(value)
                             if key == "display-brightness" and parsed not in (1, 2, 3):
                                 raise ValueError("Choose brightness 1 low, 2 medium or 3 high")
                             if key == "display-timeout" and parsed not in (0, 10, 20, 30, 60, 300, 1800):
@@ -1117,6 +1161,7 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
                                 self.launch(backend.control(key, value), control=True)
                         label = next(item.label for item in controls_for(target) if item.key == key)
                         detail = ("Off clears output-recovery bookkeeping; turning On does not restore that transient state." if key == "port-memory" else
+                                  "Change one saved inactive clock-window brightness selector. Does not enable the clock or alter its theme/assets." if key in ("clock-first-brightness", "clock-second-brightness") else
                                   "Set the display brightness. Zero is not a brightness level." if key == "display-brightness" else
                                   "Set the screen timeout; zero means Never." if key == "display-timeout" else
                                   ORIGINAL_FAST_CHARGE_WARNING if key == "fast-charge" else

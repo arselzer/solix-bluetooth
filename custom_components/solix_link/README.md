@@ -51,6 +51,11 @@ Authorization header. Treat HA configuration backups as containing credentials.
   (1%, 5%, 10%, 15%, 20%). Available limits leave at least
   five percentage points below the current backup reserve; selecting a limit
   does not adjust the reserve. The temperature sensor continues to report Celsius.
+- Optional C1000 Gen 2 native/main 1.1.4.9 **clock window brightness** selects:
+  Normal/High for each saved window, disabled by default. Require Standard mode,
+  clock disabled, transfer idle and inactive output countdowns. Both flags passed
+  native changes/restoration; visible brightness is unverified. See
+  [HA entity gates](../../docs/ha-clock-brightness.md).
 - Original C1000 Prime/native MQTT/main 1.7.1 configuration selects also expose brightness,
   screen timeout (20/30/60/300/1800 seconds) and Light (Off/Low/Medium/High/SOS).
   Brightness 1/2, screen timeout 30/60 s, Off/Low and Celsius/Fahrenheit passed
@@ -103,7 +108,7 @@ Authorization header. Treat HA configuration backups as containing credentials.
   from the strict firmware-derived A3 flag. Its physical PV behavior is untested.
   Additional read-only diagnostics show C1000 Gen 2's saved AC output frequency
   (50/60 Hz), Gen 2 AC/DC Smart flags and C2000's unproven raw frequency byte.
-  These expose no frequency or Gen 2 AC Smart controls and do not measure frequency
+  These diagnostics do not expose frequency controls or measure frequency
   or predict output state. See [the readback audit](../../docs/gen2-preference-readback.md).
 - Configuration switch: C1000 Gen 2 native MQTT off-grid alert preference.
   Setting storage and readback were verified; actual alert delivery is untested.
@@ -146,6 +151,11 @@ Authorization header. Treat HA configuration backups as containing credentials.
   preferences/F8 and the upstream baseline were restored. See
   [native AC Smart validation](../../docs/c1000-native-ac-smart-validation.md).
   The HTTP/HA integration provides no output-switch API.
+  C1000 Gen 2 native/main 1.1.4.9 also exposes AC Smart with fresh AC off and both
+  AC/DC countdowns inactive. Its SDK trial confirmed OFF→ON→OFF and restored
+  AC output through the separate private operator path. HA discovers the switch
+  in its safe AC-off state; it becomes unavailable while AC is on. C2000 is excluded.
+  See [versioned trial](../../docs/c1000-gen2-clock-ac-smart-validation.md).
   **Power saving may automatically turn the output off at low load.** Review
   connected loads before enabling these switches or using them in automations.
   The integration sends semantic enabled/disabled values and waits for readback;

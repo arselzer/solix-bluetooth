@@ -152,6 +152,14 @@ class NativeMqttCommands:
             raise ValueError("Display timeout must be 0, 10, 20, 30, 60, 300, or 1800 seconds")
         return self._request("0103", tlv(0xA4, b"\x02" + seconds.to_bytes(2, "little")), milliseconds=True)
 
+    def clock_brightness(self, window: int, high: bool) -> NativeMqttRequest:
+        """Set one inactive clock-window selector without changing its theme/assets."""
+        if self.model != Model.C1000_GEN2:
+            raise ValueError("Clock brightness supports C1000 Gen 2 only")
+        if type(window) is not int or window not in (1, 2) or type(high) is not bool:
+            raise ValueError("Use window 1 or 2 and an explicit high boolean")
+        return self._request("0091", tlv(0xAC if window == 1 else 0xAD, bytes((1, int(high)))), milliseconds=True)
+
     def port_memory(self, enabled: bool) -> NativeMqttRequest:
         """Set C1000 port memory; disabling clears transient recovery bookkeeping."""
         return self._c1000_boolean(0xA8, enabled)
@@ -178,8 +186,18 @@ class NativeMqttCommands:
         return self._original_setting("dc_power_saving_mode_enabled", enabled)
 
     def ac_power_saving(self, enabled: bool) -> NativeMqttRequest:
-        """Set original AC Normal/Smart; callers must require AC off/no timer."""
+        """Set C1000 AC Normal/Smart; callers must require AC off/no timer."""
+        if self.model == Model.C1000_GEN2:
+            if type(enabled) is not bool:
+                raise ValueError("enabled must be a boolean")
+            return self._request("0101", tlv(0xA6, bytes((1, int(enabled)))), milliseconds=True)
         return self._original_setting("ac_power_saving_mode_enabled", enabled)
+
+    def ac_output(self, enabled: bool) -> NativeMqttRequest:
+        """Build a C1000 Gen 2 output request for local operators, never C2000."""
+        if self.model != Model.C1000_GEN2 or type(enabled) is not bool:
+            raise ValueError("AC output requires C1000 Gen 2 and a boolean")
+        return self._request("0101", tlv(0xA2, bytes((1, int(enabled)))), milliseconds=True)
 
     def _original_setting(self, setting: str, value: int | bool) -> NativeMqttRequest:
         if self.model != Model.C1000:

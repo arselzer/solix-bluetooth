@@ -1,7 +1,8 @@
 """Small, single-station MQTT 3.1.1 TLS endpoint for the isolated SOLIX AP service.
 
 This is a device protocol endpoint, not a general MQTT broker. It never bridges
-traffic to Anker or another network and never sends an AC output command.
+traffic to Anker or another network. AC output control is restricted to the
+private operator path for the noncritical C1000 Gen 2; C2000 is excluded.
 """
 
 from __future__ import annotations
@@ -310,7 +311,31 @@ class LocalMqttServer:
     async def set_ac_power_saving_enabled(self, enabled: bool) -> dict:
         """Set original AC Smart with AC off, no timer and complete F8 guarded."""
         request = self.commands.ac_power_saving(enabled)
+        if self.config.model == Model.C1000_GEN2:
+            return await self._set_c1000_setting(request, "ac_power_saving_mode_enabled", int(enabled))
         return await self._set_original_setting(request, "ac_power_saving_mode_enabled", int(enabled))
+
+    async def set_ac_output_enabled(self, enabled: bool) -> dict:
+        """Local C1000 Gen 2 operator control; excluded from HTTP and HA capabilities."""
+        request = self.commands.ac_output(enabled)
+        async with self._control_lock:
+            connection = self._control_connection()
+            before_a4, before_d9, before = await self._fresh_c1000_settings(connection)
+            if (before.get("software_version") != "1.1.4.9"
+                    or before["ac_output_timeout_seconds"] != 0 or before["dc_output_timeout_seconds"] != 0):
+                raise ValueError("AC output requires main 1.1.4.9 and inactive countdowns; no write sent")
+            await connection.request(request)
+            for sample in range(2):
+                if sample:
+                    await asyncio.sleep(1)
+                a4, d9, metrics = await self._fresh_c1000_settings(connection)
+                expected = bytearray(before_a4)
+                expected[22] = a4[22]
+                if (metrics["ac_output_enabled"] != int(enabled) or a4 != bytes(expected)
+                        or d9[2:] != before_d9[2:] or any(metrics[k] != before[k] for k in
+                            ("dc_output_enabled", "ac_input_connected"))):
+                    raise RuntimeError("AC output or protected settings not confirmed; inspect fresh status")
+            return self._tou_result(d9, metrics)
 
     async def _fresh_original_settings(self, connection, *, require_inactive_ac_timer: bool = False) -> tuple[dict, bytes]:
         reply = await connection.request(self.commands.status())
@@ -402,6 +427,12 @@ class LocalMqttServer:
         if self.config.model != Model.C1000_GEN2:
             raise ValueError("Setting requires C1000 Gen 2 only")
         reply = await connection.request(self.commands.status())
+        a4, d9, metrics, _ = self._c1000_settings_report(reply)
+        return a4, d9, metrics
+
+    def _c1000_settings_report(self, reply: bytes) -> tuple[bytes, bytes, dict, dict[int, bytes]]:
+        if self.config.model != Model.C1000_GEN2:
+            raise ValueError("Setting requires C1000 Gen 2 only")
         if not reply or reply[0] != 0:
             raise RuntimeError("Status request failed")
         metrics, fields = decode_telemetry(reply[1:], self.config.model)
@@ -419,7 +450,44 @@ class LocalMqttServer:
                for key in boolean_fields):
             raise RuntimeError("Missing valid C1000 output/settings baseline")
         metrics.pop("serial_number", None)
-        return a4, d9, metrics
+        return a4, d9, metrics, fields
+
+    async def set_clock_brightness(self, window: int, high: bool) -> dict:
+        """Confirm a scalar selector while the clock is disabled and has no transfer.
+
+        DA omits hidden theme state. Never include A2 or assets, or use 0092.
+        Failed confirmation leaves an uncertain setting; do not automatically retry.
+        """
+        request = self.commands.clock_brightness(window, high)
+        async with self._control_lock:
+            connection = self._control_connection()
+
+            async def fresh():
+                a4, d9, metrics, fields = self._c1000_settings_report(
+                    await connection.request(self.commands.status()))
+                da = fields.get(0xDA, b"")
+                if (len(da) != 24 or da[0] != 4 or metrics.get("software_version") != "1.1.4.9"
+                        or da[1] & 0x80 or da[2] != 0 or da[18] not in (0, 1) or da[19] not in (0, 1)
+                        or metrics["usage_mode"] != "standard" or metrics["active_tariff"] != "none"
+                        or metrics["ac_output_timeout_seconds"] != 0 or metrics["dc_output_timeout_seconds"] != 0):
+                    raise ValueError("Clock brightness requires main 1.1.4.9, complete inactive DA, Standard mode and no countdowns")
+                return a4, d9, da, metrics
+
+            before_a4, before_d9, before_da, before = await fresh()
+            expected_da = bytearray(before_da)
+            expected_da[17 + window] = int(high)
+            await connection.request(request)
+            for sample in range(2):
+                if sample:
+                    await asyncio.sleep(1)
+                a4, d9, da, metrics = await fresh()
+                expected_a4 = bytearray(before_a4)
+                expected_a4[22] = a4[22]  # Runtime LCD activity may change.
+                if (da != bytes(expected_da) or a4 != bytes(expected_a4) or d9[2:] != before_d9[2:]
+                        or any(metrics[key] != before[key] for key in
+                               ("ac_output_enabled", "dc_output_enabled", "ac_input_connected"))):
+                    raise RuntimeError("Clock brightness or protected settings not confirmed; the setting may have changed")
+            return self._tou_result(d9, metrics)
 
     async def _set_c1000_boolean(self, request: NativeMqttRequest, metric: str, value: bool) -> dict:
         if self.config.model != Model.C1000_GEN2 or type(value) is not bool:
@@ -436,20 +504,20 @@ class LocalMqttServer:
         """
         if metric not in ("temperature_unit_fahrenheit", "ac_off_grid_alert_enabled", "device_timeout_minutes",
                           "ac_fast_charge_enabled", "ac_charging_power_limit_w", "display_brightness",
-                          "display_timeout_seconds", "port_memory_enabled", "dc_power_saving_mode_enabled"):
+                          "display_timeout_seconds", "port_memory_enabled", "dc_power_saving_mode_enabled", "ac_power_saving_mode_enabled"):
             raise ValueError("Unsupported C1000 setting")
 
         async with self._control_lock:
             connection = self._control_connection()
             before_a4, before_d9, before = await self._fresh_c1000_settings(connection)
-            if metric == "dc_power_saving_mode_enabled" and (
+            if metric in ("dc_power_saving_mode_enabled", "ac_power_saving_mode_enabled") and (
                     before.get("software_version") != "1.1.4.9"
-                    or before["dc_output_enabled"] != 0
-                    or type(before.get("dc_power_saving_mode_enabled")) is not int
-                    or before.get("dc_power_saving_mode_enabled") not in (0, 1)
+                    or before["ac_output_enabled" if metric.startswith("ac_") else "dc_output_enabled"] != 0
+                    or type(before.get(metric)) is not int
+                    or before.get(metric) not in (0, 1)
                     or before["ac_output_timeout_seconds"] != 0
                     or before["dc_output_timeout_seconds"] != 0):
-                raise ValueError("C1000 Gen 2 DC Smart requires main 1.1.4.9, DC output off and inactive AC/DC countdowns; no write sent")
+                raise ValueError("C1000 Gen 2 Smart requires main 1.1.4.9, its output off and inactive AC/DC countdowns; no write sent")
             if metric == "display_brightness" and (
                     before["usage_mode"] != "standard" or before["active_tariff"] != "none"
                     or before.get("clock_screen_enabled") != 0
@@ -478,9 +546,11 @@ class LocalMqttServer:
                 expected[23] = value
             elif metric == "dc_power_saving_mode_enabled":
                 expected[13] = value
+            elif metric == "ac_power_saving_mode_enabled":
+                expected[8] = value
             else:
                 expected[32] = (expected[32] & ~2) | (int(value) << 1)
-            for sample in range(2 if metric in ("ac_fast_charge_enabled", "dc_power_saving_mode_enabled") else 1):
+            for sample in range(2 if metric in ("ac_fast_charge_enabled", "dc_power_saving_mode_enabled", "ac_power_saving_mode_enabled") else 1):
                 if sample:
                     # Observe a second fresh report after asynchronous policy work.
                     await asyncio.sleep(1)
@@ -488,7 +558,7 @@ class LocalMqttServer:
                 if metrics[metric] != int(value):
                     raise RuntimeError("Setting not confirmed by telemetry; settings may have changed")
                 if metric in ("ac_fast_charge_enabled", "ac_charging_power_limit_w", "display_brightness",
-                              "display_timeout_seconds", "port_memory_enabled", "dc_power_saving_mode_enabled"):
+                              "display_timeout_seconds", "port_memory_enabled", "dc_power_saving_mode_enabled", "ac_power_saving_mode_enabled"):
                     # A4[22] is runtime display-timer activity. Fast-charge
                     # charge-power and display events wake it; expiry may clear
                     # it. The saved preferences remain protected independently.

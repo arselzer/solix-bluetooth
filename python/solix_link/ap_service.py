@@ -226,7 +226,8 @@ class APService:
             if not isinstance(name, str) or name not in self.stations:
                 raise ValueError("Select a configured station by name")
             mqtt = self.stations[name]
-            if action not in ("status", "readiness") and action not in native_commands_for_model(mqtt.config.model):
+            local_output = action == "set-ac-output" and mqtt.config.model == Model.C1000_GEN2
+            if action not in ("status", "readiness") and not local_output and action not in native_commands_for_model(mqtt.config.model):
                 raise ValueError("This native control is not verified for the selected model")
             if action == "readiness" and mqtt.config.model == Model.C1000:
                 raise ValueError("Controller readiness is unavailable for original C1000")
@@ -235,6 +236,10 @@ class APService:
             async with asyncio.timeout(control_timeout(action, request)):
                 if action == "status":
                     result = mqtt.snapshot()
+                elif local_output:
+                    if set(request) != {"command", "enabled"} or type(request["enabled"]) is not bool:
+                        raise ValueError("Use an explicit enabled boolean")
+                    result = await mqtt.set_ac_output_enabled(request["enabled"])
                 elif action == "set-charge-power":
                     result = await mqtt.set_ac_charging_power(request.get("watts"))
                 elif action == "set-charge-cap":
@@ -243,6 +248,10 @@ class APService:
                     values = {key: value for key, value in request.items() if key != "command"}
                     validate_command(action, values)
                     result = await mqtt.set_discharge_floor(values["lower"])
+                elif action == "set-clock-brightness":
+                    values = {key: value for key, value in request.items() if key != "command"}
+                    validate_command(action, values)
+                    result = await mqtt.set_clock_brightness(values["window"], values["high"])
                 elif action in ("set-temperature-unit", "set-off-grid-alert", "set-device-timeout", "set-fast-charge",
                                 "set-display-brightness", "set-display-timeout", "set-port-memory", "set-light", "set-dc-power-saving", "set-ac-power-saving"):
                     values = {key: value for key, value in request.items() if key != "command"}

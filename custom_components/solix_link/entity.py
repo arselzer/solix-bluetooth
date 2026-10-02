@@ -2,6 +2,7 @@
 
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from typing import Any
 
 from .api import device_id, snapshot_available
 from .const import DOMAIN
@@ -14,6 +15,7 @@ class SolixEntity(CoordinatorEntity[SolixCoordinator]):
     def __init__(self, coordinator: SolixCoordinator, name: str, key: str) -> None:
         super().__init__(coordinator, context=name)
         self.station_name = name
+        self._solix_link_role = key
         identity = device_id(coordinator.endpoint_id, name)
         snapshot = coordinator.data[name]
         self._attr_unique_id = f"{identity}_{key}"
@@ -25,6 +27,16 @@ class SolixEntity(CoordinatorEntity[SolixCoordinator]):
     @property
     def snapshot(self) -> dict:
         return (self.coordinator.data or {}).get(self.station_name, {})
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """Expose stable roles and current transport without device identities."""
+        protocol = self.snapshot.get("protocol")
+        return {
+            **(getattr(self, "_attr_extra_state_attributes", None) or {}),
+            "solix_link_role": self._solix_link_role,
+            "solix_link_protocol": protocol if protocol in ("legacy", "prime", "native_mqtt") else "unknown",
+        }
 
     @property
     def available(self) -> bool:

@@ -116,9 +116,12 @@ of physical output.** The AC mains-presence field comes from a different source.
    countdowns, output state and complete saved preferences. The ordinary status
    path uses serializer mode 1 with real timers on this image; mode 3 is an
    internal comparison route, as documented in the preceding audit.
-3. Establish an inactive timer baseline and configuration/readback while the
-   tested domain is already off. Saving an active remaining value is not an exact
-   reversible finish time: restoring it later extends the countdown.
+3. Establish an inactive timer baseline. A later
+   [dispatch replay](gen2-native-output-readiness.md) shows that ordinary off-task
+   cleanup clears a positive timer set while its domain is already off. Validate
+   a working countdown only with an expendable output-on load. Saving an active
+   remaining value is not an exact reversible finish time: restoring it later
+   extends the countdown.
 4. For any output-on countdown trial, use ample duration and cancel well before
    expiry. Confirm fresh timer and output reports after cancellation and inspect
    the independent display/load. A zero ACK cannot revoke a pending stop.

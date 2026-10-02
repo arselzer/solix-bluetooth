@@ -58,10 +58,12 @@ def add_commands(subcommands) -> None:
                                ("ap-service-set-device-timeout", "Set original/Gen 2 C1000 device timeout; 0 = Never"),
                                ("ap-service-set-fast-charge", "Set original/Gen 2 C1000 fast charge with fresh retained readback"),
                                ("ap-service-set-display-brightness", "Set original/Gen 2 C1000 native MQTT display brightness"),
+                               ("ap-service-set-clock-brightness", "Set C1000 Gen 2 inactive clock-window brightness selector"),
                                ("ap-service-set-display-timeout", "Set original/Gen 2 C1000 native MQTT screen timeout"),
                                ("ap-service-set-light", "Set and confirm original C1000 native MQTT light mode"),
                                ("ap-service-set-dc-power-saving", "Set original/Gen 2 C1000 native DC Smart; requires DC output OFF"),
-                               ("ap-service-set-ac-power-saving", "Set original C1000 native AC Smart; requires AC OFF and inactive countdown"),
+                               ("ap-service-set-ac-power-saving", "Set original/Gen 2 C1000 native AC Smart; requires AC OFF and inactive countdowns"),
+                               ("ap-service-set-ac-output", "Local C1000 Gen 2 AC socket control; never exposed by HTTP or HA"),
                                ("ap-service-set-port-memory", "Set C1000 Gen 2 native MQTT output-port memory"),
                                ("ap-service-set-reserve", "Set and confirm backup reserve without changing outputs"),
                                ("ap-service-set-tou", "Replace the native hourly schedule; explicit activation persists until changed"),
@@ -84,6 +86,9 @@ def add_commands(subcommands) -> None:
             parser.add_argument("--state", choices=["on", "off"], required=True)
         elif command == "ap-service-set-fast-charge":
             parser.add_argument("--enabled", choices=["on", "off"], required=True)
+        elif command == "ap-service-set-ac-output":
+            parser.add_argument("--enabled", choices=["on", "off"], required=True,
+                                help="Changes power at AC sockets; use only on noncritical C1000 Gen 2 loads")
         elif command in ("ap-service-set-dc-power-saving", "ap-service-set-ac-power-saving"):
             parser.add_argument("--enabled", choices=["on", "off"], required=True,
                                 help="On selects Smart; Off selects Normal. " + (
@@ -91,6 +96,10 @@ def add_commands(subcommands) -> None:
         elif command == "ap-service-set-display-brightness":
             parser.add_argument("--level", type=int, choices=[1, 2, 3], required=True,
                                 help="1 low, 2 medium, 3 high; zero is not a brightness level")
+        elif command == "ap-service-set-clock-brightness":
+            parser.add_argument("--window", type=int, choices=[1, 2], required=True)
+            parser.add_argument("--high", choices=["on", "off"], required=True,
+                                help="Stored window brightness only; requires disabled clock and no asset transfer")
         elif command == "ap-service-set-display-timeout":
             parser.add_argument("--seconds", type=int, choices=[0, 10, 20, 30, 60, 300, 1800], required=True,
                                 help="Screen timeout in seconds; original C1000 excludes 0/10; Gen 2 0 means Never")
@@ -240,6 +249,8 @@ def dispatch(args) -> None:
                    "ap-service-set-device-timeout": "set-device-timeout",
                    "ap-service-set-fast-charge": "set-fast-charge",
                    "ap-service-set-display-brightness": "set-display-brightness",
+                   "ap-service-set-clock-brightness": "set-clock-brightness",
+                   "ap-service-set-ac-output": "set-ac-output",
                    "ap-service-set-display-timeout": "set-display-timeout",
                    "ap-service-set-light": "set-light",
                    "ap-service-set-dc-power-saving": "set-dc-power-saving",
@@ -267,6 +278,10 @@ def dispatch(args) -> None:
                     print(ORIGINAL_FAST_CHARGE_WARNING, file=sys.stderr)
         elif args.command == "ap-service-set-display-brightness":
             fields = {"level": args.level}
+        elif args.command == "ap-service-set-clock-brightness":
+            fields = {"window": args.window, "high": args.high == "on"}
+        elif args.command == "ap-service-set-ac-output":
+            fields = {"enabled": args.enabled == "on"}
         elif args.command == "ap-service-set-display-timeout":
             fields = {"seconds": args.seconds}
         elif args.command == "ap-service-set-light":

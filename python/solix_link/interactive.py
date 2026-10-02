@@ -224,6 +224,7 @@ def device_timeout_menu(device: DeviceConfig | APServiceConfig, config_path: Pat
 
 
 def preference_menu(device: DeviceConfig | APServiceConfig, config_path: Path, directory: Path | None = None) -> None:
+    clock_windows = {}
     original = device.model == Model.C1000 and getattr(device, "protocol", None) == "legacy"
     if original:
         commands = ["set-temperature-unit", "set-fast-charge", "set-ac-power-saving", "set-dc-power-saving"]
@@ -243,8 +244,13 @@ def preference_menu(device: DeviceConfig | APServiceConfig, config_path: Path, d
     elif device.model == Model.C1000_GEN2 and (directory is not None or getattr(device, "protocol", None) == "prime"):
         commands, labels = ["set-fast-charge"], ["Fast charging"]
         if directory is not None:
-            commands += ["set-display-brightness", "set-display-timeout", "set-port-memory"]
-            labels += ["Display brightness", "Screen timeout", "Output port memory"]
+            commands += ["set-display-brightness", "set-display-timeout", "set-port-memory",
+                         "set-ac-power-saving", "set-dc-power-saving"]
+            labels += ["Display brightness", "Screen timeout", "Output port memory",
+                       "AC Smart mode (requires AC output off)", "DC Smart mode (requires DC output off)"]
+            clock_windows = {len(commands): 1, len(commands) + 1: 2}
+            commands += ["set-clock-brightness", "set-clock-brightness"]
+            labels += ["First clock window brightness", "Second clock window brightness"]
     else:
         print("These preferences are unavailable for this station profile.")
         return
@@ -261,6 +267,7 @@ def preference_menu(device: DeviceConfig | APServiceConfig, config_path: Path, d
         "set-display-timeout": ["20 seconds", "30 seconds", "60 seconds", "5 minutes", "30 minutes"] if device.model == Model.C1000
                                else ["Never", "10 seconds", "20 seconds", "30 seconds", "60 seconds", "5 minutes", "30 minutes"],
         "set-light": ["Off", "Low", "Medium", "High", "SOS"],
+        "set-clock-brightness": ["Normal", "High"],
     }.get(command, ["Off", "On"])
     value = choose(labels[selected], options)
     if value is None:
@@ -269,6 +276,10 @@ def preference_menu(device: DeviceConfig | APServiceConfig, config_path: Path, d
         print("Power saving may automatically turn the output off at low load.")
         if device.model == Model.C1000 and (directory is not None or getattr(device, "protocol", None) == "prime"):
             print(ORIGINAL_AC_SMART_WARNING if command == "set-ac-power-saving" else ORIGINAL_DC_SMART_WARNING)
+        elif device.model == Model.C1000_GEN2:
+            print("Requires main 1.1.4.9, the corresponding output off and both AC/DC countdowns inactive.")
+    if command == "set-clock-brightness":
+        print("Requires main 1.1.4.9, Standard mode, disabled clock, idle asset transfer and inactive output countdowns. Does not enable the clock.")
     if command == "set-ac-output":
         print("This changes power at the AC sockets. Original Prime requires a fresh inactive AC countdown; review connected loads before applying.")
     if command == "set-fast-charge" and device.model == Model.C1000_GEN2:
@@ -284,6 +295,7 @@ def preference_menu(device: DeviceConfig | APServiceConfig, config_path: Path, d
                   {"seconds": ((20, 30, 60, 300, 1800) if device.model == Model.C1000 else (0, 10, 20, 30, 60, 300, 1800))[value]} if command == "set-display-timeout" else
                   {"mode": value} if command == "set-light" else
                   {"fahrenheit": value == 1} if command == "set-temperature-unit" else
+                  {"window": clock_windows[selected], "high": value == 1} if command == "set-clock-brightness" else
                   {"enabled": value == 1})
         _show_status(asyncio.run(ap_service_request(directory, command, name=device.name, **fields)))
     else:

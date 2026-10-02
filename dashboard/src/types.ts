@@ -51,6 +51,8 @@ export interface Draft {
   alert: string;
   acSaving: string;
   dcSaving: string;
+  clockFirst: string;
+  clockSecond: string;
   periods: DraftPeriod[];
 }
 
@@ -96,6 +98,8 @@ export function draftFor(station: Station): Draft {
     alert: current('ac_off_grid_alert_enabled', '0'),
     acSaving: current('ac_power_saving_mode_enabled', ''),
     dcSaving: current('dc_power_saving_mode_enabled', ''),
+    clockFirst: current('clock_screen_first_brightness_flag_raw', ''),
+    clockSecond: current('clock_screen_second_brightness_flag_raw', ''),
     periods: [],
   };
 }

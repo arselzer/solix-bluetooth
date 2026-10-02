@@ -183,3 +183,22 @@ reachable hidden-enable mismatch after A2 toggle/restore, identify pending asset
 staging overwrite, and verify complete scalar-field preservation. Expected
 results and manifest are in `expected_results/`; independent runs matched both
 byte for byte. No physical storage/display/output or asset download is exercised.
+
+## Native output readiness and original diagnostic charging paths
+
+```sh
+SOLIX_ANALYSIS_OUTPUT=/tmp/gen2-native-output-readiness \
+  python3 tools/firmware_analysis/emulate_gen2_native_output_readiness.py
+python3 tools/firmware_analysis/audit_original_diagnostic_charging_paths.py \
+  --output /tmp/original-diagnostic-charging-results.json \
+  --manifest /tmp/original-diagnostic-charging-manifest.json
+```
+
+[92 main-1.1.4.9 cases](../../docs/gen2-native-output-readiness.md) exercise AC/DC
+off-task timer cleanup, on-branch boundaries and AC Smart saved-byte restoration.
+[131 original-main-1.5.9 cases](../../docs/c1000-diagnostic-charging-audit.md) cover
+48 diagnostic entries, selector rejection and selected radio-staging paths.
+Independent results and manifests matched their `expected_results/` files byte
+for byte. All RAM and timestamps are synthetic. No radio/relay/flash operation
+or newer-original firmware equivalence is established; counts remain separate
+from the combined runner. Diagnostic commands are not runtime API features.

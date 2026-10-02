@@ -1,0 +1,371 @@
+{
+  "model": "A1761 original C1000",
+  "main_version": "1.5.9",
+  "input_sha256": "b295ee8613f5c96e70dcc905896df516621cab4dc590bb580eac6b84519911a6",
+  "tables": [
+    {
+      "selector": 0,
+      "address": "08029b30",
+      "entries": [
+        {
+          "opcode": "0001",
+          "handler": "08023270"
+        },
+        {
+          "opcode": "0002",
+          "handler": "08023284"
+        },
+        {
+          "opcode": "0003",
+          "handler": "08023248"
+        },
+        {
+          "opcode": "0004",
+          "handler": "0802325c"
+        },
+        {
+          "opcode": "0005",
+          "handler": "08023320"
+        },
+        {
+          "opcode": "00e0",
+          "handler": "080232dc"
+        },
+        {
+          "opcode": "00e1",
+          "handler": "08023298"
+        },
+        {
+          "opcode": "00e2",
+          "handler": "08012e6c"
+        },
+        {
+          "opcode": "00e3",
+          "handler": "08012ea6"
+        },
+        {
+          "opcode": "00d0",
+          "handler": "080283c0"
+        },
+        {
+          "opcode": "00d1",
+          "handler": "080283fa"
+        },
+        {
+          "opcode": "00e4",
+          "handler": "08024138"
+        },
+        {
+          "opcode": "00e5",
+          "handler": "08024166"
+        },
+        {
+          "opcode": "00e6",
+          "handler": "080125a8"
+        },
+        {
+          "opcode": "00e7",
+          "handler": "0801260e"
+        },
+        {
+          "opcode": "00e8",
+          "handler": "080161b8"
+        },
+        {
+          "opcode": "00e9",
+          "handler": "08014db4"
+        },
+        {
+          "opcode": "00ea",
+          "handler": "08014d88"
+        },
+        {
+          "opcode": "00eb",
+          "handler": "08014d6e"
+        },
+        {
+          "opcode": "00ed",
+          "handler": "08014dd0"
+        },
+        {
+          "opcode": "00ee",
+          "handler": "08025c9c"
+        },
+        {
+          "opcode": "00ef",
+          "handler": "08025cc6"
+        },
+        {
+          "opcode": "00f0",
+          "handler": "0801255e"
+        },
+        {
+          "opcode": "00d9",
+          "handler": "08024458"
+        },
+        {
+          "opcode": "00da",
+          "handler": "08016940"
+        },
+        {
+          "opcode": "00d8",
+          "handler": "08016910"
+        },
+        {
+          "opcode": "00d7",
+          "handler": "08017940"
+        },
+        {
+          "opcode": "00d6",
+          "handler": "0802436a"
+        },
+        {
+          "opcode": "00d5",
+          "handler": "0802516c"
+        },
+        {
+          "opcode": "00d4",
+          "handler": "08017974"
+        },
+        {
+          "opcode": "00d3",
+          "handler": "08025102"
+        },
+        {
+          "opcode": "00d2",
+          "handler": "080248e6"
+        },
+        {
+          "opcode": "00db",
+          "handler": "08024a18"
+        },
+        {
+          "opcode": "00f4",
+          "handler": "0800feb4"
+        },
+        {
+          "opcode": "00ec",
+          "handler": "08026f24"
+        },
+        {
+          "opcode": "00f1",
+          "handler": "08027010"
+        },
+        {
+          "opcode": "00f2",
+          "handler": "08026f98"
+        },
+        {
+          "opcode": "00f3",
+          "handler": "08026fcc"
+        },
+        {
+          "opcode": "00fd",
+          "handler": "08024bf4"
+        },
+        {
+          "opcode": "00fe",
+          "handler": "080172f8"
+        }
+      ]
+    },
+    {
+      "selector": 1,
+      "address": "08029c70",
+      "entries": [
+        {
+          "opcode": "0010",
+          "handler": "08027418"
+        },
+        {
+          "opcode": "0012",
+          "handler": "08026f58"
+        },
+        {
+          "opcode": "0013",
+          "handler": "08027358"
+        },
+        {
+          "opcode": "0014",
+          "handler": "0802743a"
+        },
+        {
+          "opcode": "0015",
+          "handler": "08026f46"
+        },
+        {
+          "opcode": "0016",
+          "handler": "08027044"
+        },
+        {
+          "opcode": "0017",
+          "handler": "0801c198"
+        },
+        {
+          "opcode": "0018",
+          "handler": "0801c146"
+        }
+      ]
+    }
+  ],
+  "dispatcher": "080276bc; selector0 count40, selector1 count8",
+  "cases": {
+    "actual_table_dispatch": 48,
+    "other_selector_rejected": 53,
+    "unknown_property_rejected": 4,
+    "no_direct_gate_entries": 1,
+    "actual_staging_handler": 11,
+    "actual_module_poller_and_builder": 11,
+    "delayed_d6_first_poll_only": 3,
+    "total": 131
+  },
+  "cases_sha256": "e2e77f6d57298c720c164d7183a88c1170be431eb0c8184c19409a4496347200",
+  "selected_module_stages": [
+    {
+      "diagnostic_property": "00d2",
+      "value": 0,
+      "staged_state": 9,
+      "module_request": {
+        "function": "10",
+        "command": "0020",
+        "payload": "a10100"
+      },
+      "next_state": 18,
+      "no_synchronous_power_change": true
+    },
+    {
+      "diagnostic_property": "00d2",
+      "value": 1,
+      "staged_state": 9,
+      "module_request": {
+        "function": "10",
+        "command": "0020",
+        "payload": "a10101"
+      },
+      "next_state": 18,
+      "no_synchronous_power_change": true
+    },
+    {
+      "diagnostic_property": "00d2",
+      "value": 255,
+      "staged_state": 9,
+      "module_request": {
+        "function": "10",
+        "command": "0020",
+        "payload": "a101ff"
+      },
+      "next_state": 18,
+      "no_synchronous_power_change": true
+    },
+    {
+      "diagnostic_property": "00d5",
+      "value": 0,
+      "staged_state": 12,
+      "module_request": {
+        "function": "10",
+        "command": "0023",
+        "payload": "a10100"
+      },
+      "next_state": 18,
+      "no_synchronous_power_change": true
+    },
+    {
+      "diagnostic_property": "00d5",
+      "value": 1,
+      "staged_state": 12,
+      "module_request": {
+        "function": "10",
+        "command": "0023",
+        "payload": "a10101"
+      },
+      "next_state": 18,
+      "no_synchronous_power_change": true
+    },
+    {
+      "diagnostic_property": "00d5",
+      "value": 255,
+      "staged_state": 12,
+      "module_request": {
+        "function": "10",
+        "command": "0023",
+        "payload": "a101ff"
+      },
+      "next_state": 18,
+      "no_synchronous_power_change": true
+    },
+    {
+      "diagnostic_property": "00f4",
+      "value": 0,
+      "staged_state": 16,
+      "module_request": {
+        "function": "10",
+        "command": "0038",
+        "payload": "a10100"
+      },
+      "next_state": 18,
+      "no_synchronous_power_change": true
+    },
+    {
+      "diagnostic_property": "00f4",
+      "value": 1,
+      "staged_state": 16,
+      "module_request": {
+        "function": "10",
+        "command": "0038",
+        "payload": "a10101"
+      },
+      "next_state": 18,
+      "no_synchronous_power_change": true
+    },
+    {
+      "diagnostic_property": "00f4",
+      "value": 255,
+      "staged_state": 16,
+      "module_request": {
+        "function": "10",
+        "command": "0038",
+        "payload": "a101ff"
+      },
+      "next_state": 18,
+      "no_synchronous_power_change": true
+    },
+    {
+      "diagnostic_property": "00d4",
+      "value": 0,
+      "staged_state": 11,
+      "module_request": {
+        "function": "10",
+        "command": "0022",
+        "payload": ""
+      },
+      "next_state": 18,
+      "no_synchronous_power_change": true
+    },
+    {
+      "diagnostic_property": "00ec",
+      "value": 0,
+      "staged_state": 8,
+      "module_request": {
+        "function": "10",
+        "command": "0030",
+        "payload": "a10101a20100"
+      },
+      "next_state": 18,
+      "no_synchronous_power_change": true
+    }
+  ],
+  "substitutes": {
+    "48 selected diagnostic handler bodies": "routing-only sentinel capture",
+    "08012b38": "capture MCU-to-radio transport, no send",
+    "0800d6b0": "capture selected diagnostic reply",
+    "08010278": "event capture; selected cases assert none occurred"
+  },
+  "limits": [
+    "Available main1.5.9 differs from installed main1.7.1; original radio image unavailable.",
+    "Table absence excludes direct registration only, not all indirect paths.",
+    "Only five selected radio stages and D6's initial timing wait run their actual handler bodies.",
+    "No general factory enumeration/control is recommended; previous1.7.1 F0 attempt lost control.",
+    "Synchronous protected RAM is checked; radio ACK/retry, later rules/DSP/relay effects are absent.",
+    "No charging-converter stop or bypass-disable control is established."
+  ]
+}

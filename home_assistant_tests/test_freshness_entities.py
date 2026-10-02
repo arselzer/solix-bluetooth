@@ -217,3 +217,22 @@ def test_new_entity_labels_icons_and_english_translations_match():
     assert strings["entity"]["binary_sensor"]["ac_fast_charge_enabled"]["name"] == "Fast charging enabled"
     assert "last_seen_timestamp" in icons["entity"]["sensor"]
     assert "ac_fast_charge_enabled" in icons["entity"]["binary_sensor"]
+
+
+def test_role_and_transport_attributes_preserve_existing_metadata(platform):
+    sensor = timestamp_sensor(platform, snapshot())
+    sensor._attr_extra_state_attributes = {"output_behavior": "Preserved warning",
+        "solix_link_role": "forged", "solix_link_protocol": "forged"}
+    attributes = sensor.extra_state_attributes
+    assert attributes == {"output_behavior": "Preserved warning", "solix_link_role": "last_seen_timestamp",
+                          "solix_link_protocol": "native_mqtt"}
+    assert "serial" not in attributes and "account_id" not in attributes and "name" not in attributes
+    sensor.coordinator.data["station"]["protocol"] = "prime"
+    assert sensor.extra_state_attributes["solix_link_protocol"] == "prime"
+    assert sensor.extra_state_attributes["solix_link_role"] == "last_seen_timestamp"
+
+
+@pytest.mark.parametrize("protocol", [None, "unknown", "private identity", {"secret": "value"}])
+def test_transport_attribute_drops_unrecognized_values(platform, protocol):
+    sensor = timestamp_sensor(platform, snapshot(protocol=protocol))
+    assert sensor.extra_state_attributes["solix_link_protocol"] == "unknown"

@@ -149,9 +149,9 @@ def test_original_ac_smart_rejects_non_boolean_without_request(enabled):
     assert commands._sequence == 0
 
 
-@pytest.mark.parametrize("model", [Model.C1000_GEN2, Model.C2000_GEN2])
+@pytest.mark.parametrize("model", [Model.C2000_GEN2])
 @pytest.mark.parametrize("enabled", [False, True])
-def test_native_ac_smart_does_not_enable_other_models(model, enabled):
+def test_native_ac_smart_excludes_c2000(model, enabled):
     commands = NativeMqttCommands(SERIAL, ACCOUNT, model=model)
     with pytest.raises(ValueError, match="original C1000 only"):
         commands.ac_power_saving(enabled)

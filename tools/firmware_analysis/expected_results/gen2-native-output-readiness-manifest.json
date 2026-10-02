@@ -1,0 +1,31 @@
+{
+  "firmware_sha256": "21ffb746c1e07ecaa9817fa7017807585a00bedbca3f136c650129bb52a4a0c9",
+  "cases": 92,
+  "hardware_access": false,
+  "source_sha256": {
+    "emulate_gen2_native_output_readiness.py": "087dd6e8ba3d375243c7206923809461e3675845a7edb9e1d375bd0d6ebdb1f0",
+    "emulate_gen2_output_stop_worker.py": "a63cc36b116f5289083eed0991c3c46a646c2560b839168c6a913d1cc959a639",
+    "emulate_gen2_output_policy.py": "4be4833feb6893f1c8673a5356d001254d46d6667b906e94c0e3d6d5efc58689",
+    "emulate_preference_candidates.py": "a856b1706c8831a18fcdc3fa4beba15c70752578ec8fb8f5728817cb27278434",
+    "emulate_charging_followup.py": "47f845935c526ac13a9a9de119b8b442297d06039817e507ee3a6fb6e7591854",
+    "emulate_general_settings.py": "26ce041976a8fd1ac43feb2851c1717363761cb2f7da69f4d780b3f42b8ef0ba",
+    "emulate_clock_semantics.py": "945b649c3b5cec00d816041e783641085ccfbdb5f80efc2ed2c4e15f3bae30f2",
+    "replay_io.py": "731d795a5ec37e2cf12b809b7122eaf7a29d84c21a2ecd43fafa3e2f8d962d30"
+  },
+  "result_sha256": "f42420cecb1bcb8eeb7bb721a8a9f1aa1ccecf5e5609ee5f3399a67f61553f6e",
+  "boundaries": [
+    "native transport envelope and response delivery",
+    "logging/libc",
+    "LCD and diagnostic/report events",
+    "allocation/free and final DSP queue",
+    "persistence/refresh transports"
+  ],
+  "excluded": [
+    "full output tasks and scheduler",
+    "on-task body",
+    "radio/MQTT and physical timestamp processing",
+    "DSP/BMS/relay execution",
+    "device hardware",
+    "physical low-load or timer shutdown"
+  ]
+}

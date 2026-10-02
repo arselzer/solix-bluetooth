@@ -203,6 +203,24 @@ lossless scalar fields. Its 280/415-byte opaque buffers are synthetic; physical
 storage, display and output hardware are excluded. These cases remain separate
 from the combined runner's count.
 
+## Native timer readiness and original diagnostic paths
+
+```sh
+SOLIX_ANALYSIS_OUTPUT=/tmp/gen2-native-output-readiness \
+  python3 tools/firmware_analysis/emulate_gen2_native_output_readiness.py
+python3 tools/firmware_analysis/audit_original_diagnostic_charging_paths.py \
+  --output /tmp/original-diagnostic-charging-results.json \
+  --manifest /tmp/original-diagnostic-charging-manifest.json
+```
+
+The [92-case Gen 2 suite](gen2-native-output-readiness.md) executes native setting
+handlers, actual output-flag branches and off-task cleanup. The on-task body and
+final DSP/physical output are excluded. The [131-case original suite](c1000-diagnostic-charging-audit.md)
+executes diagnostic routing and selected module-request staging, excluding later
+radio/event effects and actual main 1.7.1. Both complete result/manifest pairs
+independently matched `expected_results/` byte for byte. They add no live
+diagnostic or raw-register API and remain outside the combined 1,842-case count.
+
 ## Additional image integrity tools
 
 These checks use the bundled vendor images and perform no emulation or device I/O:

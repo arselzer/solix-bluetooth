@@ -13,14 +13,15 @@ Home Assistant integration for the local gateway.
   with mains connected, and confirmed return to grid.
 - C1000 Gen 2 native MQTT: 100–1200 W charging, fast charge, temperature unit,
   off-grid alert, display brightness/timeout, output-port memory and guarded
-  lower discharge limit without silently changing reserve; DC Smart with DC off
-  and inactive output countdowns on main 1.1.4.9.
+  lower discharge limit without silently changing reserve; AC/DC Smart with the
+  corresponding output off and inactive countdowns on main 1.1.4.9, plus saved
+  brightness for each inactive clock window.
 - Original C1000: local MQTT and Prime Bluetooth charging power, Device Timeout,
   screen timeout/brightness, light and temperature units; guarded AC/DC Smart
   with the corresponding output off and Fast charging over both transports;
   additional legacy BLE controls. Prime also adds direct AC output control.
 - C1000 Gen 2 solar weak-light-lock diagnostic, traced to firmware; physical
-  low-light behavior remains untested. Read-only saved frequency and AC/DC Smart
+  low-light behavior remains untested. Saved frequency and AC/DC Smart
   settings are also available; [readback semantics](docs/gen2-preference-readback.md).
 - C1000 Gen 2 Prime RSSI queries via `wifi-rssi`, with explicit unavailable
   results; [radio readbacks](docs/c1000-radio-readback-validation.md).
@@ -36,7 +37,7 @@ Home Assistant integration for the local gateway.
 
 | Device | Python Bluetooth | Native local MQTT | Tested / limitations |
 | --- | --- | --- | --- |
-| C1000 Gen 2, A1763 | Monitoring, charge limits/power, display timeout, fast charge | Charging/fast/reserve, tariffs, temperature/alert, display/memory, discharge floor, guarded DC Smart | Main 1.1.4.9 / radio 0.3.3.0; DC Smart requires DC off and inactive countdowns; older 1.1.4.3 uses legacy BLE |
+| C1000 Gen 2, A1763 | Monitoring, charge limits/power, display timeout, fast charge | Charging/fast/reserve, tariffs, temperature/alert, display/memory, discharge floor, guarded AC/DC Smart and inactive clock brightness | Main 1.1.4.9 / radio 0.3.3.0; Smart requires its output off and inactive countdowns; older 1.1.4.3 uses legacy BLE |
 | C2000 Gen 2, A1783 | Monitoring, power/cap, display timeout | Charging/reserve, tariffs and return to grid | Main 2.1.6.4; AC-output writes blocked |
 | Original C1000, A1761 | Twelve legacy controls; ten Prime controls | Nine preferences: charging power, device/screen timeout, brightness, light, temperature unit, AC/DC Smart, Fast | Legacy 1.5.1; Prime/native main 1.7.1 / radio 0.3.3.0; Smart requires its output off; AC Smart/Prime AC output require no active AC timer; charging rates/reboot retention unverified |
 | C300/C300X AC, A1722/A1723 | Monitoring, AC output, light, charging power, display timeout | — | C300X tested; C300 sibling untested; C300 DC unsupported |

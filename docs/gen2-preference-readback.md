@@ -31,9 +31,10 @@ The fields appear in Python JSON status and the terminal/browser displays.
 Home Assistant offers diagnostic sensors, disabled by default: C1000 Gen 2
 frequency setting and Gen 2 AC/DC Smart flags. The initial readback audit exposed
 no setters. A subsequent [native C1000 Gen 2 DC Smart trial](c1000-gen2-native-dc-smart-validation.md)
-validated a guarded setter on main 1.1.4.9; frequency, AC Smart and C2000 Smart
-remain read-only.
-The existing Gen 2 Smart-control rejection remains enforced.
+validated a guarded setter on main 1.1.4.9. The later
+[native AC Smart trial](c1000-gen2-clock-ac-smart-validation.md) adds its separate
+AC-off guard. Frequency and C2000 Smart remain read-only; neither C1000 setter
+is exposed over Gen 2 BLE.
 
 C2000's A4[7] previously appeared as `ac_input_frequency_hz`. Its physical
 meaning has not been established from C2000 firmware. It now appears as
@@ -65,6 +66,6 @@ cmp /tmp/gen2-preference-readback/gen2-preference-readback-results.json \
 The exact bundled main-image hash is enforced. Python and browser regressions
 cover wrong type/length, unsupported values, model isolation and native status
 and incremental envelopes. Home Assistant API contracts retain the new values
-while rejecting frequency, Gen 2 AC Smart and C2000 Smart commands. The later
-C1000 Gen 2 native DC Smart contract tests cover its separate guards; standalone
+while rejecting frequency and C2000 Smart commands. Later
+C1000 Gen 2 native AC/DC Smart contract tests cover their separate guards; standalone
 contracts do not simulate HA.

@@ -180,7 +180,8 @@ try {
   cases++; console.log(`Scenario ${cases} passed`);
 
   await page.getByTestId('station-select').selectOption('Office · C1000 Gen 2');
-  assert.equal(await page.locator('#ac-power-saving').count(), 0);
+  assert.equal(await page.locator('#ac-power-saving').count(), 1);
+  assert.equal(await page.locator('#ac-power-saving').isDisabled(), true);
   assert.equal(await page.locator('#dc-power-saving').count(), 1);
   await page.locator('#fast-charge').selectOption('1');
   const fastApply = page.locator('.setting').filter({ has: page.locator('label[for="fast-charge"]') }).getByRole('button', { name: 'Apply', exact: true });
@@ -480,7 +481,37 @@ try {
   await change({ dc_output: 0 });
   await refresh();
   assert.equal(await page.locator('#dc-power-saving').isDisabled(), false);
-  assert.equal(await page.locator('#ac-power-saving').count(), 0);
+  assert.equal(await page.locator('#ac-power-saving').count(), 1);
+  assert.equal(await page.locator('#ac-power-saving').isDisabled(), true);
+  cases++; console.log(`Scenario ${cases} passed`);
+
+  await change({ standard: true });
+  await refresh();
+  const beforeGen2Clock = (await recorded()).length;
+  for (const window of [1, 2]) {
+    await page.locator(`#clock-brightness-${window}`).selectOption('1');
+    await propose(`clock-brightness-${window}`);
+    assert.match(await page.getByTestId('command-review').textContent(), /Does not enable the clock/);
+    await page.getByTestId('confirm-command').click();
+    await page.getByTestId('gateway-notice').filter({ hasText: 'Command confirmed' }).waitFor();
+    assert.deepEqual((await recorded()).at(-1), { name: 'Office · C1000 Gen 2', command: 'set-clock-brightness', window, high: true });
+  }
+  assert.equal((await recorded()).length, beforeGen2Clock + 2);
+  await change({ ac_output: 0 });
+  await refresh();
+  assert.equal(await page.locator('#ac-power-saving').isDisabled(), false);
+  await page.locator('#ac-power-saving').selectOption('1');
+  await propose('ac-power-saving');
+  await page.getByTestId('confirm-command').click();
+  await page.getByTestId('gateway-notice').filter({ hasText: 'Command confirmed' }).waitFor();
+  assert.deepEqual((await recorded()).at(-1), { name: 'Office · C1000 Gen 2', command: 'set-ac-power-saving', enabled: true });
+  await page.locator('#ac-power-saving').selectOption('0');
+  await propose('ac-power-saving');
+  await page.getByTestId('confirm-command').click();
+  await page.getByTestId('gateway-notice').filter({ hasText: 'Command confirmed' }).waitFor();
+  await change({ ac_output: 1 });
+  await refresh();
+  assert.equal(await page.locator('#ac-power-saving').isDisabled(), true);
   cases++; console.log(`Scenario ${cases} passed`);
 
   // Controlled browser clock and synthetic read-only responses produce a chart

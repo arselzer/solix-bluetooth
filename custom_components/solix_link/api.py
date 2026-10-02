@@ -15,7 +15,7 @@ COMMANDS = frozenset({"set-charge-power", "set-charge-cap", "set-backup-reserve"
                       "set-tou-plan", "return-grid", "set-discharge-floor",
                       "set-temperature-unit", "set-off-grid-alert", "set-device-timeout",
                       "set-fast-charge", "set-ac-power-saving", "set-dc-power-saving",
-                      "set-display-brightness", "set-display-timeout", "set-port-memory", "set-light"})
+                      "set-display-brightness", "set-display-timeout", "set-port-memory", "set-light", "set-clock-brightness"})
 METRICS = frozenset({"battery_percentage", "temperature_c", "output_power_w",
                     "ac_input_power_w", "ac_output_power_w", "dc_output_power_w",
                     "ac_input_connected", "ac_output_enabled", "ac_output_timer_remaining_seconds", "dc_output_enabled", "battery_status",
@@ -28,7 +28,9 @@ METRICS = frozenset({"battery_percentage", "temperature_c", "output_power_w",
                     "ac_power_saving_mode_enabled", "dc_power_saving_mode_enabled",
                     "dc_input_active", "pv_weak_light_locked", "dc_input_power_raw", "controller_error_code",
                     "battery_health_raw", "display_brightness", "display_timeout_seconds", "port_memory_enabled", "light_mode",
-                    "ac_output_frequency_setting_hz", "ac_frequency_raw"})
+                    "ac_output_frequency_setting_hz", "ac_frequency_raw", "clock_screen_enabled",
+                    "clock_screen_transfer_status_raw", "clock_screen_first_brightness_flag_raw",
+                    "clock_screen_second_brightness_flag_raw"})
 POWER_MINIMUM = {"c1000": 100, "c1000_gen2": 100, "c2000_gen2": 300}
 POWER_MAXIMUM = {"c1000": 1000, "c1000_gen2": 1200, "c2000_gen2": 1800}
 CHARGE_CAP_MODELS = frozenset({"c1000_gen2", "c2000_gen2"})
@@ -234,10 +236,10 @@ def boolean_setting_supported(snapshot: dict, command: str) -> bool:
             supported = (binary_state(metrics.get("ac_output_enabled")) is False
                          and type(metrics.get("ac_output_timer_remaining_seconds")) is int
                          and metrics["ac_output_timer_remaining_seconds"] == 0)
-        elif command == "set-dc-power-saving" and model == "c1000_gen2" and protocol == "native_mqtt":
+        elif command in ("set-dc-power-saving", "set-ac-power-saving") and model == "c1000_gen2" and protocol == "native_mqtt":
             metrics = snapshot.get("metrics", {})
             supported = (metrics.get("software_version") == "1.1.4.9"
-                         and binary_state(metrics.get("dc_output_enabled")) is False
+                         and binary_state(metrics.get("ac_output_enabled" if command == "set-ac-power-saving" else "dc_output_enabled")) is False
                          and all(type(metrics.get(key)) is int and metrics[key] == 0 for key in
                                  ("ac_output_timeout_seconds", "dc_output_timeout_seconds")))
     else:
@@ -277,6 +279,19 @@ def validate_plan(periods: Any, enabled: Any) -> list[dict]:
     return result
 
 
+def clock_brightness_supported(snapshot: dict, window: int) -> bool:
+    metrics = snapshot.get("metrics", {})
+    return (type(window) is int and window in (1, 2) and snapshot.get("model") == "c1000_gen2"
+            and snapshot.get("protocol") == "native_mqtt" and metrics.get("software_version") == "1.1.4.9"
+            and "set-clock-brightness" in snapshot.get("controls", [])
+            and metrics.get("usage_mode") == "standard" and metrics.get("active_tariff") == "none"
+            and all(type(metrics.get(key)) is int and metrics[key] == 0 for key in
+                    ("clock_screen_enabled", "clock_screen_transfer_status_raw",
+                     "ac_output_timeout_seconds", "dc_output_timeout_seconds"))
+            and all(type(metrics.get(key)) is int and metrics[key] in (0, 1) for key in
+                    ("clock_screen_first_brightness_flag_raw", "clock_screen_second_brightness_flag_raw")))
+
+
 def validate_command(snapshot: dict, payload: dict) -> None:
     """Validate known settings against fresh telemetry before any POST."""
     command = payload.get("command")
@@ -301,6 +316,7 @@ def validate_command(snapshot: dict, payload: dict) -> None:
         "set-dc-power-saving": {"command", "enabled"},
         "set-port-memory": {"command", "enabled"},
         "set-display-brightness": {"command", "level"},
+        "set-clock-brightness": {"command", "window", "high"},
         "set-display-timeout": {"command", "seconds"},
         "set-light": {"command", "mode"},
     }[command]
@@ -337,6 +353,9 @@ def validate_command(snapshot: dict, payload: dict) -> None:
         level = integer(payload["level"], "Display brightness")
         if not display_brightness_options(snapshot) or level not in DISPLAY_BRIGHTNESS_OPTIONS.values():
             raise ValueError("Display brightness requires a supported C1000 transport and level 1, 2 or 3")
+    elif command == "set-clock-brightness":
+        if type(payload["high"]) is not bool or not clock_brightness_supported(snapshot, payload["window"]):
+            raise ValueError("Clock brightness requires known inactive C1000 Gen 2 clock and countdown telemetry")
     elif command == "set-display-timeout":
         seconds = integer(payload["seconds"], "Screen timeout")
         if seconds not in [DISPLAY_TIMEOUT_OPTIONS[option] for option in display_timeout_options(snapshot)]:

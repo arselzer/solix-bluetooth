@@ -61,7 +61,7 @@ class SolixSettingSwitch(SolixEntity, SwitchEntity):
                     self._attr_extra_state_attributes["enable_requirement"] = "Requires main 1.1.4.9, fresh DC output OFF and inactive AC/DC countdowns."
             elif self.command == "set-ac-power-saving" and self.snapshot.get("protocol") in ("prime", "native_mqtt"):
                 self._attr_extra_state_attributes.update(
-                    enable_requirement="Requires fresh AC output OFF and an inactive AC countdown in both directions.",
+                    enable_requirement=("Requires fresh AC output OFF and inactive AC/DC countdowns on C1000 Gen 2 1.1.4.9; original C1000 requires an inactive AC countdown."),
                     inactivity_behavior="Smart may inherit an inactivity counter; enabling does not guarantee a new grace period.")
         elif self.command == "set-port-memory":
             self._attr_extra_state_attributes = {"recovery_behavior": "Off clears output-recovery bookkeeping; turning On does not restore that transient state."}

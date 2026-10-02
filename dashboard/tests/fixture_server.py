@@ -49,7 +49,9 @@ class Demo:
                    "software_version": "code 151" if original else "1.1.4.9" if c1000 else "2.1.6.4", "software_version_module": "0.3.3.0"}
         if c1000:
             metrics.update(display_brightness=1, display_timeout_seconds=30, port_memory_enabled=1, pv_weak_light_locked=0,
-                           ac_output_timeout_seconds=0, dc_output_timeout_seconds=0)
+                           ac_output_timeout_seconds=0, dc_output_timeout_seconds=0,
+                           clock_screen_enabled=0, clock_screen_transfer_status_raw=0,
+                           clock_screen_first_brightness_flag_raw=0, clock_screen_second_brightness_flag_raw=0)
         if original:
             metrics.update(display_brightness=2, display_timeout_seconds=30, light_mode=0,
                            device_timeout_minutes=720 if updated else 0, ac_output_timer_remaining_seconds=self.ac_countdown)
@@ -73,6 +75,8 @@ class Demo:
         key = {"set-display-brightness": "display_brightness", "set-display-timeout": "display_timeout_seconds",
                "set-port-memory": "port_memory_enabled"}.get(command, key)
         if key: self.overrides[name][key]=int(next(iter(values.values())))
+        if command == "set-clock-brightness":
+            self.overrides[name][f"clock_screen_{'first' if values['window'] == 1 else 'second'}_brightness_flag_raw"] = int(values["high"])
         return self.snapshot(name)
     def subscribe(self): return asyncio.Queue()
     def unsubscribe(self,queue): pass

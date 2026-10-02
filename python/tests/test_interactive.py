@@ -1,4 +1,5 @@
 from types import SimpleNamespace
+import pytest
 
 from solix_gen2 import Model
 from solix_gen2 import cli, interactive
@@ -8,6 +9,34 @@ from solix_gen2.config import DeviceConfig, load_config, save_config
 def inputs(monkeypatch, values):
     values = iter(values)
     monkeypatch.setattr("builtins.input", lambda _prompt: next(values))
+
+
+@pytest.mark.parametrize("selection,command,fields", [
+    ("5", "set-ac-power-saving", {"enabled": True}),
+    ("6", "set-dc-power-saving", {"enabled": True}),
+    ("7", "set-clock-brightness", {"window": 1, "high": True}),
+    ("8", "set-clock-brightness", {"window": 2, "high": True}),
+])
+def test_gen2_native_preference_fallback_dispatches_selected_window(monkeypatch, tmp_path, selection, command, fields, capsys):
+    requests = []
+    async def request(directory, action, **values):
+        requests.append((directory, action, values))
+        return {}
+    monkeypatch.setattr(interactive, "ap_service_request", request)
+    monkeypatch.setattr(interactive, "_show_status", lambda value: None)
+    inputs(monkeypatch, [selection, "2", "1"])
+    device = SimpleNamespace(name="office", model=Model.C1000_GEN2)
+    interactive.preference_menu(device, tmp_path / "config.json", tmp_path)
+    assert requests == [(tmp_path, command, {"name": "office", **fields})]
+    assert "Requires main 1.1.4.9" in capsys.readouterr().out
+
+
+def test_gen2_native_preference_cancel_sends_nothing(monkeypatch, tmp_path):
+    async def request(*args, **values):
+        raise AssertionError("Cancelled command must not be sent")
+    monkeypatch.setattr(interactive, "ap_service_request", request)
+    inputs(monkeypatch, ["8", "2", "0"])
+    interactive.preference_menu(SimpleNamespace(name="office", model=Model.C1000_GEN2), tmp_path / "config.json", tmp_path)
 
 
 def test_no_arguments_launch_guided_mode_only_in_a_terminal(monkeypatch, tmp_path, capsys):

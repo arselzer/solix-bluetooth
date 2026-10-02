@@ -37,7 +37,8 @@ const displayTimes = computed(() => nativeC1000.value ? [0, 10, 20, 30, 60, 300,
 const originalProfile = computed(() => props.station.model === 'c1000' && props.station.protocol === 'legacy');
 const guardedDcSmart = computed(() => props.station.model === 'c1000' && ['prime', 'native_mqtt'].includes(props.station.protocol ?? '')
   || props.station.model === 'c1000_gen2' && props.station.protocol === 'native_mqtt');
-const guardedAcSmart = computed(() => props.station.model === 'c1000' && ['prime', 'native_mqtt'].includes(props.station.protocol ?? ''));
+const guardedAcSmart = computed(() => props.station.model === 'c1000' && ['prime', 'native_mqtt'].includes(props.station.protocol ?? '')
+  || props.station.model === 'c1000_gen2' && props.station.protocol === 'native_mqtt');
 const originalPreferenceProfile = computed(() => props.station.model === 'c1000' && ['prime', 'native_mqtt'].includes(props.station.protocol ?? ''));
 const nativeC1000 = computed(() => props.station.model === 'c1000_gen2' && props.station.protocol === 'native_mqtt');
 const booleanReported = (key: string) => [0, 1].includes(numberMetric(props.station, key) ?? -1);
@@ -65,7 +66,15 @@ const dcSmartReady = computed(() => numberMetric(props.station, 'dc_output_enabl
     && numberMetric(props.station, 'ac_output_timeout_seconds') === 0
     && numberMetric(props.station, 'dc_output_timeout_seconds') === 0));
 const acSmartReady = computed(() => numberMetric(props.station, 'ac_output_enabled') === 0
-  && numberMetric(props.station, 'ac_output_timer_remaining_seconds') === 0);
+  && (nativeC1000.value ? props.station.metrics.software_version === '1.1.4.9'
+    && numberMetric(props.station, 'ac_output_timeout_seconds') === 0 && numberMetric(props.station, 'dc_output_timeout_seconds') === 0
+    : numberMetric(props.station, 'ac_output_timer_remaining_seconds') === 0));
+const clockWindows = [{ window: 1, draft: 'clockFirst', metric: 'clock_screen_first_brightness_flag_raw' },
+  { window: 2, draft: 'clockSecond', metric: 'clock_screen_second_brightness_flag_raw' }] as const;
+const clockReady = computed(() => nativeC1000.value && props.station.metrics.software_version === '1.1.4.9'
+  && props.station.metrics.usage_mode === 'standard' && props.station.metrics.active_tariff === 'none'
+  && ['clock_screen_enabled', 'clock_screen_transfer_status_raw', 'ac_output_timeout_seconds', 'dc_output_timeout_seconds'].every((key) => numberMetric(props.station, key) === 0)
+  && clockWindows.every((item) => booleanReported(item.metric)));
 const guardedSaving = (port: 'ac' | 'dc') => port === 'dc' ? guardedDcSmart.value : guardedAcSmart.value;
 const savingValid = (port: 'ac' | 'dc') => booleanReported(`${port}_power_saving_mode_enabled`)
   && (!(guardedDcSmart.value && port === 'dc') || dcSmartReady.value)
@@ -76,7 +85,7 @@ function powerSaving(port: 'ac' | 'dc') {
   const enabled = props.draft[port === 'ac' ? 'acSaving' : 'dcSaving'] === '1';
   const guarded = guardedDcSmart.value && port === 'dc' || guardedAcSmart.value && port === 'ac';
   propose({ command: `set-${port}-power-saving`, enabled }, guarded ? `Change ${port.toUpperCase()} Smart mode?` : `Change ${port.toUpperCase()} power saving?`,
-    guarded ? `Requires fresh ${port.toUpperCase()} output OFF${port === 'ac' ? ' and an inactive AC countdown' : nativeC1000.value ? ', main 1.1.4.9 and inactive AC/DC countdowns' : ''}. Smart may inherit an inactivity counter and later turn ${port.toUpperCase()} output off at low load; enabling does not guarantee a new grace period.`
+    guarded ? `Requires fresh ${port.toUpperCase()} output OFF${nativeC1000.value ? ', main 1.1.4.9 and inactive AC/DC countdowns' : port === 'ac' ? ' and an inactive AC countdown' : ''}. Smart may inherit an inactivity counter and later turn ${port.toUpperCase()} output off at low load; enabling does not guarantee a new grace period.`
       : 'Power saving may automatically turn the output off at low load.',
     [guarded ? enabled ? 'Smart' : 'Normal' : enabled ? 'On' : 'Off', `Applies to the ${port.toUpperCase()} output`]);
 }
@@ -200,6 +209,15 @@ function addPeriod() {
         <p v-if="station.model === 'c1000_gen2'" class="hint">Enabling requires Standard mode with no active tariff. Native MQTT also requires connected mains.</p>
         <p v-else-if="station.model === 'c1000'" class="hint">{{ fastCaution }}</p>
       </div>
+      <template v-if="nativeC1000 && allowed('set-clock-brightness')">
+        <div v-for="item in clockWindows" :key="item.window" class="setting">
+          <label :for="`clock-brightness-${item.window}`">Clock window {{ item.window }} brightness</label>
+          <p>Current {{ numberMetric(station, item.metric) === 1 ? 'High' : numberMetric(station, item.metric) === 0 ? 'Normal' : 'Not reported' }}</p>
+          <div class="setting-input"><select :id="`clock-brightness-${item.window}`" v-model="draft[item.draft]" :disabled="!writable || !clockReady"><option value="0">Normal</option><option value="1">High</option></select>
+            <button class="secondary" :disabled="!writable || !clockReady || !['0', '1'].includes(draft[item.draft])" @click="propose({ command: 'set-clock-brightness', window: item.window, high: draft[item.draft] === '1' }, 'Change clock-window brightness?', 'Changes one saved selector while the clock is disabled. Does not enable the clock or change its theme or assets.', [`Window ${item.window}`, draft[item.draft] === '1' ? 'High' : 'Normal'])">Apply</button></div>
+          <p class="hint">Saved window setting; requires disabled clock, no asset transfer and inactive countdowns.</p>
+        </div>
+      </template>
       <div v-if="allowed('set-light')" class="setting">
         <label for="light-mode">Light</label><p>Current {{ lights[numberMetric(station, 'light_mode') ?? -1] ?? 'Not reported' }}</p>
         <div class="setting-input"><select id="light-mode" v-model="draft.light" :disabled="!writable || !lightReported"><option v-for="(light, mode) in lights" :key="mode" :value="String(mode)">{{ light }}</option></select>
@@ -221,7 +239,7 @@ function addPeriod() {
           <div class="setting-input"><select :id="`${port}-power-saving`" v-model="draft[port === 'ac' ? 'acSaving' : 'dcSaving']" :disabled="!writable || !booleanReported(`${port}_power_saving_mode_enabled`) || guardedSaving(port) && !(port === 'dc' ? dcSmartReady : acSmartReady)"><option value="0">{{ guardedSaving(port) ? 'Normal' : 'Off' }}</option><option value="1">{{ guardedSaving(port) ? 'Smart' : 'On' }}</option></select>
             <button class="secondary" :disabled="!writable || !savingValid(port)" @click="powerSaving(port)">Apply</button></div>
           <p class="validation-error">Power saving may automatically turn the output off at low load.</p>
-          <p v-if="guardedSaving(port)" class="validation-error">Requires fresh {{ port.toUpperCase() }} output OFF{{ port === 'ac' ? ' and an inactive AC countdown' : '' }}. Smart may inherit an inactivity counter; enabling does not guarantee a new grace period.</p>
+          <p v-if="guardedSaving(port)" class="validation-error">Requires fresh {{ port.toUpperCase() }} output OFF{{ nativeC1000 ? ', main 1.1.4.9 and inactive AC/DC countdowns' : port === 'ac' ? ' and an inactive AC countdown' : '' }}. Smart may inherit an inactivity counter; enabling does not guarantee a new grace period.</p>
         </div>
       </template>
     </div>

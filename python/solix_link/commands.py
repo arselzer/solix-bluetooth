@@ -13,6 +13,7 @@ COMMAND_FIELDS = {
     "return-grid": {"timeout": int},
     "set-display-timeout": {"seconds": int},
     "set-display-brightness": {"level": int},
+    "set-clock-brightness": {"window": int, "high": bool},
     "set-port-memory": {"enabled": bool},
     "set-fast-charge": {"enabled": bool},
     "set-light": {"mode": int},
@@ -24,7 +25,7 @@ COMMAND_FIELDS = {
 }
 NATIVE_COMMANDS = ("set-charge-power", "set-charge-cap", "set-backup-reserve", "set-tou-plan", "return-grid")
 NATIVE_C1000_COMMANDS = ("set-temperature-unit", "set-off-grid-alert", "set-discharge-floor", "set-device-timeout", "set-fast-charge",
-                        "set-display-brightness", "set-display-timeout", "set-port-memory", "set-dc-power-saving")
+                        "set-display-brightness", "set-display-timeout", "set-port-memory", "set-dc-power-saving", "set-ac-power-saving", "set-clock-brightness")
 
 
 def native_commands_for_model(model: Model) -> tuple[str, ...]:
@@ -58,5 +59,7 @@ def validate_command(command: str, values: dict) -> None:
         raise ValueError("Grid confirmation timeout must be 5–120 seconds")
     if command == "set-device-timeout":
         validate_device_timeout(values["minutes"])
+    if command == "set-clock-brightness" and values["window"] not in (1, 2):
+        raise ValueError("Clock window must be 1 or 2")
     if command == "set-display-brightness" and values["level"] not in (1, 2, 3):
         raise ValueError("Display brightness must be 1 (low), 2 (medium) or 3 (high)")

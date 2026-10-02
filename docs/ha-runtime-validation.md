@@ -172,3 +172,52 @@ changes in restricted node-local JSONL, with an updated summary. It sends no
 commands, performs no recovery and stops after its deadline. The result is
 pending; these API samples cannot prove electrical continuity or continuous
 availability between samples. Existing full MQTT logs remain retained separately.
+
+## Clock, AC Smart and disabled solar-policy update
+
+The subsequent clock/AC Smart runtime wheel had SHA-256
+`df0b19b1d6bc510a9db54b940ed90992f7260727f0d875220cca871bef3db7b3`.
+It was installed after retaining code/configuration backups, preserving all
+station identities. The [bounded C1000 Gen 2 trial](c1000-gen2-clock-ac-smart-validation.md)
+confirmed both saved clock-brightness flags and AC Smart, then restored all
+protected settings. Its private AC-output setup/restoration affected only the
+noncritical C1000 Gen 2; original/C2000 received status requests only.
+
+The final wheel adds the line-menu entries and corrected browser requirement
+text, SHA-256
+`806085309f31157d1e892bc74deb57faaf9f9aac2ee48ab20b2156dbdd271a41`.
+Only the HTTP gateway needed a second reload for its asset map; the AP sessions
+and station profiles were retained. Fresh checks showed all three AC outputs on.
+
+| Station | Native controls | Registered / available HA entities |
+| --- | ---: | ---: |
+| Original C1000 | 9 | 16 / 15 |
+| C1000 Gen 2 | 16 | 37 / 25 |
+| C2000 Gen 2 | 5 | 22 / 17 |
+
+Both optional Gen 2 clock selects are registered **disabled by default**.
+AC Smart was discovered during the SDK trial's safe AC-off interval and is
+unavailable after AC restoration. Live select-service writes remain untested;
+the native worker was exercised and HA has forty select contract cases.
+
+The revised charging blueprint passed the installed HA 2026.7.4 schema again.
+Normal authenticated HA APIs created two dedicated off helpers and saved a
+**disabled C1000 Gen 2 solar charging instance**. No policy was activated or
+station charging setting changed. Its candidate export sensor reports W, but
+export sign remains unconfirmed. Defaults and activation prerequisites are in
+the [charging policy guide](home-assistant-charging-automation.md).
+
+The policy verifies all ten exact roles and native transport on one HA device,
+rechecks guards in HA's manual Run path, and recalculates the opportunity after
+a reserve action. Eighty-seven actual-template tests cover these conditions.
+Final release checks passed **2,362 Python/HA tests** and **20 synthetic browser
+scenarios**; regenerated screenshots contain synthetic station data only.
+Independent 92-case Gen 2 and 131-case original firmware replays matched both
+complete result/manifest pairs. Their limits are documented separately.
+
+The bounded observation remains pending. Deliberate service upgrades and the
+AC Smart trial are recorded as interventions, so resulting gaps or setting
+changes must not be treated as spontaneous failures. The original remains at
+100% SOC/0 W without a test load; no actual charging-rate or newly supported
+forced-discharge behavior is claimed. Generated original/C2000 native identities
+still require a demonstrated independent recovery path before testing.
