@@ -72,7 +72,13 @@ async def async_get_config_entry_diagnostics(
     hass: HomeAssistant, entry: SolixConfigEntry,
 ) -> dict[str, Any]:
     """Use the existing coordinator snapshot; never poll or send a command."""
-    coordinator = entry.runtime_data
+    coordinator = getattr(entry, "runtime_data", None)
+    if coordinator is None:
+        return {
+            "gateway_authenticated": None,
+            "last_poll_success": False,
+            **diagnostics_report({}),
+        }
     return {
         "gateway_authenticated": bool(coordinator.client.token),
         "last_poll_success": coordinator.last_update_success,

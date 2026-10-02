@@ -67,14 +67,15 @@ and are not guaranteed outage durations.
 
 ## Deployment and remaining checks
 
-An allowlisted diagnostics platform was then installed and loaded with one
-additional HA restart. The actual authenticated diagnostics download returned
+An allowlisted diagnostics platform was then installed. HA was restarted to
+load it, and once more for failed-setup handling. The actual authenticated diagnostics download returned
 all three fresh stations and their expected firmware versions. Gateway URL/token
 were absent from the complete response. The integration payload omits configured
 names, entry/device IDs, serials, account identities and raw captures; it reads
 only the coordinator cache. HA adds standard system metadata around that payload.
-Twenty new privacy/staleness tests passed; the full standalone HA suite is now
-**519 tests**. No gateway wheel or station configuration changed for diagnostics.
+Twenty-one privacy/staleness tests passed, including unavailable setup without
+a coordinator; the full standalone HA suite is now **520 tests**. No gateway
+wheel or station configuration changed for diagnostics.
 
 HA runs in a host-network Docker container; its actual configuration mount,
 rather than the Compose-file directory, contains the custom component. The

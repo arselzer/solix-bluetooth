@@ -94,3 +94,10 @@ def test_platform_uses_cached_data_and_does_not_return_entry_or_client_secrets()
     assert report["last_poll_success"] is True
     coordinator.data = None
     assert asyncio.run(diagnostics.async_get_config_entry_diagnostics(None, entry))["station_count"] == 0
+
+
+def test_unloaded_or_failed_setup_exports_no_configuration_or_exception():
+    entry = SimpleNamespace(data={"token": "private token", "url": "http://private-host"})
+    report = asyncio.run(diagnostics.async_get_config_entry_diagnostics(None, entry))
+    assert report == {"gateway_authenticated": None, "last_poll_success": False,
+                      "station_count": 0, "stations": []}

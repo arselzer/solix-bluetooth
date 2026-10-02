@@ -174,7 +174,8 @@ gateway URL, entry/device IDs, credentials and raw captures are omitted from
 the integration report. It sends no device request or command. HA adds its
 standard system/integration metadata to the download; review that wrapper before
 sharing. Diagnostics export and credential omission passed the actual HA 2026.7.4
-HTTP endpoint and twenty focused privacy/staleness tests. See
+HTTP endpoint and twenty-one focused privacy/staleness tests, including failed
+setup without a coordinator. See
 [HA's diagnostics documentation](https://developers.home-assistant.io/docs/core/integration/diagnostics/).
 
 One coordinator polls every five seconds while idle; a command pauses polling.
