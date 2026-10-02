@@ -129,8 +129,14 @@ word unchanged because their worker is not executed.
 
 ## Implementation and live-test prerequisites
 
-Gen 2 Smart and countdown setters remain unexposed. Existing saved Smart sensors
-are read-only. A first future trial should use the noncritical C1000 Gen 2 with
+Subsequent C1000 Gen 2 trials exposed guarded [DC Smart](c1000-gen2-native-dc-smart-validation.md)
+and [AC Smart](c1000-gen2-clock-ac-smart-validation.md) configuration, requiring
+the corresponding output off and inactive timers. A private operator
+[AC countdown](c1000-gen2-native-ac-countdown-validation.md) now has a bounded
+600-second arm/early-cancel validation. Physical expiry and low-load shutdown
+remain untested; C2000 output-policy controls remain excluded.
+
+A first configuration trial should use the noncritical C1000 Gen 2 with
 the tested domain already off, fresh complete status, inactive countdowns and
 saved full preferences. Changing Smart while an output is off can establish
 configuration/readback without asserting low-load shutdown behavior.

@@ -732,3 +732,28 @@ this is not proof of mains loss or physical output interruption. Actual
 transport cadence, fault clearing and charging recovery remain unverified.
 The direct queue-call audit still establishes no public stored-fault-clear
 route. This follow-up sent no device commands.
+
+## October 2: bounded countdown and original input qualification
+
+The [98-case C1000 Gen 2 lifecycle replay](gen2-ac-countdown-roundtrip.md) shows
+normal early cancellation/rearming preserves all 415 saved bytes, while hidden
+checkpoint/counter state is not fully restored. Zero cannot revoke an already
+queued output stop. The separate [native MQTT trial](c1000-gen2-native-ac-countdown-validation.md)
+confirmed 600→594→0 on main 1.1.4.9, with two timer writes and no output-switch
+writes. It restored reported preferences and did not exercise physical expiry.
+The private operator CLI supports this guarded control; HTTP/HA exclude it.
+Original/C2000 received only status requests.
+
+[1,064 original main-1.5.9 DC-input cases](c1000-second-input-qualification.md)
+trace DSP bit qualification, 202-call debounce transitions and qualified AC
+priority. Input flags and rule events do not establish an external charging-source
+selector or installed-1.7.1 behavior. A real original charging-rate test still
+requires battery headroom and the deferred expendable load.
+
+The [static app OTA follow-up](c1000-firmware-metadata-followup.md) identifies
+the original shared metadata route and `LastPackage` URL/hash/size fields.
+Compatible OTA endpoints belong to MicroInverter paths, while the discovered
+precharge action has a device-class gate excluding the retained original C1000
+class. No cloud request or supported pause/discharge control follows from this
+source audit. These findings can guide future firmware acquisition; they do not
+implement a local updater.

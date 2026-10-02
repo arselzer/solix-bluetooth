@@ -221,3 +221,29 @@ changes must not be treated as spontaneous failures. The original remains at
 100% SOC/0 W without a test load; no actual charging-rate or newly supported
 forced-discharge behavior is claimed. Generated original/C2000 native identities
 still require a demonstrated independent recovery path before testing.
+
+## Private AC-countdown runtime update
+
+On 2026-10-02 the existing AP/gateway runtime received the guarded private
+C1000 Gen 2 countdown setter, wheel SHA-256
+`e8e81f18e13308aab68850e50e0418100bce8523784094cd67c9b1721fa5467a`.
+The previous package was backed up; all static station profiles and certificate
+hashes were preserved. Only the existing AP/gateway services restarted. All
+three stations recovered fresh telemetry and AC enabled within **24.03 seconds**
+of the recovery check starting. No HA component/configuration reload was needed.
+
+The [bounded timer trial](c1000-gen2-native-ac-countdown-validation.md) verified
+600→594→0 and restoration, with exactly two native timer writes to C1000 Gen 2.
+Original/C2000 received status requests only. Final gateway checks remained fresh;
+native capability counts stayed **9 / 16 / 5** for original / Gen 2 / C2000.
+HA discovery counts remained **16 / 37 / 22** registered entities. The solar
+automation was still disabled and both arming/latch helpers off. The release
+gate passed **2,402 Python/HA tests**. Browser/component sources did not change.
+
+An immutable observation snapshot covered **253 samples over 2.10 hours** with
+zero HTTP request errors. Two samples had empty caches and unavailable stations
+4.85 and 16.35 seconds after recorded service upgrades. Those samples do not
+establish actual preference changes. The sole nonempty changed-settings sample
+was the planned C1000 Gen 2 countdown; subsequent reports returned to baseline.
+The 13-hour observation is still running. No completed soak-test or independent
+electrical-continuity claim follows from this partial snapshot.

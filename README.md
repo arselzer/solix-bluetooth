@@ -15,7 +15,9 @@ Home Assistant integration for the local gateway.
   off-grid alert, display brightness/timeout, output-port memory and guarded
   lower discharge limit without silently changing reserve; AC/DC Smart with the
   corresponding output off and inactive countdowns on main 1.1.4.9, plus saved
-  brightness for each inactive clock window.
+  brightness for each inactive clock window. A private operator CLI also supports
+  a [guarded AC countdown](docs/c1000-gen2-native-ac-countdown-validation.md);
+  early cancellation is tested, physical expiry remains untested.
 - Original C1000: local MQTT and Prime Bluetooth charging power, Device Timeout,
   screen timeout/brightness, light and temperature units; guarded AC/DC Smart
   with the corresponding output off and Fast charging over both transports;

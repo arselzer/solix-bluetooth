@@ -1,0 +1,433 @@
+{
+  "model": "A1761 original C1000",
+  "main_version": "1.5.9",
+  "input_sha256": "b295ee8613f5c96e70dcc905896df516621cab4dc590bb580eac6b84519911a6",
+  "cases": {
+    "actual_second_slot_registration": 1,
+    "dc_predicate_words": 1024,
+    "callback_mask_and_unrelated_bits": 24,
+    "qualification_sequences": 6,
+    "qualified_input_to_explicit_rule": 4,
+    "no_direct_qualifier_command_entry": 5,
+    "total": 1064
+  },
+  "cases_sha256": "459c3969dfbdf81b5d897b2477b17951f98ceedc0fe6998acf92b7301f673f43",
+  "qualification_sequences": [
+    {
+      "sequence": "fresh_dc_entry",
+      "transition_sample": 202,
+      "before": {
+        "qualified_input_byte": 160,
+        "change_flags": 0,
+        "ac_state": 0,
+        "ac_counter": 1,
+        "dc_state": 0,
+        "dc_counter": 201,
+        "events": [],
+        "power_state_unchanged": true
+      },
+      "after": {
+        "qualified_input_byte": 162,
+        "change_flags": 2,
+        "ac_state": 0,
+        "ac_counter": 1,
+        "dc_state": 1,
+        "dc_counter": 0,
+        "events": [
+          {
+            "kind": "event_queue",
+            "id": 9,
+            "data": 0
+          }
+        ],
+        "power_state_unchanged": true
+      }
+    },
+    {
+      "sequence": "invalid_then_valid_entry",
+      "valid_transition_sample": 201,
+      "blocked": {
+        "qualified_input_byte": 160,
+        "change_flags": 0,
+        "ac_state": 0,
+        "ac_counter": 1,
+        "dc_state": 0,
+        "dc_counter": 1,
+        "events": [],
+        "power_state_unchanged": true
+      },
+      "before": {
+        "qualified_input_byte": 160,
+        "change_flags": 0,
+        "ac_state": 0,
+        "ac_counter": 1,
+        "dc_state": 0,
+        "dc_counter": 201,
+        "events": [],
+        "power_state_unchanged": true
+      },
+      "after": {
+        "qualified_input_byte": 162,
+        "change_flags": 2,
+        "ac_state": 0,
+        "ac_counter": 1,
+        "dc_state": 1,
+        "dc_counter": 0,
+        "events": [
+          {
+            "kind": "event_queue",
+            "id": 9,
+            "data": 0
+          }
+        ],
+        "power_state_unchanged": true
+      }
+    },
+    {
+      "sequence": "dc_removal",
+      "transition_sample": 202,
+      "before": {
+        "qualified_input_byte": 162,
+        "change_flags": 0,
+        "ac_state": 0,
+        "ac_counter": 1,
+        "dc_state": 1,
+        "dc_counter": 201,
+        "events": [],
+        "power_state_unchanged": true
+      },
+      "after": {
+        "qualified_input_byte": 160,
+        "change_flags": 128,
+        "ac_state": 0,
+        "ac_counter": 1,
+        "dc_state": 0,
+        "dc_counter": 0,
+        "events": [
+          {
+            "kind": "event_queue",
+            "id": 9,
+            "data": 0
+          }
+        ],
+        "power_state_unchanged": true
+      }
+    },
+    {
+      "sequence": "other_dc_word_bits_after_entry",
+      "samples": 300,
+      "after": {
+        "qualified_input_byte": 162,
+        "change_flags": 2,
+        "ac_state": 0,
+        "ac_counter": 1,
+        "dc_state": 1,
+        "dc_counter": 0,
+        "events": [],
+        "power_state_unchanged": true
+      }
+    },
+    {
+      "sequence": "dc_removal_interrupted",
+      "first_absence": {
+        "qualified_input_byte": 162,
+        "change_flags": 2,
+        "ac_state": 0,
+        "ac_counter": 1,
+        "dc_state": 1,
+        "dc_counter": 100,
+        "events": [],
+        "power_state_unchanged": true
+      },
+      "presence_return": {
+        "qualified_input_byte": 162,
+        "change_flags": 2,
+        "ac_state": 0,
+        "ac_counter": 1,
+        "dc_state": 1,
+        "dc_counter": 0,
+        "events": [],
+        "power_state_unchanged": true
+      },
+      "before": {
+        "qualified_input_byte": 162,
+        "change_flags": 2,
+        "ac_state": 0,
+        "ac_counter": 1,
+        "dc_state": 1,
+        "dc_counter": 201,
+        "events": [],
+        "power_state_unchanged": true
+      },
+      "after": {
+        "qualified_input_byte": 160,
+        "change_flags": 130,
+        "ac_state": 0,
+        "ac_counter": 1,
+        "dc_state": 0,
+        "dc_counter": 0,
+        "events": [
+          {
+            "kind": "event_queue",
+            "id": 9,
+            "data": 0
+          }
+        ],
+        "power_state_unchanged": true
+      }
+    },
+    {
+      "sequence": "simultaneous_ac_dc_entry",
+      "transition_sample": 202,
+      "slot_order": [
+        "AC",
+        "second input"
+      ],
+      "before": {
+        "qualified_input_byte": 160,
+        "change_flags": 0,
+        "ac_state": 0,
+        "ac_counter": 201,
+        "dc_state": 0,
+        "dc_counter": 201,
+        "events": [],
+        "power_state_unchanged": true
+      },
+      "after": {
+        "qualified_input_byte": 163,
+        "change_flags": 3,
+        "ac_state": 1,
+        "ac_counter": 0,
+        "dc_state": 1,
+        "dc_counter": 0,
+        "events": [
+          {
+            "kind": "event_queue",
+            "id": 9,
+            "data": 0
+          },
+          {
+            "kind": "event_queue",
+            "id": 9,
+            "data": 0
+          }
+        ],
+        "power_state_unchanged": true
+      }
+    }
+  ],
+  "explicit_rule_handoffs": [
+    {
+      "scenario": "DC entry without AC",
+      "raw_ac_presence": false,
+      "raw_ac_fault_word": 0,
+      "qualified_inputs": 2,
+      "qualifier": {
+        "qualified_input_byte": 162,
+        "change_flags": 2,
+        "ac_state": 0,
+        "ac_counter": 1,
+        "dc_state": 1,
+        "dc_counter": 0,
+        "events": [
+          {
+            "kind": "event_queue",
+            "id": 9,
+            "data": 0
+          }
+        ],
+        "power_state_unchanged": true
+      },
+      "explicit_synthetic_rule_group": 3,
+      "rule": {
+        "selected_rows": [
+          1
+        ],
+        "gate_actions": [
+          {
+            "gate_bit": 5,
+            "argument": 47
+          },
+          {
+            "gate_bit": 0,
+            "argument": 1
+          }
+        ],
+        "events": [
+          {
+            "kind": "event_queue",
+            "id": 0,
+            "data": 0
+          }
+        ],
+        "source_bits_before": 0,
+        "source_bits_after": 1,
+        "protected_output_bits_unchanged": true,
+        "bc_code_after": 1
+      }
+    },
+    {
+      "scenario": "DC entry with raw AC but blocked AC qualification",
+      "raw_ac_presence": true,
+      "raw_ac_fault_word": 1,
+      "qualified_inputs": 2,
+      "qualifier": {
+        "qualified_input_byte": 162,
+        "change_flags": 2,
+        "ac_state": 0,
+        "ac_counter": 1,
+        "dc_state": 1,
+        "dc_counter": 0,
+        "events": [
+          {
+            "kind": "event_queue",
+            "id": 9,
+            "data": 0
+          }
+        ],
+        "power_state_unchanged": true
+      },
+      "explicit_synthetic_rule_group": 3,
+      "rule": {
+        "selected_rows": [
+          1
+        ],
+        "gate_actions": [
+          {
+            "gate_bit": 5,
+            "argument": 47
+          },
+          {
+            "gate_bit": 0,
+            "argument": 1
+          }
+        ],
+        "events": [
+          {
+            "kind": "event_queue",
+            "id": 0,
+            "data": 0
+          }
+        ],
+        "source_bits_before": 0,
+        "source_bits_after": 1,
+        "protected_output_bits_unchanged": true,
+        "bc_code_after": 1
+      }
+    },
+    {
+      "scenario": "AC entry after qualified DC",
+      "raw_ac_presence": true,
+      "raw_ac_fault_word": 0,
+      "qualified_inputs": 3,
+      "qualifier": {
+        "qualified_input_byte": 163,
+        "change_flags": 1,
+        "ac_state": 1,
+        "ac_counter": 0,
+        "dc_state": 1,
+        "dc_counter": 0,
+        "events": [],
+        "power_state_unchanged": true
+      },
+      "explicit_synthetic_rule_group": 5,
+      "rule": {
+        "selected_rows": [
+          1
+        ],
+        "gate_actions": [
+          {
+            "gate_bit": 5,
+            "argument": 1
+          },
+          {
+            "gate_bit": 0,
+            "argument": 0
+          }
+        ],
+        "events": [
+          {
+            "kind": "event_queue",
+            "id": 0,
+            "data": 0
+          }
+        ],
+        "source_bits_before": 1,
+        "source_bits_after": 32,
+        "protected_output_bits_unchanged": true,
+        "bc_code_after": 2
+      }
+    },
+    {
+      "scenario": "AC removal while DC remains qualified",
+      "raw_ac_presence": false,
+      "raw_ac_fault_word": 0,
+      "qualified_inputs": 2,
+      "qualifier": {
+        "qualified_input_byte": 162,
+        "change_flags": 64,
+        "ac_state": 0,
+        "ac_counter": 0,
+        "dc_state": 1,
+        "dc_counter": 0,
+        "events": [
+          {
+            "kind": "event_queue",
+            "id": 9,
+            "data": 0
+          }
+        ],
+        "power_state_unchanged": true
+      },
+      "explicit_synthetic_rule_group": 6,
+      "rule": {
+        "selected_rows": [
+          2
+        ],
+        "gate_actions": [
+          {
+            "gate_bit": 5,
+            "argument": 0
+          },
+          {
+            "gate_bit": 0,
+            "argument": 1
+          }
+        ],
+        "events": [
+          {
+            "kind": "event_queue",
+            "id": 0,
+            "data": 0
+          }
+        ],
+        "source_bits_before": 32,
+        "source_bits_after": 1,
+        "protected_output_bits_unchanged": true,
+        "bc_code_after": 1
+      }
+    }
+  ],
+  "dc_predicate": "DSP uint16[4c] bit4 only; removal is the inverse of that bit",
+  "registration": {
+    "slot": "2000251c",
+    "threshold": 200,
+    "entry": "0802169c",
+    "removal": "08021710",
+    "callback": "080216b4"
+  },
+  "substitutes": {
+    "08010278": "event capture, no dispatcher",
+    "08006b38": "alarm capture; healthy cases",
+    "sampler boundary": "stop after slot1, before other qualification slots"
+  },
+  "limits": [
+    "Available main1.5.9 differs from installed1.7.1; DSP execution, original radio image and physical inputs absent.",
+    "Other DSP word bits have unassigned meanings; qualification is not a complete health/protection test.",
+    "No wall-clock transition guarantee; real DSP cache and scheduling may add latency.",
+    "Rule groups3/5/6 invoked explicitly after qualification, not through the complete event dispatcher.",
+    "Output/power RAM preserved synchronously; no physical converter/relay behavior is established.",
+    "Direct command-table absence does not exclude every indirect path or firmware version.",
+    "No external charging pause, source override or force-battery command established."
+  ]
+}

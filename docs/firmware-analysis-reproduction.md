@@ -221,6 +221,26 @@ radio/event effects and actual main 1.7.1. Both complete result/manifest pairs
 independently matched `expected_results/` byte for byte. They add no live
 diagnostic or raw-register API and remain outside the combined 1,842-case count.
 
+## AC countdown lifecycle and original DC-input qualification
+
+```sh
+SOLIX_ANALYSIS_OUTPUT=/tmp/gen2-ac-countdown \
+  python3 tools/firmware_analysis/emulate_gen2_ac_countdown_roundtrip.py
+python3 tools/firmware_analysis/emulate_original_dc_input_qualification.py \
+  --output /tmp/original-dc-input-qualification-results.json \
+  --manifest /tmp/original-dc-input-qualification-manifest.json
+```
+
+The [98-case countdown suite](gen2-ac-countdown-roundtrip.md) uses A1763 main
+1.1.4.9. Normal early cancel/rearm preserves saved settings, while hidden volatile
+state and pending stops prevent unconditional cancellation guarantees. The
+[1,064-case original DC-input suite](c1000-second-input-qualification.md) uses
+main 1.5.9 and selected DCDC code, tracing qualification/debounce and qualified
+AC priority. It establishes no external source selector or installed-1.7.1
+charging-rate behavior. Independent complete result/manifest pairs matched
+`expected_results/` byte for byte; these counts remain outside the combined runner.
+Use each linked note for exact filenames, image hashes and substitutes.
+
 ## Additional image integrity tools
 
 These checks use the bundled vendor images and perform no emulation or device I/O:

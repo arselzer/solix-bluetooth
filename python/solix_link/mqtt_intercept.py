@@ -337,6 +337,53 @@ class LocalMqttServer:
                     raise RuntimeError("AC output or protected settings not confirmed; inspect fresh status")
             return self._tou_result(d9, metrics)
 
+    async def set_ac_countdown(self, seconds: int) -> dict:
+        """Confirm a private C1000-only timer; no output command or retry.
+
+        A positive timer will eventually stop AC. Cancel well before expiry;
+        zero readback cannot establish that a queued stop has been revoked.
+        """
+        request = self.commands.ac_countdown(seconds)  # Model/type guard before I/O.
+        async with self._control_lock:
+            connection = self._control_connection()
+            before_a4, before_d9, before = await self._fresh_c1000_settings(connection)
+            if before.get("software_version") != "1.1.4.9":
+                raise ValueError("AC countdown requires main 1.1.4.9; no write sent")
+            if seconds and (before["ac_output_enabled"] != 1
+                            or before["ac_output_timeout_seconds"] != 0
+                            or before["dc_output_timeout_seconds"] != 0
+                            or before.get("ac_power_saving_mode_enabled") != 0
+                            or before.get("usage_mode") != "standard"
+                            or before.get("active_tariff") != "none"):
+                raise ValueError("New AC countdown requires AC on, Smart off, Standard and inactive AC/DC timers; no write sent")
+            await connection.request(request)
+            previous = seconds
+            for sample in range(2):
+                if sample:
+                    await asyncio.sleep(1)
+                a4, d9, metrics = await self._fresh_c1000_settings(connection)
+                remaining = metrics["ac_output_timeout_seconds"]
+                # This confirms recent timer storage, not its future expiry.
+                # A long delay or unexpected fast consumption leaves an
+                # uncertain result instead of assuming seconds follow wall time.
+                if ((seconds == 0 and remaining != 0)
+                        or (seconds and not seconds - 30 <= remaining <= previous)):
+                    raise RuntimeError("AC countdown not confirmed; inspect fresh status before cancellation")
+                expected = bytearray(before_a4)
+                expected[1:5] = a4[1:5]
+                if metrics["dc_output_timeout_seconds"] > before["dc_output_timeout_seconds"]:
+                    raise RuntimeError("DC countdown increased during AC countdown confirmation")
+                expected[9:13] = a4[9:13]  # Another timer may advance naturally.
+                expected[22] = a4[22]  # Normal runtime display activity.
+                if (a4 != bytes(expected) or d9[2:] != before_d9[2:]
+                        or any(metrics[key] != before[key] for key in
+                               ("ac_output_enabled", "dc_output_enabled", "ac_input_connected"))):
+                    raise RuntimeError("Protected setting or output changed during AC countdown confirmation")
+                previous = remaining
+            result = self._tou_result(d9, metrics)
+            result["timer_scope"] = "remaining AC countdown; zero cannot revoke a queued stop"
+            return result
+
     async def _fresh_original_settings(self, connection, *, require_inactive_ac_timer: bool = False) -> tuple[dict, bytes]:
         reply = await connection.request(self.commands.status())
         if not reply or reply[0] != 0:

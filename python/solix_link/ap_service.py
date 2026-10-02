@@ -227,7 +227,8 @@ class APService:
                 raise ValueError("Select a configured station by name")
             mqtt = self.stations[name]
             local_output = action == "set-ac-output" and mqtt.config.model == Model.C1000_GEN2
-            if action not in ("status", "readiness") and not local_output and action not in native_commands_for_model(mqtt.config.model):
+            local_countdown = action == "set-ac-countdown" and mqtt.config.model == Model.C1000_GEN2
+            if action not in ("status", "readiness") and not (local_output or local_countdown) and action not in native_commands_for_model(mqtt.config.model):
                 raise ValueError("This native control is not verified for the selected model")
             if action == "readiness" and mqtt.config.model == Model.C1000:
                 raise ValueError("Controller readiness is unavailable for original C1000")
@@ -240,6 +241,10 @@ class APService:
                     if set(request) != {"command", "enabled"} or type(request["enabled"]) is not bool:
                         raise ValueError("Use an explicit enabled boolean")
                     result = await mqtt.set_ac_output_enabled(request["enabled"])
+                elif local_countdown:
+                    if set(request) != {"command", "seconds"}:
+                        raise ValueError("Use only the explicit seconds field")
+                    result = await mqtt.set_ac_countdown(request["seconds"])
                 elif action == "set-charge-power":
                     result = await mqtt.set_ac_charging_power(request.get("watts"))
                 elif action == "set-charge-cap":

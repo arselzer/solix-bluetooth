@@ -133,6 +133,11 @@ These are proposed prerequisites. No live validation or public control API was
 added by this audit. Smart counter history and thresholds retain the limitations
 in the [previous policy audit](gen2-output-policy-followup.md).
 
+A subsequent [private CLI trial](c1000-gen2-native-ac-countdown-validation.md)
+confirmed a 600-second timer, short progression and early zero cancellation on
+main 1.1.4.9. It did not exercise expiry, independent output sensing or pending
+stop revocation. HTTP and HA still exclude this output timer.
+
 ## Reproduction and evidence boundaries
 
 ```sh

@@ -156,6 +156,15 @@ For noncritical C1000 Gen 2 loads only, the private operator CLI
 inactive countdowns. It is excluded from HTTP/HA and from C2000. Use fresh
 status before restoring an uncertain output command; no automatic retry is sent.
 
+The private C1000 Gen 2/main 1.1.4.9 operator CLI also has
+`ap-service-set-ac-countdown --seconds 600` and `--seconds 0` for early
+cancellation. Positive durations are limited to 600–86400 seconds and require
+AC on, Smart off, Standard mode and no active AC/DC countdown. A timer
+eventually stops AC; zero cannot revoke a stop already queued by expiry.
+Two fresh reports confirm remaining time and protect configuration/output
+states. This command is excluded from HTTP/HA and C2000. See
+[timer lifecycle and confirmation limits](../docs/gen2-ac-countdown-roundtrip.md).
+
 Original C1000 **legacy** temperature, fast charge and AC/DC Smart preferences are
 [physically verified](../docs/c1000-preferences-validation.md) and exposed in
 the terminal/browser/CLI, bridge and gateway/HA. Boolean commands are

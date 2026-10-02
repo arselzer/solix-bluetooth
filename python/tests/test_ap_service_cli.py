@@ -18,6 +18,7 @@ from solix_link.cli import parser
     ("ap-service-set-temperature-unit", ["--unit", "celsius"]),
     ("ap-service-set-off-grid-alert", ["--state", "on"]),
     ("ap-service-set-dc-power-saving", ["--enabled", "off"]),
+    ("ap-service-set-ac-countdown", ["--seconds", "600"]),
     ("ap-service-set-reserve", ["--reserve", "85"]),
     ("ap-service-set-tou", ["--mode", "standard"]),
     ("ap-service-grid", ["--timeout", "20"]),

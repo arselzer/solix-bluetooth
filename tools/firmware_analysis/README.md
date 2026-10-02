@@ -202,3 +202,22 @@ Independent results and manifests matched their `expected_results/` files byte
 for byte. All RAM and timestamps are synthetic. No radio/relay/flash operation
 or newer-original firmware equivalence is established; counts remain separate
 from the combined runner. Diagnostic commands are not runtime API features.
+
+## Countdown lifecycle and original DC-input qualification
+
+```sh
+SOLIX_ANALYSIS_OUTPUT=/tmp/gen2-ac-countdown \
+  python3 tools/firmware_analysis/emulate_gen2_ac_countdown_roundtrip.py
+python3 tools/firmware_analysis/emulate_original_dc_input_qualification.py \
+  --output /tmp/original-dc-input-qualification-results.json \
+  --manifest /tmp/original-dc-input-qualification-manifest.json
+```
+
+[98 C1000 Gen 2 main-1.1.4.9 cases](../../docs/gen2-ac-countdown-roundtrip.md)
+cover early cancellation, normal rearming, adverse hidden states and asynchronous
+off/on resets. [1,064 original main-1.5.9 cases](../../docs/c1000-second-input-qualification.md)
+cover the second input qualifier, debounce history, qualified AC priority and
+selected DCDC validity boundaries. Complete results/manifests independently
+matched `expected_results/`. Both suites use synthetic inputs, omit physical
+outputs and remain separate from the combined runner. Installed original
+1.7.1 equivalence and a user-selectable charging-source command are unproved.

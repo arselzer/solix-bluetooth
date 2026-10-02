@@ -199,6 +199,19 @@ class NativeMqttCommands:
             raise ValueError("AC output requires C1000 Gen 2 and a boolean")
         return self._request("0101", tlv(0xA2, bytes((1, int(enabled)))), milliseconds=True)
 
+    def ac_countdown(self, seconds: int) -> NativeMqttRequest:
+        """Build a local C1000 Gen 2 expiry timer; zero cannot revoke queued stop.
+
+        Positive timers deliberately stop AC later. The operator domain is
+        10 minutes through 24 hours; firmware's complete domain is unverified.
+        Callers must obtain a fresh output-on, inactive-timer baseline.
+        """
+        if self.model != Model.C1000_GEN2:
+            raise ValueError("AC countdown supports C1000 Gen 2 only")
+        if type(seconds) is not int or (seconds != 0 and not 600 <= seconds <= 86400):
+            raise ValueError("AC countdown must be zero or 600–86400 integer seconds")
+        return self._request("0101", tlv(0xA3, b"\x03" + seconds.to_bytes(4, "little")), milliseconds=True)
+
     def _original_setting(self, setting: str, value: int | bool) -> NativeMqttRequest:
         if self.model != Model.C1000:
             raise ValueError("This setting supports original C1000 only")
