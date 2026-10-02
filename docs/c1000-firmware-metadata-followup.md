@@ -45,9 +45,12 @@ With the default `useBaseUrl`, `requestHttp` prepends `RequestApi.currentBaseUrl
 (`02264e50`), which resolves environment/country through
 `SpUtil.getHostByRegion` (`022650d8`). That resolver checks a cached regional host
 before its local fallback. A captured station-side API host therefore cannot
-simply be assumed to be the app's OTA host. The lower encryption, authentication
-and response processing remain untraced; a plain JSON POST is not established
-as an equivalent request. Despite being used for a version check, the endpoint is a POST:
+simply be assumed to be the app's OTA host. The
+[HTTP-wrapper follow-up](c1000-ota-http-wrapper.md) traces conditional SDK/Dio
+branches, app-context headers and the plaintext business-response callback.
+Native SDK wire signing/encryption remains outside the retained Dart image;
+a plain JSON POST is not established as an equivalent request. Despite being
+used for a version check, the endpoint is a POST:
 no server-side read-only guarantee is established. Changing `force_version`
 or treating this as an install API is unsupported.
 

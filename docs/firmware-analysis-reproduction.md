@@ -259,6 +259,37 @@ command or completed physical recovery trial. ACK is insufficient to establish
 advertising; application flags do not expose the PAL state. Original/C2000
 equivalence is unproved, and counts remain outside the combined runner.
 
+## Radio initialization and query-provider continuation
+
+```sh
+PYTHONPATH=/tmp/solix-analysis-tools:tools/firmware_analysis \
+  python3 tools/firmware_analysis/emulate_radio_ble_activation.py \
+  --image firmware/c1000_gen2/1.1.4.9/c1000-radio-validated.bin \
+  --output-dir /tmp/radio-ble-activation
+python3 tools/firmware_analysis/emulate_radio_native_info_queries.py \
+  --output /tmp/radio-native-info
+```
+
+The [47-case initialization/activation suite](radio-ble-initialization-activation.md)
+extends first-enable defaults, application BLE flag producers and the normal
+provisioning callback. Configuration/network/OS boundaries remain explicit;
+rollback and physical recovery are unproved. The
+[23-case query suite](radio-native-info-queries.md) resolves MAC-provider
+failure, Wi-Fi initialization and private network text. Its distinct-dispatch
+cases establish boundary selection only, not controller inactivity.
+
+Independent complete results and manifests match
+`expected_results/radio-ble-activation-*` and `radio-native-info-*` byte for byte.
+Both use the exact A1763 radio **0.3.3.0** image and synthetic providers;
+optimized Python and wrong images are rejected. These 70 cases remain outside
+the combined 1,842-case runner. The separate
+[live `0003` validation](c1000-gen2-native-wireless-state-validation.md) sent
+one read-only query; no `0024` station trial has been performed.
+
+The [app HTTP-wrapper audit](c1000-ota-http-wrapper.md) is static instruction
+analysis with no additional emulation-case count. It identifies a plaintext
+OTA capture boundary; original main 1.7.1 acquisition remains pending.
+
 ## Additional image integrity tools
 
 These checks use the bundled vendor images and perform no emulation or device I/O:

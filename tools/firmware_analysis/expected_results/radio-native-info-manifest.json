@@ -1,0 +1,30 @@
+{
+  "firmware": {
+    "filename": "c1000-radio-validated.bin",
+    "sha256": "e291ec115f013953e825cb51b9e457a8731889547ab55b3058640e599e8cfec8",
+    "bytes": 1482800
+  },
+  "cases_passed": 23,
+  "hardware_access": false,
+  "runtime": {
+    "python": "3.12.3",
+    "unicorn": "2.1.4",
+    "cryptography": "41.0.7"
+  },
+  "source_sha256": {
+    "emulate_radio_native_info_queries.py": "d648eae96088448dde6281bc775a9c8b974e228e9b28124a0512804a3150ef20",
+    "emulate_radio_rssi_routes.py": "de2665279a85c1b6f91d9eb41311938d5a09c2d45291c740ec03b8958ee3080b",
+    "emulate_radio_factory_routes.py": "9ae40bf0a004fd87f3edc52b30d5f48c320d29a39fb20d57d6136d61b3d7401a"
+  },
+  "result_sha256": "b0712b0355b964450f7ba68d326c09a1c3a4bcd831e28c4760a4037a84a0e81e",
+  "substitution_limits": "Offline A1763 native MAC/region query and private wireless-text schema.\n\nRuns JSON admission, local function10 dispatch, opcode0002, selected MAC/region\nwrappers, opcode0003 text wrapper, reply framing and native JSON/topic builders.\nOS/libc/JSON/base64, established crypto/session, MAC/driver/config observations,\ncountry-file reads/mutexes, Wi-Fi initialization, the different function-0f\ndispatcher boundary and final publish are explicit\nsubstitutes. Only synthetic identities, text, MAC bytes and stale scratch exist.\nNo device, network, SSH, cloud, credentials, controller or physical radio action.",
+  "excluded": [
+    "physical Wi-Fi/BLE/MAC services",
+    "full Wi-Fi initialization",
+    "full Wi-Fi config provider including fallback",
+    "flash writes",
+    "MQTT/TLS/session establishment",
+    "controller/MCU commands",
+    "any real account, MAC, SSID, credential or phone capture"
+  ]
+}

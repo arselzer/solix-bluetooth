@@ -228,7 +228,8 @@ class APService:
             mqtt = self.stations[name]
             local_output = action == "set-ac-output" and mqtt.config.model == Model.C1000_GEN2
             local_countdown = action == "set-ac-countdown" and mqtt.config.model == Model.C1000_GEN2
-            if action not in ("status", "readiness") and not (local_output or local_countdown) and action not in native_commands_for_model(mqtt.config.model):
+            local_wireless = action == "wireless-state" and mqtt.config.model == Model.C1000_GEN2
+            if action not in ("status", "readiness") and not (local_output or local_countdown or local_wireless) and action not in native_commands_for_model(mqtt.config.model):
                 raise ValueError("This native control is not verified for the selected model")
             if action == "readiness" and mqtt.config.model == Model.C1000:
                 raise ValueError("Controller readiness is unavailable for original C1000")
@@ -245,6 +246,10 @@ class APService:
                     if set(request) != {"command", "seconds"}:
                         raise ValueError("Use only the explicit seconds field")
                     result = await mqtt.set_ac_countdown(request["seconds"])
+                elif local_wireless:
+                    if set(request) != {"command"}:
+                        raise ValueError("Wireless-state query accepts no extra fields")
+                    result = await mqtt.wireless_state()
                 elif action == "set-charge-power":
                     result = await mqtt.set_ac_charging_power(request.get("watts"))
                 elif action == "set-charge-cap":

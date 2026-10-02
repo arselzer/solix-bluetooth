@@ -238,3 +238,26 @@ physical callbacks and first initialization are excluded. Complete results and
 manifest independently match `expected_results/`. Optimized Python, wrong-size
 and wrong-hash images are rejected. No runtime recovery API, station trial or
 other-model equivalence is claimed; counts are separate from the combined runner.
+
+## Radio initialization and private query providers
+
+```sh
+PYTHONPATH=/tmp/solix-analysis-tools:tools/firmware_analysis \
+  python3 tools/firmware_analysis/emulate_radio_ble_activation.py \
+  --image firmware/c1000_gen2/1.1.4.9/c1000-radio-validated.bin \
+  --output-dir /tmp/radio-ble-activation
+python3 tools/firmware_analysis/emulate_radio_native_info_queries.py \
+  --output /tmp/radio-native-info
+```
+
+[47 activation/initialization cases](../../docs/radio-ble-initialization-activation.md)
+trace first-enable timers/defaults, BLE connection flag writers and bounded
+normal provisioning callbacks. [23 query-provider cases](../../docs/radio-native-info-queries.md)
+resolve raw MAC selectors, failure scratch bytes and private configured network
+text. Complete result/manifest pairs independently match `expected_results/`.
+Both use the exact A1763 radio 0.3.3.0 image, reject optimized Python and enforce
+synthetic provider boundaries. They add no physical recovery or account-free
+trial and remain separate from the combined runner.
+
+The [static app HTTP-wrapper note](../../docs/c1000-ota-http-wrapper.md)
+documents the OTA business-response capture point; it adds no emulation cases.

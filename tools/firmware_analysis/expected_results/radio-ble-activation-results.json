@@ -1,0 +1,964 @@
+{
+  "model": "A1763 C1000 Gen 2",
+  "main_version": "1.1.4.9",
+  "radio_version": "0.3.3.0",
+  "image_sha256": "e291ec115f013953e825cb51b9e457a8731889547ab55b3058640e599e8cfec8",
+  "direct_branch_census": {
+    "scan": "linear XIP direct branches; indirect callers are not enumerated",
+    "first_sdk_initialization": [
+      "4202906a",
+      "42029154"
+    ],
+    "normal_activation_application": [
+      "420496f8",
+      "42049efa"
+    ],
+    "application_wireless_writer": [
+      {
+        "call_site": "42044186",
+        "selector": 1
+      },
+      {
+        "call_site": "4204428c",
+        "selector": 1
+      },
+      {
+        "call_site": "420442d6",
+        "selector": 1
+      },
+      {
+        "call_site": "4204434a",
+        "selector": 3
+      },
+      {
+        "call_site": "420444b2",
+        "selector": 4
+      },
+      {
+        "call_site": "42045640",
+        "selector": 0
+      },
+      {
+        "call_site": "42045650",
+        "selector": 3
+      },
+      {
+        "call_site": "42048cb4",
+        "selector": 1
+      },
+      {
+        "call_site": "42048cc2",
+        "selector": 0
+      }
+    ]
+  },
+  "case_count": 47,
+  "cases": [
+    {
+      "case": "native_first_sdk_ble_enable",
+      "synthetic_pal_state": 0,
+      "created_timers": [
+        {
+          "timer": "3fc8a1b8",
+          "callback": "42028c14",
+          "period_ms": 1000,
+          "flags": [
+            1,
+            1
+          ]
+        },
+        {
+          "timer": "3fc8a1a0",
+          "callback": "420291f0",
+          "period_ms": 1000,
+          "flags": [
+            1,
+            1
+          ]
+        }
+      ],
+      "effects": [
+        {
+          "effect": "physical_ble_tx_power_boundary",
+          "argument": 6
+        },
+        {
+          "effect": "advertisement_info_boundary"
+        },
+        {
+          "effect": "os_timer_start",
+          "timer": "3fc8a1b8"
+        }
+      ],
+      "advertisement_interval_units": 160,
+      "link_default_hex": "5000600001009001",
+      "protected_identity_regions_unchanged": true,
+      "persistence_boundaries": 0,
+      "network_mutation_boundaries": 0,
+      "response_command": "0824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_first_sdk_ble_enable",
+      "synthetic_pal_state": 1,
+      "created_timers": [
+        {
+          "timer": "3fc8a1b8",
+          "callback": "42028c14",
+          "period_ms": 1000,
+          "flags": [
+            1,
+            1
+          ]
+        },
+        {
+          "timer": "3fc8a1a0",
+          "callback": "420291f0",
+          "period_ms": 1000,
+          "flags": [
+            1,
+            1
+          ]
+        }
+      ],
+      "effects": [
+        {
+          "effect": "physical_ble_tx_power_boundary",
+          "argument": 6
+        },
+        {
+          "effect": "advertisement_info_boundary"
+        },
+        {
+          "effect": "advertisement_start_boundary"
+        },
+        {
+          "effect": "os_timer_start",
+          "timer": "3fc8a1b8"
+        }
+      ],
+      "advertisement_interval_units": 160,
+      "link_default_hex": "5000600001009001",
+      "protected_identity_regions_unchanged": true,
+      "persistence_boundaries": 0,
+      "network_mutation_boundaries": 0,
+      "response_command": "0824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_first_sdk_ble_enable",
+      "synthetic_pal_state": 2,
+      "created_timers": [
+        {
+          "timer": "3fc8a1b8",
+          "callback": "42028c14",
+          "period_ms": 1000,
+          "flags": [
+            1,
+            1
+          ]
+        },
+        {
+          "timer": "3fc8a1a0",
+          "callback": "420291f0",
+          "period_ms": 1000,
+          "flags": [
+            1,
+            1
+          ]
+        }
+      ],
+      "effects": [
+        {
+          "effect": "physical_ble_tx_power_boundary",
+          "argument": 6
+        },
+        {
+          "effect": "advertisement_info_boundary"
+        },
+        {
+          "effect": "advertisement_active_provider",
+          "synthetic_value": false
+        },
+        {
+          "effect": "advertisement_start_boundary"
+        },
+        {
+          "effect": "os_timer_start",
+          "timer": "3fc8a1b8"
+        }
+      ],
+      "advertisement_interval_units": 160,
+      "link_default_hex": "5000600001009001",
+      "protected_identity_regions_unchanged": true,
+      "persistence_boundaries": 0,
+      "network_mutation_boundaries": 0,
+      "response_command": "0824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "native_first_sdk_ble_enable",
+      "synthetic_pal_state": 3,
+      "created_timers": [
+        {
+          "timer": "3fc8a1b8",
+          "callback": "42028c14",
+          "period_ms": 1000,
+          "flags": [
+            1,
+            1
+          ]
+        },
+        {
+          "timer": "3fc8a1a0",
+          "callback": "420291f0",
+          "period_ms": 1000,
+          "flags": [
+            1,
+            1
+          ]
+        }
+      ],
+      "effects": [
+        {
+          "effect": "physical_ble_tx_power_boundary",
+          "argument": 6
+        },
+        {
+          "effect": "advertisement_info_boundary"
+        },
+        {
+          "effect": "pal_lock"
+        },
+        {
+          "effect": "disconnect_boundary",
+          "reason": 19
+        },
+        {
+          "effect": "pal_unlock"
+        },
+        {
+          "effect": "os_timer_start",
+          "timer": "3fc8a1b8"
+        }
+      ],
+      "advertisement_interval_units": 160,
+      "link_default_hex": "5000600001009001",
+      "protected_identity_regions_unchanged": true,
+      "persistence_boundaries": 0,
+      "network_mutation_boundaries": 0,
+      "response_command": "0824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "first_sdk_initialization_is_not_repeated",
+      "requests": 2,
+      "created_timers": 2,
+      "physical_ble_tx_power_boundaries": 1,
+      "advertising_timer_start_boundaries": 2,
+      "protected_identity_regions_unchanged": true,
+      "response_command": "0824",
+      "request_pattern": "030010",
+      "response_pattern": "030010",
+      "response_body_hex": "00",
+      "reply_port": 5,
+      "mqtt_command": 16,
+      "topic_suffix": "param_info"
+    },
+    {
+      "case": "actual_ble_connection_state_callback",
+      "connection_state": 0,
+      "synthetic_defer_status": false,
+      "application_ble_flag": 0,
+      "status_emissions": [],
+      "effects": [
+        {
+          "effect": "protocol_port_connection_boundary",
+          "port": 0,
+          "connected": 0
+        },
+        {
+          "effect": "os_timer_stop",
+          "timer": "3fc8b494"
+        },
+        {
+          "effect": "os_timer_stop",
+          "timer": "3fc8b19c"
+        },
+        {
+          "effect": "ble_disconnect_cleanup_boundary"
+        }
+      ],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_ble_connection_state_callback",
+      "connection_state": 0,
+      "synthetic_defer_status": true,
+      "application_ble_flag": 0,
+      "status_emissions": [],
+      "effects": [
+        {
+          "effect": "protocol_port_connection_boundary",
+          "port": 0,
+          "connected": 0
+        },
+        {
+          "effect": "os_timer_stop",
+          "timer": "3fc8b494"
+        },
+        {
+          "effect": "os_timer_stop",
+          "timer": "3fc8b19c"
+        },
+        {
+          "effect": "ble_disconnect_cleanup_boundary"
+        }
+      ],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_ble_connection_state_callback",
+      "connection_state": 1,
+      "synthetic_defer_status": false,
+      "application_ble_flag": 1,
+      "status_emissions": [
+        {
+          "ble": 1,
+          "wifi": 1
+        }
+      ],
+      "effects": [
+        {
+          "effect": "protocol_port_connection_boundary",
+          "port": 0,
+          "connected": 1
+        },
+        {
+          "effect": "os_timer_start",
+          "timer": "3fc8b494"
+        }
+      ],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_ble_connection_state_callback",
+      "connection_state": 1,
+      "synthetic_defer_status": true,
+      "application_ble_flag": 1,
+      "status_emissions": [],
+      "effects": [
+        {
+          "effect": "protocol_port_connection_boundary",
+          "port": 0,
+          "connected": 1
+        },
+        {
+          "effect": "os_timer_start",
+          "timer": "3fc8b494"
+        }
+      ],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_application_wireless_writer",
+      "selector": 0,
+      "value": 0,
+      "synthetic_defer_status": false,
+      "application_ble_flag": 0,
+      "application_wifi_flag": 1,
+      "status_emissions": []
+    },
+    {
+      "case": "actual_application_wireless_writer",
+      "selector": 0,
+      "value": 0,
+      "synthetic_defer_status": true,
+      "application_ble_flag": 0,
+      "application_wifi_flag": 1,
+      "status_emissions": []
+    },
+    {
+      "case": "actual_application_wireless_writer",
+      "selector": 0,
+      "value": 1,
+      "synthetic_defer_status": false,
+      "application_ble_flag": 1,
+      "application_wifi_flag": 1,
+      "status_emissions": [
+        {
+          "ble": 1,
+          "wifi": 1
+        }
+      ]
+    },
+    {
+      "case": "actual_application_wireless_writer",
+      "selector": 0,
+      "value": 1,
+      "synthetic_defer_status": true,
+      "application_ble_flag": 1,
+      "application_wifi_flag": 1,
+      "status_emissions": []
+    },
+    {
+      "case": "actual_application_wireless_writer",
+      "selector": 1,
+      "value": 0,
+      "synthetic_defer_status": false,
+      "application_ble_flag": 0,
+      "application_wifi_flag": 0,
+      "status_emissions": [
+        {
+          "ble": 0,
+          "wifi": 0
+        }
+      ]
+    },
+    {
+      "case": "actual_application_wireless_writer",
+      "selector": 1,
+      "value": 0,
+      "synthetic_defer_status": true,
+      "application_ble_flag": 0,
+      "application_wifi_flag": 0,
+      "status_emissions": []
+    },
+    {
+      "case": "actual_application_wireless_writer",
+      "selector": 1,
+      "value": 1,
+      "synthetic_defer_status": false,
+      "application_ble_flag": 0,
+      "application_wifi_flag": 1,
+      "status_emissions": []
+    },
+    {
+      "case": "actual_application_wireless_writer",
+      "selector": 1,
+      "value": 1,
+      "synthetic_defer_status": true,
+      "application_ble_flag": 0,
+      "application_wifi_flag": 1,
+      "status_emissions": []
+    },
+    {
+      "case": "actual_application_wireless_writer",
+      "selector": 2,
+      "value": 0,
+      "synthetic_defer_status": false,
+      "application_ble_flag": 0,
+      "application_wifi_flag": 1,
+      "status_emissions": []
+    },
+    {
+      "case": "actual_application_wireless_writer",
+      "selector": 2,
+      "value": 0,
+      "synthetic_defer_status": true,
+      "application_ble_flag": 0,
+      "application_wifi_flag": 1,
+      "status_emissions": []
+    },
+    {
+      "case": "actual_application_wireless_writer",
+      "selector": 2,
+      "value": 1,
+      "synthetic_defer_status": false,
+      "application_ble_flag": 0,
+      "application_wifi_flag": 1,
+      "status_emissions": []
+    },
+    {
+      "case": "actual_application_wireless_writer",
+      "selector": 2,
+      "value": 1,
+      "synthetic_defer_status": true,
+      "application_ble_flag": 0,
+      "application_wifi_flag": 1,
+      "status_emissions": []
+    },
+    {
+      "case": "actual_application_wireless_writer",
+      "selector": 3,
+      "value": 0,
+      "synthetic_defer_status": false,
+      "application_ble_flag": 0,
+      "application_wifi_flag": 1,
+      "status_emissions": []
+    },
+    {
+      "case": "actual_application_wireless_writer",
+      "selector": 3,
+      "value": 0,
+      "synthetic_defer_status": true,
+      "application_ble_flag": 0,
+      "application_wifi_flag": 1,
+      "status_emissions": []
+    },
+    {
+      "case": "actual_application_wireless_writer",
+      "selector": 3,
+      "value": 1,
+      "synthetic_defer_status": false,
+      "application_ble_flag": 0,
+      "application_wifi_flag": 1,
+      "status_emissions": []
+    },
+    {
+      "case": "actual_application_wireless_writer",
+      "selector": 3,
+      "value": 1,
+      "synthetic_defer_status": true,
+      "application_ble_flag": 0,
+      "application_wifi_flag": 1,
+      "status_emissions": []
+    },
+    {
+      "case": "actual_application_wireless_writer",
+      "selector": 4,
+      "value": 0,
+      "synthetic_defer_status": false,
+      "application_ble_flag": 0,
+      "application_wifi_flag": 1,
+      "status_emissions": [
+        {
+          "ble": 0,
+          "wifi": 1
+        }
+      ]
+    },
+    {
+      "case": "actual_application_wireless_writer",
+      "selector": 4,
+      "value": 0,
+      "synthetic_defer_status": true,
+      "application_ble_flag": 0,
+      "application_wifi_flag": 1,
+      "status_emissions": [
+        {
+          "ble": 0,
+          "wifi": 1
+        }
+      ]
+    },
+    {
+      "case": "actual_application_wireless_writer",
+      "selector": 4,
+      "value": 1,
+      "synthetic_defer_status": false,
+      "application_ble_flag": 0,
+      "application_wifi_flag": 1,
+      "status_emissions": [
+        {
+          "ble": 0,
+          "wifi": 1
+        }
+      ]
+    },
+    {
+      "case": "actual_application_wireless_writer",
+      "selector": 4,
+      "value": 1,
+      "synthetic_defer_status": true,
+      "application_ble_flag": 0,
+      "application_wifi_flag": 1,
+      "status_emissions": [
+        {
+          "ble": 0,
+          "wifi": 1
+        }
+      ]
+    },
+    {
+      "case": "actual_startup_ble_connection_flag",
+      "sdk_connected_flag": 0,
+      "application_ble_flag": 0,
+      "status_emissions": []
+    },
+    {
+      "case": "actual_startup_ble_connection_flag",
+      "sdk_connected_flag": 1,
+      "application_ble_flag": 1,
+      "status_emissions": [
+        {
+          "ble": 1,
+          "wifi": 1
+        }
+      ]
+    },
+    {
+      "case": "actual_registered_native_update_check_callback",
+      "synthetic_mode_flag": 0,
+      "synthetic_notify_flag": 0,
+      "provider_29f60_synthetic_result": false,
+      "application_ble_flag_unchanged": true,
+      "substituted_lifecycle_boundaries": [
+        {
+          "boundary": "4202a230",
+          "argument0": 1
+        },
+        {
+          "boundary": "4201fd58",
+          "argument0": 0
+        }
+      ],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_registered_native_update_check_callback",
+      "synthetic_mode_flag": 0,
+      "synthetic_notify_flag": 0,
+      "provider_29f60_synthetic_result": true,
+      "application_ble_flag_unchanged": true,
+      "substituted_lifecycle_boundaries": [
+        {
+          "boundary": "4202a230",
+          "argument0": 1
+        }
+      ],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_registered_native_update_check_callback",
+      "synthetic_mode_flag": 0,
+      "synthetic_notify_flag": 1,
+      "provider_29f60_synthetic_result": false,
+      "application_ble_flag_unchanged": true,
+      "substituted_lifecycle_boundaries": [
+        {
+          "boundary": "4202a230",
+          "argument0": 1
+        },
+        {
+          "boundary": "4201fd58",
+          "argument0": 0
+        },
+        {
+          "boundary": "42043782",
+          "argument0": 0
+        }
+      ],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_registered_native_update_check_callback",
+      "synthetic_mode_flag": 0,
+      "synthetic_notify_flag": 1,
+      "provider_29f60_synthetic_result": true,
+      "application_ble_flag_unchanged": true,
+      "substituted_lifecycle_boundaries": [
+        {
+          "boundary": "4202a230",
+          "argument0": 1
+        },
+        {
+          "boundary": "42043782",
+          "argument0": 0
+        }
+      ],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_registered_native_update_check_callback",
+      "synthetic_mode_flag": 1,
+      "synthetic_notify_flag": 0,
+      "provider_29f60_synthetic_result": false,
+      "application_ble_flag_unchanged": true,
+      "substituted_lifecycle_boundaries": [
+        {
+          "boundary": "42043782",
+          "argument0": 0
+        }
+      ],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_registered_native_update_check_callback",
+      "synthetic_mode_flag": 1,
+      "synthetic_notify_flag": 0,
+      "provider_29f60_synthetic_result": true,
+      "application_ble_flag_unchanged": true,
+      "substituted_lifecycle_boundaries": [
+        {
+          "boundary": "42043782",
+          "argument0": 0
+        }
+      ],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_registered_native_update_check_callback",
+      "synthetic_mode_flag": 1,
+      "synthetic_notify_flag": 1,
+      "provider_29f60_synthetic_result": false,
+      "application_ble_flag_unchanged": true,
+      "substituted_lifecycle_boundaries": [
+        {
+          "boundary": "42043782",
+          "argument0": 0
+        }
+      ],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "actual_registered_native_update_check_callback",
+      "synthetic_mode_flag": 1,
+      "synthetic_notify_flag": 1,
+      "provider_29f60_synthetic_result": true,
+      "application_ble_flag_unchanged": true,
+      "substituted_lifecycle_boundaries": [
+        {
+          "boundary": "42043782",
+          "argument0": 0
+        }
+      ],
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "normal_activation_application_body",
+      "identity_shape": "retained",
+      "provisioning_busy": false,
+      "allocation_failure": false,
+      "application_callback_returned": true,
+      "configuration_update_path_reached": true,
+      "native_config_account_changed": false,
+      "volatile_activation_state": 5,
+      "configuration_flash_writes": 0,
+      "ble_allowlist_unchanged": true,
+      "mqtt_identity_cache_unchanged": true,
+      "substituted_lifecycle_boundaries": [
+        {
+          "boundary": "420387f2",
+          "argument0": 1070657072
+        },
+        {
+          "boundary": "42011d30",
+          "argument0": 0
+        },
+        {
+          "boundary": "420119cc",
+          "argument0": 1070657040
+        },
+        {
+          "boundary": "420118da",
+          "argument0": 536873312
+        },
+        {
+          "boundary": "42013666",
+          "argument0": 1700000000
+        },
+        {
+          "boundary": "4201221e",
+          "argument0": 0
+        },
+        {
+          "boundary": "4201f766",
+          "argument0": 0
+        },
+        {
+          "boundary": "4201f810",
+          "argument0": 0
+        },
+        {
+          "boundary": "420385d6",
+          "argument0": 536873168
+        },
+        {
+          "boundary": "4203b958",
+          "argument0": 0
+        },
+        {
+          "boundary": "42020dee",
+          "argument0": 0
+        },
+        {
+          "boundary": "42020f34",
+          "argument0": 0
+        },
+        {
+          "boundary": "4202013e",
+          "argument0": 0
+        }
+      ]
+    },
+    {
+      "case": "normal_activation_application_body",
+      "identity_shape": "retained",
+      "provisioning_busy": false,
+      "allocation_failure": true,
+      "application_callback_returned": true,
+      "configuration_update_path_reached": false,
+      "native_config_account_changed": false,
+      "volatile_activation_state": 0,
+      "configuration_flash_writes": 0,
+      "ble_allowlist_unchanged": true,
+      "mqtt_identity_cache_unchanged": true,
+      "substituted_lifecycle_boundaries": []
+    },
+    {
+      "case": "normal_activation_application_body",
+      "identity_shape": "retained",
+      "provisioning_busy": true,
+      "allocation_failure": false,
+      "application_callback_returned": true,
+      "configuration_update_path_reached": false,
+      "native_config_account_changed": false,
+      "volatile_activation_state": 0,
+      "configuration_flash_writes": 0,
+      "ble_allowlist_unchanged": true,
+      "mqtt_identity_cache_unchanged": true,
+      "substituted_lifecycle_boundaries": []
+    },
+    {
+      "case": "normal_activation_application_body",
+      "identity_shape": "retained",
+      "provisioning_busy": true,
+      "allocation_failure": true,
+      "application_callback_returned": true,
+      "configuration_update_path_reached": false,
+      "native_config_account_changed": false,
+      "volatile_activation_state": 0,
+      "configuration_flash_writes": 0,
+      "ble_allowlist_unchanged": true,
+      "mqtt_identity_cache_unchanged": true,
+      "substituted_lifecycle_boundaries": []
+    },
+    {
+      "case": "normal_activation_application_body",
+      "identity_shape": "generated",
+      "provisioning_busy": false,
+      "allocation_failure": false,
+      "application_callback_returned": true,
+      "configuration_update_path_reached": true,
+      "native_config_account_changed": true,
+      "volatile_activation_state": 5,
+      "configuration_flash_writes": 1,
+      "ble_allowlist_unchanged": true,
+      "mqtt_identity_cache_unchanged": true,
+      "substituted_lifecycle_boundaries": [
+        {
+          "boundary": "420387f2",
+          "argument0": 1070657072
+        },
+        {
+          "boundary": "42011d30",
+          "argument0": 0
+        },
+        {
+          "boundary": "420119cc",
+          "argument0": 1070657040
+        },
+        {
+          "boundary": "420118da",
+          "argument0": 536873312
+        },
+        {
+          "boundary": "42013666",
+          "argument0": 1700000000
+        },
+        {
+          "boundary": "4201221e",
+          "argument0": 0
+        },
+        {
+          "boundary": "4201f766",
+          "argument0": 0
+        },
+        {
+          "boundary": "4201f810",
+          "argument0": 0
+        },
+        {
+          "boundary": "420385d6",
+          "argument0": 536873168
+        },
+        {
+          "boundary": "4203b958",
+          "argument0": 0
+        },
+        {
+          "boundary": "42020dee",
+          "argument0": 0
+        },
+        {
+          "boundary": "42020f34",
+          "argument0": 0
+        },
+        {
+          "boundary": "4202013e",
+          "argument0": 0
+        }
+      ]
+    },
+    {
+      "case": "normal_activation_application_body",
+      "identity_shape": "generated",
+      "provisioning_busy": false,
+      "allocation_failure": true,
+      "application_callback_returned": true,
+      "configuration_update_path_reached": false,
+      "native_config_account_changed": false,
+      "volatile_activation_state": 0,
+      "configuration_flash_writes": 0,
+      "ble_allowlist_unchanged": true,
+      "mqtt_identity_cache_unchanged": true,
+      "substituted_lifecycle_boundaries": []
+    },
+    {
+      "case": "normal_activation_application_body",
+      "identity_shape": "generated",
+      "provisioning_busy": true,
+      "allocation_failure": false,
+      "application_callback_returned": true,
+      "configuration_update_path_reached": false,
+      "native_config_account_changed": false,
+      "volatile_activation_state": 0,
+      "configuration_flash_writes": 0,
+      "ble_allowlist_unchanged": true,
+      "mqtt_identity_cache_unchanged": true,
+      "substituted_lifecycle_boundaries": []
+    },
+    {
+      "case": "normal_activation_application_body",
+      "identity_shape": "generated",
+      "provisioning_busy": true,
+      "allocation_failure": true,
+      "application_callback_returned": true,
+      "configuration_update_path_reached": false,
+      "native_config_account_changed": false,
+      "volatile_activation_state": 0,
+      "configuration_flash_writes": 0,
+      "ble_allowlist_unchanged": true,
+      "mqtt_identity_cache_unchanged": true,
+      "substituted_lifecycle_boundaries": []
+    }
+  ],
+  "limits": [
+    "Actual selected radio instructions; synthetic radio and identity state.",
+    "NimBLE/OS and activation lifecycle/network/config boundaries are substituted.",
+    "Completing the application activation body does not execute its async lifecycle effects.",
+    "No physical advertising, cloud binding, hardware output or rollback proof.",
+    "Original C1000 and C2000 radio image equivalence remains unproven."
+  ]
+}

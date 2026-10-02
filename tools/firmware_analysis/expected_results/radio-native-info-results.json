@@ -1,0 +1,899 @@
+{
+  "cases_passed": 23,
+  "hardware_access": false,
+  "cases": [
+    {
+      "case": "missing_mac_selector",
+      "request_wire_hex": "ff090a000300100002ed",
+      "reply_pattern": "030010",
+      "reply_command": "0802",
+      "body_hex": "01",
+      "status": 1,
+      "raw_fields": {},
+      "wire_hex": "ff090b00030010080201e5",
+      "native_reply_head": {
+        "version": "1.0.0.1",
+        "client_id": "SYNTHETIC00000001",
+        "sess_id": "0000-0000",
+        "msg_seq": 0,
+        "cmd": 16,
+        "cmd_status": 1,
+        "sign_code": 0,
+        "seed": "null",
+        "timestamp": 1700000000
+      },
+      "reply_port": 5,
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "missing_mac_selector",
+      "request_wire_hex": "ff090d000300100002a2010049",
+      "reply_pattern": "030010",
+      "reply_command": "0802",
+      "body_hex": "01",
+      "status": 1,
+      "raw_fields": {},
+      "wire_hex": "ff090b00030010080201e5",
+      "native_reply_head": {
+        "version": "1.0.0.1",
+        "client_id": "SYNTHETIC00000001",
+        "sess_id": "0000-0000",
+        "msg_seq": 0,
+        "cmd": 16,
+        "cmd_status": 1,
+        "sign_code": 0,
+        "seed": "null",
+        "timestamp": 1700000000
+      },
+      "reply_port": 5,
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "mac_selector_and_provider_error",
+      "selector": 0,
+      "mac_service_error": 0,
+      "request_wire_hex": "ff090d000300100002a101004a",
+      "effects": [
+        {
+          "effect": "mac_observation",
+          "interface_type": 2,
+          "service_result": 0
+        }
+      ],
+      "synthetic_stale_scratch": false,
+      "reply_pattern": "030010",
+      "reply_command": "0802",
+      "body_hex": "00a10c303230303030303030303031",
+      "status": 0,
+      "raw_fields": {
+        "a1": "303230303030303030303031"
+      },
+      "wire_hex": "ff091900030010080200a10c30323030303030303030303158",
+      "native_reply_head": {
+        "version": "1.0.0.1",
+        "client_id": "SYNTHETIC00000001",
+        "sess_id": "0000-0000",
+        "msg_seq": 0,
+        "cmd": 16,
+        "cmd_status": 1,
+        "sign_code": 0,
+        "seed": "null",
+        "timestamp": 1700000000
+      },
+      "reply_port": 5,
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "mac_selector_and_provider_error",
+      "selector": 0,
+      "mac_service_error": 11,
+      "request_wire_hex": "ff090d000300100002a101004a",
+      "effects": [
+        {
+          "effect": "mac_observation",
+          "interface_type": 2,
+          "service_result": 11
+        }
+      ],
+      "synthetic_stale_scratch": true,
+      "reply_pattern": "030010",
+      "reply_command": "0802",
+      "body_hex": "00a10c5354414c4548455830303031",
+      "status": 0,
+      "raw_fields": {
+        "a1": "5354414c4548455830303031"
+      },
+      "wire_hex": "ff091900030010080200a10c5354414c454845583030303140",
+      "native_reply_head": {
+        "version": "1.0.0.1",
+        "client_id": "SYNTHETIC00000001",
+        "sess_id": "0000-0000",
+        "msg_seq": 0,
+        "cmd": 16,
+        "cmd_status": 1,
+        "sign_code": 0,
+        "seed": "null",
+        "timestamp": 1700000000
+      },
+      "reply_port": 5,
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "mac_selector_and_provider_error",
+      "selector": 1,
+      "mac_service_error": 0,
+      "request_wire_hex": "ff090d000300100002a101014b",
+      "effects": [
+        {
+          "effect": "mac_observation",
+          "interface_type": 0,
+          "service_result": 0
+        },
+        {
+          "effect": "mutex_take",
+          "country_cache": true
+        },
+        {
+          "effect": "mutex_release",
+          "country_cache": true
+        }
+      ],
+      "synthetic_stale_scratch": false,
+      "reply_pattern": "030010",
+      "reply_command": "0802",
+      "body_hex": "00a10c303230303030303030303032a20430310000",
+      "status": 0,
+      "raw_fields": {
+        "a1": "303230303030303030303032",
+        "a2": "30310000"
+      },
+      "wire_hex": "ff091f00030010080200a10c303230303030303030303032a20430310000fa",
+      "native_reply_head": {
+        "version": "1.0.0.1",
+        "client_id": "SYNTHETIC00000001",
+        "sess_id": "0000-0000",
+        "msg_seq": 0,
+        "cmd": 16,
+        "cmd_status": 1,
+        "sign_code": 0,
+        "seed": "null",
+        "timestamp": 1700000000
+      },
+      "reply_port": 5,
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "mac_selector_and_provider_error",
+      "selector": 1,
+      "mac_service_error": 11,
+      "request_wire_hex": "ff090d000300100002a101014b",
+      "effects": [
+        {
+          "effect": "mac_observation",
+          "interface_type": 0,
+          "service_result": 11
+        },
+        {
+          "effect": "mutex_take",
+          "country_cache": true
+        },
+        {
+          "effect": "mutex_release",
+          "country_cache": true
+        }
+      ],
+      "synthetic_stale_scratch": true,
+      "reply_pattern": "030010",
+      "reply_command": "0802",
+      "body_hex": "00a10c303241414242434344444545a20430310000",
+      "status": 0,
+      "raw_fields": {
+        "a1": "303241414242434344444545",
+        "a2": "30310000"
+      },
+      "wire_hex": "ff091f00030010080200a10c303241414242434344444545a20430310000f8",
+      "native_reply_head": {
+        "version": "1.0.0.1",
+        "client_id": "SYNTHETIC00000001",
+        "sess_id": "0000-0000",
+        "msg_seq": 0,
+        "cmd": 16,
+        "cmd_status": 1,
+        "sign_code": 0,
+        "seed": "null",
+        "timestamp": 1700000000
+      },
+      "reply_port": 5,
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "mac_selector_and_provider_error",
+      "selector": 2,
+      "mac_service_error": 0,
+      "request_wire_hex": "ff090d000300100002a1010248",
+      "effects": [
+        {
+          "effect": "mac_observation",
+          "interface_type": 0,
+          "service_result": 0
+        },
+        {
+          "effect": "mutex_take",
+          "country_cache": true
+        },
+        {
+          "effect": "mutex_release",
+          "country_cache": true
+        }
+      ],
+      "synthetic_stale_scratch": false,
+      "reply_pattern": "030010",
+      "reply_command": "0802",
+      "body_hex": "00a10c303230303030303030303032a20430310000",
+      "status": 0,
+      "raw_fields": {
+        "a1": "303230303030303030303032",
+        "a2": "30310000"
+      },
+      "wire_hex": "ff091f00030010080200a10c303230303030303030303032a20430310000fa",
+      "native_reply_head": {
+        "version": "1.0.0.1",
+        "client_id": "SYNTHETIC00000001",
+        "sess_id": "0000-0000",
+        "msg_seq": 0,
+        "cmd": 16,
+        "cmd_status": 1,
+        "sign_code": 0,
+        "seed": "null",
+        "timestamp": 1700000000
+      },
+      "reply_port": 5,
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "mac_selector_and_provider_error",
+      "selector": 2,
+      "mac_service_error": 11,
+      "request_wire_hex": "ff090d000300100002a1010248",
+      "effects": [
+        {
+          "effect": "mac_observation",
+          "interface_type": 0,
+          "service_result": 11
+        },
+        {
+          "effect": "mutex_take",
+          "country_cache": true
+        },
+        {
+          "effect": "mutex_release",
+          "country_cache": true
+        }
+      ],
+      "synthetic_stale_scratch": true,
+      "reply_pattern": "030010",
+      "reply_command": "0802",
+      "body_hex": "00a10c303241414242434344444545a20430310000",
+      "status": 0,
+      "raw_fields": {
+        "a1": "303241414242434344444545",
+        "a2": "30310000"
+      },
+      "wire_hex": "ff091f00030010080200a10c303241414242434344444545a20430310000f8",
+      "native_reply_head": {
+        "version": "1.0.0.1",
+        "client_id": "SYNTHETIC00000001",
+        "sess_id": "0000-0000",
+        "msg_seq": 0,
+        "cmd": 16,
+        "cmd_status": 1,
+        "sign_code": 0,
+        "seed": "null",
+        "timestamp": 1700000000
+      },
+      "reply_port": 5,
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "mac_selector_and_provider_error",
+      "selector": 255,
+      "mac_service_error": 0,
+      "request_wire_hex": "ff090d000300100002a101ffb5",
+      "effects": [
+        {
+          "effect": "mac_observation",
+          "interface_type": 0,
+          "service_result": 0
+        },
+        {
+          "effect": "mutex_take",
+          "country_cache": true
+        },
+        {
+          "effect": "mutex_release",
+          "country_cache": true
+        }
+      ],
+      "synthetic_stale_scratch": false,
+      "reply_pattern": "030010",
+      "reply_command": "0802",
+      "body_hex": "00a10c303230303030303030303032a20430310000",
+      "status": 0,
+      "raw_fields": {
+        "a1": "303230303030303030303032",
+        "a2": "30310000"
+      },
+      "wire_hex": "ff091f00030010080200a10c303230303030303030303032a20430310000fa",
+      "native_reply_head": {
+        "version": "1.0.0.1",
+        "client_id": "SYNTHETIC00000001",
+        "sess_id": "0000-0000",
+        "msg_seq": 0,
+        "cmd": 16,
+        "cmd_status": 1,
+        "sign_code": 0,
+        "seed": "null",
+        "timestamp": 1700000000
+      },
+      "reply_port": 5,
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "mac_selector_and_provider_error",
+      "selector": 255,
+      "mac_service_error": 11,
+      "request_wire_hex": "ff090d000300100002a101ffb5",
+      "effects": [
+        {
+          "effect": "mac_observation",
+          "interface_type": 0,
+          "service_result": 11
+        },
+        {
+          "effect": "mutex_take",
+          "country_cache": true
+        },
+        {
+          "effect": "mutex_release",
+          "country_cache": true
+        }
+      ],
+      "synthetic_stale_scratch": true,
+      "reply_pattern": "030010",
+      "reply_command": "0802",
+      "body_hex": "00a10c303241414242434344444545a20430310000",
+      "status": 0,
+      "raw_fields": {
+        "a1": "303241414242434344444545",
+        "a2": "30310000"
+      },
+      "wire_hex": "ff091f00030010080200a10c303241414242434344444545a20430310000f8",
+      "native_reply_head": {
+        "version": "1.0.0.1",
+        "client_id": "SYNTHETIC00000001",
+        "sess_id": "0000-0000",
+        "msg_seq": 0,
+        "cmd": 16,
+        "cmd_status": 1,
+        "sign_code": 0,
+        "seed": "null",
+        "timestamp": 1700000000
+      },
+      "reply_port": 5,
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "country_provider_cache_and_fallback",
+      "warm_cache": false,
+      "file_read_error": 0,
+      "synthetic_country": "DE",
+      "country_cache_changed": true,
+      "effects": [
+        {
+          "effect": "mac_observation",
+          "interface_type": 0,
+          "service_result": 0
+        },
+        {
+          "effect": "mutex_create",
+          "country_cache": true
+        },
+        {
+          "effect": "mutex_take",
+          "country_cache": true
+        },
+        {
+          "effect": "country_file_read",
+          "file": "wifi_country_code",
+          "result": 0
+        },
+        {
+          "effect": "mutex_release",
+          "country_cache": true
+        }
+      ],
+      "reply_pattern": "030010",
+      "reply_command": "0802",
+      "body_hex": "00a10c303230303030303030303032a20444450000",
+      "status": 0,
+      "raw_fields": {
+        "a1": "303230303030303030303032",
+        "a2": "44450000"
+      },
+      "wire_hex": "ff091f00030010080200a10c303230303030303030303032a20444450000fa",
+      "native_reply_head": {
+        "version": "1.0.0.1",
+        "client_id": "SYNTHETIC00000001",
+        "sess_id": "0000-0000",
+        "msg_seq": 0,
+        "cmd": 16,
+        "cmd_status": 1,
+        "sign_code": 0,
+        "seed": "null",
+        "timestamp": 1700000000
+      },
+      "reply_port": 5,
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "country_provider_cache_and_fallback",
+      "warm_cache": false,
+      "file_read_error": 1,
+      "synthetic_country": "DE",
+      "country_cache_changed": false,
+      "effects": [
+        {
+          "effect": "mac_observation",
+          "interface_type": 0,
+          "service_result": 0
+        },
+        {
+          "effect": "mutex_create",
+          "country_cache": true
+        },
+        {
+          "effect": "mutex_take",
+          "country_cache": true
+        },
+        {
+          "effect": "country_file_read",
+          "file": "wifi_country_code",
+          "result": 1
+        },
+        {
+          "effect": "mutex_release",
+          "country_cache": true
+        }
+      ],
+      "reply_pattern": "030010",
+      "reply_command": "0802",
+      "body_hex": "00a10c303230303030303030303032a20430310000",
+      "status": 0,
+      "raw_fields": {
+        "a1": "303230303030303030303032",
+        "a2": "30310000"
+      },
+      "wire_hex": "ff091f00030010080200a10c303230303030303030303032a20430310000fa",
+      "native_reply_head": {
+        "version": "1.0.0.1",
+        "client_id": "SYNTHETIC00000001",
+        "sess_id": "0000-0000",
+        "msg_seq": 0,
+        "cmd": 16,
+        "cmd_status": 1,
+        "sign_code": 0,
+        "seed": "null",
+        "timestamp": 1700000000
+      },
+      "reply_port": 5,
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "country_provider_cache_and_fallback",
+      "warm_cache": true,
+      "file_read_error": 0,
+      "synthetic_country": "ABCD",
+      "country_cache_changed": false,
+      "effects": [
+        {
+          "effect": "mac_observation",
+          "interface_type": 0,
+          "service_result": 0
+        },
+        {
+          "effect": "mutex_take",
+          "country_cache": true
+        },
+        {
+          "effect": "mutex_release",
+          "country_cache": true
+        }
+      ],
+      "reply_pattern": "030010",
+      "reply_command": "0802",
+      "body_hex": "00a10c303230303030303030303032a20441420044",
+      "status": 0,
+      "raw_fields": {
+        "a1": "303230303030303030303032",
+        "a2": "41420044"
+      },
+      "wire_hex": "ff091f00030010080200a10c303230303030303030303032a20441420044bc",
+      "native_reply_head": {
+        "version": "1.0.0.1",
+        "client_id": "SYNTHETIC00000001",
+        "sess_id": "0000-0000",
+        "msg_seq": 0,
+        "cmd": 16,
+        "cmd_status": 1,
+        "sign_code": 0,
+        "seed": "null",
+        "timestamp": 1700000000
+      },
+      "reply_port": 5,
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "wifi_uninitialized_query_reaches_initializer",
+      "effects": [
+        {
+          "effect": "wifi_initialization_boundary",
+          "whole_initialization_substituted": true
+        },
+        {
+          "effect": "mac_observation",
+          "interface_type": 0,
+          "service_result": 0
+        },
+        {
+          "effect": "mutex_take",
+          "country_cache": true
+        },
+        {
+          "effect": "mutex_release",
+          "country_cache": true
+        }
+      ],
+      "initializer_substituted_not_a_physical_test": true,
+      "reply_pattern": "030010",
+      "reply_command": "0802",
+      "body_hex": "00a10c303230303030303030303032a20430310000",
+      "status": 0,
+      "raw_fields": {
+        "a1": "303230303030303030303032",
+        "a2": "30310000"
+      },
+      "wire_hex": "ff091f00030010080200a10c303230303030303030303032a20430310000fa",
+      "native_reply_head": {
+        "version": "1.0.0.1",
+        "client_id": "SYNTHETIC00000001",
+        "sess_id": "0000-0000",
+        "msg_seq": 0,
+        "cmd": 16,
+        "cmd_status": 1,
+        "sign_code": 0,
+        "seed": "null",
+        "timestamp": 1700000000
+      },
+      "reply_port": 5,
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "zero_length_selector_reads_next_tag",
+      "observed_selector": 162,
+      "strict_request_length_guard_required": true,
+      "reply_pattern": "030010",
+      "reply_command": "0802",
+      "body_hex": "00a10c303230303030303030303032a20430310000",
+      "status": 0,
+      "raw_fields": {
+        "a1": "303230303030303030303032",
+        "a2": "30310000"
+      },
+      "wire_hex": "ff091f00030010080200a10c303230303030303030303032a20430310000fa",
+      "native_reply_head": {
+        "version": "1.0.0.1",
+        "client_id": "SYNTHETIC00000001",
+        "sess_id": "0000-0000",
+        "msg_seq": 0,
+        "cmd": 16,
+        "cmd_status": 1,
+        "sign_code": 0,
+        "seed": "null",
+        "timestamp": 1700000000
+      },
+      "reply_port": 5,
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "wireless_private_text_schema",
+      "configured_text_bytes": 20,
+      "cached_text_present": true,
+      "config_provider_error": 0,
+      "password_in_reply": false,
+      "effects": [
+        {
+          "effect": "wifi_config_provider_boundary",
+          "configured_text_bytes": 20,
+          "result": 0
+        }
+      ],
+      "reply_pattern": "030010",
+      "reply_command": "0803",
+      "body_hex": "00a10100a20101a301baa41473796e7468657469632d636f6e6669672d6e6574a50107a60100a81473796e7468657469632d6361636865642d6e6574",
+      "status": 0,
+      "raw_fields": {
+        "a1": "00",
+        "a2": "01",
+        "a3": "ba",
+        "a4": "73796e7468657469632d636f6e6669672d6e6574",
+        "a5": "07",
+        "a6": "00",
+        "a8": "73796e7468657469632d6361636865642d6e6574"
+      },
+      "wire_hex": "ff094600030010080300a10100a20101a301baa41473796e7468657469632d636f6e6669672d6e6574a50107a60100a81473796e7468657469632d6361636865642d6e6574b8",
+      "native_reply_head": {
+        "version": "1.0.0.1",
+        "client_id": "SYNTHETIC00000001",
+        "sess_id": "0000-0000",
+        "msg_seq": 0,
+        "cmd": 16,
+        "cmd_status": 1,
+        "sign_code": 0,
+        "seed": "null",
+        "timestamp": 1700000000
+      },
+      "reply_port": 5,
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "wireless_private_text_schema",
+      "configured_text_bytes": 0,
+      "cached_text_present": false,
+      "config_provider_error": 0,
+      "password_in_reply": false,
+      "effects": [
+        {
+          "effect": "wifi_config_provider_boundary",
+          "configured_text_bytes": 0,
+          "result": 0
+        }
+      ],
+      "reply_pattern": "030010",
+      "reply_command": "0803",
+      "body_hex": "00a10100a20101a301baa400a50107a60100",
+      "status": 0,
+      "raw_fields": {
+        "a1": "00",
+        "a2": "01",
+        "a3": "ba",
+        "a4": "",
+        "a5": "07",
+        "a6": "00"
+      },
+      "wire_hex": "ff091c00030010080300a10100a20101a301baa400a50107a6010048",
+      "native_reply_head": {
+        "version": "1.0.0.1",
+        "client_id": "SYNTHETIC00000001",
+        "sess_id": "0000-0000",
+        "msg_seq": 0,
+        "cmd": 16,
+        "cmd_status": 1,
+        "sign_code": 0,
+        "seed": "null",
+        "timestamp": 1700000000
+      },
+      "reply_port": 5,
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "wireless_private_text_schema",
+      "configured_text_bytes": 32,
+      "cached_text_present": true,
+      "config_provider_error": 0,
+      "password_in_reply": false,
+      "effects": [
+        {
+          "effect": "wifi_config_provider_boundary",
+          "configured_text_bytes": 32,
+          "result": 0
+        }
+      ],
+      "reply_pattern": "030010",
+      "reply_command": "0803",
+      "body_hex": "00a10100a20101a301baa4205353535353535353535353535353535353535353535353535353535353535353a50107a60100a81473796e7468657469632d6361636865642d6e6574",
+      "status": 0,
+      "raw_fields": {
+        "a1": "00",
+        "a2": "01",
+        "a3": "ba",
+        "a4": "5353535353535353535353535353535353535353535353535353535353535353",
+        "a5": "07",
+        "a6": "00",
+        "a8": "73796e7468657469632d6361636865642d6e6574"
+      },
+      "wire_hex": "ff095200030010080300a10100a20101a301baa4205353535353535353535353535353535353535353535353535353535353535353a50107a60100a81473796e7468657469632d6361636865642d6e65748e",
+      "native_reply_head": {
+        "version": "1.0.0.1",
+        "client_id": "SYNTHETIC00000001",
+        "sess_id": "0000-0000",
+        "msg_seq": 0,
+        "cmd": 16,
+        "cmd_status": 1,
+        "sign_code": 0,
+        "seed": "null",
+        "timestamp": 1700000000
+      },
+      "reply_port": 5,
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "wireless_private_text_schema",
+      "configured_text_bytes": 20,
+      "cached_text_present": false,
+      "config_provider_error": 1,
+      "password_in_reply": false,
+      "effects": [
+        {
+          "effect": "wifi_config_provider_boundary",
+          "configured_text_bytes": 20,
+          "result": 1
+        }
+      ],
+      "reply_pattern": "030010",
+      "reply_command": "0803",
+      "body_hex": "00a10100a20101a301baa400a50107a60100",
+      "status": 0,
+      "raw_fields": {
+        "a1": "00",
+        "a2": "01",
+        "a3": "ba",
+        "a4": "",
+        "a5": "07",
+        "a6": "00"
+      },
+      "wire_hex": "ff091c00030010080300a10100a20101a301baa400a50107a6010048",
+      "native_reply_head": {
+        "version": "1.0.0.1",
+        "client_id": "SYNTHETIC00000001",
+        "sess_id": "0000-0000",
+        "msg_seq": 0,
+        "cmd": 16,
+        "cmd_status": 1,
+        "sign_code": 0,
+        "seed": "null",
+        "timestamp": 1700000000
+      },
+      "reply_port": 5,
+      "protected_identity_regions_unchanged": true
+    },
+    {
+      "case": "mixed_native_query_schemas_and_non_echoed_correlation",
+      "replies": [
+        {
+          "request_sequence": 101,
+          "reply_pattern": "030010",
+          "reply_command": "0802",
+          "body_hex": "00a10c303230303030303030303031",
+          "status": 0,
+          "raw_fields": {
+            "a1": "303230303030303030303031"
+          },
+          "wire_hex": "ff091900030010080200a10c30323030303030303030303158",
+          "native_reply_head": {
+            "version": "1.0.0.1",
+            "client_id": "SYNTHETIC00000001",
+            "sess_id": "0000-0000",
+            "msg_seq": 0,
+            "cmd": 16,
+            "cmd_status": 1,
+            "sign_code": 0,
+            "seed": "null",
+            "timestamp": 1700000000
+          },
+          "reply_port": 5,
+          "protected_identity_regions_unchanged": true
+        },
+        {
+          "request_sequence": 203,
+          "reply_pattern": "030010",
+          "reply_command": "0803",
+          "body_hex": "00a10100a20101a301baa41473796e7468657469632d636f6e6669672d6e6574a50107a60100a81473796e7468657469632d6361636865642d6e6574",
+          "status": 0,
+          "raw_fields": {
+            "a1": "00",
+            "a2": "01",
+            "a3": "ba",
+            "a4": "73796e7468657469632d636f6e6669672d6e6574",
+            "a5": "07",
+            "a6": "00",
+            "a8": "73796e7468657469632d6361636865642d6e6574"
+          },
+          "wire_hex": "ff094600030010080300a10100a20101a301baa41473796e7468657469632d636f6e6669672d6e6574a50107a60100a81473796e7468657469632d6361636865642d6e6574b8",
+          "native_reply_head": {
+            "version": "1.0.0.1",
+            "client_id": "SYNTHETIC00000001",
+            "sess_id": "0000-0001",
+            "msg_seq": 1,
+            "cmd": 16,
+            "cmd_status": 1,
+            "sign_code": 0,
+            "seed": "null",
+            "timestamp": 1700000000
+          },
+          "reply_port": 5,
+          "protected_identity_regions_unchanged": true
+        },
+        {
+          "request_sequence": 307,
+          "reply_pattern": "030010",
+          "reply_command": "0822",
+          "body_hex": "00a104baffffff",
+          "status": 0,
+          "raw_fields": {
+            "a1": "baffffff"
+          },
+          "wire_hex": "ff091100030010082200a104baffffff3e",
+          "native_reply_head": {
+            "version": "1.0.0.1",
+            "client_id": "SYNTHETIC00000001",
+            "sess_id": "0000-0002",
+            "msg_seq": 2,
+            "cmd": 16,
+            "cmd_status": 1,
+            "sign_code": 0,
+            "seed": "null",
+            "timestamp": 1700000000
+          },
+          "reply_port": 5,
+          "protected_identity_regions_unchanged": true
+        }
+      ],
+      "request_head_sequence_or_session_not_echoed": true
+    },
+    {
+      "case": "controller_function_enters_separate_dispatch_boundary",
+      "function": "0f",
+      "command": "0002",
+      "query_handler_calls": 0,
+      "substituted_dispatch_boundary": [
+        {
+          "address": "42045792",
+          "command": "0002"
+        }
+      ],
+      "controller_effects_or_reply_after_boundary_not_tested": true
+    },
+    {
+      "case": "controller_function_enters_separate_dispatch_boundary",
+      "function": "0f",
+      "command": "0003",
+      "query_handler_calls": 0,
+      "substituted_dispatch_boundary": [
+        {
+          "address": "42045792",
+          "command": "0003"
+        }
+      ],
+      "controller_effects_or_reply_after_boundary_not_tested": true
+    },
+    {
+      "case": "controller_function_enters_separate_dispatch_boundary",
+      "function": "0f",
+      "command": "0022",
+      "query_handler_calls": 0,
+      "substituted_dispatch_boundary": [
+        {
+          "address": "42045792",
+          "command": "0022"
+        }
+      ],
+      "controller_effects_or_reply_after_boundary_not_tested": true
+    }
+  ],
+  "firmware": {
+    "filename": "c1000-radio-validated.bin",
+    "sha256": "e291ec115f013953e825cb51b9e457a8731889547ab55b3058640e599e8cfec8",
+    "bytes": 1482800
+  },
+  "limitations": "Offline A1763 native MAC/region query and private wireless-text schema.\n\nRuns JSON admission, local function10 dispatch, opcode0002, selected MAC/region\nwrappers, opcode0003 text wrapper, reply framing and native JSON/topic builders.\nOS/libc/JSON/base64, established crypto/session, MAC/driver/config observations,\ncountry-file reads/mutexes, Wi-Fi initialization, the different function-0f\ndispatcher boundary and final publish are explicit\nsubstitutes. Only synthetic identities, text, MAC bytes and stale scratch exist.\nNo device, network, SSH, cloud, credentials, controller or physical radio action."
+}

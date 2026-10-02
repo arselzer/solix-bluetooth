@@ -82,12 +82,21 @@ independent working BLE recovery before changing an identity used by HA.
 
 An [A1763-only radio replay](radio-ble-advertising-recovery.md) now establishes
 a normal MQTT route to BLE enable (`10/0024`). Its ACK does not prove physical
-advertising, and its wireless query reads application flags only. The current
-controller adapter cannot receive its distinct radio response pattern. A
-bounded recovery trial needs that separate adapter, independent BLE scanning,
+advertising, and its wireless query reads application flags only. A separate
+[read-only radio adapter](c1000-gen2-native-wireless-state-validation.md) now
+handles `0003`; the BLE-enable setter remains unexposed. A bounded recovery
+trial needs an explicit setter adapter, independent BLE scanning,
 a retained working identity and physical IoT-button fallback. This candidate
 does not establish original/C2000 equivalence or account-free registration;
 their identity trials remain deferred.
+
+The [initialization/activation follow-up](radio-ble-initialization-activation.md)
+executes the first-enable defaults and normal provisioning callback, including
+an account-change configuration write. Its substituted lifecycle boundaries
+do not prove rollback or retained BLE recovery. The original app's examined
+`0003` caller is capability negotiation on function `01`, with a nonempty
+timestamp/user-ID body; it does not establish function `10/0003` support.
+Do not infer transport equivalence from matching opcodes or version labels.
 
 1. Save the working BLE/native profile, private certificates and radio network
    readback. Record fresh versions, power readings, protected settings and F8.

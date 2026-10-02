@@ -13,6 +13,7 @@ from solix_link.cli import parser
     ("ap-service-set-discharge-floor", ["--lower", "5"]),
     ("ap-service-status", []),
     ("ap-service-readiness", []),
+    ("ap-service-wireless-state", []),
     ("ap-service-set-charge-power", ["--watts", "800"]),
     ("ap-service-set-charge-cap", ["--upper", "90"]),
     ("ap-service-set-temperature-unit", ["--unit", "celsius"]),

@@ -16,7 +16,8 @@ import time
 from typing import Callable
 
 from .ap_service_config import APServiceConfig, private_write
-from .native_mqtt import NativeMqttCommands, NativeMqttRequest, decode_mqtt_telemetry
+from .native_mqtt import (RADIO_NATIVE_PATTERN, NativeMqttCommands, NativeMqttRequest,
+                          decode_mqtt_telemetry, decode_native_wireless_state)
 from .protocol import DATA_RESPONSE, Model, decode_telemetry, parse_packet, parse_tlvs, timezone_confer
 from .tou import PowerFlowTimeout, TouPeriod, periods_from_d9, power_flow, validate_periods
 
@@ -86,7 +87,7 @@ def mqtt_string(body: bytes, position: int, *, allow_zero_client_id: bool = Fals
     return value, end
 
 
-def native_response(message: bytes, config: APServiceConfig):
+def native_response(message: bytes, config: APServiceConfig, *, radio_query: bool = False):
     """Validate device identity before accepting any acknowledgement."""
     try:
         outer = json.loads(message)
@@ -100,7 +101,12 @@ def native_response(message: bytes, config: APServiceConfig):
         if inner.get("encoding_type", 0) != 0:
             raise ValueError
         frame = parse_packet(base64.b64decode(inner["data"], validate=True))
-        return frame if frame.pattern == DATA_RESPONSE else None
+        if frame.pattern == DATA_RESPONSE:
+            return frame
+        if (radio_query and config.model == Model.C1000_GEN2
+                and frame.pattern == RADIO_NATIVE_PATTERN and frame.command == bytes.fromhex("0803")):
+            return frame
+        return None
     except (ValueError, KeyError, TypeError, UnicodeError):
         raise ValueError("Invalid native response") from None
 
@@ -477,6 +483,34 @@ class LocalMqttServer:
         a4, d9, metrics, _ = self._c1000_settings_report(reply)
         return a4, d9, metrics
 
+    async def wireless_state(self) -> dict:
+        """Read radio application flags; this neither enables nor pairs BLE."""
+        request = self.commands.wireless_state()  # Model guard before device I/O.
+        async with self._control_lock:
+            connection = self.connection
+            if connection is None:
+                raise ConnectionError("Station is not connected")
+            before_a4, before_d9, before = await self._fresh_c1000_settings(connection)
+            if (before.get("software_version") != "1.1.4.9"
+                    or before.get("software_version_module") != "0.3.3.0"):
+                raise ValueError("Radio query requires main 1.1.4.9 / radio 0.3.3.0; no radio request sent")
+            flags = decode_native_wireless_state(await connection.request(request))
+            a4, d9, metrics = await self._fresh_c1000_settings(connection)
+            expected = bytearray(before_a4)
+            for key, offset in (("ac_output_timeout_seconds", 1), ("dc_output_timeout_seconds", 9)):
+                if metrics[key] > before[key]:
+                    raise RuntimeError("Output countdown increased during radio query")
+                expected[offset:offset + 4] = a4[offset:offset + 4]
+            expected[22] = a4[22]  # Runtime display activity can change naturally.
+            if (a4 != bytes(expected) or d9[2:] != before_d9[2:]
+                    or any(metrics[key] != before[key] for key in
+                           ("ac_output_enabled", "dc_output_enabled", "ac_input_connected"))):
+                raise RuntimeError("Protected setting or output changed during radio query")
+            return {"model": self.config.model.value, "radio_version": "0.3.3.0",
+                    "wireless_state": flags, "settings_unchanged": True,
+                    "observed_at": time.time(),
+                    "scope": "Radio application state; physical advertising is not reported"}
+
     def _c1000_settings_report(self, reply: bytes) -> tuple[bytes, bytes, dict, dict[int, bytes]]:
         if self.config.model != Model.C1000_GEN2:
             raise ValueError("Setting requires C1000 Gen 2 only")
@@ -816,6 +850,7 @@ class _Connection:
         self.subscribed = False
         self.pending: tuple[str, asyncio.Future] | None = None
         self._response_aliases: tuple[str, ...] = ()
+        self._response_pattern = DATA_RESPONSE
         self._original_ack: tuple[str, bytes | None] | None = None
         self.lock = asyncio.Lock()
         self.poller: asyncio.Task | None = None
@@ -838,6 +873,12 @@ class _Connection:
             pass
 
     async def request(self, request: NativeMqttRequest, timeout: float = 12) -> bytes:
+        if request.response_pattern not in (DATA_RESPONSE, RADIO_NATIVE_PATTERN):
+            raise ValueError("Unsupported native response namespace")
+        if request.response_pattern == RADIO_NATIVE_PATTERN and (
+                self.server.config.model != Model.C1000_GEN2 or request.response_command != "0803"
+                or request.response_aliases):
+            raise ValueError("Only the C1000 Gen 2 wireless-state radio query is supported")
         async with self.lock:
             if self.writer.is_closing() or not self.subscribed:
                 raise ConnectionError("Station command subscription is unavailable")
@@ -851,6 +892,7 @@ class _Connection:
             future = asyncio.get_running_loop().create_future()
             self.pending = (request.response_command, future)
             self._response_aliases = request.response_aliases
+            self._response_pattern = request.response_pattern
             topic = request.topic.encode()
             try:
                 self.server.record("request", payload=request.payload)
@@ -865,6 +907,7 @@ class _Connection:
             finally:
                 self.pending = None
                 self._response_aliases = ()
+                self._response_pattern = DATA_RESPONSE
 
     async def send_original_setting(self, request: NativeMqttRequest) -> None:
         """Send one verified original setter, accepting an optional ACK only."""
@@ -977,7 +1020,9 @@ class _Connection:
                     continue
                 message = body[pos:]
                 try:
-                    frame = native_response(message, self.server.config)
+                    frame = native_response(message, self.server.config,
+                        radio_query=bool(self.pending and self.pending[0] == "0803"
+                                         and self._response_pattern == RADIO_NATIVE_PATTERN))
                     if frame is None:
                         continue
                     update = decode_mqtt_telemetry(message, model=self.server.config.model,
@@ -994,7 +1039,8 @@ class _Connection:
                         # rejection received during this confirmation window.
                         if previous is None or (previous and previous[0] == 0):
                             self._original_ack = (command, frame.payload)
-                    if self.pending and command == self.pending[0] and not self.pending[1].done():
+                    if (self.pending and command == self.pending[0]
+                            and frame.pattern == self._response_pattern and not self.pending[1].done()):
                         self.pending[1].set_result(frame.payload)
                     elif (self.server.config.model == Model.C1000 and update is not None
                           and command == "0405" and command in self._response_aliases and self.pending

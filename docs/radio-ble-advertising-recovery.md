@@ -55,11 +55,11 @@ base64 `data` contains that wire. Established synthetic GCM requests produce
 encrypted `4824` replies. Destination bytes 0/1/2/3 reach the handler and are
 preserved in the reply; destination 0 is the narrow documented candidate.
 
-Current controller request/response handling is unsuitable: it uses function 0f,
-prepends source tag `A1=22`, and recognizes a different response pattern. A
-future adapter needs an explicit radio pattern, exact opcode/body, per-request
-matching and private response retention. Reusing that controller helper could
-enable BLE through its prepended source byte and obscure the intended value.
+The controller builder is unsuitable: it uses function 0f and prepends source
+tag `A1=22`. A separate, [live-validated read-only adapter](c1000-gen2-native-wireless-state-validation.md)
+now handles `0003` with the exact radio pattern and per-request matching.
+It exposes no `0024` setter. Reusing the controller helper could enable BLE
+through its prepended source byte and obscure the intended value.
 
 ## Executed effects and retention limits
 
@@ -91,7 +91,12 @@ limits prevent a general hardware safety or recovery guarantee.
 `0003` replies status 00 then A1=application BLE flag and A2=application Wi-Fi
 flag. Independent synthetic PAL states 1/2/3 yield the same selected flags. It
 cannot establish whether BLE is physically advertising, connecting or
-connected. A later MCU update could overwrite the current radio condition.
+connected from this replay alone. The later
+[47-case producer/initialization audit](radio-ble-initialization-activation.md)
+finds BLE connection-state writers; advertising enable does not write this flag.
+The [23-case query audit](radio-native-info-queries.md) also corrects optional
+A4 to configured network text, which this older replay substituted. A later
+MCU update could overwrite the current radio condition.
 
 ## Activation, IoT button and a future bounded trial
 
@@ -103,6 +108,8 @@ path caused it. This replay does not reproduce successful native activation's
 whole callback graph or a physical IoT button. It does not establish an opcode
 for opening a pairing window, changing registration or querying physical
 advertising. Device Timeout Never is not evidence of any of those conditions.
+The separate initialization/activation follow-up executes additional normal
+instructions, while retaining physical, persistence and asynchronous boundaries.
 
 Qualify **C1000 Gen 2 only**, while it already has fresh native telemetry and
 a retained known-working Prime identity. Have physical IoT-button recovery

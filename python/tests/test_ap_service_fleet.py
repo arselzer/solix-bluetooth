@@ -148,6 +148,30 @@ def test_private_countdown_requires_gen2_c1000_target_and_exact_shape(fleet):
     asyncio.run(run())
 
 
+def test_radio_query_requires_selected_gen2_model_and_accepts_no_write_fields(fleet):
+    primary, second, directory = fleet
+    async def run():
+        service = APService(primary, directory, allow_control=False)
+        calls = []
+        async def query():
+            calls.append(second.name)
+            return {"wireless_state": {"bluetooth_application_state": 0, "wifi_application_state": 1}}
+        service.stations[second.name].wireless_state = query
+        listener = await asyncio.start_unix_server(service._control, path=directory / "control.sock")
+        try:
+            for values in ({}, {"name": "servers"}, {"name": "unknown"},
+                           {"name": "office", "enabled": True}, {"name": "office", "seconds": 0}):
+                with pytest.raises(ValueError):
+                    await ap_service_request(directory, "wireless-state", **values)
+            assert calls == []
+            result = await ap_service_request(directory, "wireless-state", name="office")
+            assert result["wireless_state"]["wifi_application_state"] == 1 and calls == ["office"]
+            assert "wireless-state" not in APServiceMonitor(primary, directory).supported_commands("office")
+        finally:
+            listener.close(); await listener.wait_closed()
+    asyncio.run(run())
+
+
 def test_device_api_routes_header_only_requests_and_credentials(fleet):
     primary, second, directory = fleet
     async def run():

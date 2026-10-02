@@ -165,6 +165,14 @@ Two fresh reports confirm remaining time and protect configuration/output
 states. This command is excluded from HTTP/HA and C2000. See
 [timer lifecycle and confirmation limits](../docs/gen2-ac-countdown-roundtrip.md).
 
+`ap-service-wireless-state --directory /path/to/ap-service --name station`
+reads the C1000 Gen 2 radio's application BLE/Wi-Fi state bytes. It requires
+fresh main 1.1.4.9 / radio 0.3.3.0 status and also works with controls disabled.
+The query uses the radio namespace with exact reply matching, then checks fresh
+protected settings. It does not enable Bluetooth or change pairing/network state.
+MAC, SSID and optional text fields are omitted from the result; raw reports stay
+in the private capture. Application state does not establish physical advertising.
+
 Original C1000 **legacy** temperature, fast charge and AC/DC Smart preferences are
 [physically verified](../docs/c1000-preferences-validation.md) and exposed in
 the terminal/browser/CLI, bridge and gateway/HA. Boolean commands are

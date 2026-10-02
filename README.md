@@ -27,6 +27,8 @@ Home Assistant integration for the local gateway.
   settings are also available; [readback semantics](docs/gen2-preference-readback.md).
 - C1000 Gen 2 Prime RSSI queries via `wifi-rssi`, with explicit unavailable
   results; [radio readbacks](docs/c1000-radio-readback-validation.md).
+- C1000 Gen 2 private operator CLI: [read-only native radio flags](docs/c1000-gen2-native-wireless-state-validation.md)
+  via `ap-service-wireless-state`; these do not report physical advertising.
 - Authenticated JSON HTTP, SSE and Prometheus for multiple stations.
 - Opt-in Home Assistant price/solar charging blueprint with telemetry freshness,
   reserve protection and a failure latch; installed automations start disabled.
@@ -178,6 +180,10 @@ web-dashboard guide. Commit Vue sources and compiled Python assets together.
 - [Local identity storage](docs/radio-identity-storage.md): cache transitions,
   reconnect requirements and a smaller account-free test sequence;
   [MQTT-assisted BLE recovery candidate](docs/radio-ble-advertising-recovery.md).
+- [Radio initialization and identity activation](docs/radio-ble-initialization-activation.md)
+  and [native query limits](docs/radio-native-info-queries.md): 70 new offline cases.
+- [Original firmware capture plan](docs/c1000-ota-http-wrapper.md): app transport
+  branches and the plaintext OTA metadata callback; main 1.7.1 remains missing.
 - [Energy accounting](docs/gen2-energy-counter-investigation.md): sampling,
   scheduler gaps and nominal Wh arithmetic; calibrated units remain unverified.
 - [Smart auto-off policy](docs/c1000-smart-auto-off-policy.md) and

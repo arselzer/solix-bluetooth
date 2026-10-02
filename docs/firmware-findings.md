@@ -767,3 +767,34 @@ Radio response pattern `030010` differs from current controller handling, so
 the controller builder must not be reused. Physical callbacks, initialization
 and other-model equivalence remain unproved; no runtime recovery API or station
 trial was added. Physical IoT-button fallback remains a live-trial prerequisite.
+
+## October 2: radio query validation and OTA capture boundary
+
+The [47-case first-enable/activation replay](radio-ble-initialization-activation.md)
+traces radio initialization defaults, two 1000 ms timers and BLE flag producers.
+Advertising enable leaves application BLE state unchanged; direct connection
+callbacks write it. Normal provisioning can persist a changed account, but
+substituted lifecycle calls prevent a rollback or independent-recovery claim.
+An update-check callback previously worth inspecting is not a MQTT-binding
+success callback. No physical BLE-enable or identity trial followed.
+
+The [23-case native query audit](radio-native-info-queries.md) resolves `0002`
+MAC/region providers and `0003` private network text. `0002` can initialize Wi-Fi
+or return stale scratch with status 00; it stays excluded from public getters.
+`0003` A4 contains configured network text, not a MAC. Only raw A1/A2 flags
+are selected by the new private operator command.
+
+One [live native `0003` query](c1000-gen2-native-wireless-state-validation.md)
+on C1000 Gen 2 main **1.1.4.9 / radio 0.3.3.0** returned BLE application 0,
+Wi-Fi application 1. Full fresh protected settings matched, all three stations
+remained fresh with AC enabled, and the wire audit found zero setting writes.
+Exact radio pattern/opcode matching isolates replies from controller ACKs and
+freshness. HTTP/HA controls and identity profiles did not change.
+
+The [static app transport audit](c1000-ota-http-wrapper.md) finds conditional
+native SDK/Dio paths and where decrypted OTA metadata reaches `OtaUpdateModel`.
+Native SDK signing/encryption remains unresolved, and main 1.7.1 is still missing.
+App Fast/charging-limit gates establish no original charging pause or forced
+discharge control. Equal `0003` values in the original app refer to a different
+capability-negotiation namespace, so original/C2000 wireless queries remain
+unverified. Raw captures and app extracts stay private.

@@ -247,3 +247,33 @@ establish actual preference changes. The sole nonempty changed-settings sample
 was the planned C1000 Gen 2 countdown; subsequent reports returned to baseline.
 The 13-hour observation is still running. No completed soak-test or independent
 electrical-continuity claim follows from this partial snapshot.
+
+## Read-only native radio query update
+
+On 2026-10-02 the existing AP/gateway runtime received the guarded private
+C1000 Gen 2 wireless-state query, wheel SHA-256
+`2dffe375c0a486ec7ba63696a15ac8651508a106d582656c9ca388559a3f69de`.
+The prior runtime was backed up, and all static profiles/certificates matched
+their saved hashes. Only existing AP/gateway services restarted; this upgrade
+is recorded in the observation interventions. No HA component/configuration
+reload or charging-policy change was performed.
+
+The [one-query trial](c1000-gen2-native-wireless-state-validation.md) returned
+BLE application state 0 and Wi-Fi application state 1. Before/after controller
+records and three subsequent fleet samples confirmed protected settings and
+fresh telemetry with AC enabled. The bounded wire audit found zero setting
+writes on every station; original/C2000 received status requests only.
+
+Native capability counts remain **9 / 16 / 5**, and HA registration counts
+remain **16 / 37 / 22**, for original / Gen 2 / C2000. The solar automation is
+disabled, both arming/latch helpers are off, and the private query is excluded
+from HTTP/HA capabilities. The full release gate passed **2,433 Python/HA
+tests**; browser/component sources did not change. The ongoing observation
+does not establish completed long-duration reliability or physical continuity.
+
+A later immutable snapshot contains **381 samples over 3.17 hours**, with zero
+HTTP request errors. Three samples have empty caches near the recorded service
+upgrades, including this upgrade at +20.75 seconds. The sole nonempty settings
+change remains the planned countdown trial. This snapshot shows no observed
+spontaneous settings changes; it is still a partial observation, not the
+completed 13-hour run.

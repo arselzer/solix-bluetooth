@@ -14,6 +14,29 @@ from .protocol import DATA_REQUEST, DATA_RESPONSE, Model, build_packet, decode_t
 from .tou import TouPeriod, validate_periods
 from .c1000 import c1000_setting
 
+RADIO_NATIVE_PATTERN = bytes.fromhex("030010")
+
+
+def decode_native_wireless_state(reply: bytes) -> dict[str, int]:
+    """Select application-state bytes; omit MAC, SSID and other private fields."""
+    if not reply or reply[0] != 0:
+        raise ValueError("Radio wireless-state request failed")
+    fields = {}
+    pos = 1
+    while pos < len(reply):
+        if pos + 2 > len(reply):
+            raise ValueError("Truncated radio wireless-state fields")
+        tag, size = reply[pos:pos + 2]
+        end = pos + 2 + size
+        if end > len(reply) or tag in fields:
+            raise ValueError("Invalid radio wireless-state fields")
+        fields[tag] = reply[pos + 2:end]
+        pos = end
+    if any(len(fields.get(tag, b"")) != 1 for tag in (0xA1, 0xA2)):
+        raise ValueError("Missing radio application-state bytes")
+    return {"bluetooth_application_state": fields[0xA1][0],
+            "wifi_application_state": fields[0xA2][0]}
+
 
 @dataclass(frozen=True)
 class MqttTelemetry:
@@ -31,6 +54,7 @@ class NativeMqttRequest:
     payload: str = field(repr=False)
     response_command: str
     response_aliases: tuple[str, ...] = ()
+    response_pattern: bytes = DATA_RESPONSE
 
 
 @dataclass
@@ -76,6 +100,14 @@ class NativeMqttCommands:
         """Read controller readiness (0089/0889); opaque fields stay private."""
         self._require_gen2("Controller readiness")
         return self._request("0089", b"", milliseconds=False)
+
+    def wireless_state(self) -> NativeMqttRequest:
+        """Read A1763 radio state using its local namespace, without a setter."""
+        if self.model != Model.C1000_GEN2:
+            raise ValueError("Radio wireless state supports C1000 Gen 2 only")
+        command = "0003"
+        frame = build_packet(RADIO_NATIVE_PATTERN, bytes.fromhex(command), b"")
+        return self._framed_request(command, frame, time.time(), response_pattern=RADIO_NATIVE_PATTERN)
 
     def stream(self, seconds: int = 60) -> NativeMqttRequest:
         """Request a telemetry window; renew explicitly if needed.
@@ -268,6 +300,10 @@ class NativeMqttCommands:
         timestamp = (tlv(0xFD, b"\x00" + str(int(now * 1000)).encode("ascii"))
                      if milliseconds else tlv(0xFE, b"\x03" + int(now).to_bytes(4, "little")))
         frame = build_packet(DATA_REQUEST, bytes.fromhex(command), tlv(0xA1, b"\x22") + fields + timestamp)
+        return self._framed_request(command, frame, now)
+
+    def _framed_request(self, command: str, frame: bytes, now: float,
+                        *, response_pattern: bytes = DATA_RESPONSE) -> NativeMqttRequest:
         self._sequence += 1
         envelope = {
             "head": {
@@ -285,6 +321,7 @@ class NativeMqttCommands:
             topic=f"cmd/anker_power/{self.product}/{self.device_serial}/req",
             payload=json.dumps(envelope, separators=(",", ":")),
             response_command=f"{int(command, 16) | 0x0800:04x}",
+            response_pattern=response_pattern,
         )
 
 
