@@ -74,7 +74,9 @@ Authorization header. Treat HA configuration backups as containing credentials.
   restoration and three matching final samples. Its gateway requires fresh
   telemetry; a packaged AP service/SDK repeat passed 14 writes and restoration.
   Only validated commands are advertised. Missing mains, battery activity
-  and supply-source fields remain unknown. HA runtime deployment was not tested.
+  and supply-source fields remain unknown. The
+  [HA 2026.7.4 deployment trial](../../docs/ha-runtime-validation.md) also verified
+  an original-C1000 screen-timeout change/restoration through HA itself.
 - Display configuration selects: C1000 Gen 2 native MQTT brightness
   (Low/Medium/High) and screen timeout (Never, 10/20/30/60/300/1800 seconds).
   Brightness 1→2→3→1 and screen timeout 30→60→30 passed fresh readback and
@@ -166,6 +168,15 @@ hardware; clock interpretation and multi-period operation need further validatio
 
 ## Availability and failure behavior
 
+Use **Download diagnostics** in the integration's menu for cached model,
+firmware, freshness, supported controls and allowlisted telemetry. Station names,
+gateway URL, entry/device IDs, credentials and raw captures are omitted from
+the integration report. It sends no device request or command. HA adds its
+standard system/integration metadata to the download; review that wrapper before
+sharing. Diagnostics export and credential omission passed the actual HA 2026.7.4
+HTTP endpoint and twenty focused privacy/staleness tests. See
+[HA's diagnostics documentation](https://developers.home-assistant.io/docs/core/integration/diagnostics/).
+
 One coordinator polls every five seconds while idle; a command pauses polling.
 Stale/disconnected stations and
 missing metrics become unavailable. Commands re-read the station and require
@@ -196,11 +207,13 @@ python3 -m pytest home_assistant_tests -q
 python3 -m compileall -q custom_components/solix_link
 ```
 
-Home Assistant itself is not installed in the development environment. These
-tests verify HTTP contracts, parsing, privacy filtering, command guards and
-translations, but do **not** establish HA runtime/config-flow compatibility.
-Before deployment, run HA integration tests/hassfest and verify setup, entity
-discovery, reauthentication, reconfigure, unload and reload in a test HA instance.
+The standalone tests verify HTTP contracts, parsing, privacy filtering, command
+guards and translations. Separately, a
+[live HA 2026.7.4 deployment](../../docs/ha-runtime-validation.md) passed normal
+config-flow setup, three physical stations, automatic entity discovery,
+a restored setting change, integration reload and AP/gateway recovery.
+Reauthentication, reconfiguration, other releases and long-term operation remain
+unverified; run HA integration tests/hassfest for the target release.
 The component uses `ConfigEntry.runtime_data` and current coordinator APIs;
 target current Home Assistant releases.
 

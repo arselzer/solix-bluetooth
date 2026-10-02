@@ -24,6 +24,8 @@ Home Assistant integration for the local gateway.
 - C1000 Gen 2 Prime RSSI queries via `wifi-rssi`, with explicit unavailable
   results; [radio readbacks](docs/c1000-radio-readback-validation.md).
 - Authenticated JSON HTTP, SSE and Prometheus for multiple stations.
+- Home Assistant diagnostics downloads with model/firmware, freshness and
+  supported settings; the integration report omits credentials and identities.
 - Up to eight supported stations on one isolated AP, with separate certificates,
   telemetry and command queues.
 - Web dashboard with device selection, power/battery charts and explicit write
@@ -39,8 +41,10 @@ Home Assistant integration for the local gateway.
 
 Native MQTT connects the station itself to the AP service. The optional
 BLE-to-MQTT bridge reads Bluetooth and publishes to your existing broker.
-Two simultaneous native stations passed simulated TLS tests; a physical
-multi-station AP test is outstanding. See the [Python guide](python/README.md).
+Three physical stations—original C1000, C1000 Gen 2 and C2000 Gen 2—passed
+simultaneous native MQTT, HA discovery and shared-service recovery checks.
+See the [live deployment record](docs/ha-runtime-validation.md) and
+[Python guide](python/README.md).
 
 ## Start locally
 
@@ -94,8 +98,9 @@ the AP worker must separately allow controls. CLI/private socket writes use
 - [Home Assistant component](custom_components/solix_link/README.md): sensors,
   charging controls, selectors, alert switch and tariff actions.
 
-HA has standalone contract tests; actual HA runtime compatibility still needs
-testing. Session charts are not persistent energy accounting. Measured power
+HA 2026.7.4 passed live setup, three-device discovery, a restored configuration
+control and integration reload. Other releases and long-term operation still
+need testing. Session charts are not persistent energy accounting. Measured power
 can feed HA's Integral helper; firmware energy-counter units remain unverified.
 
 ## Development
@@ -156,6 +161,12 @@ web-dashboard guide. Commit Vue sources and compiled Python assets together.
   original instruction execution with synthetic inputs and explicit substitutions.
 - [Charging follow-up](docs/c1000-charging-control-followup.md): reserve side
   effects, mirrored limits and why 0 W is unavailable as charge pause.
+- [Original charging gates](docs/c1000-charge-gate-rules.md): input-event
+  priority and the second charging channel; no external bypass selector found.
+- [Countdown stop worker](docs/gen2-output-stop-worker.md): late cancellation
+  and why reported output state is not an independent physical measurement.
+- [Local identity storage](docs/radio-identity-storage.md): cache transitions,
+  reconnect requirements and a smaller account-free test sequence.
 - [Energy accounting](docs/gen2-energy-counter-investigation.md): sampling,
   scheduler gaps and nominal Wh arithmetic; calibrated units remain unverified.
 - [Smart auto-off policy](docs/c1000-smart-auto-off-policy.md) and

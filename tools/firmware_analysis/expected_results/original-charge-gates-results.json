@@ -1,0 +1,1828 @@
+{
+  "image_sha256": "b295ee8613f5c96e70dcc905896df516621cab4dc590bb580eac6b84519911a6",
+  "scope": "Original main1.5.9 only; synthetic rule events/descriptors; no installed1.7.1 or electrical validation",
+  "registration": [
+    {
+      "callbacks": [
+        "08028d3c",
+        "08028d8c",
+        "08028c4c",
+        "08028e2c",
+        "08028e2c",
+        "08028e2c",
+        "08028e2c",
+        "08028c9c",
+        "08028ddc",
+        "08028cec",
+        "08028ecc",
+        "08028e7c"
+      ],
+      "startup_block": "08006a4e..08006ac2"
+    }
+  ],
+  "healthy_rules": [
+    {
+      "group": 3,
+      "qualified_input_bits": 0,
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 47
+        },
+        {
+          "gate_bit": 0,
+          "argument": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 0,
+      "source_bits_after": 1,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 1
+    },
+    {
+      "group": 3,
+      "qualified_input_bits": 0,
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 47
+        },
+        {
+          "gate_bit": 0,
+          "argument": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 33,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 1
+    },
+    {
+      "group": 3,
+      "qualified_input_bits": 1,
+      "selected_rows": [
+        2
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 47
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 0,
+      "source_bits_after": 0,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 0
+    },
+    {
+      "group": 3,
+      "qualified_input_bits": 1,
+      "selected_rows": [
+        2
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 47
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 32,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 2
+    },
+    {
+      "group": 3,
+      "qualified_input_bits": 2,
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 47
+        },
+        {
+          "gate_bit": 0,
+          "argument": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 0,
+      "source_bits_after": 1,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 1
+    },
+    {
+      "group": 3,
+      "qualified_input_bits": 2,
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 47
+        },
+        {
+          "gate_bit": 0,
+          "argument": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 33,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 1
+    },
+    {
+      "group": 3,
+      "qualified_input_bits": 3,
+      "selected_rows": [
+        2
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 47
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 0,
+      "source_bits_after": 0,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 0
+    },
+    {
+      "group": 3,
+      "qualified_input_bits": 3,
+      "selected_rows": [
+        2
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 47
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 32,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 2
+    },
+    {
+      "group": 4,
+      "qualified_input_bits": 0,
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 47
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 0,
+      "source_bits_after": 0,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 0
+    },
+    {
+      "group": 4,
+      "qualified_input_bits": 0,
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 47
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 32,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 2
+    },
+    {
+      "group": 4,
+      "qualified_input_bits": 1,
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 47
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 0,
+      "source_bits_after": 0,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 0
+    },
+    {
+      "group": 4,
+      "qualified_input_bits": 1,
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 47
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 32,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 2
+    },
+    {
+      "group": 4,
+      "qualified_input_bits": 2,
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 47
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 0,
+      "source_bits_after": 0,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 0
+    },
+    {
+      "group": 4,
+      "qualified_input_bits": 2,
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 47
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 32,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 2
+    },
+    {
+      "group": 4,
+      "qualified_input_bits": 3,
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 47
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 0,
+      "source_bits_after": 0,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 0
+    },
+    {
+      "group": 4,
+      "qualified_input_bits": 3,
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 47
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 32,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 2
+    },
+    {
+      "group": 5,
+      "qualified_input_bits": 0,
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 1
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 0,
+      "source_bits_after": 32,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 2
+    },
+    {
+      "group": 5,
+      "qualified_input_bits": 0,
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 1
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 32,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 2
+    },
+    {
+      "group": 5,
+      "qualified_input_bits": 1,
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 1
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 0,
+      "source_bits_after": 32,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 2
+    },
+    {
+      "group": 5,
+      "qualified_input_bits": 1,
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 1
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 32,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 2
+    },
+    {
+      "group": 5,
+      "qualified_input_bits": 2,
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 1
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 0,
+      "source_bits_after": 32,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 2
+    },
+    {
+      "group": 5,
+      "qualified_input_bits": 2,
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 1
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 32,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 2
+    },
+    {
+      "group": 5,
+      "qualified_input_bits": 3,
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 1
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 0,
+      "source_bits_after": 32,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 2
+    },
+    {
+      "group": 5,
+      "qualified_input_bits": 3,
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 1
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 32,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 2
+    },
+    {
+      "group": 6,
+      "qualified_input_bits": 0,
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 0
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 0,
+      "source_bits_after": 0,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 0
+    },
+    {
+      "group": 6,
+      "qualified_input_bits": 0,
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 0
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 0,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 0
+    },
+    {
+      "group": 6,
+      "qualified_input_bits": 1,
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 0
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 0,
+      "source_bits_after": 0,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 0
+    },
+    {
+      "group": 6,
+      "qualified_input_bits": 1,
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 0
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 0,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 0
+    },
+    {
+      "group": 6,
+      "qualified_input_bits": 2,
+      "selected_rows": [
+        2
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 0
+        },
+        {
+          "gate_bit": 0,
+          "argument": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 0,
+      "source_bits_after": 1,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 1
+    },
+    {
+      "group": 6,
+      "qualified_input_bits": 2,
+      "selected_rows": [
+        2
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 0
+        },
+        {
+          "gate_bit": 0,
+          "argument": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 1,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 1
+    },
+    {
+      "group": 6,
+      "qualified_input_bits": 3,
+      "selected_rows": [
+        2
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 0
+        },
+        {
+          "gate_bit": 0,
+          "argument": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 0,
+      "source_bits_after": 1,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 1
+    },
+    {
+      "group": 6,
+      "qualified_input_bits": 3,
+      "selected_rows": [
+        2
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 0
+        },
+        {
+          "gate_bit": 0,
+          "argument": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 1,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 1
+    }
+  ],
+  "temperature_rules": [
+    {
+      "group": 3,
+      "synthetic_low_high_c": [
+        1,
+        1
+      ],
+      "selected_rows": [
+        3
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 47
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        },
+        {
+          "kind": "alarm",
+          "code": 28
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 32,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 2,
+      "not_a_safe_temperature_or_physical_protection_claim": true
+    },
+    {
+      "group": 3,
+      "synthetic_low_high_c": [
+        2,
+        2
+      ],
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 47
+        },
+        {
+          "gate_bit": 0,
+          "argument": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 33,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 1,
+      "not_a_safe_temperature_or_physical_protection_claim": true
+    },
+    {
+      "group": 3,
+      "synthetic_low_high_c": [
+        55,
+        55
+      ],
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 47
+        },
+        {
+          "gate_bit": 0,
+          "argument": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 33,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 1,
+      "not_a_safe_temperature_or_physical_protection_claim": true
+    },
+    {
+      "group": 3,
+      "synthetic_low_high_c": [
+        56,
+        56
+      ],
+      "selected_rows": [
+        4
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 47
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        },
+        {
+          "kind": "alarm",
+          "code": 27
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 32,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 2,
+      "not_a_safe_temperature_or_physical_protection_claim": true
+    },
+    {
+      "group": 3,
+      "synthetic_low_high_c": [
+        1,
+        25
+      ],
+      "selected_rows": [],
+      "gate_actions": [],
+      "events": [],
+      "source_bits_before": 33,
+      "source_bits_after": 33,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 1,
+      "not_a_safe_temperature_or_physical_protection_claim": true
+    },
+    {
+      "group": 5,
+      "synthetic_low_high_c": [
+        1,
+        1
+      ],
+      "selected_rows": [
+        2
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 0
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        },
+        {
+          "kind": "alarm",
+          "code": 28
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 0,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 0,
+      "not_a_safe_temperature_or_physical_protection_claim": true
+    },
+    {
+      "group": 5,
+      "synthetic_low_high_c": [
+        2,
+        2
+      ],
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 1
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 32,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 2,
+      "not_a_safe_temperature_or_physical_protection_claim": true
+    },
+    {
+      "group": 5,
+      "synthetic_low_high_c": [
+        55,
+        55
+      ],
+      "selected_rows": [
+        1
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 1
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 32,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 2,
+      "not_a_safe_temperature_or_physical_protection_claim": true
+    },
+    {
+      "group": 5,
+      "synthetic_low_high_c": [
+        56,
+        56
+      ],
+      "selected_rows": [
+        3
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 0
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        },
+        {
+          "kind": "alarm",
+          "code": 27
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 0,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 0,
+      "not_a_safe_temperature_or_physical_protection_claim": true
+    },
+    {
+      "group": 5,
+      "synthetic_low_high_c": [
+        1,
+        25
+      ],
+      "selected_rows": [],
+      "gate_actions": [],
+      "events": [],
+      "source_bits_before": 33,
+      "source_bits_after": 33,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 1,
+      "not_a_safe_temperature_or_physical_protection_claim": true
+    },
+    {
+      "group": 6,
+      "synthetic_low_high_c": [
+        1,
+        1
+      ],
+      "selected_rows": [
+        3
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 0
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 0,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 0,
+      "not_a_safe_temperature_or_physical_protection_claim": true
+    },
+    {
+      "group": 6,
+      "synthetic_low_high_c": [
+        2,
+        2
+      ],
+      "selected_rows": [
+        2
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 0
+        },
+        {
+          "gate_bit": 0,
+          "argument": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 1,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 1,
+      "not_a_safe_temperature_or_physical_protection_claim": true
+    },
+    {
+      "group": 6,
+      "synthetic_low_high_c": [
+        55,
+        55
+      ],
+      "selected_rows": [
+        2
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 0
+        },
+        {
+          "gate_bit": 0,
+          "argument": 1
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 1,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 1,
+      "not_a_safe_temperature_or_physical_protection_claim": true
+    },
+    {
+      "group": 6,
+      "synthetic_low_high_c": [
+        56,
+        56
+      ],
+      "selected_rows": [
+        4
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 0
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [
+        {
+          "kind": "event_queue",
+          "id": 0,
+          "data": 0
+        }
+      ],
+      "source_bits_before": 33,
+      "source_bits_after": 0,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 0,
+      "not_a_safe_temperature_or_physical_protection_claim": true
+    },
+    {
+      "group": 6,
+      "synthetic_low_high_c": [
+        1,
+        25
+      ],
+      "selected_rows": [],
+      "gate_actions": [],
+      "events": [],
+      "source_bits_before": 33,
+      "source_bits_after": 33,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 1,
+      "not_a_safe_temperature_or_physical_protection_claim": true
+    }
+  ],
+  "critical_rules": [
+    {
+      "group": 3,
+      "synthetic_global_bit20": true,
+      "selected_rows": [
+        0
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 47
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [],
+      "source_bits_before": 33,
+      "source_bits_after": 32,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 2
+    },
+    {
+      "group": 4,
+      "synthetic_global_bit20": true,
+      "selected_rows": [
+        0
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 47
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [],
+      "source_bits_before": 33,
+      "source_bits_after": 32,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 2
+    },
+    {
+      "group": 5,
+      "synthetic_global_bit20": true,
+      "selected_rows": [
+        0
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 0
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [],
+      "source_bits_before": 33,
+      "source_bits_after": 0,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 0
+    },
+    {
+      "group": 6,
+      "synthetic_global_bit20": true,
+      "selected_rows": [
+        0
+      ],
+      "gate_actions": [
+        {
+          "gate_bit": 5,
+          "argument": 0
+        },
+        {
+          "gate_bit": 0,
+          "argument": 0
+        }
+      ],
+      "events": [],
+      "source_bits_before": 33,
+      "source_bits_after": 0,
+      "protected_output_bits_unchanged": true,
+      "bc_code_after": 0
+    }
+  ],
+  "bit0_setter": [
+    {
+      "before_flags": 0,
+      "argument": 0,
+      "after_flags": 0,
+      "only_bit0_can_change": true
+    },
+    {
+      "before_flags": 0,
+      "argument": 1,
+      "after_flags": 1,
+      "only_bit0_can_change": true
+    },
+    {
+      "before_flags": 0,
+      "argument": 2,
+      "after_flags": 0,
+      "only_bit0_can_change": true
+    },
+    {
+      "before_flags": 0,
+      "argument": 47,
+      "after_flags": 0,
+      "only_bit0_can_change": true
+    },
+    {
+      "before_flags": 18,
+      "argument": 0,
+      "after_flags": 18,
+      "only_bit0_can_change": true
+    },
+    {
+      "before_flags": 18,
+      "argument": 1,
+      "after_flags": 19,
+      "only_bit0_can_change": true
+    },
+    {
+      "before_flags": 18,
+      "argument": 2,
+      "after_flags": 18,
+      "only_bit0_can_change": true
+    },
+    {
+      "before_flags": 18,
+      "argument": 47,
+      "after_flags": 18,
+      "only_bit0_can_change": true
+    },
+    {
+      "before_flags": 50,
+      "argument": 0,
+      "after_flags": 50,
+      "only_bit0_can_change": true
+    },
+    {
+      "before_flags": 50,
+      "argument": 1,
+      "after_flags": 51,
+      "only_bit0_can_change": true
+    },
+    {
+      "before_flags": 50,
+      "argument": 2,
+      "after_flags": 50,
+      "only_bit0_can_change": true
+    },
+    {
+      "before_flags": 50,
+      "argument": 47,
+      "after_flags": 50,
+      "only_bit0_can_change": true
+    },
+    {
+      "before_flags": 51,
+      "argument": 0,
+      "after_flags": 50,
+      "only_bit0_can_change": true
+    },
+    {
+      "before_flags": 51,
+      "argument": 1,
+      "after_flags": 51,
+      "only_bit0_can_change": true
+    },
+    {
+      "before_flags": 51,
+      "argument": 2,
+      "after_flags": 50,
+      "only_bit0_can_change": true
+    },
+    {
+      "before_flags": 51,
+      "argument": 47,
+      "after_flags": 51,
+      "only_bit0_can_change": true
+    }
+  ],
+  "channel2_producer": [
+    {
+      "enabled_bit0": false,
+      "existing_session": false,
+      "descriptor_dirty": false,
+      "synthetic_variant": 0,
+      "requested_descriptor": [
+        300,
+        392,
+        1000
+      ],
+      "queued": [],
+      "power_cache8_after": 0,
+      "output_and_gate_flags_unchanged": true
+    },
+    {
+      "enabled_bit0": false,
+      "existing_session": false,
+      "descriptor_dirty": false,
+      "synthetic_variant": 1,
+      "requested_descriptor": [
+        300,
+        392,
+        1000
+      ],
+      "queued": [],
+      "power_cache8_after": 0,
+      "output_and_gate_flags_unchanged": true
+    },
+    {
+      "enabled_bit0": false,
+      "existing_session": true,
+      "descriptor_dirty": false,
+      "synthetic_variant": 0,
+      "requested_descriptor": [
+        300,
+        392,
+        1000
+      ],
+      "queued": [
+        {
+          "register": 21,
+          "payload": "5800"
+        }
+      ],
+      "power_cache8_after": 0,
+      "output_and_gate_flags_unchanged": true
+    },
+    {
+      "enabled_bit0": false,
+      "existing_session": true,
+      "descriptor_dirty": false,
+      "synthetic_variant": 1,
+      "requested_descriptor": [
+        300,
+        392,
+        1000
+      ],
+      "queued": [
+        {
+          "register": 21,
+          "payload": "5800"
+        }
+      ],
+      "power_cache8_after": 0,
+      "output_and_gate_flags_unchanged": true
+    },
+    {
+      "enabled_bit0": true,
+      "existing_session": true,
+      "descriptor_dirty": false,
+      "synthetic_variant": 0,
+      "requested_descriptor": [
+        300,
+        392,
+        1000
+      ],
+      "queued": [],
+      "power_cache8_after": 1234,
+      "output_and_gate_flags_unchanged": true
+    },
+    {
+      "enabled_bit0": true,
+      "existing_session": true,
+      "descriptor_dirty": false,
+      "synthetic_variant": 1,
+      "requested_descriptor": [
+        300,
+        392,
+        1000
+      ],
+      "queued": [],
+      "power_cache8_after": 1234,
+      "output_and_gate_flags_unchanged": true
+    },
+    {
+      "enabled_bit0": true,
+      "existing_session": true,
+      "descriptor_dirty": true,
+      "synthetic_variant": 0,
+      "requested_descriptor": [
+        300,
+        392,
+        1000
+      ],
+      "queued": [
+        {
+          "register": 22,
+          "payload": "7c01500fe8032c01a00ff00a"
+        }
+      ],
+      "power_cache8_after": 1234,
+      "output_and_gate_flags_unchanged": true
+    },
+    {
+      "enabled_bit0": true,
+      "existing_session": true,
+      "descriptor_dirty": true,
+      "synthetic_variant": 1,
+      "requested_descriptor": [
+        300,
+        392,
+        1000
+      ],
+      "queued": [
+        {
+          "register": 22,
+          "payload": "7c01500f20032001a00ff00a"
+        }
+      ],
+      "power_cache8_after": 1234,
+      "output_and_gate_flags_unchanged": true
+    },
+    {
+      "enabled_bit0": true,
+      "existing_session": false,
+      "descriptor_dirty": true,
+      "synthetic_variant": 0,
+      "requested_descriptor": [
+        300,
+        392,
+        1000
+      ],
+      "queued": [
+        {
+          "register": 22,
+          "payload": "7c01780f40064402a00ff00a"
+        }
+      ],
+      "power_cache8_after": 1234,
+      "output_and_gate_flags_unchanged": true
+    },
+    {
+      "enabled_bit0": true,
+      "existing_session": false,
+      "descriptor_dirty": true,
+      "synthetic_variant": 1,
+      "requested_descriptor": [
+        300,
+        392,
+        1000
+      ],
+      "queued": [
+        {
+          "register": 22,
+          "payload": "7c01041020032001a00ff00a"
+        }
+      ],
+      "power_cache8_after": 1234,
+      "output_and_gate_flags_unchanged": true
+    },
+    {
+      "enabled_bit0": true,
+      "existing_session": true,
+      "descriptor_dirty": true,
+      "synthetic_variant": 0,
+      "requested_descriptor": [
+        0,
+        392,
+        0
+      ],
+      "queued": [
+        {
+          "register": 22,
+          "payload": "7c01500f64000000a00ff00a"
+        }
+      ],
+      "power_cache8_after": 1234,
+      "output_and_gate_flags_unchanged": true
+    },
+    {
+      "enabled_bit0": true,
+      "existing_session": true,
+      "descriptor_dirty": true,
+      "synthetic_variant": 1,
+      "requested_descriptor": [
+        0,
+        392,
+        0
+      ],
+      "queued": [
+        {
+          "register": 22,
+          "payload": "7c01500f64000000a00ff00a"
+        }
+      ],
+      "power_cache8_after": 1234,
+      "output_and_gate_flags_unchanged": true
+    }
+  ],
+  "shared_descriptor": [
+    {
+      "synthetic_both_gates_set": true,
+      "producer_order": [
+        1,
+        2
+      ],
+      "queue_counts": [
+        1,
+        1
+      ],
+      "queued": [
+        {
+          "register": 4,
+          "payload": "7c01880164002c0100001801"
+        }
+      ],
+      "shared_dirty_byte_consumed_by_first": true,
+      "not_a_real_scheduler_or_dual_source_trial": true
+    },
+    {
+      "synthetic_both_gates_set": true,
+      "producer_order": [
+        2,
+        1
+      ],
+      "queue_counts": [
+        1,
+        1
+      ],
+      "queued": [
+        {
+          "register": 22,
+          "payload": "7c01500fe8032c01a00ff00a"
+        }
+      ],
+      "shared_dirty_byte_consumed_by_first": true,
+      "not_a_real_scheduler_or_dual_source_trial": true
+    }
+  ],
+  "gate_handler_tables": [
+    {
+      "name": "function0f_app",
+      "entries": 32,
+      "gate_setters_absent_as_direct_handlers": true,
+      "not_an_indirect_reachability_proof": true
+    },
+    {
+      "name": "function10_module",
+      "entries": 32,
+      "gate_setters_absent_as_direct_handlers": true,
+      "not_an_indirect_reachability_proof": true
+    },
+    {
+      "name": "function01_library",
+      "entries": 14,
+      "gate_setters_absent_as_direct_handlers": true,
+      "not_an_indirect_reachability_proof": true
+    }
+  ],
+  "cases": 85,
+  "script_sha256": "c0d52264366cbd3c484b01d61c670b92adf8ed01142b51e8556014193a0d78b5"
+}

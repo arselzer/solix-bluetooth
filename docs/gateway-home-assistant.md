@@ -172,8 +172,8 @@ The packaged AP service/public SDK subsequently passed all six roundtrips
 also passed, reconnecting in about 2.26 seconds without BLE reprovisioning;
 independent sleep behavior and long-term availability remain unproven.
 Generated-ID pairing remains unverified. Missing mains, battery activity and
-supply-source fields stay unknown; standalone HA contracts do not establish
-Home Assistant runtime compatibility.
+supply-source fields stay unknown. Standalone HA contracts are complemented
+by the [three-station HA 2026.7.4 runtime trial](ha-runtime-validation.md).
 
 Each period has `tariff`, `start_hour`, `end_hour`. Fields/types are strict;
 no arbitrary opcode, AC-output, timer or firmware command is exposed.
@@ -191,10 +191,12 @@ Settings → Devices & services. Enter the gateway URL and token. It prepares
 capability-gated sensors, charging numbers, Return-to-grid and a TOU-plan action.
 Polling is every five seconds when idle; polling waits behind a command.
 
-The component is prepared and contract-tested, **not installed on the user's
-HA node or verified in a running HA instance**. Follow its runtime/hassfest
-checklist before depending on automations. HTTP/SSE/Prometheus remain available
-to clients independently of HA.
+The component is installed on the development HA node. The
+[HA 2026.7.4 runtime trial](ha-runtime-validation.md) passed normal config-flow
+setup, three physical stations, automatic entity discovery, a restored screen
+timeout control, integration reload and shared-service recovery. Other HA
+releases, long-term behavior and charging automations need separate validation.
+HTTP/SSE/Prometheus remain available independently of HA.
 
 ## Persistent settings
 

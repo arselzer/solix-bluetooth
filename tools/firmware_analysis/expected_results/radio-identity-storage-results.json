@@ -1,0 +1,382 @@
+{
+  "cases_passed": 38,
+  "cases": [
+    {
+      "case": "configuration_account_storage",
+      "identity_shape": "new_lower_hex",
+      "persist_requested": false,
+      "accepted": true,
+      "account_provider_matches_new_value": true,
+      "mqtt_cached_identity_unchanged": true,
+      "flash_write_count": 0,
+      "deferred_dirty_flag": true
+    },
+    {
+      "case": "configuration_account_storage",
+      "identity_shape": "new_lower_hex",
+      "persist_requested": true,
+      "accepted": true,
+      "account_provider_matches_new_value": true,
+      "mqtt_cached_identity_unchanged": true,
+      "flash_write_count": 1,
+      "deferred_dirty_flag": false
+    },
+    {
+      "case": "configuration_account_storage",
+      "identity_shape": "new_upper_hex",
+      "persist_requested": false,
+      "accepted": true,
+      "account_provider_matches_new_value": true,
+      "mqtt_cached_identity_unchanged": true,
+      "flash_write_count": 0,
+      "deferred_dirty_flag": true
+    },
+    {
+      "case": "configuration_account_storage",
+      "identity_shape": "new_upper_hex",
+      "persist_requested": true,
+      "accepted": true,
+      "account_provider_matches_new_value": true,
+      "mqtt_cached_identity_unchanged": true,
+      "flash_write_count": 1,
+      "deferred_dirty_flag": false
+    },
+    {
+      "case": "configuration_account_storage",
+      "identity_shape": "printable_nonhex",
+      "persist_requested": false,
+      "accepted": true,
+      "account_provider_matches_new_value": true,
+      "mqtt_cached_identity_unchanged": true,
+      "flash_write_count": 0,
+      "deferred_dirty_flag": true
+    },
+    {
+      "case": "configuration_account_storage",
+      "identity_shape": "printable_nonhex",
+      "persist_requested": true,
+      "accepted": true,
+      "account_provider_matches_new_value": true,
+      "mqtt_cached_identity_unchanged": true,
+      "flash_write_count": 1,
+      "deferred_dirty_flag": false
+    },
+    {
+      "case": "configuration_account_storage",
+      "identity_shape": "printable_short",
+      "persist_requested": false,
+      "accepted": true,
+      "account_provider_matches_new_value": true,
+      "mqtt_cached_identity_unchanged": true,
+      "flash_write_count": 0,
+      "deferred_dirty_flag": true
+    },
+    {
+      "case": "configuration_account_storage",
+      "identity_shape": "printable_short",
+      "persist_requested": true,
+      "accepted": true,
+      "account_provider_matches_new_value": true,
+      "mqtt_cached_identity_unchanged": true,
+      "flash_write_count": 1,
+      "deferred_dirty_flag": false
+    },
+    {
+      "case": "configuration_account_storage",
+      "identity_shape": "empty",
+      "persist_requested": false,
+      "accepted": true,
+      "account_provider_matches_new_value": true,
+      "mqtt_cached_identity_unchanged": true,
+      "flash_write_count": 0,
+      "deferred_dirty_flag": true
+    },
+    {
+      "case": "configuration_account_storage",
+      "identity_shape": "empty",
+      "persist_requested": true,
+      "accepted": true,
+      "account_provider_matches_new_value": true,
+      "mqtt_cached_identity_unchanged": true,
+      "flash_write_count": 1,
+      "deferred_dirty_flag": false
+    },
+    {
+      "case": "configuration_account_storage",
+      "identity_shape": "control_byte",
+      "persist_requested": false,
+      "accepted": false,
+      "account_provider_matches_new_value": false,
+      "mqtt_cached_identity_unchanged": true,
+      "flash_write_count": 0,
+      "deferred_dirty_flag": false
+    },
+    {
+      "case": "configuration_account_storage",
+      "identity_shape": "control_byte",
+      "persist_requested": true,
+      "accepted": false,
+      "account_provider_matches_new_value": false,
+      "mqtt_cached_identity_unchanged": true,
+      "flash_write_count": 0,
+      "deferred_dirty_flag": false
+    },
+    {
+      "case": "configuration_account_storage",
+      "identity_shape": "nonascii",
+      "persist_requested": false,
+      "accepted": false,
+      "account_provider_matches_new_value": false,
+      "mqtt_cached_identity_unchanged": true,
+      "flash_write_count": 0,
+      "deferred_dirty_flag": false
+    },
+    {
+      "case": "configuration_account_storage",
+      "identity_shape": "nonascii",
+      "persist_requested": true,
+      "accepted": false,
+      "account_provider_matches_new_value": false,
+      "mqtt_cached_identity_unchanged": true,
+      "flash_write_count": 0,
+      "deferred_dirty_flag": false
+    },
+    {
+      "case": "unchanged_configuration",
+      "account_pointer_null": true,
+      "persist_requested": false,
+      "flash_write_count": 0
+    },
+    {
+      "case": "unchanged_configuration",
+      "account_pointer_null": false,
+      "persist_requested": false,
+      "flash_write_count": 0
+    },
+    {
+      "case": "unchanged_configuration",
+      "account_pointer_null": true,
+      "persist_requested": true,
+      "flash_write_count": 0
+    },
+    {
+      "case": "unchanged_configuration",
+      "account_pointer_null": false,
+      "persist_requested": true,
+      "flash_write_count": 0
+    },
+    {
+      "case": "mqtt_parameter_copy",
+      "identity_shape": "new_local_hex",
+      "copied": true,
+      "empty_identity_startup_error": null,
+      "unchanged_parameters_skipped": false,
+      "flash_or_tasks_after_copy_executed": false
+    },
+    {
+      "case": "mqtt_parameter_copy",
+      "identity_shape": "old_hex",
+      "copied": false,
+      "empty_identity_startup_error": null,
+      "unchanged_parameters_skipped": true,
+      "flash_or_tasks_after_copy_executed": false
+    },
+    {
+      "case": "mqtt_parameter_copy",
+      "identity_shape": "empty_rejected_before_copy",
+      "copied": false,
+      "empty_identity_startup_error": 589828,
+      "unchanged_parameters_skipped": false,
+      "flash_or_tasks_after_copy_executed": false
+    },
+    {
+      "case": "synthetic_reversible_identity_cycle",
+      "phases": [
+        {
+          "phase": "before_change",
+          "provider_is_new": false,
+          "mqtt_cache_is_new": false,
+          "old_native_identity_accepted": true,
+          "new_native_identity_accepted": false
+        },
+        {
+          "phase": "after_store_before_mqtt_reload",
+          "provider_is_new": true,
+          "mqtt_cache_is_new": false,
+          "old_native_identity_accepted": true,
+          "new_native_identity_accepted": true
+        },
+        {
+          "phase": "after_mqtt_reload",
+          "provider_is_new": true,
+          "mqtt_cache_is_new": true,
+          "old_native_identity_accepted": false,
+          "new_native_identity_accepted": true
+        },
+        {
+          "phase": "after_restore_before_mqtt_reload",
+          "provider_is_new": false,
+          "mqtt_cache_is_new": true,
+          "old_native_identity_accepted": true,
+          "new_native_identity_accepted": true
+        },
+        {
+          "phase": "after_restored_mqtt_reload",
+          "provider_is_new": false,
+          "mqtt_cache_is_new": false,
+          "old_native_identity_accepted": true,
+          "new_native_identity_accepted": false
+        }
+      ],
+      "complete_configuration_restored": true,
+      "configuration_flash_writes": 2,
+      "radio_observations": 7,
+      "refresh_calls_are_substituted": true,
+      "pairing_state_executed": false
+    },
+    {
+      "case": "binding_check_state",
+      "bind_state": 0,
+      "relate_state": 0,
+      "return": -1,
+      "effect_callbacks_are_substituted": true,
+      "effect_callbacks": [
+        {
+          "callback": "4202bf3a",
+          "argument0": 0
+        }
+      ]
+    },
+    {
+      "case": "binding_check_state",
+      "bind_state": 0,
+      "relate_state": 1,
+      "return": -1,
+      "effect_callbacks_are_substituted": true,
+      "effect_callbacks": []
+    },
+    {
+      "case": "binding_check_state",
+      "bind_state": 0,
+      "relate_state": 2,
+      "return": -1,
+      "effect_callbacks_are_substituted": true,
+      "effect_callbacks": []
+    },
+    {
+      "case": "binding_check_state",
+      "bind_state": 1,
+      "relate_state": 0,
+      "return": -1,
+      "effect_callbacks_are_substituted": true,
+      "effect_callbacks": [
+        {
+          "callback": "4201fa80",
+          "argument0": 0
+        }
+      ]
+    },
+    {
+      "case": "binding_check_state",
+      "bind_state": 1,
+      "relate_state": 1,
+      "return": -1,
+      "effect_callbacks_are_substituted": true,
+      "effect_callbacks": []
+    },
+    {
+      "case": "binding_check_state",
+      "bind_state": 1,
+      "relate_state": 2,
+      "return": -1,
+      "effect_callbacks_are_substituted": true,
+      "effect_callbacks": []
+    },
+    {
+      "case": "binding_check_state",
+      "bind_state": 2,
+      "relate_state": 0,
+      "return": -1,
+      "effect_callbacks_are_substituted": true,
+      "effect_callbacks": []
+    },
+    {
+      "case": "binding_check_state",
+      "bind_state": 2,
+      "relate_state": 1,
+      "return": -1,
+      "effect_callbacks_are_substituted": true,
+      "effect_callbacks": []
+    },
+    {
+      "case": "binding_check_state",
+      "bind_state": 2,
+      "relate_state": 2,
+      "return": -1,
+      "effect_callbacks_are_substituted": true,
+      "effect_callbacks": []
+    },
+    {
+      "case": "binding_check_response",
+      "mutation": "missing_data",
+      "return": -6,
+      "effect_callbacks_are_substituted": true,
+      "effect_callbacks": []
+    },
+    {
+      "case": "binding_check_response",
+      "mutation": "missing_relate",
+      "return": -6,
+      "effect_callbacks_are_substituted": true,
+      "effect_callbacks": []
+    },
+    {
+      "case": "binding_check_response",
+      "mutation": "missing_bind",
+      "return": -7,
+      "effect_callbacks_are_substituted": true,
+      "effect_callbacks": []
+    },
+    {
+      "case": "binding_check_response",
+      "mutation": "ordinary_error_with_good_states",
+      "return": -1,
+      "effect_callbacks_are_substituted": true,
+      "effect_callbacks": [
+        {
+          "callback": "42011654",
+          "argument0": 10000
+        },
+        {
+          "callback": "42011654",
+          "argument0": 10000
+        }
+      ]
+    },
+    {
+      "case": "binding_check_response",
+      "mutation": "binding_account_missing",
+      "return": -1,
+      "effect_callbacks_are_substituted": true,
+      "effect_callbacks": []
+    },
+    {
+      "case": "binding_check_response",
+      "mutation": "binding_account_matches",
+      "return": -1,
+      "effect_callbacks_are_substituted": true,
+      "effect_callbacks": []
+    },
+    {
+      "case": "binding_check_response",
+      "mutation": "binding_account_differs",
+      "return": -1,
+      "effect_callbacks_are_substituted": true,
+      "effect_callbacks": []
+    }
+  ],
+  "hardware_access": false,
+  "cloud_access": false,
+  "firmware_model": "A1763",
+  "limitations": "Replay A1763 radio 0.3.3.0 identity storage and MQTT cache selection offline.\n\nActual configuration setter, printable-ASCII validator, persistence decision,\nconfiguration getter, MQTT parameter validation/copy, native JSON admission and\nbinding-check callback execute. Unbind/reset/error-effect callbacks are recording\nstubs. MQTT init stops at its flash-write call after copying cached parameters;\nno TLS, tasks, BLE pairing, Wi-Fi or controller code runs.\nFlash writes and mutexes are recording/success stubs; ROM libc, cJSON, allocation,\nsession keys, identity-refresh effects, RSSI, crypto and TX inherit host substitutes\nfrom the radio-route replay. Synthetic identities only; no device/network access.\nThis A1763 image does not establish original-C1000 or C2000 binary equivalence."
+}

@@ -1,6 +1,6 @@
 # Multiple stations on one isolated AP
 
-One AP service can register up to **eight C1000/C2000 Gen 2 stations** on the
+One AP service can register up to **eight original C1000 or C1000/C2000 Gen 2 stations** on the
 same dedicated Wi-Fi adapter, SSID and isolated subnet. Each station keeps its
 own model, pairing identity, client certificate, telemetry, command queue and
 settings guards. BLE-only models can still share the ordinary `serve` gateway;
@@ -28,8 +28,9 @@ starts the same AP; already configured stations reconnect using saved settings.
 Future runs omit `--provision`. Joining changes only the selected station's
 Wi-Fi/API configuration. It does not switch AC output or install firmware.
 The original station's identity/certificates are retained when adding a peer.
-C1000 generated-identity MQTT is verified; C2000 generated-identity MQTT remains
-unverified, so use its already working identity or `--account-id-file` if needed.
+C1000 Gen 2 generated-identity MQTT is verified. Original C1000 and C2000
+generated-identity MQTT remain unverified; use their already working identities
+or `--account-id-file` if needed.
 
 ## Terminal, browser and API
 
@@ -40,7 +41,7 @@ solix-link ap-service-set-charge-power --directory /path/to/private/shared-ap --
 ```
 
 The fixed terminal dashboard lists each native station separately. **Add to AP**
-registers a connected, saved and paired Gen 2 BLE station on a stopped AP,
+registers a connected, saved and paired supported Prime BLE station on a stopped AP,
 using its fresh serial and saved identity. Provision it with the command above.
 The line-based interactive fallback can also add to an existing AP profile and
 select a station. Registration cannot replace an existing name or serial.
@@ -87,5 +88,8 @@ No internet route or cloud bridge is added.
 The code is tested with **two simultaneous simulated TLS MQTT stations of
 different models**, including independent charging writes, cross-topic refusal,
 named socket/HTTP controls, model capabilities, terminal registration and stale
-peer readings. Two physical stations on one AP have **not yet been tested
-simultaneously**; single-station C1000/C2000 workflows have separate live evidence.
+peer readings. A [physical three-station trial](ha-runtime-validation.md) on
+2026-10-02 verified original C1000/main 1.7.1, C1000 Gen 2/main 1.1.4.9 and
+C2000 Gen 2/main 2.1.6.4 simultaneously, including automatic HA discovery,
+a restored original-C1000 HA setting and shared AP/gateway restart recovery.
+Long-term operation and station/host power-cycle persistence remain untested.

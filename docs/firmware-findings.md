@@ -53,6 +53,16 @@ counter history, including the real report paths. [29 local-identity cases](acco
 carry a generated ID to the radio configuration setter and verify exact native
 identity comparisons. These add no live control or model-equivalence claim.
 
+The October 2 continuations add [85 original charging-gate cases](c1000-charge-gate-rules.md),
+tracing input-event priority and the second charging channel without finding an
+external bypass selector; [1,045 Gen 2 stop-worker cases](gen2-output-stop-worker.md),
+proving a timer-zero write cannot revoke an already queued output stop; and
+[38 radio identity-storage cases](radio-identity-storage.md), showing configured
+and cached accounts can temporarily accept both old and new native identities.
+Each continuation retains explicit version and physical-validation limits.
+Separately, the [three-station HA runtime trial](ha-runtime-validation.md)
+confirms actual discovery, a restored control and shared-service recovery.
+
 The latest [reconnect, clock and power-gate follow-up](c2000-mqtt-reconnect-and-tariff.md)
 includes additional offline executions and guarded C2000 hardware observations.
 The [parallel power-control analysis](mqtt-power-offline-followup.md) adds

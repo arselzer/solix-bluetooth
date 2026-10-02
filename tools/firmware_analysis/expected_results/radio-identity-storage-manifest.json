@@ -1,0 +1,23 @@
+{
+  "firmware": {
+    "filename": "c1000-radio-validated.bin",
+    "sha256": "e291ec115f013953e825cb51b9e457a8731889547ab55b3058640e599e8cfec8",
+    "bytes": 1482800
+  },
+  "cases_passed": 38,
+  "hardware_access": false,
+  "cloud_access": false,
+  "runtime": {
+    "python": "3.12.3",
+    "unicorn": "2.1.4",
+    "cryptography": "41.0.7"
+  },
+  "source_sha256": {
+    "emulate_radio_identity_storage.py": "e99c1e5cb8c7f699a6d1aa404f3fde052369d1cef62a98501fa63420a80f4fa1",
+    "emulate_radio_local_identity.py": "2b96d05caae3b9eb3878866aeca0045a29ad42b1316867aa8e442a4306d03f84",
+    "emulate_radio_rssi_routes.py": "de2665279a85c1b6f91d9eb41311938d5a09c2d45291c740ec03b8958ee3080b",
+    "emulate_radio_factory_routes.py": "9ae40bf0a004fd87f3edc52b30d5f48c320d29a39fb20d57d6136d61b3d7401a"
+  },
+  "result_sha256": "1be46c4249aa469cbc7037626390ce6939fe8a35903df10e6ef980c4a59c9d0b",
+  "substitution_limits": "Replay A1763 radio 0.3.3.0 identity storage and MQTT cache selection offline.\n\nActual configuration setter, printable-ASCII validator, persistence decision,\nconfiguration getter, MQTT parameter validation/copy, native JSON admission and\nbinding-check callback execute. Unbind/reset/error-effect callbacks are recording\nstubs. MQTT init stops at its flash-write call after copying cached parameters;\nno TLS, tasks, BLE pairing, Wi-Fi or controller code runs.\nFlash writes and mutexes are recording/success stubs; ROM libc, cJSON, allocation,\nsession keys, identity-refresh effects, RSSI, crypto and TX inherit host substitutes\nfrom the radio-route replay. Synthetic identities only; no device/network access.\nThis A1763 image does not establish original-C1000 or C2000 binary equivalence."
+}

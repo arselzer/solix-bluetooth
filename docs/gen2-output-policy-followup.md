@@ -88,6 +88,9 @@ The policy does **not** itself clear the volatile enable bit or zero the remaini
 word at expiry. The later event worker/output cleanup is excluded from this suite.
 A handler ACK, remaining zero, or seeded output word cannot prove physical output
 continuity or complete post-expiry cleanup.
+The subsequent [stop-worker replay](gen2-output-stop-worker.md) executes that
+worker: writing zero after expiry is queued does not revoke the pending stop,
+and software output state can change before DSP queue admission.
 
 ## Smart thresholds and counter history
 

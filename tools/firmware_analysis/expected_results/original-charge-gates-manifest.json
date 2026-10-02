@@ -1,0 +1,32 @@
+{
+  "firmware_sha256": "b295ee8613f5c96e70dcc905896df516621cab4dc590bb580eac6b84519911a6",
+  "case_count": 85,
+  "python": "3.12.3",
+  "unicorn": "2.1.4",
+  "sha256": {
+    "emulate_original_charge_gates.py": "c0d52264366cbd3c484b01d61c670b92adf8ed01142b51e8556014193a0d78b5",
+    "emulate_c1000_original_commands.py": "598d83e15b6d7e982581439ea8b55fb0d7d3985009a6c1f4722363dff0f8ba5d",
+    "emulate_original_power_paths.py": "416910da3fb6aa7e34eedeaae0a13ec55ee06416a5b591232eecfbe6077c37b6",
+    "emulate_original_timers_modes.py": "4a830e88b9ca5c2d0b290d3c5d33ddda9e16e24fb70e43115f1e7c4e22ad0795",
+    "emulate_original_fast_retention.py": "0b1c968df8a2a79856cf8baaa60cee4f1e57a65ccead91928a2dc9087ec9b08c",
+    "emulate_original_charge_source.py": "1c21332818a5aac02455d32901fc999a661a620128424a500f5e7fd0d37789fb",
+    "requirements.txt": "898079ea36b03630f08a4cacda94f6b23d995ec3edd29bd4c181371b8cd29fef"
+  },
+  "result_sha256": "d0311ae9d0ddfed939a60931f436de115f6fb739cc65f713a93e47c6459c3dc9",
+  "substitutes": [
+    "event enqueue",
+    "alarm delivery",
+    "DSP allocation/enqueue"
+  ],
+  "not_executed": [
+    "device",
+    "radio",
+    "MQTT",
+    "DSP",
+    "flash",
+    "hardware",
+    "whole event dispatcher",
+    "scheduler",
+    "installed main1.7.1"
+  ]
+}

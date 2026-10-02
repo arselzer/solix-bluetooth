@@ -44,7 +44,10 @@ and [1,347 original Smart-policy cases](c1000-smart-auto-off-policy.md),
 [144 radio module-update status cases](radio-update-status.md),
 [96 original charging-source cases](c1000-charge-source-provenance.md),
 [635 Gen 2 countdown/Smart cases](gen2-output-policy-followup.md), and
-[29 local-identity acceptance cases](account-free-local-setup.md).
+[29 local-identity acceptance cases](account-free-local-setup.md), and
+[85 original input-event charging-gate cases](c1000-charge-gate-rules.md),
+[1,045 Gen 2 output-stop-worker cases](gen2-output-stop-worker.md), and
+[38 radio identity-storage cases](radio-identity-storage.md).
 These have independent commands and manifests; they are not included in the
 1,842-case combined runner. Their individual commands are in the linked records.
 The diagnostic cases include malformed-envelope stalls; those synthetic inputs

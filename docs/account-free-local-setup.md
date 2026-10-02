@@ -54,6 +54,10 @@ identity-refresh providers, whose effects are substituted; it is not a
 purely passive production probe. Account fields placed in the outer `head`
 do not replace the payload identity. The selected accepted branch also
 works without `sign_code`, consistent with the previous route audit.
+The later [storage/cache replay](radio-identity-storage.md) qualifies these
+comparisons: when configured and cached IDs differ, both can be accepted during
+transition. Reconnect and complete status verification are required after
+changing or restoring identity.
 
 Thus a locally generated identity is plausible for the two remaining models,
 but cannot be certified by substituting their product names into A1763 code.
@@ -65,6 +69,12 @@ The replay does not prove a factory reset, account recovery or app coexistence.
 ## Safe next hardware sequence
 
 Test the **original C1000 first**, separately from the HA deployment:
+
+The [native-only experiment](radio-identity-storage.md#smallest-reversible-original-c1000-experiment)
+is now the smaller first test: retain its working Prime BLE ID, change only the
+native provisioning account, and verify reconnect plus rollback. The sequence
+below additionally tests generated BLE pairing and needs physical confirmation
+available; success of either experiment does not establish the other.
 
 1. Save the working BLE/native profile, private certificates and radio network
    readback. Record fresh versions, power readings, protected settings and F8.

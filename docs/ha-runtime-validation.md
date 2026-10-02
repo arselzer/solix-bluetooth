@@ -1,0 +1,96 @@
+# Three-station Home Assistant runtime validation
+
+Live trial on **2026-10-02** with Home Assistant **2026.7.4**, Ubuntu
+**26.04** and Python **3.14.4**. This is physical deployment evidence beyond
+the standalone HA contract tests. The gateway package is the verified
+`solix_link-0.1.0` wheel; the integration uses the normal authenticated
+configuration flow and one shared HTTP coordinator.
+
+## Stations and discovery
+
+| Station | Main firmware | Native controls | Registered / available HA entities |
+| --- | --- | ---: | ---: |
+| Original C1000, A1761 | 1.7.1 | 9 | 15 / 14 |
+| C1000 Gen 2, A1763 | 1.1.4.9 | 13 | 32 / 23 |
+| C2000 Gen 2, A1783 | 2.1.6.4 | 5 | 20 / 15 |
+
+All three stations simultaneously connected to one isolated **2.4 GHz** AP,
+with separate client certificates, telemetry and command queues. Disabled
+diagnostics and unavailable derived values account for the remaining entities;
+their presence is not a station connection failure. New entities appeared
+during ordinary polling, without reloading the integration for discovery.
+
+The C2000 automatically reused its existing network configuration. Only the
+two C1000s received Wi-Fi/API/timezone provisioning, through their saved Prime
+Bluetooth identities. The original replied `4824=00`, with `4825` timing out;
+the Gen 2 replied `4824=00` and `4825=00a10400000000`. Both subsequently
+completed local TLS/MQTT activation. A configuration timeout alone is therefore
+insufficient to diagnose provisioning failure.
+
+Both C1000 Bluetooth sessions disconnected during activation. Post-activation
+checks used fresh native telemetry; a subsequent Gen 2 direct BLE probe could
+not find its advertisement and sent **no setting command**. This observation
+does not establish a permanent BLE lockout or a universal pairing requirement.
+
+## HA command and restoration
+
+The original C1000's actual HA `select.select_option` service changed its
+screen timeout **30 → 60 → 30 seconds**. The gateway confirmed the temporary
+value and restoration through native telemetry. All recorded output, charging,
+timeout, display and Smart settings across the three stations matched their
+baselines afterward. The native setter independently guards the original's
+complete F8 and eleven preferences.
+
+All three AC outputs remained enabled in recorded snapshots. No C2000
+provisioning, charging or output command was sent in this deployment trial.
+These are reported output states, not independent waveform measurements.
+
+## Service and integration recovery
+
+Both dedicated systemd services are enabled at boot:
+
+```sh
+systemctl status solix-link-ap.service solix-link-gateway.service
+```
+
+Restarting only the HTTP gateway recovered all three available snapshots in
+approximately **1.01 seconds after `systemctl` returned**. Restarting the AP
+and gateway together recovered all three in approximately **32.07 seconds
+after `systemctl` returned**. Neither phase reprovisioned a station or sent a
+settings command. All protected settings matched the pre-restart baseline.
+
+Reloading only the SOLIX Link HA integration succeeded. Its entry returned to
+`loaded`, with the same device IDs, entity IDs and available-entity counts.
+Six additional samples confirmed all three were available and their report
+timestamps advanced. These recovery times exclude service-command execution
+and are not guaranteed outage durations.
+
+## Deployment and remaining checks
+
+An allowlisted diagnostics platform was then installed and loaded with one
+additional HA restart. The actual authenticated diagnostics download returned
+all three fresh stations and their expected firmware versions. Gateway URL/token
+were absent from the complete response. The integration payload omits configured
+names, entry/device IDs, serials, account identities and raw captures; it reads
+only the coordinator cache. HA adds standard system metadata around that payload.
+Twenty new privacy/staleness tests passed; the full standalone HA suite is now
+**519 tests**. No gateway wheel or station configuration changed for diagnostics.
+
+HA runs in a host-network Docker container; its actual configuration mount,
+rather than the Compose-file directory, contains the custom component. The
+separate privileged AP worker owns a dedicated Wi-Fi adapter in a network
+namespace with no LAN interface or default route. The authenticated HTTP
+gateway and bundled browser dashboard are reachable from the host LAN.
+Unauthenticated station requests return 401; no output-switch API is exposed.
+
+This trial retains existing identities. Generated native identities for the
+original C1000/C2000, full host or station power-cycle persistence, long-term
+availability, reauthentication/reconfiguration and charging automations remain
+separate checks. Original mains/battery-source observations remain unknown
+where the firmware provides no validated field. Session charts are not
+persistent energy accounting.
+
+Private deployment scripts, baselines, authentication/config backups, native
+logs and complete runtime results remain owner-only in ignored local evidence
+and the node's restricted runtime directory. Public documentation contains
+no account identifiers, station serials, certificates or bearer tokens.
