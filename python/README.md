@@ -873,6 +873,8 @@ The server provides:
 | Endpoint | Content |
 | --- | --- |
 | `/health` | Availability summary; HTTP 503 when no station is reporting |
+| `/diagnostics` | Redacted cached availability reasons; no device requests |
+| `/setup-check` | Saved AP profiles/certificates; native gateway only, no changes |
 | `/devices` | JSON status for all configured stations |
 | `/devices/c2000` | JSON status and latest metrics for one station |
 | `/events` | Server-sent events with snapshots and live updates |

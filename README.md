@@ -35,6 +35,8 @@ Home Assistant integration for the local gateway.
   reserve protection and a failure latch; installed automations start disabled.
 - Home Assistant diagnostics downloads with model/firmware, freshness and
   supported settings; the integration report omits credentials and identities.
+- [Passive gateway diagnostics](docs/gateway-diagnostics.md) and
+  [saved AP checks](docs/ap-service-setup-check.md) through CLI, terminal, browser and HTTP.
 - Up to eight supported stations on one isolated AP, with separate certificates,
   telemetry and command queues.
 - Web dashboard with device selection, power/battery charts and explicit write
@@ -54,6 +56,8 @@ Three physical stations—original C1000, C1000 Gen 2 and C2000 Gen 2—passed
 simultaneous native MQTT, HA discovery and shared-service recovery checks.
 See the [live deployment record](docs/ha-runtime-validation.md) and
 [Python guide](python/README.md).
+The [completed 13-hour observation](docs/ha-13-hour-observation.md) records
+maintenance gaps and no unexpected protected-setting changes.
 
 ## Start locally
 

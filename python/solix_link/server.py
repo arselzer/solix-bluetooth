@@ -16,6 +16,7 @@ from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse, Str
 import uvicorn
 
 from .commands import validate_command
+from .diagnostics import gateway_diagnostics
 from .manager import MonitorService
 from .tou import PowerFlowTimeout
 
@@ -89,6 +90,20 @@ def create_app(service: MonitorService, token: str | None = None, *, allow_contr
     @app.api_route("/devices", methods=["GET", "HEAD"])
     async def all_devices():
         return {"devices": snapshots()}
+
+    @app.api_route("/diagnostics", methods=["GET", "HEAD"])
+    async def diagnostics():
+        return gateway_diagnostics(service.snapshots())
+
+    @app.api_route("/setup-check", methods=["GET", "HEAD"])
+    async def setup_check():
+        check = getattr(service, "check_setup", None)
+        if check is None:
+            return JSONResponse({"error": "SetupCheckUnavailable"}, status_code=404)
+        try:
+            return JSONResponse(await check())
+        except Exception:
+            return JSONResponse({"error": "SetupCheckFailed"}, status_code=503)
 
     @app.api_route("/devices/{name}", methods=["GET", "HEAD"])
     async def one_device(name: str):

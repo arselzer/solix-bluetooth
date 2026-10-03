@@ -875,3 +875,28 @@ method's larger body is inspected only as data. Static references do not prove
 the running app's loading choice, recover plaintext DEX buffers or establish
 the charging encoder. Raw decoded images/strings remain private; these 68 cases
 are separate from the UPX, protector-byte and firmware suites.
+
+## October 3: protected JNI boundary and original charging menu
+
+The [static JNI boundary proof](android-loader-vm-boundary.md) verifies 189
+selected instructions, three bounded protected records and five prefix tokens.
+Record zero forwards the original JNI arguments through an exact thunk to
+selector 2: **182 bytes at `001136cc..00113782`**. It executes zero guest
+instructions and recovers no SDK serializer or station packet. `DETool.dowork`
+is a separate app preferences/database protection path; its string conversions
+are not demonstrated DEX decoders. The next investigation is a bounded static
+trace of record 2 and its external calls.
+
+The [original-C1000 menu and artifact audit](c1000-app-charge-menu-and-artifact-gap.md)
+finds a retained official-app A1761/A1762 charging picker of **200–1000 W in
+100 W steps**. This UI does not prove hardware admissibility or measured charging
+rate and does not invalidate existing 100 W SDK support. A bounded audit of
+retained captures still finds no updated main 1.7.1 image or usable new download
+URL; the available older-image replay cannot establish installed 1.7.1 behavior.
+
+The [completed 13-hour HA observation](ha-13-hour-observation.md) retains 1,560
+samples, one HTTP error during planned runtime maintenance and no unexpected
+protected-setting changes. Passive gateway diagnostics and saved AP checks now
+explain monitoring/file prerequisites without station requests. Generated-ID
+support remains unverified for original C1000 and C2000, and automatic charging
+remains disabled pending export-sign and physical charging validation.

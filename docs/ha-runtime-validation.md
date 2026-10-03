@@ -302,3 +302,27 @@ earlier planned upgrades; the sole nonempty settings change is the prior
 countdown trial. No additional anomaly was sampled during this RSSI deployment
 or query. This does not measure the exact outage duration or complete the
 planned 13-hour observation.
+
+## Completed observation and passive diagnostics
+
+The [completed capture review](ha-13-hour-observation.md), dated 2026-10-03,
+supersedes the partial progress summaries above. It covers 1,560 samples over
+13 hours, one HTTP error and three empty-cache readings per station, all near
+recorded runtime upgrades. The planned countdown is the only nonempty
+protected-setting change. This is sampled monitoring evidence, not electrical
+continuity or whole-host power-cycle validation.
+
+The 2026-10-03 gateway update adds authenticated passive `/diagnostics` and
+saved-file `/setup-check`, plus the browser Checks dialog. The terminal and
+line interfaces use the same offline setup checker. Deployment retained a
+private runtime backup and restarted only the HTTP gateway. The AP worker PID,
+saved profile/credential hashes, registered control counts and every protected
+baseline setting matched afterward. All three stations were fresh with AC
+enabled. GET/HEAD checks required the token; setup checks found three profiles
+and no local-file errors. No station command was sent.
+
+Saved BLE pairing remains unchecked without an optional CLI configuration.
+The checker continues to mark generated native identities unverified for
+original C1000 and C2000; a file check cannot establish identity origin or live
+binding. The release passed **2,510 Python/HA tests**, **22 synthetic browser
+scenarios**, and both frontend builds. Screenshots use synthetic fixtures.

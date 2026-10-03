@@ -12,6 +12,8 @@ export function useGateway() {
   const connecting = ref(false);
   const polling = ref(false);
   const busy = ref(false);
+  const checking = ref(false);
+  const checks = ref<{ diagnostics: unknown; setup: unknown } | null>(null);
   const notice = ref('');
   const noticeKind = ref<'success' | 'error' | 'info'>('info');
   const now = ref(Date.now());
@@ -49,6 +51,8 @@ export function useGateway() {
     generation += 1;
     token = '';
     session.value = online.value = connecting.value = polling.value = busy.value = false;
+    checking.value = false;
+    checks.value = null;
     if (timer) clearInterval(timer);
     timer = undefined;
     for (const request of requests) request.abort();
@@ -57,7 +61,7 @@ export function useGateway() {
     if (!quiet) message('Disconnected. The gateway and station keep running.');
   }
 
-  async function request(path: string, body?: Command) {
+  async function request(path: string, body?: Command, quiet = false) {
     const currentGeneration = generation;
     const controller = new AbortController();
     requests.add(controller);
@@ -88,7 +92,7 @@ export function useGateway() {
           message(!changed ? 'The command was rejected without changing settings. Check the gateway permissions and fresh status.' : response.status === 504
             ? 'Confirmation timed out. A setting may have changed; fresh status is being checked. Do not retry automatically.'
             : 'The gateway could not confirm this command. Fresh status is being checked; a setting may have changed.', 'error');
-        } else {
+        } else if (!quiet) {
           message('The gateway is unavailable. Readings and controls are paused.', 'error');
         }
         return null;
@@ -96,7 +100,7 @@ export function useGateway() {
       const result: unknown = await response.json();
       return currentGeneration === generation ? result : null;
     } catch {
-      if (currentGeneration === generation) {
+      if (currentGeneration === generation && !quiet) {
         message(body
           ? 'Connection lost before confirmation. A setting may have changed; check fresh status before trying again.'
           : 'Cannot reach the gateway. Readings and controls are paused.', 'error');
@@ -181,7 +185,20 @@ export function useGateway() {
     }
   }
 
+  async function checkGateway() {
+    if (!session.value || checking.value || busy.value) return;
+    const currentGeneration = generation;
+    checking.value = true;
+    checks.value = null;
+    const [diagnostics, setup] = await Promise.all([
+      request('/diagnostics', undefined, true), request('/setup-check', undefined, true),
+    ]);
+    if (currentGeneration !== generation) return;
+    checks.value = { diagnostics, setup };
+    checking.value = false;
+  }
+
   onUnmounted(() => disconnect(true));
-  return { stations, histories, session, online, connecting, polling, busy, notice, noticeKind, now,
-    active: computed(() => session.value && online.value), connect, disconnect, refresh, send, fresh };
+  return { stations, histories, session, online, connecting, polling, busy, checking, checks, notice, noticeKind, now,
+    active: computed(() => session.value && online.value), connect, disconnect, refresh, send, fresh, checkGateway };
 }

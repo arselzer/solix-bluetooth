@@ -2,12 +2,14 @@
 import { computed, nextTick, reactive, ref, watch } from 'vue';
 import HistoryChart from './HistoryChart.vue';
 import StationControls from './StationControls.vue';
+import GatewayChecks from './GatewayChecks.vue';
 import { draftFor, modelLabel, numberMetric, powerMetric } from './types';
 import type { Draft, Proposal } from './types';
 import { useGateway } from './useGateway';
 
 const gateway = useGateway();
-const { stations, histories, session, online, connecting, polling, busy, notice, noticeKind, now } = gateway;
+const { stations, histories, session, online, connecting, polling, busy, checking, checks, notice, noticeKind, now } = gateway;
+const checksOpen = ref(false);
 const tokenInput = ref('');
 const selectedName = ref('');
 const drafts = reactive<Record<string, Draft>>({});
@@ -52,6 +54,13 @@ watch(proposal, async (value) => {
   }
 });
 
+watch(session, (value) => { if (!value) checksOpen.value = false; });
+
+function openChecks() {
+  checksOpen.value = true;
+  void gateway.checkGateway();
+}
+
 function connect() {
   const token = tokenInput.value.trim();
   tokenInput.value = '';
@@ -87,6 +96,7 @@ function confirm() {
       </a>
       <div class="topbar-actions"><span class="connection-badge" :class="{ connected: online, disconnected: !online }"><span class="status-dot"></span>{{ online ? 'Gateway connected' : session ? 'Gateway offline' : 'Disconnected' }}</span>
         <button v-if="session" class="quiet" data-testid="refresh" :disabled="polling || busy || connecting" @click="gateway.refresh">{{ polling ? 'Refreshing…' : '↻ Refresh' }}</button>
+        <button v-if="session" class="quiet" data-testid="open-checks" :disabled="busy || connecting" @click="openChecks">Checks</button>
         <button v-if="session" class="quiet" data-testid="disconnect" :disabled="busy" @click="disconnect">Disconnect</button></div>
     </header>
 
@@ -119,6 +129,7 @@ function confirm() {
       <footer class="page-footer"><span>SOLIX Link <span class="footer-separator">/</span> Local gateway</span><span>5-second refresh · History stays in this tab</span></footer>
     </main>
 
+    <GatewayChecks v-if="checksOpen && session" :checking="checking" :reports="checks" @close="checksOpen = false" @refresh="gateway.checkGateway" />
     <dialog v-if="proposal" ref="dialog" class="confirm-dialog" data-testid="command-review" aria-labelledby="confirmation-title" @cancel.prevent="cancel">
       <div class="confirmation-label"><span class="status-dot"></span>Confirm station command</div><h2 id="confirmation-title">{{ proposal.title }}</h2><p class="confirmation-station">{{ proposal.station }}</p><p>{{ proposal.detail }}</p><ul class="confirmation-summary"><li v-for="item in proposal.summary" :key="item">{{ item }}</li></ul><p v-if="!canConfirm" class="validation-error">Wait for fresh telemetry and an available gateway before applying.</p><div class="confirmation-actions"><button ref="cancelButton" class="secondary" data-testid="cancel-command" @click="cancel">Cancel</button><button class="primary" data-testid="confirm-command" :disabled="!canConfirm" @click="confirm">Apply command</button></div>
     </dialog>

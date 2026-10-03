@@ -434,7 +434,7 @@ def mqtt_menu(device: DeviceConfig, config_path: Path, directory: Path) -> None:
         if device.model in (Model.C1000, Model.C1000_GEN2, Model.C2000_GEN2) and device.protocol == "prime":
             choices += ["Create AP-service configuration", "Start saved AP service",
                         "Provision/reconnect to AP service", "Inspect running AP-service status",
-                        "Serve native status over HTTP"]
+                        "Serve native status over HTTP", "Check saved AP setup (read-only)"]
         action = choose("MQTT connection", choices)
         if action is None:
             return
@@ -472,6 +472,9 @@ def mqtt_menu(device: DeviceConfig, config_path: Path, directory: Path) -> None:
                 host = prompt("HTTP listen address", "127.0.0.1")
                 port = int(prompt("HTTP port", "8765"))
                 run_server(APServiceMonitor(load_ap_service(directory / "ap_service.json"), directory), host, port)
+            elif action == 6:
+                from .ap_service_check import check_ap_service
+                print(json.dumps(check_ap_service(directory, config_path), indent=2))
         except KeyboardInterrupt:
             print("Stopped.")
         except Exception as error:

@@ -20,6 +20,10 @@ from .c1000_capabilities import ORIGINAL_AC_SMART_WARNING, ORIGINAL_DC_SMART_WAR
 
 
 def add_commands(subcommands) -> None:
+    check = subcommands.add_parser("ap-service-check", help="Check saved AP profiles and credentials offline with redacted results; no services or station requests")
+    check.add_argument("--directory", type=Path, required=True)
+    check.add_argument("--config", type=Path, help="Optional owner-only saved BLE config for provisioning-readiness checks")
+
     init = subcommands.add_parser("ap-service-init", help="Generate private isolated-AP configuration and local MQTT certificates")
     init.add_argument("--directory", type=Path, required=True, help="New private directory; existing directories are refused")
     init.add_argument("--name", required=True, help="Paired Prime original C1000, C1000 Gen 2 or C2000 Gen 2 config name")
@@ -223,7 +227,13 @@ async def run_ap_service(args) -> None:
 
 
 def dispatch(args) -> None:
-    if args.command == "ap-service-init":
+    if args.command == "ap-service-check":
+        from .ap_service_check import check_ap_service
+        result = check_ap_service(args.directory, paired_config=args.config)
+        print(json.dumps(result, indent=2))
+        if not result["ok"]:
+            raise ValueError("Saved AP setup has errors; inspect the redacted check results")
+    elif args.command == "ap-service-init":
         device = _device(args, args.name)
         config = APServiceConfig(name=device.name, interface=args.interface, phy=args.phy, country=args.country,
                            device_serial=_secret(args.serial_file),

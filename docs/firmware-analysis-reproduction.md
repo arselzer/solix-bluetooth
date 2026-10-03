@@ -364,6 +364,24 @@ state and no JNI/Android/system/device callbacks. Default output is selected
 metadata only; it does not export decoded images or SDK code. These cases
 remain separate from every earlier suite.
 
+## Static protected JNI boundary
+
+The [static JNI boundary continuation](android-loader-vm-boundary.md) consumes
+the same pinned carrier image without executing guest instructions:
+
+```sh
+python3 tools/firmware_analysis/inspect_android_loader_vm_boundary.py \
+  --base-apk /private/path/base.apk \
+  --images-dir /private/path/recovered-virtual-images \
+  --output-dir /tmp/android-loader-vm-boundary
+```
+
+Compare the complete `android-loader-vm-boundary-{results,manifest}.json` pair
+with `expected_results/`. It checks 189 selected instructions, three record
+bounds and five prefix tokens using pure ELF relocations; it neither executes
+the VM nor exports decoded app code. Record 2 and the charging serializer
+remain unresolved. These are static checks, not additional emulation cases.
+
 ## Additional image integrity tools
 
 These checks use the bundled vendor images and perform no emulation or device I/O:

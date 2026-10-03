@@ -1,0 +1,410 @@
+{
+  "descriptor_records": [
+    {
+      "end_exclusive": "0x113608",
+      "first_handler_index": "0x2c",
+      "first_handler_target": "0xbd760",
+      "frame_words": 4,
+      "index": 0,
+      "sha256": "321f4caed9e1b035a52adfba0fb834efc46c02755e3cc2572c5c06a219ebcd91",
+      "start": "0x1135f0",
+      "stored_bytes": 24
+    },
+    {
+      "end_exclusive": "0x1136cc",
+      "first_handler_index": "0x2c",
+      "first_handler_target": "0xbd760",
+      "frame_words": 4,
+      "index": 1,
+      "sha256": "09ccf5234c2fa225251122cad5770c7034fddfee4831924243d893352fa2d128",
+      "start": "0x113608",
+      "stored_bytes": 196
+    },
+    {
+      "end_exclusive": "0x113782",
+      "first_handler_index": "0x2c",
+      "first_handler_target": "0xbd760",
+      "frame_words": 4,
+      "index": 2,
+      "sha256": "3461677d2c0fdbaa44ae02c09e4e7232babf45adfc497137d9ed052b4f22588b",
+      "start": "0x1136cc",
+      "stored_bytes": 182
+    }
+  ],
+  "elf_relative_relocations_applied": 4415,
+  "guest_instructions_executed": 0,
+  "instruction_checks": {
+    "call_table_pointer_token": {
+      "addresses": [
+        "0xbefc0",
+        "0xbefc4",
+        "0xbefcc",
+        "0xbefd0",
+        "0xbefd8",
+        "0xbefdc",
+        "0xbefe4",
+        "0xbefe8",
+        "0xbefec",
+        "0xbeff4",
+        "0xbeffc",
+        "0xbf000",
+        "0xbf00c",
+        "0xbf060",
+        "0xbf064",
+        "0xbf068",
+        "0xbf06c",
+        "0xbf070",
+        "0xbf074",
+        "0xbf078",
+        "0xbf09c"
+      ],
+      "count": 21
+    },
+    "descriptor_selector": {
+      "addresses": [
+        "0xe2e00",
+        "0xe2e04",
+        "0xe2e08",
+        "0xe2e0c"
+      ],
+      "count": 4
+    },
+    "first_token_width_and_rolling_key": {
+      "addresses": [
+        "0xbd77c",
+        "0xbd780",
+        "0xbd7c4",
+        "0xbd7cc",
+        "0xbd7d0",
+        "0xbd7ec",
+        "0xbd7f0",
+        "0xbd7fc",
+        "0xbd800",
+        "0xbd804",
+        "0xbd808",
+        "0xbd80c",
+        "0xbd818",
+        "0xbd834",
+        "0xbd854",
+        "0xbd858",
+        "0xbd85c",
+        "0xbd860",
+        "0xbd864",
+        "0xbd868",
+        "0xbd86c",
+        "0xbd870",
+        "0xbd874",
+        "0xbd878",
+        "0xbd87c",
+        "0xbd880",
+        "0xbd884",
+        "0xbd888",
+        "0xbd898",
+        "0xbd89c",
+        "0xbd8a8",
+        "0xbd8ac",
+        "0xbd8c4",
+        "0xbd8c8",
+        "0xbd8cc",
+        "0xbd8d4"
+      ],
+      "count": 36
+    },
+    "header_transform": {
+      "addresses": [
+        "0xbd67c",
+        "0xbd698",
+        "0xbd69c",
+        "0xbd6a0",
+        "0xbd6a4",
+        "0xbd6a8",
+        "0xbd6ac",
+        "0xbd6b0",
+        "0xbd6b8",
+        "0xbd6bc",
+        "0xbd6c0",
+        "0xbd6c4",
+        "0xbd6c8",
+        "0xbd6d0",
+        "0xbd6d4",
+        "0xbd6d8",
+        "0xbd6dc",
+        "0xbd6e0",
+        "0xbd6e4",
+        "0xbd6e8",
+        "0xbd6f0",
+        "0xbd704",
+        "0xbd70c",
+        "0xbd728",
+        "0xbd72c",
+        "0xbd738",
+        "0xbd73c",
+        "0xbd744",
+        "0xbd750",
+        "0xbd754",
+        "0xbd75c"
+      ],
+      "count": 31
+    },
+    "jni_entry_selector_zero": {
+      "addresses": [
+        "0x72e84",
+        "0x72e88",
+        "0x72e94",
+        "0x72e98",
+        "0x72e9c",
+        "0x72ea0",
+        "0x72ea4",
+        "0x72ea8",
+        "0x72eac",
+        "0x72eb0",
+        "0x72eb4",
+        "0x72eb8",
+        "0x72ebc",
+        "0x72ec0",
+        "0x72ec4",
+        "0x72ec8",
+        "0x72ecc",
+        "0x72ed0"
+      ],
+      "count": 18
+    },
+    "local_pointer_token": {
+      "addresses": [
+        "0xc39cc",
+        "0xc39d4",
+        "0xc39dc",
+        "0xc39e0",
+        "0xc39e4",
+        "0xc39f0",
+        "0xc39f4",
+        "0xc39f8",
+        "0xc39fc",
+        "0xc3a00",
+        "0xc3a18",
+        "0xc3aa8"
+      ],
+      "count": 12
+    },
+    "native_thunk_token": {
+      "addresses": [
+        "0xc3768",
+        "0xc3770",
+        "0xc3774",
+        "0xc3778",
+        "0xc377c",
+        "0xc3780",
+        "0xc3788",
+        "0xc37e0",
+        "0xc37e4",
+        "0xc37e8",
+        "0xc37ec",
+        "0xc37f0",
+        "0xc37f4",
+        "0xc37f8",
+        "0xc381c"
+      ],
+      "count": 15
+    },
+    "non_null_target_and_record_two": {
+      "addresses": [
+        "0x848d8",
+        "0x848dc",
+        "0x848e0",
+        "0x848ec",
+        "0x72e0c",
+        "0x72e10",
+        "0x72e18",
+        "0x72e20",
+        "0x72e24",
+        "0x72e28",
+        "0x72e2c",
+        "0x72e30",
+        "0x72e34",
+        "0x72e38",
+        "0x72e3c",
+        "0x72e40",
+        "0x72e44",
+        "0x72e48",
+        "0x72e4c",
+        "0x72e50",
+        "0x72e54",
+        "0x72e58"
+      ],
+      "count": 22
+    },
+    "push_original_pointer": {
+      "addresses": [
+        "0xe2e10",
+        "0xe2e14",
+        "0xe2e18",
+        "0xe2e1c"
+      ],
+      "count": 4
+    },
+    "two_argument_native_thunk": {
+      "addresses": [
+        "0xe7fcc",
+        "0xe7fd0",
+        "0xe7fd4",
+        "0xe7fd8",
+        "0xe7fdc",
+        "0xe7fe0",
+        "0xe7fe4",
+        "0xe7fe8",
+        "0xe7fec",
+        "0xe7ff0",
+        "0xe7ff4",
+        "0xe7ff8",
+        "0xe7ffc",
+        "0xe8000",
+        "0xe8004",
+        "0xe8008",
+        "0xe800c",
+        "0xe8010",
+        "0xe8014",
+        "0xe8018",
+        "0xe801c",
+        "0xe8020",
+        "0xe8024",
+        "0xe8028",
+        "0xe802c",
+        "0xe8030"
+      ],
+      "count": 26
+    }
+  },
+  "limits": [
+    "No complete descriptor VM decoder",
+    "Record 1 and record 2 bodies remain undecoded",
+    "No plaintext DEX, SDK action serializer or device packet recovered",
+    "DETool.dowork belongs to a separate data-protection library"
+  ],
+  "record_zero_prefix": {
+    "argument_order": [
+      "original JNI x0",
+      "original JNI x1"
+    ],
+    "decoded_through_offset_exclusive": 17,
+    "native_target": "0x848cc",
+    "native_thunk": "0xe7fc4",
+    "native_thunk_indirect_call": "0xe8028",
+    "next_descriptor_index": 2,
+    "next_record_bytes": 182,
+    "next_record_start": "0x1136cc",
+    "non_null_x0_target": "0x72dfc",
+    "remaining_bytes_unparsed": 7,
+    "tokens": [
+      {
+        "handler_index": "0x2c",
+        "handler_target": "0xbd760",
+        "operand": 2,
+        "operand_bytes": 1,
+        "record_offset": 4,
+        "static_meaning": "reserve_zero_words"
+      },
+      {
+        "handler_index": "0x4c",
+        "handler_target": "0xbefc0",
+        "operand": 2,
+        "operand_bytes": 2,
+        "record_offset": 6,
+        "static_meaning": "push_call_table_pointer"
+      },
+      {
+        "handler_index": "0x39",
+        "handler_target": "0xc39c8",
+        "operand": 0,
+        "operand_bytes": 2,
+        "record_offset": 9,
+        "static_meaning": "push_local_pointer"
+      },
+      {
+        "handler_index": "0x39",
+        "handler_target": "0xc39c8",
+        "operand": 2,
+        "operand_bytes": 2,
+        "record_offset": 12,
+        "static_meaning": "push_local_pointer"
+      },
+      {
+        "handler_index": "0x4d",
+        "handler_target": "0xc3768",
+        "operand": 0,
+        "operand_bytes": 1,
+        "record_offset": 15,
+        "static_meaning": "call_native_thunk"
+      }
+    ]
+  },
+  "scope": "Static protected JNI wrapper prefix; no guest or VM execution",
+  "selected_functions": [
+    {
+      "bytes": 120,
+      "end_exclusive": "0x72eec",
+      "sha256": "e2491bf6aa1e535226ef57664d88d5c7924a75a0bc2668e71c77ff67932a6476",
+      "start": "0x72e74"
+    },
+    {
+      "bytes": 16,
+      "end_exclusive": "0xe2e10",
+      "sha256": "c973fc2ee59ed9134e5c505317df509a1ea63de0d6dcdd2cc2703cf89acca2e0",
+      "start": "0xe2e00"
+    },
+    {
+      "bytes": 16,
+      "end_exclusive": "0xe2e20",
+      "sha256": "4f9b96740e8470fb81782f218677622bbba25630f61720e16dc2dac8bf5e3fed",
+      "start": "0xe2e10"
+    },
+    {
+      "bytes": 28936,
+      "end_exclusive": "0xc472c",
+      "sha256": "340df1c4ff552b0571438c88b5f84dbd6ba551df25ed4ec6ec3b1f382eaf5ac8",
+      "start": "0xbd624"
+    },
+    {
+      "bytes": 124,
+      "end_exclusive": "0xe8040",
+      "sha256": "7034ebe19fab3d400f3fc5bbc6d751c69d754b1bcc2a3ff7d68be78fed18ab5f",
+      "start": "0xe7fc4"
+    },
+    {
+      "bytes": 64,
+      "end_exclusive": "0x8490c",
+      "sha256": "740538f6d417e4f22ad81c57dd7d76a4fb0a8eeb2a0b1532d7723c870368c159",
+      "start": "0x848cc"
+    },
+    {
+      "bytes": 120,
+      "end_exclusive": "0x72e74",
+      "sha256": "032f7007d3fca127dae435516de3942b404331041b5080dcb2451fce4827c4b4",
+      "start": "0x72dfc"
+    },
+    {
+      "bytes": 252,
+      "end_exclusive": "0x55314",
+      "sha256": "120b7b117fcb42834cb5f5181f952369a331661c5078b424f62e68eeecdb79e2",
+      "start": "0x55218"
+    },
+    {
+      "bytes": 200,
+      "end_exclusive": "0x553dc",
+      "sha256": "ba952de442f5efb9bf3468b0bb19b5fb740966e9d19ed3da502042ea14af8f68",
+      "start": "0x55314"
+    },
+    {
+      "bytes": 392,
+      "end_exclusive": "0x55564",
+      "sha256": "43497c662de40129091de3d42c200530446bfd2ead2dd4fabd43dbaf255eadf8",
+      "start": "0x553dc"
+    },
+    {
+      "bytes": 236,
+      "end_exclusive": "0x54b4c",
+      "sha256": "acc36fe2f114b4c43910b8613a219273ea0f18fc75a92ad36b605ff50a6a7086",
+      "start": "0x54a60"
+    }
+  ],
+  "supported_fde_functions": 2040
+}

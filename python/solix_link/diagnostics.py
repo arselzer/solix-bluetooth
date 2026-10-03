@@ -1,4 +1,82 @@
-"""Radio network error reports, separate from battery and inverter faults."""
+"""Radio reports and passive, redacted gateway connection diagnostics."""
+
+from __future__ import annotations
+
+import math
+import re
+import time
+from collections.abc import Iterable
+
+
+MODELS = frozenset({"c1000", "c1000_gen2", "c2000_gen2", "c300"})
+PROTOCOLS = frozenset({"legacy", "prime", "native_mqtt"})
+VERSION = re.compile(r"[0-9]{1,3}(?:\.[0-9]{1,3}){1,5}\Z")
+NEXT_STEPS = {
+    "ready": "Telemetry is fresh; no recovery action is needed.",
+    "disconnected": "Check the monitoring worker and the station's connection before retrying.",
+    "awaiting_telemetry": "Wait for a complete station report; connection alone does not establish freshness.",
+    "stale_telemetry": "Check the monitoring worker and transport; do not use cached readings for controls.",
+    "clock_skew": "Check the gateway and worker clocks before trusting report timestamps.",
+    "unavailable": "The monitor reports unavailable despite a recent timestamp; check its status and logs.",
+}
+
+
+def gateway_diagnostics(snapshots: Iterable[dict], *, now: float | None = None) -> dict:
+    """Explain cached availability without device requests or arbitrary strings.
+
+    Station labels are ordinal; names, network addresses, configuration, raw
+    metrics and error text never enter the downloadable report. Availability
+    remains authoritative from the monitor and cannot be upgraded here.
+    """
+    now = time.time() if now is None else now
+    stations = []
+    for snapshot in snapshots:
+        if not isinstance(snapshot, dict):
+            continue
+        model, protocol = snapshot.get("model"), snapshot.get("protocol")
+        model = model if isinstance(model, str) and model in MODELS else "unknown"
+        protocol = protocol if isinstance(protocol, str) and protocol in PROTOCOLS else "unknown"
+        limit = 30 if protocol == "native_mqtt" else 90
+        seen = snapshot.get("last_seen_timestamp")
+        try:
+            age = now - seen if type(seen) in (int, float) and math.isfinite(seen) else None
+            if age is not None and not math.isfinite(age):
+                age = None
+        except OverflowError:
+            age = None
+        connected = snapshot.get("connected") is True
+        if not connected:
+            reason = "disconnected"
+        elif age is None:
+            reason = "awaiting_telemetry"
+        elif age < -5:
+            reason = "clock_skew"
+        elif age >= limit:
+            reason = "stale_telemetry"
+        elif snapshot.get("available") is not True:
+            reason = "unavailable"
+        else:
+            reason = "ready"
+        metrics = snapshot.get("metrics")
+        version = metrics.get("software_version") if isinstance(metrics, dict) else None
+        stations.append({
+            "station": len(stations) + 1,
+            "model": model,
+            "protocol": protocol,
+            "software_version": version if isinstance(version, str) and VERSION.fullmatch(version) else None,
+            "connected": connected,
+            "available": reason == "ready",
+            "telemetry_age_seconds": round(age, 2) if age is not None else None,
+            "freshness_limit_seconds": limit,
+            "availability_reason": reason,
+            "next_step": NEXT_STEPS[reason],
+        })
+    return {
+        "schema_version": 1,
+        "station_count": len(stations),
+        "available_station_count": sum(station["available"] for station in stations),
+        "stations": stations,
+    }
 
 FIELDS = {
     0xA1: ("system_reboot_code", 1),

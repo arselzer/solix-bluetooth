@@ -47,6 +47,12 @@ For BLE, use `solix-link serve --config ... --allow-control` with the same token
 
 ## Command API
 
+GET `/diagnostics` explains cached availability with redacted, ordinal station
+entries. Native gateways also offer GET `/setup-check` for saved profile and
+certificate checks. Both use existing authentication and send no device request;
+see [gateway diagnostics](gateway-diagnostics.md) and
+[setup checks](ap-service-setup-check.md).
+
 GET `/devices` returns stations, freshness, `power_flow`, metrics and the
 available `controls` and configured `timezone_name`.
 A [shared AP](multiple-ap-devices.md) exposes each registered station through

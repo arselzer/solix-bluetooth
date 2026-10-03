@@ -47,6 +47,11 @@ class APServiceMonitor:
             return []
         return list(native_commands_for_model(self.devices[name].model))
 
+    async def check_setup(self) -> dict:
+        """Check saved AP files without polling or contacting the worker."""
+        from .ap_service_check import check_ap_service
+        return await asyncio.to_thread(check_ap_service, self.directory)
+
     async def command(self, name: str, command: str, **values) -> dict:
         validate_command(command, values)
         if command not in self.supported_commands(name):

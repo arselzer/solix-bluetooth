@@ -8,6 +8,9 @@ they do not join this native MQTT service.
 
 ## Register and provision
 
+Use [the read-only setup checker](ap-service-setup-check.md) before provisioning
+or when diagnosing saved profiles; it is available in CLI, terminal and HTTP.
+
 Keep the existing primary `ap_service.json` and certificates. Stop the AP worker
 before adding a station; restart the HTTP gateway after changing profiles.
 Registration creates keys and configuration, and sends no device command.

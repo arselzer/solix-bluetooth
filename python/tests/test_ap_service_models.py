@@ -129,17 +129,23 @@ def test_provision_rejects_mismatched_model_before_monitor_or_ap_start(monkeypat
     assert stopped == [True]
 
 
-@pytest.mark.parametrize("model,expected_count", [(Model.C1000, 1), (Model.C300, 1),
-                                                  (Model.C1000_GEN2, 6), (Model.C2000_GEN2, 6)])
-def test_guided_native_menu_only_offers_gen2_profiles(monkeypatch, tmp_path, model, expected_count):
-    device = DeviceConfig("ups", "AA:BB:CC:DD:EE:01", model)
+@pytest.mark.parametrize("model,protocol,native_setup", [
+    (Model.C1000, "legacy", False), (Model.C300, "legacy", False),
+    (Model.C1000, "prime", True), (Model.C1000_GEN2, "prime", True),
+    (Model.C2000_GEN2, "prime", True), (Model.C1000_GEN2, "legacy", False),
+])
+def test_guided_menu_only_offers_native_setup_for_supported_prime_profiles(monkeypatch, tmp_path, model, protocol, native_setup):
+    device = DeviceConfig("ups", "AA:BB:CC:DD:EE:01", model, protocol=protocol)
     captured = []
     def choose(_title, options):
         captured.append(options)
         return None
     monkeypatch.setattr(interactive, "choose", choose)
     interactive.mqtt_menu(device, tmp_path / "config.json", tmp_path / "private")
-    assert len(captured[0]) == expected_count
+    assert ("Create AP-service configuration" in captured[0]) == native_setup
+    assert ("Check saved AP setup (read-only)" in captured[0]) == native_setup
+    if not native_setup:
+        assert captured[0] == ["Publish BLE telemetry to my MQTT broker"]
 
 
 @pytest.mark.parametrize("model", [Model.C1000_GEN2, Model.C2000_GEN2])

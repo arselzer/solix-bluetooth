@@ -98,6 +98,44 @@ try {
   await refresh();
   assert.equal(await page.locator('#charging-power').inputValue(), '100');
   assert.equal(await page.locator('.period-row').first().locator('input').nth(1).inputValue(), '6');
+  const beforeChecks = posts;
+  const checkRequests = [];
+  page.on('request', (request) => {
+    if (['/diagnostics', '/setup-check'].some((path) => request.url() === base + path)) {
+      checkRequests.push({ method: request.method(), authorization: request.headers().authorization });
+    }
+  });
+  await page.getByTestId('open-checks').click();
+  await page.getByTestId('setup-result').filter({ hasText: 'Local file checks passed' }).waitFor();
+  assert.equal(await page.locator('.checks-stations li').count(), 5);
+  assert.match(await page.getByTestId('gateway-checks').textContent(), /Generated native identity support remains unverified/);
+  assert.deepEqual(checkRequests, [{ method: 'GET', authorization }, { method: 'GET', authorization }]);
+  await page.screenshot({ path: `${root}/docs/images/web-dashboard-setup-check.png` });
+  await page.setViewportSize({ width: 390, height: 844 });
+  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
+  assert.equal(await page.getByTestId('close-checks').isVisible(), true);
+  await page.setViewportSize({ width: 1440, height: 1100 });
+  await page.getByTestId('close-checks').click();
+  assert.equal(await page.locator('#charging-power').inputValue(), '100');
+  assert.equal(await page.locator('.period-row').first().locator('input').nth(1).inputValue(), '6');
+  assert.equal(posts, beforeChecks);
+  cases++; console.log(`Scenario ${cases} passed`);
+
+  await page.route('**/setup-check', (route) => route.fulfill({ status: 404, contentType: 'application/json', body: '{}' }));
+  await page.getByTestId('open-checks').click();
+  await page.getByTestId('setup-unavailable').waitFor();
+  assert.equal(await page.getByTestId('gateway-checks').getByText('Checking…').count(), 0);
+  assert.match(await page.getByTestId('gateway-notice').textContent(), /Connected to the local gateway/);
+  await page.getByTestId('close-checks').click();
+  await page.unroute('**/setup-check');
+  await page.route('**/diagnostics', (route) => route.fulfill({ status: 401, contentType: 'application/json', body: '{}' }));
+  await page.getByTestId('open-checks').click();
+  await page.getByTestId('gateway-notice').filter({ hasText: 'Access denied' }).waitFor();
+  assert.equal(await page.getByTestId('gateway-checks').count(), 0);
+  assert.equal(posts, beforeChecks);
+  await page.unroute('**/diagnostics');
+  await connect();
+  cases++; console.log(`Scenario ${cases} passed`);
   cases++; console.log(`Scenario ${cases} passed`);
 
   await propose('charging-power');

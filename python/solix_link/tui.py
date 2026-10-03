@@ -397,6 +397,14 @@ class TuiBackend:
                 self.targets.append(Target(f"native:{name}", f"{name} · {item.model.value} · Native MQTT", item.model,
                                            True, native_name=name))
 
+    async def check_ap_setup(self) -> dict:
+        """Inspect saved AP files without connecting, provisioning or repairing."""
+        if self.directory is None:
+            raise ValueError("Choose an AP directory with --ap-service-directory first")
+        from .ap_service_check import check_ap_service
+        async with self._lock:
+            return await asyncio.to_thread(check_ap_service, self.directory, self.config_path)
+
     async def _close(self) -> None:
         monitor, self.monitor = self.monitor, None
         self.target = None
@@ -756,6 +764,7 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
                     "Tab / Shift+Tab   Move between fields and buttons\n"
                     "↑ / ↓, Enter      Select a station, setting or option\n"
                     "F1–F4             Overview, Controls, Hourly plan, Events\n"
+                    "F8                Check saved AP setup (read-only)\n"
                     "Ctrl+O            Connect to the selected station\n"
                     "Ctrl+S            Scan nearby Bluetooth stations\n"
                     "Ctrl+R            Request fresh readings\n"
@@ -775,6 +784,40 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
         def close_help(self) -> None:
             self.dismiss()
 
+    class SetupCheckScreen(ModalScreen):
+        BINDINGS = [("escape", "dismiss", "Close")]
+        DEFAULT_CSS = """
+        SetupCheckScreen { align: center middle; background: #0c1424 85%; }
+        #setup-check-dialog { width: 76; max-width: 95%; height: auto; max-height: 90%;
+                              border: round #77dfc2; background: #13233a; padding: 1 2; }
+        #setup-check-title { color: #77dfc2; text-style: bold; margin-bottom: 1; }
+        #setup-check-summary { margin-bottom: 1; }
+        #setup-check-close { margin-top: 1; width: 100%; }
+        """
+
+        def __init__(self, report: dict) -> None:
+            super().__init__()
+            self.report = report
+
+        def compose(self) -> ComposeResult:
+            with VerticalScroll(id="setup-check-dialog"):
+                yield Static("Saved AP setup · read-only", id="setup-check-title", markup=False)
+                yield Static(
+                    "Local files passed. A live connection still needs confirmation."
+                    if self.report["ok"] else "Local file errors need attention before provisioning.",
+                    id="setup-check-summary", markup=False,
+                )
+                yield Static("No files, services or station settings were changed.", markup=False)
+                for profile in self.report["profiles"]:
+                    yield Static(f"\n{profile['profile']} · {profile.get('model', 'Invalid profile')}", markup=False)
+                for finding in self.report["findings"]:
+                    yield Static(f"\n{finding['severity'].upper()} · {finding['profile']}\n{finding['message']}", markup=False)
+                yield Button("Back to dashboard · Esc", id="setup-check-close", variant="primary")
+
+        @on(Button.Pressed, "#setup-check-close")
+        def close_check(self) -> None:
+            self.dismiss()
+
     class SolixApp(App):
         TITLE = "SOLIX Link"
         SUB_TITLE = "Local station console"
@@ -783,6 +826,7 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
             Binding("f2", "panel('controls')", "Controls", priority=True),
             Binding("f3", "panel('plan')", "Plan", priority=True),
             Binding("f4", "panel('events')", "Events", priority=True),
+            Binding("f8", "check_ap_setup", "AP check", priority=True),
             Binding("ctrl+o", "connect", "Connect", show=False, priority=True),
             Binding("ctrl+s", "scan", "Scan", priority=True),
             Binding("ctrl+r", "refresh", "Refresh", priority=True),
@@ -819,6 +863,7 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
         #controls-scroll, #plan-scroll { height: 1fr; }
         #readings { height: 1fr; }
         #event-log { height: 1fr; border: round #2c4866; }
+        #diagnostic-actions { height: auto; }
         .form-label { margin-top: 1; color: #77dfc2; }
         .hint { color: #a8bdd4; height: auto; margin: 1 0; }
         .form-row { height: auto; margin-bottom: 1; }
@@ -903,6 +948,8 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
                                 yield Button("Return to grid", id="return-grid", disabled=True)
                             yield Static("Return to grid clears the plan and waits for observed grid supply. It keeps AC output enabled.", classes="hint", markup=False)
                     with TabPane("Events", id="events"):
+                        with Horizontal(id="diagnostic-actions"):
+                            yield Button("Check saved AP setup · F8", id="check-ap-setup", disabled=backend.directory is None)
                         yield RichLog(id="event-log", markup=False, wrap=True, max_lines=200)
             yield Footer()
 
@@ -965,6 +1012,7 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
                 self.query_one(f"#{widget}").disabled = self.busy
             self.query_one("#connect", Button).disabled = self.busy or not self.selected
             self.query_one("#scan", Button).disabled = self.busy
+            self.query_one("#check-ap-setup", Button).disabled = self.busy or backend.directory is None
             self.query_one("#save-station", Button).disabled = self.busy or backend.config_path is None or not target or target.saved
             self.query_one("#station-protocol", Button).disabled = self.busy or not target or target.device is None or len(protocol_choices(target.model)) < 2 or (target.saved and backend.config_path is None)
             self.query_one("#add-to-ap", Button).disabled = self.busy or not connected or not fresh or backend.directory is None or not target or target.native or not target.saved or target.model not in (Model.C1000, Model.C1000_GEN2, Model.C2000_GEN2) or not target.device or target.device.protocol != "prime" or not target.device.client_id
@@ -1105,6 +1153,8 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
                 self.action_disconnect()
             elif action == "scan":
                 self.action_scan()
+            elif action == "check-ap-setup":
+                self.action_check_ap_setup()
             elif action == "save-station" and self.selected:
                 async def save() -> None:
                     target = await backend.save_target(self.selected)
@@ -1215,6 +1265,15 @@ def create_app(config_path: Path = DEFAULT_CONFIG, ap_service_directory: Path | 
         def action_help(self) -> None:
             if not isinstance(self.screen, HelpScreen):
                 self.push_screen(HelpScreen())
+
+        def action_check_ap_setup(self) -> None:
+            if self.busy or isinstance(self.screen, SetupCheckScreen):
+                return
+            async def inspect_setup() -> None:
+                report = await backend.check_ap_setup()
+                self.push_screen(SetupCheckScreen(report))
+                self.event_log("Saved AP setup check completed; no files or station settings changed.")
+            self.launch(inspect_setup())
 
         def refresh_targets(self) -> None:
             selector = self.query_one("#station", Select)

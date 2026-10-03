@@ -65,6 +65,13 @@ class Demo:
                 "connected":self.connected,"available":self.available,"last_seen_timestamp":self.last_seen or now - 2,
                 "metrics":metrics,"power_flow":"unknown" if original else "battery" if c1000 else "grid"}
     def snapshots(self): return [self.snapshot(name) for name in self.devices]
+    async def check_setup(self):
+        return {"schema": 1, "ok": True, "read_only": True,
+                "live_confirmation_required": True, "profiles": [],
+                "findings": [{"profile": "primary", "severity": "warning", "code": "pairing_not_checked",
+                              "message": "Saved BLE pairing was not checked; provide a paired configuration to the CLI checker."},
+                             {"profile": "device-2", "severity": "warning", "code": "generated_native_identity_unverified",
+                              "message": "Generated native identity support remains unverified on this model."}]}
     async def command(self,name,command,**values):
         self.commands.append({"name":name,"command":command,**values})
         key={"set-charge-power":"ac_charging_power_limit_w","set-charge-cap":"max_charge_percentage",

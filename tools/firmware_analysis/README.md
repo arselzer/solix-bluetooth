@@ -326,3 +326,19 @@ It regenerates init-array/FDE selection and replays only bounded pure routines,
 with read/write/import-slot guards and reset guest state. JNI/Android methods
 remain excluded. Complete metadata results/manifests independently match the
 fixture pair; recovered code and arbitrary decoded strings stay private.
+
+The [static protected-JNI continuation](../../docs/android-loader-vm-boundary.md)
+uses that same pinned carrier image, pure ELF relocations and no guest execution:
+
+```sh
+python3 tools/firmware_analysis/inspect_android_loader_vm_boundary.py \
+  --base-apk /private/path/base.apk \
+  --images-dir /private/path/recovered-virtual-images \
+  --output-dir /tmp/android-loader-vm-boundary
+```
+
+Compare both complete `android-loader-vm-boundary-*.json` files with
+`expected_results/`. Its 189 instruction checks, three record boundaries and
+five prefix tokens identify the next bounded wrapper record; they recover no
+SDK action serializer or device packet. Inputs are hash-pinned, wrong inputs
+fail before output, and raw app records/images stay private.
