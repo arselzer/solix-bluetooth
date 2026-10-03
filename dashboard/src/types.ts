@@ -18,6 +18,7 @@ export interface Sample {
   input: number | null;
   output: number | null;
   battery: number | null;
+  gap?: boolean;
 }
 
 export type Command = { command: string } & Record<string, unknown>;

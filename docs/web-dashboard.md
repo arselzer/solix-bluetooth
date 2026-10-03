@@ -33,10 +33,21 @@ are separate; serving this dashboard does not give the station internet access.
 ## Monitoring and controls
 
 Select a station to see battery, input/output power, supply state, freshness
-and session history. The browser polls cached gateway status every five seconds;
-it does not open another station connection. History stays in browser memory,
-is bounded to 30 minutes, and resets on reload. Missing or stale samples produce
-chart gaps rather than invented readings. This is not durable energy accounting.
+and history. The browser polls cached gateway status every five seconds;
+it does not open another station connection. Session history stays in browser
+memory for 30 minutes and resets on reload. To retain readings, start either
+gateway with `--history-file /path/to/private/history/readings.sqlite3` and
+optionally `--history-retention-days 7`. Saved 24-hour/seven-day views refresh
+every 30 seconds. Missing/stale readings, outages and restarts produce gaps.
+AC energy estimates include coverage and cannot measure stored battery energy;
+see [storage and accounting semantics](persistent-history.md).
+
+Native Gen 2 stations also have a **Charging policy preview** form. Enter manual
+export/price samples and thresholds to evaluate cached status and see proposed
+watts/reserve. Its armed checkbox is a simulation assumption; it never changes
+HA helpers, enables automation or sends a setting. Positive-export confirmation
+does not independently validate a sensor. There is no Apply action for proposals.
+See [guards and request schema](charging-policy-preview.md).
 
 Controls follow the selected station's advertised capabilities. Each change
 requires a review and explicit confirmation; offline or busy controls are
@@ -66,7 +77,7 @@ status before deciding whether to retry. The UI never retries a write.
 ## Authentication and API
 
 The bundled shell and its exact asset paths are public and contain no station
-telemetry. `/health`, `/devices`, `/events`, `/metrics` and command routes still
+telemetry. Status, history, charging-preview and command routes still
 require the configured Bearer token. The browser keeps the token only in memory,
 clears its input after connecting, and forgets it on disconnect or authentication
 failure. It uses no local storage, cookies or token query parameters.
@@ -110,3 +121,7 @@ synthetic data:
 ![Desktop dashboard with synthetic readings](images/web-dashboard-desktop.png)
 
 [Mobile screenshot](images/web-dashboard-mobile.png).
+
+![Read-only charging-policy preview using synthetic inputs](images/web-charging-preview.png)
+
+![Saved AC power and battery history with an explicit gap](images/web-saved-history.png)

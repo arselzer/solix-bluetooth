@@ -50,6 +50,20 @@ AP-service Python APIs use `APServiceConfig`, `APService` and
 `ap-service-run --energy-reports` for optional local analytics capture. The
 counter units remain unverified; no HA energy statistics are derived from them.
 
+The HTTP gateway optionally retains private battery/AC-power readings with
+`--history-file /private/history/readings.sqlite3 --history-retention-days 7`.
+The browser can then show saved 24-hour/seven-day charts and estimated AC energy
+with coverage and explicit gaps. This uses cached snapshots, never polls the
+station, and remains disabled when no history path is supplied.
+See [history setup and limits](../docs/persistent-history.md).
+
+Read-only Gen 2 charging-policy preview is available through Python,
+`charging-preview --snapshot-file snapshot.json --request-file policy.json`,
+`ap-service-charging-preview --directory /private/ap --name office --request-file policy.json`,
+the browser and `POST /devices/{name}/charging-preview`. It proposes saved
+watts/reserve without commands or HA changes; see the
+[schema and freshness guards](../docs/charging-policy-preview.md).
+
 ## Terminal dashboard and HA gateway
 
 ```sh

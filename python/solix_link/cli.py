@@ -67,6 +67,12 @@ def parser() -> argparse.ArgumentParser:
     serve.add_argument("--port", type=int, default=8765)
     serve.add_argument("--allow-control", action="store_true", help="Enable allowlisted HTTP commands; requires SOLIX_HTTP_TOKEN")
     serve.add_argument("--web-ui", action="store_true", help="Serve the optional local dashboard at /")
+    serve.add_argument("--history-file", type=Path, help="Opt in to a private SQLite history file; no station requests")
+    serve.add_argument("--history-retention-days", type=int, default=7, help="History retention, 1–365 days (default 7)")
+
+    preview = subcommands.add_parser("charging-preview", help="Explain a charging policy from saved JSON; sends no commands")
+    preview.add_argument("--snapshot-file", type=Path, required=True)
+    preview.add_argument("--request-file", type=Path, required=True)
 
     mqtt = subcommands.add_parser("mqtt-bridge", help="Publish BLE status and supported settings through a local MQTT broker")
     mqtt.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
@@ -449,7 +455,11 @@ def main(argv: list[str] | None = None) -> int:
         elif args.command == "serve":
             from .server import run_server
             run_server(MonitorService(load_config(args.config)), host=args.host, port=args.port,
-                       allow_control=args.allow_control, web_ui=args.web_ui)
+                       allow_control=args.allow_control, web_ui=args.web_ui,
+                       history_file=args.history_file, history_retention_days=args.history_retention_days)
+        elif args.command == "charging-preview":
+            from .charging_preview_cli import offline_preview
+            print(json.dumps(offline_preview(args.snapshot_file, args.request_file), indent=2))
         elif args.command == "mqtt-bridge":
             from .mqtt_bridge import MqttBridge
             asyncio.run(MqttBridge(

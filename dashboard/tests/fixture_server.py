@@ -1,5 +1,6 @@
 """Synthetic fixtures only. No device or private configuration imports."""
-import asyncio, os, time
+import asyncio, os, tempfile, time
+from pathlib import Path
 from types import SimpleNamespace
 import uvicorn
 from solix_link.server import create_app
@@ -89,7 +90,9 @@ class Demo:
     def unsubscribe(self,queue): pass
 
 service=Demo()
-app=create_app(service,token="demo-token-not-secret",allow_control=True,web_ui=True)
+history_directory=tempfile.TemporaryDirectory(prefix="solix-synthetic-history-")
+app=create_app(service,token="demo-token-not-secret",allow_control=True,web_ui=True,
+               history_file=Path(history_directory.name)/"history.sqlite")
 @app.post("/fixture")
 async def fixture(body:dict):
     for key,value in body.items(): setattr(service,key,value)

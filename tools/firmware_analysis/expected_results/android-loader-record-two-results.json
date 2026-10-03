@@ -1,0 +1,2001 @@
+{
+  "foundation_instruction_checks": 189,
+  "guest_instructions_executed": 0,
+  "handler_widths": [
+    {
+      "end_exclusive": "0xbd92c",
+      "handler_index": "0x1",
+      "meaning": "return_word",
+      "operand_bytes": 0,
+      "sha256": "fb000e18ecb59cc866de580c8460f9befce25b3aa0e17acf8dd122f54ba90e61",
+      "start": "0xbd910"
+    },
+    {
+      "end_exclusive": "0xc13e8",
+      "handler_index": "0xc",
+      "meaning": "compare_words_equal",
+      "operand_bytes": 0,
+      "sha256": "8e03fa5e24f4a76a1d3ee96aa4dd39a14f3fe2654b904e8b17aeec002b28cc73",
+      "start": "0xc1320"
+    },
+    {
+      "end_exclusive": "0xbd8e0",
+      "handler_index": "0x2c",
+      "meaning": "reserve_zero_words",
+      "operand_bytes": 1,
+      "sha256": "18bd8742f19f96272963ab9f808673c6e711f533bdba0ff388b5c02c5c0d2d5b",
+      "start": "0xbd760"
+    },
+    {
+      "end_exclusive": "0xc260c",
+      "handler_index": "0x32",
+      "meaning": "push_immediate_word",
+      "operand_bytes": 4,
+      "sha256": "8b992f359f0a046e013a2c1fd81aba22568e1231174abb13a08e10fc37385f12",
+      "start": "0xc2528"
+    },
+    {
+      "end_exclusive": "0xc39c8",
+      "handler_index": "0x33",
+      "meaning": "push_immediate_pointer",
+      "operand_bytes": 8,
+      "sha256": "408939e508c3b8a0beebcf39aa4e2c01e10d786c1ee5fc3d7baefe2fe32cb0a9",
+      "start": "0xc3908"
+    },
+    {
+      "end_exclusive": "0xc0838",
+      "handler_index": "0x36",
+      "meaning": "push_local_byte",
+      "operand_bytes": 2,
+      "sha256": "ec49566b19dec4b0ca5f5b3bedb560ac9df8bf015e4fd70c740b9f185b942532",
+      "start": "0xc075c"
+    },
+    {
+      "end_exclusive": "0xc3dbc",
+      "handler_index": "0x38",
+      "meaning": "push_local_word",
+      "operand_bytes": 2,
+      "sha256": "04afcf672daaa0b840d97204ff87ee67bfbcf0ea3abd3f87e8bc7297a94d53df",
+      "start": "0xc3ce4"
+    },
+    {
+      "end_exclusive": "0xc3ab0",
+      "handler_index": "0x39",
+      "meaning": "push_local_pointer",
+      "operand_bytes": 2,
+      "sha256": "3ed069fdbb365ce0f97f0636e3988a3b9a0531dfe869e2b0e35cfb3832ad3e56",
+      "start": "0xc39c8"
+    },
+    {
+      "end_exclusive": "0xc36a4",
+      "handler_index": "0x3b",
+      "meaning": "reset_rolling_key",
+      "operand_bytes": 1,
+      "sha256": "5b002f8aedc1056125c391b02dee9c9c3d82458829ffc30a26a6e00e8bbb9f91",
+      "start": "0xc35f8"
+    },
+    {
+      "end_exclusive": "0xc3908",
+      "handler_index": "0x3c",
+      "meaning": "store_local_byte",
+      "operand_bytes": 2,
+      "sha256": "ac5adfce4671945e960dae5a20e147d469544016974dd2ec16847bb4035ea4ec",
+      "start": "0xc3820"
+    },
+    {
+      "end_exclusive": "0xc2ee4",
+      "handler_index": "0x3e",
+      "meaning": "store_local_word",
+      "operand_bytes": 2,
+      "sha256": "0a18071a8267b325be42b04184fcdb3a26c26f2bb6317aa63d2554eae9835971",
+      "start": "0xc2e0c"
+    },
+    {
+      "end_exclusive": "0xc01f0",
+      "handler_index": "0x3f",
+      "meaning": "store_local_pointer",
+      "operand_bytes": 2,
+      "sha256": "523461c979ceba2b71a031493c28086c87488cd7606ffb5ce507697c241878cf",
+      "start": "0xc010c"
+    },
+    {
+      "end_exclusive": "0xc0b64",
+      "handler_index": "0x41",
+      "meaning": "push_local_address",
+      "operand_bytes": 2,
+      "sha256": "44b40bf6a7ec5250ac23f604091ffd0afdc458982ab78cd679d9f2a09b8ed9c2",
+      "start": "0xc0a8c"
+    },
+    {
+      "end_exclusive": "0xc0c24",
+      "handler_index": "0x45",
+      "meaning": "load_indirect_pointer",
+      "operand_bytes": 0,
+      "sha256": "53bf6204257d87892b587930ab5a4181a34a7a43ce2225c82e746bdc17c13d5e",
+      "start": "0xc0b64"
+    },
+    {
+      "end_exclusive": "0xbf848",
+      "handler_index": "0x4a",
+      "meaning": "store_indirect_pointer",
+      "operand_bytes": 0,
+      "sha256": "5df9b722700d8957e31491f7c72b54efc13fda022fc2a308f152cd71f29b9dff",
+      "start": "0xbf780"
+    },
+    {
+      "end_exclusive": "0xbf0a4",
+      "handler_index": "0x4c",
+      "meaning": "push_call_table_pointer",
+      "operand_bytes": 2,
+      "sha256": "d1531544f2f5afa107e291230c7c24af2aa085ea6f1eda1ef7aa20e46c40be85",
+      "start": "0xbefc0"
+    },
+    {
+      "end_exclusive": "0xc3820",
+      "handler_index": "0x4d",
+      "meaning": "call_native_thunk",
+      "operand_bytes": 1,
+      "sha256": "271eb8134ec18754818198d4a6ff4e1a40e261ea03169db7f85632ab6175862c",
+      "start": "0xc3768"
+    },
+    {
+      "end_exclusive": "0xc46c8",
+      "handler_index": "0x68",
+      "meaning": "add_pointers",
+      "operand_bytes": 0,
+      "sha256": "6fc4a81283685a9a08449c9eca13f5aa3001c21b1b6a424d0ba44241cdb3e257",
+      "start": "0xc4600"
+    },
+    {
+      "end_exclusive": "0xc2878",
+      "handler_index": "0x85",
+      "meaning": "jump_relative",
+      "operand_bytes": 3,
+      "sha256": "5e9fe9d57b6550288998e59fffdf437ef1c3a6983ecbcb9b869ca9364bb4715d",
+      "start": "0xc2798"
+    },
+    {
+      "end_exclusive": "0xc03a8",
+      "handler_index": "0x86",
+      "meaning": "jump_relative_if_byte_nonzero",
+      "operand_bytes": 3,
+      "sha256": "0daff66d34b7076988c2aa9a3211be7ef29dd200d68f92049657a948ff0a4798",
+      "start": "0xc02a4"
+    }
+  ],
+  "jni_registration_candidate": {
+    "b2b_result": "exact null-return stub",
+    "class": "runtime context descriptor field +0x08; unresolved",
+    "count": 7,
+    "entries": [
+      {
+        "function": "0x740e0",
+        "name": "l",
+        "name_offset": "0x271ed",
+        "signature": "(Landroid/app/Application;Ljava/lang/String;)Z",
+        "signature_offset": "0x1035f0"
+      },
+      {
+        "function": "0x768f0",
+        "name": "r",
+        "name_offset": "0x26d33",
+        "signature": "(Landroid/app/Application;Ljava/lang/String;)Z",
+        "signature_offset": "0x1035f0"
+      },
+      {
+        "function": "0x76f78",
+        "name": "ra",
+        "name_offset": "0x103658",
+        "signature": "(Landroid/app/Application;Ljava/lang/String;)Z",
+        "signature_offset": "0x1035f0"
+      },
+      {
+        "function": "0x77124",
+        "name": "b2b",
+        "name_offset": "0x10365c",
+        "signature": "([BI)[B",
+        "signature_offset": "0x103660"
+      },
+      {
+        "function": "0x7712c",
+        "name": "m",
+        "name_offset": "0x26cda",
+        "signature": "(Ljava/lang/String;I)V",
+        "signature_offset": "0x103670"
+      },
+      {
+        "function": "0x77130",
+        "name": "sa",
+        "name_offset": "0x103688",
+        "signature": "(Ljava/lang/String;Ljava/lang/String;)V",
+        "signature_offset": "0x103690"
+      },
+      {
+        "function": "0x77134",
+        "name": "al",
+        "name_offset": "0x1036b8",
+        "signature": "(Ljava/lang/ClassLoader;Landroid/content/pm/ApplicationInfo;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/ClassLoader;",
+        "signature_offset": "0x1036c0"
+      }
+    ],
+    "function": "0x73864",
+    "m_and_sa_result": "exact RET stubs",
+    "register_call": "0x73a00"
+  },
+  "limits": [
+    "No runtime branch or indirect context callback resolved",
+    "No Java class or JNI/native method executed",
+    "Class-loader and Application registration paths need further static tracing",
+    "No plaintext SDK DEX, action serializer or station command recovered"
+  ],
+  "native_call_preparations": [
+    {
+      "arguments": [
+        "original JavaVM",
+        "address of local JNIEnv* cell",
+        "JNI_VERSION_1_4 (0x10004)"
+      ],
+      "record_offset": 81,
+      "return": "unknown jint",
+      "target": "symbolic JavaVM.functions[0x30] = GetEnv",
+      "thunk": "0xe8040",
+      "thunk_call": "0xe80b0"
+    },
+    {
+      "arguments": [
+        "original JavaVM"
+      ],
+      "record_offset": 147,
+      "return": "unknown word; stored without controlling the next call",
+      "runtime_context_pointer_slot": "0xfd220",
+      "target": "symbolic (*runtime_context_pointer).callback[0x78]",
+      "thunk": "0xe80c8",
+      "thunk_call": "0xe8110"
+    },
+    {
+      "arguments": [
+        "JNIEnv* from GetEnv local cell"
+      ],
+      "record_offset": 165,
+      "return": "unknown low byte; stored without controlling the return literal",
+      "target": "0x73864",
+      "thunk": "0xe8128",
+      "thunk_call": "0xe8170"
+    }
+  ],
+  "new_instruction_checks": {
+    "b2b_null_return": {
+      "addresses": [
+        "0x77124",
+        "0x77128"
+      ],
+      "count": 2
+    },
+    "handler_01_return_word": {
+      "addresses": [
+        "0xbd910",
+        "0xbd914",
+        "0xbd918",
+        "0xbd91c",
+        "0xbd920",
+        "0xbd924",
+        "0xbd928"
+      ],
+      "count": 7
+    },
+    "handler_0c_compare_words_equal": {
+      "addresses": [
+        "0xc1320",
+        "0xc1324",
+        "0xc1328",
+        "0xc132c",
+        "0xc1330",
+        "0xc1334",
+        "0xc1338",
+        "0xc133c",
+        "0xc1340",
+        "0xc1344",
+        "0xc1348",
+        "0xc134c",
+        "0xc1350",
+        "0xc1354",
+        "0xc1358",
+        "0xc13d0",
+        "0xc13d4",
+        "0xc13d8",
+        "0xc13dc",
+        "0xc13e0",
+        "0xc13e4",
+        "0xc13b8",
+        "0xc13bc"
+      ],
+      "count": 23
+    },
+    "handler_2c_reserve_zero_words": {
+      "addresses": [
+        "0xbd760",
+        "0xbd764",
+        "0xbd768",
+        "0xbd76c",
+        "0xbd770",
+        "0xbd774",
+        "0xbd778",
+        "0xbd77c",
+        "0xbd780",
+        "0xbd784",
+        "0xbd788",
+        "0xbd78c",
+        "0xbd790",
+        "0xbd794",
+        "0xbd798",
+        "0xbd8c8",
+        "0xbd8cc",
+        "0xbd8d0",
+        "0xbd8d4",
+        "0xbd8d8",
+        "0xbd8dc",
+        "0xbd880",
+        "0xbd884"
+      ],
+      "count": 23
+    },
+    "handler_32_push_immediate_word": {
+      "addresses": [
+        "0xc2528",
+        "0xc252c",
+        "0xc2530",
+        "0xc2534",
+        "0xc2538",
+        "0xc253c",
+        "0xc2540",
+        "0xc2544",
+        "0xc2548",
+        "0xc254c",
+        "0xc2550",
+        "0xc2554",
+        "0xc2558",
+        "0xc255c",
+        "0xc2560",
+        "0xc2564",
+        "0xc2568",
+        "0xc256c",
+        "0xc2570",
+        "0xc25f4",
+        "0xc25f8",
+        "0xc25fc",
+        "0xc2600",
+        "0xc2604",
+        "0xc2608",
+        "0xc25dc",
+        "0xc25e0"
+      ],
+      "count": 27
+    },
+    "handler_33_push_immediate_pointer": {
+      "addresses": [
+        "0xc3908",
+        "0xc390c",
+        "0xc3910",
+        "0xc3914",
+        "0xc3918",
+        "0xc391c",
+        "0xc3920",
+        "0xc3924",
+        "0xc3928",
+        "0xc392c",
+        "0xc3930",
+        "0xc3934",
+        "0xc3938",
+        "0xc393c",
+        "0xc3940",
+        "0xc39b0",
+        "0xc39b4",
+        "0xc39b8",
+        "0xc39bc",
+        "0xc39c0",
+        "0xc39c4",
+        "0xc3998",
+        "0xc399c"
+      ],
+      "count": 23
+    },
+    "handler_36_push_local_byte": {
+      "addresses": [
+        "0xc075c",
+        "0xc0760",
+        "0xc0764",
+        "0xc0768",
+        "0xc076c",
+        "0xc0770",
+        "0xc0774",
+        "0xc0778",
+        "0xc077c",
+        "0xc0780",
+        "0xc0784",
+        "0xc0788",
+        "0xc078c",
+        "0xc0790",
+        "0xc0794",
+        "0xc0820",
+        "0xc0824",
+        "0xc0828",
+        "0xc082c",
+        "0xc0830",
+        "0xc0834",
+        "0xc0808",
+        "0xc080c"
+      ],
+      "count": 23
+    },
+    "handler_38_push_local_word": {
+      "addresses": [
+        "0xc3ce4",
+        "0xc3ce8",
+        "0xc3cec",
+        "0xc3cf0",
+        "0xc3cf4",
+        "0xc3cf8",
+        "0xc3cfc",
+        "0xc3d00",
+        "0xc3d04",
+        "0xc3d08",
+        "0xc3d0c",
+        "0xc3d10",
+        "0xc3d14",
+        "0xc3d18",
+        "0xc3d1c",
+        "0xc3da4",
+        "0xc3da8",
+        "0xc3dac",
+        "0xc3db0",
+        "0xc3db4",
+        "0xc3db8",
+        "0xc3d8c",
+        "0xc3d90"
+      ],
+      "count": 23
+    },
+    "handler_39_push_local_pointer": {
+      "addresses": [
+        "0xc39c8",
+        "0xc39cc",
+        "0xc39d0",
+        "0xc39d4",
+        "0xc39d8",
+        "0xc39dc",
+        "0xc39e0",
+        "0xc39e4",
+        "0xc39e8",
+        "0xc39ec",
+        "0xc39f0",
+        "0xc39f4",
+        "0xc39f8",
+        "0xc39fc",
+        "0xc3a00",
+        "0xc3a98",
+        "0xc3a9c",
+        "0xc3aa0",
+        "0xc3aa4",
+        "0xc3aa8",
+        "0xc3aac",
+        "0xc3a80",
+        "0xc3a84"
+      ],
+      "count": 23
+    },
+    "handler_3b_reset_rolling_key": {
+      "addresses": [
+        "0xc35f8",
+        "0xc35fc",
+        "0xc3600",
+        "0xc3604",
+        "0xc3608",
+        "0xc360c",
+        "0xc3610",
+        "0xc3614",
+        "0xc3618",
+        "0xc361c",
+        "0xc3620",
+        "0xc3624",
+        "0xc3628",
+        "0xc362c",
+        "0xc3630",
+        "0xc368c",
+        "0xc3690",
+        "0xc3694",
+        "0xc3698",
+        "0xc369c",
+        "0xc36a0",
+        "0xc3678",
+        "0xc367c"
+      ],
+      "count": 23
+    },
+    "handler_3c_store_local_byte": {
+      "addresses": [
+        "0xc3820",
+        "0xc3824",
+        "0xc3828",
+        "0xc382c",
+        "0xc3830",
+        "0xc3834",
+        "0xc3838",
+        "0xc383c",
+        "0xc3840",
+        "0xc3844",
+        "0xc3848",
+        "0xc384c",
+        "0xc3850",
+        "0xc3854",
+        "0xc3858",
+        "0xc38f0",
+        "0xc38f4",
+        "0xc38f8",
+        "0xc38fc",
+        "0xc3900",
+        "0xc3904",
+        "0xc38d8",
+        "0xc38dc"
+      ],
+      "count": 23
+    },
+    "handler_3e_store_local_word": {
+      "addresses": [
+        "0xc2e0c",
+        "0xc2e10",
+        "0xc2e14",
+        "0xc2e18",
+        "0xc2e1c",
+        "0xc2e20",
+        "0xc2e24",
+        "0xc2e28",
+        "0xc2e2c",
+        "0xc2e30",
+        "0xc2e34",
+        "0xc2e38",
+        "0xc2e3c",
+        "0xc2e40",
+        "0xc2e44",
+        "0xc2ecc",
+        "0xc2ed0",
+        "0xc2ed4",
+        "0xc2ed8",
+        "0xc2edc",
+        "0xc2ee0",
+        "0xc2eb4",
+        "0xc2eb8"
+      ],
+      "count": 23
+    },
+    "handler_3f_store_local_pointer": {
+      "addresses": [
+        "0xc010c",
+        "0xc0110",
+        "0xc0114",
+        "0xc0118",
+        "0xc011c",
+        "0xc0120",
+        "0xc0124",
+        "0xc0128",
+        "0xc012c",
+        "0xc0130",
+        "0xc0134",
+        "0xc0138",
+        "0xc013c",
+        "0xc0140",
+        "0xc0144",
+        "0xc01d8",
+        "0xc01dc",
+        "0xc01e0",
+        "0xc01e4",
+        "0xc01e8",
+        "0xc01ec",
+        "0xc01c0",
+        "0xc01c4"
+      ],
+      "count": 23
+    },
+    "handler_41_push_local_address": {
+      "addresses": [
+        "0xc0a8c",
+        "0xc0a90",
+        "0xc0a94",
+        "0xc0a98",
+        "0xc0a9c",
+        "0xc0aa0",
+        "0xc0aa4",
+        "0xc0aa8",
+        "0xc0aac",
+        "0xc0ab0",
+        "0xc0ab4",
+        "0xc0ab8",
+        "0xc0abc",
+        "0xc0ac0",
+        "0xc0ac4",
+        "0xc0b4c",
+        "0xc0b50",
+        "0xc0b54",
+        "0xc0b58",
+        "0xc0b5c",
+        "0xc0b60",
+        "0xc0b34",
+        "0xc0b38"
+      ],
+      "count": 23
+    },
+    "handler_45_load_indirect_pointer": {
+      "addresses": [
+        "0xc0b64",
+        "0xc0b68",
+        "0xc0b6c",
+        "0xc0b70",
+        "0xc0b74",
+        "0xc0b78",
+        "0xc0b7c",
+        "0xc0b80",
+        "0xc0b84",
+        "0xc0b88",
+        "0xc0b8c",
+        "0xc0b90",
+        "0xc0b94",
+        "0xc0b98",
+        "0xc0b9c",
+        "0xc0c0c",
+        "0xc0c10",
+        "0xc0c14",
+        "0xc0c18",
+        "0xc0c1c",
+        "0xc0c20",
+        "0xc0bf4",
+        "0xc0bf8"
+      ],
+      "count": 23
+    },
+    "handler_4a_store_indirect_pointer": {
+      "addresses": [
+        "0xbf780",
+        "0xbf784",
+        "0xbf788",
+        "0xbf78c",
+        "0xbf790",
+        "0xbf794",
+        "0xbf798",
+        "0xbf79c",
+        "0xbf7a0",
+        "0xbf7a4",
+        "0xbf7a8",
+        "0xbf7ac",
+        "0xbf7b0",
+        "0xbf7b4",
+        "0xbf7b8",
+        "0xbf830",
+        "0xbf834",
+        "0xbf838",
+        "0xbf83c",
+        "0xbf840",
+        "0xbf844",
+        "0xbf818",
+        "0xbf81c"
+      ],
+      "count": 23
+    },
+    "handler_4c_push_call_table_pointer": {
+      "addresses": [
+        "0xbefc0",
+        "0xbefc4",
+        "0xbefc8",
+        "0xbefcc",
+        "0xbefd0",
+        "0xbefd4",
+        "0xbefd8",
+        "0xbefdc",
+        "0xbefe0",
+        "0xbefe4",
+        "0xbefe8",
+        "0xbefec",
+        "0xbeff0",
+        "0xbeff4",
+        "0xbeff8",
+        "0xbf08c",
+        "0xbf090",
+        "0xbf094",
+        "0xbf098",
+        "0xbf09c",
+        "0xbf0a0",
+        "0xbf074",
+        "0xbf078"
+      ],
+      "count": 23
+    },
+    "handler_4d_call_native_thunk": {
+      "addresses": [
+        "0xc3768",
+        "0xc376c",
+        "0xc3770",
+        "0xc3774",
+        "0xc3778",
+        "0xc377c",
+        "0xc3780",
+        "0xc3784",
+        "0xc3788",
+        "0xc378c",
+        "0xc3790",
+        "0xc3794",
+        "0xc3798",
+        "0xc379c",
+        "0xc37a0",
+        "0xc3808",
+        "0xc380c",
+        "0xc3810",
+        "0xc3814",
+        "0xc3818",
+        "0xc381c",
+        "0xc37f4",
+        "0xc37f8"
+      ],
+      "count": 23
+    },
+    "handler_68_add_pointers": {
+      "addresses": [
+        "0xc4600",
+        "0xc4604",
+        "0xc4608",
+        "0xc460c",
+        "0xc4610",
+        "0xc4614",
+        "0xc4618",
+        "0xc461c",
+        "0xc4620",
+        "0xc4624",
+        "0xc4628",
+        "0xc462c",
+        "0xc4630",
+        "0xc4634",
+        "0xc4638",
+        "0xc46b0",
+        "0xc46b4",
+        "0xc46b8",
+        "0xc46bc",
+        "0xc46c0",
+        "0xc46c4",
+        "0xc4698",
+        "0xc469c"
+      ],
+      "count": 23
+    },
+    "handler_85_jump_relative": {
+      "addresses": [
+        "0xc2798",
+        "0xc279c",
+        "0xc27a0",
+        "0xc27a4",
+        "0xc27a8",
+        "0xc27ac",
+        "0xc27b0",
+        "0xc27b4",
+        "0xc27b8",
+        "0xc27bc",
+        "0xc27c0",
+        "0xc27c4",
+        "0xc27c8",
+        "0xc27cc",
+        "0xc27d0",
+        "0xc27d4",
+        "0xc27d8",
+        "0xc27dc",
+        "0xc27e0",
+        "0xc27e4",
+        "0xc27e8",
+        "0xc27ec",
+        "0xc27f0",
+        "0xc27f4",
+        "0xc2860",
+        "0xc2864",
+        "0xc2868",
+        "0xc286c",
+        "0xc2870",
+        "0xc2874",
+        "0xc2848",
+        "0xc284c"
+      ],
+      "count": 32
+    },
+    "handler_86_jump_relative_if_byte_nonzero": {
+      "addresses": [
+        "0xc02a4",
+        "0xc02a8",
+        "0xc02ac",
+        "0xc02b0",
+        "0xc02b4",
+        "0xc02b8",
+        "0xc02bc",
+        "0xc02c0",
+        "0xc02c4",
+        "0xc02c8",
+        "0xc02cc",
+        "0xc02d0",
+        "0xc02d4",
+        "0xc02d8",
+        "0xc02dc",
+        "0xc02e0",
+        "0xc02e4",
+        "0xc02e8",
+        "0xc02ec",
+        "0xc02f0",
+        "0xc02f4",
+        "0xc02f8",
+        "0xc02fc",
+        "0xc0300",
+        "0xc0390",
+        "0xc0394",
+        "0xc0398",
+        "0xc039c",
+        "0xc03a0",
+        "0xc03a4",
+        "0xc0378",
+        "0xc037c"
+      ],
+      "count": 32
+    },
+    "m_ret_stub": {
+      "addresses": [
+        "0x7712c"
+      ],
+      "count": 1
+    },
+    "one_argument_byte_return_thunk": {
+      "addresses": [
+        "0xe8128",
+        "0xe812c",
+        "0xe8130",
+        "0xe8134",
+        "0xe8138",
+        "0xe813c",
+        "0xe8140",
+        "0xe8144",
+        "0xe8148",
+        "0xe814c",
+        "0xe8150",
+        "0xe8154",
+        "0xe8158",
+        "0xe815c",
+        "0xe8160",
+        "0xe8164",
+        "0xe8168",
+        "0xe816c",
+        "0xe8170",
+        "0xe8174",
+        "0xe8178",
+        "0xe817c",
+        "0xe8180",
+        "0xe8184",
+        "0xe8188"
+      ],
+      "count": 25
+    },
+    "one_argument_word_return_thunk": {
+      "addresses": [
+        "0xe80c8",
+        "0xe80cc",
+        "0xe80d0",
+        "0xe80d4",
+        "0xe80d8",
+        "0xe80dc",
+        "0xe80e0",
+        "0xe80e4",
+        "0xe80e8",
+        "0xe80ec",
+        "0xe80f0",
+        "0xe80f4",
+        "0xe80f8",
+        "0xe80fc",
+        "0xe8100",
+        "0xe8104",
+        "0xe8108",
+        "0xe810c",
+        "0xe8110",
+        "0xe8114",
+        "0xe8118",
+        "0xe811c",
+        "0xe8120",
+        "0xe8124"
+      ],
+      "count": 24
+    },
+    "registration_class_descriptor": {
+      "addresses": [
+        "0x738cc",
+        "0x738d0",
+        "0x738d4",
+        "0x738d8",
+        "0x738dc",
+        "0x738e0",
+        "0x738e4"
+      ],
+      "count": 7
+    },
+    "sa_ret_stub": {
+      "addresses": [
+        "0x77130"
+      ],
+      "count": 1
+    },
+    "seven_jni_registration_rows": {
+      "addresses": [
+        "0x73924",
+        "0x73928",
+        "0x7392c",
+        "0x73930",
+        "0x73934",
+        "0x73938",
+        "0x7393c",
+        "0x73940",
+        "0x73944",
+        "0x73948",
+        "0x7394c",
+        "0x73950",
+        "0x73954",
+        "0x73958",
+        "0x7395c",
+        "0x73960",
+        "0x73964",
+        "0x73968",
+        "0x7396c",
+        "0x73970",
+        "0x73974",
+        "0x73978",
+        "0x7397c",
+        "0x73980",
+        "0x73984",
+        "0x73988",
+        "0x7398c",
+        "0x73990",
+        "0x73994",
+        "0x73998",
+        "0x7399c",
+        "0x739a0",
+        "0x739a4",
+        "0x739a8",
+        "0x739ac",
+        "0x739b0",
+        "0x739b4",
+        "0x739b8",
+        "0x739bc",
+        "0x739c0",
+        "0x739c4",
+        "0x739c8",
+        "0x739cc",
+        "0x739d0",
+        "0x739d4",
+        "0x739d8",
+        "0x739dc",
+        "0x739e0",
+        "0x739e4",
+        "0x739e8",
+        "0x739ec",
+        "0x739f0",
+        "0x739f4",
+        "0x739f8",
+        "0x739fc",
+        "0x73a00"
+      ],
+      "count": 56
+    },
+    "three_argument_word_return_thunk": {
+      "addresses": [
+        "0xe8040",
+        "0xe8044",
+        "0xe8048",
+        "0xe804c",
+        "0xe8050",
+        "0xe8054",
+        "0xe8058",
+        "0xe805c",
+        "0xe8060",
+        "0xe8064",
+        "0xe8068",
+        "0xe806c",
+        "0xe8070",
+        "0xe8074",
+        "0xe8078",
+        "0xe807c",
+        "0xe8080",
+        "0xe8084",
+        "0xe8088",
+        "0xe808c",
+        "0xe8090",
+        "0xe8094",
+        "0xe8098",
+        "0xe809c",
+        "0xe80a0",
+        "0xe80a4",
+        "0xe80a8",
+        "0xe80ac",
+        "0xe80b0",
+        "0xe80b4",
+        "0xe80b8",
+        "0xe80bc",
+        "0xe80c0",
+        "0xe80c4"
+      ],
+      "count": 34
+    }
+  },
+  "record": {
+    "bytes": 182,
+    "cfg": {
+      "covered_non_header_bytes": 178,
+      "nodes": [
+        {
+          "handler": "0xbd760",
+          "handler_index": "0x2c",
+          "meaning": "reserve_zero_words",
+          "offset": 4,
+          "operand": 28,
+          "operand_bytes": 1,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 6
+            }
+          ]
+        },
+        {
+          "handler": "0xc0a8c",
+          "handler_index": "0x41",
+          "meaning": "push_local_address",
+          "offset": 6,
+          "operand": 30,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 9
+            }
+          ]
+        },
+        {
+          "handler": "0xc010c",
+          "handler_index": "0x3f",
+          "meaning": "store_local_pointer",
+          "offset": 9,
+          "operand": 4,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 12
+            }
+          ]
+        },
+        {
+          "handler": "0xc39c8",
+          "handler_index": "0x39",
+          "meaning": "push_local_pointer",
+          "offset": 12,
+          "operand": 4,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 15
+            }
+          ]
+        },
+        {
+          "handler": "0xc010c",
+          "handler_index": "0x3f",
+          "meaning": "store_local_pointer",
+          "offset": 15,
+          "operand": 6,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 18
+            }
+          ]
+        },
+        {
+          "handler": "0xc39c8",
+          "handler_index": "0x39",
+          "meaning": "push_local_pointer",
+          "offset": 18,
+          "operand": 4,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 21
+            }
+          ]
+        },
+        {
+          "handler": "0xc3908",
+          "handler_index": "0x33",
+          "meaning": "push_immediate_pointer",
+          "offset": 21,
+          "operand": 0,
+          "operand_bytes": 8,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 30
+            }
+          ]
+        },
+        {
+          "handler": "0xbf780",
+          "handler_index": "0x4a",
+          "meaning": "store_indirect_pointer",
+          "offset": 30,
+          "operand": null,
+          "operand_bytes": 0,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 31
+            }
+          ]
+        },
+        {
+          "handler": "0xc39c8",
+          "handler_index": "0x39",
+          "meaning": "push_local_pointer",
+          "offset": 31,
+          "operand": 0,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 34
+            }
+          ]
+        },
+        {
+          "handler": "0xc0b64",
+          "handler_index": "0x45",
+          "meaning": "load_indirect_pointer",
+          "offset": 34,
+          "operand": null,
+          "operand_bytes": 0,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 35
+            }
+          ]
+        },
+        {
+          "handler": "0xc010c",
+          "handler_index": "0x3f",
+          "meaning": "store_local_pointer",
+          "offset": 35,
+          "operand": 8,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 38
+            }
+          ]
+        },
+        {
+          "handler": "0xc39c8",
+          "handler_index": "0x39",
+          "meaning": "push_local_pointer",
+          "offset": 38,
+          "operand": 8,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 41
+            }
+          ]
+        },
+        {
+          "handler": "0xc3908",
+          "handler_index": "0x33",
+          "meaning": "push_immediate_pointer",
+          "offset": 41,
+          "operand": 48,
+          "operand_bytes": 8,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 50
+            }
+          ]
+        },
+        {
+          "handler": "0xc4600",
+          "handler_index": "0x68",
+          "meaning": "add_pointers",
+          "offset": 50,
+          "operand": null,
+          "operand_bytes": 0,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 51
+            }
+          ]
+        },
+        {
+          "handler": "0xc010c",
+          "handler_index": "0x3f",
+          "meaning": "store_local_pointer",
+          "offset": 51,
+          "operand": 10,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 54
+            }
+          ]
+        },
+        {
+          "handler": "0xc39c8",
+          "handler_index": "0x39",
+          "meaning": "push_local_pointer",
+          "offset": 54,
+          "operand": 10,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 57
+            }
+          ]
+        },
+        {
+          "handler": "0xc0b64",
+          "handler_index": "0x45",
+          "meaning": "load_indirect_pointer",
+          "offset": 57,
+          "operand": null,
+          "operand_bytes": 0,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 58
+            }
+          ]
+        },
+        {
+          "handler": "0xc010c",
+          "handler_index": "0x3f",
+          "meaning": "store_local_pointer",
+          "offset": 58,
+          "operand": 12,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 61
+            }
+          ]
+        },
+        {
+          "handler": "0xc39c8",
+          "handler_index": "0x39",
+          "meaning": "push_local_pointer",
+          "offset": 61,
+          "operand": 4,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 64
+            }
+          ]
+        },
+        {
+          "handler": "0xc010c",
+          "handler_index": "0x3f",
+          "meaning": "store_local_pointer",
+          "offset": 64,
+          "operand": 14,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 67
+            }
+          ]
+        },
+        {
+          "handler": "0xc39c8",
+          "handler_index": "0x39",
+          "meaning": "push_local_pointer",
+          "offset": 67,
+          "operand": 12,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 70
+            }
+          ]
+        },
+        {
+          "handler": "0xc39c8",
+          "handler_index": "0x39",
+          "meaning": "push_local_pointer",
+          "offset": 70,
+          "operand": 0,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 73
+            }
+          ]
+        },
+        {
+          "handler": "0xc39c8",
+          "handler_index": "0x39",
+          "meaning": "push_local_pointer",
+          "offset": 73,
+          "operand": 14,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 76
+            }
+          ]
+        },
+        {
+          "handler": "0xc2528",
+          "handler_index": "0x32",
+          "meaning": "push_immediate_word",
+          "offset": 76,
+          "operand": 65540,
+          "operand_bytes": 4,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 81
+            }
+          ]
+        },
+        {
+          "handler": "0xc3768",
+          "handler_index": "0x4d",
+          "meaning": "call_native_thunk",
+          "offset": 81,
+          "operand": 1,
+          "operand_bytes": 1,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 83
+            }
+          ]
+        },
+        {
+          "handler": "0xc2e0c",
+          "handler_index": "0x3e",
+          "meaning": "store_local_word",
+          "offset": 83,
+          "operand": 16,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 86
+            }
+          ]
+        },
+        {
+          "handler": "0xc3ce4",
+          "handler_index": "0x38",
+          "meaning": "push_local_word",
+          "offset": 86,
+          "operand": 16,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 89
+            }
+          ]
+        },
+        {
+          "handler": "0xc2528",
+          "handler_index": "0x32",
+          "meaning": "push_immediate_word",
+          "offset": 89,
+          "operand": 0,
+          "operand_bytes": 4,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 94
+            }
+          ]
+        },
+        {
+          "handler": "0xc1320",
+          "handler_index": "0xc",
+          "meaning": "compare_words_equal",
+          "offset": 94,
+          "operand": null,
+          "operand_bytes": 0,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 95
+            }
+          ]
+        },
+        {
+          "handler": "0xc3820",
+          "handler_index": "0x3c",
+          "meaning": "store_local_byte",
+          "offset": 95,
+          "operand": 68,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 98
+            }
+          ]
+        },
+        {
+          "handler": "0xc075c",
+          "handler_index": "0x36",
+          "meaning": "push_local_byte",
+          "offset": 98,
+          "operand": 68,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 101
+            }
+          ]
+        },
+        {
+          "handler": "0xc02a4",
+          "handler_index": "0x86",
+          "meaning": "jump_relative_if_byte_nonzero",
+          "offset": 101,
+          "operand": 8,
+          "operand_bytes": 3,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "byte nonzero",
+              "offset": 109
+            },
+            {
+              "condition": "byte zero",
+              "offset": 105
+            }
+          ]
+        },
+        {
+          "handler": "0xc2798",
+          "handler_index": "0x85",
+          "meaning": "jump_relative",
+          "offset": 105,
+          "operand": 69,
+          "operand_bytes": 3,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "unconditional",
+              "offset": 174
+            }
+          ]
+        },
+        {
+          "handler": "0xc35f8",
+          "handler_index": "0x3b",
+          "meaning": "reset_rolling_key",
+          "offset": 109,
+          "operand": 49,
+          "operand_bytes": 1,
+          "special_marker": true,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 111
+            }
+          ]
+        },
+        {
+          "handler": "0xbefc0",
+          "handler_index": "0x4c",
+          "meaning": "push_call_table_pointer",
+          "offset": 111,
+          "operand": 1,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 114
+            }
+          ]
+        },
+        {
+          "handler": "0xc0b64",
+          "handler_index": "0x45",
+          "meaning": "load_indirect_pointer",
+          "offset": 114,
+          "operand": null,
+          "operand_bytes": 0,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 115
+            }
+          ]
+        },
+        {
+          "handler": "0xc010c",
+          "handler_index": "0x3f",
+          "meaning": "store_local_pointer",
+          "offset": 115,
+          "operand": 18,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 118
+            }
+          ]
+        },
+        {
+          "handler": "0xc39c8",
+          "handler_index": "0x39",
+          "meaning": "push_local_pointer",
+          "offset": 118,
+          "operand": 18,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 121
+            }
+          ]
+        },
+        {
+          "handler": "0xc3908",
+          "handler_index": "0x33",
+          "meaning": "push_immediate_pointer",
+          "offset": 121,
+          "operand": 120,
+          "operand_bytes": 8,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 130
+            }
+          ]
+        },
+        {
+          "handler": "0xc4600",
+          "handler_index": "0x68",
+          "meaning": "add_pointers",
+          "offset": 130,
+          "operand": null,
+          "operand_bytes": 0,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 131
+            }
+          ]
+        },
+        {
+          "handler": "0xc010c",
+          "handler_index": "0x3f",
+          "meaning": "store_local_pointer",
+          "offset": 131,
+          "operand": 20,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 134
+            }
+          ]
+        },
+        {
+          "handler": "0xc39c8",
+          "handler_index": "0x39",
+          "meaning": "push_local_pointer",
+          "offset": 134,
+          "operand": 20,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 137
+            }
+          ]
+        },
+        {
+          "handler": "0xc0b64",
+          "handler_index": "0x45",
+          "meaning": "load_indirect_pointer",
+          "offset": 137,
+          "operand": null,
+          "operand_bytes": 0,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 138
+            }
+          ]
+        },
+        {
+          "handler": "0xc010c",
+          "handler_index": "0x3f",
+          "meaning": "store_local_pointer",
+          "offset": 138,
+          "operand": 22,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 141
+            }
+          ]
+        },
+        {
+          "handler": "0xc39c8",
+          "handler_index": "0x39",
+          "meaning": "push_local_pointer",
+          "offset": 141,
+          "operand": 22,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 144
+            }
+          ]
+        },
+        {
+          "handler": "0xc39c8",
+          "handler_index": "0x39",
+          "meaning": "push_local_pointer",
+          "offset": 144,
+          "operand": 0,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 147
+            }
+          ]
+        },
+        {
+          "handler": "0xc3768",
+          "handler_index": "0x4d",
+          "meaning": "call_native_thunk",
+          "offset": 147,
+          "operand": 2,
+          "operand_bytes": 1,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 149
+            }
+          ]
+        },
+        {
+          "handler": "0xc2e0c",
+          "handler_index": "0x3e",
+          "meaning": "store_local_word",
+          "offset": 149,
+          "operand": 24,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 152
+            }
+          ]
+        },
+        {
+          "handler": "0xc39c8",
+          "handler_index": "0x39",
+          "meaning": "push_local_pointer",
+          "offset": 152,
+          "operand": 4,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 155
+            }
+          ]
+        },
+        {
+          "handler": "0xc0b64",
+          "handler_index": "0x45",
+          "meaning": "load_indirect_pointer",
+          "offset": 155,
+          "operand": null,
+          "operand_bytes": 0,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 156
+            }
+          ]
+        },
+        {
+          "handler": "0xc010c",
+          "handler_index": "0x3f",
+          "meaning": "store_local_pointer",
+          "offset": 156,
+          "operand": 26,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 159
+            }
+          ]
+        },
+        {
+          "handler": "0xbefc0",
+          "handler_index": "0x4c",
+          "meaning": "push_call_table_pointer",
+          "offset": 159,
+          "operand": 0,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 162
+            }
+          ]
+        },
+        {
+          "handler": "0xc39c8",
+          "handler_index": "0x39",
+          "meaning": "push_local_pointer",
+          "offset": 162,
+          "operand": 26,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 165
+            }
+          ]
+        },
+        {
+          "handler": "0xc3768",
+          "handler_index": "0x4d",
+          "meaning": "call_native_thunk",
+          "offset": 165,
+          "operand": 3,
+          "operand_bytes": 1,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 167
+            }
+          ]
+        },
+        {
+          "handler": "0xc3820",
+          "handler_index": "0x3c",
+          "meaning": "store_local_byte",
+          "offset": 167,
+          "operand": 112,
+          "operand_bytes": 2,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 170
+            }
+          ]
+        },
+        {
+          "handler": "0xc2798",
+          "handler_index": "0x85",
+          "meaning": "jump_relative",
+          "offset": 170,
+          "operand": 4,
+          "operand_bytes": 3,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "unconditional",
+              "offset": 174
+            }
+          ]
+        },
+        {
+          "handler": "0xc35f8",
+          "handler_index": "0x3b",
+          "meaning": "reset_rolling_key",
+          "offset": 174,
+          "operand": 140,
+          "operand_bytes": 1,
+          "special_marker": true,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 176
+            }
+          ]
+        },
+        {
+          "handler": "0xc2528",
+          "handler_index": "0x32",
+          "meaning": "push_immediate_word",
+          "offset": 176,
+          "operand": 65540,
+          "operand_bytes": 4,
+          "special_marker": false,
+          "successors": [
+            {
+              "condition": "next",
+              "offset": 181
+            }
+          ]
+        },
+        {
+          "handler": "0xbd910",
+          "handler_index": "0x1",
+          "meaning": "return_word",
+          "offset": 181,
+          "operand": null,
+          "operand_bytes": 0,
+          "special_marker": false,
+          "successors": []
+        }
+      ],
+      "runtime_branch_results_evaluated": 0,
+      "states": 59,
+      "terminal_offsets": [
+        181
+      ],
+      "unique_token_offsets": 59
+    },
+    "end_exclusive": "0x113782",
+    "sha256": "3461677d2c0fdbaa44ae02c09e4e7232babf45adfc497137d9ed052b4f22588b",
+    "start": "0x1136cc"
+  },
+  "return_literal": "0x10004 on both statically decoded GetEnv branches",
+  "scope": "Static CFG and call preparation only; no VM/JNI/native execution",
+  "selected_native_functions": [
+    {
+      "bytes": 136,
+      "direct_calls": 0,
+      "end_exclusive": "0xe80c8",
+      "indirect_calls": 1,
+      "sha256": "95a57493d31a2d29215477e1e17bf4fc47a3eb7df67c8e7962f3d07c339f6e3b",
+      "start": "0xe8040",
+      "system_call_instructions": 0
+    },
+    {
+      "bytes": 96,
+      "direct_calls": 0,
+      "end_exclusive": "0xe8128",
+      "indirect_calls": 1,
+      "sha256": "274f0a696e2f616d32d596e848b1ca0de4b8160bc48c3313495cc96efc0fd3f5",
+      "start": "0xe80c8",
+      "system_call_instructions": 0
+    },
+    {
+      "bytes": 100,
+      "direct_calls": 0,
+      "end_exclusive": "0xe818c",
+      "indirect_calls": 1,
+      "sha256": "7e598f1d9ffff9b13704808cae7af96c3f38c69acd9d493d0914eb479e466ebf",
+      "start": "0xe8128",
+      "system_call_instructions": 0
+    },
+    {
+      "bytes": 1796,
+      "direct_calls": 9,
+      "end_exclusive": "0x73f68",
+      "indirect_calls": 20,
+      "sha256": "83b27c7198724b6d26870711d674b066dd823b3c9e5a68f25992a77ad42334aa",
+      "start": "0x73864",
+      "system_call_instructions": 3
+    },
+    {
+      "bytes": 8,
+      "direct_calls": 0,
+      "end_exclusive": "0x7712c",
+      "indirect_calls": 0,
+      "sha256": "ed86e0b2911b6a4e9edfa1a48e9544ba115299466a1992e2370619d8ce8e29fc",
+      "start": "0x77124",
+      "system_call_instructions": 0
+    },
+    {
+      "bytes": 4,
+      "direct_calls": 0,
+      "end_exclusive": "0x77130",
+      "indirect_calls": 0,
+      "sha256": "110f46b5b35c069160560c6ad6786f647dd44e8760a52a46fc22dbbcd7630b91",
+      "start": "0x7712c",
+      "system_call_instructions": 0
+    },
+    {
+      "bytes": 4,
+      "direct_calls": 0,
+      "end_exclusive": "0x77134",
+      "indirect_calls": 0,
+      "sha256": "110f46b5b35c069160560c6ad6786f647dd44e8760a52a46fc22dbbcd7630b91",
+      "start": "0x77130",
+      "system_call_instructions": 0
+    },
+    {
+      "bytes": 6908,
+      "direct_calls": 71,
+      "end_exclusive": "0x78c30",
+      "indirect_calls": 22,
+      "sha256": "c3bcaf15b61566e29f22857eb43ce35edc25bb1381ddcb2899ecbac5d740a62f",
+      "start": "0x77134",
+      "system_call_instructions": 25
+    }
+  ]
+}

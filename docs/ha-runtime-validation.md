@@ -326,3 +326,29 @@ The checker continues to mark generated native identities unverified for
 original C1000 and C2000; a file check cannot establish identity origin or live
 binding. The release passed **2,510 Python/HA tests**, **22 synthetic browser
 scenarios**, and both frontend builds. Screenshots use synthetic fixtures.
+
+## Charging preview and persistent history
+
+The next 2026-10-03 update deployed wheel SHA-256
+`3eb95e010c35e49a495590f46fad9d57276c3e762c481151cfb15f684ee550f0`.
+It adds [read-only policy preview](charging-policy-preview.md) and
+[optional private history](persistent-history.md), including saved browser
+charts. Only the HTTP gateway restarted; the AP worker PID, saved profile and
+credential hashes, control counts **9 / 16 / 5** and protected baseline settings
+matched afterward. Three stations remained fresh with AC enabled.
+
+Seven-day SQLite recording is enabled on the node with an owner-only directory
+and database. Authenticated GET/HEAD checks returned all three named histories;
+missing tokens were rejected. A hypothetical manual-export request returned
+proposals through both HTTP and the cached AP CLI with **zero commands sent**.
+The original C1000 preview correctly returned `unsupported_model`. These checks
+do not validate an actual solar sensor or physical charging rate. HA remained
+loaded with three fresh stations, automation disabled and arming/latch helpers
+off; no HA configuration, output or charging setting changed.
+
+A separate bounded **48-hour GET-only observation** started after deployment.
+Its first two samples had no request errors or protected-setting changes.
+It is still running, not a completed reliability trial. Data stays private and
+is limited to 64 MiB; the observer makes no station requests or recovery actions.
+The release passed **2,751 Python/HA tests**, **24 synthetic browser scenarios**,
+both frontend builds and an independent full SDK-record-two artifact comparison.

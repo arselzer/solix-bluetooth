@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed, nextTick, reactive, ref, watch } from 'vue';
-import HistoryChart from './HistoryChart.vue';
+import StationHistory from './StationHistory.vue';
 import StationControls from './StationControls.vue';
 import GatewayChecks from './GatewayChecks.vue';
+import ChargingPreview from './ChargingPreview.vue';
 import { draftFor, modelLabel, numberMetric, powerMetric } from './types';
 import type { Draft, Proposal } from './types';
 import { useGateway } from './useGateway';
@@ -120,13 +121,14 @@ function confirm() {
             <section class="metric-card"><div class="metric-top"><span>Power out</span><span class="metric-arrow output-arrow" aria-hidden="true">↗</span></div><div class="metric-value">{{ format(output) }}<span>W</span></div><p>{{ numberMetric(selected, 'ac_output_enabled') === 1 ? 'AC output enabled' : numberMetric(selected, 'ac_output_enabled') === 0 ? 'AC output off' : 'AC output not reported' }}</p></section>
             <section class="metric-card" data-testid="supply-reading"><div class="metric-top"><span>Supply source</span><span class="metric-arrow supply-arrow" aria-hidden="true">⌁</span></div><div class="metric-value source-value">{{ flow }}</div><p>{{ String(selected.metrics.usage_mode ?? 'Mode unknown').replaceAll('_', ' ') }}<span v-if="selected.metrics.active_tariff && selected.metrics.active_tariff !== 'none'"> · {{ String(selected.metrics.active_tariff).replaceAll('_', ' ') }}</span></p></section>
           </div>
-          <div class="chart-grid"><HistoryChart :samples="history" :now="now" kind="power" /><HistoryChart :samples="history" :now="now" kind="battery" /></div>
+          <StationHistory :key="selected.name" :station="selected" :samples="history" :now="now" :request="gateway.readOnly" />
           <div class="station-details"><span>Upper charge limit <strong>{{ format(numberMetric(selected, 'max_charge_percentage'), '%') }}</strong></span><span>Discharge floor <strong>{{ format(numberMetric(selected, 'min_charge_percentage'), '%') }}</strong></span><span>Reserve <strong>{{ format(numberMetric(selected, 'backup_reserve_percentage'), '%') }}</strong></span><span>Temperature <strong>{{ format(numberMetric(selected, 'temperature_c'), '°C') }}</strong></span><span>Firmware <strong>{{ selected.metrics.software_version ?? '—' }}</strong></span><span v-if="selected.model === 'c1000_gen2' && [0, 1].includes(numberMetric(selected, 'pv_weak_light_locked') ?? -1)" data-testid="pv-weak-light-lock" title="Firmware-derived C1000 Gen 2 flag; physical PV behavior untested.">PV weak-light lock <strong>{{ numberMetric(selected, 'pv_weak_light_locked') === 1 ? 'Active' : 'Inactive' }}</strong></span></div>
           <StationControls v-if="drafts[selected.name]" :station="selected" :draft="drafts[selected.name]!" :writable="writable" @propose="proposal = $event" />
+          <ChargingPreview :key="selected.name" :station="selected" :busy="busy" :request="gateway.readOnly" />
         </template>
         <section v-else-if="!connecting" class="panel empty-stations"><h2>No stations configured</h2><p>Add a station to your SOLIX Link gateway, then refresh this page.</p><button class="secondary" :disabled="polling" @click="gateway.refresh">Refresh stations</button></section>
       </template>
-      <footer class="page-footer"><span>SOLIX Link <span class="footer-separator">/</span> Local gateway</span><span>5-second refresh · History stays in this tab</span></footer>
+      <footer class="page-footer"><span>SOLIX Link <span class="footer-separator">/</span> Local gateway</span><span>5-second telemetry refresh · Optional saved history</span></footer>
     </main>
 
     <GatewayChecks v-if="checksOpen && session" :checking="checking" :reports="checks" @close="checksOpen = false" @refresh="gateway.checkGateway" />

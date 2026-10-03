@@ -900,3 +900,11 @@ protected-setting changes. Passive gateway diagnostics and saved AP checks now
 explain monitoring/file prerequisites without station requests. Generated-ID
 support remains unverified for original C1000 and C2000, and automatic charging
 remains disabled pending export-sign and physical charging validation.
+
+The [next protected JNI record](android-loader-record-two.md) now has complete
+static parsing: 59 CFG states, 178 body bytes and 616 new instruction checks.
+Both GetEnv branches converge on return version `0x10004`; the success path
+prepares a context callback and seven-method RegisterNatives table. `b2b`, `m`
+and `sa` are stubs. The real ClassLoader entry `al` is the next bounded lead;
+no guest code was executed and no charging-pause serializer was recovered.
+Complete sanitized results/manifests independently match the public fixtures.

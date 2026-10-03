@@ -128,6 +128,7 @@ try {
   assert.match(await page.getByTestId('gateway-notice').textContent(), /Connected to the local gateway/);
   await page.getByTestId('close-checks').click();
   await page.unroute('**/setup-check');
+  cases++; console.log(`Scenario ${cases} passed`);
   await page.route('**/diagnostics', (route) => route.fulfill({ status: 401, contentType: 'application/json', body: '{}' }));
   await page.getByTestId('open-checks').click();
   await page.getByTestId('gateway-notice').filter({ hasText: 'Access denied' }).waitFor();
@@ -136,6 +137,54 @@ try {
   await page.unroute('**/diagnostics');
   await connect();
   cases++; console.log(`Scenario ${cases} passed`);
+
+  const beforePreview = posts;
+  await page.getByTestId('preview-export').fill('700');
+  await page.getByTestId('preview-export-sign').check();
+  await page.getByTestId('run-charging-preview').click();
+  await page.getByTestId('charging-preview-result').filter({ hasText: 'Blocked' }).waitFor();
+  assert.match(await page.getByTestId('charging-preview-result').textContent(), /Standard mode is required/);
+  await change({ standard: true });
+  await refresh();
+  await page.getByTestId('run-charging-preview').click();
+  await page.getByTestId('charging-preview-result').filter({ hasText: 'Proposed decision' }).waitFor();
+  assert.match(await page.getByTestId('charging-preview-result').textContent(), /Reserve → 20%/);
+  assert.match(await page.getByTestId('charging-preview-result').textContent(), /Charging power → 1000 W/);
+  assert.equal(posts, beforePreview);
+  assert.equal(await page.getByTestId('command-review').count(), 0);
+  assert.match(await page.getByTestId('gateway-notice').textContent(), /Connected to the local gateway/);
+  await page.getByTestId('charging-preview-panel').screenshot({ path: `${root}/docs/images/web-charging-preview.png` });
+  await change({ standard: false });
+  await refresh();
+  cases++; console.log(`Scenario ${cases} passed`);
+
+  // Downsampled synthetic points summarize continuous underlying samples;
+  // explicit gaps must break the chart even when selected points have values.
+  const savedUntil = Date.now() / 1000;
+  const savedPoints = Array.from({ length: 25 }, (_, index) => ({ timestamp: savedUntil - (24 - index) * 3600,
+    battery_percentage: 95 - index / 4, ac_input_power_w: 450 + 100 * Math.sin(index / 3),
+    ac_output_power_w: 350 + 50 * Math.cos(index / 4), gap: index === 0 || index === 12, max_source_interval_seconds: 5 }));
+  await page.route('**/devices/*/history?*', (route) => route.fulfill({ contentType: 'application/json', body: JSON.stringify({
+    name: 'Office · C1000 Gen 2', model: 'c1000_gen2', protocol: 'native_mqtt', estimated: true,
+    points: savedPoints, window: { since: savedUntil - 86400, until: savedUntil },
+    totals: { ac_input_energy_kwh_estimate: 10.1, ac_output_energy_kwh_estimate: 8.2,
+      ac_input_coverage_seconds: 86000, ac_output_coverage_seconds: 86000, gap_count: 1 },
+  }) }));
+  await page.waitForFunction(() => !document.querySelector('[data-testid="history-range"] option[value="day"]')?.disabled);
+  await page.getByTestId('history-range').selectOption('day');
+  await page.getByTestId('history-energy').waitFor();
+  assert.match(await page.getByTestId('history-energy').textContent(), /10\.100 kWh/);
+  const savedPath = await page.locator('.input-line').getAttribute('d');
+  assert.equal((savedPath.match(/M/g) || []).length, 2);
+  assert.ok(savedPath.includes('L'));
+  assert.match(await page.locator('.history-chart').first().getAttribute('aria-label'), /24 hours/);
+  await page.getByTestId('station-history').screenshot({ path: `${root}/docs/images/web-saved-history.png` });
+  await page.setViewportSize({ width: 390, height: 844 });
+  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
+  await page.setViewportSize({ width: 1440, height: 1100 });
+  await page.getByTestId('history-range').selectOption('session');
+  await page.unroute('**/devices/*/history?*');
+  assert.equal(posts, beforePreview);
   cases++; console.log(`Scenario ${cases} passed`);
 
   await propose('charging-power');

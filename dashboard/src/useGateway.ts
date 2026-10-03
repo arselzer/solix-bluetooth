@@ -61,11 +61,11 @@ export function useGateway() {
     if (!quiet) message('Disconnected. The gateway and station keep running.');
   }
 
-  async function request(path: string, body?: Command, quiet = false) {
+  async function request(path: string, body?: Record<string, unknown>, quiet = false, readOnly = false) {
     const currentGeneration = generation;
     const controller = new AbortController();
     requests.add(controller);
-    const timeout = body?.command === 'return-grid' ? 190000 : body ? 150000 : 10000;
+    const timeout = readOnly ? 10000 : body?.command === 'return-grid' ? 190000 : body ? 150000 : 10000;
     const deadline = setTimeout(() => controller.abort(), timeout);
     try {
       const headers: Record<string, string> = {};
@@ -82,7 +82,7 @@ export function useGateway() {
         return null;
       }
       if (!response.ok) {
-        if (body) {
+        if (body && !readOnly) {
           let changed = true;
           try {
             const failure = await response.json();
@@ -101,7 +101,7 @@ export function useGateway() {
       return currentGeneration === generation ? result : null;
     } catch {
       if (currentGeneration === generation && !quiet) {
-        message(body
+        message(body && !readOnly
           ? 'Connection lost before confirmation. A setting may have changed; check fresh status before trying again.'
           : 'Cannot reach the gateway. Readings and controls are paused.', 'error');
       }
@@ -198,7 +198,12 @@ export function useGateway() {
     checking.value = false;
   }
 
+  async function readOnly(path: string, body?: Record<string, unknown>) {
+    if (!session.value || busy.value) return null;
+    return request(path, body, true, true);
+  }
+
   onUnmounted(() => disconnect(true));
   return { stations, histories, session, online, connecting, polling, busy, checking, checks, notice, noticeKind, now,
-    active: computed(() => session.value && online.value), connect, disconnect, refresh, send, fresh, checkGateway };
+    active: computed(() => session.value && online.value), connect, disconnect, refresh, send, fresh, checkGateway, readOnly };
 }

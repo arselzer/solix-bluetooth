@@ -8,6 +8,7 @@ import json
 import mimetypes
 import os
 import re
+import sqlite3
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -16,6 +17,7 @@ from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse, Str
 import uvicorn
 
 from .commands import validate_command
+from .charging_policy import ChargingPolicyRequestError, MAX_PREVIEW_BYTES, preview_charging_policy
 from .diagnostics import gateway_diagnostics
 from .manager import MonitorService
 from .tou import PowerFlowTimeout
@@ -31,7 +33,8 @@ WEB_HEADERS = {
 
 
 def create_app(service: MonitorService, token: str | None = None, *, allow_control: bool = False,
-               web_ui: bool = False) -> FastAPI:
+               web_ui: bool = False, history_file: Path | None = None,
+               history_retention_days: int = 7) -> FastAPI:
     """Create the gateway; its lifespan owns the single monitoring service."""
     if allow_control and not token:
         raise ValueError("HTTP controls require SOLIX_HTTP_TOKEN or an explicit Bearer token")
@@ -43,13 +46,43 @@ def create_app(service: MonitorService, token: str | None = None, *, allow_contr
             raise RuntimeError("Dashboard assets missing; run npm run build:dashboard")
         assets["/"] = web_root / "index.html"
 
+    history_store = None
+    history_failed = False
+
+    async def record_history():
+        nonlocal history_failed
+        while True:
+            try:
+                cached = service.snapshots()
+                await asyncio.to_thread(history_store.record, cached)
+            except Exception:
+                history_failed = True
+                return
+            await asyncio.sleep(2)
+
     @asynccontextmanager
     async def lifespan(_app: FastAPI):
+        nonlocal history_store, history_failed
+        recorder = None
         await service.start()
         try:
+            if history_file is not None:
+                from .history import HistoryStore
+                history_failed = False
+                history_store = await asyncio.to_thread(
+                    HistoryStore, history_file, retention_days=history_retention_days)
+                recorder = asyncio.create_task(record_history())
             yield
         finally:
-            await service.stop()
+            if recorder is not None:
+                recorder.cancel()
+                await asyncio.gather(recorder, return_exceptions=True)
+            try:
+                if history_store is not None:
+                    await asyncio.to_thread(history_store.close)
+                    history_store = None
+            finally:
+                await service.stop()
 
     app = FastAPI(lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None)
 
@@ -110,6 +143,63 @@ def create_app(service: MonitorService, token: str | None = None, *, allow_contr
         if name not in service.devices:
             return PlainTextResponse("Unknown device", status_code=404)
         return status_with_controls(service.snapshot(name))
+
+    @app.api_route("/history", methods=["GET", "HEAD"])
+    async def history_info():
+        if history_file is None:
+            return {"enabled": False, "estimated": True, "read_only": True}
+        if history_store is None or history_failed:
+            return JSONResponse({"error": "HistoryUnavailable"}, status_code=503)
+        try:
+            return {"enabled": True, "read_only": True, **await asyncio.to_thread(history_store.stats)}
+        except (OSError, ValueError, sqlite3.Error):
+            return JSONResponse({"error": "HistoryUnavailable"}, status_code=503)
+
+    @app.api_route("/devices/{name}/history", methods=["GET", "HEAD"])
+    async def device_history(name: str, request: Request):
+        if name not in service.devices:
+            return JSONResponse({"error": "UnknownDevice"}, status_code=404)
+        if history_file is None:
+            return JSONResponse({"error": "HistoryDisabled"}, status_code=404)
+        if history_store is None or history_failed:
+            return JSONResponse({"error": "HistoryUnavailable"}, status_code=503)
+        try:
+            parameters = request.query_params
+            if set(parameters) - {"since", "until", "limit"} or len(parameters.multi_items()) != len(parameters):
+                raise ValueError
+            arguments = {key: float(parameters[key]) for key in ("since", "until") if key in parameters}
+            if "limit" in parameters:
+                arguments["limit"] = int(parameters["limit"])
+            return await asyncio.to_thread(history_store.query, name, **arguments)
+        except KeyError:
+            return JSONResponse({"error": "HistoryNotRecorded"}, status_code=404)
+        except (ValueError, OverflowError):
+            return JSONResponse({"error": "InvalidHistoryQuery"}, status_code=400)
+        except (OSError, sqlite3.Error):
+            return JSONResponse({"error": "HistoryUnavailable"}, status_code=503)
+
+    @app.post("/devices/{name}/charging-preview")
+    async def charging_preview(name: str, request: Request):
+        if name not in service.devices:
+            return JSONResponse({"error": "UnknownDevice", "commands_sent": 0}, status_code=404)
+        try:
+            raw = bytearray()
+            async for chunk in request.stream():
+                if len(raw) + len(chunk) > MAX_PREVIEW_BYTES:
+                    return JSONResponse({"error": "PreviewTooLarge", "commands_sent": 0}, status_code=413)
+                raw.extend(chunk)
+            def unique_object(pairs):
+                result = {}
+                for key, value in pairs:
+                    if key in result:
+                        raise ValueError
+                    result[key] = value
+                return result
+            body = json.loads(raw, object_pairs_hook=unique_object)
+            return preview_charging_policy(service.snapshot(name), body)
+        except (ChargingPolicyRequestError, ValueError, UnicodeError, RecursionError):
+            return JSONResponse({"error": "InvalidChargingPreview", "commands_sent": 0,
+                                 "settings_may_have_changed": False}, status_code=400)
 
     @app.post("/devices/{name}/commands")
     async def command(name: str, request: Request):
@@ -192,6 +282,7 @@ def create_app(service: MonitorService, token: str | None = None, *, allow_contr
 
 
 def run_server(service: MonitorService, host: str = "127.0.0.1", port: int = 8765, *, allow_control: bool = False,
-               web_ui: bool = False) -> None:
-    uvicorn.run(create_app(service, os.environ.get("SOLIX_HTTP_TOKEN"), allow_control=allow_control, web_ui=web_ui),
-                host=host, port=port)
+               web_ui: bool = False, history_file: Path | None = None,
+               history_retention_days: int = 7) -> None:
+    uvicorn.run(create_app(service, os.environ.get("SOLIX_HTTP_TOKEN"), allow_control=allow_control, web_ui=web_ui,
+                          history_file=history_file, history_retention_days=history_retention_days), host=host, port=port)

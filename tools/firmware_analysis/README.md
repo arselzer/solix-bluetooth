@@ -342,3 +342,21 @@ Compare both complete `android-loader-vm-boundary-*.json` files with
 five prefix tokens identify the next bounded wrapper record; they recover no
 SDK action serializer or device packet. Inputs are hash-pinned, wrong inputs
 fail before output, and raw app records/images stay private.
+
+The [record-two continuation](../../docs/android-loader-record-two.md) adds
+616 static instruction checks, 59 bounded CFG states and complete 178-byte
+body coverage across both GetEnv branches, with zero guest execution:
+
+```sh
+python3 tools/firmware_analysis/inspect_android_loader_record_two.py \
+  --base-apk /private/path/base.apk \
+  --images-dir /private/path/recovered-virtual-images \
+  --initialized-image /private/path/libexec.so.decoded-strings-memory.bin \
+  --output-dir /tmp/android-loader-record-two
+```
+
+Compare both complete `android-loader-record-two-*.json` files with
+`expected_results/`. The pinned retained initializer image supplies only seven
+whitelisted registration signatures. `b2b`, `m` and `sa` are exact stubs;
+the real `al` ClassLoader method is a next static lead, not a recovered SDK
+serializer or executable decoder. No Android/JNI/VM method is invoked.

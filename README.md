@@ -33,6 +33,10 @@ Home Assistant integration for the local gateway.
 - Authenticated JSON HTTP, SSE and Prometheus for multiple stations.
 - Opt-in Home Assistant price/solar charging blueprint with telemetry freshness,
   reserve protection and a failure latch; installed automations start disabled.
+- Read-only charging-policy previews in the browser, API and CLI; proposals
+  send no commands and do not activate automations.
+- Optional private SQLite history with saved battery/AC-power charts, estimated
+  AC energy and coverage; gaps and process restarts stop integration.
 - Home Assistant diagnostics downloads with model/firmware, freshness and
   supported settings; the integration report omits credentials and identities.
 - [Passive gateway diagnostics](docs/gateway-diagnostics.md) and
@@ -115,8 +119,9 @@ the AP worker must separately allow controls. CLI/private socket writes use
 
 HA 2026.7.4 passed live setup, three-device discovery, a restored configuration
 control and integration reload. Other releases and long-term operation still
-need testing. Session charts are not persistent energy accounting. Measured power
-can feed HA's Integral helper; firmware energy-counter units remain unverified.
+need testing. [Saved history](docs/persistent-history.md) is opt-in with
+`--history-file`; AC energy estimates include bypass loads and do not measure
+stored battery energy. Firmware energy-counter units remain unverified.
 
 ## Development
 
@@ -179,6 +184,8 @@ web-dashboard guide. Commit Vue sources and compiled Python assets together.
 - [Charging action mapping](docs/gen2-iot-action-firmware-boundary.md): binary
   MQTT admission, [Dart interceptors](docs/gen2-dart-action-interceptors.md)
   and [protected SDK loader recovery](docs/android-loader-carriers.md).
+  [Record 2 analysis](docs/android-loader-record-two.md) resolves JNI method
+  registration and stub decoders; the charging-pause encoder remains unknown.
 - [Original charging gates](docs/c1000-charge-gate-rules.md): input-event
   priority and the second charging channel; no external bypass selector found.
   [Saved-limit validation](docs/c1000-saved-charge-validation.md) distinguishes

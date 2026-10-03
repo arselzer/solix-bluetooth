@@ -160,6 +160,17 @@ main { width: min(1320px, 100%); margin: 0 auto; padding: 32px 28px 0; }
 .checks-findings li { margin-top: 10px; overflow-wrap: anywhere; }
 .checks-findings .warning { color: #eacb91; }.checks-findings .error { color: #f0bfb1; }
 .check-ready { color: var(--mint) !important; }
+.preview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 18px; margin-bottom: 20px; }
+.preview-grid label { display: grid; gap: 8px; font-size: 12px; }
+.preview-pair { display: flex; gap: 8px; }.preview-pair input { width: 50%; }
+.preview-toggle { display: flex; align-items: center; gap: 10px; margin: 12px 0; font-size: 12px; }
+.preview-toggle input { accent-color: var(--mint); }
+.preview-result { margin-top: 20px; padding: 18px; border: 1px solid #385449; border-radius: 8px; font-size: 13px; line-height: 1.8; color: #bdcfde; }
+.history-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+.history-toolbar label { display: flex; align-items: center; gap: 12px; font-size: 12px; }
+.history-toolbar select { font-size: 12px; }
+.history-toolbar > span { color: var(--muted); font-size: 11px; }
+.energy-estimates > p { flex-basis: 100%; line-height: 1.7; font-size: 11px; }
 @media (max-width: 1050px) {
   .welcome-grid { gap: 45px; padding: 70px 10px; }
   .metric-card { padding: 18px; }.metric-value { font-size: 31px; }.source-value { font-size: 26px; }

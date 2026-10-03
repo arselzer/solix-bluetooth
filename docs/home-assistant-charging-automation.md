@@ -133,9 +133,13 @@ duplicating the policy or running another charging owner can still race.
 
 ## Persistent energy history
 
-The existing HA power sensors use watts and measurement state classes, so the
-HA **Integral helper** is the proposed first place for estimated cumulative
-energy, rather than adding another server database. Use separate helpers for
+The existing HA power sensors use watts and measurement state classes. The
+optional gateway [SQLite history](persistent-history.md) now provides derived
+AC energy with explicit outage/restart gaps and per-channel coverage. It is
+enabled separately with `--history-file` and does not activate this blueprint.
+Its totals are not automatically exposed as HA Energy statistics.
+
+HA's **Integral helper** is another option. Use separate helpers for
 AC input and AC output and select kWh output. Input energy includes bypass
 loads; it is not the battery's stored energy. Output energy represents AC load
 delivery. Their difference does not establish battery energy or conversion
@@ -149,6 +153,11 @@ This audit did not execute Integral or Recorder, and no helpers were configured.
 Keep the integration's reported source values and mark these totals as derived
 estimates. Firmware `*_energy_raw` values remain excluded because physical
 scaling, reset epochs and cross-model behavior are not fully established.
+
+The [read-only policy preview](charging-policy-preview.md) lets you check manual
+price/export inputs against cached native Gen 2 status through CLI, browser or
+HTTP. It uses the blueprint's decision rules but cannot verify HA helper roles,
+sensor sign or exclusive ownership, and sends no settings or helper changes.
 
 ## Battery use is a separate explicit action
 
